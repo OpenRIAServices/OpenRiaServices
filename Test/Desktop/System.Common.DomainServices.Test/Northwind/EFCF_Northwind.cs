@@ -1,0 +1,526 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.Entity.Infrastructure;
+using System.Data.Objects;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.DomainServices.EntityFramework;
+using System.ServiceModel.DomainServices.Hosting;
+using System.ServiceModel.DomainServices.Server;
+using CodeFirstModels;
+using TestDomainServices.Testing;
+
+namespace TestDomainServices.EFCF
+{
+    [EnableClientAccess]
+    public class Northwind : DbDomainService<EFCFNorthwindEntities>
+    {
+        #region Product methods
+        public Product GetProductById(int id)
+        {
+            return this.DbContext.Products.SingleOrDefault(p => p.ProductID == id);
+        }
+
+        public IQueryable<Product> GetProducts()
+        {
+            return this.DbContext.Products.Include("Supplier").Include("Category");
+        }
+
+        public void InsertProduct(Product product)
+        {
+            DbEntityEntry<Product> entityEntry = this.DbContext.Entry(product);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                this.DbContext.Products.Add(product);
+            }
+        }
+
+        public void UpdateProduct(Product current)
+        {
+            this.DbContext.Products.AttachAsModified(current, this.ChangeSet.GetOriginal(current), this.DbContext);
+        }
+
+        public void DeleteProduct(Product product)
+        {
+            DbEntityEntry<Product> entityEntry = this.DbContext.Entry(product);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.Products.Attach(product);
+                this.DbContext.Products.Remove(product);
+            }
+        }
+
+        public void DiscontinueProduct(Product product)
+        {
+            // Don't allow discontinued products to be discontinued again.
+            if (product.Discontinued)
+            {
+                throw new ValidationException("Discontinued products can't be discontinued again.");
+            }
+
+            DbEntityEntry entityEntry = this.DbContext.Entry(product);
+            if (entityEntry.State == EntityState.Detached)
+            {
+                this.DbContext.Products.Attach(product);
+            }                     
+            product.Discontinued = true;
+            if (entityEntry.State == EntityState.Unchanged)
+            {
+                entityEntry.State = EntityState.Modified;
+            }
+            else if (entityEntry.State == EntityState.Modified)
+            {
+                 entityEntry.State = EntityState.Modified;
+            }
+        }
+
+        protected override bool ResolveConflicts(IEnumerable<DbEntityEntry> conflicts)
+        {
+            ObjectContext objectContext = ((IObjectContextAdapter)this.DbContext).ObjectContext;
+            ObjectStateManager objectStateManager = objectContext.ObjectStateManager;
+
+            foreach (DbEntityEntry entityEntry in conflicts)
+            {
+                ObjectStateEntry stateEntry = objectStateManager.GetObjectStateEntry(entityEntry.Entity);
+                if (entityEntry.State == EntityState.Detached ||
+                    stateEntry.IsRelationship)
+                {
+                    continue;
+                }
+
+                Type entityType = stateEntry.Entity.GetType();
+                if (entityType == typeof(Product))
+                {
+                    if (!this.ResolveProductConflict(entityEntry))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool ResolveProductConflict(DbEntityEntry entryInConflict)
+        {
+            Product product = (Product)entryInConflict.Entity;
+            ObjectContext objectContext = (this.DbContext as IObjectContextAdapter).ObjectContext;
+            switch (product.ResolveMethod)
+            {
+                case "ThrowValidationEx":
+                    throw new ValidationException("testing");
+                case "ThrowDomainServiceEx":
+                    throw new DomainException("testing");
+                case "MergeIntoCurrent":
+                    return this.ResolveProductWithMerge(entryInConflict);
+                case "KeepCurrent":
+                    // Client Wins
+                    objectContext.Refresh(RefreshMode.ClientWins, product);
+                    break;
+                case "RefreshCurrent":
+                    // Store wins
+                    objectContext.Refresh(RefreshMode.StoreWins, product);
+                    break;
+                case "ReturnTrueNoResolve":
+                    return true;
+                case "ReturnFalse":
+                    return false;
+                case "ReturnFalseWithResolve":
+                    // Store Wins
+                    objectContext.Refresh(RefreshMode.StoreWins, product);
+                    return false;
+                case "":
+                    objectContext.Refresh(RefreshMode.ClientWins, product);
+                    break;
+                default:
+                    {
+                        throw new NotImplementedException(string.Format("ResolveMethod {0} is not defined", product.ResolveMethod));
+                    }
+            }
+
+            return true;
+        }
+
+        private bool ResolveProductWithMerge(DbEntityEntry entry)
+        {
+            // Keep a collection of all modified properties and their values.
+            DbPropertyValues currentValues = entry.CurrentValues;
+            DbPropertyValues originalValues = entry.OriginalValues;
+
+            List<Tuple<string, object>> modifiedMembers = new List<Tuple<string, object>>();
+            foreach (string propertyName in currentValues.PropertyNames)
+            {
+                object currValue = currentValues[propertyName];
+                object origValue = originalValues[propertyName];
+                if (!object.Equals(currValue, origValue))
+                {
+                    modifiedMembers.Add(new Tuple<string, object>(propertyName, currValue));
+                }
+            }
+
+            // refresh from store to get the updated values - StoreWins
+            entry.Reload();
+
+            if (entry.State == EntityState.Detached)
+            {
+                // if the refresh results in the entity becoming
+                // detached, it means the entity no longer exists
+                // in the store
+                return false;
+            }
+
+            // now play back changes
+            currentValues = entry.CurrentValues;
+            foreach (var modifiedMember in modifiedMembers)
+            {
+                currentValues[modifiedMember.Item1] = modifiedMember.Item2;
+            }
+            return true;
+        }
+        #endregion
+
+        #region Order methods
+        public IQueryable<Order> GetOrders()
+        {
+            return this.DbContext.Orders.Include("Order_Details").Include("Order_Details.Product");
+        }
+
+        public void InsertOrder(Order order)
+        {
+            DbEntityEntry<Order> entityEntry = this.DbContext.Entry(order);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                this.DbContext.Orders.Add(order);
+            }
+        }
+
+        public void UpdateOrder(Order current)
+        {
+            this.DbContext.Orders.AttachAsModified(current, this.ChangeSet.GetOriginal(current), this.DbContext);
+        }
+
+        public void DeleteOrder(Order order)
+        {
+            DbEntityEntry<Order> entityEntry = this.DbContext.Entry(order);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.Orders.Attach(order);
+                this.DbContext.Orders.Remove(order);
+            }
+        }
+        #endregion
+
+        #region OrderDetail methods
+        public IQueryable<Order_Detail> GetOrderDetails()
+        {
+            return this.DbContext.Order_Details.Include("Product");
+        }
+
+        public void InsertOrderDetail(Order_Detail detail)
+        {
+            DbEntityEntry<Order_Detail> entityEntry = this.DbContext.Entry(detail);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                this.DbContext.Order_Details.Add(detail);
+            }
+        }
+
+        public void UpdateOrderDetail(Order_Detail current)
+        {
+            this.DbContext.Order_Details.AttachAsModified(current, this.ChangeSet.GetOriginal(current), this.DbContext);
+        }
+
+        public void DeleteOrderDetail(Order_Detail detail)
+        {
+            DbEntityEntry<Order_Detail> entityEntry = this.DbContext.Entry(detail);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.Order_Details.Attach(detail);
+                this.DbContext.Order_Details.Remove(detail);
+            }
+        }
+        #endregion
+
+        #region Customer methods
+        public IQueryable<Customer> GetCustomers()
+        {
+            return this.DbContext.Customers;
+        }
+
+        public void InsertCustomer(Customer customer)
+        {
+            DbEntityEntry<Customer> entityEntry = this.DbContext.Entry(customer);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                this.DbContext.Customers.Add(customer);
+            }
+        }
+
+        public void UpdateCustomer(Customer current)
+        {
+            this.DbContext.Customers.AttachAsModified(current, this.ChangeSet.GetOriginal(current), this.DbContext);
+        }
+
+        public void DeleteCustomer(Customer customer)
+        {
+            DbEntityEntry<Customer> entityEntry = this.DbContext.Entry(customer);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.Customers.Attach(customer);
+                this.DbContext.Customers.Remove(customer);
+            }
+        }
+        #endregion
+
+        #region Category methods
+        public IQueryable<Category> GetCategories()
+        {
+            return this.DbContext.Categories;
+        }
+
+        public void InsertCategory(Category category)
+        {
+            DbEntityEntry<Category> entityEntry = this.DbContext.Entry(category);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                this.DbContext.Categories.Add(category);
+            }
+        }
+
+        public void UpdateCategory(Category current)
+        {
+            this.DbContext.Categories.AttachAsModified(current, this.ChangeSet.GetOriginal(current), this.DbContext);
+        }
+
+        public void DeleteCategory(Category category)
+        {
+            DbEntityEntry<Category> entityEntry = this.DbContext.Entry(category);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.Categories.Attach(category);
+                this.DbContext.Categories.Remove(category);
+            }
+        }
+        #endregion
+
+        #region Region/Territory composition
+        public Region GetRegionById(int id)
+        {
+            return this.GetRegions().Where(p => p.RegionID == id).FirstOrDefault();
+        }
+
+        public IQueryable<Region> GetRegions()
+        {
+            return this.DbContext.Regions.Include("Territories");
+        }
+
+        public void InsertRegion(Region region)
+        {
+            this.DbContext.Regions.Add(region);
+
+            foreach (Territory territory in this.ChangeSet.GetAssociatedChanges(region, p => p.Territories, ChangeOperation.Insert))
+            {
+                this.DbContext.Territories.Add(territory);
+            }
+        }
+
+        /// <summary>
+        /// Update the region by processing all child modifications.
+        /// <remarks>Note: The order of operations below is very important. Only by
+        /// processing the related changes in this order will the update succeed.</remarks>
+        /// </summary>
+        /// <param name="region">The region to update.</param>
+        public void UpdateRegion(Region region)
+        {
+            Region originalRegion = this.ChangeSet.GetOriginal(region);
+
+            // Attach all unmodified entities
+            foreach (Territory territory in this.ChangeSet.GetAssociatedChanges(region, p => p.Territories, ChangeOperation.None))
+            {
+                this.DbContext.Territories.Attach(territory);
+            }
+            if (originalRegion == null)
+            {
+                this.DbContext.Regions.Attach(region);
+            }
+
+            // Attach and apply changes to modified entities
+            if (originalRegion != null)
+            {
+                this.DbContext.Regions.AttachAsModified(region, originalRegion, this.DbContext);
+            }
+            foreach (Territory territory in this.ChangeSet.GetAssociatedChanges(region, p => p.Territories, ChangeOperation.Update))
+            {
+                this.DbContext.Territories.AttachAsModified(territory, this.ChangeSet.GetOriginal(territory), this.DbContext);
+            }
+
+            // Add new entities
+            foreach (Territory territory in this.ChangeSet.GetAssociatedChanges(region, p => p.Territories, ChangeOperation.Insert))
+            {
+                DbEntityEntry<Territory> entityEntry = this.DbContext.Entry(territory);
+                if (entityEntry.State != EntityState.Detached)
+                {
+                    // need to change the object state if the entity was already eagerly added
+                    entityEntry.State = EntityState.Added;
+                }
+                else
+                {
+                    this.DbContext.Territories.Add(territory);
+                }
+            }
+
+            // Finally, process any deleted entites and relationships
+            foreach (Territory territory in this.ChangeSet.GetAssociatedChanges(region, p => p.Territories, ChangeOperation.Delete))
+            {
+                Territory origTerrigory = this.ChangeSet.GetOriginal(territory);
+                if (origTerrigory != null)
+                {
+                    this.DbContext.Territories.AttachAsModified(territory, origTerrigory, this.DbContext);
+                }
+                else
+                {
+                    this.DbContext.Territories.Attach(territory);
+                }
+
+                // need to remove any employee territory rows
+                DbEntityEntry tEntityEntry = this.DbContext.Entry(territory);
+                DbCollectionEntry employeesCollection = tEntityEntry.Collection("Employees");
+                employeesCollection.Load();
+                territory.Employees.Clear();
+
+                this.DbContext.Territories.Remove(territory);
+            }
+        }
+
+        public void DeleteRegion(Region region)
+        {
+            foreach (Territory territory in this.ChangeSet.GetAssociatedChanges(region, p => p.Territories, ChangeOperation.Delete))
+            {
+                Territory origTerrigory = this.ChangeSet.GetOriginal(territory);
+                if (origTerrigory != null)
+                {
+                    this.DbContext.Territories.AttachAsModified(territory, origTerrigory, this.DbContext);
+                }
+                else
+                {
+                    this.DbContext.Territories.Attach(territory);
+                }
+
+                // need to remove any employee territory rows
+                DbEntityEntry tEntityEntry = this.DbContext.Entry(territory);
+                DbCollectionEntry employeesCollection = tEntityEntry.Collection("Employees");
+                employeesCollection.Load();
+                territory.Employees.Clear();
+
+                this.DbContext.Territories.Remove(territory);
+            }
+
+            DbEntityEntry<Region> entityEntry = this.DbContext.Entry(region);
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                this.DbContext.Regions.Attach(region);
+                this.DbContext.Regions.Remove(region);
+            }
+        }
+        #endregion
+
+        public IQueryable<ProductInfo> GetProductInfos()
+        {
+            var results = from p in this.DbContext.Products.Include("Supplier").Include("Category")
+                          select new ProductInfo
+                          {
+                              ProductID = p.ProductID,
+                              CategoryName = p.Category.CategoryName,
+                              ProductName = p.ProductName,
+                              SupplierName = p.Supplier.CompanyName
+                          };
+            return results;
+        }
+
+        public void UpdateProductInfo(ProductInfo current)
+        {
+            // load the corresponding product to modify and copy
+            // the new values
+            Product product = this.DbContext.Products.First(p => p.ProductID == current.ProductID);
+            product.ProductName = current.ProductName;
+        }
+    }
+
+    /// <summary>
+    /// Derived provider that overrides Context creation to use the current
+    /// active connection.
+    /// </summary>
+    [EnableClientAccess]
+    [ServiceContract(Name = "Northwind")]
+    public class Northwind_CUD : Northwind
+    {
+        protected override EFCFNorthwindEntities CreateDbContext()
+        {
+            EFCFNorthwindEntities context = null;
+
+            string connection = ActiveConnections.Get("Northwind");
+            if (!string.IsNullOrEmpty(connection))
+            {
+                // if there is an active connection in scope use it
+                // Here we have to append the mapping file info to the connection string
+                //"data source=Alexappfxss01;Persist Security Info=True;User ID=dbi;Password=!Password1;MultipleActiveResultSets=True;Database=Northwind_Light"
+                connection = string.Format("Persist Security Info=True;MultipleActiveResultSets=True;{0}", connection);
+                //connection = "Data Source=AlexAppFxss02;Initial Catalog=Northwind;Persist Security Info=True;User ID=dbi;Password=!Password1;MultipleActiveResultSets=True";
+                context = new EFCFNorthwindEntities(connection);
+            }
+            else
+            {
+                context = base.CreateDbContext();
+            }
+
+            return context;
+        }
+    }
+}

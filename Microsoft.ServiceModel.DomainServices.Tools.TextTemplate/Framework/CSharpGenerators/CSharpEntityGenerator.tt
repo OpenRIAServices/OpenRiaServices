@@ -1,0 +1,212 @@
+﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.EntityGenerator" #>
+
+<#@ import namespace="System" #>
+<#@ import namespace="System.ComponentModel" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.ServiceModel.DomainServices.Server" #>
+<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate" #>
+<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools" #>
+<#@ import namespace="System.Runtime.Serialization" #>
+
+<#@ include file="Templates\DataContractGeneratorTemplate.ttinclude" #>
+<#@ include file="Templates\Utility.ttinclude" #>
+<#@ include file="Templates\AssociationGenerator.ttinclude" #>
+
+<# this.Generate(); #>
+
+<#+	
+	private void GenerateCustomMethod(DomainOperationEntry customMethod)
+	{
+		string methodInvokingName = "On" + customMethod.Name + "Invoking";
+        string methodInvokedName = "On" + customMethod.Name + "Invoked";		
+		List<KeyValuePair<string, string>> customMethodParameters = new List<KeyValuePair<string, string>>();
+		List<DomainOperationParameter> domainOperationparameterList = new List<DomainOperationParameter>();
+		for(int i = 1; i < customMethod.Parameters.Count(); i++)
+		{
+			DomainOperationParameter paramInfo = customMethod.Parameters[i];
+			customMethodParameters.Add(new KeyValuePair<string, string>(CodeGenUtilities.GetTypeName(CodeGenUtilities.TranslateType(paramInfo.ParameterType)), paramInfo.Name));
+			domainOperationparameterList.Add(paramInfo);
+		}
+
+#>
+public void <#= customMethod.Name #>(<#+
+this.GenerateParameterDeclaration(domainOperationparameterList, true);
+#>)
+<#+		
+		this.GenerateOpeningBrace();
+#>
+this.<#= methodInvokingName #>(<#+ this.GenerateParametersForMethodCall(domainOperationparameterList); #>);
+base.InvokeAction("<#= customMethod.Name #>"<#+ if(domainOperationparameterList.Count > 0){#>, <#+ this.GenerateParametersForMethodCall(domainOperationparameterList); }#>);
+this.<#= methodInvokedName #>();
+<#+		
+		this.GenerateClosingBrace();
+#>
+partial void <#= methodInvokingName #>(<#+ this.GenerateParameterDeclaration(domainOperationparameterList, false); #>);
+partial void <#= methodInvokedName #>();
+<#+
+	}
+	
+	private void GenerateParametersForMethodCall(IEnumerable<DomainOperationParameter> parameters)
+	{
+		DomainOperationParameter[] paramArr = parameters.ToArray();
+		for(int i = 0; i < paramArr.Length; i++)
+		{
+			#><#= paramArr[i].Name #><#+
+			if(i + 1 < paramArr.Length)
+			{
+				#>, <#+
+			}
+		}
+	}
+	
+	private void GenerateCustomMethodProperties(DomainOperationEntry customMethod)
+	{
+#>
+[System.ComponentModel.DataAnnotations.Display(AutoGenerateField=false)]
+public bool Can<#= customMethod.Name #>
+{
+    get
+    {
+        return base.CanInvokeAction("<#= customMethod.Name #>");
+    }
+}
+
+[System.ComponentModel.DataAnnotations.Display(AutoGenerateField=false)]
+public bool Is<#= customMethod.Name #>Invoked
+{
+	get
+	{
+		return base.IsActionInvoked("<#= customMethod.Name #>");
+	}
+}
+<#+
+	}
+
+	private void GenerateOnActionStateChanged(IEnumerable<DomainOperationEntry> customMethods)
+	{
+#>
+protected override void OnActionStateChanged()
+<#+
+		this.GenerateOpeningBrace();
+		if(this.IsDerivedType)
+		{
+#>
+base.OnActionStateChanged();
+<#+
+		}
+		foreach(DomainOperationEntry customMethod in customMethods)
+		{
+#>
+base.UpdateActionState("<#= customMethod.Name #>", "Can<#= customMethod.Name #>", "Is<#= customMethod.Name #>Invoked");
+<#+
+		}
+		this.GenerateClosingBrace();
+	}
+	
+	/// <summary>
+	/// Generates the GetIdentity() method on the entity.
+	/// </summary>
+	protected virtual void GenerateGetIdentityMethod()
+	{
+		string[] keyNames;
+		string[] nullableKeyNames;
+		this.GetKeysInfo(out keyNames, out nullableKeyNames);
+		if(keyNames != null && keyNames.Count() > 0)
+		{
+#>
+public override object GetIdentity()
+<#+  
+			this.GenerateOpeningBrace();
+			if(keyNames.Count() == 1)
+			{
+#>
+return this.<#= keyNames[0] #>;
+<#+
+			}
+			else
+			{
+				if(nullableKeyNames.Count() > 0)
+				{
+					#>if(<#+ 
+						for(int i = 0; i < nullableKeyNames.Count(); i++)
+						{
+							#>this.<#= nullableKeyNames[i] #> == null<#+
+							if(i + 1 < nullableKeyNames.Count())
+							{
+								#> || <#+
+							}
+						}	
+#>)
+{
+	return null;
+}
+<#+
+				}
+#>
+return System.ServiceModel.DomainServices.Client.EntityKey.Create(<#+
+for(int i = 0; i < keyNames.Count(); i++)
+{
+	#>this.<#= keyNames[i] #><#+
+	if(i + 1 < keyNames.Count())
+	{
+		#>, <#+
+	}
+}	
+#>);
+<#+
+				
+			}
+			this.GenerateClosingBrace();
+		}
+	}
+	
+	private void GenerateAdditionalUserCode()
+	{
+		// Generate Properties / methods for IPrincipal and IIdentity interfaces. We are guaranteed to have properties called Name and Roles.
+		// We simply generate code as it is, since it is not dependent on anything.
+		
+#>
+string global::System.Security.Principal.IIdentity.AuthenticationType
+{
+    get
+    {
+        return string.Empty;
+    }
+}
+
+public bool IsAuthenticated
+{
+    get
+    {
+        return (true != string.IsNullOrEmpty(this.Name));
+    }
+}
+
+string global::System.Security.Principal.IIdentity.Name
+{
+    get
+    {
+        return this.Name;
+    }
+}
+
+global::System.Security.Principal.IIdentity global::System.Security.Principal.IPrincipal.Identity
+{
+    get
+    {
+        return this;
+    }
+}
+
+public bool IsInRole(string role)
+{
+    if ((this.Roles == null))
+    {
+        return false;
+    }
+    return global::System.Linq.Enumerable.Contains(this.Roles, role);
+}
+<#+
+	}
+#>

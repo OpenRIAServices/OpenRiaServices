@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Buddy_Class_Remarks" xml:space="preserve">
+    <value>This class allows you to attach custom attributes to properties
+ of the {0} class.
+</value>
+    <comment>{0}=Entity class name</comment>
+  </data>
+  <data name="Buddy_Class_Remarks_CSharp" xml:space="preserve">
+    <value>For example, the following marks the Xyz property as a
+ required property and specifies the format for valid values:
+    [Required]
+    [RegularExpression("[A-Z][A-Za-z0-9]*")]
+    [StringLength(32)]
+    public string Xyz { get; set; }</value>
+  </data>
+  <data name="Buddy_Class_Remarks_VB" xml:space="preserve">
+    <value>For example, the following marks the Xyz property as a
+ required property and specifies the format for valid values:
+    &lt;Required()&gt;
+    &lt;RegularExpression("[A-Z][A-Za-z0-9]*")&gt;
+    &lt;StringLength(32)&gt;
+    Public Property Xyz As String</value>
+  </data>
+  <data name="BusinessLogicClass_AvailableContexts_Text" xml:space="preserve">
+    <value>Available context classes:</value>
+  </data>
+  <data name="BusinessLogicClass_Cancel_Button_Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BusinessLogicClass_Class_Remarks" xml:space="preserve">
+    <value>Implements application logic using the {0} context.
+ TODO: Add your application logic to these methods or in additional methods.
+ TODO: Wire up authentication (Windows/ASP.NET Forms) and uncomment the following to disable anonymous access
+ Also consider adding roles to restrict access as appropriate.</value>
+    <comment>{0} = type name of context</comment>
+  </data>
+  <data name="BusinessLogicClass_Class_Remarks_Empty" xml:space="preserve">
+    <value>TODO: Create methods containing your application logic.</value>
+  </data>
+  <data name="BusinessLogicClass_Dialog_Title" xml:space="preserve">
+    <value>Add New Domain Service Class</value>
+  </data>
+  <data name="BusinessLogicClass_DomainServiceClassName_Text" xml:space="preserve">
+    <value>Domain Service class name:</value>
+  </data>
+  <data name="BusinessLogicClass_EnableClientAccess_Comment" xml:space="preserve">
+    <value>TODO: add the EnableClientAccessAttribute to this class to expose this DomainService to clients.</value>
+  </data>
+  <data name="BusinessLogicClass_EnableClientAccess_Text" xml:space="preserve">
+    <value>Enable client access</value>
+  </data>
+  <data name="BusinessLogicClass_EnableClientAccess_Tooltip" xml:space="preserve">
+    <value>Checking this makes this Domain Service available to client applications</value>
+  </data>
+  <data name="BusinessLogicClass_EnableODataEndpoint_Text" xml:space="preserve">
+    <value>Expose OData endpoint</value>
+  </data>
+  <data name="BusinessLogicClass_EnableODataEndpoint_Tooltip" xml:space="preserve">
+    <value>Checking this will expose an OData endpoint for this application
+and will mark the generated query methods as the defaults.</value>
+  </data>
+  <data name="BusinessLogicClass_EntityFramework" xml:space="preserve">
+    <value>Entity Framework</value>
+  </data>
+  <data name="BusinessLogicClass_Entity_Partial_Class_Remarks" xml:space="preserve">
+    <value>The MetadataTypeAttribute identifies {0} as the class
+ that carries additional metadata for the {1} class.</value>
+    <comment>{0} = buddy class name, {1} = Entity Type name</comment>
+  </data>
+  <data name="BusinessLogicClass_Error_Invalid_ClassName" xml:space="preserve">
+    <value>The identifier '{0}' is not a valid class name.   Please enter a valid class name before proceeding.</value>
+    <comment>{0} = user entered class name for business logic class</comment>
+  </data>
+  <data name="BusinessLogicClass_Error_No_AssemblyName" xml:space="preserve">
+    <value>No AssemblyName was available for this project.</value>
+  </data>
+  <data name="BusinessLogicClass_Error_No_ConfigurationManager" xml:space="preserve">
+    <value>No ConfigurationManager was available.</value>
+  </data>
+  <data name="BusinessLogicClass_Error_No_Hierarchy" xml:space="preserve">
+    <value>No VSHierarchy was available</value>
+  </data>
+  <data name="BusinessLogicClass_Error_No_Project" xml:space="preserve">
+    <value>No project was active.</value>
+  </data>
+  <data name="BusinessLogicClass_Error_No_RootNamespace" xml:space="preserve">
+    <value>No RootNamespace was available.</value>
+  </data>
+  <data name="BusinessLogicClass_Error_No_TypeDiscoveryService" xml:space="preserve">
+    <value>The TypeDiscoveryService was not available.</value>
+  </data>
+  <data name="BusinessLogicClass_Failed_Get_Types" xml:space="preserve">
+    <value>Failed to load types from '{0}'.  {1}</value>
+  </data>
+  <data name="BusinessLogicClass_Failed_Load" xml:space="preserve">
+    <value>Failed to load '{0}'.  {1}</value>
+  </data>
+  <data name="BusinessLogicClass_Failed_Type_Load" xml:space="preserve">
+    <value>Failed to load type '{0}'.</value>
+  </data>
+  <data name="BusinessLogicClass_Generic_Type_CSharp" xml:space="preserve">
+    <value>{0}&lt;{1}&gt;</value>
+    <comment>{0}=base class, {1}=generic parameter class</comment>
+  </data>
+  <data name="BusinessLogicClass_Generic_Type_VB" xml:space="preserve">
+    <value>{0}(Of {1})</value>
+    <comment>{0}=base class, {1}=generic parameter class</comment>
+  </data>
+  <data name="BusinessLogicClass_InvalidContextType" xml:space="preserve">
+    <value>The type '{0}' is not a valid context for a DomainService class.</value>
+  </data>
+  <data name="BusinessLogicClass_LinqToSql" xml:space="preserve">
+    <value>LINQ to SQL</value>
+  </data>
+  <data name="BusinessLogicClass_ListView_EnableEditing_Header" xml:space="preserve">
+    <value>Enable editing</value>
+  </data>
+  <data name="BusinessLogicClass_ListView_Entity_Header" xml:space="preserve">
+    <value>Entities</value>
+  </data>
+  <data name="BusinessLogicClass_Metadata_Text" xml:space="preserve">
+    <value>Generate associated classes for metadata</value>
+  </data>
+  <data name="BusinessLogicClass_Metadata_Tooltip" xml:space="preserve">
+    <value>Checking this will create file '{0}.metadata.cs' to let you add additional metadata such as validation.</value>
+  </data>
+  <data name="BusinessLogicClass_Name_And_Technology" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>{0}=context name, {1}=DAL name</comment>
+  </data>
+  <data name="BusinessLogicClass_Not_Initialized" xml:space="preserve">
+    <value>The BusinessLogicModel has not been initialized.</value>
+  </data>
+  <data name="BusinessLogicClass_No_Project_Path" xml:space="preserve">
+    <value>The active project has no corresponding file.</value>
+  </data>
+  <data name="BusinessLogicClass_OK_Button_Text" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="BusinessLogicClass_Private_Ctor_Comment" xml:space="preserve">
+    <value>Metadata classes are not meant to be instantiated.</value>
+  </data>
+  <data name="BusinessLogicClass_Query_Method_EF_Remarks" xml:space="preserve">
+    <value>To support paging you will need to add ordering to the '{0}' query.</value>
+  </data>
+  <data name="BusinessLogicClass_Query_Method_Remarks" xml:space="preserve">
+    <value>TODO:
+ Consider constraining the results of your query method.  If you need additional input you can
+ add parameters to this method or create additional query methods with different names.</value>
+  </data>
+  <data name="BusinessLogicClass_RequiresAuthentication_CSharp" xml:space="preserve">
+    <value>[RequiresAuthentication]</value>
+  </data>
+  <data name="BusinessLogicClass_RequiresAuthentication_VB" xml:space="preserve">
+    <value>&lt;RequiresAuthentication&gt; _</value>
+    <comment>line continuation mandatory if user uncomments</comment>
+  </data>
+  <data name="BusinessLogic_Class_Empty_Class_Name" xml:space="preserve">
+    <value>&lt;empty Domain Service class&gt;</value>
+  </data>
+  <data name="WizardError_Caption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="WizardError_Empty_Filename" xml:space="preserve">
+    <value>A file name for the DomainService class is required.</value>
+  </data>
+  <data name="WizardError_No_DTE" xml:space="preserve">
+    <value>No automation object was supplied.</value>
+  </data>
+  <data name="BusinessLogicClass_ListView_EnableEditing_Automation" xml:space="preserve">
+    <value>Enable editing for {0}</value>
+    <comment>{0}=entity name</comment>
+  </data>
+  <data name="LinqToEntitiesDbContext_UnableToCreateContext" xml:space="preserve">
+    <value>Failed to create the DbContext for the EntityFramework model due to the following exception: '{0}'.</value>
+  </data>
+  <data name="LinqToEntitiesDbContext_DefaultCtorNotFound" xml:space="preserve">
+    <value>The DbContext type '{0}' does not contain a default constructor. A default constructor is required to use EntityFramework in the Code-First mode with WCF RIA Services.</value>
+  </data>
+  <data name="BusinessLogicClass_AvailableContexts_DbContextUrl" xml:space="preserve">
+    <value>http://go.microsoft.com/fwlink/?LinkID=256695</value>
+  </data>
+  <data name="BusinessLogicClass_AvailableContexts_DbContextWarning" xml:space="preserve">
+    <value>Some Entity Framework context classes may have been excluded. </value>
+  </data>
+  <data name="BusinessLogicClass_AvailableContexts_KnowledgeBase" xml:space="preserve">
+    <value>More information can be found in the knowledge base.</value>
+  </data>
+</root>

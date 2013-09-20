@@ -1,0 +1,913 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="AdventureWorks" EntityNamespace="DataTests.AdventureWorks.LTS" ContextNamespace="DataTests.AdventureWorks.LTS" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=AlexAppFxSS02;Initial Catalog=AdventureWorks;Persist Security Info=True;User ID=dbi" SettingsObjectName="System.Common.DomainServices.Test.Properties.Settings" SettingsPropertyName="AdventureWorksConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="HumanResources.Department" Member="Departments">
+    <Type Name="Department">
+      <Column Name="DepartmentID" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GroupName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Department_EmployeeDepartmentHistory" Member="EmployeeDepartmentHistories" ThisKey="DepartmentID" OtherKey="DepartmentID" Type="EmployeeDepartmentHistory" />
+    </Type>
+  </Table>
+  <Table Name="Sales.StoreContact" Member="StoreContacts">
+    <Type Name="StoreContact">
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContactTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Contact_StoreContact" Member="Contact" ThisKey="ContactID" OtherKey="ContactID" Type="Contact" IsForeignKey="true" />
+      <Association Name="ContactType_StoreContact" Member="ContactType" ThisKey="ContactTypeID" OtherKey="ContactTypeID" Type="ContactType" IsForeignKey="true" />
+      <Association Name="Store_StoreContact" Member="Store" ThisKey="CustomerID" OtherKey="CustomerID" Type="Store" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="HumanResources.Employee" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NationalIDNumber" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LoginID" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="ManagerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BirthDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="MaritalStatus" Type="System.String" DbType="NChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Gender" Type="System.String" DbType="NChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="HireDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SalariedFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="VacationHours" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="SickLeaveHours" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="CurrentFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_Employee" Member="Reports" Storage="_Employees" ThisKey="EmployeeID" OtherKey="ManagerID" Type="Employee" />
+      <Association Name="Employee_EmployeeAddress" Member="EmployeeAddresses" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="EmployeeAddress" />
+      <Association Name="Employee_EmployeeDepartmentHistory" Member="EmployeeDepartmentHistories" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="EmployeeDepartmentHistory" />
+      <Association Name="Employee_EmployeePayHistory" Member="EmployeePayHistories" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="EmployeePayHistory" />
+      <Association Name="Employee_JobCandidate" Member="JobCandidates" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="JobCandidate" />
+      <Association Name="Employee_PurchaseOrder" Member="PurchaseOrders" Storage="_PurchaseOrderHeaders" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="PurchaseOrder" />
+      <Association Name="Employee_SalesPerson" Member="SalesPerson" ThisKey="EmployeeID" OtherKey="SalesPersonID" Type="SalesPerson" Cardinality="One" />
+      <Association Name="Employee_Employee" Member="Manager" Storage="_Employee1" ThisKey="ManagerID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="Contact_Employee" Member="Contact" ThisKey="ContactID" OtherKey="ContactID" Type="Contact" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="HumanResources.EmployeeAddress" Member="EmployeeAddresses">
+    <Type Name="EmployeeAddress">
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AddressID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_EmployeeAddress" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="Address_EmployeeAddress" Member="Address" ThisKey="AddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="HumanResources.EmployeeDepartmentHistory" Member="EmployeeDepartmentHistories">
+    <Type Name="EmployeeDepartmentHistory">
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentID" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ShiftID" Type="System.Byte" DbType="TinyInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Department_EmployeeDepartmentHistory" Member="Department" ThisKey="DepartmentID" OtherKey="DepartmentID" Type="Department" IsForeignKey="true" />
+      <Association Name="Employee_EmployeeDepartmentHistory" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="Shift_EmployeeDepartmentHistory" Member="Shift" ThisKey="ShiftID" OtherKey="ShiftID" Type="Shift" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="HumanResources.EmployeePayHistory" Member="EmployeePayHistories">
+    <Type Name="EmployeePayHistory">
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RateChangeDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Rate" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="PayFrequency" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_EmployeePayHistory" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="HumanResources.JobCandidate" Member="JobCandidates">
+    <Type Name="JobCandidate">
+      <Column Name="JobCandidateID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Resume" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Employee_JobCandidate" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="HumanResources.Shift" Member="Shifts">
+    <Type Name="Shift">
+      <Column Name="ShiftID" Type="System.Byte" DbType="TinyInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StartTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Shift_EmployeeDepartmentHistory" Member="EmployeeDepartmentHistories" ThisKey="ShiftID" OtherKey="ShiftID" Type="EmployeeDepartmentHistory" />
+    </Type>
+  </Table>
+  <Table Name="Person.Address" Member="Addresses">
+    <Type Name="Address">
+      <Column Name="AddressID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AddressLine1" Type="System.String" DbType="NVarChar(60) NOT NULL" CanBeNull="false" />
+      <Column Name="AddressLine2" Type="System.String" DbType="NVarChar(60)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="StateProvinceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PostalCode" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Address_EmployeeAddress" Member="EmployeeAddresses" ThisKey="AddressID" OtherKey="AddressID" Type="EmployeeAddress" />
+      <Association Name="Address_VendorAddress" Member="VendorAddresses" ThisKey="AddressID" OtherKey="AddressID" Type="VendorAddress" />
+      <Association Name="Address_CustomerAddress" Member="CustomerAddresses" ThisKey="AddressID" OtherKey="AddressID" Type="CustomerAddress" />
+      <Association Name="Address_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="AddressID" OtherKey="BillToAddressID" Type="SalesOrderHeader" />
+      <Association Name="Address_SalesOrderHeader1" Member="SalesOrderHeaders1" ThisKey="AddressID" OtherKey="ShipToAddressID" Type="SalesOrderHeader" />
+      <Association Name="StateProvince_Address" Member="StateProvince" ThisKey="StateProvinceID" OtherKey="StateProvinceID" Type="StateProvince" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Person.AddressType" Member="AddressTypes">
+    <Type Name="AddressType">
+      <Column Name="AddressTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="AddressType_VendorAddress" Member="VendorAddresses" ThisKey="AddressTypeID" OtherKey="AddressTypeID" Type="VendorAddress" />
+      <Association Name="AddressType_CustomerAddress" Member="CustomerAddresses" ThisKey="AddressTypeID" OtherKey="AddressTypeID" Type="CustomerAddress" />
+    </Type>
+  </Table>
+  <Table Name="Person.Contact" Member="Contacts">
+    <Type Name="Contact">
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NameStyle" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(8)" CanBeNull="true" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MiddleName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Suffix" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="EmailAddress" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="EmailPromotion" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(25)" CanBeNull="true" />
+      <Column Name="PasswordHash" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordSalt" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="AdditionalContactInfo" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Contact_StoreContact" Member="StoreContacts" ThisKey="ContactID" OtherKey="ContactID" Type="StoreContact" />
+      <Association Name="Contact_Employee" Member="Employees" ThisKey="ContactID" OtherKey="ContactID" Type="Employee" />
+      <Association Name="Contact_VendorContact" Member="VendorContacts" ThisKey="ContactID" OtherKey="ContactID" Type="VendorContact" />
+      <Association Name="Contact_ContactCreditCard" Member="ContactCreditCards" ThisKey="ContactID" OtherKey="ContactID" Type="ContactCreditCard" />
+      <Association Name="Contact_Individual" Member="Individuals" ThisKey="ContactID" OtherKey="ContactID" Type="Individual" />
+      <Association Name="Contact_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="ContactID" OtherKey="ContactID" Type="SalesOrderHeader" />
+    </Type>
+  </Table>
+  <Table Name="Person.ContactType" Member="ContactTypes">
+    <Type Name="ContactType">
+      <Column Name="ContactTypeID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ContactType_StoreContact" Member="StoreContacts" ThisKey="ContactTypeID" OtherKey="ContactTypeID" Type="StoreContact" />
+      <Association Name="ContactType_VendorContact" Member="VendorContacts" ThisKey="ContactTypeID" OtherKey="ContactTypeID" Type="VendorContact" />
+    </Type>
+  </Table>
+  <Table Name="Person.CountryRegion" Member="CountryRegions">
+    <Type Name="CountryRegion">
+      <Column Name="CountryRegionCode" Type="System.String" DbType="NVarChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CountryRegion_StateProvince" Member="StateProvinces" ThisKey="CountryRegionCode" OtherKey="CountryRegionCode" Type="StateProvince" />
+      <Association Name="CountryRegion_CountryRegionCurrency" Member="CountryRegionCurrencies" ThisKey="CountryRegionCode" OtherKey="CountryRegionCode" Type="CountryRegionCurrency" />
+    </Type>
+  </Table>
+  <Table Name="Person.StateProvince" Member="StateProvinces">
+    <Type Name="StateProvince">
+      <Column Name="StateProvinceID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="StateProvinceCode" Type="System.String" DbType="NChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="CountryRegionCode" Type="System.String" DbType="NVarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="IsOnlyStateProvinceFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TerritoryID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="StateProvince_Address" Member="Addresses" ThisKey="StateProvinceID" OtherKey="StateProvinceID" Type="Address" />
+      <Association Name="StateProvince_SalesTaxRate" Member="SalesTaxRates" ThisKey="StateProvinceID" OtherKey="StateProvinceID" Type="SalesTaxRate" />
+      <Association Name="CountryRegion_StateProvince" Member="CountryRegion" ThisKey="CountryRegionCode" OtherKey="CountryRegionCode" Type="CountryRegion" IsForeignKey="true" />
+      <Association Name="SalesTerritory_StateProvince" Member="SalesTerritory" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesTerritory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.BillOfMaterials" Member="BillOfMaterials">
+    <Type Name="BillOfMaterial">
+      <Column Name="BillOfMaterialsID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductAssemblyID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ComponentID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UnitMeasureCode" Type="System.String" DbType="NChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="BOMLevel" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="PerAssemblyQty" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_BillOfMaterial" Member="Product" ThisKey="ComponentID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="Product_BillOfMaterial1" Member="Product1" ThisKey="ProductAssemblyID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="UnitMeasure_BillOfMaterial" Member="UnitMeasure" ThisKey="UnitMeasureCode" OtherKey="UnitMeasureCode" Type="UnitMeasure" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.Culture" Member="Cultures">
+    <Type Name="Culture">
+      <Column Name="CultureID" Type="System.String" DbType="NChar(6) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Culture_ProductModelProductDescriptionCulture" Member="ProductModelProductDescriptionCultures" ThisKey="CultureID" OtherKey="CultureID" Type="ProductModelProductDescriptionCulture" />
+    </Type>
+  </Table>
+  <Table Name="Production.Document" Member="Documents">
+    <Type Name="Document">
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="FileExtension" Type="System.String" DbType="NVarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="Revision" Type="System.String" DbType="NChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="ChangeNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="DocumentSummary" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Document" Member="Document1" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Document_ProductDocument" Member="ProductDocuments" ThisKey="DocumentID" OtherKey="DocumentID" Type="ProductDocument" />
+    </Type>
+  </Table>
+  <Table Name="Production.Illustration" Member="Illustrations">
+    <Type Name="Illustration">
+      <Column Name="IllustrationID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Diagram" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Illustration_ProductModelIllustration" Member="ProductModelIllustrations" ThisKey="IllustrationID" OtherKey="IllustrationID" Type="ProductModelIllustration" />
+    </Type>
+  </Table>
+  <Table Name="Production.Location" Member="Locations">
+    <Type Name="Location">
+      <Column Name="LocationID" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CostRate" Type="System.Decimal" DbType="SmallMoney NOT NULL" CanBeNull="false" />
+      <Column Name="Availability" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Location_ProductInventory" Member="ProductInventories" ThisKey="LocationID" OtherKey="LocationID" Type="ProductInventory" />
+      <Association Name="Location_WorkOrderRouting" Member="WorkOrderRoutings" ThisKey="LocationID" OtherKey="LocationID" Type="WorkOrderRouting" />
+    </Type>
+  </Table>
+  <Table Name="Production.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductNumber" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="MakeFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="FinishedGoodsFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Color" Type="System.String" DbType="NVarChar(15)" CanBeNull="true" />
+      <Column Name="SafetyStockLevel" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ReorderPoint" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="StandardCost" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ListPrice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Size" Type="System.String" DbType="NVarChar(5)" CanBeNull="true" />
+      <Column Name="SizeUnitMeasureCode" Type="System.String" DbType="NChar(3)" CanBeNull="true" />
+      <Column Name="WeightUnitMeasureCode" Type="System.String" DbType="NChar(3)" CanBeNull="true" />
+      <Column Name="Weight" Type="System.Decimal" DbType="Decimal(8,2)" CanBeNull="true" />
+      <Column Name="DaysToManufacture" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductLine" Type="System.String" DbType="NChar(2)" CanBeNull="true" />
+      <Column Name="Class" Type="System.String" DbType="NChar(2)" CanBeNull="true" />
+      <Column Name="Style" Type="System.String" DbType="NChar(2)" CanBeNull="true" />
+      <Column Name="ProductSubcategoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductModelID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SellStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SellEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DiscontinuedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_BillOfMaterial" Member="BillOfMaterials" ThisKey="ProductID" OtherKey="ComponentID" Type="BillOfMaterial" />
+      <Association Name="Product_BillOfMaterial1" Member="BillOfMaterials1" ThisKey="ProductID" OtherKey="ProductAssemblyID" Type="BillOfMaterial" />
+      <Association Name="Product_ProductCostHistory" Member="ProductCostHistories" ThisKey="ProductID" OtherKey="ProductID" Type="ProductCostHistory" />
+      <Association Name="Product_ProductDocument" Member="ProductDocuments" ThisKey="ProductID" OtherKey="ProductID" Type="ProductDocument" />
+      <Association Name="Product_ProductInventory" Member="ProductInventories" ThisKey="ProductID" OtherKey="ProductID" Type="ProductInventory" />
+      <Association Name="Product_ProductListPriceHistory" Member="ProductListPriceHistories" ThisKey="ProductID" OtherKey="ProductID" Type="ProductListPriceHistory" />
+      <Association Name="Product_ProductProductPhoto" Member="ProductProductPhotos" ThisKey="ProductID" OtherKey="ProductID" Type="ProductProductPhoto" />
+      <Association Name="Product_ProductReview" Member="ProductReviews" ThisKey="ProductID" OtherKey="ProductID" Type="ProductReview" />
+      <Association Name="Product_TransactionHistory" Member="TransactionHistories" ThisKey="ProductID" OtherKey="ProductID" Type="TransactionHistory" />
+      <Association Name="Product_WorkOrder" Member="WorkOrders" ThisKey="ProductID" OtherKey="ProductID" Type="WorkOrder" />
+      <Association Name="Product_ProductVendor" Member="ProductVendors" ThisKey="ProductID" OtherKey="ProductID" Type="ProductVendor" />
+      <Association Name="Product_PurchaseOrderDetail" Member="PurchaseOrderDetails" ThisKey="ProductID" OtherKey="ProductID" Type="PurchaseOrderDetail" />
+      <Association Name="Product_ShoppingCartItem" Member="ShoppingCartItems" ThisKey="ProductID" OtherKey="ProductID" Type="ShoppingCartItem" />
+      <Association Name="Product_SpecialOfferProduct" Member="SpecialOfferProducts" ThisKey="ProductID" OtherKey="ProductID" Type="SpecialOfferProduct" />
+      <Association Name="ProductModel_Product" Member="ProductModel" ThisKey="ProductModelID" OtherKey="ProductModelID" Type="ProductModel" IsForeignKey="true" />
+      <Association Name="ProductSubcategory_Product" Member="ProductSubcategory" ThisKey="ProductSubcategoryID" OtherKey="ProductSubcategoryID" Type="ProductSubcategory" IsForeignKey="true" />
+      <Association Name="UnitMeasure_Product" Member="UnitMeasure" ThisKey="SizeUnitMeasureCode" OtherKey="UnitMeasureCode" Type="UnitMeasure" IsForeignKey="true" />
+      <Association Name="UnitMeasure_Product1" Member="UnitMeasure1" ThisKey="WeightUnitMeasureCode" OtherKey="UnitMeasureCode" Type="UnitMeasure" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductCategory" Member="ProductCategories">
+    <Type Name="ProductCategory">
+      <Column Name="ProductCategoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ProductCategory_ProductSubcategory" Member="ProductSubcategories" ThisKey="ProductCategoryID" OtherKey="ProductCategoryID" Type="ProductSubcategory" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductCostHistory" Member="ProductCostHistories">
+    <Type Name="ProductCostHistory">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="StandardCost" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductCostHistory" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductDescription" Member="ProductDescriptions">
+    <Type Name="ProductDescription">
+      <Column Name="ProductDescriptionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ProductDescription_ProductModelProductDescriptionCulture" Member="ProductModelProductDescriptionCultures" ThisKey="ProductDescriptionID" OtherKey="ProductDescriptionID" Type="ProductModelProductDescriptionCulture" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductDocument" Member="ProductDocuments">
+    <Type Name="ProductDocument">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DocumentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Document_ProductDocument" Member="Document" ThisKey="DocumentID" OtherKey="DocumentID" Type="Document" IsForeignKey="true" />
+      <Association Name="Product_ProductDocument" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductInventory" Member="ProductInventories">
+    <Type Name="ProductInventory">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LocationID" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Shelf" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Bin" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Location_ProductInventory" Member="Location" ThisKey="LocationID" OtherKey="LocationID" Type="Location" IsForeignKey="true" />
+      <Association Name="Product_ProductInventory" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductListPriceHistory" Member="ProductListPriceHistories">
+    <Type Name="ProductListPriceHistory">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ListPrice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductListPriceHistory" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductModel" Member="ProductModels">
+    <Type Name="ProductModel">
+      <Column Name="ProductModelID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CatalogDescription" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Instructions" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ProductModel_Product" Member="Products" ThisKey="ProductModelID" OtherKey="ProductModelID" Type="Product" />
+      <Association Name="ProductModel_ProductModelIllustration" Member="ProductModelIllustrations" ThisKey="ProductModelID" OtherKey="ProductModelID" Type="ProductModelIllustration" />
+      <Association Name="ProductModel_ProductModelProductDescriptionCulture" Member="ProductModelProductDescriptionCultures" ThisKey="ProductModelID" OtherKey="ProductModelID" Type="ProductModelProductDescriptionCulture" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductModelIllustration" Member="ProductModelIllustrations">
+    <Type Name="ProductModelIllustration">
+      <Column Name="ProductModelID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IllustrationID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Illustration_ProductModelIllustration" Member="Illustration" ThisKey="IllustrationID" OtherKey="IllustrationID" Type="Illustration" IsForeignKey="true" />
+      <Association Name="ProductModel_ProductModelIllustration" Member="ProductModel" ThisKey="ProductModelID" OtherKey="ProductModelID" Type="ProductModel" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductModelProductDescriptionCulture" Member="ProductModelProductDescriptionCultures">
+    <Type Name="ProductModelProductDescriptionCulture">
+      <Column Name="ProductModelID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProductDescriptionID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CultureID" Type="System.String" DbType="NChar(6) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Culture_ProductModelProductDescriptionCulture" Member="Culture" ThisKey="CultureID" OtherKey="CultureID" Type="Culture" IsForeignKey="true" />
+      <Association Name="ProductDescription_ProductModelProductDescriptionCulture" Member="ProductDescription" ThisKey="ProductDescriptionID" OtherKey="ProductDescriptionID" Type="ProductDescription" IsForeignKey="true" />
+      <Association Name="ProductModel_ProductModelProductDescriptionCulture" Member="ProductModel" ThisKey="ProductModelID" OtherKey="ProductModelID" Type="ProductModel" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductPhoto" Member="ProductPhotos">
+    <Type Name="ProductPhoto">
+      <Column Name="ProductPhotoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ThumbNailPhoto" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ThumbnailPhotoFileName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LargePhoto" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="LargePhotoFileName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ProductPhoto_ProductProductPhoto" Member="ProductProductPhotos" ThisKey="ProductPhotoID" OtherKey="ProductPhotoID" Type="ProductProductPhoto" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductProductPhoto" Member="ProductProductPhotos">
+    <Type Name="ProductProductPhoto">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProductPhotoID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="[Primary]" Member="Primary" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductProductPhoto" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="ProductPhoto_ProductProductPhoto" Member="ProductPhoto" ThisKey="ProductPhotoID" OtherKey="ProductPhotoID" Type="ProductPhoto" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductReview" Member="ProductReviews">
+    <Type Name="ProductReview">
+      <Column Name="ProductReviewID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReviewerName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ReviewDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EmailAddress" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Rating" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="NVarChar(3850)" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductReview" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ProductSubcategory" Member="ProductSubcategories">
+    <Type Name="ProductSubcategory">
+      <Column Name="ProductSubcategoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductCategoryID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ProductSubcategory_Product" Member="Products" ThisKey="ProductSubcategoryID" OtherKey="ProductSubcategoryID" Type="Product" />
+      <Association Name="ProductCategory_ProductSubcategory" Member="ProductCategory" ThisKey="ProductCategoryID" OtherKey="ProductCategoryID" Type="ProductCategory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.ScrapReason" Member="ScrapReasons">
+    <Type Name="ScrapReason">
+      <Column Name="ScrapReasonID" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ScrapReason_WorkOrder" Member="WorkOrders" ThisKey="ScrapReasonID" OtherKey="ScrapReasonID" Type="WorkOrder" />
+    </Type>
+  </Table>
+  <Table Name="Production.TransactionHistory" Member="TransactionHistories">
+    <Type Name="TransactionHistory">
+      <Column Name="TransactionID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReferenceOrderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReferenceOrderLineID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionType" Type="System.Char" DbType="NChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ActualCost" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_TransactionHistory" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.TransactionHistoryArchive" Member="TransactionHistoryArchives">
+    <Type Name="TransactionHistoryArchive">
+      <Column Name="TransactionID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReferenceOrderID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReferenceOrderLineID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TransactionType" Type="System.Char" DbType="NChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ActualCost" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="Production.UnitMeasure" Member="UnitMeasures">
+    <Type Name="UnitMeasure">
+      <Column Name="UnitMeasureCode" Type="System.String" DbType="NChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="UnitMeasure_BillOfMaterial" Member="BillOfMaterials" ThisKey="UnitMeasureCode" OtherKey="UnitMeasureCode" Type="BillOfMaterial" />
+      <Association Name="UnitMeasure_Product" Member="Products" ThisKey="UnitMeasureCode" OtherKey="SizeUnitMeasureCode" Type="Product" />
+      <Association Name="UnitMeasure_Product1" Member="Products1" ThisKey="UnitMeasureCode" OtherKey="WeightUnitMeasureCode" Type="Product" />
+      <Association Name="UnitMeasure_ProductVendor" Member="ProductVendors" ThisKey="UnitMeasureCode" OtherKey="UnitMeasureCode" Type="ProductVendor" />
+    </Type>
+  </Table>
+  <Table Name="Production.WorkOrder" Member="WorkOrders">
+    <Type Name="WorkOrder">
+      <Column Name="WorkOrderID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrderQty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StockedQty" Type="System.Int32" DbType="Int NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ScrappedQty" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DueDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ScrapReasonID" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="WorkOrder_WorkOrderRouting" Member="WorkOrderRoutings" ThisKey="WorkOrderID" OtherKey="WorkOrderID" Type="WorkOrderRouting" />
+      <Association Name="Product_WorkOrder" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="ScrapReason_WorkOrder" Member="ScrapReason" ThisKey="ScrapReasonID" OtherKey="ScrapReasonID" Type="ScrapReason" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Production.WorkOrderRouting" Member="WorkOrderRoutings">
+    <Type Name="WorkOrderRouting">
+      <Column Name="WorkOrderID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OperationSequence" Type="System.Int16" DbType="SmallInt NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LocationID" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ScheduledStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ScheduledEndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ActualStartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ActualEndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ActualResourceHrs" Type="System.Decimal" DbType="Decimal(9,4)" CanBeNull="true" />
+      <Column Name="PlannedCost" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ActualCost" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Location_WorkOrderRouting" Member="Location" ThisKey="LocationID" OtherKey="LocationID" Type="Location" IsForeignKey="true" />
+      <Association Name="WorkOrder_WorkOrderRouting" Member="WorkOrder" ThisKey="WorkOrderID" OtherKey="WorkOrderID" Type="WorkOrder" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.ProductVendor" Member="ProductVendors">
+    <Type Name="ProductVendor">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="VendorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AverageLeadTime" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StandardPrice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="LastReceiptCost" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="LastReceiptDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="MinOrderQty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaxOrderQty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OnOrderQty" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UnitMeasureCode" Type="System.String" DbType="NChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ProductVendor" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="UnitMeasure_ProductVendor" Member="UnitMeasure" ThisKey="UnitMeasureCode" OtherKey="UnitMeasureCode" Type="UnitMeasure" IsForeignKey="true" />
+      <Association Name="Vendor_ProductVendor" Member="Vendor" ThisKey="VendorID" OtherKey="VendorID" Type="Vendor" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.PurchaseOrderDetail" Member="PurchaseOrderDetails">
+    <Type Name="PurchaseOrderDetail">
+      <Column Name="PurchaseOrderID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PurchaseOrderDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DueDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="OrderQty" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="LineTotal" Type="System.Decimal" DbType="Money NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ReceivedQty" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="RejectedQty" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Column Name="StockedQty" Type="System.Decimal" DbType="Decimal(9,2) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_PurchaseOrderDetail" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="PurchaseOrder_PurchaseOrderDetail" Member="PurchaseOrder" Storage="_PurchaseOrderHeader" ThisKey="PurchaseOrderID" OtherKey="PurchaseOrderID" Type="PurchaseOrder" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.PurchaseOrderHeader" Member="PurchaseOrders">
+    <Type Name="PurchaseOrder">
+      <Column Name="PurchaseOrderID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RevisionNumber" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="VendorID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ShipMethodID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrderDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ShipDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SubTotal" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="TaxAmt" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Freight" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="TotalDue" Type="System.Decimal" DbType="Money NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="PurchaseOrder_PurchaseOrderDetail" Member="PurchaseOrderDetails" ThisKey="PurchaseOrderID" OtherKey="PurchaseOrderID" Type="PurchaseOrderDetail" />
+      <Association Name="Employee_PurchaseOrder" Member="Employee" ThisKey="EmployeeID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="ShipMethod_PurchaseOrder" Member="ShipMethod" ThisKey="ShipMethodID" OtherKey="ShipMethodID" Type="ShipMethod" IsForeignKey="true" />
+      <Association Name="Vendor_PurchaseOrder" Member="Vendor" ThisKey="VendorID" OtherKey="VendorID" Type="Vendor" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.ShipMethod" Member="ShipMethods">
+    <Type Name="ShipMethod">
+      <Column Name="ShipMethodID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ShipBase" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ShipRate" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ShipMethod_PurchaseOrder" Member="PurchaseOrders" Storage="_PurchaseOrderHeaders" ThisKey="ShipMethodID" OtherKey="ShipMethodID" Type="PurchaseOrder" />
+      <Association Name="ShipMethod_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="ShipMethodID" OtherKey="ShipMethodID" Type="SalesOrderHeader" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.Vendor" Member="Vendors">
+    <Type Name="Vendor">
+      <Column Name="VendorID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AccountNumber" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreditRating" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="PreferredVendorStatus" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ActiveFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingWebServiceURL" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Vendor_ProductVendor" Member="ProductVendors" ThisKey="VendorID" OtherKey="VendorID" Type="ProductVendor" />
+      <Association Name="Vendor_PurchaseOrder" Member="PurchaseOrders" Storage="_PurchaseOrderHeaders" ThisKey="VendorID" OtherKey="VendorID" Type="PurchaseOrder" />
+      <Association Name="Vendor_VendorAddress" Member="VendorAddresses" ThisKey="VendorID" OtherKey="VendorID" Type="VendorAddress" />
+      <Association Name="Vendor_VendorContact" Member="VendorContacts" ThisKey="VendorID" OtherKey="VendorID" Type="VendorContact" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.VendorAddress" Member="VendorAddresses">
+    <Type Name="VendorAddress">
+      <Column Name="VendorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AddressID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AddressTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Address_VendorAddress" Member="Address" ThisKey="AddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+      <Association Name="AddressType_VendorAddress" Member="AddressType" ThisKey="AddressTypeID" OtherKey="AddressTypeID" Type="AddressType" IsForeignKey="true" />
+      <Association Name="Vendor_VendorAddress" Member="Vendor" ThisKey="VendorID" OtherKey="VendorID" Type="Vendor" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Purchasing.VendorContact" Member="VendorContacts">
+    <Type Name="VendorContact">
+      <Column Name="VendorID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContactTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Contact_VendorContact" Member="Contact" ThisKey="ContactID" OtherKey="ContactID" Type="Contact" IsForeignKey="true" />
+      <Association Name="ContactType_VendorContact" Member="ContactType" ThisKey="ContactTypeID" OtherKey="ContactTypeID" Type="ContactType" IsForeignKey="true" />
+      <Association Name="Vendor_VendorContact" Member="Vendor" ThisKey="VendorID" OtherKey="VendorID" Type="Vendor" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.ContactCreditCard" Member="ContactCreditCards">
+    <Type Name="ContactCreditCard">
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CreditCardID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Contact_ContactCreditCard" Member="Contact" ThisKey="ContactID" OtherKey="ContactID" Type="Contact" IsForeignKey="true" />
+      <Association Name="CreditCard_ContactCreditCard" Member="CreditCard" ThisKey="CreditCardID" OtherKey="CreditCardID" Type="CreditCard" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.CountryRegionCurrency" Member="CountryRegionCurrencies">
+    <Type Name="CountryRegionCurrency">
+      <Column Name="CountryRegionCode" Type="System.String" DbType="NVarChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CurrencyCode" Type="System.String" DbType="NChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CountryRegion_CountryRegionCurrency" Member="CountryRegion" ThisKey="CountryRegionCode" OtherKey="CountryRegionCode" Type="CountryRegion" IsForeignKey="true" />
+      <Association Name="Currency_CountryRegionCurrency" Member="Currency" ThisKey="CurrencyCode" OtherKey="CurrencyCode" Type="Currency" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.CreditCard" Member="CreditCards">
+    <Type Name="CreditCard">
+      <Column Name="CreditCardID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CardType" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CardNumber" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="ExpMonth" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="ExpYear" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CreditCard_ContactCreditCard" Member="ContactCreditCards" ThisKey="CreditCardID" OtherKey="CreditCardID" Type="ContactCreditCard" />
+      <Association Name="CreditCard_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="CreditCardID" OtherKey="CreditCardID" Type="SalesOrderHeader" />
+    </Type>
+  </Table>
+  <Table Name="Sales.Currency" Member="Currencies">
+    <Type Name="Currency">
+      <Column Name="CurrencyCode" Type="System.String" DbType="NChar(3) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Currency_CountryRegionCurrency" Member="CountryRegionCurrencies" ThisKey="CurrencyCode" OtherKey="CurrencyCode" Type="CountryRegionCurrency" />
+      <Association Name="Currency_CurrencyRate" Member="CurrencyRates" ThisKey="CurrencyCode" OtherKey="FromCurrencyCode" Type="CurrencyRate" />
+      <Association Name="Currency_CurrencyRate1" Member="CurrencyRates1" ThisKey="CurrencyCode" OtherKey="ToCurrencyCode" Type="CurrencyRate" />
+    </Type>
+  </Table>
+  <Table Name="Sales.CurrencyRate" Member="CurrencyRates">
+    <Type Name="CurrencyRate">
+      <Column Name="CurrencyRateID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CurrencyRateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FromCurrencyCode" Type="System.String" DbType="NChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="ToCurrencyCode" Type="System.String" DbType="NChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="AverageRate" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="EndOfDayRate" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CurrencyRate_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="CurrencyRateID" OtherKey="CurrencyRateID" Type="SalesOrderHeader" />
+      <Association Name="Currency_CurrencyRate" Member="Currency" ThisKey="FromCurrencyCode" OtherKey="CurrencyCode" Type="Currency" IsForeignKey="true" />
+      <Association Name="Currency_CurrencyRate1" Member="Currency1" ThisKey="ToCurrencyCode" OtherKey="CurrencyCode" Type="Currency" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.Customer" Member="Customers">
+    <Type Name="Customer">
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TerritoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AccountNumber" Type="System.String" DbType="VarChar(10) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="CustomerType" Type="System.Char" DbType="NChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Customer_CustomerAddress" Member="CustomerAddresses" ThisKey="CustomerID" OtherKey="CustomerID" Type="CustomerAddress" />
+      <Association Name="Customer_Individual" Member="Individual" ThisKey="CustomerID" OtherKey="CustomerID" Type="Individual" Cardinality="One" />
+      <Association Name="Customer_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="CustomerID" OtherKey="CustomerID" Type="SalesOrderHeader" />
+      <Association Name="Customer_Store" Member="Store" ThisKey="CustomerID" OtherKey="CustomerID" Type="Store" Cardinality="One" />
+      <Association Name="SalesTerritory_Customer" Member="SalesTerritory" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesTerritory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.CustomerAddress" Member="CustomerAddresses">
+    <Type Name="CustomerAddress">
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AddressID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AddressTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Address_CustomerAddress" Member="Address" ThisKey="AddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+      <Association Name="AddressType_CustomerAddress" Member="AddressType" ThisKey="AddressTypeID" OtherKey="AddressTypeID" Type="AddressType" IsForeignKey="true" />
+      <Association Name="Customer_CustomerAddress" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.Individual" Member="Individuals">
+    <Type Name="Individual">
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Demographics" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Contact_Individual" Member="Contact" ThisKey="ContactID" OtherKey="ContactID" Type="Contact" IsForeignKey="true" />
+      <Association Name="Customer_Individual" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesOrderDetail" Member="SalesOrderDetails">
+    <Type Name="SalesOrderDetail">
+      <Column Name="SalesOrderID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SalesOrderDetailID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CarrierTrackingNumber" Type="System.String" DbType="NVarChar(25)" CanBeNull="true" />
+      <Column Name="OrderQty" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SpecialOfferID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPriceDiscount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="LineTotal" Type="System.Decimal" DbType="Decimal(38,6) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesOrderHeader_SalesOrderDetail" Member="SalesOrderHeader" ThisKey="SalesOrderID" OtherKey="SalesOrderID" Type="SalesOrderHeader" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="SpecialOfferProduct_SalesOrderDetail" Member="SpecialOfferProduct" ThisKey="SpecialOfferID,ProductID" OtherKey="SpecialOfferID,ProductID" Type="SpecialOfferProduct" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesOrderHeader" Member="SalesOrderHeaders">
+    <Type Name="SalesOrderHeader">
+      <Column Name="SalesOrderID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RevisionNumber" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="OrderDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DueDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ShipDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="OnlineOrderFlag" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SalesOrderNumber" Type="System.String" DbType="NVarChar(25) NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="PurchaseOrderNumber" Type="System.String" DbType="NVarChar(25)" CanBeNull="true" />
+      <Column Name="AccountNumber" Type="System.String" DbType="NVarChar(15)" CanBeNull="true" />
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesPersonID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TerritoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BillToAddressID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ShipToAddressID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ShipMethodID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreditCardID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreditCardApprovalCode" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="CurrencyRateID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SubTotal" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="TaxAmt" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="Freight" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="TotalDue" Type="System.Decimal" DbType="Money NOT NULL" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Comment" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesOrderHeader_SalesOrderDetail" Member="SalesOrderDetails" ThisKey="SalesOrderID" OtherKey="SalesOrderID" Type="SalesOrderDetail" />
+      <Association Name="SalesOrderHeader_SalesOrderHeaderSalesReason" Member="SalesOrderHeaderSalesReasons" ThisKey="SalesOrderID" OtherKey="SalesOrderID" Type="SalesOrderHeaderSalesReason" />
+      <Association Name="Address_SalesOrderHeader" Member="Address" ThisKey="BillToAddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+      <Association Name="Address_SalesOrderHeader1" Member="Address1" ThisKey="ShipToAddressID" OtherKey="AddressID" Type="Address" IsForeignKey="true" />
+      <Association Name="Contact_SalesOrderHeader" Member="Contact" ThisKey="ContactID" OtherKey="ContactID" Type="Contact" IsForeignKey="true" />
+      <Association Name="CreditCard_SalesOrderHeader" Member="CreditCard" ThisKey="CreditCardID" OtherKey="CreditCardID" Type="CreditCard" IsForeignKey="true" />
+      <Association Name="CurrencyRate_SalesOrderHeader" Member="CurrencyRate" ThisKey="CurrencyRateID" OtherKey="CurrencyRateID" Type="CurrencyRate" IsForeignKey="true" />
+      <Association Name="Customer_SalesOrderHeader" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+      <Association Name="ShipMethod_SalesOrderHeader" Member="ShipMethod" ThisKey="ShipMethodID" OtherKey="ShipMethodID" Type="ShipMethod" IsForeignKey="true" />
+      <Association Name="SalesPerson_SalesOrderHeader" Member="SalesPerson" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesPerson" IsForeignKey="true" />
+      <Association Name="SalesTerritory_SalesOrderHeader" Member="SalesTerritory" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesTerritory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesOrderHeaderSalesReason" Member="SalesOrderHeaderSalesReasons">
+    <Type Name="SalesOrderHeaderSalesReason">
+      <Column Name="SalesOrderID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SalesReasonID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesOrderHeader_SalesOrderHeaderSalesReason" Member="SalesOrderHeader" ThisKey="SalesOrderID" OtherKey="SalesOrderID" Type="SalesOrderHeader" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="SalesReason_SalesOrderHeaderSalesReason" Member="SalesReason" ThisKey="SalesReasonID" OtherKey="SalesReasonID" Type="SalesReason" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesPerson" Member="SalesPersons">
+    <Type Name="SalesPerson">
+      <Column Name="SalesPersonID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TerritoryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SalesQuota" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="Bonus" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="CommissionPct" Type="System.Decimal" DbType="SmallMoney NOT NULL" CanBeNull="false" />
+      <Column Name="SalesYTD" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="SalesLastYear" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesPerson_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesOrderHeader" />
+      <Association Name="SalesPerson_SalesPersonQuotaHistory" Member="SalesPersonQuotaHistories" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesPersonQuotaHistory" />
+      <Association Name="SalesPerson_SalesTerritoryHistory" Member="SalesTerritoryHistories" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesTerritoryHistory" />
+      <Association Name="SalesPerson_Store" Member="Stores" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="Store" />
+      <Association Name="Employee_SalesPerson" Member="Employee" ThisKey="SalesPersonID" OtherKey="EmployeeID" Type="Employee" IsForeignKey="true" />
+      <Association Name="SalesTerritory_SalesPerson" Member="SalesTerritory" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesTerritory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesPersonQuotaHistory" Member="SalesPersonQuotaHistories">
+    <Type Name="SalesPersonQuotaHistory">
+      <Column Name="SalesPersonID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="QuotaDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SalesQuota" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesPerson_SalesPersonQuotaHistory" Member="SalesPerson" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesPerson" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesReason" Member="SalesReasons">
+    <Type Name="SalesReason">
+      <Column Name="SalesReasonID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ReasonType" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesReason_SalesOrderHeaderSalesReason" Member="SalesOrderHeaderSalesReasons" ThisKey="SalesReasonID" OtherKey="SalesReasonID" Type="SalesOrderHeaderSalesReason" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesTaxRate" Member="SalesTaxRates">
+    <Type Name="SalesTaxRate">
+      <Column Name="SalesTaxRateID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="StateProvinceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaxType" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="TaxRate" Type="System.Decimal" DbType="SmallMoney NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="StateProvince_SalesTaxRate" Member="StateProvince" ThisKey="StateProvinceID" OtherKey="StateProvinceID" Type="StateProvince" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesTerritory" Member="SalesTerritories">
+    <Type Name="SalesTerritory">
+      <Column Name="TerritoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CountryRegionCode" Type="System.String" DbType="NVarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="[Group]" Member="Group" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesYTD" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="SalesLastYear" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="CostYTD" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="CostLastYear" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesTerritory_StateProvince" Member="StateProvinces" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="StateProvince" />
+      <Association Name="SalesTerritory_Customer" Member="Customers" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="Customer" />
+      <Association Name="SalesTerritory_SalesOrderHeader" Member="SalesOrderHeaders" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesOrderHeader" />
+      <Association Name="SalesTerritory_SalesPerson" Member="SalesPersons" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesPerson" />
+      <Association Name="SalesTerritory_SalesTerritoryHistory" Member="SalesTerritoryHistories" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesTerritoryHistory" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SalesTerritoryHistory" Member="SalesTerritoryHistories">
+    <Type Name="SalesTerritoryHistory">
+      <Column Name="SalesPersonID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TerritoryID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SalesPerson_SalesTerritoryHistory" Member="SalesPerson" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesPerson" IsForeignKey="true" />
+      <Association Name="SalesTerritory_SalesTerritoryHistory" Member="SalesTerritory" ThisKey="TerritoryID" OtherKey="TerritoryID" Type="SalesTerritory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.ShoppingCartItem" Member="ShoppingCartItems">
+    <Type Name="ShoppingCartItem">
+      <Column Name="ShoppingCartItemID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ShoppingCartID" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Product_ShoppingCartItem" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SpecialOffer" Member="SpecialOffers">
+    <Type Name="SpecialOffer">
+      <Column Name="SpecialOfferID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DiscountPct" Type="System.Decimal" DbType="SmallMoney NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Category" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="MinQty" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaxQty" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SpecialOffer_SpecialOfferProduct" Member="SpecialOfferProducts" ThisKey="SpecialOfferID" OtherKey="SpecialOfferID" Type="SpecialOfferProduct" />
+    </Type>
+  </Table>
+  <Table Name="Sales.SpecialOfferProduct" Member="SpecialOfferProducts">
+    <Type Name="SpecialOfferProduct">
+      <Column Name="SpecialOfferID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="SpecialOfferProduct_SalesOrderDetail" Member="SalesOrderDetails" ThisKey="SpecialOfferID,ProductID" OtherKey="SpecialOfferID,ProductID" Type="SalesOrderDetail" />
+      <Association Name="Product_SpecialOfferProduct" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+      <Association Name="SpecialOffer_SpecialOfferProduct" Member="SpecialOffer" ThisKey="SpecialOfferID" OtherKey="SpecialOfferID" Type="SpecialOffer" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="Sales.Store" Member="Stores">
+    <Type Name="Store">
+      <Column Name="CustomerID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesPersonID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Demographics" Type="System.Xml.Linq.XElement" DbType="Xml" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="rowguid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ModifiedDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Store_StoreContact" Member="StoreContacts" ThisKey="CustomerID" OtherKey="CustomerID" Type="StoreContact" />
+      <Association Name="Customer_Store" Member="Customer" ThisKey="CustomerID" OtherKey="CustomerID" Type="Customer" IsForeignKey="true" />
+      <Association Name="SalesPerson_Store" Member="SalesPerson" ThisKey="SalesPersonID" OtherKey="SalesPersonID" Type="SalesPerson" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

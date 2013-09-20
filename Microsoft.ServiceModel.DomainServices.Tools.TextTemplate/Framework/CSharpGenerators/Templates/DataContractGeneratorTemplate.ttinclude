@@ -1,0 +1,184 @@
+﻿<#+
+
+	private void GenerateNamespace()
+	{
+#>
+namespace <#= this.Type.Namespace #>
+<#+
+	}
+	
+	/// <summary>
+    /// Generates the type declaration.
+    /// </summary>
+	protected virtual void GenerateClassDeclaration()
+	{
+		this.GenerateTypeAttributes();
+		
+		string baseType = this.GetBaseTypeName();
+		string visibility = this.GetClassVisibility();
+#>
+<#= visibility #> partial class <#= CodeGenUtilities.GetSafeName(this.Type.Name) #> : <#= baseType #>
+<#+
+	}
+	
+	private string GetClassVisibility()
+    {
+        string visibility = "public";
+        if (this.IsAbstract)
+        {
+            visibility += " abstract";
+        }
+        if (!this.IsAbstract && !this.GetDerivedTypes().Any())
+        {
+            visibility += " sealed";
+        }
+        return visibility;
+    }
+	
+	private void GenerateTypeAttributes()
+	{
+		IEnumerable<Attribute> typeAttributes = this.GetTypeAttributes();
+		this.GenerateAttributes(typeAttributes);
+		this.GenerateDataContractAttribute(this.Type);
+		
+		if(!this.IsDerivedType)
+		{
+			foreach (Type derivedType in this.GetDerivedTypes().OrderBy(t => t.FullName))
+            {
+#>
+[System.Runtime.Serialization.KnownType(typeof(<#= CodeGenUtilities.GetTypeName(derivedType) #>))]
+<#+
+			}
+		}
+	}
+	
+	/// <summary>
+    /// Generates the data contract type constructor.
+    /// </summary>
+	protected virtual void GenerateConstructor()
+	{
+		string ctorVisibility = this.IsAbstract ? "protected" : "public";
+#>
+<#=ctorVisibility #> <#= CodeGenUtilities.GetSafeName(this.Type.Name) #>()
+{
+	this.OnCreated();
+}
+<#+
+	}
+	
+	private void GeneratePropertiesInternal()
+	{
+		foreach(var property in this.Properties)
+		{
+			this.GenerateProperty(property);
+		}
+	}
+	
+	/// <summary>
+    /// Generates the code for a property.
+	/// <param name="propertyDescriptor">The PropertyDescriptor for which the property is to be generated.</param>
+    /// </summary>
+	protected virtual void GenerateProperty(PropertyDescriptor propertyDescriptor)
+	{
+		this.GeneratePropertyDeclaration(propertyDescriptor);
+		this.GenerateOpeningBrace();
+		this.GeneratePropertyGetter(propertyDescriptor);
+		this.GeneratePropertySetter(propertyDescriptor);
+		this.GenerateClosingBrace();
+		this.GenerateBackingPrivateField(propertyDescriptor);
+	}
+	
+	private void GeneratePropertyGetter(PropertyDescriptor propertyDescriptor)
+	{
+		string fieldName = CodeGenUtilities.MakeCompliantFieldName(propertyDescriptor.Name);
+#>
+get
+{
+	return this.<#= fieldName #>;
+} 
+<#+
+	}
+	
+	private void GeneratePropertySetter(PropertyDescriptor propertyDescriptor)
+	{
+		string fieldName = CodeGenUtilities.MakeCompliantFieldName(propertyDescriptor.Name);
+#>
+set 
+<#+ this.GenerateOpeningBrace(); 
+#>
+if(this.<#= fieldName #> != value)
+<#+ this.GenerateOpeningBrace(); 
+#>
+this.On<#= propertyDescriptor.Name #>Changing(value);	
+<#+
+		bool propertyIsReadOnly = this.IsPropertyReadOnly(propertyDescriptor);
+        if (!propertyIsReadOnly)
+        {
+#>
+this.RaiseDataMemberChanging("<#= propertyDescriptor.Name #>");
+<#+
+		}
+#>
+this.ValidateProperty("<#= propertyDescriptor.Name #>", value);
+this.<#= fieldName #> = value;
+<#+
+		if (!propertyIsReadOnly)
+        {
+#>
+this.RaiseDataMemberChanged("<#= propertyDescriptor.Name #>");
+<#+
+		}
+		else
+		{
+#>
+this.RaisePropertyChanged("<#= propertyDescriptor.Name #>");
+<#+
+		}	
+#>
+this.On<#= propertyDescriptor.Name #>Changed();
+<#+
+		this.GenerateClosingBrace();
+		this.GenerateClosingBrace();
+	}
+	
+	private void GenerateBackingPrivateField(PropertyDescriptor propertyDescriptor)
+	{
+		Type propertyType = CodeGenUtilities.TranslateType(propertyDescriptor.PropertyType);
+		string propertyTypeName = CodeGenUtilities.GetTypeName(propertyType);
+		string fieldName = CodeGenUtilities.MakeCompliantFieldName(propertyDescriptor.Name);
+#>
+private <#= propertyTypeName #> <#= fieldName #>;
+<#+
+	}
+	
+	private void GeneratePropertyDeclaration(PropertyDescriptor propertyDescriptor)
+	{		
+		Type propertyType = CodeGenUtilities.TranslateType(propertyDescriptor.PropertyType);
+		string propertyTypeName = CodeGenUtilities.GetTypeName(propertyType);
+		IEnumerable<Attribute> propAttributes = this.GetPropertyAttributes(propertyDescriptor, propertyType);
+		string propertyName = CodeGenUtilities.GetSafeName(propertyDescriptor.Name);
+		this.GenerateAttributes(propAttributes);
+#>
+public <#= propertyTypeName #> <#= propertyName #>
+<#+
+	}
+
+	/// <summary>
+	/// Generates the notification methods on the class.
+	/// </summary>
+	protected virtual void GenerateNotificationMethods()
+	{
+#>
+partial void OnCreated();
+<#+
+		foreach(PropertyDescriptor pd in this.NotificationMethodList)
+		{
+			Type propType = CodeGenUtilities.TranslateType(pd.PropertyType);			
+			string propertyTypeName = CodeGenUtilities.GetTypeName(propType);
+#>
+partial void On<#= pd.Name #>Changing(<#= propertyTypeName #> value);
+partial void On<#= pd.Name #>Changed();
+<#+
+		}
+	}
+#>

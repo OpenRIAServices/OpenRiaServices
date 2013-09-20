@@ -1,0 +1,143 @@
+﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.DomainContextGenerator" #>
+
+<#@ import namespace="System" #>
+<#@ import namespace="System.ComponentModel" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.ServiceModel.DomainServices.Server" #>
+<#@ import namespace="System.ServiceModel.DomainServices.Hosting" #>
+<#@ import namespace="System.ServiceModel.DomainServices.Server.ApplicationServices" #>
+<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate" #>
+<#@ include file="Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude" #>
+<#@ include file="Templates\InvokeOperationProxyGeneratorTemplate.ttinclude" #>
+<#@ include file="Templates\ContractInterfaceTemplate.ttinclude" #>
+<#@ include file="Templates\Utility.ttinclude" #>
+
+<# this.Generate(); #>
+
+<#+
+
+	private void GenerateUsings()
+	{
+#>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.DomainServices.Client;
+using System.ServiceModel.DomainServices.Client.ApplicationServices;
+<#+
+	}
+
+	/// <summary>
+    /// Generates the DomainContext class declaration.
+    /// </summary>
+	protected virtual void GenerateClassDeclaration()
+	{	
+		string baseType = "System.ServiceModel.DomainServices.Client.DomainContext";
+		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
+		{
+			baseType = @"global::System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+		}
+		 
+#>
+public sealed partial class <#= this.DomainContextTypeName #> : <#= baseType #>
+<#+
+	}
+	
+	/// <summary>
+    /// Generates the DomainContext class constructors.
+    /// </summary>	
+	protected virtual void GenerateConstructors()
+	{
+		bool requiresSecureEndpoint = this.GetRequiresSecureEndpoint();
+		string relativeServiceUri = string.Format(CultureInfo.InvariantCulture, "{0}.svc", this.DomainServiceDescription.DomainServiceType.FullName.Replace('.', '-'));
+#>
+public <#= this.DomainContextTypeName #>() : 
+	this(new WebDomainClient<<#= this.ContractInterfaceName #>>(new Uri("<#= relativeServiceUri #>", UriKind.Relative)<#+ 
+	if(requiresSecureEndpoint)
+	{
+		#>,true<#+
+	}
+#>))
+{
+}
+		
+public <#= this.DomainContextTypeName #>(Uri serviceUri) : 
+	this(new WebDomainClient<<#= this.ContractInterfaceName #>>(serviceUri<#+ 
+	if(requiresSecureEndpoint)
+	{
+		#>,true<#+
+	}
+	#>))
+{
+}
+
+public <#= this.DomainContextTypeName #>(DomainClient domainClient) :
+	base(domainClient)
+{
+	this.OnCreated();
+}
+<#+
+	}
+	
+	/// <summary>
+    /// Generates the EntityContriner property and the nested EntityContainer nested class.
+    /// </summary>		
+	protected virtual void GenerateEntityContainer()
+	{
+		string entityContainerClassName = this.DomainContextTypeName + "EntityContainer";
+#>
+protected override EntityContainer CreateEntityContainer()
+{
+	return new <#= entityContainerClassName #>();
+}
+<#+
+		
+		this.GenerateEntityContainerClass(entityContainerClassName);
+	}
+	
+	private void GenerateEntityContainerClass(string entityContainerClassName)
+	{
+#>
+internal sealed class <#= entityContainerClassName #> : EntityContainer
+<#+ this.GenerateOpeningBrace(); #>
+public <#= entityContainerClassName #>()
+<#+ this.GenerateOpeningBrace(); #>
+<#+
+		HashSet<Type> entityTypesToUse = new HashSet<Type>();
+        foreach (Type entityType in this.DomainServiceDescription.EntityTypes)
+        {
+            entityTypesToUse.Add(entityType);
+        }
+		
+		foreach(Type entityType in this.DomainServiceDescription.EntityTypes.OrderBy(t => t.FullName))
+		{
+			if (entityTypesToUse.Any(t => t != entityType && t.IsAssignableFrom(entityType)))
+            {
+                continue;
+            }
+			string entitySetOperationsEnumValue = this.GetEntitySetOperationsEnumValue(entityType);
+			string entityTypeName = CodeGenUtilities.GetTypeName(entityType);
+#>
+this.CreateEntitySet<<#= entityTypeName #>>(<#= entitySetOperationsEnumValue #>);
+<#+
+		}
+		
+		this.GenerateClosingBrace();
+		this.GenerateClosingBrace();
+	}
+	
+	/// <summary>
+    /// Generates the DomainContext class extensibility methods.
+    /// </summary>	
+	protected virtual void GenerateExtensibilityMethods()
+	{
+#>		
+partial void OnCreated();
+<#+
+	}
+#>

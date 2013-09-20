@@ -1,0 +1,3 @@
+﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.ClientCodeGenerator" #>
+
+<# this.GenerateProxyClass(); #>

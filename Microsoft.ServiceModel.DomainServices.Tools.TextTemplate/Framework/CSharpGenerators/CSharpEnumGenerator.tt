@@ -1,0 +1,105 @@
+﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.EnumGenerator" #>
+
+<#@ import namespace="System.Runtime.Serialization" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools" #>
+
+<#@ include file="Templates\Utility.ttinclude" #>
+
+<# this.Generate(); #>
+
+<#+	
+	private void GenerateEnumNamespace(Type enumType)
+	{
+		#>namespace <#= enumType.Namespace #><#+
+	}
+	
+	private void GenerateEnumTypeDeclaration(Type enumType)
+	{
+		DataContractAttribute dataContractAttr = (DataContractAttribute)Attribute.GetCustomAttribute(enumType, typeof(DataContractAttribute));
+        if (dataContractAttr != null)
+        {
+			this.GenerateDataContractAttribute(enumType);
+		}
+		
+		if (enumType.GetCustomAttributes(typeof(FlagsAttribute), false).Length > 0)
+        {
+#>
+[System.Flags]
+<#+
+		}
+		
+		#>public enum <#= CodeGenUtilities.GetSafeName(enumType.Name) #><#+
+		
+		Type underlyingType = enumType.GetEnumUnderlyingType();
+        if (underlyingType != typeof(int))
+		{
+			#> : <#= CodeGenUtilities.GetTypeName(underlyingType) #><#+
+		}
+	}
+	
+	private void GenerateEnumMemberAttributes(FieldInfo fieldInfo)
+	{	
+		EnumMemberAttribute enumMemberAttr = (EnumMemberAttribute)Attribute.GetCustomAttribute(fieldInfo, typeof(EnumMemberAttribute));
+        if (enumMemberAttr != null)
+        {
+#>
+[System.Runtime.Serialization.EnumMember<#+
+            string value = enumMemberAttr.Value;
+            if (!string.IsNullOrEmpty(value))
+            {
+#>(Value=<#= value.ToString() #>)
+<#+
+            }#>]<#+
+		}
+		
+		this.GenerateAttributes(fieldInfo.GetCustomAttributes(false).Cast<Attribute>().Where(a => a.GetType() != typeof(EnumMemberAttribute)));
+	}
+	
+	private void GenerateEnumMembers(Type enumType)
+	{
+		Type underlyingType = enumType.GetEnumUnderlyingType();
+		string[] memberNames = Enum.GetNames(enumType);
+        Type enumValueType = Enum.GetUnderlyingType(enumType);
+        for (int i = 0; i < memberNames.Length; ++i)
+        {
+            string memberName = memberNames[i];
+			FieldInfo fieldInfo = enumType.GetField(memberName);
+			
+			this.GenerateEnumMemberAttributes(fieldInfo);
+			
+			if(fieldInfo != null)
+			{
+				object memberValue = fieldInfo.GetRawConstantValue();
+				
+				object[] minMaxValues = null;
+               	CodeGenUtilities.IntegralMinMaxValues.TryGetValue(underlyingType, out minMaxValues);				
+			
+				if (minMaxValues != null && !memberValue.Equals(minMaxValues[2]) && memberValue.Equals(minMaxValues[0]))
+				{
+#>
+<#= memberName #> = <#= CodeGenUtilities.GetTypeName(underlyingType) #>.MinValue <#+
+				}
+				else if (minMaxValues != null && memberValue.Equals(minMaxValues[1]))
+				{
+#> 
+<#= memberName #> = <#= CodeGenUtilities.GetTypeName(underlyingType) #>.MaxValue <#+
+				}
+				else
+				{
+#> 
+<#= memberName #> = <#= memberValue.ToString() #> <#+
+				}
+				
+				if(i + 1 < memberNames.Length)
+				{
+					#>,<#+
+				}
+			}
+		}			
+	}
+
+#>

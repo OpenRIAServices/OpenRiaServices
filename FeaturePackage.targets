@@ -1,0 +1,21 @@
+﻿<!--
+// 
+// Common settings and targets for building Feature Packages
+// 
+-->
+<Project
+  DefaultTargets="Build"
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+  <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
+  <PropertyGroup>
+    <SLTargetFrameworkDirectory Condition=" '$(TargetFrameworkDirectory)' == '' ">$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\Silverlight\v4.0</SLTargetFrameworkDirectory>
+    <TargetFrameworkSDKDirectory Condition=" '$(TargetFrameworkSDKDirectory)' == '' ">$(ProgramFiles)\Microsoft SDKs\Silverlight\v4.0\Libraries\Client</TargetFrameworkSDKDirectory>
+  </PropertyGroup>
+
+  <!-- MSBuildCommunityTasks properties -->
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
+  </PropertyGroup>
+
+</Project>

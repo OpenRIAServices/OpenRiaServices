@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8F487386-A11E-4AA8-AB5E-98B294E0328E}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <OutputPath>Bin\$(Configuration)\</OutputPath>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Website.SilverlightHost</RootNamespace>
+    <AssemblyName>Website.SilverlightHost</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>System.Test.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>Website.SilverlightHost.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;SILVERLIGHT;CODECOV</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Silverlight.Testing, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(FeaturePackageIgnite)\Microsoft.Silverlight.Testing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(FeaturePackageIgnite)\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Windows.Data">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(TargetFrameworkSDKDirectory)\System.Windows.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows" />
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RiaTestHarness.cs" />
+    <Compile Include="RiaTestRunFilter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\System.ServiceModel.DomainServices.Client\Test\Silverlight\ServiceReferences.ClientConfig">
+      <Link>ServiceReferences.ClientConfig</Link>
+    </Content>
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client.Web\Framework\Silverlight\System.ServiceModel.DomainServices.Client.Web.csproj">
+      <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
+      <Name>System.ServiceModel.DomainServices.Client.Web %28Framework\Silverlight\System.ServiceModel.DomainServices.Client.Web%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client.Web\Test\Silverlight\System.ServiceModel.DomainServices.Client.Web.Test.csproj">
+      <Project>{DF732E93-F424-459A-978C-B3A3450C9FAE}</Project>
+      <Name>System.ServiceModel.DomainServices.Client.Web.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client\Test\SilverlightExternal\System.ServiceModel.DomainServices.Client.External.Test.csproj">
+      <Project>{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}</Project>
+      <Name>System.ServiceModel.DomainServices.Client.External.Test %28Test\Silverlight\System.ServiceModel.DomainServices.Client.External.Test%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.Windows.Controls.DomainServices\Framework\System.Windows.Controls.DomainServices.csproj">
+      <Project>{174DE0B6-BBA8-43DF-8755-BC8927EB9138}</Project>
+      <Name>System.Windows.Controls.DomainServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.Windows.Controls.DomainServices\Test\System.Windows.Controls.DomainServices.Test.csproj">
+      <Project>{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D}</Project>
+      <Name>System.Windows.Controls.DomainServices.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client\Framework\Silverlight\System.ServiceModel.DomainServices.Client.csproj">
+      <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
+      <Name>System.ServiceModel.DomainServices.Client %28Framework\Silverlight\System.ServiceModel.DomainServices.Client%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj">
+      <Project>{A1407522-0D18-4D64-A5B9-8E5C569AAA51}</Project>
+      <Name>SilverlightVbDataClients</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client\Test\SilverlightVb\SilverlightVb.csproj">
+      <Project>{3E32C394-4E3E-4684-9AF0-360996D4E970}</Project>
+      <Name>SilverlightVb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Client\Test\Silverlight\System.ServiceModel.DomainServices.Client.Test.csproj">
+      <Project>{18708280-F972-487E-A86C-45D518ACF831}</Project>
+      <Name>System.ServiceModel.DomainServices.Client.Test %28Test\Silverlight\System.ServiceModel.DomainServices.Client.Test%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Silverlight\System.Common.Test\System.Common.Test.csproj">
+      <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
+      <Name>System.Common.Test %28Test\Silverlight\System.Common.Test%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

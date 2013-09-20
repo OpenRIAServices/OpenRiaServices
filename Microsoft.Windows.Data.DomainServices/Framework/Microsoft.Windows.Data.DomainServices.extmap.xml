@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <assembly>
+    <name>Microsoft.Windows.Data.DomainServices</name>
+    <version>2.0.5.0</version>
+    <publickeytoken>{RiaServicesKey}</publickeytoken>
+    <relpath>Microsoft.Windows.Data.DomainServices.dll</relpath>
+    <extension downloadUri="Microsoft.Windows.Data.DomainServices.zip" />
+  </assembly>
+
+</manifest>

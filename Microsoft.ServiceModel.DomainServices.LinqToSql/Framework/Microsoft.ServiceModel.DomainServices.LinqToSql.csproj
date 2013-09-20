@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E9141C78-4083-4ED9-B0C3-591BF5986488}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.ServiceModel.DomainServices.LinqToSql</RootNamespace>
+    <AssemblyName>Microsoft.ServiceModel.DomainServices.LinqToSql</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\Microsoft.ServiceModel.DomainServices.LinqToSql.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SERVERFX;LINQTOSQL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;SERVERFX;LINQTOSQL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV;LINQTOSQL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
+      <Link>DatabaseGeneratedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedOption.cs">
+      <Link>DatabaseGeneratedOption.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs">
+      <Link>MetadataPropertyDescriptorWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\TypeDescriptionContextBase.cs">
+      <Link>TypeDescriptionContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\TypeDescriptorBase.cs">
+      <Link>TypeDescriptorBase.cs</Link>
+    </Compile>
+    <Compile Include="DataContextExtensions.cs" />
+    <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="LinqToSqlDomainService.cs" />
+    <Compile Include="LinqToSqlDomainServiceDescriptionProvider.cs" />
+    <Compile Include="LinqToSqlDomainServiceDescriptionProviderAttribute.cs" />
+    <Compile Include="LinqToSqlTypeDescriptionContext.cs" />
+    <Compile Include="LinqToSqlTypeDescriptor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\System.ServiceModel.DomainServices.Server.csproj">
+      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
+      <Name>System.ServiceModel.DomainServices.Server</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
+</Project>

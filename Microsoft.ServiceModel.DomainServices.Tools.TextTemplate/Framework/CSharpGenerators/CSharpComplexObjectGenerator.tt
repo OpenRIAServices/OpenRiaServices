@@ -1,0 +1,15 @@
+﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.ComplexObjectGenerator" #>
+
+<#@ import namespace="System" #>
+<#@ import namespace="System.ComponentModel" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.ServiceModel.DomainServices.Server" #>
+<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate" #>
+<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools" #>
+<#@ import namespace="System.Runtime.Serialization" #>
+
+<#@ include file="Templates\Utility.ttinclude" #>
+<#@ include file="Templates\DataContractGeneratorTemplate.ttinclude" #>
+
+<# this.Generate(); #>

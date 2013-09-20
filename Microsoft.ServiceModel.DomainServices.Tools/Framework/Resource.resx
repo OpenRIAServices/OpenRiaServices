@@ -1,0 +1,638 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Analyzing_Project_Files" xml:space="preserve">
+    <value>Analyzing project '{0}' for shared source files.</value>
+  </data>
+  <data name="Analyzing_Project_References" xml:space="preserve">
+    <value>Analyzing project '{0}' for project references.</value>
+  </data>
+  <data name="ClientCodeGen_Assembly_Load_Error" xml:space="preserve">
+    <value>Assembly '{0}' could not be loaded and will be ignored.
+{1}</value>
+  </data>
+  <data name="ClientCodeGen_Assembly_Load_Type_Error" xml:space="preserve">
+    <value>Failed to load types from assembly '{0}' so the assembly will be ignored.
+{1}</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_FailedToGenerate" xml:space="preserve">
+    <value>The following attributes were not generated:</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_FailedToGenerate_ErrorTemplate" xml:space="preserve">
+    <value>- {0}</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_Parameter_FailedToGenerate" xml:space="preserve">
+    <value>Unable to generate the following attributes for parameter '{0}' due to the following errors:</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresBuilder" xml:space="preserve">
+    <value>The attribute '{0}' was not generated because a suitable attribute generator was not found.
+
+Please ensure that the attribute type follows recommended .NET Framework guidelines and meets the following requirements:
+ - The attribute has one or more public constructors.
+ - All public properties have public setter methods.
+   OR
+ - A public constructor exists that accepts parameters matching all public properties without public setter methods.  (Matching is performed by case-insensitive name and type.)</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresDataAnnotations" xml:space="preserve">
+    <value>The attribute '{0}' requires a reference to System.ComponentModel.DataAnnotations in the client project '{1}'. Skipping generation of attribute. Please add a reference to System.ComponentModel.DataAnnotations to ensure generation of the attribute.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresShared" xml:space="preserve">
+    <value>The attribute '{0}' is not visible in the client project '{1}'. Are you missing an assembly reference?</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresShared_Method" xml:space="preserve">
+    <value>The attribute '{0}' references a method '{1}' on type '{2}' that is not accessible in the client project '{3}'.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresShared_NoPDB" xml:space="preserve">
+    <value>The attribute '{0}' in assembly '{1}'
+ was not generated in the proxy classes for client project '{2}'
+ because there was insufficient information to determine whether it is visible to the client project.
+ If this attribute type is intended to be used in shared code, avoid the use of
+ automatic properties, provide at least a default constructor,
+ and be sure a PDB is available for analysis.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresShared_Property" xml:space="preserve">
+    <value>The attribute '{0}' references a property '{1}' on type '{2}' that is not accessible in the client project '{3}'.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresShared_Type" xml:space="preserve">
+    <value>The attribute '{0}' references type '{1}' that is not accessible in the client project '{2}'. If you would like the attribute to be generated, make sure the assembly containing the attribute is referenced on the client.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_RequiresShared_Type_NoPDB" xml:space="preserve">
+    <value>The attribute '{0}' references type '{1}' from assembly '{2}'. The type is not visible to the client project '{3}' because either a PDB file does not exist or the type does not contain user-defined code.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_ThrewException" xml:space="preserve">
+    <value>An exception occurred generating the '{1}' property on attribute of type '{0}'.</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_ThrewException_CodeMethod" xml:space="preserve">
+    <value>{0}  The attribute could not be generated for the '{1}' method of the '{2}' class.  Exception message: {3}</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_ThrewException_CodeMethodParameter" xml:space="preserve">
+    <value>{0}  The attribute could not be generated for the '{1}' parameter to the '{2}' method of the '{3}' class.  Exception message: {4}</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_ThrewException_CodeType" xml:space="preserve">
+    <value>{0}  The attribute could not be generated for the '{1}' type.  Exception message: {2}</value>
+  </data>
+  <data name="ClientCodeGen_Attribute_ThrewException_CodeTypeMember" xml:space="preserve">
+    <value>{0}  The attribute could not be generated for the '{1}' member of the '{2}' type.  Exception message: {3}</value>
+  </data>
+  <data name="ClientCodeGen_Cannot_Have_Include_And_Exclude" xml:space="preserve">
+    <value>The property '{0}' in type '{1}' is marked with both IncludeAttribute and ExcludeAttribute.  Ignoring IncludeAttribute. Please remove the ExcludeAttribute if you want the association in the generated code.</value>
+  </data>
+  <data name="ClientCodeGen_Copying_File" xml:space="preserve">
+    <value>Copying file '{0}' to '{1}'.</value>
+  </data>
+  <data name="ClientCodeGen_Deleting_Orphan" xml:space="preserve">
+    <value>Deleting previously generated file '{0}'</value>
+  </data>
+  <data name="ClientCodeGen_Deleting_Orphan_Folder" xml:space="preserve">
+    <value>Deleting empty folder '{0}'</value>
+  </data>
+  <data name="ClientCodeGen_DomainService_CannotBeNested" xml:space="preserve">
+    <value>Cannot generate DomainService '{0}'. Nested DomainService types are not supported.</value>
+  </data>
+  <data name="ClientCodeGen_DomainService_CodeProcessor_ExceptionCaught" xml:space="preserve">
+    <value>CodeProcessor type '{0}' defined in DomainIdentifier attribute on type '{1}' threw an Exception: {2}</value>
+  </data>
+  <data name="ClientCodeGen_DomainService_CodeProcessor_InvalidConstructorSignature" xml:space="preserve">
+    <value>CodeProcessor type '{0}' defined in DomainIdentifier attribute on type '{1}' must have a constructor accepting one parameter of type '{2}'.</value>
+  </data>
+  <data name="ClientCodeGen_DomainService_CodeProcessor_NotValidType" xml:space="preserve">
+    <value>Type '{0}' defined in DomainIdentifier attribute on type '{1}' is not a valid CodeProcessor implementation.</value>
+  </data>
+  <data name="ClientCodeGen_DomainService_Inheritance_Not_Allowed" xml:space="preserve">
+    <value>DomainService '{0}' derives from DomainService '{1}'. Only the leaf DomainService in the inheritance hierarchy may have the EnableClientAccessAttribute.</value>
+  </data>
+  <data name="ClientCodeGen_Domain_Op_Enum_Error" xml:space="preserve">
+    <value>DomainOperationEntry '{0}' in DomainService '{1}' will not be generated because it uses the Enum type '{2}'.  {3}</value>
+  </data>
+  <data name="ClientCodeGen_EmptyDomainService" xml:space="preserve">
+    <value>DomainService '{0}' does not contain any public domain operations.</value>
+  </data>
+  <data name="ClientCodeGen_EntityTypesCannotBeShared_Reference" xml:space="preserve">
+    <value>The entity type '{0}' already exists in another assembly. Entity types cannot be defined in multiple assemblies.</value>
+  </data>
+  <data name="ClientCodeGen_Failed_Delete_Folder" xml:space="preserve">
+    <value>Could not delete folder '{0}'.  {1}</value>
+  </data>
+  <data name="ClientCodeGen_Failed_To_Load" xml:space="preserve">
+    <value>Failed to load one or more types from assembly '{0}': {1}.  Continuing with the types that loaded successfully.</value>
+  </data>
+  <data name="ClientCodeGen_Input_Assembly_Not_Found" xml:space="preserve">
+    <value>Could not find necessary input file '{0}'.</value>
+  </data>
+  <data name="ClientCodeGen_InvalidDomainServiceType" xml:space="preserve">
+    <value>Code cannot be generated for the DomainService '{0}' because it isn't marked with EnableClientAccessAttribute.</value>
+  </data>
+  <data name="ClientCodeGen_Namespace_Required" xml:space="preserve">
+    <value>The type '{0}' must appear inside a namespace.</value>
+  </data>
+  <data name="ClientCodeGen_NamingCollision_MemberAlreadyExists" xml:space="preserve">
+    <value>Unable to generate DomainService '{0}' due to a naming conflict with an existing member.  DomainOperationEntry '{1}' conflicts with an auto-generated property with the same name.  Consider renaming.</value>
+  </data>
+  <data name="ClientCodeGen_No_Input_Assemblies" xml:space="preserve">
+    <value>The '{0}' project must be built before client proxy classes can be generated.</value>
+  </data>
+  <data name="ClientCodeGen_OutputFiles_Are" xml:space="preserve">
+    <value>The client proxy task generated or is reusing existing copies of these files:{0}</value>
+  </data>
+  <data name="ClientCodeGen_PropertyType_Not_Shared" xml:space="preserve">
+    <value>The property '{0}' in entity type '{1}' cannot be generated because its type '{2}' is not visible in the client project '{3}'. Are you missing an assembly reference?</value>
+  </data>
+  <data name="ClientCodeGen_Property_Enum_Error" xml:space="preserve">
+    <value>Property '{0}.{1}' will not be generated because it uses the Enum type '{2}'.  {3}</value>
+  </data>
+  <data name="ClientCodeGen_Skipping_CodeGen" xml:space="preserve">
+    <value>Skipping code generation because existing file '{0}' is current.</value>
+  </data>
+  <data name="ClientCodeGen_Skipping_Copy" xml:space="preserve">
+    <value>Skipping copy because existing file '{0}' is current.</value>
+  </data>
+  <data name="ClientCodeGen_ValidationAttribute_Requires_ResourceType_And_Name" xml:space="preserve">
+    <value>The validation attribute '{0}' contains ErrorMessageResourceType='{1}' and ErrorMessageResourceName='{2}'.  You must specify values for both or neither.</value>
+  </data>
+  <data name="ClientCodeGen_ValidationAttribute_ResourcePropertyNotFound" xml:space="preserve">
+    <value>The validation attribute '{0}' contains ErrorMessageResourceName='{1}' which was not found on declared ErrorMessageResourceType '{2}'.</value>
+  </data>
+  <data name="ClientProxyGenerator_Initialize_Not_Called" xml:space="preserve">
+    <value>'ClientProxyGenerator.Initialize' must be called before use.</value>
+  </data>
+  <data name="CodeGenerator_Threw_Exception" xml:space="preserve">
+    <value>The code generator '{0}' encountered a fatal exception and could not generate code for project '{1}':
+{2}</value>
+  </data>
+  <data name="CodeGen_CreateEntityContainer_Method_Returns_Comment" xml:space="preserve">
+    <value>A new container instance.</value>
+  </data>
+  <data name="CodeGen_CreateEntityContainer_Method_Summary_Comment" xml:space="preserve">
+    <value>Creates a new EntityContainer for this DomainContext's EntitySets.</value>
+  </data>
+  <data name="CodeGen_Default_Constructor_Summary_Comments" xml:space="preserve">
+    <value>Initializes a new instance of the &lt;see cref="{0}"/&gt; class.</value>
+  </data>
+  <data name="CodeGen_DomainClient_Custom_Method_Summary_Comment" xml:space="preserve">
+    <value>Invokes the '{0}' method of the specified &lt;see cref="{1}"/&gt; entity.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Class_Summary_Comment" xml:space="preserve">
+    <value>The DomainContext corresponding to the '{0}' DomainService.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Custom_Method_Entity_Parameter_Comment" xml:space="preserve">
+    <value>The &lt;see cref="{0}"/&gt; entity instance.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Custom_Method_Parameter_Comment" xml:space="preserve">
+    <value>The value for the '{0}' parameter for this action.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Invoke_Method_Callback_Parameter_Comment" xml:space="preserve">
+    <value>Callback to invoke when the operation completes.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Invoke_Method_Parameter_Comment" xml:space="preserve">
+    <value>The value for the '{0}' parameter of this action.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Invoke_Method_Summary_Comment" xml:space="preserve">
+    <value>Asynchronously invokes the '{0}' method of the DomainService.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Invoke_Method_UserState_Parameter_Comment" xml:space="preserve">
+    <value>Value to pass to the callback.  It can be &lt;c&gt;null&lt;/c&gt;.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Invoke_Returns_Comment" xml:space="preserve">
+    <value>An operation instance that can be used to manage the asynchronous request.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Begin_Method_AsyncState_Parameter_Comment" xml:space="preserve">
+    <value>Optional state object.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Begin_Method_Callback_Parameter_Comment" xml:space="preserve">
+    <value>Callback to invoke on completion.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Begin_Method_Parameter_Comment" xml:space="preserve">
+    <value>The value for the '{0}' parameter of this action.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Begin_Method_Returns_Comment" xml:space="preserve">
+    <value>An IAsyncResult that can be used to monitor the request.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Begin_Method_Summary_Comment" xml:space="preserve">
+    <value>Asynchronously invokes the '{0}' operation.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Begin_SubmitMethod_Changeset_Parameter_Comment" xml:space="preserve">
+    <value>The change-set to submit.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_End_Method_Parameter_Comment" xml:space="preserve">
+    <value>The IAsyncResult returned from '{0}'.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_End_Method_Returns_Comment" xml:space="preserve">
+    <value>The '{0}' returned from the '{1}' operation.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_End_Method_Summary_Comment" xml:space="preserve">
+    <value>Completes the asynchronous operation begun by '{0}'.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_End_SubmitMethod_Returns_Comment" xml:space="preserve">
+    <value>The collection of change-set entry elements returned from 'SubmitChanges'.</value>
+  </data>
+  <data name="CodeGen_DomainContext_ServiceContract_Summary_Comment" xml:space="preserve">
+    <value>Service contract for the '{0}' DomainService.</value>
+  </data>
+  <data name="CodeGen_EntitySet_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets the set of &lt;see cref="{0}"/&gt; entity instances that have been loaded into this &lt;see cref="{1}"/&gt; instance.</value>
+  </data>
+  <data name="CodeGen_Entity_CanInvoke_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets a value indicating whether the '{0}' method can be invoked on this entity.</value>
+  </data>
+  <data name="CodeGen_Entity_Class_Context_Summary_Comment" xml:space="preserve">
+    <value>The &lt;see cref="{0}"/&gt; context.</value>
+  </data>
+  <data name="CodeGen_Entity_Class_Shared_Summary_Comment" xml:space="preserve">
+    <value>This entity is shared between the following contexts:</value>
+  </data>
+  <data name="CodeGen_Entity_Class_Summary_Comment" xml:space="preserve">
+    <value>The '{0}' entity class.</value>
+  </data>
+  <data name="CodeGen_Entity_Collection_Association_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets the collection of associated &lt;see cref="{0}"/&gt; entity instances.</value>
+  </data>
+  <data name="CodeGen_Entity_Custom_Method_Parameter_Comment" xml:space="preserve">
+    <value>The value to pass to the server method's '{0}' parameter.</value>
+  </data>
+  <data name="CodeGen_Entity_Custom_Method_Summary_Comment" xml:space="preserve">
+    <value>Invokes the '{0}' action on this entity.</value>
+  </data>
+  <data name="CodeGen_Entity_IsInvoked_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets a value indicating whether the '{0}' action has been invoked on this entity.</value>
+  </data>
+  <data name="CodeGen_Entity_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets or sets the '{0}' value.</value>
+  </data>
+  <data name="CodeGen_Entity_Singleton_Association_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets or sets the associated &lt;see cref="{0}"/&gt; entity.</value>
+  </data>
+  <data name="CodeGen_Entity_Singleton_Association_ReadOnly_Property_Summary_Comment" xml:space="preserve">
+    <value>Gets the associated &lt;see cref="{0}"/&gt; entity.</value>
+  </data>
+  <data name="CodeGen_Execution_Time" xml:space="preserve">
+    <value>RIA client proxy class generation finished in {0} seconds.</value>
+  </data>
+  <data name="CodeGen_Generating_DomainService" xml:space="preserve">
+    <value>Generating proxy classes for the DomainService '{0}'.</value>
+  </data>
+  <data name="CodeGen_Generating_Proxies" xml:space="preserve">
+    <value>RIA client proxy class generation starting for project '{0}'.</value>
+  </data>
+  <data name="CodeGen_Generating_WebContext" xml:space="preserve">
+    <value>Generating WebContext class.</value>
+  </data>
+  <data name="CodeGen_GetIdentify_Method_Returns_Comment" xml:space="preserve">
+    <value>An object instance that uniquely identifies this entity instance.</value>
+  </data>
+  <data name="CodeGen_GetIdentify_Method_Summary_Comment" xml:space="preserve">
+    <value>Computes a value from the key fields that uniquely identifies this entity instance.</value>
+  </data>
+  <data name="CodeGen_No_Pdb" xml:space="preserve">
+    <value>Shared file analysis cannot be done on assembly '{0}' because it has no corresponding PDB file.
+Change its project file to set DebugType to 'full' or 'pdbonly' if you intend to share code.</value>
+  </data>
+  <data name="CodeGen_Query_Method_Parameter_Comment" xml:space="preserve">
+    <value>The value for the '{0}' parameter of the query.</value>
+  </data>
+  <data name="CodeGen_Query_Method_Returns_Comment" xml:space="preserve">
+    <value>An EntityQuery that can be loaded to retrieve &lt;see cref="{0}"/&gt; entity instances.</value>
+  </data>
+  <data name="CodeGen_Shared_Files" xml:space="preserve">
+    <value>Files visible to both the client and the server are:{0}</value>
+  </data>
+  <data name="Code_Generator_Incorrect_Type" xml:space="preserve">
+    <value>The requested code generator '{0}' cannot be used because it does not implement 'IDomainServiceClientCodeGenerator'.</value>
+  </data>
+  <data name="Code_Generator_Instantiation_Error" xml:space="preserve">
+    <value>The requested code generator '{0}' cannot be instantiated:
+{0}</value>
+  </data>
+  <data name="Code_Generator_Not_Found" xml:space="preserve">
+    <value>No code generator named '{0}' is available for '{1}'.
+If a generator with this name exists elsewhere, add a reference to its assembly to the
+'{2}' project.
+Otherwise, manually edit the '{3}' project
+to add a &lt;RiaClientCodeGeneratorName&gt; property to name a valid generator.
+To specify the default generator add this property:
+  &lt;RiaClientCodeGeneratorName&gt;{4}&lt;/RiaClientCodeGeneratorName&gt;
+</value>
+  </data>
+  <data name="CommentOnCreated" xml:space="preserve">
+    <value>&lt;summary&gt;
+This method is invoked from the constructor once initialization is complete and
+can be used for further object setup.
+&lt;/summary&gt;</value>
+  </data>
+  <data name="Deleting_Empty_File" xml:space="preserve">
+    <value>Deleting file {0} because no client proxy classes have been generated.</value>
+  </data>
+  <data name="EntityCodeGen_ConstructorComments_Param_DomainClient" xml:space="preserve">
+    <value>The DomainClient instance to use for this DomainContext.</value>
+  </data>
+  <data name="EntityCodeGen_ConstructorComments_Param_ServiceUri" xml:space="preserve">
+    <value>The {0} service URI.</value>
+  </data>
+  <data name="EntityCodeGen_ConstructorComments_Summary_DomainClientAccumulating" xml:space="preserve">
+    <value>Initializes a new instance of the &lt;see cref="{0}"/&gt; class with the specified &lt;paramref name="domainClient"/&gt;.</value>
+  </data>
+  <data name="EntityCodeGen_ConstructorComments_Summary_DomainContext" xml:space="preserve">
+    <value>Gets an EntityQuery instance that can be used to load &lt;see cref="{0}"/&gt; entity instances using the '{1}' query.</value>
+  </data>
+  <data name="EntityCodeGen_ConstructorComments_Summary_ServiceUri" xml:space="preserve">
+    <value>Initializes a new instance of the &lt;see cref="{0}"/&gt; class with the specified service URI.</value>
+  </data>
+  <data name="EntityCodeGen_DuplicateCustomMethodName" xml:space="preserve">
+    <value>The custom method named '{0}' associated with entity type '{1}' is defined more than once in the '{2}' and '{3}' DomainService classes.</value>
+  </data>
+  <data name="EntityCodeGen_EntityKey_KeyTypeNotSupported" xml:space="preserve">
+    <value>Property '{0}.{1}' is marked as a key property and is of type '{2}', which is not a supported type for a key member.</value>
+  </data>
+  <data name="EntityCodeGen_EntityKey_PropertyNotSerializable" xml:space="preserve">
+    <value>The property '{0}.{1}' is marked as a key property, but it's not serializable. Are you missing DataMemberAttribute?</value>
+  </data>
+  <data name="EntityCodeGen_Generating_GuardProperty" xml:space="preserve">
+    <value>Generating custom method guard property '{0}'...</value>
+  </data>
+  <data name="EntityCodeGen_Generating_GuardUpdateMethod" xml:space="preserve">
+    <value>Generating update method for guard properties...</value>
+  </data>
+  <data name="EntityCodeGen_Generating_InvokeMethod" xml:space="preserve">
+    <value>Generating domain invoke method '{0}'...</value>
+  </data>
+  <data name="EntityCodeGen_NamingCollision_EntityCustomMethodNameAlreadyExists" xml:space="preserve">
+    <value>Unable to generate entity '{0}' due to a naming conflict with an existing member.  Custom method '{1}' conflicts with a field with the same name.  Consider renaming.</value>
+  </data>
+  <data name="EntityCodeGen_RoundtripOriginalOnBaseType" xml:space="preserve">
+    <value>There is a RoundtripOriginalAttribute on derived type '{0}' but not on base type '{1}'. RoundtripOriginalAttribute needs to be on the least derived entity type in an inheritance hierarchy.</value>
+  </data>
+  <data name="EntityCodeGen_SharedEntityMustBeLeastDerived" xml:space="preserve">
+    <value>Sharing entity types within an inheritance hierarchy is not allowed unless all DomainServices expose the same least derived entity. Entity '{0}' is the least derived entity on DomainService '{1}',  Entity '{2}' is the least derived Entity on DomainService '{3}', and Entity '{4}' is exposed from both DomainServices.</value>
+  </data>
+  <data name="Enum_Type_Cannot_Gen_System" xml:space="preserve">
+    <value>The Enum type is not visible to the client and belongs to the System namespace.  Are you missing an assembly reference?</value>
+  </data>
+  <data name="Enum_Type_Must_Be_Public" xml:space="preserve">
+    <value>The Enum type must be public and cannot be nested.</value>
+  </data>
+  <data name="Failed_To_Copy_File" xml:space="preserve">
+    <value>Failed to copy file '{0}' to '{1}'. {2}</value>
+  </data>
+  <data name="Failed_To_Create_Composition_Container" xml:space="preserve">
+    <value>The following exception occurred creating the MEF composition container:
+{0}
+The default code generator will be used.</value>
+  </data>
+  <data name="Failed_To_Create_Folder" xml:space="preserve">
+    <value>Failed to create folder '{0}'.{1}</value>
+  </data>
+  <data name="Failed_To_Delete_File" xml:space="preserve">
+    <value>Failed to delete file '{0}'.</value>
+  </data>
+  <data name="Failed_To_Delete_File_Error" xml:space="preserve">
+    <value>Could not delete file '{0}'. {1}</value>
+  </data>
+  <data name="Failed_To_Modify_ReadOnly" xml:space="preserve">
+    <value>Failed to modify the read-only attribute of file '{0}'.{1}</value>
+  </data>
+  <data name="Failed_To_Open_PDB" xml:space="preserve">
+    <value>An error was encountered attempting to read the PDB file for '{0}' so it will not be possible to detect shared files in that assembly.  {1}</value>
+  </data>
+  <data name="Failed_To_Open_Project" xml:space="preserve">
+    <value>An error was encountered attempting to open project '{0}'. {1}</value>
+  </data>
+  <data name="Failed_To_Read_File_From_VS" xml:space="preserve">
+    <value>Failed to read the contents of '{0}' from Visual Studio.</value>
+  </data>
+  <data name="Failed_To_Rename_File" xml:space="preserve">
+    <value>Failed to move/rename file '{0}' to '{1}'. {2}</value>
+  </data>
+  <data name="Failed_To_Write_File" xml:space="preserve">
+    <value>Failed to write file '{0}'. {1}</value>
+  </data>
+  <data name="Failed_To_Write_File_To_VS" xml:space="preserve">
+    <value>Failed to write the generated contents of '{0}' to Visual Studio.</value>
+  </data>
+  <data name="Multiple_Custom_Code_Generators" xml:space="preserve">
+    <value>Multiple custom code generators are available for {0}:
+{1}Please set the RiaClientCodeGeneratorName property in the client project to select which of these you wish to use.
+</value>
+  </data>
+  <data name="Multiple_Custom_Code_Generators_Using_Default" xml:space="preserve">
+    <value>Multiple custom code generators are available for '{0}':
+{1}The default generator will be used because none was specified.
+To specify one manually edit the '{2}' project
+and add a property like this:
+  &lt;RiaClientCodeGeneratorName&gt;{3}&lt;/RiaClientCodeGeneratorName&gt;
+To specify the default generator add this property:
+  &lt;RiaClientCodeGeneratorName&gt;{4}&lt;/RiaClientCodeGeneratorName&gt;</value>
+  </data>
+  <data name="Multiple_Named_Code_Generators" xml:space="preserve">
+    <value>Multiple code generators named '{0}' are available for '{1}':
+{2}Remove all but one from '{3}',
+modify them to have unique names,
+or manually edit the '{4}' project
+to add a property that fully qualifies one, like this:
+    &lt;RiaClientCodeGeneratorName&gt;{5}&lt;/RiaClientCodeGeneratorName&gt;</value>
+  </data>
+  <data name="Null_Language_Property" xml:space="preserve">
+    <value>The 'ClientProxyCodeGenerationOptions.Language' property cannot be null or empty.</value>
+  </data>
+  <data name="Null_Logger_Property" xml:space="preserve">
+    <value>The Logger property cannot be null.</value>
+  </data>
+  <data name="ProjectPath_Argument_Required" xml:space="preserve">
+    <value>ProjectPath property is required when relative paths are used.</value>
+  </data>
+  <data name="Project_Does_Not_Exist" xml:space="preserve">
+    <value>The project '{0}' does not exist.</value>
+  </data>
+  <data name="Project_References_Found" xml:space="preserve">
+    <value>The project '{0}' contains project references to:</value>
+  </data>
+  <data name="Property_Not_Found" xml:space="preserve">
+    <value>The type '{0}' does not contain a property named '{1}'.</value>
+  </data>
+  <data name="Region_ExtensibilityMethodDefinitions" xml:space="preserve">
+    <value>Extensibility Method Definitions</value>
+  </data>
+  <data name="RIA_Link_Present" xml:space="preserve">
+    <value>A WCF RIA Services Link exists between project '{0}' and project '{1}'.</value>
+  </data>
+  <data name="RIA_Link_Prevents_Copy" xml:space="preserve">
+    <value>Shared files will not be copied from '{0}' due to an existing WCF RIA Services Link from '{1}'.</value>
+  </data>
+  <data name="Server_Project_File_Does_Not_Exist" xml:space="preserve">
+    <value>The Silverlight project '{0}' has a WCF RIA Services Link to the project '{1}' which does not exist.
+Did you rename or move that project?
+Please modify the Project Properties of '{0}' and set the WCF RIA Services Link to point to a valid project.</value>
+  </data>
+  <data name="SharedCodeServiceParameters_Parameter_Null" xml:space="preserve">
+    <value>SharedCodeServiceParameters.{0} cannot be null.</value>
+  </data>
+  <data name="Shared_DomainContext_Skipped" xml:space="preserve">
+    <value>Skipping proxy class generation for '{0}' because a DomainContext for it already exists in another assembly.</value>
+  </data>
+  <data name="Type_Must_Be_Attribute" xml:space="preserve">
+    <value>The type '{0}' is not derived from Attribute.</value>
+  </data>
+  <data name="Unspecified_Resource_Element" xml:space="preserve">
+    <value>&lt;unspecified&gt;</value>
+  </data>
+  <data name="Using_Custom_Code_Generator" xml:space="preserve">
+    <value>The '{0}' custom code generator will be used to generate the proxy classes.</value>
+  </data>
+  <data name="WebContext_CommentClass" xml:space="preserve">
+    <value>&lt;summary&gt;
+Context for the RIA application.
+&lt;/summary&gt;
+&lt;remarks&gt;
+This context extends the base to make application services and types available
+for consumption from code and xaml.
+&lt;/remarks&gt;</value>
+  </data>
+  <data name="WebContext_CommentConstructor" xml:space="preserve">
+    <value>&lt;summary&gt;
+Initializes a new instance of the WebContext class.
+&lt;/summary&gt;</value>
+  </data>
+  <data name="WebContext_CommentCurrent" xml:space="preserve">
+    <value>&lt;summary&gt;
+Gets the context that is registered as a lifetime object with the current application.
+&lt;/summary&gt;
+&lt;exception cref="InvalidOperationException"&gt; is thrown if there is no current application,
+no contexts have been added, or more than one context has been added.
+&lt;/exception&gt;
+&lt;seealso cref="System.Windows.Application.ApplicationLifetimeObjects"/&gt;</value>
+  </data>
+  <data name="WebContext_CommentUser" xml:space="preserve">
+    <value>&lt;summary&gt;
+Gets a user representing the authenticated identity.
+&lt;/summary&gt;</value>
+  </data>
+  <data name="WebContext_ManyAuthServices" xml:space="preserve">
+    <value>More than one AuthenticationService exists in the project. No AuthenticationService is set as the default in WebContext.\n{0}</value>
+  </data>
+  <data name="Writing_Generated_Code" xml:space="preserve">
+    <value>Writing generated client proxy classes to '{0}'.</value>
+  </data>
+  <data name="HttpRuntimeInitializationError" xml:space="preserve">
+    <value>There was a problem initializing the HttpRuntime.</value>
+  </data>
+  <data name="CodeGen_Complex_Class_Summary_Comment" xml:space="preserve">
+    <value>The '{0}' class.</value>
+  </data>
+  <data name="ClientCodeGen_ComplexTypesCannotBeShared_Reference" xml:space="preserve">
+    <value>The Complex Type '{0}' already exists in another assembly. Complex Types cannot be defined in multiple assemblies.</value>
+  </data>
+</root>
