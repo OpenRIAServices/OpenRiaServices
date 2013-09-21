@@ -19,7 +19,7 @@
     <OptionCompare>Binary</OptionCompare>
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <DelaySign>true</DelaySign>
     <AssemblyOriginatorKeyFile>..\..\..\External\Infrastructure\Keys\MsApps36.snk</AssemblyOriginatorKeyFile>
     <SccProjectName>SAK</SccProjectName>
