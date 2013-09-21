@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+#if DBCONTEXT
+using System.Data.Entity.Core.Metadata.Edm;
+#else
 using System.Data.Metadata.Edm;
+#endif
 using System.ServiceModel.DomainServices.Server;
 
 namespace System.ServiceModel.DomainServices.EntityFramework

@@ -1,14 +1,28 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+
+
+#if DBCONTEXT
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects.DataClasses;
+using System.Data.Entity.Core.Objects;
+#else
 using System.Data;
 using System.Data.Metadata.Edm;
 using System.Data.Objects;
+using System.Data.Objects.DataClasses;
+#endif
 using System.Linq;
 using System.ServiceModel.DomainServices.Server;
 
 namespace System.ServiceModel.DomainServices.EntityFramework
 {
-    using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
+#if DBCONTEXT
+    using ConcurrencyMode = System.Data.Entity.Core.Metadata.Edm.ConcurrencyMode;
+#else
+using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
+#endif
+
 
     /// <summary>
     /// Internal utility functions for dealing with EF types and metadata

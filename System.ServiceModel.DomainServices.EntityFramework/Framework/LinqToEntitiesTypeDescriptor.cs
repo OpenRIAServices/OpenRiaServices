@@ -1,9 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+
+
+#if DBCONTEXT
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects.DataClasses;
+using System.Data.Entity;
+#else
 using System.Data;
 using System.Data.Metadata.Edm;
 using System.Data.Objects.DataClasses;
+#endif
+
 using System.Linq;
 using System.ServiceModel.DomainServices.Server;
 

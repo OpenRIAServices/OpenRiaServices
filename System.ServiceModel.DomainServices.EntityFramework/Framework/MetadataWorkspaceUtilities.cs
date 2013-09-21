@@ -1,8 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Mapping;
+
+
+#if DBCONTEXT
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Mapping;
+#else
 using System.Data.Metadata.Edm;
 using System.Data.Objects;
+using System.Data.Mapping;
+#endif
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
