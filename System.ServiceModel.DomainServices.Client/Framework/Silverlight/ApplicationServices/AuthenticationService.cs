@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// Service that is responsible for authenticating, loading, and saving the current user. 

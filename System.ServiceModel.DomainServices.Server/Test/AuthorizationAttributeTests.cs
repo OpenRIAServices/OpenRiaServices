@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     [TestClass]
     public class AuthorizationAttributeTests
@@ -247,7 +246,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             }
         }
 
-        [System.ServiceModel.DomainServices.Hosting.EnableClientAccess]
+        [OpenRiaServices.DomainServices.Hosting.EnableClientAccess]
         public class AuthorizationTestDomainService : DomainService
         {
             [Invoke]
@@ -281,6 +280,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             public void CustomUpdate(AuthorizationTestEntity entity) { }
 
         }
+
         public class AuthorizationTestEntity
         {
             [Key]

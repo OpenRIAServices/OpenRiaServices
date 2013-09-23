@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Principal;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Identifies a set of roles that are permitted to invoke a <see cref="DomainOperationEntry"/>.

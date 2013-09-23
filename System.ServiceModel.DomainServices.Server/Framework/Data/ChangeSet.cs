@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Represents a set of changes to be processed by a <see cref="DomainService"/>.

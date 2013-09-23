@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Microsoft.ServiceModel.DomainServices.WindowsAzure
+namespace OpenRiaServices.DomainServices.WindowsAzure
 {
     /// <summary>
     /// Type used to store the default metadata for the <see cref="TableEntity"/>.

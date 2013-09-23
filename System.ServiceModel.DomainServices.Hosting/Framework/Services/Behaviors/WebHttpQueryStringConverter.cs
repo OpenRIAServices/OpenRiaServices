@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization.Json;
 using System.ServiceModel.Dispatcher;
 using System.Text;
-
 #if SILVERLIGHT
 using System.Windows.Browser;
 #else
@@ -10,9 +10,9 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 #else
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 #endif
 {
     internal class WebHttpQueryStringConverter : QueryStringConverter

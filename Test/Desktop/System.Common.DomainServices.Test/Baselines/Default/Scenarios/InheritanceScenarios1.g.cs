@@ -16,12 +16,11 @@ namespace TestDomainServices
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
-    
     
     /// <summary>
     /// The 'InheritanceB' entity class.

@@ -6,9 +6,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Internal implementation of <see cref="ICodeGenerationHost"/> used for client

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client.Test.Services;
+using OpenRiaServices.DomainServices.Client.Test.Services;
 using System.Threading;
 using System.Xml.Linq;
 using Cities;
@@ -16,12 +16,12 @@ using TestDomainServices;
 using TestDomainServices.LTS;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     using System.Net;
     using TestDomainServices.Saleテ;
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
-    using Resources = SSmDsClient::System.ServiceModel.DomainServices.Client.Resources;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = OpenRiaServices.DomainServices.Client.Resources;
 
     /// <summary>
     /// Non provider specific query tests.
@@ -2005,12 +2005,10 @@ namespace System.ServiceModel.DomainServices.Client.Test
 
                 // TODO: We should move TestHelpers.cs into System.Common.Test and then call TestDatabase.SetAddress to reuse that code.
 #if SILVERLIGHT
-                ts.Endpoint.Address = new ServiceModel.EndpointAddress(
-                new Uri(
+                ts.Endpoint.Address = new System.ServiceModel.EndpointAddress(
                     new Uri(
-                        System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped),
-                        UriKind.Absolute),
-                    ts.Endpoint.Address.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)));
+                        new Uri( System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped), UriKind.Absolute),
+                        ts.Endpoint.Address.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)));
 #endif
                 ts.RestartAppCompleted += (s, e) => restartCompletedArgs = e;
                 ts.RestartAppAsync();
@@ -2760,5 +2758,4 @@ namespace System.ServiceModel.DomainServices.Client.Test
             this.CreateEntitySet<D>(EntitySetOperations.All);
         }
     }
-
 }

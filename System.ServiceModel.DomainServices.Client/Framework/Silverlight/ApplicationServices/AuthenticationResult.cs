@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// Abstract base type for all the results returned by End calls for

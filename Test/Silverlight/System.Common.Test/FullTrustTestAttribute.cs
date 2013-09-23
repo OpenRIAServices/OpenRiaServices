@@ -1,6 +1,6 @@
 using System;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     /// <summary>
     /// Provides a hint to test hosts that a test requires full trust.

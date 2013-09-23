@@ -4,13 +4,13 @@ using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.ServiceModel.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="DataContractSurrogate"/> members.

@@ -1,7 +1,7 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     using System.Collections.Generic;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
 
     /// <summary>
     /// Generator class that generates WebContext classes.

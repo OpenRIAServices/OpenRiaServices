@@ -1,8 +1,8 @@
-﻿using System.ServiceModel.DomainServices.Client.Test;
+﻿using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="WindowsAuthentication"/> members.

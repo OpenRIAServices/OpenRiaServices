@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// CustomTypeDescriptor base type shared by LINQ To SQL and LINQ To Entities

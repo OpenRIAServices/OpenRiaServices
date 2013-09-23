@@ -11,21 +11,21 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.EntityFramework;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using System.Threading;
 using Cities;
-using Microsoft.ServiceModel.DomainServices.LinqToSql;
+using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using TheTypeDescriptorExtensions = SystemWebDomainServices::System.ServiceModel.DomainServices.Server.TypeDescriptorExtensions;
+using TheTypeDescriptorExtensions = OpenRiaServices.DomainServices.Server.TypeDescriptorExtensions;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
-    using MetaType = SystemWebDomainServices::System.ServiceModel.DomainServices.Server.MetaType;
+    using MetaType = OpenRiaServices.DomainServices.Server.MetaType;
     using System.Data.Metadata.Edm;
 
     /// <summary>
@@ -1378,7 +1378,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(System.ServiceModel.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -1388,7 +1388,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(System.ServiceModel.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -1398,7 +1398,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(System.ServiceModel.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -1408,7 +1408,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(System.ServiceModel.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -2129,7 +2129,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
                 {
                     ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
                 },
-                string.Format(Microsoft.ServiceModel.DomainServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
+                string.Format(OpenRiaServices.DomainServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
                     typeof(AdventureWorksModel.AdventureWorksEntities))
                 );
 
@@ -2147,8 +2147,8 @@ namespace System.ServiceModel.DomainServices.Server.Test
             {
                 ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
             },
-                string.Format(System.ServiceModel.DomainServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
-                    typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
+                                                           string.Format(OpenRiaServices.DomainServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
+                                                               typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
                 );
         }
 
@@ -3071,7 +3071,6 @@ namespace System.ServiceModel.DomainServices.Server.Test
             set;
         }
     }
-
 
     public class EFPocoEntity_IEntityChangeTracker : System.Data.Objects.DataClasses.IEntityChangeTracker
     {
@@ -4017,7 +4016,6 @@ namespace System.ServiceModel.DomainServices.Server.Test
             return null;
         }
     }
-
     #endregion
 }
 

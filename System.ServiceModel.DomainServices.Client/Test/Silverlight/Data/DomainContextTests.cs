@@ -7,7 +7,7 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     [TestClass]
     public class DomainContextTests : UnitTestBase

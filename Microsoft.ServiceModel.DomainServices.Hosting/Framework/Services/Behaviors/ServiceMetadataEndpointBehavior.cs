@@ -2,12 +2,12 @@
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using System.Xml;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     internal class ServiceMetadataEndpointBehavior : IEndpointBehavior
     {

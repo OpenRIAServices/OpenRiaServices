@@ -152,7 +152,7 @@
     <EmbeddedResource Include="Services\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.Hosting</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Linq\Resource.resx">
       <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>

@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.Metadata.Edm;
 using System.Globalization;
 using System.IO;
-using System.ServiceModel.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.EntityFramework;
 using System.Text;
 
 namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools

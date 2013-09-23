@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("System.ServiceModel.DomainServices.Hosting.OData")]
-[assembly: AssemblyDescription("System.ServiceModel.DomainServices.Hosting.OData.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Hosting.OData")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Hosting.OData.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -28,7 +28,7 @@ using System.Security;
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Hosting.OData.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Hosting.OData.Test")]
 
 // Version information for an assembly consists of the following four values:
 //

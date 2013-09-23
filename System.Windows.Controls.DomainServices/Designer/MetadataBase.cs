@@ -7,7 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
+using OpenRiaServices.DomainServices;
 using System.Xml.Linq;
 using Microsoft.Windows.Design.Metadata;
 using SSW = Silverlight::System.Windows;

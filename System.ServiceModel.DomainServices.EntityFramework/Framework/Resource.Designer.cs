@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.ServiceModel.DomainServices.EntityFramework {
+namespace OpenRiaServices.DomainServices.EntityFramework {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace System.ServiceModel.DomainServices.EntityFramework {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.ServiceModel.DomainServices.EntityFramework.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.DomainServices.EntityFramework.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

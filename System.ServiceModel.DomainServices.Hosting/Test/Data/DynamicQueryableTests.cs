@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Hosting.Test.Data
+namespace OpenRiaServices.DomainServices.Hosting.Test.Data
 {
     [TestClass]
     public class DynamicQueryableTests

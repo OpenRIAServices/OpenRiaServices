@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Utility class to deal with <see cref="KnownTypeAttribute"/>

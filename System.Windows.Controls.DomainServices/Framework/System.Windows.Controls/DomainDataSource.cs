@@ -6,8 +6,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Client;
 using System.Windows.Common;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -19,7 +19,7 @@ namespace System.Windows.Controls
 
     /// <summary>
     /// A component to simplify the interaction between the user interface and data from a
-    /// <see cref="System.ServiceModel.DomainServices.Client.DomainContext"/>. With the
+    /// <see cref="OpenRiaServices.DomainServices.Client.DomainContext"/>. With the
     /// DomainDataSource, you can <see cref="Load">load</see>, <see cref="FilterDescriptors">filter</see>,
     /// <see cref="GroupDescriptors">group</see>, and <see cref="SortDescriptors">sort</see> data easily.
     /// <para>
@@ -682,7 +682,7 @@ namespace System.Windows.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="System.ServiceModel.DomainServices.Client.DomainContext"/>
+        /// Gets or sets the <see cref="OpenRiaServices.DomainServices.Client.DomainContext"/>
         /// instance used for executing the load and submit operations.
         /// </summary>
         public DomainContext DomainContext
@@ -2013,7 +2013,7 @@ namespace System.Windows.Controls
         /// method of cancellation differs slightly from canceling a submit via the
         /// <see cref="SubmittingChanges"/> event.
         /// <para>
-        /// Upon completion of the operation, check the <see cref="System.ServiceModel.DomainServices.Client.OperationBase.IsCanceled"/>
+        /// Upon completion of the operation, check the <see cref="OpenRiaServices.DomainServices.Client.OperationBase.IsCanceled"/>
         /// property to determine whether or not the operation was successfully canceled. Note that cancellation
         /// of the operation does not guarantee state changes were prevented from happening on the server.
         /// </para>
@@ -2907,7 +2907,7 @@ namespace System.Windows.Controls
 
         /// <summary>
         /// Invoke a load operation for the specified <see cref="LoadType"/>. The <see cref="EntityQuery"/> will be
-        /// composed and the <see cref="DomainContext"/>'s <see cref="System.ServiceModel.DomainServices.Client.DomainContext.Load"/>
+        /// composed and the <see cref="DomainContext"/>'s <see cref="OpenRiaServices.DomainServices.Client.DomainContext.Load"/>
         /// method will be called.
         /// </summary>
         /// <remarks>

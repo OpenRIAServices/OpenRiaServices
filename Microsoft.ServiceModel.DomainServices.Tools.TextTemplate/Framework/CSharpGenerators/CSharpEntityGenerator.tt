@@ -1,12 +1,12 @@
-﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.EntityGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EntityGenerator" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="System.ServiceModel.DomainServices.Server" #>
-<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate" #>
-<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Tools.TextTemplate" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
 <#@ import namespace="System.Runtime.Serialization" #>
 
 <#@ include file="Templates\DataContractGeneratorTemplate.ttinclude" #>
@@ -144,7 +144,7 @@ return this.<#= keyNames[0] #>;
 <#+
 				}
 #>
-return System.ServiceModel.DomainServices.Client.EntityKey.Create(<#+
+return OpenRiaServices.DomainServices.Client.EntityKey.Create(<#+
 for(int i = 0; i < keyNames.Count(); i++)
 {
 	#>this.<#= keyNames[i] #><#+

@@ -4,19 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Client;
 using System.Xml.Linq;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
-    using TypeUtility = SSmDsClient::System.ServiceModel.DomainServices.TypeUtility;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
 
     [TestClass]
     public class InvokeOperationTests : UnitTestBase

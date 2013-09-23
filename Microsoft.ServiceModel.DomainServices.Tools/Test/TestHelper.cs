@@ -8,13 +8,13 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text;
-using Microsoft.ServiceModel.DomainServices.Tools;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
-using Microsoft.ServiceModel.DomainServices.Tools.Test;
+using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Tools.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     public class TestHelper
     {

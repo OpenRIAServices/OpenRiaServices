@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ServiceModel.DomainServices.Tools
+﻿namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// This enum is designed to be used with type snippet generators.

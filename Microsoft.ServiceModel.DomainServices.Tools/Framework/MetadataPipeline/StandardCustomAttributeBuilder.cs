@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Standard custom attribute builder.

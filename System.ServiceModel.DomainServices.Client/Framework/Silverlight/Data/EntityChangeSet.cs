@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Represents a collection of <see cref="Entity"/> changes

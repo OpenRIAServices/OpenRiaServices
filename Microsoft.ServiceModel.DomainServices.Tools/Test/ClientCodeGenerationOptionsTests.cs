@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
 
     /// <summary>

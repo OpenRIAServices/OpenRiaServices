@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 #if LINQTOSQL
-using Microsoft.ServiceModel.DomainServices.LinqToSql;
+using OpenRiaServices.DomainServices.LinqToSql;
 #else
-using System.ServiceModel.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.EntityFramework;
 #endif
 
 namespace System.ComponentModel.DataAnnotations.Schema

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.Test.Utilities
+namespace OpenRiaServices.DomainServices.Server.Test.Utilities
 {
     /// <summary>
     /// This class is meant to be used with unit tests to disable the Debug.Assert dialog

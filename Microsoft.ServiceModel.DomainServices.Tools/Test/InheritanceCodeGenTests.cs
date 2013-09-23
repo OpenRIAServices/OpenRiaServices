@@ -5,17 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using DomainService_Resource = System.ServiceModel.DomainServices.Server.Resource;
+using DomainService_Resource = OpenRiaServices.DomainServices.Server.Resource;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     using Inheritance.Tests;
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
-    using System.ServiceModel.DomainServices.Server.Test.Utilities;
+    using OpenRiaServices.DomainServices.Server.Test.Utilities;
 
     /// <summary>
     /// Tests CustomAttributeGenerator
@@ -25,7 +24,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("Inheritance: the domain service catalog identifies the right entities")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH1")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH1")]
         public void Inherit_Gen_DomainServiceCatalog()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator(
@@ -76,7 +75,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: basic validation of code gen for domain service with single derived type")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH2")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH2")]
         public void Inherit_Gen_Basic()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -196,7 +195,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: CUD methods on derived types is allowed")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH3")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH3")]
         public void Inherit_Gen_Basic_With_CUD()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -255,7 +254,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         #region Association
         [TestMethod]
         [Description("Inheritance: unidirectional 1:1 association is legal from derived entity to other root entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH4")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH4")]
         public void Inherit_Gen_Assoc_Uni_Derived_To_Included_Root()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -314,7 +313,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association is legal from derived entity to other root entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH5")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH5")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Root()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -391,7 +390,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH6")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH6")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Derived()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -474,7 +473,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:M association is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH7")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH7")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Derived_OneToMany()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -563,7 +562,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional M:1 association is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH8")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH8")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Derived_ManyToOne()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -656,7 +655,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association with projection is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH9")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH9")]
         public void Inherit_Gen_Projection_Bi_Derived_To_Included_Derived()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -755,7 +754,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association with projection is legal from target derived entity to source derived entity identified only through [Include]")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH10")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH10")]
         public void Inherit_Gen_Projection_Bi_Derived_To_Included_Derived_Reversed()
         {
             // This test differs from the one above only in that project elements occur
@@ -858,7 +857,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: validates buddy class on derived types works")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH11")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH11")]
         public void Inherit_Gen_Buddy()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1036,7 +1035,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: checks generation of partial methods")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH12")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH12")]
         public void Inherit_Gen_Partial_Methods()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1055,7 +1054,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
                         ? @"namespace Inheritance.Tests
                             {
                                 using System;
-                                using System.ServiceModel.DomainServices.Client;
+                                using OpenRiaServices.DomainServices.Client;
                                 public sealed partial class Inherit_Basic_Derived : Inherit_Basic_Root
                                 {
                                     partial void OnCreated() {}
@@ -1079,7 +1078,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
                             Option Explicit On
 
                             Imports System
-                            Imports System.ServiceModel.DomainServices.Client
+                            Imports OpenRiaServices.DomainServices.Client
 
                             Namespace Inheritance.Tests
                                 
@@ -1147,7 +1146,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: validates the DomainServiceDescription builds correct known type hierarchy for abstracts")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH13")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH13")]
         public void Inherit_DomainServiceDescription_Type_Hierarchies()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1219,7 +1218,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: root entity may be abstract if it specifies a concrete derived type")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH14")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH14")]
         public void Inherit_Gen_Abstract_Root_With_Concrete_Derived()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1282,7 +1281,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: root entity type without [Key] causes error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH15")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH15")]
         public void Inherit_Gen_No_Key_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1305,7 +1304,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: derived entity type with [Key] causes error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH16")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH16")]
         public void Inherit_Gen_Derived_Key_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1328,7 +1327,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: derived entity type not specified in [KnownType] causes error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH17")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH17")]
         public void Inherit_Gen_Missing_KnownType_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1351,7 +1350,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: entity properties may be polymorphic")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH18")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH18")]
         public void Inherit_Gen_Polymorphic_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1416,7 +1415,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: using 'new' to override a property generates an error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH19")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH19")]
         public void Inherit_Gen_New_Property_Illegal()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1442,7 +1441,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Code generator flattens the hierarchy when it has non-visible types")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH20")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH20")]
         public void Inherit_Gen_Flatten()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1543,7 +1542,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: insert method on derived entity only is an error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH21")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH21")]
         public void Inherit_Gen_No_Root_Insert_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1566,7 +1565,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: update method on derived entity only is an error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH22")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH22")]
         public void Inherit_Gen_No_Root_Update_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1589,7 +1588,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: delete method on derived entity only is an error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH23")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH23")]
         public void Inherit_Gen_No_Root_Delete_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1612,7 +1611,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: custom method on derived entity only is legal")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH24")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH24")]
         public void Inherit_Gen_No_Root_Custom()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -1671,7 +1670,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: overloaded custom method on derived type is error")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH25")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_INH25")]
         [Ignore] // TODO: [Dev10] This generates no errors, but it should
         public void Inherit_Gen_Custom_Overload_Is_Error()
         {
@@ -1892,8 +1891,8 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 // Avoid the System namespace or VB treats System as its root namespace
 namespace Inheritance.Tests
 {
-    using System.ServiceModel.DomainServices.Hosting;
-    using Microsoft.ServiceModel.DomainServices.Tools.Test;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Tools.Test;
 
     #region Inherit_Basic
 

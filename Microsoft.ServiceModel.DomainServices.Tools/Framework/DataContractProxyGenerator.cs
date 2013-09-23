@@ -8,10 +8,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Proxy generator base class for an type that carries data contract data.

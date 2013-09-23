@@ -1,12 +1,13 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Base class for all <see cref="CodeProcessor"/> implementations. By associating a <see cref="CodeProcessor"/> Type
-    /// with a <see cref="DomainService"/> Type via the <see cref="System.ServiceModel.DomainServices.DomainIdentifierAttribute"/>, codegen for the service
+    /// with a <see cref="DomainService"/> Type via the <see cref="OpenRiaServices.DomainServices.DomainIdentifierAttribute"/>, codegen for the service
     /// Type can be customized.
     /// </summary>
     public abstract class CodeProcessor

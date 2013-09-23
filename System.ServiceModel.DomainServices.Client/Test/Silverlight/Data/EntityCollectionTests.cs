@@ -11,10 +11,10 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     using Cities;
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
     using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
     [TestClass]

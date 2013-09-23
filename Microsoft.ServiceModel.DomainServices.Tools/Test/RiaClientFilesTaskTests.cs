@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
 
     /// <summary>

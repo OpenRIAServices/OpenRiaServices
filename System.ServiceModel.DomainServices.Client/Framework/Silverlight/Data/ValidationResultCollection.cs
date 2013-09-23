@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// An <see cref="ICollection{ValidationResult}"/> implementation that serves as a base class
@@ -370,7 +371,7 @@ namespace System.ServiceModel.DomainServices.Client
         /// Gets the enumerator for this collection of validation results.
         /// </summary>
         /// <returns>An enumerator of <see cref="ValidationResult"/> objects.</returns>
-        Collections.IEnumerator Collections.IEnumerable.GetEnumerator()
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }

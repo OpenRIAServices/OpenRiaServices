@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
@@ -32,7 +32,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [Description("DomainService with [Include] yields error for non-entity types")]
         public void CodeGen_Attribute_IncludeAttribute_Fail_Not_Entity()
         {
-            string error = string.Format(System.ServiceModel.DomainServices.Server.Resource.Invalid_Include_Invalid_Entity, "NotAnEntity", typeof(Mock_CG_Attr_Entity_Include).Name, "String", System.ServiceModel.DomainServices.Server.Resource.EntityTypes_Cannot_Be_Primitives);
+            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.Invalid_Include_Invalid_Entity, "NotAnEntity", typeof(Mock_CG_Attr_Entity_Include).Name, "String", OpenRiaServices.DomainServices.Server.Resource.EntityTypes_Cannot_Be_Primitives);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Attr_Entity_Include_DomainService), error);
         }
 
@@ -41,7 +41,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         public void CodeGen_Attribute_IncludeAttribute_Fail_Buddy_Class_Wrong_Property()
         {
             // This resource is internal to DataAnnotations, so we evaluate correctness only for EN_US
-            if (System.ServiceModel.DomainServices.Client.Test.UnitTestHelper.EnglishBuildAndOS)
+            if (OpenRiaServices.DomainServices.Client.Test.UnitTestHelper.EnglishBuildAndOS)
             {
                 string error = "The associated metadata type for type '" + typeof(Mock_CG_Attr_Entity_Include_Buddy).FullName + "' contains the following unknown properties or fields: NotAProperty. Please make sure that the names of these members match the names of the properties on the main type.";
                 TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Attr_Entity_Include_Buddy_DomainService), error);
@@ -68,7 +68,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [Description("DomainService with [Include] and [Exclude] succeeds but emits warning")]
         public void CodeGen_Attribute_IncludeAttribute_Exclude_Succeeds_With_Warning()
         {
-            string warning = string.Format(Microsoft.ServiceModel.DomainServices.Tools.Resource.ClientCodeGen_Cannot_Have_Include_And_Exclude, "Entity2", typeof(Mock_CG_Attr_Entity_Include_Exclude));
+            string warning = string.Format(OpenRiaServices.DomainServices.Tools.Resource.ClientCodeGen_Cannot_Have_Include_And_Exclude, "Entity2", typeof(Mock_CG_Attr_Entity_Include_Exclude));
             string generatedCode = TestHelper.GenerateCodeAssertWarnings("C#", typeof(Mock_CG_Attr_Entity_Include_Exclude_DomainService), warning);
         }
 

@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Linq;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.EntityFramework;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using System.Xml.Linq;
 using DataModels.ScenarioModels;
 using DataTests.AdventureWorks.LTS;
-using Microsoft.ServiceModel.DomainServices.LinqToSql;
+using OpenRiaServices.DomainServices.LinqToSql;
 using TestDomainServices.Saleテ;
 
 [assembly: ContractNamespace("http://TestNamespace/ForNoClrNamespace")]

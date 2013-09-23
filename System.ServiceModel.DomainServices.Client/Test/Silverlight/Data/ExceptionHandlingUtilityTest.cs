@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Test
+namespace OpenRiaServices.DomainServices.Test
 {
-    using ExceptionHandlingUtility = SSmDsClient::System.ServiceModel.DomainServices.ExceptionHandlingUtility;
+    using ExceptionHandlingUtility = OpenRiaServices.DomainServices.ExceptionHandlingUtility;
 
     [TestClass]
     public class ExceptionHandlingUtilityTests

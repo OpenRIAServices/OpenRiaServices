@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Represents a domain operation to be performed on an entity. This is the message

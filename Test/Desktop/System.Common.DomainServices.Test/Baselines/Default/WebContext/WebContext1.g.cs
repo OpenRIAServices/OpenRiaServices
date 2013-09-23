@@ -15,11 +15,10 @@ namespace RootNamespace
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using RootNamespace.TestNamespace;
-    
     
     /// <summary>
     /// Context for the RIA application.
@@ -85,21 +84,18 @@ namespace RootNamespace.TestNamespace
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
-    
     
     /// <summary>
     /// The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     /// </summary>
-    public sealed partial class AuthenticationService1 : global::System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+    public sealed partial class AuthenticationService1 : OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
     {
-        
         #region Extensibility Method Definitions
-
         /// <summary>
         /// This method is invoked from the constructor once initialization is complete and
         /// can be used for further object setup.
@@ -107,7 +103,6 @@ namespace RootNamespace.TestNamespace
         partial void OnCreated();
 
         #endregion
-        
         
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationService1"/> class.

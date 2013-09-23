@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 // if this test is linked into the server test project. For now, we only need to run from the client
 // since there is no behavior difference of ValidationResultInfo on client/server.
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     [TestClass]
     public class OperationErrorTest

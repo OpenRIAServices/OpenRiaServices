@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Linq.Mapping;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.LinqToSql
+namespace OpenRiaServices.DomainServices.LinqToSql
 {
     internal class LinqToSqlDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {

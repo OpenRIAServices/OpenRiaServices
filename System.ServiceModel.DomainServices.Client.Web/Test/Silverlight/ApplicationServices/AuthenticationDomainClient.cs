@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
     public class AuthenticationDomainClient : DomainClient
     {

@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.LinqToSql")]
-[assembly: AssemblyDescription("Microsoft.ServiceModel.DomainServices.LinqToSql.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.LinqToSql")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.LinqToSql.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -25,8 +25,8 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("9e0c539b-0604-4ba6-aefc-2831d419f1a5")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Server.Test")]
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Tools.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

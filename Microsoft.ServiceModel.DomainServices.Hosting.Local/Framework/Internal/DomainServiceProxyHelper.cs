@@ -5,9 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting.Local
+namespace OpenRiaServices.DomainServices.Hosting.Local
 {
     /// <summary>
     /// Used to perform Submit, Invoke and Query operations on a <see cref="DomainService"/> proxy instances.

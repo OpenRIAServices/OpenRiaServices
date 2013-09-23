@@ -5,11 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Represents a catalog of DomainServices.

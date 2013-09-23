@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Web.Hosting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Validation
+namespace OpenRiaServices.DomainServices.Tools.Validation
 {
     /// <summary>
     /// Validator used by the <see cref="ValidateDomainServicesTask"/> to validate the
-    /// integrity of the <see cref="System.ServiceModel.DomainServices.Server.DomainService"/>s exposed by the target Web Application
+    /// integrity of the <see cref="OpenRiaServices.DomainServices.Server.DomainService"/>s exposed by the target Web Application
     /// </summary>
     /// <remarks>
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across

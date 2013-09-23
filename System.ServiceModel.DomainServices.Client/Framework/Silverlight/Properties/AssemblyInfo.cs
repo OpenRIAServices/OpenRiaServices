@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("System.ServiceModel.DomainServices.Client")]
-[assembly: AssemblyDescription("System.ServiceModel.DomainServices.Client.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Client")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Client.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -28,8 +28,8 @@ using System.Runtime.InteropServices;
 
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Client.Test")]
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Client.Test.Vb")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test.Vb")]
 [assembly: InternalsVisibleTo("System.Windows.Controls.DomainServices.Test")]
 
 // Version information for an assembly consists of the following four values:

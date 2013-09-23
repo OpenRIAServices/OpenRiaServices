@@ -4,7 +4,7 @@ namespace CodeFirstModels
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
     
     public partial class Order
     {

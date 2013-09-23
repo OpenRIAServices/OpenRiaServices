@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
-using DataAnnotationsResources = System.ServiceModel.DomainServices.Server.Resource;
-
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     [TestClass]
     public class AuthorizationContextTests

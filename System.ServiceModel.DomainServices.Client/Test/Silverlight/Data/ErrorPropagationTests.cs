@@ -12,9 +12,9 @@ using TestDomainServices;
 using System.Web;
 #endif
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
 
     [TestClass]
     public class ErrorPropagationTests : UnitTestBase

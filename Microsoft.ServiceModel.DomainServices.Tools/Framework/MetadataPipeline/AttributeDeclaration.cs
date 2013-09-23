@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Type used to represent an <see cref="Attribute"/> declaration and its requirements.

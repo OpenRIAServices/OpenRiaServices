@@ -2,13 +2,13 @@
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.Server.Test;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server.Test;
 using System.Web.Profile;
 using System.Web.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {
     /// <summary>
     /// Summary description for AuthenticationBaseTest

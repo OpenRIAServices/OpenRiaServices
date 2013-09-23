@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NorthwindModel;

@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 #if DBCONTEXT
 using System.Data.Entity.Core.Metadata.Edm;
 #else
 using System.Data.Metadata.Edm;
 #endif
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.EntityFramework
+namespace OpenRiaServices.DomainServices.EntityFramework
 {
     internal class LinqToEntitiesDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {

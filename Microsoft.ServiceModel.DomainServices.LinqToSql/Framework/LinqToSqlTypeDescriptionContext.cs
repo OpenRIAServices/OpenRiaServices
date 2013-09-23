@@ -4,9 +4,9 @@ using System.Data.Linq.Mapping;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.LinqToSql
+namespace OpenRiaServices.DomainServices.LinqToSql
 {
     /// <summary>
     /// Class that provides the basic metadata interface to a LINQ To SQL data context.

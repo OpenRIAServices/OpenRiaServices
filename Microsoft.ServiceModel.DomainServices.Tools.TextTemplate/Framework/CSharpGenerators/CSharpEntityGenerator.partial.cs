@@ -1,4 +1,4 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     using System.Collections;
@@ -9,9 +9,9 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerat
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Server;
-    using Microsoft.ServiceModel.DomainServices.Tools;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Tools;
 
     /// <summary>
     /// C# generator for entity types.
@@ -156,13 +156,13 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerat
             if (!this.IsCollection)
             {
                 this.PropTypeName = CodeGenUtilities.GetTypeName(pd.PropertyType);
-                this.AssociationTypeName = @"System.ServiceModel.DomainServices.Client.EntityRef<" + this.PropTypeName + ">";
+                this.AssociationTypeName = @"OpenRiaServices.DomainServices.Client.EntityRef<" + this.PropTypeName + ">";
                 this.Attributes = propertyAttributes.Cast<Attribute>().Where(a => a.GetType() != typeof(DataMemberAttribute));
             }
             else
             {
                 this.PropTypeName = CodeGenUtilities.GetTypeName(TypeUtility.GetElementType(pd.PropertyType));
-                this.AssociationTypeName = "System.ServiceModel.DomainServices.Client.EntityCollection<" + this.PropTypeName + ">";
+                this.AssociationTypeName = "OpenRiaServices.DomainServices.Client.EntityCollection<" + this.PropTypeName + ">";
 
                 List<Attribute> attributeList = propertyAttributes.Cast<Attribute>().ToList();
                 ReadOnlyAttribute readOnlyAttr = propertyAttributes.OfType<ReadOnlyAttribute>().SingleOrDefault();

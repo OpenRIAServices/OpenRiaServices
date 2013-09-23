@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using TypeUtility = SystemWebDomainServices::System.ServiceModel.DomainServices.TypeUtility;
+using OpenRiaServices.DomainServices;
+using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     [TestClass]
     public class AssemblyUtilitiesTest
@@ -22,7 +22,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             Assembly mscorlib = typeof(object).Assembly;
             Assembly system = typeof(System.Uri).Assembly;
             Assembly systemCore = typeof(System.Linq.IQueryable<>).Assembly;
-            Assembly domainServices = typeof(System.ServiceModel.DomainServices.Server.DomainService).Assembly;
+            Assembly domainServices = typeof(OpenRiaServices.DomainServices.Server.DomainService).Assembly;
             Assembly dataAnnotations = typeof(System.ComponentModel.DataAnnotations.DisplayAttribute).Assembly;
             Assembly excutingAssembly = Assembly.GetExecutingAssembly();
 
@@ -42,7 +42,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             AssemblyName mscorlib = typeof(object).Assembly.GetName();
             AssemblyName system = typeof(System.Uri).Assembly.GetName();
             AssemblyName systemCore = typeof(System.Linq.IQueryable<>).Assembly.GetName();
-            AssemblyName domainServices = typeof(System.ServiceModel.DomainServices.Server.DomainService).Assembly.GetName();
+            AssemblyName domainServices = typeof(OpenRiaServices.DomainServices.Server.DomainService).Assembly.GetName();
             AssemblyName dataAnnotations = typeof(System.ComponentModel.DataAnnotations.DisplayAttribute).Assembly.GetName();
             AssemblyName executingAssembly = Assembly.GetExecutingAssembly().GetName();
 

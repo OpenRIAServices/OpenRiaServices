@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure;
 
-namespace Microsoft.ServiceModel.DomainServices.WindowsAzure.Test
+namespace OpenRiaServices.DomainServices.WindowsAzure.Test
 {
     [TestClass]
     public class TableEntityContextTests

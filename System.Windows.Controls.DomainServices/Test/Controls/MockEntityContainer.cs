@@ -1,4 +1,4 @@
-﻿using System.ServiceModel.DomainServices.Client;
+﻿using OpenRiaServices.DomainServices.Client;
 
 namespace System.Windows.Controls.Test
 {

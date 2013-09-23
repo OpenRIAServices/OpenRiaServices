@@ -1,4 +1,4 @@
-﻿using System.ServiceModel.DomainServices.Client.Test;
+﻿using OpenRiaServices.DomainServices.Client.Test;
 using System.Windows.Input;
 using Cities;
 using Microsoft.Silverlight.Testing;

@@ -1,4 +1,4 @@
-﻿namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+﻿namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// The parameters that specify the user to authentication in the <c>Login</c>

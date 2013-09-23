@@ -10,11 +10,11 @@ using System.Threading;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VbExpressions;
-using DomainServiceDescription = DomainServices::System.ServiceModel.DomainServices.Server.DomainServiceDescription;
+using DomainServiceDescription = OpenRiaServices.DomainServices.Server.DomainServiceDescription;
 using NorthwindDomainService = DomainServicesTests::TestDomainServices.LTS.Northwind;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     /// <summary>
     /// Tests of both the client and server query serialization pieces via internal direct access to those
@@ -30,7 +30,8 @@ namespace System.ServiceModel.DomainServices.Client.Test
         [TestMethod]
         public void TestNullable()
         {
-            IQueryable<GenericEntity> entities = new GenericEntity[] {
+            IQueryable<GenericEntity> entities = new GenericEntity[]
+            {
                 new GenericEntity { Key = 1, Title = "Manager", NullableInt = null },
                 new GenericEntity { Key = 2, Title = "Supervisor", NullableInt = -5 },
                 new GenericEntity { Key = 3, Title = "Supervisor", NullableInt = 5 }
@@ -109,7 +110,8 @@ namespace System.ServiceModel.DomainServices.Client.Test
         [Description("Verify that VB checked expressions are treated as unchecked expressions.")]
         public void TestVBCheckedExpressions()
         {
-            IQueryable<GenericEntity> entities = new GenericEntity[] {
+            IQueryable<GenericEntity> entities = new GenericEntity[]
+            {
                 new GenericEntity { Key = 1, Title = "Manager" },
                 new GenericEntity { Key = 2, Title = "Supervisor" }
             }.AsQueryable();
@@ -162,12 +164,14 @@ namespace System.ServiceModel.DomainServices.Client.Test
         [TestMethod]
         public void TestVBCompareString()
         {
-            IQueryable<GenericEntity> entities = new GenericEntity[] {
+            IQueryable<GenericEntity> entities = new GenericEntity[]
+            {
                 new GenericEntity { Title = "Manager" },
-                new GenericEntity { Title = "Peon" }, 
+                new GenericEntity { Title = "Peon" },
                 new GenericEntity { Title = "Supreme Leader" },
                 new GenericEntity { Title = "X" },
-                new GenericEntity { Title = null } }.AsQueryable();
+                new GenericEntity { Title = null }
+            }.AsQueryable();
 
             // VB string comparison EQ
             IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)StringComparisons.CompareStringEqual(entities);
@@ -236,12 +240,14 @@ namespace System.ServiceModel.DomainServices.Client.Test
         [TestMethod]
         public void TestVBIIf()
         {
-            IQueryable<GenericEntity> entities = new GenericEntity[] {
+            IQueryable<GenericEntity> entities = new GenericEntity[]
+            {
                 new GenericEntity { Title = "Manager" },
-                new GenericEntity { Title = "Peon" }, 
+                new GenericEntity { Title = "Peon" },
                 new GenericEntity { Title = "Supreme Leader" },
                 new GenericEntity { Title = "X" },
-                new GenericEntity { Title = null } }.AsQueryable();
+                new GenericEntity { Title = null }
+            }.AsQueryable();
 
             // Where (IIf(item.Title = "Supreme Leader", 1, 0) = 1)
             IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)Expressions.IIfWithEqualComparison(entities);
@@ -326,7 +332,8 @@ namespace System.ServiceModel.DomainServices.Client.Test
         [TestMethod]
         public void TestReservedNames()
         {
-            IQueryable<EmployeeWithReservedNames> entities = new EmployeeWithReservedNames[] {
+            IQueryable<EmployeeWithReservedNames> entities = new EmployeeWithReservedNames[]
+            {
                 new EmployeeWithReservedNames { Id = 1, @true = true, iif = true },
                 new EmployeeWithReservedNames { Id = 1, @true = false, iif = false },
             }.AsQueryable();
@@ -383,11 +390,13 @@ namespace System.ServiceModel.DomainServices.Client.Test
         [TestMethod]
         public void TestEscapingInStrings()
         {
-            IQueryable<GenericEntity> entities = new GenericEntity[] {
+            IQueryable<GenericEntity> entities = new GenericEntity[]
+            {
                 new GenericEntity { Title = "Supreme \"Leader\"" },
                 new GenericEntity { Title = "Supreme \\\"Leader\\\"" },
                 new GenericEntity { Title = "Supreme \'Leader\'" },
-                new GenericEntity { Title = null } }.AsQueryable();
+                new GenericEntity { Title = null }
+            }.AsQueryable();
 
             IQueryable<GenericEntity> q = entities.Where(e => e.Title == "Supreme \"Leader\"");
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
@@ -430,7 +439,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_NestedQueriesNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_NestedQueriesNotSupported, expectedException.Message);
         }
 
         [TestMethod]
@@ -465,7 +474,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(string.Format(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_MethodNotAccessible, "LocalMethod", typeof(QuerySerializationTests)), expectedException.Message);
+            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_MethodNotAccessible, "LocalMethod", typeof(QuerySerializationTests)), expectedException.Message);
 
             // test an unsupported static method
             expectedException = null;
@@ -478,7 +487,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(string.Format(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_MethodNotAccessible, "LocalStaticMethod", typeof(QuerySerializationTests)), expectedException.Message);
+            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_MethodNotAccessible, "LocalStaticMethod", typeof(QuerySerializationTests)), expectedException.Message);
         }
 
         [TestMethod]
@@ -582,7 +591,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedType, typeof(PurchaseOrder).GetType()), expectedException.Message);
+            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedType, typeof(PurchaseOrder).GetType()), expectedException.Message);
 
             // while the Type can't be passed, verify that we can't use unsupported methods either
             try
@@ -635,7 +644,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise AND not supported
             expectedException = null;
@@ -648,7 +657,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise OR not supported
             expectedException = null;
@@ -661,7 +670,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise XOR not supported
             expectedException = null;
@@ -674,7 +683,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise Left Shift not supported
             expectedException = null;
@@ -687,7 +696,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise Right Shift not supported
             expectedException = null;
@@ -700,7 +709,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
         }
 
         [TestMethod]
@@ -708,7 +717,8 @@ namespace System.ServiceModel.DomainServices.Client.Test
         {
             DomainServiceDescription northwindDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
 
-            List<PurchaseOrder> poData = new List<PurchaseOrder> {
+            List<PurchaseOrder> poData = new List<PurchaseOrder>
+            {
                 new PurchaseOrder { PurchaseOrderID = 1, OrderDate = new DateTime(2000, 1, 2) },
                 new PurchaseOrder { PurchaseOrderID = 2, OrderDate = new DateTime(2001, 2, 2) },
                 new PurchaseOrder { PurchaseOrderID = 3, OrderDate = new DateTime(2002, 3, 2) },
@@ -779,7 +789,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_NewExpressionsNotSupported, expectedException.Message);
+            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_NewExpressionsNotSupported, expectedException.Message);
         }
 
         /// <summary>
@@ -792,9 +802,9 @@ namespace System.ServiceModel.DomainServices.Client.Test
             DomainServicesTests.Cities.CityData cityData = new DomainServicesTests.Cities.CityData();
 
             IQueryable<DomainServicesTests.Cities.State> statesQuery =
-                from s in cityData.States.AsQueryable()
-                where s.Counties.Count > 2 && s.FullName.Length < 6
-                select s;
+                                                                      from s in cityData.States.AsQueryable()
+                                                                      where s.Counties.Count > 2 && s.FullName.Length < 6
+                                                                      select s;
 
             DomainServiceDescription cityDescription = DomainServiceDescription.GetDescription(typeof(DomainServicesTests.Cities.CityDomainService));
             IQueryable<DomainServicesTests.Cities.State> statesQuery2 = (IQueryable<DomainServicesTests.Cities.State>)RoundtripQuery(cityDescription, statesQuery, cityData.States.AsQueryable());
@@ -829,7 +839,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(string.Format(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedQueryOperator, "Reverse"), expectedException.Message);
+            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedQueryOperator, "Reverse"), expectedException.Message);
             expectedException = null;
         }
 
@@ -1008,7 +1018,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             catch (NotSupportedException e)
             {
                 expectedException = e;
-                Assert.AreEqual(String.Format(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_ProjectionsNotSupported), e.Message);
+                Assert.AreEqual(String.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_ProjectionsNotSupported), e.Message);
             }
             Assert.IsNotNull(expectedException);
 
@@ -1022,7 +1032,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             catch (NotSupportedException e)
             {
                 expectedException = e;
-                Assert.AreEqual(String.Format(System.ServiceModel.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedQueryOperator, "SelectMany"), e.Message);
+                Assert.AreEqual(String.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedQueryOperator, "SelectMany"), e.Message);
             }
             Assert.IsNotNull(expectedException);
         }
@@ -1074,9 +1084,9 @@ namespace System.ServiceModel.DomainServices.Client.Test
             string testName = "Mortimer";
             IQueryable<Product> query1;
             query1 = from p in BaselineTestData.Products.AsQueryable()
-                     where p.Color == TestColor &&  // test field reference
-                           p.ListPrice < GetDecimal("555.35") &&  // test method call
-                           p.Name != testName
+                     where p.Color == TestColor && // test field reference
+                                                                             p.ListPrice < GetDecimal("555.35") && // test method call
+                                                                             p.Name != testName
                      orderby p.ListPrice ascending, p.Style descending, p.Weight
                      select p;
 
@@ -1099,12 +1109,12 @@ namespace System.ServiceModel.DomainServices.Client.Test
             return SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data, TranslateQueryParts(queryParts));
         }
 
-        private List<WebRia::System.ServiceModel.DomainServices.Hosting.ServiceQueryPart> TranslateQueryParts(List<ServiceQueryPart> queryParts)
+        private List<OpenRiaServices.DomainServices.Hosting.ServiceQueryPart> TranslateQueryParts(List<ServiceQueryPart> queryParts)
         {
-            List<WebRia::System.ServiceModel.DomainServices.Hosting.ServiceQueryPart> returnParts = new List<WebRia::System.ServiceModel.DomainServices.Hosting.ServiceQueryPart>();
+            List<OpenRiaServices.DomainServices.Hosting.ServiceQueryPart> returnParts = new List<OpenRiaServices.DomainServices.Hosting.ServiceQueryPart>();
             foreach (ServiceQueryPart part in queryParts)
             {
-                WebRia::System.ServiceModel.DomainServices.Hosting.ServiceQueryPart newPart = new WebRia::System.ServiceModel.DomainServices.Hosting.ServiceQueryPart(part.QueryOperator, part.Expression);
+                OpenRiaServices.DomainServices.Hosting.ServiceQueryPart newPart = new OpenRiaServices.DomainServices.Hosting.ServiceQueryPart(part.QueryOperator, part.Expression);
                 returnParts.Add(newPart);
             }
             return returnParts;

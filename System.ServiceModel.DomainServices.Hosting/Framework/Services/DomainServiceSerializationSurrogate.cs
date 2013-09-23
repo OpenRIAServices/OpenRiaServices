@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     internal class DomainServiceSerializationSurrogate : IDataContractSurrogate
     {

@@ -2,7 +2,7 @@
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     internal sealed class DomainServiceWsdlExportExtension : IContractBehavior, IWsdlExportExtension
     {

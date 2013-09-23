@@ -14,8 +14,8 @@ using System.Data.Mapping;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 
 namespace System.Data.Mapping
 {
@@ -42,7 +42,7 @@ namespace System.Data.Mapping
             {
                 if (contextType.GetConstructor(Type.EmptyTypes) == null)
                 {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, System.ServiceModel.DomainServices.EntityFramework.DbResource.DefaultCtorNotFound, contextType.FullName));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.EntityFramework.DbResource.DefaultCtorNotFound, contextType.FullName));
                 }
 
                 try
@@ -58,7 +58,7 @@ namespace System.Data.Mapping
                         throw;
                     }
                     
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, System.ServiceModel.DomainServices.EntityFramework.DbResource.MetadataWorkspaceNotFound, contextType.FullName), efException);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.EntityFramework.DbResource.MetadataWorkspaceNotFound, contextType.FullName), efException);
                 }
             }
 #endif

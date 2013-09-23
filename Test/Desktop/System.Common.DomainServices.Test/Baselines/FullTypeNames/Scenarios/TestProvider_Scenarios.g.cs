@@ -22,10 +22,10 @@ namespace TestDomainServices
     // [CustomValidationAttribute(typeof(TestDomainServices.ServerOnlyValidator), "IsObjectValid")]
     // 
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class A : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class A : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.B> _b;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.B> _b;
         
         private int _bid1;
         
@@ -84,7 +84,7 @@ namespace TestDomainServices
             {
                 if ((this._b == null))
                 {
-                    this._b = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.B>(this, "B", this.FilterB);
+                    this._b = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.B>(this, "B", this.FilterB);
                 }
                 return this._b.Entity;
             }
@@ -316,10 +316,10 @@ namespace TestDomainServices
     /// The 'B' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class B : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class B : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.C> _cs;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.C> _cs;
         
         private int _id1;
         
@@ -353,13 +353,13 @@ namespace TestDomainServices
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("B_C", "ID1, ID2", "BID1, BID2")]
         [global::System.ComponentModel.DataAnnotations.DisplayAttribute(Description="Cs")]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.C> Cs
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.C> Cs
         {
             get
             {
                 if ((this._cs == null))
                 {
-                    this._cs = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.C>(this, "Cs", this.FilterCs);
+                    this._cs = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.C>(this, "Cs", this.FilterCs);
                 }
                 return this._cs;
             }
@@ -429,7 +429,7 @@ namespace TestDomainServices
         /// <returns>An object instance that uniquely identifies this entity instance.</returns>
         public override object GetIdentity()
         {
-            return global::System.ServiceModel.DomainServices.Client.EntityKey.Create(this._id1, this._id2);
+            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._id1, this._id2);
         }
     }
     
@@ -437,16 +437,16 @@ namespace TestDomainServices
     /// The 'C' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class C : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class C : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _bid1;
         
         private int _bid2;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref1;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref1;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref2;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref2;
         
         private int _did_Ref1;
         
@@ -542,7 +542,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref1 == null))
                 {
-                    this._d_Ref1 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref1", this.FilterD_Ref1);
+                    this._d_Ref1 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref1", this.FilterD_Ref1);
                 }
                 return this._d_Ref1.Entity;
             }
@@ -585,7 +585,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref2 == null))
                 {
-                    this._d_Ref2 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref2", this.FilterD_Ref2);
+                    this._d_Ref2 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref2", this.FilterD_Ref2);
                 }
                 return this._d_Ref2.Entity;
             }
@@ -709,12 +709,12 @@ namespace TestDomainServices
     /// The 'Cart' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class Cart : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class Cart : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _cartId;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.CartItem> _items;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.CartItem> _items;
         
         #region Extensibility Method Definitions
 
@@ -769,13 +769,13 @@ namespace TestDomainServices
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("CartItem_Cart", "CartId", "CartItemId")]
         [global::System.ComponentModel.DataAnnotations.EditableAttribute(false)]
         [global::System.ComponentModel.ReadOnlyAttribute(true)]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.CartItem> Items
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.CartItem> Items
         {
             get
             {
                 if ((this._items == null))
                 {
-                    this._items = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.CartItem>(this, "Items", this.FilterItems, this.AttachItems, this.DetachItems);
+                    this._items = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.CartItem>(this, "Items", this.FilterItems, this.AttachItems, this.DetachItems);
                 }
                 return this._items;
             }
@@ -810,10 +810,10 @@ namespace TestDomainServices
     /// The 'CartItem' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class CartItem : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class CartItem : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.Cart> _cart;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.Cart> _cart;
         
         private int _cartId;
         
@@ -856,7 +856,7 @@ namespace TestDomainServices
             {
                 if ((this._cart == null))
                 {
-                    this._cart = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.Cart>(this, "Cart", this.FilterCart);
+                    this._cart = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.Cart>(this, "Cart", this.FilterCart);
                 }
                 return this._cart.Entity;
             }
@@ -982,7 +982,7 @@ namespace TestDomainServices
     /// The 'CityWithCacheData' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class CityWithCacheData : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class CityWithCacheData : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _cacheData;
@@ -1103,7 +1103,7 @@ namespace TestDomainServices
             {
                 return null;
             }
-            return global::System.ServiceModel.DomainServices.Client.EntityKey.Create(this._name, this._stateName);
+            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._name, this._stateName);
         }
     }
     
@@ -1111,20 +1111,20 @@ namespace TestDomainServices
     /// The 'D' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class D : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class D : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private byte[] _binaryData;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.C> _c;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.C> _c;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d1;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d1;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d2;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d2;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d2_BackRef;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d2_BackRef;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.D> _ds;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.D> _ds;
         
         private int _dSelfRef_ID1;
         
@@ -1201,7 +1201,7 @@ namespace TestDomainServices
             {
                 if ((this._c == null))
                 {
-                    this._c = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.C>(this, "C", this.FilterC);
+                    this._c = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.C>(this, "C", this.FilterC);
                 }
                 return this._c.Entity;
             }
@@ -1236,7 +1236,7 @@ namespace TestDomainServices
             {
                 if ((this._d1 == null))
                 {
-                    this._d1 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D1", this.FilterD1);
+                    this._d1 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D1", this.FilterD1);
                 }
                 return this._d1.Entity;
             }
@@ -1279,7 +1279,7 @@ namespace TestDomainServices
             {
                 if ((this._d2 == null))
                 {
-                    this._d2 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2", this.FilterD2);
+                    this._d2 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2", this.FilterD2);
                 }
                 return this._d2.Entity;
             }
@@ -1322,7 +1322,7 @@ namespace TestDomainServices
             {
                 if ((this._d2_BackRef == null))
                 {
-                    this._d2_BackRef = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2_BackRef", this.FilterD2_BackRef);
+                    this._d2_BackRef = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2_BackRef", this.FilterD2_BackRef);
                 }
                 return this._d2_BackRef.Entity;
             }
@@ -1351,13 +1351,13 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="D"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("D_D", "ID", "DSelfRef_ID1")]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.D> Ds
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.D> Ds
         {
             get
             {
                 if ((this._ds == null))
                 {
-                    this._ds = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.D>(this, "Ds", this.FilterDs, this.AttachDs, this.DetachDs);
+                    this._ds = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.D>(this, "Ds", this.FilterDs, this.AttachDs, this.DetachDs);
                 }
                 return this._ds;
             }
@@ -1539,7 +1539,7 @@ namespace TestDomainServices
     /// The 'Entity_TestEditableAttribute' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class Entity_TestEditableAttribute : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class Entity_TestEditableAttribute : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _editableFalse;
@@ -2554,7 +2554,7 @@ namespace TestDomainServices
         /// <returns>An object instance that uniquely identifies this entity instance.</returns>
         public override object GetIdentity()
         {
-            return global::System.ServiceModel.DomainServices.Client.EntityKey.Create(this._key_EditableFalse, this._key_EditableFalse_AllowInitialValueTrue, this._key_EditableTrue, this._key_EditableTrue_AllowInitialValueFalse, this._key_ReadOnlyFalse, this._key_ReadOnlyTrue, this._key_Timestamp, this._key_Timestamp_ReadOnlyFalse, this._key_Timestamp_ReadOnlyTrue, this._keyField);
+            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._key_EditableFalse, this._key_EditableFalse_AllowInitialValueTrue, this._key_EditableTrue, this._key_EditableTrue_AllowInitialValueFalse, this._key_ReadOnlyFalse, this._key_ReadOnlyTrue, this._key_Timestamp, this._key_Timestamp_ReadOnlyFalse, this._key_Timestamp_ReadOnlyTrue, this._keyField);
         }
     }
     
@@ -2562,7 +2562,7 @@ namespace TestDomainServices
     /// The 'EntityWithDataContract' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="CustomNamespace", Name="CustomName")]
-    public sealed partial class EntityWithDataContract : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class EntityWithDataContract : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _data;
@@ -2656,7 +2656,7 @@ namespace TestDomainServices
     /// The 'EntityWithDataContract2' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class EntityWithDataContract2 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class EntityWithDataContract2 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _data;
@@ -2750,7 +2750,7 @@ namespace TestDomainServices
     /// The 'EntityWithDefaultDefaultValue' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class EntityWithDefaultDefaultValue : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class EntityWithDefaultDefaultValue : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private bool _boolProp;
@@ -2933,7 +2933,7 @@ namespace TestDomainServices
     /// The 'EntityWithXElement' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class EntityWithXElement : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class EntityWithXElement : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -3027,7 +3027,7 @@ namespace TestDomainServices
     /// The 'MixedType' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class MixedType : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MixedType : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private byte[] _binaryProp;
@@ -4995,7 +4995,7 @@ namespace TestDomainServices
     /// The 'MultipartKeyTestEntity1' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class MultipartKeyTestEntity1 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MultipartKeyTestEntity1 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _a;
@@ -5148,7 +5148,7 @@ namespace TestDomainServices
             {
                 return null;
             }
-            return global::System.ServiceModel.DomainServices.Client.EntityKey.Create(this._a, this._b, this._c, this._d);
+            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._a, this._b, this._c, this._d);
         }
     }
     
@@ -5156,7 +5156,7 @@ namespace TestDomainServices
     /// The 'MultipartKeyTestEntity2' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class MultipartKeyTestEntity2 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MultipartKeyTestEntity2 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _a;
@@ -5248,7 +5248,7 @@ namespace TestDomainServices
             {
                 return null;
             }
-            return global::System.ServiceModel.DomainServices.Client.EntityKey.Create(this._a, this._b);
+            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._a, this._b);
         }
     }
     
@@ -5256,7 +5256,7 @@ namespace TestDomainServices
     /// The 'MultipartKeyTestEntity3' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class MultipartKeyTestEntity3 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MultipartKeyTestEntity3 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _a;
@@ -5378,7 +5378,7 @@ namespace TestDomainServices
             {
                 return null;
             }
-            return global::System.ServiceModel.DomainServices.Client.EntityKey.Create(this._a, this._b, this._c);
+            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._a, this._b, this._c);
         }
     }
     
@@ -5386,16 +5386,16 @@ namespace TestDomainServices
     /// The 'NullableFKChild' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class NullableFKChild : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class NullableFKChild : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _data;
         
         private int _id;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent> _parent;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent> _parent;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent> _parent2;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent> _parent2;
         
         private global::System.Nullable<int> _parentID;
         
@@ -5488,7 +5488,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent>(this, "Parent", this.FilterParent);
+                    this._parent = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent>(this, "Parent", this.FilterParent);
                 }
                 return this._parent.Entity;
             }
@@ -5531,7 +5531,7 @@ namespace TestDomainServices
             {
                 if ((this._parent2 == null))
                 {
-                    this._parent2 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent>(this, "Parent2", this.FilterParent2);
+                    this._parent2 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKParent>(this, "Parent2", this.FilterParent2);
                 }
                 return this._parent2.Entity;
             }
@@ -5638,12 +5638,12 @@ namespace TestDomainServices
     /// The 'NullableFKParent' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class NullableFKParent : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class NullableFKParent : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKChild> _child;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKChild> _child;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.NullableFKChild> _children;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.NullableFKChild> _children;
         
         private string _data;
         
@@ -5682,7 +5682,7 @@ namespace TestDomainServices
             {
                 if ((this._child == null))
                 {
-                    this._child = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKChild>(this, "Child", this.FilterChild);
+                    this._child = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.NullableFKChild>(this, "Child", this.FilterChild);
                 }
                 return this._child.Entity;
             }
@@ -5711,13 +5711,13 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="NullableFKChild"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Parent_Child", "ID", "ParentID")]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.NullableFKChild> Children
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.NullableFKChild> Children
         {
             get
             {
                 if ((this._children == null))
                 {
-                    this._children = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.NullableFKChild>(this, "Children", this.FilterChildren, this.AttachChildren, this.DetachChildren);
+                    this._children = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.NullableFKChild>(this, "Children", this.FilterChildren, this.AttachChildren, this.DetachChildren);
                 }
                 return this._children;
             }
@@ -5807,7 +5807,7 @@ namespace TestDomainServices
     /// The 'POCONoValidation' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class POCONoValidation : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class POCONoValidation : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _a;
@@ -6013,7 +6013,7 @@ namespace TestDomainServices
     /// The 'RoundtripOriginal_TestEntity' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class RoundtripOriginal_TestEntity : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class RoundtripOriginal_TestEntity : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -6137,10 +6137,10 @@ namespace TestDomainServices
     /// </summary>
     [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class RoundtripOriginal_TestEntity2 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class RoundtripOriginal_TestEntity2 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.RoundtripOriginal_TestEntity> _assocProp;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.RoundtripOriginal_TestEntity> _assocProp;
         
         private int _id;
         
@@ -6183,7 +6183,7 @@ namespace TestDomainServices
             {
                 if ((this._assocProp == null))
                 {
-                    this._assocProp = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.RoundtripOriginal_TestEntity>(this, "AssocProp", this.FilterAssocProp);
+                    this._assocProp = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.RoundtripOriginal_TestEntity>(this, "AssocProp", this.FilterAssocProp);
                 }
                 return this._assocProp.Entity;
             }
@@ -6291,7 +6291,7 @@ namespace TestDomainServices
     /// The 'RoundtripQueryEntity' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class RoundtripQueryEntity : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class RoundtripQueryEntity : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -6441,7 +6441,7 @@ namespace TestDomainServices
     /// The 'TestCT' class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TestCT : global::System.ServiceModel.DomainServices.Client.ComplexObject
+    public sealed partial class TestCT : global::OpenRiaServices.DomainServices.Client.ComplexObject
     {
         
         private int _ctProp1;
@@ -6524,12 +6524,12 @@ namespace TestDomainServices
     /// The 'TestCycles' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TestCycles : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class TestCycles : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.TestCycles> _includedT;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.TestCycles> _includedT;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.TestCycles> _includedTs;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.TestCycles> _includedTs;
         
         private string _name;
         
@@ -6568,7 +6568,7 @@ namespace TestDomainServices
             {
                 if ((this._includedT == null))
                 {
-                    this._includedT = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.TestCycles>(this, "IncludedT", this.FilterIncludedT);
+                    this._includedT = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.TestCycles>(this, "IncludedT", this.FilterIncludedT);
                 }
                 return this._includedT.Entity;
             }
@@ -6605,13 +6605,13 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="TestCycles"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("TestCycle_Parent", "Name", "ParentName")]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.TestCycles> IncludedTs
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.TestCycles> IncludedTs
         {
             get
             {
                 if ((this._includedTs == null))
                 {
-                    this._includedTs = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.TestCycles>(this, "IncludedTs", this.FilterIncludedTs, this.AttachIncludedTs, this.DetachIncludedTs);
+                    this._includedTs = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.TestCycles>(this, "IncludedTs", this.FilterIncludedTs, this.AttachIncludedTs, this.DetachIncludedTs);
                 }
                 return this._includedTs;
             }
@@ -6702,7 +6702,7 @@ namespace TestDomainServices
     /// The 'TestEntityForInvokeOperations' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TestEntityForInvokeOperations : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class TestEntityForInvokeOperations : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private global::TestDomainServices.TestCT _ctProp;
@@ -6824,7 +6824,7 @@ namespace TestDomainServices
     /// <summary>
     /// The DomainContext corresponding to the 'TestProvider_Scenarios' DomainService.
     /// </summary>
-    public sealed partial class TestProvider_Scenarios : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class TestProvider_Scenarios : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -6842,7 +6842,7 @@ namespace TestDomainServices
         /// Initializes a new instance of the <see cref="TestProvider_Scenarios"/> class.
         /// </summary>
         public TestProvider_Scenarios() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Scenarios.ITestProvider_ScenariosContract>(new global::System.Uri("TestDomainServices-TestProvider_Scenarios.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Scenarios.ITestProvider_ScenariosContract>(new global::System.Uri("TestDomainServices-TestProvider_Scenarios.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -6851,7 +6851,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="serviceUri">The TestProvider_Scenarios service URI.</param>
         public TestProvider_Scenarios(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Scenarios.ITestProvider_ScenariosContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Scenarios.ITestProvider_ScenariosContract>(serviceUri))
         {
         }
         
@@ -6859,7 +6859,7 @@ namespace TestDomainServices
         /// Initializes a new instance of the <see cref="TestProvider_Scenarios"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public TestProvider_Scenarios(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public TestProvider_Scenarios(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -6868,7 +6868,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="TestSideEffects"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.TestSideEffects> TestSideEffects
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TestSideEffects> TestSideEffects
         {
             get
             {
@@ -6879,7 +6879,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="A"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.A> As
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.A> As
         {
             get
             {
@@ -6890,7 +6890,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="B"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.B> Bs
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.B> Bs
         {
             get
             {
@@ -6901,7 +6901,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="CartItem"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.CartItem> CartItems
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.CartItem> CartItems
         {
             get
             {
@@ -6912,7 +6912,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="Cart"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.Cart> Carts
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.Cart> Carts
         {
             get
             {
@@ -6923,7 +6923,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="CityWithCacheData"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.CityWithCacheData> CityWithCacheDatas
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.CityWithCacheData> CityWithCacheDatas
         {
             get
             {
@@ -6934,7 +6934,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="C"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.C> Cs
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.C> Cs
         {
             get
             {
@@ -6945,7 +6945,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="D"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.D> Ds
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.D> Ds
         {
             get
             {
@@ -6956,7 +6956,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="EntityWithDataContract"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithDataContract> EntityWithDataContracts
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithDataContract> EntityWithDataContracts
         {
             get
             {
@@ -6967,7 +6967,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="EntityWithDataContract2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithDataContract2> EntityWithDataContract2s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithDataContract2> EntityWithDataContract2s
         {
             get
             {
@@ -6978,7 +6978,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="EntityWithSpecialTypeName"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName> EntityWithSpecialTypeNames
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName> EntityWithSpecialTypeNames
         {
             get
             {
@@ -6989,7 +6989,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="Entity_TestEditableAttribute"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.Entity_TestEditableAttribute> Entity_TestEditableAttributes
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.Entity_TestEditableAttribute> Entity_TestEditableAttributes
         {
             get
             {
@@ -7000,7 +7000,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="EntityWithDefaultDefaultValue"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithDefaultDefaultValue> EntityWithDefaultDefaultValues
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithDefaultDefaultValue> EntityWithDefaultDefaultValues
         {
             get
             {
@@ -7011,7 +7011,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="MixedType"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.MixedType> MixedTypes
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.MixedType> MixedTypes
         {
             get
             {
@@ -7022,7 +7022,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="MultipartKeyTestEntity1"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.MultipartKeyTestEntity1> MultipartKeyTestEntity1s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.MultipartKeyTestEntity1> MultipartKeyTestEntity1s
         {
             get
             {
@@ -7033,7 +7033,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="MultipartKeyTestEntity2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.MultipartKeyTestEntity2> MultipartKeyTestEntity2s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.MultipartKeyTestEntity2> MultipartKeyTestEntity2s
         {
             get
             {
@@ -7044,7 +7044,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="MultipartKeyTestEntity3"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.MultipartKeyTestEntity3> MultipartKeyTestEntity3s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.MultipartKeyTestEntity3> MultipartKeyTestEntity3s
         {
             get
             {
@@ -7055,7 +7055,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="NullableFKParent"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NullableFKParent> NullableFKParents
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NullableFKParent> NullableFKParents
         {
             get
             {
@@ -7066,7 +7066,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="POCONoValidation"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.POCONoValidation> POCONoValidations
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.POCONoValidation> POCONoValidations
         {
             get
             {
@@ -7077,7 +7077,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="RoundtripOriginal_TestEntity2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity2> RoundtripOriginal_TestEntity2s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity2> RoundtripOriginal_TestEntity2s
         {
             get
             {
@@ -7088,7 +7088,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="RoundtripOriginal_TestEntity"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity> RoundtripOriginal_TestEntities
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity> RoundtripOriginal_TestEntities
         {
             get
             {
@@ -7099,7 +7099,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="RoundtripQueryEntity"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.RoundtripQueryEntity> RoundtripQueryEntities
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.RoundtripQueryEntity> RoundtripQueryEntities
         {
             get
             {
@@ -7110,7 +7110,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="TestCycles"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.TestCycles> TestCycles
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TestCycles> TestCycles
         {
             get
             {
@@ -7121,7 +7121,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="TestEntityForInvokeOperations"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.TestEntityForInvokeOperations> TestEntityForInvokeOperations
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TestEntityForInvokeOperations> TestEntityForInvokeOperations
         {
             get
             {
@@ -7132,7 +7132,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="TimestampEntityA"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.TimestampEntityA> TimestampEntityAs
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TimestampEntityA> TimestampEntityAs
         {
             get
             {
@@ -7143,7 +7143,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="TimestampEntityB"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.TimestampEntityB> TimestampEntityBs
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TimestampEntityB> TimestampEntityBs
         {
             get
             {
@@ -7154,7 +7154,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="EntityWithXElement"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithXElement> EntityWithXElements
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.EntityWithXElement> EntityWithXElements
         {
             get
             {
@@ -7167,7 +7167,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="name">The value for the 'name' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TestSideEffects"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.TestSideEffects> CreateAndGetSideEffectsObjectsQuery(string name)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TestSideEffects> CreateAndGetSideEffectsObjectsQuery(string name)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("name", name);
@@ -7179,7 +7179,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAReturnNull' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAReturnNullQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAReturnNullQuery()
         {
             this.ValidateMethod("GetAReturnNullQuery", null);
             return base.CreateQuery<global::TestDomainServices.A>("GetAReturnNull", null, false, false);
@@ -7189,7 +7189,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAsQuery()
         {
             this.ValidateMethod("GetAsQuery", null);
             return base.CreateQuery<global::TestDomainServices.A>("GetAs", null, false, false);
@@ -7199,7 +7199,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAsReturnNull' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAsReturnNullQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAsReturnNullQuery()
         {
             this.ValidateMethod("GetAsReturnNullQuery", null);
             return base.CreateQuery<global::TestDomainServices.A>("GetAsReturnNull", null, false, true);
@@ -7209,7 +7209,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="B"/> entity instances using the 'GetBs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="B"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.B> GetBsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.B> GetBsQuery()
         {
             this.ValidateMethod("GetBsQuery", null);
             return base.CreateQuery<global::TestDomainServices.B>("GetBs", null, false, true);
@@ -7219,7 +7219,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CartItem"/> entity instances using the 'GetCartItems' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CartItem"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CartItem> GetCartItemsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CartItem> GetCartItemsQuery()
         {
             this.ValidateMethod("GetCartItemsQuery", null);
             return base.CreateQuery<global::TestDomainServices.CartItem>("GetCartItems", null, false, true);
@@ -7229,7 +7229,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="Cart"/> entity instances using the 'GetCarts' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Cart"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.Cart> GetCartsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.Cart> GetCartsQuery()
         {
             this.ValidateMethod("GetCartsQuery", null);
             return base.CreateQuery<global::TestDomainServices.Cart>("GetCarts", null, false, true);
@@ -7239,7 +7239,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesQuery()
         {
             this.ValidateMethod("GetCitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCities", null, false, true);
@@ -7250,7 +7250,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="state">The value for the 'state' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesInStateQuery(string state)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesInStateQuery(string state)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("state", state);
@@ -7263,7 +7263,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="state">The value for the 'state' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesInStateWithCachingQuery(string state)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesInStateWithCachingQuery(string state)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("state", state);
@@ -7276,7 +7276,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="state">The value for the 'state' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesInStateWithCaching2Query(string state)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesInStateWithCaching2Query(string state)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("state", state);
@@ -7288,7 +7288,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationAny' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationAnyQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationAnyQuery()
         {
             this.ValidateMethod("GetCitiesWithCacheLocationAnyQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCacheLocationAny", null, false, true);
@@ -7298,7 +7298,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationDownstream' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationDownstreamQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationDownstreamQuery()
         {
             this.ValidateMethod("GetCitiesWithCacheLocationDownstreamQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCacheLocationDownstream", null, false, true);
@@ -7308,7 +7308,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationServer' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationServerQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationServerQuery()
         {
             this.ValidateMethod("GetCitiesWithCacheLocationServerQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCacheLocationServer", null, false, true);
@@ -7318,7 +7318,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationServerAndClient' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationServerAndClientQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCacheLocationServerAndClientQuery()
         {
             this.ValidateMethod("GetCitiesWithCacheLocationServerAndClientQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCacheLocationServerAndClient", null, false, true);
@@ -7328,7 +7328,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCaching' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingQuery()
         {
             this.ValidateMethod("GetCitiesWithCachingQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCaching", null, false, true);
@@ -7338,7 +7338,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCaching2' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCaching2Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCaching2Query()
         {
             this.ValidateMethod("GetCitiesWithCaching2Query", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCaching2", null, false, true);
@@ -7348,7 +7348,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCachingAndThrow' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingAndThrowQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingAndThrowQuery()
         {
             this.ValidateMethod("GetCitiesWithCachingAndThrowQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCachingAndThrow", null, false, true);
@@ -7358,7 +7358,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCachingVaryByHeaders' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingVaryByHeadersQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingVaryByHeadersQuery()
         {
             this.ValidateMethod("GetCitiesWithCachingVaryByHeadersQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCachingVaryByHeaders", null, false, true);
@@ -7368,7 +7368,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCachingViaCacheProfile' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingViaCacheProfileQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.CityWithCacheData> GetCitiesWithCachingViaCacheProfileQuery()
         {
             this.ValidateMethod("GetCitiesWithCachingViaCacheProfileQuery", null);
             return base.CreateQuery<global::TestDomainServices.CityWithCacheData>("GetCitiesWithCachingViaCacheProfile", null, false, true);
@@ -7378,7 +7378,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="C"/> entity instances using the 'GetCs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="C"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.C> GetCsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.C> GetCsQuery()
         {
             this.ValidateMethod("GetCsQuery", null);
             return base.CreateQuery<global::TestDomainServices.C>("GetCs", null, false, true);
@@ -7388,7 +7388,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'GetDs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.D> GetDsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> GetDsQuery()
         {
             this.ValidateMethod("GetDsQuery", null);
             return base.CreateQuery<global::TestDomainServices.D>("GetDs", null, false, true);
@@ -7398,7 +7398,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="EntityWithDataContract"/> entity instances using the 'GetEntitiesWithDataContracts' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithDataContract"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithDataContract> GetEntitiesWithDataContractsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithDataContract> GetEntitiesWithDataContractsQuery()
         {
             this.ValidateMethod("GetEntitiesWithDataContractsQuery", null);
             return base.CreateQuery<global::TestDomainServices.EntityWithDataContract>("GetEntitiesWithDataContracts", null, false, true);
@@ -7408,7 +7408,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="EntityWithDataContract2"/> entity instances using the 'GetEntitiesWithDataContracts2' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithDataContract2"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithDataContract2> GetEntitiesWithDataContracts2Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithDataContract2> GetEntitiesWithDataContracts2Query()
         {
             this.ValidateMethod("GetEntitiesWithDataContracts2Query", null);
             return base.CreateQuery<global::TestDomainServices.EntityWithDataContract2>("GetEntitiesWithDataContracts2", null, false, true);
@@ -7418,7 +7418,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="EntityWithSpecialTypeName"/> entity instances using the 'GetEntitiesWithSpecialTypeName' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithSpecialTypeName"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName> GetEntitiesWithSpecialTypeNameQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName> GetEntitiesWithSpecialTypeNameQuery()
         {
             this.ValidateMethod("GetEntitiesWithSpecialTypeNameQuery", null);
             return base.CreateQuery<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName>("GetEntitiesWithSpecialTypeName", null, false, true);
@@ -7428,7 +7428,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="Entity_TestEditableAttribute"/> entity instances using the 'GetEntity_TestEditableAttributes' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Entity_TestEditableAttribute"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.Entity_TestEditableAttribute> GetEntity_TestEditableAttributesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.Entity_TestEditableAttribute> GetEntity_TestEditableAttributesQuery()
         {
             this.ValidateMethod("GetEntity_TestEditableAttributesQuery", null);
             return base.CreateQuery<global::TestDomainServices.Entity_TestEditableAttribute>("GetEntity_TestEditableAttributes", null, false, true);
@@ -7438,7 +7438,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="EntityWithDefaultDefaultValue"/> entity instances using the 'GetEntityWithDefaultValue' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithDefaultDefaultValue"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithDefaultDefaultValue> GetEntityWithDefaultValueQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithDefaultDefaultValue> GetEntityWithDefaultValueQuery()
         {
             this.ValidateMethod("GetEntityWithDefaultValueQuery", null);
             return base.CreateQuery<global::TestDomainServices.EntityWithDefaultDefaultValue>("GetEntityWithDefaultValue", null, false, true);
@@ -7448,7 +7448,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="MixedType"/> entity instances using the 'GetMixedTypes' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypesQuery()
         {
             this.ValidateMethod("GetMixedTypesQuery", null);
             return base.CreateQuery<global::TestDomainServices.MixedType>("GetMixedTypes", null, false, true);
@@ -7472,7 +7472,7 @@ namespace TestDomainServices
         // - The attribute 'System.ComponentModel.DataAnnotations.CustomValidationAttribute' references a method 'IsStringValid' on type 'TestDomainServices.ServerOnlyValidator' that is not accessible in the client project 'MockProject'.
         // [CustomValidationAttribute(typeof(TestDomainServices.ServerOnlyValidator), "IsStringValid")]
         // 
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_BadAttributesQuery(char broiled, string cheese)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_BadAttributesQuery(char broiled, string cheese)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("broiled", broiled);
@@ -7505,7 +7505,7 @@ namespace TestDomainServices
         /// <param name="nullableTimeSpans">The value for the 'nullableTimeSpans' parameter of the query.</param>
         /// <param name="nullableDictionaryDateTime">The value for the 'nullableDictionaryDateTime' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_NullableQuery(
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_NullableQuery(
                     string idToChange, 
                     global::System.Nullable<bool> b1, 
                     global::System.Nullable<byte> b2, 
@@ -7576,7 +7576,7 @@ namespace TestDomainServices
         /// <param name="dictionaryXElement">The value for the 'dictionaryXElement' parameter of the query.</param>
         /// <param name="dictionaryDateTimeOffset">The value for the 'dictionaryDateTimeOffset' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_PredefinedQuery(
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_PredefinedQuery(
                     string idToChange, 
                     string s, 
                     decimal d, 
@@ -7640,7 +7640,7 @@ namespace TestDomainServices
         /// <param name="d">The value for the 'd' parameter of the query.</param>
         /// <param name="s">The value for the 's' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_PrimitiveQuery(string idToChange, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypes_PrimitiveQuery(string idToChange, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("idToChange", idToChange);
@@ -7664,7 +7664,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="MixedType"/> entity instances using the 'GetMixedTypesThrow' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypesThrowQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypesThrowQuery()
         {
             this.ValidateMethod("GetMixedTypesThrowQuery", null);
             return base.CreateQuery<global::TestDomainServices.MixedType>("GetMixedTypesThrow", null, false, true);
@@ -7674,7 +7674,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="MixedType"/> entity instances using the 'GetMixedTypeSuperset' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypeSupersetQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MixedType> GetMixedTypeSupersetQuery()
         {
             this.ValidateMethod("GetMixedTypeSupersetQuery", null);
             return base.CreateQuery<global::TestDomainServices.MixedType>("GetMixedTypeSuperset", null, false, true);
@@ -7684,7 +7684,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="MultipartKeyTestEntity1"/> entity instances using the 'GetMultipartKeyTestEntity1s' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MultipartKeyTestEntity1"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MultipartKeyTestEntity1> GetMultipartKeyTestEntity1sQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MultipartKeyTestEntity1> GetMultipartKeyTestEntity1sQuery()
         {
             this.ValidateMethod("GetMultipartKeyTestEntity1sQuery", null);
             return base.CreateQuery<global::TestDomainServices.MultipartKeyTestEntity1>("GetMultipartKeyTestEntity1s", null, false, true);
@@ -7694,7 +7694,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="MultipartKeyTestEntity2"/> entity instances using the 'GetMultipartKeyTestEntity2s' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MultipartKeyTestEntity2"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MultipartKeyTestEntity2> GetMultipartKeyTestEntity2sQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MultipartKeyTestEntity2> GetMultipartKeyTestEntity2sQuery()
         {
             this.ValidateMethod("GetMultipartKeyTestEntity2sQuery", null);
             return base.CreateQuery<global::TestDomainServices.MultipartKeyTestEntity2>("GetMultipartKeyTestEntity2s", null, false, true);
@@ -7704,7 +7704,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="MultipartKeyTestEntity3"/> entity instances using the 'GetMultipartKeyTestEntity3s' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MultipartKeyTestEntity3"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.MultipartKeyTestEntity3> GetMultipartKeyTestEntity3sQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.MultipartKeyTestEntity3> GetMultipartKeyTestEntity3sQuery()
         {
             this.ValidateMethod("GetMultipartKeyTestEntity3sQuery", null);
             return base.CreateQuery<global::TestDomainServices.MultipartKeyTestEntity3>("GetMultipartKeyTestEntity3s", null, false, true);
@@ -7714,7 +7714,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="NullableFKParent"/> entity instances using the 'GetNullableFKParents' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="NullableFKParent"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NullableFKParent> GetNullableFKParentsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NullableFKParent> GetNullableFKParentsQuery()
         {
             this.ValidateMethod("GetNullableFKParentsQuery", null);
             return base.CreateQuery<global::TestDomainServices.NullableFKParent>("GetNullableFKParents", null, false, true);
@@ -7724,7 +7724,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="POCONoValidation"/> entity instances using the 'GetPOCONoValidations' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="POCONoValidation"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.POCONoValidation> GetPOCONoValidationsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.POCONoValidation> GetPOCONoValidationsQuery()
         {
             this.ValidateMethod("GetPOCONoValidationsQuery", null);
             return base.CreateQuery<global::TestDomainServices.POCONoValidation>("GetPOCONoValidations", null, false, true);
@@ -7734,7 +7734,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="RoundtripOriginal_TestEntity2"/> entity instances using the 'GetRoundtripOriginal_ClassAttribute_TestEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RoundtripOriginal_TestEntity2"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.RoundtripOriginal_TestEntity2> GetRoundtripOriginal_ClassAttribute_TestEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.RoundtripOriginal_TestEntity2> GetRoundtripOriginal_ClassAttribute_TestEntitiesQuery()
         {
             this.ValidateMethod("GetRoundtripOriginal_ClassAttribute_TestEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.RoundtripOriginal_TestEntity2>("GetRoundtripOriginal_ClassAttribute_TestEntities", null, false, true);
@@ -7744,7 +7744,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="RoundtripOriginal_TestEntity"/> entity instances using the 'GetRoundtripOriginal_TestEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RoundtripOriginal_TestEntity"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.RoundtripOriginal_TestEntity> GetRoundtripOriginal_TestEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.RoundtripOriginal_TestEntity> GetRoundtripOriginal_TestEntitiesQuery()
         {
             this.ValidateMethod("GetRoundtripOriginal_TestEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.RoundtripOriginal_TestEntity>("GetRoundtripOriginal_TestEntities", null, false, true);
@@ -7754,7 +7754,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="RoundtripQueryEntity"/> entity instances using the 'GetRoundtripQueryEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RoundtripQueryEntity"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.RoundtripQueryEntity> GetRoundtripQueryEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.RoundtripQueryEntity> GetRoundtripQueryEntitiesQuery()
         {
             this.ValidateMethod("GetRoundtripQueryEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.RoundtripQueryEntity>("GetRoundtripQueryEntities", null, false, true);
@@ -7764,7 +7764,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="TestCycles"/> entity instances using the 'GetTestCyclesRoot' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TestCycles"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.TestCycles> GetTestCyclesRootQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TestCycles> GetTestCyclesRootQuery()
         {
             this.ValidateMethod("GetTestCyclesRootQuery", null);
             return base.CreateQuery<global::TestDomainServices.TestCycles>("GetTestCyclesRoot", null, false, true);
@@ -7774,7 +7774,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="TestCycles"/> entity instances using the 'GetTestCyclesTier1' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TestCycles"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.TestCycles> GetTestCyclesTier1Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TestCycles> GetTestCyclesTier1Query()
         {
             this.ValidateMethod("GetTestCyclesTier1Query", null);
             return base.CreateQuery<global::TestDomainServices.TestCycles>("GetTestCyclesTier1", null, false, true);
@@ -7784,7 +7784,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="TestEntityForInvokeOperations"/> entity instances using the 'GetTestEntityForInvokeOperations' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TestEntityForInvokeOperations"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.TestEntityForInvokeOperations> GetTestEntityForInvokeOperationsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TestEntityForInvokeOperations> GetTestEntityForInvokeOperationsQuery()
         {
             this.ValidateMethod("GetTestEntityForInvokeOperationsQuery", null);
             return base.CreateQuery<global::TestDomainServices.TestEntityForInvokeOperations>("GetTestEntityForInvokeOperations", null, false, true);
@@ -7794,7 +7794,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="TimestampEntityA"/> entity instances using the 'GetTimestampEntityAs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TimestampEntityA"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.TimestampEntityA> GetTimestampEntityAsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TimestampEntityA> GetTimestampEntityAsQuery()
         {
             this.ValidateMethod("GetTimestampEntityAsQuery", null);
             return base.CreateQuery<global::TestDomainServices.TimestampEntityA>("GetTimestampEntityAs", null, false, true);
@@ -7804,7 +7804,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="TimestampEntityB"/> entity instances using the 'GetTimestampEntityBs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TimestampEntityB"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.TimestampEntityB> GetTimestampEntityBsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TimestampEntityB> GetTimestampEntityBsQuery()
         {
             this.ValidateMethod("GetTimestampEntityBsQuery", null);
             return base.CreateQuery<global::TestDomainServices.TimestampEntityB>("GetTimestampEntityBs", null, false, true);
@@ -7814,7 +7814,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="EntityWithXElement"/> entity instances using the 'GetXElemEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithXElement"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithXElement> GetXElemEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.EntityWithXElement> GetXElemEntitiesQuery()
         {
             this.ValidateMethod("GetXElemEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.EntityWithXElement>("GetXElemEntities", null, false, true);
@@ -7826,7 +7826,7 @@ namespace TestDomainServices
         /// <param name="a">The value for the 'a' parameter of the query.</param>
         /// <param name="b">The value for the 'b' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.A> QueryWithParamValidationQuery([global::System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)] int a, [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(2)] string b)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.A> QueryWithParamValidationQuery([global::System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)] int a, [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(2)] string b)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
@@ -7920,12 +7920,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> IncrementBid1ForA(global::TestDomainServices.A a, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> IncrementBid1ForA(global::TestDomainServices.A a, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
             this.ValidateMethod("IncrementBid1ForA", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForA", typeof(int), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForA", typeof(int), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -7933,12 +7933,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="a">The value for the 'a' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> IncrementBid1ForA(global::TestDomainServices.A a)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> IncrementBid1ForA(global::TestDomainServices.A a)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
             this.ValidateMethod("IncrementBid1ForA", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForA", typeof(int), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForA", typeof(int), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -7949,13 +7949,13 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> IncrementBid1ForABy(global::TestDomainServices.A a, [global::System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)] int delta, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> IncrementBid1ForABy(global::TestDomainServices.A a, [global::System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)] int delta, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
             parameters.Add("delta", delta);
             this.ValidateMethod("IncrementBid1ForABy", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForABy", typeof(int), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForABy", typeof(int), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -7964,13 +7964,13 @@ namespace TestDomainServices
         /// <param name="a">The value for the 'a' parameter of this action.</param>
         /// <param name="delta">The value for the 'delta' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> IncrementBid1ForABy(global::TestDomainServices.A a, [global::System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)] int delta)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> IncrementBid1ForABy(global::TestDomainServices.A a, [global::System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)] int delta)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
             parameters.Add("delta", delta);
             this.ValidateMethod("IncrementBid1ForABy", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForABy", typeof(int), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("IncrementBid1ForABy", typeof(int), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -7982,14 +7982,14 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> InvokeOperationWithParamValidation([global::System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)] int a, [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(2)] string b, global::TestDomainServices.CityWithCacheData entity, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> InvokeOperationWithParamValidation([global::System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)] int a, [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(2)] string b, global::TestDomainServices.CityWithCacheData entity, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
             parameters.Add("b", b);
             parameters.Add("entity", entity);
             this.ValidateMethod("InvokeOperationWithParamValidation", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("InvokeOperationWithParamValidation", typeof(bool), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("InvokeOperationWithParamValidation", typeof(bool), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -7999,14 +7999,14 @@ namespace TestDomainServices
         /// <param name="b">The value for the 'b' parameter of this action.</param>
         /// <param name="entity">The value for the 'entity' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> InvokeOperationWithParamValidation([global::System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)] int a, [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(2)] string b, global::TestDomainServices.CityWithCacheData entity)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> InvokeOperationWithParamValidation([global::System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)] int a, [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(2)] string b, global::TestDomainServices.CityWithCacheData entity)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("a", a);
             parameters.Add("b", b);
             parameters.Add("entity", entity);
             this.ValidateMethod("InvokeOperationWithParamValidation", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("InvokeOperationWithParamValidation", typeof(bool), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("InvokeOperationWithParamValidation", typeof(bool), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8016,12 +8016,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParam(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParam(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("list", list);
             this.ValidateMethod("InvokeOpWithIEnumerableParam", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParam", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParam", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8029,12 +8029,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="list">The value for the 'list' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParam(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParam(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("list", list);
             this.ValidateMethod("InvokeOpWithIEnumerableParam", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParam", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParam", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8044,12 +8044,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParamAndNoSideEffects(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParamAndNoSideEffects(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("list", list);
             this.ValidateMethod("InvokeOpWithIEnumerableParamAndNoSideEffects", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParamAndNoSideEffects", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, false, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParamAndNoSideEffects", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, false, callback, userState)));
         }
         
         /// <summary>
@@ -8057,12 +8057,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="list">The value for the 'list' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParamAndNoSideEffects(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>> InvokeOpWithIEnumerableParamAndNoSideEffects(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("list", list);
             this.ValidateMethod("InvokeOpWithIEnumerableParamAndNoSideEffects", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParamAndNoSideEffects", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, false, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>>)(this.InvokeOperation("InvokeOpWithIEnumerableParamAndNoSideEffects", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations>), parameters, false, null, null)));
         }
         
         /// <summary>
@@ -8071,7 +8071,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation MethodRequiresAuthentication(global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation MethodRequiresAuthentication(global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation> callback, object userState)
         {
             this.ValidateMethod("MethodRequiresAuthentication", null);
             return this.InvokeOperation("MethodRequiresAuthentication", typeof(void), null, true, callback, userState);
@@ -8081,7 +8081,7 @@ namespace TestDomainServices
         /// Asynchronously invokes the 'MethodRequiresAuthentication' method of the DomainService.
         /// </summary>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation MethodRequiresAuthentication()
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation MethodRequiresAuthentication()
         {
             this.ValidateMethod("MethodRequiresAuthentication", null);
             return this.InvokeOperation("MethodRequiresAuthentication", typeof(void), null, true, null, null);
@@ -8093,20 +8093,20 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithoutSideEffects_Online(global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithoutSideEffects_Online(global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>> callback, object userState)
         {
             this.ValidateMethod("ReturnHttpMethodWithoutSideEffects_Online", null);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithoutSideEffects_Online", typeof(string), null, false, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithoutSideEffects_Online", typeof(string), null, false, callback, userState)));
         }
         
         /// <summary>
         /// Asynchronously invokes the 'ReturnHttpMethodWithoutSideEffects_Online' method of the DomainService.
         /// </summary>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithoutSideEffects_Online()
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithoutSideEffects_Online()
         {
             this.ValidateMethod("ReturnHttpMethodWithoutSideEffects_Online", null);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithoutSideEffects_Online", typeof(string), null, false, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithoutSideEffects_Online", typeof(string), null, false, null, null)));
         }
         
         /// <summary>
@@ -8115,20 +8115,20 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithSideEffects_Online(global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithSideEffects_Online(global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>> callback, object userState)
         {
             this.ValidateMethod("ReturnHttpMethodWithSideEffects_Online", null);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithSideEffects_Online", typeof(string), null, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithSideEffects_Online", typeof(string), null, true, callback, userState)));
         }
         
         /// <summary>
         /// Asynchronously invokes the 'ReturnHttpMethodWithSideEffects_Online' method of the DomainService.
         /// </summary>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithSideEffects_Online()
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<string> ReturnHttpMethodWithSideEffects_Online()
         {
             this.ValidateMethod("ReturnHttpMethodWithSideEffects_Online", null);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithSideEffects_Online", typeof(string), null, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnHttpMethodWithSideEffects_Online", typeof(string), null, true, null, null)));
         }
         
         /// <summary>
@@ -8138,12 +8138,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]> ReturnsBinary_Online(byte[] value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]> ReturnsBinary_Online(byte[] value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsBinary_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsBinary_Online", typeof(byte[]), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsBinary_Online", typeof(byte[]), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8151,12 +8151,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]> ReturnsBinary_Online(byte[] value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]> ReturnsBinary_Online(byte[] value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsBinary_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsBinary_Online", typeof(byte[]), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsBinary_Online", typeof(byte[]), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8166,12 +8166,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> ReturnsBoolean_Online(bool value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> ReturnsBoolean_Online(bool value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsBoolean_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("ReturnsBoolean_Online", typeof(bool), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("ReturnsBoolean_Online", typeof(bool), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8179,12 +8179,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> ReturnsBoolean_Online(bool value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> ReturnsBoolean_Online(bool value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsBoolean_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("ReturnsBoolean_Online", typeof(bool), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("ReturnsBoolean_Online", typeof(bool), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8194,12 +8194,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte> ReturnsByte_Online(byte value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte> ReturnsByte_Online(byte value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte>)(this.InvokeOperation("ReturnsByte_Online", typeof(byte), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte>)(this.InvokeOperation("ReturnsByte_Online", typeof(byte), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8207,12 +8207,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte> ReturnsByte_Online(byte value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte> ReturnsByte_Online(byte value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte>)(this.InvokeOperation("ReturnsByte_Online", typeof(byte), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte>)(this.InvokeOperation("ReturnsByte_Online", typeof(byte), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8222,12 +8222,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]> ReturnsByteArray_Online(byte[] value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]> ReturnsByteArray_Online(byte[] value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsByteArray_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsByteArray_Online", typeof(byte[]), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsByteArray_Online", typeof(byte[]), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8235,12 +8235,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]> ReturnsByteArray_Online(byte[] value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]> ReturnsByteArray_Online(byte[] value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsByteArray_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsByteArray_Online", typeof(byte[]), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<byte[]>)(this.InvokeOperation("ReturnsByteArray_Online", typeof(byte[]), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8250,12 +8250,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<char> ReturnsChar_Online(char value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<char>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<char> ReturnsChar_Online(char value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<char>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsChar_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<char>)(this.InvokeOperation("ReturnsChar_Online", typeof(char), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<char>)(this.InvokeOperation("ReturnsChar_Online", typeof(char), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8263,12 +8263,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<char> ReturnsChar_Online(char value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<char> ReturnsChar_Online(char value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsChar_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<char>)(this.InvokeOperation("ReturnsChar_Online", typeof(char), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<char>)(this.InvokeOperation("ReturnsChar_Online", typeof(char), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8278,12 +8278,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime> ReturnsDateTime_Online(global::System.DateTime value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime> ReturnsDateTime_Online(global::System.DateTime value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTime_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime>)(this.InvokeOperation("ReturnsDateTime_Online", typeof(global::System.DateTime), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime>)(this.InvokeOperation("ReturnsDateTime_Online", typeof(global::System.DateTime), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8291,12 +8291,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime> ReturnsDateTime_Online(global::System.DateTime value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime> ReturnsDateTime_Online(global::System.DateTime value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTime_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime>)(this.InvokeOperation("ReturnsDateTime_Online", typeof(global::System.DateTime), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime>)(this.InvokeOperation("ReturnsDateTime_Online", typeof(global::System.DateTime), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8306,12 +8306,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset> ReturnsDateTimeOffset_Online(global::System.DateTimeOffset value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset> ReturnsDateTimeOffset_Online(global::System.DateTimeOffset value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTimeOffset_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset>)(this.InvokeOperation("ReturnsDateTimeOffset_Online", typeof(global::System.DateTimeOffset), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset>)(this.InvokeOperation("ReturnsDateTimeOffset_Online", typeof(global::System.DateTimeOffset), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8319,12 +8319,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset> ReturnsDateTimeOffset_Online(global::System.DateTimeOffset value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset> ReturnsDateTimeOffset_Online(global::System.DateTimeOffset value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTimeOffset_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset>)(this.InvokeOperation("ReturnsDateTimeOffset_Online", typeof(global::System.DateTimeOffset), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset>)(this.InvokeOperation("ReturnsDateTimeOffset_Online", typeof(global::System.DateTimeOffset), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8334,12 +8334,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]> ReturnsDateTimeOffsets_Online(global::System.DateTimeOffset[] value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]> ReturnsDateTimeOffsets_Online(global::System.DateTimeOffset[] value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTimeOffsets_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]>)(this.InvokeOperation("ReturnsDateTimeOffsets_Online", typeof(global::System.DateTimeOffset[]), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]>)(this.InvokeOperation("ReturnsDateTimeOffsets_Online", typeof(global::System.DateTimeOffset[]), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8347,12 +8347,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]> ReturnsDateTimeOffsets_Online(global::System.DateTimeOffset[] value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]> ReturnsDateTimeOffsets_Online(global::System.DateTimeOffset[] value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTimeOffsets_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]>)(this.InvokeOperation("ReturnsDateTimeOffsets_Online", typeof(global::System.DateTimeOffset[]), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTimeOffset[]>)(this.InvokeOperation("ReturnsDateTimeOffsets_Online", typeof(global::System.DateTimeOffset[]), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8362,12 +8362,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime[]> ReturnsDateTimes_Online(global::System.DateTime[] value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime[]>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime[]> ReturnsDateTimes_Online(global::System.DateTime[] value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime[]>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTimes_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime[]>)(this.InvokeOperation("ReturnsDateTimes_Online", typeof(global::System.DateTime[]), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime[]>)(this.InvokeOperation("ReturnsDateTimes_Online", typeof(global::System.DateTime[]), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8375,12 +8375,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime[]> ReturnsDateTimes_Online(global::System.DateTime[] value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime[]> ReturnsDateTimes_Online(global::System.DateTime[] value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDateTimes_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.DateTime[]>)(this.InvokeOperation("ReturnsDateTimes_Online", typeof(global::System.DateTime[]), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.DateTime[]>)(this.InvokeOperation("ReturnsDateTimes_Online", typeof(global::System.DateTime[]), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8390,12 +8390,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<decimal> ReturnsDecimal_Online(decimal value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<decimal>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<decimal> ReturnsDecimal_Online(decimal value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<decimal>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDecimal_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<decimal>)(this.InvokeOperation("ReturnsDecimal_Online", typeof(decimal), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<decimal>)(this.InvokeOperation("ReturnsDecimal_Online", typeof(decimal), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8403,12 +8403,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<decimal> ReturnsDecimal_Online(decimal value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<decimal> ReturnsDecimal_Online(decimal value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDecimal_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<decimal>)(this.InvokeOperation("ReturnsDecimal_Online", typeof(decimal), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<decimal>)(this.InvokeOperation("ReturnsDecimal_Online", typeof(decimal), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8418,12 +8418,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>> ReturnsDictionary(global::System.Collections.Generic.Dictionary<string, int> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>> ReturnsDictionary(global::System.Collections.Generic.Dictionary<string, int> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDictionary", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>>)(this.InvokeOperation("ReturnsDictionary", typeof(global::System.Collections.Generic.Dictionary<string, int>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>>)(this.InvokeOperation("ReturnsDictionary", typeof(global::System.Collections.Generic.Dictionary<string, int>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8431,12 +8431,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>> ReturnsDictionary(global::System.Collections.Generic.Dictionary<string, int> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>> ReturnsDictionary(global::System.Collections.Generic.Dictionary<string, int> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDictionary", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>>)(this.InvokeOperation("ReturnsDictionary", typeof(global::System.Collections.Generic.Dictionary<string, int>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.Dictionary<string, int>>)(this.InvokeOperation("ReturnsDictionary", typeof(global::System.Collections.Generic.Dictionary<string, int>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8446,12 +8446,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<double> ReturnsDouble_Online(double value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<double>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<double> ReturnsDouble_Online(double value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<double>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDouble_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("ReturnsDouble_Online", typeof(double), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("ReturnsDouble_Online", typeof(double), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8459,12 +8459,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<double> ReturnsDouble_Online(double value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<double> ReturnsDouble_Online(double value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsDouble_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("ReturnsDouble_Online", typeof(double), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("ReturnsDouble_Online", typeof(double), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8475,13 +8475,13 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType> ReturnsEntity_Online(global::TestDomainServices.MixedType value, string id, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType> ReturnsEntity_Online(global::TestDomainServices.MixedType value, string id, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             parameters.Add("id", id);
             this.ValidateMethod("ReturnsEntity_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType>)(this.InvokeOperation("ReturnsEntity_Online", typeof(global::TestDomainServices.MixedType), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType>)(this.InvokeOperation("ReturnsEntity_Online", typeof(global::TestDomainServices.MixedType), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8490,13 +8490,13 @@ namespace TestDomainServices
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <param name="id">The value for the 'id' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType> ReturnsEntity_Online(global::TestDomainServices.MixedType value, string id)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType> ReturnsEntity_Online(global::TestDomainServices.MixedType value, string id)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             parameters.Add("id", id);
             this.ValidateMethod("ReturnsEntity_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType>)(this.InvokeOperation("ReturnsEntity_Online", typeof(global::TestDomainServices.MixedType), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.MixedType>)(this.InvokeOperation("ReturnsEntity_Online", typeof(global::TestDomainServices.MixedType), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8506,12 +8506,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>> ReturnsEntityCollection_Online(int value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>> ReturnsEntityCollection_Online(int value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsEntityCollection_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>>)(this.InvokeOperation("ReturnsEntityCollection_Online", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>>)(this.InvokeOperation("ReturnsEntityCollection_Online", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8519,12 +8519,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>> ReturnsEntityCollection_Online(int value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>> ReturnsEntityCollection_Online(int value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsEntityCollection_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>>)(this.InvokeOperation("ReturnsEntityCollection_Online", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>>)(this.InvokeOperation("ReturnsEntityCollection_Online", typeof(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.MixedType>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8534,12 +8534,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum> ReturnsEnum_Online(global::TestDomainServices.TestEnum value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum> ReturnsEnum_Online(global::TestDomainServices.TestEnum value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsEnum_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum>)(this.InvokeOperation("ReturnsEnum_Online", typeof(global::TestDomainServices.TestEnum), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum>)(this.InvokeOperation("ReturnsEnum_Online", typeof(global::TestDomainServices.TestEnum), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8547,12 +8547,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum> ReturnsEnum_Online(global::TestDomainServices.TestEnum value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum> ReturnsEnum_Online(global::TestDomainServices.TestEnum value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsEnum_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum>)(this.InvokeOperation("ReturnsEnum_Online", typeof(global::TestDomainServices.TestEnum), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::TestDomainServices.TestEnum>)(this.InvokeOperation("ReturnsEnum_Online", typeof(global::TestDomainServices.TestEnum), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8562,12 +8562,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Guid> ReturnsGuid_Online(global::System.Guid value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Guid>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Guid> ReturnsGuid_Online(global::System.Guid value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Guid>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsGuid_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Guid>)(this.InvokeOperation("ReturnsGuid_Online", typeof(global::System.Guid), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Guid>)(this.InvokeOperation("ReturnsGuid_Online", typeof(global::System.Guid), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8575,12 +8575,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Guid> ReturnsGuid_Online(global::System.Guid value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Guid> ReturnsGuid_Online(global::System.Guid value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsGuid_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Guid>)(this.InvokeOperation("ReturnsGuid_Online", typeof(global::System.Guid), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Guid>)(this.InvokeOperation("ReturnsGuid_Online", typeof(global::System.Guid), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8590,12 +8590,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<short> ReturnsInt16_Online(short value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<short>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<short> ReturnsInt16_Online(short value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<short>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<short>)(this.InvokeOperation("ReturnsInt16_Online", typeof(short), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<short>)(this.InvokeOperation("ReturnsInt16_Online", typeof(short), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8603,12 +8603,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<short> ReturnsInt16_Online(short value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<short> ReturnsInt16_Online(short value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<short>)(this.InvokeOperation("ReturnsInt16_Online", typeof(short), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<short>)(this.InvokeOperation("ReturnsInt16_Online", typeof(short), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8618,12 +8618,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> ReturnsInt32_Online(int value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> ReturnsInt32_Online(int value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("ReturnsInt32_Online", typeof(int), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("ReturnsInt32_Online", typeof(int), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8631,12 +8631,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> ReturnsInt32_Online(int value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> ReturnsInt32_Online(int value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("ReturnsInt32_Online", typeof(int), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("ReturnsInt32_Online", typeof(int), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8646,12 +8646,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<long> ReturnsInt64_Online(long value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<long>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<long> ReturnsInt64_Online(long value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<long>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<long>)(this.InvokeOperation("ReturnsInt64_Online", typeof(long), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<long>)(this.InvokeOperation("ReturnsInt64_Online", typeof(long), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8659,12 +8659,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<long> ReturnsInt64_Online(long value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<long> ReturnsInt64_Online(long value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<long>)(this.InvokeOperation("ReturnsInt64_Online", typeof(long), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<long>)(this.InvokeOperation("ReturnsInt64_Online", typeof(long), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8674,12 +8674,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>> ReturnsNullableBoolean_Online(global::System.Nullable<bool> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>> ReturnsNullableBoolean_Online(global::System.Nullable<bool> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableBoolean_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>>)(this.InvokeOperation("ReturnsNullableBoolean_Online", typeof(global::System.Nullable<bool>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>>)(this.InvokeOperation("ReturnsNullableBoolean_Online", typeof(global::System.Nullable<bool>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8687,12 +8687,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>> ReturnsNullableBoolean_Online(global::System.Nullable<bool> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>> ReturnsNullableBoolean_Online(global::System.Nullable<bool> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableBoolean_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>>)(this.InvokeOperation("ReturnsNullableBoolean_Online", typeof(global::System.Nullable<bool>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<bool>>)(this.InvokeOperation("ReturnsNullableBoolean_Online", typeof(global::System.Nullable<bool>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8702,12 +8702,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>> ReturnsNullableByte_Online(global::System.Nullable<byte> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>> ReturnsNullableByte_Online(global::System.Nullable<byte> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>>)(this.InvokeOperation("ReturnsNullableByte_Online", typeof(global::System.Nullable<byte>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>>)(this.InvokeOperation("ReturnsNullableByte_Online", typeof(global::System.Nullable<byte>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8715,12 +8715,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>> ReturnsNullableByte_Online(global::System.Nullable<byte> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>> ReturnsNullableByte_Online(global::System.Nullable<byte> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>>)(this.InvokeOperation("ReturnsNullableByte_Online", typeof(global::System.Nullable<byte>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<byte>>)(this.InvokeOperation("ReturnsNullableByte_Online", typeof(global::System.Nullable<byte>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8730,12 +8730,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<char>> ReturnsNullableChar_Online(global::System.Nullable<char> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<char>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<char>> ReturnsNullableChar_Online(global::System.Nullable<char> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<char>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableChar_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<char>>)(this.InvokeOperation("ReturnsNullableChar_Online", typeof(global::System.Nullable<char>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<char>>)(this.InvokeOperation("ReturnsNullableChar_Online", typeof(global::System.Nullable<char>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8743,12 +8743,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<char>> ReturnsNullableChar_Online(global::System.Nullable<char> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<char>> ReturnsNullableChar_Online(global::System.Nullable<char> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableChar_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<char>>)(this.InvokeOperation("ReturnsNullableChar_Online", typeof(global::System.Nullable<char>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<char>>)(this.InvokeOperation("ReturnsNullableChar_Online", typeof(global::System.Nullable<char>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8758,12 +8758,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>> ReturnsNullableDateTime_Online(global::System.Nullable<global::System.DateTime> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>> ReturnsNullableDateTime_Online(global::System.Nullable<global::System.DateTime> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDateTime_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>>)(this.InvokeOperation("ReturnsNullableDateTime_Online", typeof(global::System.Nullable<global::System.DateTime>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>>)(this.InvokeOperation("ReturnsNullableDateTime_Online", typeof(global::System.Nullable<global::System.DateTime>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8771,12 +8771,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>> ReturnsNullableDateTime_Online(global::System.Nullable<global::System.DateTime> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>> ReturnsNullableDateTime_Online(global::System.Nullable<global::System.DateTime> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDateTime_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>>)(this.InvokeOperation("ReturnsNullableDateTime_Online", typeof(global::System.Nullable<global::System.DateTime>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTime>>)(this.InvokeOperation("ReturnsNullableDateTime_Online", typeof(global::System.Nullable<global::System.DateTime>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8786,12 +8786,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>> ReturnsNullableDateTimeOffset_Online(global::System.Nullable<global::System.DateTimeOffset> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>> ReturnsNullableDateTimeOffset_Online(global::System.Nullable<global::System.DateTimeOffset> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDateTimeOffset_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>>)(this.InvokeOperation("ReturnsNullableDateTimeOffset_Online", typeof(global::System.Nullable<global::System.DateTimeOffset>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>>)(this.InvokeOperation("ReturnsNullableDateTimeOffset_Online", typeof(global::System.Nullable<global::System.DateTimeOffset>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8799,12 +8799,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>> ReturnsNullableDateTimeOffset_Online(global::System.Nullable<global::System.DateTimeOffset> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>> ReturnsNullableDateTimeOffset_Online(global::System.Nullable<global::System.DateTimeOffset> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDateTimeOffset_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>>)(this.InvokeOperation("ReturnsNullableDateTimeOffset_Online", typeof(global::System.Nullable<global::System.DateTimeOffset>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.DateTimeOffset>>)(this.InvokeOperation("ReturnsNullableDateTimeOffset_Online", typeof(global::System.Nullable<global::System.DateTimeOffset>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8814,12 +8814,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>> ReturnsNullableDecimal_Online(global::System.Nullable<decimal> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>> ReturnsNullableDecimal_Online(global::System.Nullable<decimal> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDecimal_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>>)(this.InvokeOperation("ReturnsNullableDecimal_Online", typeof(global::System.Nullable<decimal>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>>)(this.InvokeOperation("ReturnsNullableDecimal_Online", typeof(global::System.Nullable<decimal>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8827,12 +8827,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>> ReturnsNullableDecimal_Online(global::System.Nullable<decimal> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>> ReturnsNullableDecimal_Online(global::System.Nullable<decimal> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDecimal_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>>)(this.InvokeOperation("ReturnsNullableDecimal_Online", typeof(global::System.Nullable<decimal>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<decimal>>)(this.InvokeOperation("ReturnsNullableDecimal_Online", typeof(global::System.Nullable<decimal>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8842,12 +8842,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<double>> ReturnsNullableDouble_Online(global::System.Nullable<double> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<double>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<double>> ReturnsNullableDouble_Online(global::System.Nullable<double> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<double>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDouble_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<double>>)(this.InvokeOperation("ReturnsNullableDouble_Online", typeof(global::System.Nullable<double>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<double>>)(this.InvokeOperation("ReturnsNullableDouble_Online", typeof(global::System.Nullable<double>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8855,12 +8855,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<double>> ReturnsNullableDouble_Online(global::System.Nullable<double> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<double>> ReturnsNullableDouble_Online(global::System.Nullable<double> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableDouble_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<double>>)(this.InvokeOperation("ReturnsNullableDouble_Online", typeof(global::System.Nullable<double>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<double>>)(this.InvokeOperation("ReturnsNullableDouble_Online", typeof(global::System.Nullable<double>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8870,12 +8870,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>> ReturnsNullableEnum_Online(global::System.Nullable<global::TestDomainServices.TestEnum> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>> ReturnsNullableEnum_Online(global::System.Nullable<global::TestDomainServices.TestEnum> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableEnum_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>>)(this.InvokeOperation("ReturnsNullableEnum_Online", typeof(global::System.Nullable<global::TestDomainServices.TestEnum>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>>)(this.InvokeOperation("ReturnsNullableEnum_Online", typeof(global::System.Nullable<global::TestDomainServices.TestEnum>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8883,12 +8883,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>> ReturnsNullableEnum_Online(global::System.Nullable<global::TestDomainServices.TestEnum> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>> ReturnsNullableEnum_Online(global::System.Nullable<global::TestDomainServices.TestEnum> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableEnum_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>>)(this.InvokeOperation("ReturnsNullableEnum_Online", typeof(global::System.Nullable<global::TestDomainServices.TestEnum>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::TestDomainServices.TestEnum>>)(this.InvokeOperation("ReturnsNullableEnum_Online", typeof(global::System.Nullable<global::TestDomainServices.TestEnum>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8898,12 +8898,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>> ReturnsNullableGuid_Online(global::System.Nullable<global::System.Guid> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>> ReturnsNullableGuid_Online(global::System.Nullable<global::System.Guid> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableGuid_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>>)(this.InvokeOperation("ReturnsNullableGuid_Online", typeof(global::System.Nullable<global::System.Guid>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>>)(this.InvokeOperation("ReturnsNullableGuid_Online", typeof(global::System.Nullable<global::System.Guid>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8911,12 +8911,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>> ReturnsNullableGuid_Online(global::System.Nullable<global::System.Guid> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>> ReturnsNullableGuid_Online(global::System.Nullable<global::System.Guid> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableGuid_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>>)(this.InvokeOperation("ReturnsNullableGuid_Online", typeof(global::System.Nullable<global::System.Guid>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.Guid>>)(this.InvokeOperation("ReturnsNullableGuid_Online", typeof(global::System.Nullable<global::System.Guid>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8926,12 +8926,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<short>> ReturnsNullableInt16_Online(global::System.Nullable<short> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<short>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<short>> ReturnsNullableInt16_Online(global::System.Nullable<short> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<short>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<short>>)(this.InvokeOperation("ReturnsNullableInt16_Online", typeof(global::System.Nullable<short>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<short>>)(this.InvokeOperation("ReturnsNullableInt16_Online", typeof(global::System.Nullable<short>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8939,12 +8939,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<short>> ReturnsNullableInt16_Online(global::System.Nullable<short> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<short>> ReturnsNullableInt16_Online(global::System.Nullable<short> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<short>>)(this.InvokeOperation("ReturnsNullableInt16_Online", typeof(global::System.Nullable<short>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<short>>)(this.InvokeOperation("ReturnsNullableInt16_Online", typeof(global::System.Nullable<short>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8954,12 +8954,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<int>> ReturnsNullableInt32_Online(global::System.Nullable<int> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<int>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<int>> ReturnsNullableInt32_Online(global::System.Nullable<int> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<int>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<int>>)(this.InvokeOperation("ReturnsNullableInt32_Online", typeof(global::System.Nullable<int>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<int>>)(this.InvokeOperation("ReturnsNullableInt32_Online", typeof(global::System.Nullable<int>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8967,12 +8967,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<int>> ReturnsNullableInt32_Online(global::System.Nullable<int> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<int>> ReturnsNullableInt32_Online(global::System.Nullable<int> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<int>>)(this.InvokeOperation("ReturnsNullableInt32_Online", typeof(global::System.Nullable<int>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<int>>)(this.InvokeOperation("ReturnsNullableInt32_Online", typeof(global::System.Nullable<int>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -8982,12 +8982,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<long>> ReturnsNullableInt64_Online(global::System.Nullable<long> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<long>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<long>> ReturnsNullableInt64_Online(global::System.Nullable<long> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<long>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<long>>)(this.InvokeOperation("ReturnsNullableInt64_Online", typeof(global::System.Nullable<long>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<long>>)(this.InvokeOperation("ReturnsNullableInt64_Online", typeof(global::System.Nullable<long>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -8995,12 +8995,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<long>> ReturnsNullableInt64_Online(global::System.Nullable<long> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<long>> ReturnsNullableInt64_Online(global::System.Nullable<long> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<long>>)(this.InvokeOperation("ReturnsNullableInt64_Online", typeof(global::System.Nullable<long>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<long>>)(this.InvokeOperation("ReturnsNullableInt64_Online", typeof(global::System.Nullable<long>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9010,12 +9010,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>> ReturnsNullableSByte_Online(global::System.Nullable<sbyte> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>> ReturnsNullableSByte_Online(global::System.Nullable<sbyte> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableSByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>>)(this.InvokeOperation("ReturnsNullableSByte_Online", typeof(global::System.Nullable<sbyte>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>>)(this.InvokeOperation("ReturnsNullableSByte_Online", typeof(global::System.Nullable<sbyte>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9023,12 +9023,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>> ReturnsNullableSByte_Online(global::System.Nullable<sbyte> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>> ReturnsNullableSByte_Online(global::System.Nullable<sbyte> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableSByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>>)(this.InvokeOperation("ReturnsNullableSByte_Online", typeof(global::System.Nullable<sbyte>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<sbyte>>)(this.InvokeOperation("ReturnsNullableSByte_Online", typeof(global::System.Nullable<sbyte>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9038,12 +9038,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<float>> ReturnsNullableSingle_Online(global::System.Nullable<float> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<float>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<float>> ReturnsNullableSingle_Online(global::System.Nullable<float> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<float>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableSingle_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<float>>)(this.InvokeOperation("ReturnsNullableSingle_Online", typeof(global::System.Nullable<float>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<float>>)(this.InvokeOperation("ReturnsNullableSingle_Online", typeof(global::System.Nullable<float>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9051,12 +9051,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<float>> ReturnsNullableSingle_Online(global::System.Nullable<float> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<float>> ReturnsNullableSingle_Online(global::System.Nullable<float> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableSingle_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<float>>)(this.InvokeOperation("ReturnsNullableSingle_Online", typeof(global::System.Nullable<float>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<float>>)(this.InvokeOperation("ReturnsNullableSingle_Online", typeof(global::System.Nullable<float>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9066,12 +9066,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>> ReturnsNullableTimeSpan_Online(global::System.Nullable<global::System.TimeSpan> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>> ReturnsNullableTimeSpan_Online(global::System.Nullable<global::System.TimeSpan> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableTimeSpan_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsNullableTimeSpan_Online", typeof(global::System.Nullable<global::System.TimeSpan>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsNullableTimeSpan_Online", typeof(global::System.Nullable<global::System.TimeSpan>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9079,12 +9079,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>> ReturnsNullableTimeSpan_Online(global::System.Nullable<global::System.TimeSpan> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>> ReturnsNullableTimeSpan_Online(global::System.Nullable<global::System.TimeSpan> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableTimeSpan_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsNullableTimeSpan_Online", typeof(global::System.Nullable<global::System.TimeSpan>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsNullableTimeSpan_Online", typeof(global::System.Nullable<global::System.TimeSpan>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9094,12 +9094,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>> ReturnsNullableUInt16_Online(global::System.Nullable<ushort> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>> ReturnsNullableUInt16_Online(global::System.Nullable<ushort> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableUInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>>)(this.InvokeOperation("ReturnsNullableUInt16_Online", typeof(global::System.Nullable<ushort>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>>)(this.InvokeOperation("ReturnsNullableUInt16_Online", typeof(global::System.Nullable<ushort>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9107,12 +9107,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>> ReturnsNullableUInt16_Online(global::System.Nullable<ushort> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>> ReturnsNullableUInt16_Online(global::System.Nullable<ushort> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableUInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>>)(this.InvokeOperation("ReturnsNullableUInt16_Online", typeof(global::System.Nullable<ushort>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ushort>>)(this.InvokeOperation("ReturnsNullableUInt16_Online", typeof(global::System.Nullable<ushort>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9122,12 +9122,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>> ReturnsNullableUInt32_Online(global::System.Nullable<uint> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>> ReturnsNullableUInt32_Online(global::System.Nullable<uint> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableUInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>>)(this.InvokeOperation("ReturnsNullableUInt32_Online", typeof(global::System.Nullable<uint>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>>)(this.InvokeOperation("ReturnsNullableUInt32_Online", typeof(global::System.Nullable<uint>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9135,12 +9135,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>> ReturnsNullableUInt32_Online(global::System.Nullable<uint> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>> ReturnsNullableUInt32_Online(global::System.Nullable<uint> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableUInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>>)(this.InvokeOperation("ReturnsNullableUInt32_Online", typeof(global::System.Nullable<uint>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<uint>>)(this.InvokeOperation("ReturnsNullableUInt32_Online", typeof(global::System.Nullable<uint>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9150,12 +9150,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>> ReturnsNullableUInt64_Online(global::System.Nullable<ulong> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>> ReturnsNullableUInt64_Online(global::System.Nullable<ulong> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableUInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>>)(this.InvokeOperation("ReturnsNullableUInt64_Online", typeof(global::System.Nullable<ulong>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>>)(this.InvokeOperation("ReturnsNullableUInt64_Online", typeof(global::System.Nullable<ulong>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9163,12 +9163,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>> ReturnsNullableUInt64_Online(global::System.Nullable<ulong> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>> ReturnsNullableUInt64_Online(global::System.Nullable<ulong> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsNullableUInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>>)(this.InvokeOperation("ReturnsNullableUInt64_Online", typeof(global::System.Nullable<ulong>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Nullable<ulong>>)(this.InvokeOperation("ReturnsNullableUInt64_Online", typeof(global::System.Nullable<ulong>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9178,12 +9178,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<sbyte> ReturnsSByte_Online(sbyte value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<sbyte>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<sbyte> ReturnsSByte_Online(sbyte value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<sbyte>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsSByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<sbyte>)(this.InvokeOperation("ReturnsSByte_Online", typeof(sbyte), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<sbyte>)(this.InvokeOperation("ReturnsSByte_Online", typeof(sbyte), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9191,12 +9191,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<sbyte> ReturnsSByte_Online(sbyte value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<sbyte> ReturnsSByte_Online(sbyte value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsSByte_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<sbyte>)(this.InvokeOperation("ReturnsSByte_Online", typeof(sbyte), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<sbyte>)(this.InvokeOperation("ReturnsSByte_Online", typeof(sbyte), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9206,12 +9206,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<float> ReturnsSingle_Online(float value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<float>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<float> ReturnsSingle_Online(float value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<float>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsSingle_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<float>)(this.InvokeOperation("ReturnsSingle_Online", typeof(float), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<float>)(this.InvokeOperation("ReturnsSingle_Online", typeof(float), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9219,12 +9219,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<float> ReturnsSingle_Online(float value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<float> ReturnsSingle_Online(float value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsSingle_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<float>)(this.InvokeOperation("ReturnsSingle_Online", typeof(float), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<float>)(this.InvokeOperation("ReturnsSingle_Online", typeof(float), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9234,12 +9234,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<string> ReturnsString_Online(string value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<string> ReturnsString_Online(string value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsString_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnsString_Online", typeof(string), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnsString_Online", typeof(string), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9247,12 +9247,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<string> ReturnsString_Online(string value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<string> ReturnsString_Online(string value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsString_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnsString_Online", typeof(string), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<string>)(this.InvokeOperation("ReturnsString_Online", typeof(string), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9262,12 +9262,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>> ReturnsStrings_Online(global::System.Collections.Generic.IEnumerable<string> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>> ReturnsStrings_Online(global::System.Collections.Generic.IEnumerable<string> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsStrings_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>>)(this.InvokeOperation("ReturnsStrings_Online", typeof(global::System.Collections.Generic.IEnumerable<string>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>>)(this.InvokeOperation("ReturnsStrings_Online", typeof(global::System.Collections.Generic.IEnumerable<string>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9275,12 +9275,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>> ReturnsStrings_Online(global::System.Collections.Generic.IEnumerable<string> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>> ReturnsStrings_Online(global::System.Collections.Generic.IEnumerable<string> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsStrings_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>>)(this.InvokeOperation("ReturnsStrings_Online", typeof(global::System.Collections.Generic.IEnumerable<string>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<string>>)(this.InvokeOperation("ReturnsStrings_Online", typeof(global::System.Collections.Generic.IEnumerable<string>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9290,12 +9290,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.TimeSpan> ReturnsTimeSpan_Online(global::System.TimeSpan value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.TimeSpan>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.TimeSpan> ReturnsTimeSpan_Online(global::System.TimeSpan value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.TimeSpan>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsTimeSpan_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.TimeSpan>)(this.InvokeOperation("ReturnsTimeSpan_Online", typeof(global::System.TimeSpan), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.TimeSpan>)(this.InvokeOperation("ReturnsTimeSpan_Online", typeof(global::System.TimeSpan), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9303,12 +9303,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.TimeSpan> ReturnsTimeSpan_Online(global::System.TimeSpan value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.TimeSpan> ReturnsTimeSpan_Online(global::System.TimeSpan value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsTimeSpan_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.TimeSpan>)(this.InvokeOperation("ReturnsTimeSpan_Online", typeof(global::System.TimeSpan), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.TimeSpan>)(this.InvokeOperation("ReturnsTimeSpan_Online", typeof(global::System.TimeSpan), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9318,12 +9318,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>> ReturnsTimeSpans_Online(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan> value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>> ReturnsTimeSpans_Online(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan> value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsTimeSpans_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsTimeSpans_Online", typeof(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsTimeSpans_Online", typeof(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9331,12 +9331,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>> ReturnsTimeSpans_Online(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan> value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>> ReturnsTimeSpans_Online(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan> value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsTimeSpans_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsTimeSpans_Online", typeof(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>>)(this.InvokeOperation("ReturnsTimeSpans_Online", typeof(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan>), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9346,12 +9346,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<ushort> ReturnsUInt16_Online(ushort value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<ushort>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<ushort> ReturnsUInt16_Online(ushort value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<ushort>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<ushort>)(this.InvokeOperation("ReturnsUInt16_Online", typeof(ushort), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<ushort>)(this.InvokeOperation("ReturnsUInt16_Online", typeof(ushort), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9359,12 +9359,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<ushort> ReturnsUInt16_Online(ushort value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<ushort> ReturnsUInt16_Online(ushort value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUInt16_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<ushort>)(this.InvokeOperation("ReturnsUInt16_Online", typeof(ushort), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<ushort>)(this.InvokeOperation("ReturnsUInt16_Online", typeof(ushort), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9374,12 +9374,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<uint> ReturnsUInt32_Online(uint value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<uint>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<uint> ReturnsUInt32_Online(uint value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<uint>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<uint>)(this.InvokeOperation("ReturnsUInt32_Online", typeof(uint), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<uint>)(this.InvokeOperation("ReturnsUInt32_Online", typeof(uint), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9387,12 +9387,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<uint> ReturnsUInt32_Online(uint value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<uint> ReturnsUInt32_Online(uint value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUInt32_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<uint>)(this.InvokeOperation("ReturnsUInt32_Online", typeof(uint), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<uint>)(this.InvokeOperation("ReturnsUInt32_Online", typeof(uint), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9402,12 +9402,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<ulong> ReturnsUInt64_Online(ulong value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<ulong>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<ulong> ReturnsUInt64_Online(ulong value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<ulong>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<ulong>)(this.InvokeOperation("ReturnsUInt64_Online", typeof(ulong), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<ulong>)(this.InvokeOperation("ReturnsUInt64_Online", typeof(ulong), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9415,12 +9415,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<ulong> ReturnsUInt64_Online(ulong value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<ulong> ReturnsUInt64_Online(ulong value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUInt64_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<ulong>)(this.InvokeOperation("ReturnsUInt64_Online", typeof(ulong), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<ulong>)(this.InvokeOperation("ReturnsUInt64_Online", typeof(ulong), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9430,12 +9430,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Uri> ReturnsUri_Online(global::System.Uri value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Uri>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Uri> ReturnsUri_Online(global::System.Uri value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Uri>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUri_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Uri>)(this.InvokeOperation("ReturnsUri_Online", typeof(global::System.Uri), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Uri>)(this.InvokeOperation("ReturnsUri_Online", typeof(global::System.Uri), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9443,12 +9443,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Uri> ReturnsUri_Online(global::System.Uri value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Uri> ReturnsUri_Online(global::System.Uri value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsUri_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Uri>)(this.InvokeOperation("ReturnsUri_Online", typeof(global::System.Uri), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Uri>)(this.InvokeOperation("ReturnsUri_Online", typeof(global::System.Uri), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9458,12 +9458,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement> ReturnsXElement(global::System.Xml.Linq.XElement value, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement> ReturnsXElement(global::System.Xml.Linq.XElement value, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsXElement", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement>)(this.InvokeOperation("ReturnsXElement", typeof(global::System.Xml.Linq.XElement), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement>)(this.InvokeOperation("ReturnsXElement", typeof(global::System.Xml.Linq.XElement), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9471,12 +9471,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="value">The value for the 'value' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement> ReturnsXElement(global::System.Xml.Linq.XElement value)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement> ReturnsXElement(global::System.Xml.Linq.XElement value)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("ReturnsXElement", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement>)(this.InvokeOperation("ReturnsXElement", typeof(global::System.Xml.Linq.XElement), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::System.Xml.Linq.XElement>)(this.InvokeOperation("ReturnsXElement", typeof(global::System.Xml.Linq.XElement), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9486,12 +9486,12 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<double> RoundtripDouble(double d, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<double>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<double> RoundtripDouble(double d, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<double>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("d", d);
             this.ValidateMethod("RoundtripDouble", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("RoundtripDouble", typeof(double), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("RoundtripDouble", typeof(double), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9499,12 +9499,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="d">The value for the 'd' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<double> RoundtripDouble(double d)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<double> RoundtripDouble(double d)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("d", d);
             this.ValidateMethod("RoundtripDouble", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("RoundtripDouble", typeof(double), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<double>)(this.InvokeOperation("RoundtripDouble", typeof(double), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9533,7 +9533,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> TestNullable_Online(
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> TestNullable_Online(
                     global::TestDomainServices.MixedType entity, 
                     global::System.Nullable<bool> b1, 
                     global::System.Nullable<byte> b2, 
@@ -9554,7 +9554,7 @@ namespace TestDomainServices
                     global::System.Nullable<global::TestDomainServices.TestEnum> en, 
                     global::System.Collections.Generic.IEnumerable<global::System.Nullable<global::System.TimeSpan>> nullableTimeSpans, 
                     global::System.Nullable<global::System.DateTimeOffset> dto, 
-                    global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>> callback, 
+                    global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>> callback, 
                     object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
@@ -9579,7 +9579,7 @@ namespace TestDomainServices
             parameters.Add("nullableTimeSpans", nullableTimeSpans);
             parameters.Add("dto", dto);
             this.ValidateMethod("TestNullable_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestNullable_Online", typeof(bool), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestNullable_Online", typeof(bool), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9606,7 +9606,7 @@ namespace TestDomainServices
         /// <param name="nullableTimeSpans">The value for the 'nullableTimeSpans' parameter of this action.</param>
         /// <param name="dto">The value for the 'dto' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> TestNullable_Online(
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> TestNullable_Online(
                     global::TestDomainServices.MixedType entity, 
                     global::System.Nullable<bool> b1, 
                     global::System.Nullable<byte> b2, 
@@ -9650,7 +9650,7 @@ namespace TestDomainServices
             parameters.Add("nullableTimeSpans", nullableTimeSpans);
             parameters.Add("dto", dto);
             this.ValidateMethod("TestNullable_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestNullable_Online", typeof(bool), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestNullable_Online", typeof(bool), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9674,7 +9674,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> TestPredefined_Online(
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> TestPredefined_Online(
                     global::TestDomainServices.MixedType entity, 
                     string s, 
                     decimal d, 
@@ -9690,7 +9690,7 @@ namespace TestDomainServices
                     global::System.Guid[] guids, 
                     ulong[] ulongs, 
                     global::System.DateTimeOffset dto, 
-                    global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>> callback, 
+                    global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>> callback, 
                     object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
@@ -9710,7 +9710,7 @@ namespace TestDomainServices
             parameters.Add("ulongs", ulongs);
             parameters.Add("dto", dto);
             this.ValidateMethod("TestPredefined_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPredefined_Online", typeof(bool), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPredefined_Online", typeof(bool), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9732,7 +9732,7 @@ namespace TestDomainServices
         /// <param name="ulongs">The value for the 'ulongs' parameter of this action.</param>
         /// <param name="dto">The value for the 'dto' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> TestPredefined_Online(global::TestDomainServices.MixedType entity, string s, decimal d, global::System.DateTime dt, global::System.TimeSpan ts, global::System.Collections.Generic.IEnumerable<string> strings, global::System.Uri uri, global::System.Guid g, byte[] b, global::System.Xml.Linq.XElement x, byte[] bArray, global::TestDomainServices.TestEnum en, global::System.Guid[] guids, ulong[] ulongs, global::System.DateTimeOffset dto)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> TestPredefined_Online(global::TestDomainServices.MixedType entity, string s, decimal d, global::System.DateTime dt, global::System.TimeSpan ts, global::System.Collections.Generic.IEnumerable<string> strings, global::System.Uri uri, global::System.Guid g, byte[] b, global::System.Xml.Linq.XElement x, byte[] bArray, global::TestDomainServices.TestEnum en, global::System.Guid[] guids, ulong[] ulongs, global::System.DateTimeOffset dto)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("entity", entity);
@@ -9751,7 +9751,7 @@ namespace TestDomainServices
             parameters.Add("ulongs", ulongs);
             parameters.Add("dto", dto);
             this.ValidateMethod("TestPredefined_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPredefined_Online", typeof(bool), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPredefined_Online", typeof(bool), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9773,7 +9773,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> TestPrimitive_Online(global::TestDomainServices.MixedType entity, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> TestPrimitive_Online(global::TestDomainServices.MixedType entity, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("entity", entity);
@@ -9790,7 +9790,7 @@ namespace TestDomainServices
             parameters.Add("d", d);
             parameters.Add("s", s);
             this.ValidateMethod("TestPrimitive_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPrimitive_Online", typeof(bool), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPrimitive_Online", typeof(bool), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9810,7 +9810,7 @@ namespace TestDomainServices
         /// <param name="d">The value for the 'd' parameter of this action.</param>
         /// <param name="s">The value for the 's' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool> TestPrimitive_Online(global::TestDomainServices.MixedType entity, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool> TestPrimitive_Online(global::TestDomainServices.MixedType entity, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("entity", entity);
@@ -9827,7 +9827,7 @@ namespace TestDomainServices
             parameters.Add("d", d);
             parameters.Add("s", s);
             this.ValidateMethod("TestPrimitive_Online", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPrimitive_Online", typeof(bool), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<bool>)(this.InvokeOperation("TestPrimitive_Online", typeof(bool), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9836,7 +9836,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation ThrowOnlineException(global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation ThrowOnlineException(global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation> callback, object userState)
         {
             this.ValidateMethod("ThrowOnlineException", null);
             return this.InvokeOperation("ThrowOnlineException", typeof(void), null, true, callback, userState);
@@ -9846,7 +9846,7 @@ namespace TestDomainServices
         /// Asynchronously invokes the 'ThrowOnlineException' method of the DomainService.
         /// </summary>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation ThrowOnlineException()
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation ThrowOnlineException()
         {
             this.ValidateMethod("ThrowOnlineException", null);
             return this.InvokeOperation("ThrowOnlineException", typeof(void), null, true, null, null);
@@ -9858,7 +9858,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation ThrowValidationException(global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation ThrowValidationException(global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation> callback, object userState)
         {
             this.ValidateMethod("ThrowValidationException", null);
             return this.InvokeOperation("ThrowValidationException", typeof(void), null, true, callback, userState);
@@ -9868,7 +9868,7 @@ namespace TestDomainServices
         /// Asynchronously invokes the 'ThrowValidationException' method of the DomainService.
         /// </summary>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation ThrowValidationException()
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation ThrowValidationException()
         {
             this.ValidateMethod("ThrowValidationException", null);
             return this.InvokeOperation("ThrowValidationException", typeof(void), null, true, null, null);
@@ -9883,14 +9883,14 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> VariousParameterTypes([global::System.ComponentModel.DataAnnotations.RequiredAttribute()] string str, int integer, bool boolean, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> VariousParameterTypes([global::System.ComponentModel.DataAnnotations.RequiredAttribute()] string str, int integer, bool boolean, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("str", str);
             parameters.Add("integer", integer);
             parameters.Add("boolean", boolean);
             this.ValidateMethod("VariousParameterTypes", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("VariousParameterTypes", typeof(int), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("VariousParameterTypes", typeof(int), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -9900,14 +9900,14 @@ namespace TestDomainServices
         /// <param name="integer">The value for the 'integer' parameter of this action.</param>
         /// <param name="boolean">The value for the 'boolean' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<int> VariousParameterTypes([global::System.ComponentModel.DataAnnotations.RequiredAttribute()] string str, int integer, bool boolean)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<int> VariousParameterTypes([global::System.ComponentModel.DataAnnotations.RequiredAttribute()] string str, int integer, bool boolean)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("str", str);
             parameters.Add("integer", integer);
             parameters.Add("boolean", boolean);
             this.ValidateMethod("VariousParameterTypes", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("VariousParameterTypes", typeof(int), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<int>)(this.InvokeOperation("VariousParameterTypes", typeof(int), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -9916,7 +9916,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation VoidMethod(global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation VoidMethod(global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation> callback, object userState)
         {
             this.ValidateMethod("VoidMethod", null);
             return this.InvokeOperation("VoidMethod", typeof(void), null, true, callback, userState);
@@ -9926,7 +9926,7 @@ namespace TestDomainServices
         /// Asynchronously invokes the 'VoidMethod' method of the DomainService.
         /// </summary>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation VoidMethod()
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation VoidMethod()
         {
             this.ValidateMethod("VoidMethod", null);
             return this.InvokeOperation("VoidMethod", typeof(void), null, true, null, null);
@@ -9936,7 +9936,7 @@ namespace TestDomainServices
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.TestProvider_Scenarios.TestProvider_ScenariosEntityContainer();
         }
@@ -9965,7 +9965,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/CreateAndGetSideEffectsObjectsDomainSer" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/CreateAndGetSideEffectsObjectsDomainSer" +
                 "viceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/CreateAndGetSideEffectsObjects", ReplyAction="http://tempuri.org/TestProvider_Scenarios/CreateAndGetSideEffectsObjectsResponse")]
             global::System.IAsyncResult BeginCreateAndGetSideEffectsObjects(string name, global::System.AsyncCallback callback, object asyncState);
@@ -9975,7 +9975,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginCreateAndGetSideEffectsObjects'.</param>
             /// <returns>The 'QueryResult' returned from the 'CreateAndGetSideEffectsObjects' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.TestSideEffects> EndCreateAndGetSideEffectsObjects(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TestSideEffects> EndCreateAndGetSideEffectsObjects(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetAReturnNull' operation.
@@ -9983,7 +9983,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetAReturnNullDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetAReturnNullDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetAReturnNull", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetAReturnNullResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetAReturnNull(global::System.AsyncCallback callback, object asyncState);
@@ -9993,7 +9993,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetAReturnNull'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetAReturnNull' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAReturnNull(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAReturnNull(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetAs' operation.
@@ -10001,7 +10001,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetAsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetAsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetAs", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetAsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetAs(global::System.AsyncCallback callback, object asyncState);
@@ -10011,7 +10011,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetAs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetAs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetAsReturnNull' operation.
@@ -10019,7 +10019,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetAsReturnNullDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetAsReturnNullDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetAsReturnNull", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetAsReturnNullResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetAsReturnNull(global::System.AsyncCallback callback, object asyncState);
@@ -10029,7 +10029,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetAsReturnNull'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetAsReturnNull' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAsReturnNull(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAsReturnNull(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetBs' operation.
@@ -10037,7 +10037,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetBsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetBsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetBs", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetBsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetBs(global::System.AsyncCallback callback, object asyncState);
@@ -10047,7 +10047,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetBs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetBs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.B> EndGetBs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.B> EndGetBs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCartItems' operation.
@@ -10055,7 +10055,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCartItemsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCartItemsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCartItems", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCartItemsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCartItems(global::System.AsyncCallback callback, object asyncState);
@@ -10065,7 +10065,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCartItems'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCartItems' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CartItem> EndGetCartItems(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CartItem> EndGetCartItems(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCarts' operation.
@@ -10073,7 +10073,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCartsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCartsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCarts", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCartsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCarts(global::System.AsyncCallback callback, object asyncState);
@@ -10083,7 +10083,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCarts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCarts' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.Cart> EndGetCarts(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.Cart> EndGetCarts(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCities' operation.
@@ -10091,7 +10091,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCities", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCities(global::System.AsyncCallback callback, object asyncState);
@@ -10101,7 +10101,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesInState' operation.
@@ -10110,7 +10110,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInState", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCitiesInState(string state, global::System.AsyncCallback callback, object asyncState);
@@ -10120,7 +10120,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesInState'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesInState' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesInState(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesInState(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesInStateWithCaching' operation.
@@ -10129,7 +10129,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCachingDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCachingDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCachingResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10140,7 +10140,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesInStateWithCaching'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesInStateWithCaching' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesInStateWithCaching(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesInStateWithCaching(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesInStateWithCaching2' operation.
@@ -10149,7 +10149,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching2DomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching2DomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching2", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching2Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10160,7 +10160,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesInStateWithCaching2'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesInStateWithCaching2' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesInStateWithCaching2(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesInStateWithCaching2(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCacheLocationAny' operation.
@@ -10168,7 +10168,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationAnyDomainServ" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationAnyDomainServ" +
                 "iceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationAny", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationAnyResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10179,7 +10179,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationAny'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationAny' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationAny(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationAny(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCacheLocationDownstream' operation.
@@ -10187,7 +10187,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationDownstreamDom" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationDownstreamDom" +
                 "ainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationDownstream", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationDownstreamRes" +
                 "ponse")]
@@ -10199,7 +10199,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationDownstream'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationDownstream' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationDownstream(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationDownstream(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCacheLocationServer' operation.
@@ -10207,7 +10207,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerDomainS" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerDomainS" +
                 "erviceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServer", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerRespons" +
                 "e")]
@@ -10219,7 +10219,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationServer'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationServer' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationServer(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationServer(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCacheLocationServerAndClient' operation.
@@ -10227,7 +10227,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerAndClie" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerAndClie" +
                 "ntDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerAndClie" +
                 "nt", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerAndClie" +
@@ -10240,7 +10240,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationServerAndClient'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationServerAndClient' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationServerAndClient(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCacheLocationServerAndClient(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCaching' operation.
@@ -10248,7 +10248,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCitiesWithCaching(global::System.AsyncCallback callback, object asyncState);
@@ -10258,7 +10258,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCaching'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCaching' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCaching(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCaching(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCaching2' operation.
@@ -10266,7 +10266,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching2DomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching2DomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching2", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching2Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10277,7 +10277,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCaching2'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCaching2' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCaching2(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCaching2(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCachingAndThrow' operation.
@@ -10285,7 +10285,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingAndThrowDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingAndThrowDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingAndThrow", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingAndThrowResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10296,7 +10296,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCachingAndThrow'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCachingAndThrow' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCachingAndThrow(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCachingAndThrow(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCachingVaryByHeaders' operation.
@@ -10304,7 +10304,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingVaryByHeadersDomain" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingVaryByHeadersDomain" +
                 "ServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingVaryByHeaders", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingVaryByHeadersRespon" +
                 "se")]
@@ -10316,7 +10316,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCachingVaryByHeaders'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCachingVaryByHeaders' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCachingVaryByHeaders(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCachingVaryByHeaders(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCitiesWithCachingViaCacheProfile' operation.
@@ -10324,7 +10324,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingViaCacheProfileDoma" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingViaCacheProfileDoma" +
                 "inServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingViaCacheProfile", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingViaCacheProfileResp" +
                 "onse")]
@@ -10336,7 +10336,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCachingViaCacheProfile'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCitiesWithCachingViaCacheProfile' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCachingViaCacheProfile(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.CityWithCacheData> EndGetCitiesWithCachingViaCacheProfile(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCs' operation.
@@ -10344,7 +10344,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetCsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetCs", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetCsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCs(global::System.AsyncCallback callback, object asyncState);
@@ -10354,7 +10354,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.C> EndGetCs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.C> EndGetCs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetDs' operation.
@@ -10362,7 +10362,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetDsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetDsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetDs", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetDsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetDs(global::System.AsyncCallback callback, object asyncState);
@@ -10372,7 +10372,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetDs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetDs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndGetDs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndGetDs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntitiesWithDataContracts' operation.
@@ -10380,7 +10380,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContractsDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContractsDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContractsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10391,7 +10391,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntitiesWithDataContracts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntitiesWithDataContracts' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithDataContract> EndGetEntitiesWithDataContracts(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithDataContract> EndGetEntitiesWithDataContracts(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntitiesWithDataContracts2' operation.
@@ -10399,7 +10399,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts2DomainServ" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts2DomainServ" +
                 "iceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts2", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts2Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10410,7 +10410,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntitiesWithDataContracts2'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntitiesWithDataContracts2' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithDataContract2> EndGetEntitiesWithDataContracts2(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithDataContract2> EndGetEntitiesWithDataContracts2(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntitiesWithSpecialTypeName' operation.
@@ -10418,7 +10418,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithSpecialTypeNameDomainSer" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithSpecialTypeNameDomainSer" +
                 "viceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithSpecialTypeName", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithSpecialTypeNameResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10429,7 +10429,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntitiesWithSpecialTypeName'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntitiesWithSpecialTypeName' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName> EndGetEntitiesWithSpecialTypeName(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName> EndGetEntitiesWithSpecialTypeName(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntity_TestEditableAttributes' operation.
@@ -10437,7 +10437,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntity_TestEditableAttributesDomainS" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntity_TestEditableAttributesDomainS" +
                 "erviceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetEntity_TestEditableAttributes", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetEntity_TestEditableAttributesRespons" +
                 "e")]
@@ -10449,7 +10449,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntity_TestEditableAttributes'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntity_TestEditableAttributes' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.Entity_TestEditableAttribute> EndGetEntity_TestEditableAttributes(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.Entity_TestEditableAttribute> EndGetEntity_TestEditableAttributes(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntityWithDefaultValue' operation.
@@ -10457,7 +10457,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntityWithDefaultValueDomainServiceF" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetEntityWithDefaultValueDomainServiceF" +
                 "ault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetEntityWithDefaultValue", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetEntityWithDefaultValueResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10468,7 +10468,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntityWithDefaultValue'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntityWithDefaultValue' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithDefaultDefaultValue> EndGetEntityWithDefaultValue(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithDefaultDefaultValue> EndGetEntityWithDefaultValue(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypes' operation.
@@ -10476,7 +10476,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetMixedTypes(global::System.AsyncCallback callback, object asyncState);
@@ -10486,7 +10486,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypes' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypes_BadAttributes' operation.
@@ -10496,7 +10496,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_BadAttributesDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_BadAttributesDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_BadAttributes", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_BadAttributesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10507,7 +10507,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_BadAttributes'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypes_BadAttributes' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_BadAttributes(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_BadAttributes(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypes_Nullable' operation.
@@ -10535,7 +10535,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_NullableDomainServiceFaul" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_NullableDomainServiceFaul" +
                 "t", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_Nullable", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_NullableResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10568,7 +10568,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_Nullable'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypes_Nullable' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_Nullable(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_Nullable(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypes_Predefined' operation.
@@ -10596,7 +10596,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PredefinedDomainServiceFa" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PredefinedDomainServiceFa" +
                 "ult", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_Predefined", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PredefinedResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10629,7 +10629,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_Predefined'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypes_Predefined' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_Predefined(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_Predefined(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypes_Primitive' operation.
@@ -10650,7 +10650,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PrimitiveDomainServiceFau" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PrimitiveDomainServiceFau" +
                 "lt", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_Primitive", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PrimitiveResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10661,7 +10661,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_Primitive'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypes_Primitive' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_Primitive(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypes_Primitive(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypesThrow' operation.
@@ -10669,7 +10669,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesThrowDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesThrowDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesThrow", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesThrowResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetMixedTypesThrow(global::System.AsyncCallback callback, object asyncState);
@@ -10679,7 +10679,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypesThrow'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypesThrow' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypesThrow(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypesThrow(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMixedTypeSuperset' operation.
@@ -10687,7 +10687,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypeSupersetDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypeSupersetDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMixedTypeSuperset", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMixedTypeSupersetResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetMixedTypeSuperset(global::System.AsyncCallback callback, object asyncState);
@@ -10697,7 +10697,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMixedTypeSuperset'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMixedTypeSuperset' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypeSuperset(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MixedType> EndGetMixedTypeSuperset(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMultipartKeyTestEntity1s' operation.
@@ -10705,7 +10705,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity1sDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity1sDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity1s", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity1sResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10716,7 +10716,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMultipartKeyTestEntity1s'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMultipartKeyTestEntity1s' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MultipartKeyTestEntity1> EndGetMultipartKeyTestEntity1s(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MultipartKeyTestEntity1> EndGetMultipartKeyTestEntity1s(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMultipartKeyTestEntity2s' operation.
@@ -10724,7 +10724,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity2sDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity2sDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity2s", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity2sResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10735,7 +10735,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMultipartKeyTestEntity2s'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMultipartKeyTestEntity2s' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MultipartKeyTestEntity2> EndGetMultipartKeyTestEntity2s(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MultipartKeyTestEntity2> EndGetMultipartKeyTestEntity2s(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetMultipartKeyTestEntity3s' operation.
@@ -10743,7 +10743,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity3sDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity3sDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity3s", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity3sResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10754,7 +10754,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetMultipartKeyTestEntity3s'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetMultipartKeyTestEntity3s' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.MultipartKeyTestEntity3> EndGetMultipartKeyTestEntity3s(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.MultipartKeyTestEntity3> EndGetMultipartKeyTestEntity3s(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetNullableFKParents' operation.
@@ -10762,7 +10762,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetNullableFKParentsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetNullableFKParentsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetNullableFKParents", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetNullableFKParentsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetNullableFKParents(global::System.AsyncCallback callback, object asyncState);
@@ -10772,7 +10772,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetNullableFKParents'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetNullableFKParents' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NullableFKParent> EndGetNullableFKParents(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NullableFKParent> EndGetNullableFKParents(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPOCONoValidations' operation.
@@ -10780,7 +10780,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetPOCONoValidationsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetPOCONoValidationsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetPOCONoValidations", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetPOCONoValidationsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetPOCONoValidations(global::System.AsyncCallback callback, object asyncState);
@@ -10790,7 +10790,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetPOCONoValidations'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetPOCONoValidations' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.POCONoValidation> EndGetPOCONoValidations(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.POCONoValidation> EndGetPOCONoValidations(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRoundtripOriginal_ClassAttribute_TestEntities' operation.
@@ -10798,7 +10798,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_ClassAttribute_Tes" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_ClassAttribute_Tes" +
                 "tEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_ClassAttribute_Tes" +
                 "tEntities", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_ClassAttribute_Tes" +
@@ -10811,7 +10811,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRoundtripOriginal_ClassAttribute_TestEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRoundtripOriginal_ClassAttribute_TestEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.RoundtripOriginal_TestEntity2> EndGetRoundtripOriginal_ClassAttribute_TestEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.RoundtripOriginal_TestEntity2> EndGetRoundtripOriginal_ClassAttribute_TestEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRoundtripOriginal_TestEntities' operation.
@@ -10819,7 +10819,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_TestEntitiesDomain" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_TestEntitiesDomain" +
                 "ServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_TestEntities", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_TestEntitiesRespon" +
                 "se")]
@@ -10831,7 +10831,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRoundtripOriginal_TestEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRoundtripOriginal_TestEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.RoundtripOriginal_TestEntity> EndGetRoundtripOriginal_TestEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.RoundtripOriginal_TestEntity> EndGetRoundtripOriginal_TestEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRoundtripQueryEntities' operation.
@@ -10839,7 +10839,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripQueryEntitiesDomainServiceF" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripQueryEntitiesDomainServiceF" +
                 "ault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetRoundtripQueryEntities", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetRoundtripQueryEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -10850,7 +10850,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRoundtripQueryEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRoundtripQueryEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.RoundtripQueryEntity> EndGetRoundtripQueryEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.RoundtripQueryEntity> EndGetRoundtripQueryEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTestCyclesRoot' operation.
@@ -10858,7 +10858,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesRootDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesRootDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesRoot", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesRootResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetTestCyclesRoot(global::System.AsyncCallback callback, object asyncState);
@@ -10868,7 +10868,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTestCyclesRoot'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTestCyclesRoot' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.TestCycles> EndGetTestCyclesRoot(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TestCycles> EndGetTestCyclesRoot(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTestCyclesTier1' operation.
@@ -10876,7 +10876,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesTier1DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesTier1DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesTier1", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesTier1Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetTestCyclesTier1(global::System.AsyncCallback callback, object asyncState);
@@ -10886,7 +10886,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTestCyclesTier1'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTestCyclesTier1' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.TestCycles> EndGetTestCyclesTier1(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TestCycles> EndGetTestCyclesTier1(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTestEntityForInvokeOperations' operation.
@@ -10894,7 +10894,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTestEntityForInvokeOperationsDomainS" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTestEntityForInvokeOperationsDomainS" +
                 "erviceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetTestEntityForInvokeOperations", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetTestEntityForInvokeOperationsRespons" +
                 "e")]
@@ -10906,7 +10906,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTestEntityForInvokeOperations'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTestEntityForInvokeOperations' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.TestEntityForInvokeOperations> EndGetTestEntityForInvokeOperations(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TestEntityForInvokeOperations> EndGetTestEntityForInvokeOperations(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTimestampEntityAs' operation.
@@ -10914,7 +10914,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityAsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityAsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityAs", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityAsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetTimestampEntityAs(global::System.AsyncCallback callback, object asyncState);
@@ -10924,7 +10924,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTimestampEntityAs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTimestampEntityAs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.TimestampEntityA> EndGetTimestampEntityAs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TimestampEntityA> EndGetTimestampEntityAs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTimestampEntityBs' operation.
@@ -10932,7 +10932,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityBsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityBsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityBs", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityBsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetTimestampEntityBs(global::System.AsyncCallback callback, object asyncState);
@@ -10942,7 +10942,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTimestampEntityBs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTimestampEntityBs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.TimestampEntityB> EndGetTimestampEntityBs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TimestampEntityB> EndGetTimestampEntityBs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetXElemEntities' operation.
@@ -10950,7 +10950,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetXElemEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/GetXElemEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/GetXElemEntities", ReplyAction="http://tempuri.org/TestProvider_Scenarios/GetXElemEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetXElemEntities(global::System.AsyncCallback callback, object asyncState);
@@ -10960,7 +10960,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetXElemEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetXElemEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithXElement> EndGetXElemEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.EntityWithXElement> EndGetXElemEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'IncrementBid1ForA' operation.
@@ -10969,7 +10969,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForADomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForADomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForA", ReplyAction="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForAResponse")]
             global::System.IAsyncResult BeginIncrementBid1ForA(global::TestDomainServices.A a, global::System.AsyncCallback callback, object asyncState);
             
@@ -10988,7 +10988,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForAByDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForAByDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForABy", ReplyAction="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForAByResponse")]
             global::System.IAsyncResult BeginIncrementBid1ForABy(global::TestDomainServices.A a, int delta, global::System.AsyncCallback callback, object asyncState);
             
@@ -11008,7 +11008,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/InvokeOperationWithParamValidationDomai" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/InvokeOperationWithParamValidationDomai" +
                 "nServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/InvokeOperationWithParamValidation", ReplyAction="http://tempuri.org/TestProvider_Scenarios/InvokeOperationWithParamValidationRespo" +
                 "nse")]
@@ -11028,7 +11028,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParam", ReplyAction="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamResponse")]
             global::System.IAsyncResult BeginInvokeOpWithIEnumerableParam(global::System.Collections.Generic.IEnumerable<global::TestDomainServices.TestEntityForInvokeOperations> list, global::System.AsyncCallback callback, object asyncState);
@@ -11047,7 +11047,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamAndNoSideEf" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamAndNoSideEf" +
                 "fectsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamAndNoSideEf" +
                 "fects", ReplyAction="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamAndNoSideEf" +
@@ -11068,7 +11068,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/MethodRequiresAuthenticationDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/MethodRequiresAuthenticationDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/MethodRequiresAuthentication", ReplyAction="http://tempuri.org/TestProvider_Scenarios/MethodRequiresAuthenticationResponse")]
             global::System.IAsyncResult BeginMethodRequiresAuthentication(global::System.AsyncCallback callback, object asyncState);
@@ -11087,7 +11087,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/QueryWithParamValidationDomainServiceFa" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/QueryWithParamValidationDomainServiceFa" +
                 "ult", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/QueryWithParamValidation", ReplyAction="http://tempuri.org/TestProvider_Scenarios/QueryWithParamValidationResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -11098,7 +11098,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginQueryWithParamValidation'.</param>
             /// <returns>The 'QueryResult' returned from the 'QueryWithParamValidation' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndQueryWithParamValidation(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndQueryWithParamValidation(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'ReturnHttpMethodWithoutSideEffects_Online' operation.
@@ -11106,7 +11106,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithoutSideEffects_Onli" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithoutSideEffects_Onli" +
                 "neDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithoutSideEffects_Onli" +
                 "ne", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithoutSideEffects_Onli" +
@@ -11127,7 +11127,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithSideEffects_OnlineD" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithSideEffects_OnlineD" +
                 "omainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithSideEffects_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithSideEffects_OnlineR" +
                 "esponse")]
@@ -11147,7 +11147,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsBinary_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsBinary_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsBinary_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsBinary_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsBinary_Online(byte[] value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11165,7 +11165,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsBoolean_OnlineDomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsBoolean_OnlineDomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsBoolean_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsBoolean_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsBoolean_Online(bool value, global::System.AsyncCallback callback, object asyncState);
@@ -11184,7 +11184,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsByte_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsByte_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsByte_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsByte_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsByte_Online(byte value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11202,7 +11202,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsByteArray_OnlineDomainServiceFau" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsByteArray_OnlineDomainServiceFau" +
                 "lt", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsByteArray_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsByteArray_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsByteArray_Online(byte[] value, global::System.AsyncCallback callback, object asyncState);
@@ -11221,7 +11221,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsChar_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsChar_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsChar_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsChar_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsChar_Online(char value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11239,7 +11239,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTime_OnlineDomainServiceFaul" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTime_OnlineDomainServiceFaul" +
                 "t", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTime_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTime_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsDateTime_Online(global::System.DateTime value, global::System.AsyncCallback callback, object asyncState);
@@ -11258,7 +11258,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffset_OnlineDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffset_OnlineDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffset_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffset_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsDateTimeOffset_Online(global::System.DateTimeOffset value, global::System.AsyncCallback callback, object asyncState);
@@ -11277,7 +11277,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffsets_OnlineDomainServ" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffsets_OnlineDomainServ" +
                 "iceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffsets_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffsets_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsDateTimeOffsets_Online(global::System.DateTimeOffset[] value, global::System.AsyncCallback callback, object asyncState);
@@ -11296,7 +11296,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimes_OnlineDomainServiceFau" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimes_OnlineDomainServiceFau" +
                 "lt", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimes_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimes_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsDateTimes_Online(global::System.DateTime[] value, global::System.AsyncCallback callback, object asyncState);
@@ -11315,7 +11315,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDecimal_OnlineDomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDecimal_OnlineDomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDecimal_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDecimal_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsDecimal_Online(decimal value, global::System.AsyncCallback callback, object asyncState);
@@ -11334,7 +11334,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDictionaryDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDictionaryDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDictionary", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDictionaryResponse")]
             global::System.IAsyncResult BeginReturnsDictionary(global::System.Collections.Generic.Dictionary<string, int> value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11352,7 +11352,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDouble_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDouble_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsDouble_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsDouble_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsDouble_Online(double value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11371,7 +11371,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEntity_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEntity_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEntity_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsEntity_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsEntity_Online(global::TestDomainServices.MixedType value, string id, global::System.AsyncCallback callback, object asyncState);
             
@@ -11389,7 +11389,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEntityCollection_OnlineDomainSer" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEntityCollection_OnlineDomainSer" +
                 "viceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEntityCollection_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsEntityCollection_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsEntityCollection_Online(int value, global::System.AsyncCallback callback, object asyncState);
@@ -11408,7 +11408,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEnum_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEnum_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsEnum_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsEnum_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsEnum_Online(global::TestDomainServices.TestEnum value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11426,7 +11426,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsGuid_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsGuid_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsGuid_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsGuid_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsGuid_Online(global::System.Guid value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11444,7 +11444,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt16_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt16_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt16_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsInt16_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsInt16_Online(short value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11462,7 +11462,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt32_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt32_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt32_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsInt32_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsInt32_Online(int value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11480,7 +11480,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt64_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt64_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsInt64_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsInt64_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsInt64_Online(long value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11498,7 +11498,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableBoolean_OnlineDomainServ" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableBoolean_OnlineDomainServ" +
                 "iceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableBoolean_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableBoolean_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableBoolean_Online(global::System.Nullable<bool> value, global::System.AsyncCallback callback, object asyncState);
@@ -11517,7 +11517,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableByte_OnlineDomainService" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableByte_OnlineDomainService" +
                 "Fault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableByte_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableByte_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableByte_Online(global::System.Nullable<byte> value, global::System.AsyncCallback callback, object asyncState);
@@ -11536,7 +11536,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableChar_OnlineDomainService" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableChar_OnlineDomainService" +
                 "Fault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableChar_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableChar_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableChar_Online(global::System.Nullable<char> value, global::System.AsyncCallback callback, object asyncState);
@@ -11555,7 +11555,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTime_OnlineDomainSer" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTime_OnlineDomainSer" +
                 "viceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTime_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTime_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableDateTime_Online(global::System.Nullable<global::System.DateTime> value, global::System.AsyncCallback callback, object asyncState);
@@ -11574,7 +11574,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTimeOffset_OnlineDom" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTimeOffset_OnlineDom" +
                 "ainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTimeOffset_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTimeOffset_OnlineRes" +
                 "ponse")]
@@ -11594,7 +11594,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDecimal_OnlineDomainServ" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDecimal_OnlineDomainServ" +
                 "iceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDecimal_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDecimal_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableDecimal_Online(global::System.Nullable<decimal> value, global::System.AsyncCallback callback, object asyncState);
@@ -11613,7 +11613,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDouble_OnlineDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDouble_OnlineDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDouble_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDouble_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableDouble_Online(global::System.Nullable<double> value, global::System.AsyncCallback callback, object asyncState);
@@ -11632,7 +11632,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableEnum_OnlineDomainService" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableEnum_OnlineDomainService" +
                 "Fault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableEnum_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableEnum_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableEnum_Online(global::System.Nullable<global::TestDomainServices.TestEnum> value, global::System.AsyncCallback callback, object asyncState);
@@ -11651,7 +11651,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableGuid_OnlineDomainService" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableGuid_OnlineDomainService" +
                 "Fault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableGuid_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableGuid_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableGuid_Online(global::System.Nullable<global::System.Guid> value, global::System.AsyncCallback callback, object asyncState);
@@ -11670,7 +11670,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt16_OnlineDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt16_OnlineDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt16_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt16_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableInt16_Online(global::System.Nullable<short> value, global::System.AsyncCallback callback, object asyncState);
@@ -11689,7 +11689,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt32_OnlineDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt32_OnlineDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt32_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt32_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableInt32_Online(global::System.Nullable<int> value, global::System.AsyncCallback callback, object asyncState);
@@ -11708,7 +11708,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt64_OnlineDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt64_OnlineDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt64_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt64_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableInt64_Online(global::System.Nullable<long> value, global::System.AsyncCallback callback, object asyncState);
@@ -11727,7 +11727,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSByte_OnlineDomainServic" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSByte_OnlineDomainServic" +
                 "eFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSByte_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSByte_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableSByte_Online(global::System.Nullable<sbyte> value, global::System.AsyncCallback callback, object asyncState);
@@ -11746,7 +11746,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSingle_OnlineDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSingle_OnlineDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSingle_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSingle_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableSingle_Online(global::System.Nullable<float> value, global::System.AsyncCallback callback, object asyncState);
@@ -11765,7 +11765,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableTimeSpan_OnlineDomainSer" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableTimeSpan_OnlineDomainSer" +
                 "viceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableTimeSpan_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableTimeSpan_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableTimeSpan_Online(global::System.Nullable<global::System.TimeSpan> value, global::System.AsyncCallback callback, object asyncState);
@@ -11784,7 +11784,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt16_OnlineDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt16_OnlineDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt16_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt16_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableUInt16_Online(global::System.Nullable<ushort> value, global::System.AsyncCallback callback, object asyncState);
@@ -11803,7 +11803,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt32_OnlineDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt32_OnlineDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt32_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt32_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableUInt32_Online(global::System.Nullable<uint> value, global::System.AsyncCallback callback, object asyncState);
@@ -11822,7 +11822,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt64_OnlineDomainServi" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt64_OnlineDomainServi" +
                 "ceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt64_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt64_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsNullableUInt64_Online(global::System.Nullable<ulong> value, global::System.AsyncCallback callback, object asyncState);
@@ -11841,7 +11841,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsSByte_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsSByte_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsSByte_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsSByte_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsSByte_Online(sbyte value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11859,7 +11859,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsSingle_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsSingle_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsSingle_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsSingle_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsSingle_Online(float value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11877,7 +11877,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsString_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsString_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsString_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsString_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsString_Online(string value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11895,7 +11895,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsStrings_OnlineDomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsStrings_OnlineDomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsStrings_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsStrings_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsStrings_Online(global::System.Collections.Generic.IEnumerable<string> value, global::System.AsyncCallback callback, object asyncState);
@@ -11914,7 +11914,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpan_OnlineDomainServiceFaul" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpan_OnlineDomainServiceFaul" +
                 "t", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpan_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpan_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsTimeSpan_Online(global::System.TimeSpan value, global::System.AsyncCallback callback, object asyncState);
@@ -11933,7 +11933,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpans_OnlineDomainServiceFau" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpans_OnlineDomainServiceFau" +
                 "lt", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpans_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpans_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsTimeSpans_Online(global::System.Collections.Generic.IEnumerable<global::System.TimeSpan> value, global::System.AsyncCallback callback, object asyncState);
@@ -11952,7 +11952,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt16_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt16_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt16_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt16_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsUInt16_Online(ushort value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11970,7 +11970,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt32_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt32_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt32_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt32_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsUInt32_Online(uint value, global::System.AsyncCallback callback, object asyncState);
             
@@ -11988,7 +11988,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt64_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt64_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt64_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt64_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsUInt64_Online(ulong value, global::System.AsyncCallback callback, object asyncState);
             
@@ -12006,7 +12006,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUri_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUri_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsUri_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsUri_OnlineResponse")]
             global::System.IAsyncResult BeginReturnsUri_Online(global::System.Uri value, global::System.AsyncCallback callback, object asyncState);
             
@@ -12024,7 +12024,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsXElementDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ReturnsXElementDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ReturnsXElement", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ReturnsXElementResponse")]
             global::System.IAsyncResult BeginReturnsXElement(global::System.Xml.Linq.XElement value, global::System.AsyncCallback callback, object asyncState);
             
@@ -12042,7 +12042,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/RoundtripDoubleDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/RoundtripDoubleDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/RoundtripDouble", ReplyAction="http://tempuri.org/TestProvider_Scenarios/RoundtripDoubleResponse")]
             global::System.IAsyncResult BeginRoundtripDouble(double d, global::System.AsyncCallback callback, object asyncState);
             
@@ -12079,7 +12079,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/TestNullable_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/TestNullable_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/TestNullable_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/TestNullable_OnlineResponse")]
             global::System.IAsyncResult BeginTestNullable_Online(
                         global::TestDomainServices.MixedType entity, 
@@ -12133,7 +12133,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/TestPredefined_OnlineDomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/TestPredefined_OnlineDomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/TestPredefined_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/TestPredefined_OnlineResponse")]
             global::System.IAsyncResult BeginTestPredefined_Online(
@@ -12181,7 +12181,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/TestPrimitive_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/TestPrimitive_OnlineDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/TestPrimitive_Online", ReplyAction="http://tempuri.org/TestProvider_Scenarios/TestPrimitive_OnlineResponse")]
             global::System.IAsyncResult BeginTestPrimitive_Online(global::TestDomainServices.MixedType entity, bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s, global::System.AsyncCallback callback, object asyncState);
             
@@ -12198,7 +12198,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ThrowOnlineExceptionDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ThrowOnlineExceptionDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ThrowOnlineException", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ThrowOnlineExceptionResponse")]
             global::System.IAsyncResult BeginThrowOnlineException(global::System.AsyncCallback callback, object asyncState);
             
@@ -12214,7 +12214,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ThrowValidationExceptionDomainServiceFa" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/ThrowValidationExceptionDomainServiceFa" +
                 "ult", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/ThrowValidationException", ReplyAction="http://tempuri.org/TestProvider_Scenarios/ThrowValidationExceptionResponse")]
             global::System.IAsyncResult BeginThrowValidationException(global::System.AsyncCallback callback, object asyncState);
@@ -12234,7 +12234,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/VariousParameterTypesDomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/VariousParameterTypesDomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/VariousParameterTypes", ReplyAction="http://tempuri.org/TestProvider_Scenarios/VariousParameterTypesResponse")]
             global::System.IAsyncResult BeginVariousParameterTypes(string str, int integer, bool boolean, global::System.AsyncCallback callback, object asyncState);
@@ -12252,7 +12252,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/VoidMethodDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/VoidMethodDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/VoidMethod", ReplyAction="http://tempuri.org/TestProvider_Scenarios/VoidMethodResponse")]
             global::System.IAsyncResult BeginVoidMethod(global::System.AsyncCallback callback, object asyncState);
             
@@ -12269,51 +12269,51 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Scenarios/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios/SubmitChanges", ReplyAction="http://tempuri.org/TestProvider_Scenarios/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class TestProvider_ScenariosEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class TestProvider_ScenariosEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public TestProvider_ScenariosEntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.A>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.B>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.C>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Add);
-                this.CreateEntitySet<global::TestDomainServices.Cart>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Add);
-                this.CreateEntitySet<global::TestDomainServices.CartItem>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Add);
-                this.CreateEntitySet<global::TestDomainServices.CityWithCacheData>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.D>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Add);
-                this.CreateEntitySet<global::TestDomainServices.Entity_TestEditableAttribute>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.EntityWithDataContract>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.EntityWithDataContract2>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.EntityWithDefaultDefaultValue>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.EntityWithXElement>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.MixedType>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.MultipartKeyTestEntity1>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.MultipartKeyTestEntity2>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.MultipartKeyTestEntity3>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.NullableFKChild>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.NullableFKParent>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.POCONoValidation>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity2>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.RoundtripQueryEntity>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TestCycles>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TestEntityForInvokeOperations>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TestSideEffects>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TimestampEntityA>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.TimestampEntityB>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.A>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.B>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.C>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Add);
+                this.CreateEntitySet<global::TestDomainServices.Cart>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Add);
+                this.CreateEntitySet<global::TestDomainServices.CartItem>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Add);
+                this.CreateEntitySet<global::TestDomainServices.CityWithCacheData>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.D>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Add);
+                this.CreateEntitySet<global::TestDomainServices.Entity_TestEditableAttribute>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.EntityWithDataContract>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.EntityWithDataContract2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.EntityWithDefaultDefaultValue>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.EntityWithXElement>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.MixedType>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.MultipartKeyTestEntity1>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.MultipartKeyTestEntity2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.MultipartKeyTestEntity3>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.NullableFKChild>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.NullableFKParent>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.POCONoValidation>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.RoundtripOriginal_TestEntity2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.RoundtripQueryEntity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.Saleテ.EntityWithSpecialTypeName>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TestCycles>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TestEntityForInvokeOperations>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TestSideEffects>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TimestampEntityA>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.TimestampEntityB>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
             }
         }
     }
@@ -12322,7 +12322,7 @@ namespace TestDomainServices
     /// The 'TestSideEffects' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TestSideEffects : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class TestSideEffects : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _name;
@@ -12444,7 +12444,7 @@ namespace TestDomainServices
     /// The 'TimestampEntityA' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TimestampEntityA : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class TimestampEntityA : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -12597,7 +12597,7 @@ namespace TestDomainServices
     /// The 'TimestampEntityB' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TimestampEntityB : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class TimestampEntityB : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -12755,7 +12755,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockComplexObject1' class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockComplexObject1 : global::System.ServiceModel.DomainServices.Client.ComplexObject
+    public sealed partial class MockComplexObject1 : global::OpenRiaServices.DomainServices.Client.ComplexObject
     {
         
         private global::TestDomainServices.NamedUpdates.MockComplexObject1 _property1;
@@ -12841,7 +12841,7 @@ namespace TestDomainServices.NamedUpdates
     /// </summary>
     [global::System.ComponentModel.DataAnnotations.CustomValidationAttribute(typeof(global::TestDomainServices.DynamicTestValidator), "Validate")]
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockComplexObject2 : global::System.ServiceModel.DomainServices.Client.ComplexObject
+    public sealed partial class MockComplexObject2 : global::OpenRiaServices.DomainServices.Client.ComplexObject
     {
         
         private global::TestDomainServices.NamedUpdates.MockComplexObject2 _property1;
@@ -12926,7 +12926,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockComplexObject3' class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockComplexObject3 : global::System.ServiceModel.DomainServices.Client.ComplexObject
+    public sealed partial class MockComplexObject3 : global::OpenRiaServices.DomainServices.Client.ComplexObject
     {
         
         private global::TestDomainServices.NamedUpdates.MockComplexObject4[] _commonArray;
@@ -13012,7 +13012,7 @@ namespace TestDomainServices.NamedUpdates
     /// </summary>
     [global::System.ComponentModel.DataAnnotations.CustomValidationAttribute(typeof(global::TestDomainServices.DynamicTestValidator), "Validate")]
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockComplexObject4 : global::System.ServiceModel.DomainServices.Client.ComplexObject
+    public sealed partial class MockComplexObject4 : global::OpenRiaServices.DomainServices.Client.ComplexObject
     {
         
         private global::TestDomainServices.NamedUpdates.MockComplexObject4 _property1;
@@ -13068,7 +13068,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockEntity1' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockEntity1 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MockEntity1 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -13260,7 +13260,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockEntity2' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockEntity2 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MockEntity2 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -13452,7 +13452,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockEntity3' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockEntity3 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MockEntity3 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -13714,7 +13714,7 @@ namespace TestDomainServices.NamedUpdates
     /// </summary>
     [global::System.ComponentModel.DataAnnotations.CustomValidationAttribute(typeof(global::TestDomainServices.DynamicTestValidator), "Validate")]
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockEntity4 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MockEntity4 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -13936,7 +13936,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockEntity5' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockEntity5 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MockEntity5 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private global::TestDomainServices.NamedUpdates.MockComplexObject4[] _commonArray;
@@ -14186,7 +14186,7 @@ namespace TestDomainServices.NamedUpdates
     /// The 'MockEntity6' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
-    public sealed partial class MockEntity6 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class MockEntity6 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -14377,7 +14377,7 @@ namespace TestDomainServices.NamedUpdates
     /// <summary>
     /// The DomainContext corresponding to the 'NamedUpdate_CustomAndUpdate' DomainService.
     /// </summary>
-    public sealed partial class NamedUpdate_CustomAndUpdate : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class NamedUpdate_CustomAndUpdate : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -14395,7 +14395,7 @@ namespace TestDomainServices.NamedUpdates
         /// Initializes a new instance of the <see cref="NamedUpdate_CustomAndUpdate"/> class.
         /// </summary>
         public NamedUpdate_CustomAndUpdate() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.INamedUpdate_CustomAndUpdateContract>(new global::System.Uri("TestDomainServices-NamedUpdates-NamedUpdate_CustomAndUpdate.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.INamedUpdate_CustomAndUpdateContract>(new global::System.Uri("TestDomainServices-NamedUpdates-NamedUpdate_CustomAndUpdate.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -14404,7 +14404,7 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="serviceUri">The NamedUpdate_CustomAndUpdate service URI.</param>
         public NamedUpdate_CustomAndUpdate(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.INamedUpdate_CustomAndUpdateContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.INamedUpdate_CustomAndUpdateContract>(serviceUri))
         {
         }
         
@@ -14412,7 +14412,7 @@ namespace TestDomainServices.NamedUpdates
         /// Initializes a new instance of the <see cref="NamedUpdate_CustomAndUpdate"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public NamedUpdate_CustomAndUpdate(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public NamedUpdate_CustomAndUpdate(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -14421,7 +14421,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Gets the set of <see cref="MockEntity2"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomAndUpdate"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity2> MockEntity2s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity2> MockEntity2s
         {
             get
             {
@@ -14433,7 +14433,7 @@ namespace TestDomainServices.NamedUpdates
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity2"/> entity instances using the 'GetEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity2"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity2> GetEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity2> GetEntitiesQuery()
         {
             this.ValidateMethod("GetEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.NamedUpdates.MockEntity2>("GetEntities", null, false, true);
@@ -14453,7 +14453,7 @@ namespace TestDomainServices.NamedUpdates
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.NamedUpdate_CustomAndUpdateEntityContainer();
         }
@@ -14471,7 +14471,7 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomAndUpdate/GetEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomAndUpdate/GetEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomAndUpdate/GetEntities", ReplyAction="http://tempuri.org/NamedUpdate_CustomAndUpdate/GetEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetEntities(global::System.AsyncCallback callback, object asyncState);
@@ -14481,7 +14481,7 @@ namespace TestDomainServices.NamedUpdates
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity2> EndGetEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity2> EndGetEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -14490,24 +14490,24 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomAndUpdate/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomAndUpdate/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomAndUpdate/SubmitChanges", ReplyAction="http://tempuri.org/NamedUpdate_CustomAndUpdate/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class NamedUpdate_CustomAndUpdateEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class NamedUpdate_CustomAndUpdateEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public NamedUpdate_CustomAndUpdateEntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity2>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
             }
         }
     }
@@ -14515,7 +14515,7 @@ namespace TestDomainServices.NamedUpdates
     /// <summary>
     /// The DomainContext corresponding to the 'NamedUpdate_CustomOnly' DomainService.
     /// </summary>
-    public sealed partial class NamedUpdate_CustomOnly : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class NamedUpdate_CustomOnly : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -14533,7 +14533,7 @@ namespace TestDomainServices.NamedUpdates
         /// Initializes a new instance of the <see cref="NamedUpdate_CustomOnly"/> class.
         /// </summary>
         public NamedUpdate_CustomOnly() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.INamedUpdate_CustomOnlyContract>(new global::System.Uri("TestDomainServices-NamedUpdates-NamedUpdate_CustomOnly.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.INamedUpdate_CustomOnlyContract>(new global::System.Uri("TestDomainServices-NamedUpdates-NamedUpdate_CustomOnly.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -14542,7 +14542,7 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="serviceUri">The NamedUpdate_CustomOnly service URI.</param>
         public NamedUpdate_CustomOnly(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.INamedUpdate_CustomOnlyContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.INamedUpdate_CustomOnlyContract>(serviceUri))
         {
         }
         
@@ -14550,7 +14550,7 @@ namespace TestDomainServices.NamedUpdates
         /// Initializes a new instance of the <see cref="NamedUpdate_CustomOnly"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public NamedUpdate_CustomOnly(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public NamedUpdate_CustomOnly(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -14559,7 +14559,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Gets the set of <see cref="MockEntity1"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomOnly"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity1> MockEntity1s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity1> MockEntity1s
         {
             get
             {
@@ -14571,7 +14571,7 @@ namespace TestDomainServices.NamedUpdates
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity1"/> entity instances using the 'GetEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity1"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity1> GetEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity1> GetEntitiesQuery()
         {
             this.ValidateMethod("GetEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.NamedUpdates.MockEntity1>("GetEntities", null, false, true);
@@ -14591,7 +14591,7 @@ namespace TestDomainServices.NamedUpdates
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.NamedUpdate_CustomOnlyEntityContainer();
         }
@@ -14609,7 +14609,7 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomOnly/GetEntities", ReplyAction="http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetEntities(global::System.AsyncCallback callback, object asyncState);
@@ -14619,7 +14619,7 @@ namespace TestDomainServices.NamedUpdates
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity1> EndGetEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity1> EndGetEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -14628,24 +14628,24 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomOnly/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomOnly/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomOnly/SubmitChanges", ReplyAction="http://tempuri.org/NamedUpdate_CustomOnly/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class NamedUpdate_CustomOnlyEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class NamedUpdate_CustomOnlyEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public NamedUpdate_CustomOnlyEntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity1>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity1>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
             }
         }
     }
@@ -14653,7 +14653,7 @@ namespace TestDomainServices.NamedUpdates
     /// <summary>
     /// The DomainContext corresponding to the 'NamedUpdate_CustomValidation' DomainService.
     /// </summary>
-    public sealed partial class NamedUpdate_CustomValidation : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class NamedUpdate_CustomValidation : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -14671,7 +14671,7 @@ namespace TestDomainServices.NamedUpdates
         /// Initializes a new instance of the <see cref="NamedUpdate_CustomValidation"/> class.
         /// </summary>
         public NamedUpdate_CustomValidation() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.INamedUpdate_CustomValidationContract>(new global::System.Uri("TestDomainServices-NamedUpdates-NamedUpdate_CustomValidation.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.INamedUpdate_CustomValidationContract>(new global::System.Uri("TestDomainServices-NamedUpdates-NamedUpdate_CustomValidation.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -14680,7 +14680,7 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="serviceUri">The NamedUpdate_CustomValidation service URI.</param>
         public NamedUpdate_CustomValidation(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.INamedUpdate_CustomValidationContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.INamedUpdate_CustomValidationContract>(serviceUri))
         {
         }
         
@@ -14688,7 +14688,7 @@ namespace TestDomainServices.NamedUpdates
         /// Initializes a new instance of the <see cref="NamedUpdate_CustomValidation"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public NamedUpdate_CustomValidation(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public NamedUpdate_CustomValidation(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -14697,7 +14697,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Gets the set of <see cref="MockEntity3"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity3> MockEntity3s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity3> MockEntity3s
         {
             get
             {
@@ -14708,7 +14708,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Gets the set of <see cref="MockEntity4"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity4> MockEntity4s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity4> MockEntity4s
         {
             get
             {
@@ -14719,7 +14719,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Gets the set of <see cref="MockEntity5"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity5> MockEntity5s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity5> MockEntity5s
         {
             get
             {
@@ -14730,7 +14730,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Gets the set of <see cref="MockEntity6"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity6> MockEntity6s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.MockEntity6> MockEntity6s
         {
             get
             {
@@ -14742,7 +14742,7 @@ namespace TestDomainServices.NamedUpdates
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity3"/> entity instances using the 'GetEntities3' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity3"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity3> GetEntities3Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity3> GetEntities3Query()
         {
             this.ValidateMethod("GetEntities3Query", null);
             return base.CreateQuery<global::TestDomainServices.NamedUpdates.MockEntity3>("GetEntities3", null, false, true);
@@ -14752,7 +14752,7 @@ namespace TestDomainServices.NamedUpdates
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity4"/> entity instances using the 'GetEntities4' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity4"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity4> GetEntities4Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity4> GetEntities4Query()
         {
             this.ValidateMethod("GetEntities4Query", null);
             return base.CreateQuery<global::TestDomainServices.NamedUpdates.MockEntity4>("GetEntities4", null, false, true);
@@ -14762,7 +14762,7 @@ namespace TestDomainServices.NamedUpdates
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity5"/> entity instances using the 'GetEntities5' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity5"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity5> GetEntities5Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity5> GetEntities5Query()
         {
             this.ValidateMethod("GetEntities5Query", null);
             return base.CreateQuery<global::TestDomainServices.NamedUpdates.MockEntity5>("GetEntities5", null, false, true);
@@ -14772,7 +14772,7 @@ namespace TestDomainServices.NamedUpdates
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity6"/> entity instances using the 'GetEntities6' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity6"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity6> GetEntities6Query()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.MockEntity6> GetEntities6Query()
         {
             this.ValidateMethod("GetEntities6Query", null);
             return base.CreateQuery<global::TestDomainServices.NamedUpdates.MockEntity6>("GetEntities6", null, false, true);
@@ -14835,7 +14835,7 @@ namespace TestDomainServices.NamedUpdates
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.NamedUpdate_CustomValidationEntityContainer();
         }
@@ -14858,7 +14858,7 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities3DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities3DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities3", ReplyAction="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities3Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetEntities3(global::System.AsyncCallback callback, object asyncState);
@@ -14868,7 +14868,7 @@ namespace TestDomainServices.NamedUpdates
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities3'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities3' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity3> EndGetEntities3(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity3> EndGetEntities3(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntities4' operation.
@@ -14876,7 +14876,7 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities4DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities4DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities4", ReplyAction="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities4Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetEntities4(global::System.AsyncCallback callback, object asyncState);
@@ -14886,7 +14886,7 @@ namespace TestDomainServices.NamedUpdates
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities4'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities4' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity4> EndGetEntities4(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity4> EndGetEntities4(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntities5' operation.
@@ -14894,7 +14894,7 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities5DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities5DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities5", ReplyAction="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities5Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetEntities5(global::System.AsyncCallback callback, object asyncState);
@@ -14904,7 +14904,7 @@ namespace TestDomainServices.NamedUpdates
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities5'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities5' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity5> EndGetEntities5(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity5> EndGetEntities5(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntities6' operation.
@@ -14912,7 +14912,7 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities6DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities6DomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities6", ReplyAction="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities6Response")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetEntities6(global::System.AsyncCallback callback, object asyncState);
@@ -14922,7 +14922,7 @@ namespace TestDomainServices.NamedUpdates
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities6'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities6' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity6> EndGetEntities6(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.MockEntity6> EndGetEntities6(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -14931,27 +14931,27 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/NamedUpdate_CustomValidation/SubmitChangesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/NamedUpdate_CustomValidation/SubmitChanges", ReplyAction="http://tempuri.org/NamedUpdate_CustomValidation/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class NamedUpdate_CustomValidationEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class NamedUpdate_CustomValidationEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public NamedUpdate_CustomValidationEntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity3>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity4>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity5>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity6>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity3>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity4>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity5>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.MockEntity6>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
             }
         }
     }
@@ -14964,7 +14964,7 @@ namespace TestDomainServices.Saleテ
     /// The 'EntityWithSpecialTypeName' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.Sale%E3%83%86")]
-    public sealed partial class EntityWithSpecialTypeName : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class EntityWithSpecialTypeName : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _data;

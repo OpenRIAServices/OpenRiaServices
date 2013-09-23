@@ -1,12 +1,12 @@
 ﻿using System.Security.Principal;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using MockUser = System.ServiceModel.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
-using UserType = System.ServiceModel.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.UserType;
+using MockUser = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
+using UserType = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.UserType;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="WebAuthenticationService"/> members.

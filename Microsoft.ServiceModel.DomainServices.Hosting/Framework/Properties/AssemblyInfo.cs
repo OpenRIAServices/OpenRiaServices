@@ -7,8 +7,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.Hosting.EndPoints")]
-[assembly: AssemblyDescription("Microsoft.ServiceModel.DomainServices.Hosting.EndPoints")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Hosting.EndPoints")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Hosting.EndPoints")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -50,4 +50,4 @@ using System.Security;
 #endif
 
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Hosting.Local.Test")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenRiaServices.DomainServices.Hosting.Local.Test")]

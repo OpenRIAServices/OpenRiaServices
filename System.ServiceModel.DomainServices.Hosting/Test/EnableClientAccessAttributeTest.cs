@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using System.ServiceModel.DomainServices.Server.ApplicationServices;
+using OpenRiaServices.DomainServices.Server.ApplicationServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="EnableClientAccessAttribute"/> members.

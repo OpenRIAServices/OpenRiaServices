@@ -23,7 +23,7 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("4453f316-ed5d-466b-a79b-622a1a9f2461")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Client.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test")]
 
 // Version information for an assembly consists of the following four values:
 //

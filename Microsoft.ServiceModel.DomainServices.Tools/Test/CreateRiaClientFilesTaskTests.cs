@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for custom build task to generate client proxies
@@ -46,7 +46,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF0")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF0")]
         [Description("CreateRiaClientFilesTask populates its internal computed properties correctly")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Internal_Computed_Task_Properties()
@@ -77,7 +77,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF1")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF1")]
         [Description("CreateRiaClientFilesTask should issue warning if no server assembly was specified")]
         [TestMethod]
         public void CreateRiaClientFiles_Warn_No_Assembly_Specified()
@@ -106,7 +106,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF2")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF2")]
         [Description("CreateRiaClientFilesTask should issue warning if server assembly does not exist")]
         [TestMethod]
         public void CreateRiaClientFiles_Warn_No_Assembly_Exists()
@@ -185,7 +185,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF3")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF3")]
         [Description("CreateRiaClientFilesTask issues no warning if ask to write null content to non-existant file")]
         [TestMethod]
         public void CreateRiaClientFiles_No_Warning_Write_Empty_Content()
@@ -214,7 +214,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF12")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF12")]
         [Description("CreateRiaClientFilesTask logs error if the RIA Link points to non-existent file")]
         [TestMethod]
         public void CreateRiaClientFiles_Bad_RIA_Link()
@@ -244,7 +244,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
 
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF4")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF4")]
         [Description("CreateRiaClientFilesTask issues warning if no PDB is found")]
         [TestMethod]
         public void CreateRiaClientFiles_Missing_Pdb_Warns()
@@ -284,7 +284,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF5")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF5")]
         [Description("CreateRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Generated_Files()
@@ -414,7 +414,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
         
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF11")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF11")]
         [Description("CreateRiaClientFilesTask can access web.config using ASP.NET AppDomain")]
         [TestMethod]
         public void CreateRiaClientFiles_ASPNET_AppDomain()
@@ -479,7 +479,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF7")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF7")]
         [Description("CreateRiaClientFilesTask computes the correct set of shared files")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Shared_Files()
@@ -539,7 +539,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
 
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF8")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF8")]
         [Description("CreateRiaClientFilesTask does not regen files on second code-gen")]
         [TestMethod]
         public void CreateRiaClientFiles_Second_CodeGen_Does_Nothing()
@@ -630,7 +630,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF8")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF8")]
         [Description("CreateRiaClientFilesTask generates breadcrumb files with relative paths, and does nothing on second build")]
         [TestMethod]
         public void CreateRiaClientFiles_CopyClientProject()
@@ -735,7 +735,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF9")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF9")]
         [Description("CreateRiaClientFilesTask regenerates code if list of references changes")]
         [TestMethod]
         public void CreateRiaClientFiles_Missing_ReferenceList_Regens()
@@ -818,7 +818,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CRCF10")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF10")]
         [Description("CreateRiaClientFilesTask purges orphan files and folders on subsequent builds")]
         [TestMethod]
         public void CreateRiaClientFiles_Deletes_Orphan_Files()

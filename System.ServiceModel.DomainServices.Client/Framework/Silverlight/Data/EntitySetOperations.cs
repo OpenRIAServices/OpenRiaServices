@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Client
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Enumeration of the types of operations permissable

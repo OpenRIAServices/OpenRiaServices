@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.WindowsAzure.Test")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.WindowsAzure.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
-[assembly: AssemblyProduct("Microsoft.ServiceModel.DomainServices.WindowsAzure.Test")]
+[assembly: AssemblyProduct("OpenRiaServices.DomainServices.WindowsAzure.Test")]
 [assembly: AssemblyCopyright("© Outercurve Foundation.  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

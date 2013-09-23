@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
 using System.Reflection;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
-using Microsoft.ServiceModel.DomainServices.Tools.SourceLocation;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Tools.SourceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for CodeMemberKey

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.ServiceModel.DomainServices.Client;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client.Test;
 using System.Windows.Controls.Test;
 using Cities;
 using DataTests.Northwind.LTS;

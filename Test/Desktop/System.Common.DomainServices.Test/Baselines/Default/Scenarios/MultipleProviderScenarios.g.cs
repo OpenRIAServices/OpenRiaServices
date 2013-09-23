@@ -16,9 +16,9 @@ namespace DataTests.Northwind.LTS
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -2509,9 +2509,9 @@ namespace NorthwindModel
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -4990,9 +4990,9 @@ namespace TestDomainServices.EF
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
     using NorthwindModel;
     
@@ -5447,9 +5447,9 @@ namespace TestDomainServices.LTS
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
     using DataTests.Northwind.LTS;
     

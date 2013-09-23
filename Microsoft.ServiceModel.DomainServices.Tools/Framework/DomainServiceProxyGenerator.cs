@@ -6,13 +6,14 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using System.ServiceModel.Web;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Proxy generator for a DomainService

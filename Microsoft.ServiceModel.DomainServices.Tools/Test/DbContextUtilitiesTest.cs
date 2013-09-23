@@ -4,7 +4,7 @@ using System.Reflection;
 using CodeFirstModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     [TestClass]
     public class DbContextUtilitiesTest

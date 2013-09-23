@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Linq;
 
-namespace Microsoft.ServiceModel.DomainServices.LinqToSql
+namespace OpenRiaServices.DomainServices.LinqToSql
 {
     /// <summary>
     /// DataContext extension methods useful to LinqToSqlDomainService authors

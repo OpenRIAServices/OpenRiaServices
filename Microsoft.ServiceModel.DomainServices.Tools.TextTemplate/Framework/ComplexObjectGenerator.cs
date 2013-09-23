@@ -7,14 +7,14 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     using System;
     
     
-    #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\ComplexObjectGenerator.tt"
+    #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\ComplexObjectGenerator.tt"
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "10.0.0.0")]
-    public partial class ComplexObjectGenerator : Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.DataContractProxyGenerator
+    public partial class ComplexObjectGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.DataContractProxyGenerator
     {
         public override string TransformText()
         {

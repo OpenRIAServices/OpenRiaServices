@@ -20,7 +20,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
     ''' The DomainContext corresponding to the 'BaseTypeConflicts' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class BaseTypeConflicts
-        Inherits Global.System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -38,7 +38,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' Initializes a new instance of the <see cref="BaseTypeConflicts"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.IBaseTypeConflictsContract)(New Global.System.Uri("TestDomainServices-TypeNameConflictResolution-BaseTypeConflicts.svc", Global.System.UriKind.Relative)))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.IBaseTypeConflictsContract)(New Global.System.Uri("TestDomainServices-TypeNameConflictResolution-BaseTypeConflicts.svc", Global.System.UriKind.Relative)))
         End Sub
         
         ''' <summary>
@@ -46,14 +46,14 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' </summary>
         ''' <param name="serviceUri">The BaseTypeConflicts service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.IBaseTypeConflictsContract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.IBaseTypeConflictsContract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="BaseTypeConflicts"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -61,7 +61,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' <summary>
         ''' Gets the set of <see cref="DomainContext"/> entity instances that have been loaded into this <see cref="BaseTypeConflicts"/> instance.
         ''' </summary>
-        Public ReadOnly Property DomainContexts() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
+        Public ReadOnly Property DomainContexts() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
             End Get
@@ -70,7 +70,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' <summary>
         ''' Gets the set of <see cref="Entity"/> entity instances that have been loaded into this <see cref="BaseTypeConflicts"/> instance.
         ''' </summary>
-        Public ReadOnly Property Entities() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
+        Public ReadOnly Property Entities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
             End Get
@@ -80,7 +80,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' Gets an EntityQuery instance that can be used to load <see cref="DomainContext"/> entity instances using the 'GetDataContexts' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="DomainContext"/> entity instances.</returns>
-        Public Function GetDataContextsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
+        Public Function GetDataContextsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
             Me.ValidateMethod("GetDataContextsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)("GetDataContexts", Nothing, false, true)
         End Function
@@ -89,7 +89,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' Gets an EntityQuery instance that can be used to load <see cref="Entity"/> entity instances using the 'GetEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Entity"/> entity instances.</returns>
-        Public Function GetEntitiesQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
+        Public Function GetEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
             Me.ValidateMethod("GetEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)("GetEntities", Nothing, false, true)
         End Function
@@ -98,7 +98,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.BaseTypeConflictsEntityContainer()
         End Function
         
@@ -114,7 +114,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/BaseTypeConflicts/GetDataContextsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/BaseTypeConflicts/GetDataContextsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/BaseTypeConflicts/GetDataContexts", ReplyAction:="http://tempuri.org/BaseTypeConflicts/GetDataContextsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetDataContexts(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -124,7 +124,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetDataContexts'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetDataContexts' operation.</returns>
-            Function EndGetDataContexts(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
+            Function EndGetDataContexts(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntities' operation.
@@ -132,7 +132,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/BaseTypeConflicts/GetEntitiesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/BaseTypeConflicts/GetEntitiesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/BaseTypeConflicts/GetEntities", ReplyAction:="http://tempuri.org/BaseTypeConflicts/GetEntitiesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -142,16 +142,16 @@ Namespace TestDomainServices.TypeNameConflictResolution
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
+            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)
         End Interface
         
         Friend NotInheritable Class BaseTypeConflictsEntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.DomainContext)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.Entity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -162,7 +162,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion")>  _
     Partial Public NotInheritable Class DomainContext
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _dataContextID As Integer
         
@@ -228,7 +228,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion")>  _
     Partial Public NotInheritable Class Entity
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _name As String
         
@@ -294,7 +294,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     ''' The DomainContext corresponding to the 'DomainServiceScenario1' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class DomainServiceScenario1
-        Inherits Global.System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -312,7 +312,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Initializes a new instance of the <see cref="DomainServiceScenario1"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.IDomainServiceScenario1Contract)(New Global.System.Uri("TestDomainServices-TypeNameConflictResolution-ExternalConflicts-DomainServiceScen"& _ 
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.IDomainServiceScenario1Contract)(New Global.System.Uri("TestDomainServices-TypeNameConflictResolution-ExternalConflicts-DomainServiceScen"& _ 
                             "ario1.svc", Global.System.UriKind.Relative)))
         End Sub
         
@@ -321,14 +321,14 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' </summary>
         ''' <param name="serviceUri">The DomainServiceScenario1 service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.IDomainServiceScenario1Contract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.IDomainServiceScenario1Contract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="DomainServiceScenario1"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -336,7 +336,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity1"/> entity instances that have been loaded into this <see cref="DomainServiceScenario1"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity1s() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
+        Public ReadOnly Property MockEntity1s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
             End Get
@@ -345,7 +345,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity2"/> entity instances that have been loaded into this <see cref="DomainServiceScenario1"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity2s() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
+        Public ReadOnly Property MockEntity2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
             End Get
@@ -355,7 +355,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity1"/> entity instances using the 'GetTEntity1' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity1"/> entity instances.</returns>
-        Public Function GetTEntity1Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
+        Public Function GetTEntity1Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
             Me.ValidateMethod("GetTEntity1Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)("GetTEntity1", Nothing, false, true)
         End Function
@@ -364,7 +364,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity2"/> entity instances using the 'GetTEntity2' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity2"/> entity instances.</returns>
-        Public Function GetTEntity2Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
+        Public Function GetTEntity2Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
             Me.ValidateMethod("GetTEntity2Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)("GetTEntity2", Nothing, false, true)
         End Function
@@ -373,7 +373,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.DomainServiceScenario1EntityContainer()
         End Function
         
@@ -389,7 +389,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario1/GetTEntity1DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario1/GetTEntity1DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/DomainServiceScenario1/GetTEntity1", ReplyAction:="http://tempuri.org/DomainServiceScenario1/GetTEntity1Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetTEntity1(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -399,7 +399,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTEntity1'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTEntity1' operation.</returns>
-            Function EndGetTEntity1(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
+            Function EndGetTEntity1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTEntity2' operation.
@@ -407,7 +407,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario1/GetTEntity2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario1/GetTEntity2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/DomainServiceScenario1/GetTEntity2", ReplyAction:="http://tempuri.org/DomainServiceScenario1/GetTEntity2Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetTEntity2(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -417,16 +417,16 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTEntity2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTEntity2' operation.</returns>
-            Function EndGetTEntity2(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
+            Function EndGetTEntity2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)
         End Interface
         
         Friend NotInheritable Class DomainServiceScenario1EntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -435,7 +435,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     ''' The DomainContext corresponding to the 'DomainServiceScenario2' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class DomainServiceScenario2
-        Inherits Global.System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -453,7 +453,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Initializes a new instance of the <see cref="DomainServiceScenario2"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.IDomainServiceScenario2Contract)(New Global.System.Uri("TestDomainServices-TypeNameConflictResolution-ExternalConflicts-DomainServiceScen"& _ 
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.IDomainServiceScenario2Contract)(New Global.System.Uri("TestDomainServices-TypeNameConflictResolution-ExternalConflicts-DomainServiceScen"& _ 
                             "ario2.svc", Global.System.UriKind.Relative)))
         End Sub
         
@@ -462,14 +462,14 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' </summary>
         ''' <param name="serviceUri">The DomainServiceScenario2 service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.IDomainServiceScenario2Contract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.IDomainServiceScenario2Contract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="DomainServiceScenario2"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -477,7 +477,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity1"/> entity instances that have been loaded into this <see cref="DomainServiceScenario2"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity1s() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
+        Public ReadOnly Property MockEntity1s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
             End Get
@@ -486,7 +486,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity2"/> entity instances that have been loaded into this <see cref="DomainServiceScenario2"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity2s() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
+        Public ReadOnly Property MockEntity2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
             End Get
@@ -496,7 +496,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity1"/> entity instances using the 'GetTEntity1' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity1"/> entity instances.</returns>
-        Public Function GetTEntity1Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
+        Public Function GetTEntity1Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
             Me.ValidateMethod("GetTEntity1Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)("GetTEntity1", Nothing, false, true)
         End Function
@@ -505,7 +505,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity2"/> entity instances using the 'GetTEntity2' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity2"/> entity instances.</returns>
-        Public Function GetTEntity2Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
+        Public Function GetTEntity2Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
             Me.ValidateMethod("GetTEntity2Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)("GetTEntity2", Nothing, false, true)
         End Function
@@ -514,7 +514,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.DomainServiceScenario2EntityContainer()
         End Function
         
@@ -530,7 +530,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario2/GetTEntity1DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario2/GetTEntity1DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/DomainServiceScenario2/GetTEntity1", ReplyAction:="http://tempuri.org/DomainServiceScenario2/GetTEntity1Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetTEntity1(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -540,7 +540,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTEntity1'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTEntity1' operation.</returns>
-            Function EndGetTEntity1(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
+            Function EndGetTEntity1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTEntity2' operation.
@@ -548,7 +548,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario2/GetTEntity2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/DomainServiceScenario2/GetTEntity2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/DomainServiceScenario2/GetTEntity2", ReplyAction:="http://tempuri.org/DomainServiceScenario2/GetTEntity2Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetTEntity2(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -558,16 +558,16 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTEntity2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTEntity2' operation.</returns>
-            Function EndGetTEntity2(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
+            Function EndGetTEntity2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)
         End Interface
         
         Friend NotInheritable Class DomainServiceScenario2EntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -581,7 +581,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace1")>  _
     Partial Public NotInheritable Class MockEntity1
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         
@@ -647,7 +647,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace1")>  _
     Partial Public NotInheritable Class MockEntity2
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         
@@ -716,7 +716,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace2")>  _
     Partial Public NotInheritable Class MockEntity1
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         
@@ -782,7 +782,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace2")>  _
     Partial Public NotInheritable Class MockEntity2
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         

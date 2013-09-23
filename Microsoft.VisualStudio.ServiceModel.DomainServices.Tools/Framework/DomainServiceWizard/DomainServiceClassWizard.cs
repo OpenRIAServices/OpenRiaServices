@@ -13,7 +13,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Interop;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.ServiceModel.DomainServices.Tools;
+using OpenRiaServices.DomainServices.Tools;
 using Microsoft.VisualStudio.ManagedInterfaces9;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Design;

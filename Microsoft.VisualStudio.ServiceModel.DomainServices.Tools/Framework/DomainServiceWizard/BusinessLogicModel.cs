@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web.Hosting;
-using Microsoft.ServiceModel.DomainServices.Tools;
+using OpenRiaServices.DomainServices.Tools;
 
 namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
 {

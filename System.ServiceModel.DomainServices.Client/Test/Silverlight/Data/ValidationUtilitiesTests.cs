@@ -2,11 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Client;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Hosting.Test
+namespace OpenRiaServices.DomainServices.Hosting.Test
 {
     [TestClass]
     public class ValidationUtilitiesTests
@@ -96,12 +96,12 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, null, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
 
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, null, new List<ValidationResult>());
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
         }
 
         [TestMethod]
@@ -191,13 +191,13 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.Double', 'System.Double')' could not be found. Parameter count: 2.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.Double', 'System.Double')' could not be found. Parameter count: 2.");
 
             // Validate entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.ValidateMethodCall("MethodWithParameters", context, parameters);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.Double', 'System.Double')' could not be found. Parameter count: 2.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.Double', 'System.Double')' could not be found. Parameter count: 2.");
 
         }
 
@@ -277,13 +277,13 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String')' could not be found. Parameter count: 1.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String')' could not be found. Parameter count: 1.");
 
             // Validate entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.ValidateMethodCall("MethodWithParameters", context, parameters);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String')' could not be found. Parameter count: 1.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String')' could not be found. Parameter count: 1.");
         }
 
         [TestMethod]
@@ -299,13 +299,13 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', 'System.Double', 'System.Int32')' could not be found. Parameter count: 3.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', 'System.Double', 'System.Int32')' could not be found. Parameter count: 3.");
 
             // Validate entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.ValidateMethodCall("MethodWithParameters", context, parameters);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', 'System.Double', 'System.Int32')' could not be found. Parameter count: 3.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', 'System.Double', 'System.Int32')' could not be found. Parameter count: 3.");
         }
 
         [TestMethod]
@@ -321,13 +321,13 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', null)' could not be found. Parameter count: 2.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', null)' could not be found. Parameter count: 2.");
 
             // Validate entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.ValidateMethodCall("MethodWithParameters", context, parameters);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', null)' could not be found. Parameter count: 2.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters('System.String', null)' could not be found. Parameter count: 2.");
         }
 
         [TestMethod]
@@ -343,13 +343,13 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
 
             // Validate entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.ValidateMethodCall("MethodWithParameters", context, parameters);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
         }
 
         [TestMethod]
@@ -365,13 +365,13 @@ namespace System.ServiceModel.DomainServices.Hosting.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, null);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
 
             // Validate entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()
             {
                 ValidationUtilities.ValidateMethodCall("MethodWithParameters", context, parameters);
-            }, "Method 'System.ServiceModel.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
+            }, "Method 'OpenRiaServices.DomainServices.Hosting.Test.ValidationUtilitiesTests+ValTestClass.MethodWithParameters' accepting zero parameters could not be found.");
         }
 
         #endregion Method Parameters

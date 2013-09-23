@@ -530,7 +530,7 @@ namespace System.Linq.Dynamic
                     (methodName.Equals("Truncate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) }));
                 }
 
-                if (System.ServiceModel.DomainServices.TypeUtility.IsNullableType(method.DeclaringType))
+                if (OpenRiaServices.DomainServices.TypeUtility.IsNullableType(method.DeclaringType))
                 {
                     return
                     (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);

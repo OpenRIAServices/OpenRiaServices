@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     /// <summary>
     /// Represents a module which takes care of registering the <see cref="DomainServiceVirtualPathProvider"/>.

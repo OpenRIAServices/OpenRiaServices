@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     [TestClass]
     public class AuthorizationResultTests

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Client;
 using System.Windows.Data;
 
 namespace System.Windows.Controls

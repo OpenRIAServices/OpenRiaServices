@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
+using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
+
 #if SILVERLIGHT
 using System.Windows;
 #endif
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Default <see cref="DomainClient"/> implementation using WCF
@@ -93,7 +96,7 @@ namespace System.ServiceModel.DomainServices.Client
             if (!serviceUri.IsAbsoluteUri)
             {
                 // Relative URIs currently only supported on Silverlight
-                throw new ArgumentException(System.ServiceModel.DomainServices.Client.Resource.DomainContext_InvalidServiceUri, "serviceUri");
+                throw new ArgumentException(OpenRiaServices.DomainServices.Client.Resource.DomainContext_InvalidServiceUri, "serviceUri");
             }
 #endif
 
@@ -262,7 +265,7 @@ namespace System.ServiceModel.DomainServices.Client
                 factory = new ChannelFactory<TContract>(binding, new EndpointAddress(this._serviceUri));
                 factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
                 {
-                    DefaultBodyStyle = Web.WebMessageBodyStyle.Wrapped
+                    DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
                 });
 
 #if DEBUG
@@ -670,7 +673,7 @@ namespace System.ServiceModel.DomainServices.Client
             MethodInfo m = typeof(TContract).GetMethod("Begin" + operationName);
             if (m == null)
             {
-                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, System.ServiceModel.DomainServices.Client.Resource.WebDomainClient_OperationDoesNotExist, operationName));
+                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_OperationDoesNotExist, operationName));
             }
             return m;
         }
@@ -680,7 +683,7 @@ namespace System.ServiceModel.DomainServices.Client
             MethodInfo m = typeof(TContract).GetMethod("End" + operationName);
             if (m == null)
             {
-                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, System.ServiceModel.DomainServices.Client.Resource.WebDomainClient_OperationDoesNotExist, operationName));
+                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_OperationDoesNotExist, operationName));
             }
             return m;
         }
@@ -732,7 +735,7 @@ namespace System.ServiceModel.DomainServices.Client
                 // Only proceed if we can determine a root uri
                 if ((current == null) || (current.Host == null) || (current.Host.Source == null))
                 {
-                    throw new InvalidOperationException(System.ServiceModel.DomainServices.Client.Resource.DomainClient_UnableToDetermineHostUri);
+                    throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_UnableToDetermineHostUri);
                 }
 
                 string sourceUri = current.Host.Source.AbsoluteUri;

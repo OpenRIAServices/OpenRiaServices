@@ -1,7 +1,7 @@
 ﻿using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices.UnitTests
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 {
     /// <summary>
     /// Tests <see cref="LoginParameters"/> members.

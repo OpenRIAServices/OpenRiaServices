@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Build.BuildEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ConsoleLogger = System.ServiceModel.DomainServices.Server.Test.Utilities.ConsoleLogger;
+using ConsoleLogger = OpenRiaServices.DomainServices.Server.Test.Utilities.ConsoleLogger;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for custom build task to generate client proxies
@@ -306,7 +306,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Tests ProjectSourceFileCache loads files for project")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SSFC")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SSFC")]
         public void ProjectSourceFileCache_Loads_Real_Project()
         {
             string projectPath = null;

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Objects;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.EntityFramework
+namespace OpenRiaServices.DomainServices.EntityFramework
 {
     /// <summary>
     /// Base class for DomainServices operating on LINQ To Entities data models

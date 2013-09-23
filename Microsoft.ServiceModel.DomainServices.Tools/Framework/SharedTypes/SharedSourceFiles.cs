@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
+using OpenRiaServices.DomainServices;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 {
     /// <summary>
     /// Internal class to maintain a list of known source files

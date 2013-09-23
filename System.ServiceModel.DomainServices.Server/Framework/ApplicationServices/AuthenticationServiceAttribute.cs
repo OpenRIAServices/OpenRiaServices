@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// Attribute that marks a <see cref="DomainService"/> as an authentication service.

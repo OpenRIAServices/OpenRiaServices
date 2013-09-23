@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Client.Test;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
-using Microsoft.ServiceModel.DomainServices.Tools.SourceLocation;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Tools.SourceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for SharedFiles service
@@ -19,7 +19,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SFT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SFT")]
         [Description("SharedSourceFiles locates shared types between projects")]
         [TestMethod]
         public void SharedSourceFiles_Types()
@@ -58,7 +58,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SFT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SFT")]
         [Description("SharedSourceFiles locates shared methods between projects")]
         [TestMethod]
         public void SharedSourceFiles_Methods()

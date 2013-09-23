@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Contract for codegen attribute builders.

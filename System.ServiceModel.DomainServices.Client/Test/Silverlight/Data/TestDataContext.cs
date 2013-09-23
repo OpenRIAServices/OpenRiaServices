@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ServiceModel;
+using OpenRiaServices;
 using DataTests.AdventureWorks.LTS;
 using System.ServiceModel.Web;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     /// <summary>
     /// Test context that can be used to perform load operations directly for testing purposes

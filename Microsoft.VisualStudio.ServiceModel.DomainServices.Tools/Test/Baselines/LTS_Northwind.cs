@@ -7,10 +7,10 @@ namespace BizLogic.Test
     using System.ComponentModel.DataAnnotations;
     using System.Data.Linq;
     using System.Linq;
-    using System.ServiceModel.DomainServices.Hosting;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Server;
     using DataTests.Northwind.LTS;
-    using Microsoft.ServiceModel.DomainServices.LinqToSql;
+    using OpenRiaServices.DomainServices.LinqToSql;
     
     
     // Implements application logic using the NorthwindDataContext context.

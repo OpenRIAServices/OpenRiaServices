@@ -3,7 +3,7 @@ namespace CodeFirstModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
     
     public partial class Order_Detail
     {

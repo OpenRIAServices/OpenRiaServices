@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     using TypeRef.Test1;
     using TypeRef.Test2;
@@ -21,7 +21,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for C#, short type names")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_CS")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_CS")]
         public void TypeReference_Common_Types_CS()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ false, "CG_TR_CS");
@@ -29,7 +29,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for C#, full type names")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_CS_Full")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_CS_Full")]
         public void TypeReference_Common_Types_CS_FullTypeNames()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ true, "CG_TR_CS_Full");
@@ -37,7 +37,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for VB, short type names")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_VB")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_VB")]
         public void TypeReference_Common_Types_VB()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ false, "CG_TR_VB");
@@ -45,7 +45,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for VB, full type names")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_VB_Full")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_VB_Full")]
         public void TypeReference_Common_Types_VB_FullTypeNames()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ true, "CG_TR_VB_Full");

@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Tasks;
 using Microsoft.Build.Utilities;
-using Microsoft.ServiceModel.DomainServices.Tools.Test;
+using OpenRiaServices.DomainServices.Tools.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 

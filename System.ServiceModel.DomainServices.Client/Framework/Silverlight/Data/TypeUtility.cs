@@ -12,12 +12,13 @@ using System.Runtime.Serialization;
 #endif
 
 #if SERVERFX
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
+
 #else
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 #endif
 
-namespace System.ServiceModel.DomainServices
+namespace OpenRiaServices.DomainServices
 {
     internal static class TypeUtility
     {
@@ -27,7 +28,7 @@ namespace System.ServiceModel.DomainServices
         private static string[] systemAssemblyPublicKeyTokens =
         {
             "b77a5c561934e089", // mscorlib, System, System.ComponentModel.Composition, and System.Core
-            "31bf3856ad364e35", // System.ServiceModel.DomainServices.*, System.ComponentModel.DataAnnotations
+            "31bf3856ad364e35", // OpenRiaServices.DomainServices.*, System.ComponentModel.DataAnnotations
             "b03f5f7f11d50a3a", // Microsoft.VisualBasic, Microsoft.CSharp, System.Configuration
             "7cec85d7bea7798e"  // Silverlight system assemblies
         };

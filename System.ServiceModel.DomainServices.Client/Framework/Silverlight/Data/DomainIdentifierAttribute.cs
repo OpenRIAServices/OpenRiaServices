@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices
+﻿using System;
+
+namespace OpenRiaServices.DomainServices
 {
 #if SILVERLIGHT
      /// <summary>

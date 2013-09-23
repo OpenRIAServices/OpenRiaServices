@@ -16,7 +16,7 @@ namespace TestDomainServices
     /// The 'InheritanceB' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class InheritanceB : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class InheritanceB : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -27,11 +27,11 @@ namespace TestDomainServices
         
         private int _inheritanceD_ID;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1> _t1;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1> _t1;
         
         private int _t1_id;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> _t1s;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> _t1s;
         
         #region Extensibility Method Definitions
 
@@ -171,7 +171,7 @@ namespace TestDomainServices
             {
                 if ((this._t1 == null))
                 {
-                    this._t1 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1>(this, "T1", this.FilterT1);
+                    this._t1 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1>(this, "T1", this.FilterT1);
                 }
                 return this._t1.Entity;
             }
@@ -224,13 +224,13 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="InheritanceT1"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("InheritanceT1_InheritanceBase", "ID", "InheritanceBase_ID")]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> T1s
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> T1s
         {
             get
             {
                 if ((this._t1s == null))
                 {
-                    this._t1s = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1>(this, "T1s", this.FilterT1s);
+                    this._t1s = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1>(this, "T1s", this.FilterT1s);
                 }
                 return this._t1s;
             }
@@ -260,7 +260,7 @@ namespace TestDomainServices
     /// The 'InheritanceC' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class InheritanceC : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class InheritanceC : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _id;
@@ -271,11 +271,11 @@ namespace TestDomainServices
         
         private int _inheritanceD_ID;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1> _t1;
+        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1> _t1;
         
         private int _t1_id;
         
-        private global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> _t1s;
+        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> _t1s;
         
         #region Extensibility Method Definitions
 
@@ -415,7 +415,7 @@ namespace TestDomainServices
             {
                 if ((this._t1 == null))
                 {
-                    this._t1 = new global::System.ServiceModel.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1>(this, "T1", this.FilterT1);
+                    this._t1 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.InheritanceT1>(this, "T1", this.FilterT1);
                 }
                 return this._t1.Entity;
             }
@@ -468,13 +468,13 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="InheritanceT1"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("InheritanceT1_InheritanceBase", "ID", "InheritanceBase_ID")]
-        public global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> T1s
+        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> T1s
         {
             get
             {
                 if ((this._t1s == null))
                 {
-                    this._t1s = new global::System.ServiceModel.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1>(this, "T1s", this.FilterT1s);
+                    this._t1s = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1>(this, "T1s", this.FilterT1s);
                 }
                 return this._t1s;
             }
@@ -504,7 +504,7 @@ namespace TestDomainServices
     /// The 'InheritanceT1' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class InheritanceT1 : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class InheritanceT1 : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _description;
@@ -626,7 +626,7 @@ namespace TestDomainServices
     /// <summary>
     /// The DomainContext corresponding to the 'TestProvider_Inheritance1' DomainService.
     /// </summary>
-    public sealed partial class TestProvider_Inheritance1 : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class TestProvider_Inheritance1 : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -644,7 +644,7 @@ namespace TestDomainServices
         /// Initializes a new instance of the <see cref="TestProvider_Inheritance1"/> class.
         /// </summary>
         public TestProvider_Inheritance1() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Inheritance1.ITestProvider_Inheritance1Contract>(new global::System.Uri("TestDomainServices-TestProvider_Inheritance1.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Inheritance1.ITestProvider_Inheritance1Contract>(new global::System.Uri("TestDomainServices-TestProvider_Inheritance1.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -653,7 +653,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="serviceUri">The TestProvider_Inheritance1 service URI.</param>
         public TestProvider_Inheritance1(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Inheritance1.ITestProvider_Inheritance1Contract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::TestDomainServices.TestProvider_Inheritance1.ITestProvider_Inheritance1Contract>(serviceUri))
         {
         }
         
@@ -661,7 +661,7 @@ namespace TestDomainServices
         /// Initializes a new instance of the <see cref="TestProvider_Inheritance1"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public TestProvider_Inheritance1(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public TestProvider_Inheritance1(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -670,7 +670,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="InheritanceB"/> entity instances that have been loaded into this <see cref="TestProvider_Inheritance1"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.InheritanceB> InheritanceBs
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.InheritanceB> InheritanceBs
         {
             get
             {
@@ -681,7 +681,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="InheritanceC"/> entity instances that have been loaded into this <see cref="TestProvider_Inheritance1"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.InheritanceC> InheritanceCs
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.InheritanceC> InheritanceCs
         {
             get
             {
@@ -692,7 +692,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="InheritanceT1"/> entity instances that have been loaded into this <see cref="TestProvider_Inheritance1"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::TestDomainServices.InheritanceT1> InheritanceT1s
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.InheritanceT1> InheritanceT1s
         {
             get
             {
@@ -704,7 +704,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="InheritanceB"/> entity instances using the 'GetBs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="InheritanceB"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.InheritanceB> GetBsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.InheritanceB> GetBsQuery()
         {
             this.ValidateMethod("GetBsQuery", null);
             return base.CreateQuery<global::TestDomainServices.InheritanceB>("GetBs", null, false, true);
@@ -714,7 +714,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="InheritanceC"/> entity instances using the 'GetCs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="InheritanceC"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.InheritanceC> GetCsQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.InheritanceC> GetCsQuery()
         {
             this.ValidateMethod("GetCsQuery", null);
             return base.CreateQuery<global::TestDomainServices.InheritanceC>("GetCs", null, false, true);
@@ -724,7 +724,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="InheritanceT1"/> entity instances using the 'GetInheritanceT1s' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="InheritanceT1"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::TestDomainServices.InheritanceT1> GetInheritanceT1sQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.InheritanceT1> GetInheritanceT1sQuery()
         {
             this.ValidateMethod("GetInheritanceT1sQuery", null);
             return base.CreateQuery<global::TestDomainServices.InheritanceT1>("GetInheritanceT1s", null, false, true);
@@ -734,7 +734,7 @@ namespace TestDomainServices
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.TestProvider_Inheritance1.TestProvider_Inheritance1EntityContainer();
         }
@@ -752,7 +752,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Inheritance1/GetBsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Inheritance1/GetBsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Inheritance1/GetBs", ReplyAction="http://tempuri.org/TestProvider_Inheritance1/GetBsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetBs(global::System.AsyncCallback callback, object asyncState);
@@ -762,7 +762,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetBs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetBs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.InheritanceB> EndGetBs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.InheritanceB> EndGetBs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCs' operation.
@@ -770,7 +770,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Inheritance1/GetCsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Inheritance1/GetCsDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Inheritance1/GetCs", ReplyAction="http://tempuri.org/TestProvider_Inheritance1/GetCsResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetCs(global::System.AsyncCallback callback, object asyncState);
@@ -780,7 +780,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCs' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.InheritanceC> EndGetCs(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.InheritanceC> EndGetCs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetInheritanceT1s' operation.
@@ -788,7 +788,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Inheritance1/GetInheritanceT1sDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/TestProvider_Inheritance1/GetInheritanceT1sDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Inheritance1/GetInheritanceT1s", ReplyAction="http://tempuri.org/TestProvider_Inheritance1/GetInheritanceT1sResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetInheritanceT1s(global::System.AsyncCallback callback, object asyncState);
@@ -798,17 +798,17 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetInheritanceT1s'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetInheritanceT1s' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::TestDomainServices.InheritanceT1> EndGetInheritanceT1s(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.InheritanceT1> EndGetInheritanceT1s(global::System.IAsyncResult result);
         }
         
-        internal sealed class TestProvider_Inheritance1EntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class TestProvider_Inheritance1EntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public TestProvider_Inheritance1EntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.InheritanceB>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.InheritanceC>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.InheritanceT1>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.InheritanceB>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.InheritanceC>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.InheritanceT1>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
             }
         }
     }

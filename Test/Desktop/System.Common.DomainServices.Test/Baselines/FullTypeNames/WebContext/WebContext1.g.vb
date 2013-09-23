@@ -23,7 +23,7 @@ Option Explicit On
 ''' for consumption from code and xaml.
 ''' </remarks>
 Partial Public NotInheritable Class WebContext
-    Inherits Global.System.ServiceModel.DomainServices.Client.ApplicationServices.WebContextBase
+    Inherits Global.OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase
     
     #Region "Extensibility Method Definitions"
 
@@ -54,7 +54,7 @@ Partial Public NotInheritable Class WebContext
     ''' <seealso cref="System.Windows.Application.ApplicationLifetimeObjects"/>
     Public Shadows Shared ReadOnly Property Current() As Global.RootNamespace.WebContext
         Get
-            Return CType(Global.System.ServiceModel.DomainServices.Client.ApplicationServices.WebContextBase.Current,Global.RootNamespace.WebContext)
+            Return CType(Global.OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Current,Global.RootNamespace.WebContext)
         End Get
     End Property
     
@@ -74,7 +74,7 @@ Namespace TestNamespace
     ''' The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class AuthenticationService1
-        Inherits Global.System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+        Inherits Global.OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
         
         #Region "Extensibility Method Definitions"
 
@@ -92,7 +92,7 @@ Namespace TestNamespace
         ''' Initializes a new instance of the <see cref="AuthenticationService1"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.RootNamespace.TestNamespace.AuthenticationService1.IAuthenticationService1Contract)(New Global.System.Uri("RootNamespace-TestNamespace-AuthenticationService1.svc", Global.System.UriKind.Relative)))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.RootNamespace.TestNamespace.AuthenticationService1.IAuthenticationService1Contract)(New Global.System.Uri("RootNamespace-TestNamespace-AuthenticationService1.svc", Global.System.UriKind.Relative)))
         End Sub
         
         ''' <summary>
@@ -100,14 +100,14 @@ Namespace TestNamespace
         ''' </summary>
         ''' <param name="serviceUri">The AuthenticationService1 service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.RootNamespace.TestNamespace.AuthenticationService1.IAuthenticationService1Contract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.RootNamespace.TestNamespace.AuthenticationService1.IAuthenticationService1Contract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="AuthenticationService1"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -115,7 +115,7 @@ Namespace TestNamespace
         ''' <summary>
         ''' Gets the set of <see cref="User1"/> entity instances that have been loaded into this <see cref="AuthenticationService1"/> instance.
         ''' </summary>
-        Public ReadOnly Property User1s() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.RootNamespace.TestNamespace.User1)
+        Public ReadOnly Property User1s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.RootNamespace.TestNamespace.User1)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.RootNamespace.TestNamespace.User1)
             End Get
@@ -125,7 +125,7 @@ Namespace TestNamespace
         ''' Gets an EntityQuery instance that can be used to load <see cref="User1"/> entity instances using the 'GetUser' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="User1"/> entity instances.</returns>
-        Public Function GetUserQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.RootNamespace.TestNamespace.User1)
+        Public Function GetUserQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.RootNamespace.TestNamespace.User1)
             Me.ValidateMethod("GetUserQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.RootNamespace.TestNamespace.User1)("GetUser", Nothing, false, false)
         End Function
@@ -138,7 +138,7 @@ Namespace TestNamespace
         ''' <param name="isPersistent">The value for the 'isPersistent' parameter of the query.</param>
         ''' <param name="customData">The value for the 'customData' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="User1"/> entity instances.</returns>
-        Public Function LoginQuery(ByVal userName As String, ByVal password As String, ByVal isPersistent As Boolean, ByVal customData As String) As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.RootNamespace.TestNamespace.User1)
+        Public Function LoginQuery(ByVal userName As String, ByVal password As String, ByVal isPersistent As Boolean, ByVal customData As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.RootNamespace.TestNamespace.User1)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("userName", userName)
             parameters.Add("password", password)
@@ -152,7 +152,7 @@ Namespace TestNamespace
         ''' Gets an EntityQuery instance that can be used to load <see cref="User1"/> entity instances using the 'Logout' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="User1"/> entity instances.</returns>
-        Public Function LogoutQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.RootNamespace.TestNamespace.User1)
+        Public Function LogoutQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.RootNamespace.TestNamespace.User1)
             Me.ValidateMethod("LogoutQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.RootNamespace.TestNamespace.User1)("Logout", Nothing, true, false)
         End Function
@@ -161,7 +161,7 @@ Namespace TestNamespace
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.RootNamespace.TestNamespace.AuthenticationService1.AuthenticationService1EntityContainer()
         End Function
         
@@ -177,7 +177,7 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/GetUserDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/GetUserDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/GetUser", ReplyAction:="http://tempuri.org/AuthenticationService1/GetUserResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetUser(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -187,7 +187,7 @@ Namespace TestNamespace
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetUser'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetUser' operation.</returns>
-            Function EndGetUser(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
+            Function EndGetUser(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'Login' operation.
@@ -199,7 +199,7 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/LoginDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/LoginDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/Login", ReplyAction:="http://tempuri.org/AuthenticationService1/LoginResponse")>  _
             Function BeginLogin(ByVal userName As String, ByVal password As String, ByVal isPersistent As Boolean, ByVal customData As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -208,7 +208,7 @@ Namespace TestNamespace
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginLogin'.</param>
             ''' <returns>The 'QueryResult' returned from the 'Login' operation.</returns>
-            Function EndLogin(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
+            Function EndLogin(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'Logout' operation.
@@ -216,7 +216,7 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/LogoutDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/LogoutDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/Logout", ReplyAction:="http://tempuri.org/AuthenticationService1/LogoutResponse")>  _
             Function BeginLogout(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -225,7 +225,7 @@ Namespace TestNamespace
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginLogout'.</param>
             ''' <returns>The 'QueryResult' returned from the 'Logout' operation.</returns>
-            Function EndLogout(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
+            Function EndLogout(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -234,24 +234,24 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/SubmitChangesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/AuthenticationService1/SubmitChangesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/SubmitChanges", ReplyAction:="http://tempuri.org/AuthenticationService1/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.System.ServiceModel.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.System.ServiceModel.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class AuthenticationService1EntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.RootNamespace.TestNamespace.User1)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.RootNamespace.TestNamespace.User1)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -261,7 +261,7 @@ Namespace TestNamespace
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/RootNamespace.TestNamespace")>  _
     Partial Public NotInheritable Class User1
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         Implements Global.System.Security.Principal.IIdentity, Global.System.Security.Principal.IPrincipal
         
         Private _name As String = String.Empty

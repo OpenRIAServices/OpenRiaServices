@@ -17,16 +17,16 @@ namespace TestDomainServices.TypeNameConflictResolution
     using System.Linq;
     using System.Runtime.Serialization;
     using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
     
     
     /// <summary>
     /// The DomainContext corresponding to the 'BaseTypeConflicts' DomainService.
     /// </summary>
-    public sealed partial class BaseTypeConflicts : System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class BaseTypeConflicts : OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -178,7 +178,7 @@ namespace TestDomainServices.TypeNameConflictResolution
     /// </summary>
     [DataContract(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion")]
-    public sealed partial class DomainContext : System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class DomainContext : OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _dataContextID;
@@ -245,7 +245,7 @@ namespace TestDomainServices.TypeNameConflictResolution
     /// </summary>
     [DataContract(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion")]
-    public sealed partial class Entity : System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class Entity : OpenRiaServices.DomainServices.Client.Entity
     {
         
         private string _name;
@@ -315,9 +315,9 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
     using TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1;
     
@@ -632,9 +632,9 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -779,9 +779,9 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     
     
     /// <summary>

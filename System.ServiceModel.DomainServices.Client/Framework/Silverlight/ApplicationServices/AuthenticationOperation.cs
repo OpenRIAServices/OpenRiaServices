@@ -1,8 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// Abstract subclass of the <see cref="OperationBase"/> class

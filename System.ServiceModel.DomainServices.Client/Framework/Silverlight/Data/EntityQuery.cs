@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Client
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Client
 {
     using System.Collections.Generic;
     using System.Globalization;

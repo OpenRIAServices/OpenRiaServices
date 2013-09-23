@@ -238,7 +238,7 @@
     <EmbeddedResource Include="..\Silverlight\Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.Client</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
       <Link>Data\Resource.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Silverlight\Resources.resx">
@@ -247,7 +247,7 @@
     <EmbeddedResource Include="Linq\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.Client.Services</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client.Services</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

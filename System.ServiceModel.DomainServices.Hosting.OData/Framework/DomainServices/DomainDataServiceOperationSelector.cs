@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Hosting.OData
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespaces
     using System.Collections.Generic;
@@ -10,6 +12,7 @@
     using System.ServiceModel.Channels;
     using System.ServiceModel.Description;
     using System.ServiceModel.Dispatcher;    
+
     #endregion
 
     /// <summary>Selects the domain service operation to be invoked by WCF corresponding to current request.</summary>

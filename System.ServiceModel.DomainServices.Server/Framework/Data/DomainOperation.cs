@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Enumeration of the types of operations a <see cref="DomainService"/> can perform.

@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Server
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Attribute applied to a <see cref="DomainService"/> member to indicate that domain

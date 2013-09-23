@@ -154,8 +154,8 @@
     <Compile Include="Services\Tracing\WcfTraceService.cs" />
     <Compile Include="Services\Configuration\JsonEndpointFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <DependentUpon>Resource.resx</DependentUpon>
+    <Compile Include="EndpointResource.Designer.cs">
+      <DependentUpon>EndpointResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -191,20 +191,20 @@
       <LogicalName>System.ServiceModel.DomainServices.Hosting.Linq.Resource.resources</LogicalName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.Hosting</CustomToolNamespace>
+      <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>
       <Link>Linq\Resource.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\Services\Resource.resx">
       <LogicalName>System.ServiceModel.DomainServices.Hosting.Services.Resource.resources</LogicalName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.Hosting</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>
       <Link>Services\Resource.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resource.resx">
+    <EmbeddedResource Include="EndpointResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Microsoft.ServiceModel.DomainServices.Hosting</CustomToolNamespace>
+      <LastGenOutput>EndpointResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

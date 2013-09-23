@@ -7,16 +7,16 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.EntityFramework;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.Hosting;
 using System.Xml.Linq;
 using Cities;
-using Microsoft.ServiceModel.DomainServices.LinqToSql;
+using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
 
-namespace Microsoft.ServiceModel.DomainServices.WindowsAzure
+namespace OpenRiaServices.DomainServices.WindowsAzure
 {
     /// <summary>
     /// <see cref="TableServiceContext"/> that simplifies the task of creating entity

@@ -1,14 +1,14 @@
-﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.DomainContextGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.DomainContextGenerator" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="System.ServiceModel.DomainServices.Server" #>
-<#@ import namespace="System.ServiceModel.DomainServices.Hosting" #>
-<#@ import namespace="System.ServiceModel.DomainServices.Server.ApplicationServices" #>
-<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Hosting" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Server.ApplicationServices" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Tools.TextTemplate" #>
 <#@ include file="Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude" #>
 <#@ include file="Templates\InvokeOperationProxyGeneratorTemplate.ttinclude" #>
 <#@ include file="Templates\ContractInterfaceTemplate.ttinclude" #>
@@ -27,8 +27,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.DomainServices.Client;
-using System.ServiceModel.DomainServices.Client.ApplicationServices;
+using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client.ApplicationServices;
 <#+
 	}
 
@@ -37,10 +37,10 @@ using System.ServiceModel.DomainServices.Client.ApplicationServices;
     /// </summary>
 	protected virtual void GenerateClassDeclaration()
 	{	
-		string baseType = "System.ServiceModel.DomainServices.Client.DomainContext";
+		string baseType = "OpenRiaServices.DomainServices.Client.DomainContext";
 		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
 		{
-			baseType = @"global::System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+			baseType = @"global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
 		}
 		 
 #>

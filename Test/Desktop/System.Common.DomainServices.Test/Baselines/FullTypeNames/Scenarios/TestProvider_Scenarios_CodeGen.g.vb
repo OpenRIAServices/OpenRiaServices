@@ -27,9 +27,9 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class A
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
-        Private _b As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.B)
+        Private _b As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.B)
         
         Private _bid1 As Integer
         
@@ -100,7 +100,7 @@ Namespace TestDomainServices
         Public Property B() As Global.TestDomainServices.B
             Get
                 If (Me._b Is Nothing) Then
-                    Me._b = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.B)(Me, "B", AddressOf Me.FilterB)
+                    Me._b = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.B)(Me, "B", AddressOf Me.FilterB)
                 End If
                 Return Me._b.Entity
             End Get
@@ -300,9 +300,9 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class B
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
-        Private _cs As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)
+        Private _cs As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)
         
         Private _id1 As Integer
         
@@ -341,10 +341,10 @@ Namespace TestDomainServices
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("B_C", "ID1, ID2", "BID1, BID2"),  _
          Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="Cs")>  _
-        Public ReadOnly Property Cs() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)
+        Public ReadOnly Property Cs() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)
             Get
                 If (Me._cs Is Nothing) Then
-                    Me._cs = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)(Me, "Cs", AddressOf Me.FilterCs)
+                    Me._cs = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)(Me, "Cs", AddressOf Me.FilterCs)
                 End If
                 Return Me._cs
             End Get
@@ -405,7 +405,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
-            Return Global.System.ServiceModel.DomainServices.Client.EntityKey.Create(Me._id1, Me._id2)
+            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._id1, Me._id2)
         End Function
     End Class
     
@@ -414,15 +414,15 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class C
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _bid1 As Integer
         
         Private _bid2 As Integer
         
-        Private _d_Ref1 As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d_Ref1 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _d_Ref2 As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d_Ref2 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
         Private _did_Ref1 As Integer
         
@@ -520,7 +520,7 @@ Namespace TestDomainServices
         Public Property D_Ref1() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
-                    Me._d_Ref1 = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
+                    Me._d_Ref1 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
                 End If
                 Return Me._d_Ref1.Entity
             End Get
@@ -553,7 +553,7 @@ Namespace TestDomainServices
         Public Property D_Ref2() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
-                    Me._d_Ref2 = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
+                    Me._d_Ref2 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
                 End If
                 Return Me._d_Ref2.Entity
             End Get
@@ -661,19 +661,19 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class D
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _binaryData() As Byte
         
-        Private _c As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.C)
+        Private _c As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.C)
         
-        Private _d1 As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d1 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _d2 As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d2 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _d2_BackRef As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d2_BackRef As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _ds As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)
+        Private _ds As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)
         
         Private _dSelfRef_ID1 As Integer
         
@@ -756,7 +756,7 @@ Namespace TestDomainServices
         Public Property C() As Global.TestDomainServices.C
             Get
                 If (Me._c Is Nothing) Then
-                    Me._c = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.C)(Me, "C", AddressOf Me.FilterC)
+                    Me._c = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.C)(Me, "C", AddressOf Me.FilterC)
                 End If
                 Return Me._c.Entity
             End Get
@@ -784,7 +784,7 @@ Namespace TestDomainServices
         Public Property D1() As Global.TestDomainServices.D
             Get
                 If (Me._d1 Is Nothing) Then
-                    Me._d1 = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D1", AddressOf Me.FilterD1)
+                    Me._d1 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D1", AddressOf Me.FilterD1)
                 End If
                 Return Me._d1.Entity
             End Get
@@ -817,7 +817,7 @@ Namespace TestDomainServices
         Public Property D2() As Global.TestDomainServices.D
             Get
                 If (Me._d2 Is Nothing) Then
-                    Me._d2 = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2", AddressOf Me.FilterD2)
+                    Me._d2 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2", AddressOf Me.FilterD2)
                 End If
                 Return Me._d2.Entity
             End Get
@@ -850,7 +850,7 @@ Namespace TestDomainServices
         Public Property D2_BackRef() As Global.TestDomainServices.D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
-                    Me._d2_BackRef = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2_BackRef", AddressOf Me.FilterD2_BackRef)
+                    Me._d2_BackRef = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2_BackRef", AddressOf Me.FilterD2_BackRef)
                 End If
                 Return Me._d2_BackRef.Entity
             End Get
@@ -875,10 +875,10 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("D_D", "ID", "DSelfRef_ID1")>  _
-        Public ReadOnly Property Ds() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)
+        Public ReadOnly Property Ds() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)
             Get
                 If (Me._ds Is Nothing) Then
-                    Me._ds = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)(Me, "Ds", AddressOf Me.FilterDs, AddressOf Me.AttachDs, AddressOf Me.DetachDs)
+                    Me._ds = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)(Me, "Ds", AddressOf Me.FilterDs, AddressOf Me.AttachDs, AddressOf Me.DetachDs)
                 End If
                 Return Me._ds
             End Get
@@ -1044,7 +1044,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class SpecialDataTypes
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _booleanProperty As Global.System.Collections.Generic.IEnumerable(Of Global.System.Nullable(Of Boolean))
         
@@ -1161,7 +1161,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TestEntity_DataMemberBuddy
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _id As Integer
         
@@ -1252,7 +1252,7 @@ Namespace TestDomainServices
     ''' The DomainContext corresponding to the 'TestProvider_Scenarios_CodeGen' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class TestProvider_Scenarios_CodeGen
-        Inherits Global.System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -1270,7 +1270,7 @@ Namespace TestDomainServices
         ''' Initializes a new instance of the <see cref="TestProvider_Scenarios_CodeGen"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TestProvider_Scenarios_CodeGen.ITestProvider_Scenarios_CodeGenContract)(New Global.System.Uri("TestDomainServices-TestProvider_Scenarios_CodeGen.svc", Global.System.UriKind.Relative)))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TestProvider_Scenarios_CodeGen.ITestProvider_Scenarios_CodeGenContract)(New Global.System.Uri("TestDomainServices-TestProvider_Scenarios_CodeGen.svc", Global.System.UriKind.Relative)))
         End Sub
         
         ''' <summary>
@@ -1278,14 +1278,14 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="serviceUri">The TestProvider_Scenarios_CodeGen service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TestProvider_Scenarios_CodeGen.ITestProvider_Scenarios_CodeGenContract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.TestProvider_Scenarios_CodeGen.ITestProvider_Scenarios_CodeGenContract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="TestProvider_Scenarios_CodeGen"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -1293,7 +1293,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="D"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property Ds() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.D)
+        Public ReadOnly Property Ds() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.D)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.D)
             End Get
@@ -1302,7 +1302,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="A"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property [As]() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.A)
+        Public ReadOnly Property [As]() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.A)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.A)
             End Get
@@ -1311,7 +1311,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="B"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property Bs() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.B)
+        Public ReadOnly Property Bs() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.B)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.B)
             End Get
@@ -1320,7 +1320,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="C"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property Cs() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.C)
+        Public ReadOnly Property Cs() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.C)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.C)
             End Get
@@ -1329,7 +1329,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="SpecialDataTypes"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property SpecialDataTypes() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.SpecialDataTypes)
+        Public ReadOnly Property SpecialDataTypes() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.SpecialDataTypes)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.SpecialDataTypes)
             End Get
@@ -1338,7 +1338,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="TestEntity_DataMemberBuddy"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property TestEntity_DataMemberBuddies() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
+        Public ReadOnly Property TestEntity_DataMemberBuddies() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
             End Get
@@ -1347,7 +1347,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="Turkishİ2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         ''' </summary>
-        Public ReadOnly Property Turkishİ2s() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.TestDomainServices.Turkishİ2)
+        Public ReadOnly Property Turkishİ2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.Turkishİ2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.Turkishİ2)
             End Get
@@ -1357,7 +1357,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'FetchDs2' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function FetchDs2Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function FetchDs2Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("FetchDs2Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("FetchDs2", Nothing, false, true)
         End Function
@@ -1366,7 +1366,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'FindDs6' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function FindDs6Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function FindDs6Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("FindDs6Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("FindDs6", Nothing, false, true)
         End Function
@@ -1375,7 +1375,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'Get_Images' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function Get_ImagesQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function Get_ImagesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("Get_ImagesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("Get_Images", Nothing, false, true)
         End Function
@@ -1385,7 +1385,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="kind">The value for the 'kind' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function Get_Images_OfKindQuery(ByVal kind As Global.System.Nullable(Of Global.TestDomainServices.ImageKindEnum)) As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function Get_Images_OfKindQuery(ByVal kind As Global.System.Nullable(Of Global.TestDomainServices.ImageKindEnum)) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("kind", kind)
             Me.ValidateMethod("Get_Images_OfKindQuery", parameters)
@@ -1396,7 +1396,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        Public Function GetAsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
+        Public Function GetAsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
             Me.ValidateMethod("GetAsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.A)("GetAs", Nothing, false, false)
         End Function
@@ -1405,7 +1405,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAsWithSideEffects' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        Public Function GetAsWithSideEffectsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
+        Public Function GetAsWithSideEffectsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
             Me.ValidateMethod("GetAsWithSideEffectsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.A)("GetAsWithSideEffects", Nothing, true, false)
         End Function
@@ -1414,7 +1414,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="B"/> entity instances using the 'GetBs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="B"/> entity instances.</returns>
-        Public Function GetBsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.B)
+        Public Function GetBsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.B)
             Me.ValidateMethod("GetBsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.B)("GetBs", Nothing, false, true)
         End Function
@@ -1423,7 +1423,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="C"/> entity instances using the 'GetCs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="C"/> entity instances.</returns>
-        Public Function GetCsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.C)
+        Public Function GetCsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.C)
             Me.ValidateMethod("GetCsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.C)("GetCs", Nothing, false, true)
         End Function
@@ -1432,7 +1432,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="SpecialDataTypes"/> entity instances using the 'GetSpecialDataTypes' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="SpecialDataTypes"/> entity instances.</returns>
-        Public Function GetSpecialDataTypesQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.SpecialDataTypes)
+        Public Function GetSpecialDataTypesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.SpecialDataTypes)
             Me.ValidateMethod("GetSpecialDataTypesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.SpecialDataTypes)("GetSpecialDataTypes", Nothing, false, true)
         End Function
@@ -1441,7 +1441,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="TestEntity_DataMemberBuddy"/> entity instances using the 'GetTestEntity_DataMemberBuddys' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TestEntity_DataMemberBuddy"/> entity instances.</returns>
-        Public Function GetTestEntity_DataMemberBuddysQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
+        Public Function GetTestEntity_DataMemberBuddysQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
             Me.ValidateMethod("GetTestEntity_DataMemberBuddysQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)("GetTestEntity_DataMemberBuddys", Nothing, false, true)
         End Function
@@ -1450,7 +1450,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="Turkishİ2"/> entity instances using the 'GetTurkishİ2' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Turkishİ2"/> entity instances.</returns>
-        Public Function GetTurkishİ2Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.Turkishİ2)
+        Public Function GetTurkishİ2Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.Turkishİ2)
             Me.ValidateMethod("GetTurkishİ2Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.Turkishİ2)("GetTurkishİ2", Nothing, false, true)
         End Function
@@ -1459,7 +1459,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'GettyImages' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function GettyImagesQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function GettyImagesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("GettyImagesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("GettyImages", Nothing, false, true)
         End Function
@@ -1468,7 +1468,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'QueryDs3' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function QueryDs3Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function QueryDs3Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("QueryDs3Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("QueryDs3", Nothing, false, true)
         End Function
@@ -1477,7 +1477,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'RandomNameButStillAQuery' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function RandomNameButStillAQueryQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function RandomNameButStillAQueryQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("RandomNameButStillAQueryQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("RandomNameButStillAQuery", Nothing, false, true)
         End Function
@@ -1486,7 +1486,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'RetrieveDs4' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function RetrieveDs4Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function RetrieveDs4Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("RetrieveDs4Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("RetrieveDs4", Nothing, false, true)
         End Function
@@ -1495,7 +1495,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'RetrieveDs5' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function RetrieveDs5Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function RetrieveDs5Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("RetrieveDs5Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("RetrieveDs5", Nothing, false, true)
         End Function
@@ -1504,7 +1504,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'SelectDs1' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function SelectDs1Query() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function SelectDs1Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("SelectDs1Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("SelectDs1", Nothing, false, true)
         End Function
@@ -1516,7 +1516,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function OnlineMethod(ByVal x As Global.TestDomainServices.D, ByVal callback As Global.System.Action(Of Global.System.ServiceModel.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.System.ServiceModel.DomainServices.Client.InvokeOperation
+        Public Overloads Function OnlineMethod(ByVal x As Global.TestDomainServices.D, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("x", x)
             Me.ValidateMethod("OnlineMethod", parameters)
@@ -1528,7 +1528,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="x">The value for the 'x' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function OnlineMethod(ByVal x As Global.TestDomainServices.D) As Global.System.ServiceModel.DomainServices.Client.InvokeOperation
+        Public Overloads Function OnlineMethod(ByVal x As Global.TestDomainServices.D) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("x", x)
             Me.ValidateMethod("OnlineMethod", parameters)
@@ -1539,7 +1539,7 @@ Namespace TestDomainServices
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.TestDomainServices.TestProvider_Scenarios_CodeGen.TestProvider_Scenarios_CodeGenEntityContainer()
         End Function
         
@@ -1555,7 +1555,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FetchDs2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FetchDs2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FetchDs2", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FetchDs2Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginFetchDs2(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1565,7 +1565,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginFetchDs2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'FetchDs2' operation.</returns>
-            Function EndFetchDs2(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndFetchDs2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'FindDs6' operation.
@@ -1573,7 +1573,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FindDs6DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FindDs6DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FindDs6", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/FindDs6Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginFindDs6(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1583,7 +1583,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginFindDs6'.</param>
             ''' <returns>The 'QueryResult' returned from the 'FindDs6' operation.</returns>
-            Function EndFindDs6(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndFindDs6(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'Get_Images' operation.
@@ -1591,7 +1591,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_ImagesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_ImagesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_ImagesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGet_Images(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1601,7 +1601,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGet_Images'.</param>
             ''' <returns>The 'QueryResult' returned from the 'Get_Images' operation.</returns>
-            Function EndGet_Images(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndGet_Images(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'Get_Images_OfKind' operation.
@@ -1610,7 +1610,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images_OfKindDomainServiceF"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images_OfKindDomainServiceF"& _ 
                 "ault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images_OfKind", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images_OfKindResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
@@ -1621,7 +1621,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGet_Images_OfKind'.</param>
             ''' <returns>The 'QueryResult' returned from the 'Get_Images_OfKind' operation.</returns>
-            Function EndGet_Images_OfKind(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndGet_Images_OfKind(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetAs' operation.
@@ -1629,7 +1629,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetAs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1639,7 +1639,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetAs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetAs' operation.</returns>
-            Function EndGetAs(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
+            Function EndGetAs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetAsWithSideEffects' operation.
@@ -1647,7 +1647,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsWithSideEffectsDomainServi"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsWithSideEffectsDomainServi"& _ 
                 "ceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsWithSideEffects", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsWithSideEffectsResponse")>  _
             Function BeginGetAsWithSideEffects(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1657,7 +1657,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetAsWithSideEffects'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetAsWithSideEffects' operation.</returns>
-            Function EndGetAsWithSideEffects(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
+            Function EndGetAsWithSideEffects(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetBs' operation.
@@ -1665,7 +1665,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetBsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetBsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetBs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetBsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetBs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1675,7 +1675,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetBs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetBs' operation.</returns>
-            Function EndGetBs(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.B)
+            Function EndGetBs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.B)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCs' operation.
@@ -1683,7 +1683,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetCsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetCsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetCs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetCsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetCs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1693,7 +1693,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCs' operation.</returns>
-            Function EndGetCs(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.C)
+            Function EndGetCs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.C)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetSpecialDataTypes' operation.
@@ -1701,7 +1701,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetSpecialDataTypesDomainServic"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetSpecialDataTypesDomainServic"& _ 
                 "eFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetSpecialDataTypes", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetSpecialDataTypesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
@@ -1712,7 +1712,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetSpecialDataTypes'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetSpecialDataTypes' operation.</returns>
-            Function EndGetSpecialDataTypes(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.SpecialDataTypes)
+            Function EndGetSpecialDataTypes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.SpecialDataTypes)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTestEntity_DataMemberBuddys' operation.
@@ -1720,7 +1720,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTestEntity_DataMemberBuddysD"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTestEntity_DataMemberBuddysD"& _ 
                 "omainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTestEntity_DataMemberBuddys", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTestEntity_DataMemberBuddysR"& _ 
                 "esponse"),  _
@@ -1732,7 +1732,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTestEntity_DataMemberBuddys'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTestEntity_DataMemberBuddys' operation.</returns>
-            Function EndGetTestEntity_DataMemberBuddys(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
+            Function EndGetTestEntity_DataMemberBuddys(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTurkishİ2' operation.
@@ -1740,7 +1740,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTurkishİ2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTurkishİ2DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTurkishİ2", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTurkishİ2Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetTurkishİ2(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1750,7 +1750,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTurkishİ2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTurkishİ2' operation.</returns>
-            Function EndGetTurkishİ2(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.Turkishİ2)
+            Function EndGetTurkishİ2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.Turkishİ2)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GettyImages' operation.
@@ -1758,7 +1758,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GettyImagesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GettyImagesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GettyImages", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/GettyImagesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGettyImages(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1768,7 +1768,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGettyImages'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GettyImages' operation.</returns>
-            Function EndGettyImages(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndGettyImages(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'OnlineMethod' operation.
@@ -1777,7 +1777,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/OnlineMethodDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/OnlineMethodDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/OnlineMethod", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/OnlineMethodResponse")>  _
             Function BeginOnlineMethod(ByVal x As Global.TestDomainServices.D, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -1793,7 +1793,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/QueryDs3DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/QueryDs3DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/QueryDs3", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/QueryDs3Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginQueryDs3(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1803,7 +1803,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginQueryDs3'.</param>
             ''' <returns>The 'QueryResult' returned from the 'QueryDs3' operation.</returns>
-            Function EndQueryDs3(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndQueryDs3(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'RandomNameButStillAQuery' operation.
@@ -1811,7 +1811,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RandomNameButStillAQueryDomainS"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RandomNameButStillAQueryDomainS"& _ 
                 "erviceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RandomNameButStillAQuery", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RandomNameButStillAQueryRespons"& _ 
                 "e"),  _
@@ -1823,7 +1823,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginRandomNameButStillAQuery'.</param>
             ''' <returns>The 'QueryResult' returned from the 'RandomNameButStillAQuery' operation.</returns>
-            Function EndRandomNameButStillAQuery(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndRandomNameButStillAQuery(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'RetrieveDs4' operation.
@@ -1831,7 +1831,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs4DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs4DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs4", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs4Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginRetrieveDs4(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1841,7 +1841,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginRetrieveDs4'.</param>
             ''' <returns>The 'QueryResult' returned from the 'RetrieveDs4' operation.</returns>
-            Function EndRetrieveDs4(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndRetrieveDs4(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'RetrieveDs5' operation.
@@ -1849,7 +1849,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs5DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs5DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs5", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs5Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginRetrieveDs5(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1859,7 +1859,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginRetrieveDs5'.</param>
             ''' <returns>The 'QueryResult' returned from the 'RetrieveDs5' operation.</returns>
-            Function EndRetrieveDs5(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndRetrieveDs5(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SelectDs1' operation.
@@ -1867,7 +1867,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/SelectDs1DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/SelectDs1DomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios_CodeGen/SelectDs1", ReplyAction:="http://tempuri.org/TestProvider_Scenarios_CodeGen/SelectDs1Response"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginSelectDs1(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -1877,21 +1877,21 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSelectDs1'.</param>
             ''' <returns>The 'QueryResult' returned from the 'SelectDs1' operation.</returns>
-            Function EndSelectDs1(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndSelectDs1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
         End Interface
         
         Friend NotInheritable Class TestProvider_Scenarios_CodeGenEntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.A)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.B)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.C)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.D)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.SpecialDataTypes)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.Turkishİ2)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.A)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.B)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.C)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.D)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.SpecialDataTypes)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TestEntity_DataMemberBuddy)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.Turkishİ2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -1901,7 +1901,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class Turkishİ2
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _data As String
         

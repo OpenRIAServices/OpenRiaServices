@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// Attribute that describes how a property is backed in an ASP.NET profile. It can 

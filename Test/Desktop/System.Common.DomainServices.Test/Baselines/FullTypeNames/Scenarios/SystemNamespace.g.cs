@@ -15,7 +15,7 @@ namespace System
     /// <summary>
     /// The DomainContext corresponding to the 'SystemDomainService' DomainService.
     /// </summary>
-    public sealed partial class SystemDomainContext : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class SystemDomainContext : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -33,7 +33,7 @@ namespace System
         /// Initializes a new instance of the <see cref="SystemDomainContext"/> class.
         /// </summary>
         public SystemDomainContext() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::System.SystemDomainContext.ISystemDomainServiceContract>(new global::System.Uri("System-SystemDomainService.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::System.SystemDomainContext.ISystemDomainServiceContract>(new global::System.Uri("System-SystemDomainService.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -42,7 +42,7 @@ namespace System
         /// </summary>
         /// <param name="serviceUri">The SystemDomainService service URI.</param>
         public SystemDomainContext(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::System.SystemDomainContext.ISystemDomainServiceContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::System.SystemDomainContext.ISystemDomainServiceContract>(serviceUri))
         {
         }
         
@@ -50,7 +50,7 @@ namespace System
         /// Initializes a new instance of the <see cref="SystemDomainContext"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public SystemDomainContext(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public SystemDomainContext(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -59,7 +59,7 @@ namespace System
         /// <summary>
         /// Gets the set of <see cref="SystemEntity"/> entity instances that have been loaded into this <see cref="SystemDomainContext"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::System.SystemEntity> SystemEntities
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::System.SystemEntity> SystemEntities
         {
             get
             {
@@ -71,7 +71,7 @@ namespace System
         /// Gets an EntityQuery instance that can be used to load <see cref="SystemEntity"/> entity instances using the 'GetSystemEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="SystemEntity"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::System.SystemEntity> GetSystemEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::System.SystemEntity> GetSystemEntitiesQuery()
         {
             this.ValidateMethod("GetSystemEntitiesQuery", null);
             return base.CreateQuery<global::System.SystemEntity>("GetSystemEntities", null, false, true);
@@ -81,7 +81,7 @@ namespace System
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::System.SystemDomainContext.SystemDomainContextEntityContainer();
         }
@@ -99,7 +99,7 @@ namespace System
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/SystemDomainService/GetSystemEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/SystemDomainService/GetSystemEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/SystemDomainService/GetSystemEntities", ReplyAction="http://tempuri.org/SystemDomainService/GetSystemEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetSystemEntities(global::System.AsyncCallback callback, object asyncState);
@@ -109,15 +109,15 @@ namespace System
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetSystemEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetSystemEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::System.SystemEntity> EndGetSystemEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::System.SystemEntity> EndGetSystemEntities(global::System.IAsyncResult result);
         }
         
-        internal sealed class SystemDomainContextEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class SystemDomainContextEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public SystemDomainContextEntityContainer()
             {
-                this.CreateEntitySet<global::System.SystemEntity>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::System.SystemEntity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -127,7 +127,7 @@ namespace System
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/System")]
     [global::System.SystemNamespaceAttribute()]
-    public sealed partial class SystemEntity : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class SystemEntity : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -288,7 +288,7 @@ namespace System.Subsystem
     /// <summary>
     /// The DomainContext corresponding to the 'SubsystemDomainService' DomainService.
     /// </summary>
-    public sealed partial class SubsystemDomainContext : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class SubsystemDomainContext : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -306,7 +306,7 @@ namespace System.Subsystem
         /// Initializes a new instance of the <see cref="SubsystemDomainContext"/> class.
         /// </summary>
         public SubsystemDomainContext() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::System.Subsystem.SubsystemDomainContext.ISubsystemDomainServiceContract>(new global::System.Uri("System-Subsystem-SubsystemDomainService.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::System.Subsystem.SubsystemDomainContext.ISubsystemDomainServiceContract>(new global::System.Uri("System-Subsystem-SubsystemDomainService.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -315,7 +315,7 @@ namespace System.Subsystem
         /// </summary>
         /// <param name="serviceUri">The SubsystemDomainService service URI.</param>
         public SubsystemDomainContext(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::System.Subsystem.SubsystemDomainContext.ISubsystemDomainServiceContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::System.Subsystem.SubsystemDomainContext.ISubsystemDomainServiceContract>(serviceUri))
         {
         }
         
@@ -323,7 +323,7 @@ namespace System.Subsystem
         /// Initializes a new instance of the <see cref="SubsystemDomainContext"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public SubsystemDomainContext(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public SubsystemDomainContext(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -332,7 +332,7 @@ namespace System.Subsystem
         /// <summary>
         /// Gets the set of <see cref="SubsystemEntity"/> entity instances that have been loaded into this <see cref="SubsystemDomainContext"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::System.Subsystem.SubsystemEntity> SubsystemEntities
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::System.Subsystem.SubsystemEntity> SubsystemEntities
         {
             get
             {
@@ -344,7 +344,7 @@ namespace System.Subsystem
         /// Gets an EntityQuery instance that can be used to load <see cref="SubsystemEntity"/> entity instances using the 'GetSubsystemEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="SubsystemEntity"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::System.Subsystem.SubsystemEntity> GetSubsystemEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::System.Subsystem.SubsystemEntity> GetSubsystemEntitiesQuery()
         {
             this.ValidateMethod("GetSubsystemEntitiesQuery", null);
             return base.CreateQuery<global::System.Subsystem.SubsystemEntity>("GetSubsystemEntities", null, false, true);
@@ -354,7 +354,7 @@ namespace System.Subsystem
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::System.Subsystem.SubsystemDomainContext.SubsystemDomainContextEntityContainer();
         }
@@ -372,7 +372,7 @@ namespace System.Subsystem
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/SubsystemDomainService/GetSubsystemEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/SubsystemDomainService/GetSubsystemEntitiesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/SubsystemDomainService/GetSubsystemEntities", ReplyAction="http://tempuri.org/SubsystemDomainService/GetSubsystemEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
             global::System.IAsyncResult BeginGetSubsystemEntities(global::System.AsyncCallback callback, object asyncState);
@@ -382,15 +382,15 @@ namespace System.Subsystem
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetSubsystemEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetSubsystemEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::System.Subsystem.SubsystemEntity> EndGetSubsystemEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::System.Subsystem.SubsystemEntity> EndGetSubsystemEntities(global::System.IAsyncResult result);
         }
         
-        internal sealed class SubsystemDomainContextEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class SubsystemDomainContextEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public SubsystemDomainContextEntityContainer()
             {
-                this.CreateEntitySet<global::System.Subsystem.SubsystemEntity>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::System.Subsystem.SubsystemEntity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -399,7 +399,7 @@ namespace System.Subsystem
     /// The 'SubsystemEntity' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/System.Subsystem")]
-    public sealed partial class SubsystemEntity : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class SubsystemEntity : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;
@@ -560,7 +560,7 @@ namespace SystemExtensions
     /// <summary>
     /// The DomainContext corresponding to the 'SystemExtensionsDomainService' DomainService.
     /// </summary>
-    public sealed partial class SystemExtensionsDomainContext : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class SystemExtensionsDomainContext : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -578,7 +578,7 @@ namespace SystemExtensions
         /// Initializes a new instance of the <see cref="SystemExtensionsDomainContext"/> class.
         /// </summary>
         public SystemExtensionsDomainContext() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::SystemExtensions.SystemExtensionsDomainContext.ISystemExtensionsDomainServiceContract>(new global::System.Uri("SystemExtensions-SystemExtensionsDomainService.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::SystemExtensions.SystemExtensionsDomainContext.ISystemExtensionsDomainServiceContract>(new global::System.Uri("SystemExtensions-SystemExtensionsDomainService.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -587,7 +587,7 @@ namespace SystemExtensions
         /// </summary>
         /// <param name="serviceUri">The SystemExtensionsDomainService service URI.</param>
         public SystemExtensionsDomainContext(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::SystemExtensions.SystemExtensionsDomainContext.ISystemExtensionsDomainServiceContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::SystemExtensions.SystemExtensionsDomainContext.ISystemExtensionsDomainServiceContract>(serviceUri))
         {
         }
         
@@ -595,7 +595,7 @@ namespace SystemExtensions
         /// Initializes a new instance of the <see cref="SystemExtensionsDomainContext"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public SystemExtensionsDomainContext(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public SystemExtensionsDomainContext(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -604,7 +604,7 @@ namespace SystemExtensions
         /// <summary>
         /// Gets the set of <see cref="SystemExtensionsEntity"/> entity instances that have been loaded into this <see cref="SystemExtensionsDomainContext"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::SystemExtensions.SystemExtensionsEntity> SystemExtensionsEntities
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::SystemExtensions.SystemExtensionsEntity> SystemExtensionsEntities
         {
             get
             {
@@ -616,7 +616,7 @@ namespace SystemExtensions
         /// Gets an EntityQuery instance that can be used to load <see cref="SystemExtensionsEntity"/> entity instances using the 'GetSystemExtensionsEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="SystemExtensionsEntity"/> entity instances.</returns>
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::SystemExtensions.SystemExtensionsEntity> GetSystemExtensionsEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::SystemExtensions.SystemExtensionsEntity> GetSystemExtensionsEntitiesQuery()
         {
             this.ValidateMethod("GetSystemExtensionsEntitiesQuery", null);
             return base.CreateQuery<global::SystemExtensions.SystemExtensionsEntity>("GetSystemExtensionsEntities", null, false, true);
@@ -626,7 +626,7 @@ namespace SystemExtensions
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::SystemExtensions.SystemExtensionsDomainContext.SystemExtensionsDomainContextEntityContainer();
         }
@@ -644,7 +644,7 @@ namespace SystemExtensions
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntitiesDomai" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntitiesDomai" +
                 "nServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntities", ReplyAction="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntitiesRespo" +
                 "nse")]
@@ -656,15 +656,15 @@ namespace SystemExtensions
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetSystemExtensionsEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetSystemExtensionsEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::SystemExtensions.SystemExtensionsEntity> EndGetSystemExtensionsEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::SystemExtensions.SystemExtensionsEntity> EndGetSystemExtensionsEntities(global::System.IAsyncResult result);
         }
         
-        internal sealed class SystemExtensionsDomainContextEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class SystemExtensionsDomainContextEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public SystemExtensionsDomainContextEntityContainer()
             {
-                this.CreateEntitySet<global::SystemExtensions.SystemExtensionsEntity>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::SystemExtensions.SystemExtensionsEntity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -673,7 +673,7 @@ namespace SystemExtensions
     /// The 'SystemExtensionsEntity' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/SystemExtensions")]
-    public sealed partial class SystemExtensionsEntity : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class SystemExtensionsEntity : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private int _key;

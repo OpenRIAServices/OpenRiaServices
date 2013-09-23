@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Linq;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using DataTests.Northwind.LTS;
-using Microsoft.ServiceModel.DomainServices.LinqToSql;
+using OpenRiaServices.DomainServices.LinqToSql;
 using TestDomainServices.Testing;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract

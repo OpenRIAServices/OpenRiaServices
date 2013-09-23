@@ -1,5 +1,4 @@
-﻿
-namespace System.ServiceModel.DomainServices.Client
+﻿namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Used to control identity cache behavior when loading entities.

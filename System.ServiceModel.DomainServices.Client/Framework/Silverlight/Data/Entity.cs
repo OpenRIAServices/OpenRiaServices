@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Base class for all entity types.
@@ -1591,7 +1592,7 @@ namespace System.ServiceModel.DomainServices.Client
                 sb.Append(keyValue != null ? keyValue.ToString() : "null");
             }
             string keyText = keyMembers.Length > 1 ? "{" + sb.ToString() + "}" : sb.ToString();
-            return string.Format(Globalization.CultureInfo.CurrentCulture, "{0} : {1}", GetType().Name, keyText);
+            return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} : {1}", GetType().Name, keyText);
         }
 
         /// <summary>

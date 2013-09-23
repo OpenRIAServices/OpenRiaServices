@@ -1,15 +1,17 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+using System.ServiceModel;
+
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
-    using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Hosting;
-    using System.ServiceModel.DomainServices.Server;
-    using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+    using OpenRiaServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Tools.SharedTypes;
 
     /// <summary>
     /// Proxy generator for DomainServices.

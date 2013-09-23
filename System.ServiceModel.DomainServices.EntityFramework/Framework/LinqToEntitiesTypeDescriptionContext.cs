@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Mapping;
 #if DBCONTEXT
@@ -9,9 +10,9 @@ using System.Data.Metadata.Edm;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.EntityFramework
+namespace OpenRiaServices.DomainServices.EntityFramework
 {
     /// <summary>
     /// Metadata context for LINQ To Entities domain services

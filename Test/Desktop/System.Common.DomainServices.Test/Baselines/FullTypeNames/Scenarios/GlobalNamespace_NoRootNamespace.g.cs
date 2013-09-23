@@ -25,7 +25,7 @@ namespace GlobalNamespaceTest
     /// The DomainContext corresponding to the 'GlobalNamespaceTest_DomainService' DomainService.
     /// </summary>
     [global::GlobalNamespaceTest_Attribute(EnumProperty=global::GlobalNamespaceTest_Enum.NonDefaultValue)]
-    public sealed partial class GlobalNamespaceTest_DomainContext : global::System.ServiceModel.DomainServices.Client.DomainContext
+    public sealed partial class GlobalNamespaceTest_DomainContext : global::OpenRiaServices.DomainServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -43,7 +43,7 @@ namespace GlobalNamespaceTest
         /// Initializes a new instance of the <see cref="GlobalNamespaceTest_DomainContext"/> class.
         /// </summary>
         public GlobalNamespaceTest_DomainContext() : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract>(new global::System.Uri("GlobalNamespaceTest-GlobalNamespaceTest_DomainService.svc", global::System.UriKind.Relative)))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract>(new global::System.Uri("GlobalNamespaceTest-GlobalNamespaceTest_DomainService.svc", global::System.UriKind.Relative)))
         {
         }
         
@@ -52,7 +52,7 @@ namespace GlobalNamespaceTest
         /// </summary>
         /// <param name="serviceUri">The GlobalNamespaceTest_DomainService service URI.</param>
         public GlobalNamespaceTest_DomainContext(global::System.Uri serviceUri) : 
-                this(new global::System.ServiceModel.DomainServices.Client.WebDomainClient<global::GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract>(serviceUri))
+                this(new global::OpenRiaServices.DomainServices.Client.WebDomainClient<global::GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract>(serviceUri))
         {
         }
         
@@ -60,7 +60,7 @@ namespace GlobalNamespaceTest
         /// Initializes a new instance of the <see cref="GlobalNamespaceTest_DomainContext"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public GlobalNamespaceTest_DomainContext(global::System.ServiceModel.DomainServices.Client.DomainClient domainClient) : 
+        public GlobalNamespaceTest_DomainContext(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -69,7 +69,7 @@ namespace GlobalNamespaceTest
         /// <summary>
         /// Gets the set of <see cref="GlobalNamespaceTest_Entity"/> entity instances that have been loaded into this <see cref="GlobalNamespaceTest_DomainContext"/> instance.
         /// </summary>
-        public global::System.ServiceModel.DomainServices.Client.EntitySet<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> GlobalNamespaceTest_Entities
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> GlobalNamespaceTest_Entities
         {
             get
             {
@@ -82,7 +82,7 @@ namespace GlobalNamespaceTest
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="GlobalNamespaceTest_Entity"/> entity instances.</returns>
         [global::GlobalNamespaceTest_Attribute()]
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> GetEntitiesQuery()
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> GetEntitiesQuery()
         {
             this.ValidateMethod("GetEntitiesQuery", null);
             return base.CreateQuery<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity>("GetEntities", null, false, true);
@@ -94,7 +94,7 @@ namespace GlobalNamespaceTest
         /// <param name="enumParameter">The value for the 'enumParameter' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="GlobalNamespaceTest_Entity"/> entity instances.</returns>
         [global::GlobalNamespaceTest_Attribute()]
-        public global::System.ServiceModel.DomainServices.Client.EntityQuery<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> ReadEntitiesQuery([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter)
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> ReadEntitiesQuery([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("enumParameter", enumParameter);
@@ -120,12 +120,12 @@ namespace GlobalNamespaceTest
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         [global::GlobalNamespaceTest_Attribute()]
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum> InvokeReturn([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum>> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum> InvokeReturn([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum>> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("enumParameter", enumParameter);
             this.ValidateMethod("InvokeReturn", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum>)(this.InvokeOperation("InvokeReturn", typeof(global::GlobalNamespaceTest_Enum), parameters, true, callback, userState)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum>)(this.InvokeOperation("InvokeReturn", typeof(global::GlobalNamespaceTest_Enum), parameters, true, callback, userState)));
         }
         
         /// <summary>
@@ -134,12 +134,12 @@ namespace GlobalNamespaceTest
         /// <param name="enumParameter">The value for the 'enumParameter' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         [global::GlobalNamespaceTest_Attribute()]
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum> InvokeReturn([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum> InvokeReturn([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("enumParameter", enumParameter);
             this.ValidateMethod("InvokeReturn", parameters);
-            return ((global::System.ServiceModel.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum>)(this.InvokeOperation("InvokeReturn", typeof(global::GlobalNamespaceTest_Enum), parameters, true, null, null)));
+            return ((global::OpenRiaServices.DomainServices.Client.InvokeOperation<global::GlobalNamespaceTest_Enum>)(this.InvokeOperation("InvokeReturn", typeof(global::GlobalNamespaceTest_Enum), parameters, true, null, null)));
         }
         
         /// <summary>
@@ -150,7 +150,7 @@ namespace GlobalNamespaceTest
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         [global::GlobalNamespaceTest_Attribute()]
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation InvokeVoid([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter, global::System.Action<global::System.ServiceModel.DomainServices.Client.InvokeOperation> callback, object userState)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation InvokeVoid([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("enumParameter", enumParameter);
@@ -164,7 +164,7 @@ namespace GlobalNamespaceTest
         /// <param name="enumParameter">The value for the 'enumParameter' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         [global::GlobalNamespaceTest_Attribute()]
-        public global::System.ServiceModel.DomainServices.Client.InvokeOperation InvokeVoid([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter)
+        public global::OpenRiaServices.DomainServices.Client.InvokeOperation InvokeVoid([global::GlobalNamespaceTest_ValidationAttribute()] global::GlobalNamespaceTest_Enum enumParameter)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("enumParameter", enumParameter);
@@ -176,7 +176,7 @@ namespace GlobalNamespaceTest
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::System.ServiceModel.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.GlobalNamespaceTest_DomainContextEntityContainer();
         }
@@ -195,7 +195,7 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesDomainServiceFaul" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesDomainServiceFaul" +
                 "t", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntities", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -206,7 +206,7 @@ namespace GlobalNamespaceTest
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> EndGetEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> EndGetEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'InvokeReturn' operation.
@@ -215,7 +215,7 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnDomainServiceFau" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnDomainServiceFau" +
                 "lt", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturn", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnResponse")]
             global::System.IAsyncResult BeginInvokeReturn(global::GlobalNamespaceTest_Enum enumParameter, global::System.AsyncCallback callback, object asyncState);
@@ -234,7 +234,7 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidDomainServiceFault" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidDomainServiceFault" +
                 "", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoid", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidResponse")]
             global::System.IAsyncResult BeginInvokeVoid(global::GlobalNamespaceTest_Enum enumParameter, global::System.AsyncCallback callback, object asyncState);
@@ -252,7 +252,7 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesDomainServiceFau" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesDomainServiceFau" +
                 "lt", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntities", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesResponse")]
             [global::System.ServiceModel.Web.WebGetAttribute()]
@@ -263,7 +263,7 @@ namespace GlobalNamespaceTest
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginReadEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'ReadEntities' operation.</returns>
-            global::System.ServiceModel.DomainServices.Client.QueryResult<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> EndReadEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity> EndReadEntities(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -272,25 +272,25 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.FaultContractAttribute(typeof(global::System.ServiceModel.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesDomainServiceFa" +
+            [global::System.ServiceModel.FaultContractAttribute(typeof(global::OpenRiaServices.DomainServices.Client.DomainServiceFault), Action="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesDomainServiceFa" +
                 "ult", Name="DomainServiceFault", Namespace="DomainServices")]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChanges", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::System.ServiceModel.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class GlobalNamespaceTest_DomainContextEntityContainer : global::System.ServiceModel.DomainServices.Client.EntityContainer
+        internal sealed class GlobalNamespaceTest_DomainContextEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
         {
             
             public GlobalNamespaceTest_DomainContextEntityContainer()
             {
-                this.CreateEntitySet<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity>(global::System.ServiceModel.DomainServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::GlobalNamespaceTest.GlobalNamespaceTest_Entity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
             }
         }
     }
@@ -301,7 +301,7 @@ namespace GlobalNamespaceTest
     [global::GlobalNamespaceTest_Attribute()]
     [global::GlobalNamespaceTest_ValidationAttribute()]
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/GlobalNamespaceTest")]
-    public sealed partial class GlobalNamespaceTest_Entity : global::System.ServiceModel.DomainServices.Client.Entity
+    public sealed partial class GlobalNamespaceTest_Entity : global::OpenRiaServices.DomainServices.Client.Entity
     {
         
         private global::GlobalNamespaceTest_Enum _enumProperty;

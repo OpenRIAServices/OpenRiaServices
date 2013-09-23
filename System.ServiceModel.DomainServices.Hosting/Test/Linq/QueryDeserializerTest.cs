@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace System.Linq.Dynamic.UnitTests

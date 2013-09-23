@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
 
-namespace Microsoft.ServiceModel.DomainServices.WindowsAzure.Test
+namespace OpenRiaServices.DomainServices.WindowsAzure.Test
 {
     [TestClass]
     public class TableEntitySetTests

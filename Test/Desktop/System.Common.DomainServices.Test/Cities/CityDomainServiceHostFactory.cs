@@ -1,6 +1,6 @@
 ﻿using System;
-using System.ServiceModel;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices;
+using OpenRiaServices.DomainServices.Hosting;
 
 namespace Cities
 {

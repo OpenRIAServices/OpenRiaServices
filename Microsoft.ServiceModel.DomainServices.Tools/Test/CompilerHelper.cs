@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Tasks;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     internal class CompilerHelper
     {
@@ -134,10 +134,10 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             string projectDir = Path.GetDirectoryName(projectPath);
 
             // Folder of project we want to build
-            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\System.ServiceModel.DomainServices.Client.Web\Framework\Silverlight"));
+            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight"));
 
             string projectOutputDir = Path.Combine(testProjectDir, outputPath);
-            string testProjectFile = Path.Combine(testProjectDir, @"System.ServiceModel.DomainServices.Client.Web.csproj");
+            string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.DomainServices.Client.Web.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)

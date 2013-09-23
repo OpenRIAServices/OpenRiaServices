@@ -3,15 +3,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.DataAnnotations;
 using DataTests.AdventureWorks.LTS;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
 
     [TestClass]
     public class EntityConflictTests : UnitTestBase

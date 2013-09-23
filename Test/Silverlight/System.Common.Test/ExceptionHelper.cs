@@ -9,9 +9,9 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace System.ServiceModel.DomainServices.Hosting.Test
+namespace OpenRiaServices.DomainServices.Hosting.Test
 #else
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 #endif
 {
     public delegate void GenericDelegate();

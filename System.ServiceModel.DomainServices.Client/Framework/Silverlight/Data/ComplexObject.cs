@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Base class for all complex objects.
@@ -883,12 +884,10 @@ namespace System.ServiceModel.DomainServices.Client
         }
         #endregion
     }
-
 #if SILVERLIGHT
     public abstract partial class ComplexObject : INotifyDataErrorInfo
     {
         private EventHandler<DataErrorsChangedEventArgs> _errorsChangedHandler;
-
         /// <summary>
         /// Raises the event whenever validation errors have changed for a property.
         /// </summary>
@@ -900,7 +899,6 @@ namespace System.ServiceModel.DomainServices.Client
                 this._errorsChangedHandler(this, new DataErrorsChangedEventArgs(propertyName));
             }
         }
-
         /// <summary>
         /// Explicitly implement the <see cref="INotifyDataErrorInfo.ErrorsChanged"/> event.
         /// </summary>
@@ -909,7 +907,6 @@ namespace System.ServiceModel.DomainServices.Client
             add { this._errorsChangedHandler += value; }
             remove { this._errorsChangedHandler -= value; }
         }
-
         /// <summary>
         /// Get the errors for the specified property, or the type-level
         /// errors if <paramref name="propertyName"/> is <c>null</c> of empty.
@@ -926,7 +923,6 @@ namespace System.ServiceModel.DomainServices.Client
         IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
         {
             IEnumerable<ValidationResult> results;
-
             if (string.IsNullOrEmpty(propertyName))
             {
                 // If the property name is null or empty, then we want to include errors
@@ -939,11 +935,9 @@ namespace System.ServiceModel.DomainServices.Client
                 // Otherwise, only return the errors that contain the property name
                 results = this.ValidationResultCollection.Where(e => e.MemberNames.Contains(propertyName));
             }
-
             // Prevent deferred enumeration
             return results.ToArray();
         }
-
         /// <summary>
         /// Gets a value indicating whether or not the entity presently has errors.
         /// </summary>

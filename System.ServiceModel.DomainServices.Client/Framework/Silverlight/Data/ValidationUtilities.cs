@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -6,18 +7,18 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-
+using OpenRiaServices.DomainServices;
 #if SERVERFX
-using DataResource = System.ServiceModel.DomainServices.Server.Resource;
+using DataResource = OpenRiaServices.DomainServices.Server.Resource;
 #else
-using DataResource = System.ServiceModel.DomainServices.Client.Resource;
+using DataResource = OpenRiaServices.DomainServices.Client.Resource;
+
 #endif
 
 #if SERVERFX
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 #else
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 #endif
 {
     internal static class ValidationUtilities

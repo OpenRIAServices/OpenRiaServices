@@ -5,11 +5,11 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.Hosting.Local.Tests")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Hosting.Local.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
-[assembly: AssemblyProduct("Microsoft.ServiceModel.DomainServices.Hosting.Local.Tests")]
+[assembly: AssemblyProduct("OpenRiaServices.DomainServices.Hosting.Local.Tests")]
 [assembly: AssemblyCopyright("© Outercurve Foundation.  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

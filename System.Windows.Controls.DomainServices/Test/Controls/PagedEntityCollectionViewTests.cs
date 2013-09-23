@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 using System.Windows.Controls.Test;
 using Cities;
 using DataTests.AdventureWorks.LTS;

@@ -7,47 +7,46 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
-namespace System.ServiceModel.DomainServices.Client.Test.Services {
-    
-    
+namespace OpenRiaServices.DomainServices.Client.Test.Services
+{
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="", ConfigurationName="Services.TestServices")]
-    public interface TestServices {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="urn:TestServices/CreateNewDatabase", ReplyAction="urn:TestServices/CreateNewDatabaseResponse")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace = "", ConfigurationName = "Services.TestServices")]
+    public interface TestServices
+    {
+        [System.ServiceModel.OperationContractAttribute(Action = "urn:TestServices/CreateNewDatabase", ReplyAction = "urn:TestServices/CreateNewDatabaseResponse")]
         void CreateNewDatabase(string databaseName);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="urn:TestServices/CreateNewDatabase", ReplyAction="urn:TestServices/CreateNewDatabaseResponse")]
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "urn:TestServices/CreateNewDatabase", ReplyAction = "urn:TestServices/CreateNewDatabaseResponse")]
         System.IAsyncResult BeginCreateNewDatabase(string databaseName, System.AsyncCallback callback, object asyncState);
         
         void EndCreateNewDatabase(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:TestServices/ReleaseNewDatabase", ReplyAction="urn:TestServices/ReleaseNewDatabaseResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action = "urn:TestServices/ReleaseNewDatabase", ReplyAction = "urn:TestServices/ReleaseNewDatabaseResponse")]
         void ReleaseNewDatabase(string databaseName);
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="urn:TestServices/ReleaseNewDatabase", ReplyAction="urn:TestServices/ReleaseNewDatabaseResponse")]
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "urn:TestServices/ReleaseNewDatabase", ReplyAction = "urn:TestServices/ReleaseNewDatabaseResponse")]
         System.IAsyncResult BeginReleaseNewDatabase(string databaseName, System.AsyncCallback callback, object asyncState);
         
         void EndReleaseNewDatabase(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(Action="urn:TestServices/RestartApp", ReplyAction="urn:TestServices/RestartAppResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action = "urn:TestServices/RestartApp", ReplyAction = "urn:TestServices/RestartAppResponse")]
         void RestartApp();
         
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="urn:TestServices/RestartApp", ReplyAction="urn:TestServices/RestartAppResponse")]
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "urn:TestServices/RestartApp", ReplyAction = "urn:TestServices/RestartAppResponse")]
         System.IAsyncResult BeginRestartApp(System.AsyncCallback callback, object asyncState);
         
         void EndRestartApp(System.IAsyncResult result);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public interface TestServicesChannel : System.ServiceModel.DomainServices.Client.Test.Services.TestServices, System.ServiceModel.IClientChannel {
+    public interface TestServicesChannel : OpenRiaServices.DomainServices.Client.Test.Services.TestServices, System.ServiceModel.IClientChannel
+    {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-    public partial class TestServicesClient : System.ServiceModel.ClientBase<System.ServiceModel.DomainServices.Client.Test.Services.TestServices>, System.ServiceModel.DomainServices.Client.Test.Services.TestServices {
-        
+    public partial class TestServicesClient : System.ServiceModel.ClientBase<OpenRiaServices.DomainServices.Client.Test.Services.TestServices>, OpenRiaServices.DomainServices.Client.Test.Services.TestServices
+    {
         private BeginOperationDelegate onBeginCreateNewDatabaseDelegate;
         
         private EndOperationDelegate onEndCreateNewDatabaseDelegate;
@@ -77,12 +76,12 @@ namespace System.ServiceModel.DomainServices.Client.Test.Services {
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public TestServicesClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public TestServicesClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : base(endpointConfigurationName, remoteAddress)
+        {
         }
         
-        public TestServicesClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public TestServicesClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : base(binding, remoteAddress)
+        {
         }
         
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CreateNewDatabaseCompleted;

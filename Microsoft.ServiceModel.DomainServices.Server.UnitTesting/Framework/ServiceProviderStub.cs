@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Principal;
 
-namespace Microsoft.ServiceModel.DomainServices.Server.UnitTesting
+namespace OpenRiaServices.DomainServices.Server.UnitTesting
 {
     internal class ServiceProviderStub : IServiceProvider
     {

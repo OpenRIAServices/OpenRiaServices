@@ -4,11 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     [TestClass]
     public class QueryAttributeTests

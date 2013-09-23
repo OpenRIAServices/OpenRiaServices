@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// Interface for user entities that has properties for passing principal values to the client.

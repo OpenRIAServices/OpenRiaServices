@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAzure.StorageClient;
 
-namespace Microsoft.ServiceModel.DomainServices.WindowsAzure
+namespace OpenRiaServices.DomainServices.WindowsAzure
 {
     /// <summary>
     /// The base type for all entities that can be made available from the <see cref="TableDomainService{T}"/>.

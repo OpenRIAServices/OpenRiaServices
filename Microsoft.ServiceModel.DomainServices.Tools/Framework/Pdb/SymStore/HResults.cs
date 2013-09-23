@@ -1,4 +1,4 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.Pdb.SymStore
+namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
 {
     internal enum HResult
     {

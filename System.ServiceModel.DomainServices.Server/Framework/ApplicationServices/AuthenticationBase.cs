@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
@@ -12,7 +13,7 @@ using System.Web.Configuration;
 using System.Web.Profile;
 using System.Web.Security;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// <see cref="DomainService"/> that encapsulates the authentication domain.

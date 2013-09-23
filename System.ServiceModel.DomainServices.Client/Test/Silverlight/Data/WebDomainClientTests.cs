@@ -4,18 +4,18 @@ extern alias SSmDsWeb;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel;
+using OpenRiaServices;
 using System.ServiceModel.Channels;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using AsyncResultBase = SSmDsClient::System.ServiceModel.DomainServices.Client.AsyncResultBase;
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
-    using Resources = SSmDsClient::System.ServiceModel.DomainServices.Client.Resources;
+    using AsyncResultBase = OpenRiaServices.DomainServices.Client.AsyncResultBase;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = OpenRiaServices.DomainServices.Client.Resources;
     using System.Globalization;
     using System.Threading;
 
@@ -634,7 +634,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
             CityDomainContext dc = new CityDomainContext(GenerateUriBase(1000)); // --> the length when localized to Turkish is > 2083
             ExceptionHelper.ExpectException<InvalidOperationException>(() => dc.Echo(""),
-                String.Format(SSmDsWeb::System.ServiceModel.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
+                String.Format(OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
         }
 
         [TestMethod]
@@ -643,7 +643,7 @@ namespace System.ServiceModel.DomainServices.Client.Test
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
             CityDomainContext dc = new CityDomainContext(GenerateUriBase(1000)); // --> the length when localized to Turkish is > 2083
             ExceptionHelper.ExpectException<InvalidOperationException>(() => dc.Load(dc.GetCitiesQuery()),
-                String.Format(SSmDsWeb::System.ServiceModel.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
+                String.Format(OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
         }
 
         private static Uri GenerateUriBase(int length)

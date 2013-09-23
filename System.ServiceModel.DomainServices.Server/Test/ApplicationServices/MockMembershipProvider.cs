@@ -1,6 +1,6 @@
 ﻿using System.Web.Security;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {
     public class MockMembershipProvider : MembershipProvider
     {

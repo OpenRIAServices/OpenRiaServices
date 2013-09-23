@@ -6,8 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Client;
 
 namespace System.Windows.Controls
 {

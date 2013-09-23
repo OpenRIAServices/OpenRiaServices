@@ -7,24 +7,23 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     using System.ComponentModel;
     using System.Globalization;
     using System.Collections.Generic;
     using System.Linq;
-    using System.ServiceModel.DomainServices.Server;
-    using System.ServiceModel.DomainServices.Hosting;
-    using System.ServiceModel.DomainServices.Server.ApplicationServices;
-    using Microsoft.ServiceModel.DomainServices.Tools.TextTemplate;
-    using Microsoft.ServiceModel.DomainServices.Tools;
-    using System.ServiceModel.DomainServices;
+    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Server.ApplicationServices;
+    using OpenRiaServices.DomainServices.Tools.TextTemplate;
+    using OpenRiaServices.DomainServices.Tools;
+    using OpenRiaServices.DomainServices;
     
-    
-    #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+    #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "10.0.0.0")]
-    public partial class CSharpDomainContextGenerator : Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.DomainContextGenerator
+    public partial class CSharpDomainContextGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.DomainContextGenerator
     {
         #region ToString Helpers
         /// <summary>
@@ -91,7 +90,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerat
             this.Write("\r\n");
             this.Write("\r\n\r\n");
             
-            #line 17 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+            #line 17 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
  this.Generate(); 
             
             #line default
@@ -100,7 +99,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerat
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 
 	private void GenerateUsings()
@@ -110,22 +109,22 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerat
         #line default
         #line hidden
         
-        #line 23 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 23 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(@"using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.DomainServices.Client;
-using System.ServiceModel.DomainServices.Client.ApplicationServices;
+using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client.ApplicationServices;
 ");
 
         
         #line default
         #line hidden
         
-        #line 32 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 32 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 	}
 
@@ -134,10 +133,10 @@ using System.ServiceModel.DomainServices.Client.ApplicationServices;
     /// </summary>
 	protected virtual void GenerateClassDeclaration()
 	{	
-		string baseType = "System.ServiceModel.DomainServices.Client.DomainContext";
+		string baseType = "OpenRiaServices.DomainServices.Client.DomainContext";
 		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
 		{
-			baseType = @"global::System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+			baseType = @"global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
 		}
 		 
 
@@ -145,42 +144,42 @@ using System.ServiceModel.DomainServices.Client.ApplicationServices;
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("public sealed partial class ");
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(" : ");
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(baseType));
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("\r\n");
 
         
         #line default
         #line hidden
         
-        #line 48 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 48 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 	}
 	
@@ -196,56 +195,56 @@ this.Write("\r\n");
         #line default
         #line hidden
         
-        #line 58 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 58 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("public ");
 
         
         #line default
         #line hidden
         
-        #line 59 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 59 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
         
         #line default
         #line hidden
         
-        #line 59 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 59 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("() : \r\n\tthis(new WebDomainClient<");
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(">(new Uri(\"");
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(relativeServiceUri));
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("\", UriKind.Relative)");
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
  
 	if(requiresSecureEndpoint)
 	{
@@ -254,14 +253,14 @@ this.Write("\", UriKind.Relative)");
         #line default
         #line hidden
         
-        #line 63 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 63 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(",true");
 
         
         #line default
         #line hidden
         
-        #line 63 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 63 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 	}
 
@@ -269,42 +268,42 @@ this.Write(",true");
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("))\r\n{\r\n}\r\n\t\t\r\npublic ");
 
         
         #line default
         #line hidden
         
-        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
         
         #line default
         #line hidden
         
-        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("(Uri serviceUri) : \r\n\tthis(new WebDomainClient<");
 
         
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
 
         
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(">(serviceUri");
 
         
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
  
 	if(requiresSecureEndpoint)
 	{
@@ -313,14 +312,14 @@ this.Write(">(serviceUri");
         #line default
         #line hidden
         
-        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(",true");
 
         
         #line default
         #line hidden
         
-        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 	}
 	
@@ -328,28 +327,28 @@ this.Write(",true");
         #line default
         #line hidden
         
-        #line 75 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 75 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("))\r\n{\r\n}\r\n\r\npublic ");
 
         
         #line default
         #line hidden
         
-        #line 79 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 79 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
         
         #line default
         #line hidden
         
-        #line 79 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 79 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("(DomainClient domainClient) :\r\n\tbase(domainClient)\r\n{\r\n\tthis.OnCreated();\r\n}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 84 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 84 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 	}
 	
@@ -364,28 +363,28 @@ this.Write("(DomainClient domainClient) :\r\n\tbase(domainClient)\r\n{\r\n\tthis
         #line default
         #line hidden
         
-        #line 93 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 93 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("protected override EntityContainer CreateEntityContainer()\r\n{\r\n\treturn new ");
 
         
         #line default
         #line hidden
         
-        #line 96 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 96 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityContainerClassName));
 
         
         #line default
         #line hidden
         
-        #line 96 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 96 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("();\r\n}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 98 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 98 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 		
 		this.GenerateEntityContainerClass(entityContainerClassName);
@@ -398,61 +397,61 @@ this.Write("();\r\n}\r\n");
         #line default
         #line hidden
         
-        #line 105 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 105 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("internal sealed class ");
 
         
         #line default
         #line hidden
         
-        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityContainerClassName));
 
         
         #line default
         #line hidden
         
-        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(" : EntityContainer\r\n");
 
         
         #line default
         #line hidden
         
-        #line 107 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 107 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
  this.GenerateOpeningBrace(); 
         
         #line default
         #line hidden
         
-        #line 107 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 107 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("public ");
 
         
         #line default
         #line hidden
         
-        #line 108 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 108 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityContainerClassName));
 
         
         #line default
         #line hidden
         
-        #line 108 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 108 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("()\r\n");
 
         
         #line default
         #line hidden
         
-        #line 109 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 109 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
  this.GenerateOpeningBrace(); 
         
         #line default
         #line hidden
         
-        #line 110 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 110 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 		HashSet<Type> entityTypesToUse = new HashSet<Type>();
         foreach (Type entityType in this.DomainServiceDescription.EntityTypes)
@@ -473,42 +472,42 @@ this.Write("()\r\n");
         #line default
         #line hidden
         
-        #line 125 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 125 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("this.CreateEntitySet<");
 
         
         #line default
         #line hidden
         
-        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
         
         #line default
         #line hidden
         
-        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(">(");
 
         
         #line default
         #line hidden
         
-        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(this.ToStringHelper.ToStringWithCulture(entitySetOperationsEnumValue));
 
         
         #line default
         #line hidden
         
-        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write(");");
 
         
         #line default
         #line hidden
         
-        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 		}
 		
@@ -526,14 +525,14 @@ this.Write(");");
         #line default
         #line hidden
         
-        #line 138 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 138 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 this.Write("\t\t\r\npartial void OnCreated();\r\n");
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpDomainContextGenerator.tt"
 
 	}
 
@@ -541,7 +540,7 @@ this.Write("\t\t\r\npartial void OnCreated();\r\n");
         #line default
         #line hidden
         
-        #line 4 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 4 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 	/// <summary>
 	/// Generates the custom methods.
@@ -565,28 +564,28 @@ this.Write("\t\t\r\npartial void OnCreated();\r\n");
         #line default
         #line hidden
         
-        #line 22 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 22 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("public void ");
 
         
         #line default
         #line hidden
         
-        #line 23 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 23 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainMethod.Name));
 
         
         #line default
         #line hidden
         
-        #line 23 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 23 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("(\r\n");
 
         
         #line default
         #line hidden
         
-        #line 24 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 24 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 		List<string> invokeParams = new List<string>();
 		DomainOperationParameter[] paramInfos = domainMethod.Parameters.ToArray();
@@ -599,28 +598,28 @@ this.Write("(\r\n");
         #line default
         #line hidden
         
-        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramTypeName));
 
         
         #line default
         #line hidden
         
-        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfo.Name));
 
         
         #line default
         #line hidden
         
-        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 			if(i + 1 < paramInfos.Length)
 			{
@@ -629,14 +628,14 @@ this.Write(this.ToStringHelper.ToStringWithCulture(paramInfo.Name));
         #line default
         #line hidden
         
-        #line 34 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 34 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 34 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 34 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 			}
 			if(i > 0)
@@ -649,14 +648,14 @@ this.Write(", ");
         #line default
         #line hidden
         
-        #line 41 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 41 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(")\r\n");
 
         
         #line default
         #line hidden
         
-        #line 42 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 42 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 		this.GenerateOpeningBrace();
 
@@ -664,35 +663,35 @@ this.Write(")\r\n");
         #line default
         #line hidden
         
-        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfos[0].Name));
 
         
         #line default
         #line hidden
         
-        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(".");
 
         
         #line default
         #line hidden
         
-        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainMethod.Name));
 
         
         #line default
         #line hidden
         
-        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("(\r\n");
 
         
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
   
 			for(int i = 0; i < invokeParams.Count; i ++)
 			{
@@ -701,14 +700,14 @@ this.Write("(\r\n");
         #line default
         #line hidden
         
-        #line 49 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 49 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(invokeParams[i]));
 
         
         #line default
         #line hidden
         
-        #line 49 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 49 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 				if(i + 1 < invokeParams.Count)
 				{
@@ -717,14 +716,14 @@ this.Write(this.ToStringHelper.ToStringWithCulture(invokeParams[i]));
         #line default
         #line hidden
         
-        #line 52 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 52 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 52 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 52 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 				}
 			}
@@ -733,14 +732,14 @@ this.Write(", ");
         #line default
         #line hidden
         
-        #line 55 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 55 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 56 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 56 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 		this.GenerateClosingBrace();
 	}
@@ -769,56 +768,56 @@ this.Write(");\r\n");
         #line default
         #line hidden
         
-        #line 79 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 79 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("public EntitySet<");
 
         
         #line default
         #line hidden
         
-        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
         
         #line default
         #line hidden
         
-        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("> ");
 
         
         #line default
         #line hidden
         
-        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
 
         
         #line default
         #line hidden
         
-        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 80 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("\r\n{\r\n    get\r\n    {\r\n        return base.EntityContainer.GetEntitySet<");
 
         
         #line default
         #line hidden
         
-        #line 84 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 84 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
         
         #line default
         #line hidden
         
-        #line 84 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 84 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(">();\r\n    }\r\n}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 87 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 87 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 	}
 	
@@ -857,42 +856,42 @@ this.Write(">();\r\n    }\r\n}\r\n");
         #line default
         #line hidden
         
-        #line 120 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 120 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("public EntityQuery<");
 
         
         #line default
         #line hidden
         
-        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetEntityQueryMethodElementReturnTypeName(domainOperationEntry)));
 
         
         #line default
         #line hidden
         
-        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("> ");
 
         
         #line default
         #line hidden
         
-        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(queryMethodName));
 
         
         #line default
         #line hidden
         
-        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 121 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("(\r\n");
 
         
         #line default
         #line hidden
         
-        #line 122 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 122 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 	this.GenerateParameterDeclaration(domainOperationEntry.Parameters.AsEnumerable(), true);
 
@@ -900,14 +899,14 @@ this.Write("(\r\n");
         #line default
         #line hidden
         
-        #line 124 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 124 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(")\r\n");
 
         
         #line default
         #line hidden
         
-        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 126 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 
 	}
 	
@@ -926,84 +925,84 @@ this.Write(")\r\n");
         #line default
         #line hidden
         
-        #line 139 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 139 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("return base.CreateQuery<");
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetEntityQueryMethodElementReturnTypeName(domainOperationEntry)));
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(">(\"");
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainOperationEntry.Name));
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write("\", ");
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterDictionaryName));
 
         
         #line default
         #line hidden
         
-        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 140 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(", \r\n\t\t");
 
         
         #line default
         #line hidden
         
-        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetBooleanString(queryAttribute.HasSideEffects, true)));
 
         
         #line default
         #line hidden
         
-        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetBooleanString(queryAttribute.IsComposable, true)));
 
         
         #line default
         #line hidden
         
-        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 141 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 142 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
+        #line 142 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude"
 	
 	}
 	
@@ -1017,7 +1016,7 @@ this.Write(");\r\n");
         #line default
         #line hidden
         
-        #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 
 /// <summary>
@@ -1057,42 +1056,42 @@ private void GenerateInvokeOperationDeclaration(DomainOperationEntry domainOpera
         #line default
         #line hidden
         
-        #line 35 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 35 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("public ");
 
         
         #line default
         #line hidden
         
-        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(invokeOperationReturnTypeName));
 
         
         #line default
         #line hidden
         
-        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainOperationEntry.Name));
 
         
         #line default
         #line hidden
         
-        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 36 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("(\r\n");
 
         
         #line default
         #line hidden
         
-        #line 37 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 37 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 	this.GenerateParameterDeclaration(domainOperationEntry.Parameters, true);
 
@@ -1105,14 +1104,14 @@ this.Write("(\r\n");
         #line default
         #line hidden
         
-        #line 44 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 44 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 44 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 44 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 		}
 
@@ -1120,28 +1119,28 @@ this.Write(", ");
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("Action<");
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(invokeOperationReturnTypeName));
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("> callback, object userState\r\n");
 
         
         #line default
         #line hidden
         
-        #line 48 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 48 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 	}
 
@@ -1149,14 +1148,14 @@ this.Write("> callback, object userState\r\n");
         #line default
         #line hidden
         
-        #line 50 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 50 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(")\r\n");
 
         
         #line default
         #line hidden
         
-        #line 51 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 51 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 }
 
@@ -1175,84 +1174,84 @@ private void GenerateInvokeMethodReturn(DomainOperationEntry domainOperationEntr
         #line default
         #line hidden
         
-        #line 64 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 64 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("return ((");
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetInvokeMethodReturnTypeName(domainOperationEntry)));
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(")(this.InvokeOperation(\"");
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainOperationEntry.Name));
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("\", typeof(");
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(returnTypeNameString));
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("), ");
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterDictionaryString));
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(", \r\n");
 
         
         #line default
         #line hidden
         
-        #line 66 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 66 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetBooleanString(invokeAttribute.HasSideEffects, true)));
 
         
         #line default
         #line hidden
         
-        #line 66 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 66 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(",\r\n");
 
         
         #line default
         #line hidden
         
-        #line 67 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 67 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 	if(generateCallback)
 	{
@@ -1261,14 +1260,14 @@ this.Write(",\r\n");
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("callback, userState)));\r\n");
 
         
         #line default
         #line hidden
         
-        #line 72 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 72 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 	}
 	else
@@ -1278,14 +1277,14 @@ this.Write("callback, userState)));\r\n");
         #line default
         #line hidden
         
-        #line 76 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 76 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("null, null)));\r\n");
 
         
         #line default
         #line hidden
         
-        #line 78 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 78 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 	}
 		
@@ -1303,28 +1302,28 @@ private string GenerateServiceOpMethodBody(DomainOperationEntry domainOperationE
         #line default
         #line hidden
         
-        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("Dictionary<string, object> ");
 
         
         #line default
         #line hidden
         
-        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterDictionaryName));
 
         
         #line default
         #line hidden
         
-        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(" = new Dictionary<string, object>();\t\t\t\r\n");
 
         
         #line default
         #line hidden
         
-        #line 92 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 92 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 		foreach(DomainOperationParameter paramInfo in domainOperationEntryParameters)
 		{
@@ -1337,49 +1336,49 @@ this.Write(" = new Dictionary<string, object>();\t\t\t\r\n");
         #line default
         #line hidden
         
-        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterDictionaryName));
 
         
         #line default
         #line hidden
         
-        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(".Add(\"");
 
         
         #line default
         #line hidden
         
-        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfo.Name));
 
         
         #line default
         #line hidden
         
-        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("\", ");
 
         
         #line default
         #line hidden
         
-        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfo.Name));
 
         
         #line default
         #line hidden
         
-        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 100 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 101 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 101 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 		}
 	}
@@ -1389,42 +1388,42 @@ this.Write(");\r\n");
         #line default
         #line hidden
         
-        #line 105 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 105 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("this.ValidateMethod(\"");
 
         
         #line default
         #line hidden
         
-        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(methodName));
 
         
         #line default
         #line hidden
         
-        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write("\", ");
 
         
         #line default
         #line hidden
         
-        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(parameterDictionaryName));
 
         
         #line default
         #line hidden
         
-        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 106 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 this.Write(");\r\n");
 
         
         #line default
         #line hidden
         
-        #line 107 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
+        #line 107 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude"
 
 	return parameterDictionaryName;
 }
@@ -1434,7 +1433,7 @@ this.Write(");\r\n");
         #line default
         #line hidden
         
-        #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
 	/// <summary>
     /// Generates the DomainContext class constructors.
@@ -1463,28 +1462,28 @@ this.Write(");\r\n");
         #line default
         #line hidden
         
-        #line 24 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 24 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("[System.ServiceModel.ServiceContract()]\r\npublic interface ");
 
         
         #line default
         #line hidden
         
-        #line 26 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 26 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
 
         
         #line default
         #line hidden
         
-        #line 26 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 26 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("\r\n");
 
         
         #line default
         #line hidden
         
-        #line 27 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 27 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
  
 		this.GenerateOpeningBrace();
 		foreach(DomainOperationEntry operation in contractMethods)
@@ -1511,14 +1510,14 @@ this.Write("\r\n");
         #line default
         #line hidden
         
-        #line 48 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 48 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("[System.ServiceModel.Web.WebGet]\r\n");
 
         
         #line default
         #line hidden
         
-        #line 50 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 50 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
 		}
 		this.GenerateContractMethodAttributes(operation.Name);
@@ -1527,28 +1526,28 @@ this.Write("[System.ServiceModel.Web.WebGet]\r\n");
         #line default
         #line hidden
         
-        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("System.IAsyncResult Begin");
 
         
         #line default
         #line hidden
         
-        #line 54 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 54 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(operation.Name));
 
         
         #line default
         #line hidden
         
-        #line 54 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 54 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("(\r\n");
 
         
         #line default
         #line hidden
         
-        #line 55 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 55 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
 		foreach (DomainOperationParameter parameter in operation.Parameters)
         {
@@ -1558,35 +1557,35 @@ this.Write("(\r\n");
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetTypeName(parameterType)));
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Name));
 
         
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(",\r\n");
 
         
         #line default
         #line hidden
         
-        #line 61 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 61 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
         }
 
@@ -1594,14 +1593,14 @@ this.Write(",\r\n");
         #line default
         #line hidden
         
-        #line 63 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 63 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("System.AsyncCallback callback, object asyncState);\r\n");
 
         
         #line default
         #line hidden
         
-        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 65 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
  
 		string returnTypeName = CSharpDomainContextGenerator.GetEndOperationReturnType(operation);
 
@@ -1609,42 +1608,42 @@ this.Write("System.AsyncCallback callback, object asyncState);\r\n");
         #line default
         #line hidden
         
-        #line 67 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 67 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("\t\t\r\n");
 
         
         #line default
         #line hidden
         
-        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(returnTypeName));
 
         
         #line default
         #line hidden
         
-        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(" End");
 
         
         #line default
         #line hidden
         
-        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(operation.Name));
 
         
         #line default
         #line hidden
         
-        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 68 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("(System.IAsyncResult result);\r\n");
 
         
         #line default
         #line hidden
         
-        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
 	}
 	
@@ -1656,7 +1655,7 @@ this.Write("(System.IAsyncResult result);\r\n");
         #line default
         #line hidden
         
-        #line 75 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 75 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallb" +
         "ack callback, object asyncState);\r\nIEnumerable<ChangeSetEntry> EndSubmitChanges(" +
         "IAsyncResult result);\t\t\t\r\n");
@@ -1665,7 +1664,7 @@ this.Write("IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSe
         #line default
         #line hidden
         
-        #line 78 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 78 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
 	}
 	
@@ -1682,70 +1681,70 @@ this.Write("IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSe
         #line default
         #line hidden
         
-        #line 89 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 89 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("[FaultContract(typeof(DomainServiceFault), Action=\"");
 
         
         #line default
         #line hidden
         
-        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(faultActionString));
 
         
         #line default
         #line hidden
         
-        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("\", Name=\"");
 
         
         #line default
         #line hidden
         
-        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(faultTypeName));
 
         
         #line default
         #line hidden
         
-        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 90 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("\", Namespace=\"DomainServices\")]\r\n[OperationContract(AsyncPattern=true, Action=\"");
 
         
         #line default
         #line hidden
         
-        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(actionString));
 
         
         #line default
         #line hidden
         
-        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("\", ReplyAction=\"");
 
         
         #line default
         #line hidden
         
-        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(replyActionString));
 
         
         #line default
         #line hidden
         
-        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 91 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 this.Write("\")]\t\r\n");
 
         
         #line default
         #line hidden
         
-        #line 92 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
+        #line 92 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude"
 
 	}
 
@@ -1753,7 +1752,7 @@ this.Write("\")]\t\r\n");
         #line default
         #line hidden
         
-        #line 5 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 5 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 
 
 private void GenerateParameterDeclaration(IEnumerable<DomainOperationParameter> parameters, bool generateAttributes)
@@ -1773,28 +1772,28 @@ private void GenerateParameterDeclaration(IEnumerable<DomainOperationParameter> 
         #line default
         #line hidden
         
-        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramTypeName));
 
         
         #line default
         #line hidden
         
-        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfo.Name));
 
         
         #line default
         #line hidden
         
-        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 19 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 
 		if(i + 1 < paramInfos.Length)
 		{
@@ -1803,14 +1802,14 @@ this.Write(this.ToStringHelper.ToStringWithCulture(paramInfo.Name));
         #line default
         #line hidden
         
-        #line 22 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 22 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 22 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 22 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 
 		}		
 	}
@@ -1823,14 +1822,14 @@ private void GenerateOpeningBrace()
         #line default
         #line hidden
         
-        #line 29 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 29 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write("{\r\n");
 
         
         #line default
         #line hidden
         
-        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 31 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 
 	PushIndent("\t");
 }
@@ -1843,14 +1842,14 @@ private void GenerateClosingBrace()
         #line default
         #line hidden
         
-        #line 38 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 38 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write("}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 40 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 40 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 
 }
 
@@ -1861,28 +1860,28 @@ private void GenerateNamespace(string ns)
         #line default
         #line hidden
         
-        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 45 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write("namespace ");
 
         
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(ns));
 
         
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 this.Write("\r\n");
 
         
         #line default
         #line hidden
         
-        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
+        #line 47 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\Utility.ttinclude"
 
 }
 
@@ -1891,7 +1890,7 @@ this.Write("\r\n");
         #line default
         #line hidden
         
-        #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 	/// <summary>
 	/// Generates attribute declarations in C#.
@@ -1923,28 +1922,28 @@ this.Write("\r\n");
         #line default
         #line hidden
         
-        #line 27 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 27 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write("[");
 
         
         #line default
         #line hidden
         
-        #line 28 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 28 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(attributeTypeName));
 
         
         #line default
         #line hidden
         
-        #line 28 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 28 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write("(");
 
         
         #line default
         #line hidden
         
-        #line 28 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 28 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 			if (attributeDeclaration.ConstructorArguments.Count > 0)
             {
@@ -1957,14 +1956,14 @@ this.Write("(");
         #line default
         #line hidden
         
-        #line 35 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 35 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(stringValue));
 
         
         #line default
         #line hidden
         
-        #line 35 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 35 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 					if (i + 1 < attributeDeclaration.ConstructorArguments.Count)
 					{
@@ -1973,14 +1972,14 @@ this.Write(this.ToStringHelper.ToStringWithCulture(stringValue));
         #line default
         #line hidden
         
-        #line 38 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 38 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 38 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 38 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 					}
 	            }
@@ -1994,14 +1993,14 @@ this.Write(", ");
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(", ");
 
         
         #line default
         #line hidden
         
-        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 46 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 				}
 				
@@ -2014,28 +2013,28 @@ this.Write(", ");
         #line default
         #line hidden
         
-        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(pair.Key));
 
         
         #line default
         #line hidden
         
-        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write("=");
 
         
         #line default
         #line hidden
         
-        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(stringValue));
 
         
         #line default
         #line hidden
         
-        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 53 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
                     if (i + 1 < attributeDeclaration.NamedParameters.Count)
                     {
@@ -2044,14 +2043,14 @@ this.Write(this.ToStringHelper.ToStringWithCulture(stringValue));
         #line default
         #line hidden
         
-        #line 56 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 56 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(",");
 
         
         #line default
         #line hidden
         
-        #line 56 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 56 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
                     }
                 }
@@ -2061,14 +2060,14 @@ this.Write(",");
         #line default
         #line hidden
         
-        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 60 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(")]\r\n");
 
         
         #line default
         #line hidden
         
-        #line 61 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 61 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 		}
 	}
@@ -2082,28 +2081,28 @@ this.Write(")]\r\n");
         #line default
         #line hidden
         
-        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 69 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write("[System.Runtime.Serialization.DataContract(Namespace = \"");
 
         
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(dataContractNamespace));
 
         
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write("\"");
 
         
         #line default
         #line hidden
         
-        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 70 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
   
 		if(!string.IsNullOrEmpty(dataContractName))
 		{
@@ -2112,28 +2111,28 @@ this.Write("\"");
         #line default
         #line hidden
         
-        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(", Name = \" ");
 
         
         #line default
         #line hidden
         
-        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(dataContractName));
 
         
         #line default
         #line hidden
         
-        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write("\"");
 
         
         #line default
         #line hidden
         
-        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 73 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 		}
 
@@ -2141,14 +2140,14 @@ this.Write("\"");
         #line default
         #line hidden
         
-        #line 75 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 75 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 this.Write(")]\r\n");
 
         
         #line default
         #line hidden
         
-        #line 76 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
+        #line 76 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude"
 
 	}	
 

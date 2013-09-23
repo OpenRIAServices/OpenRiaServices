@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Principal;
 
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.ServiceModel.DomainServices.Server.ApplicationServices.UserBase.#System.Security.Principal.IPrincipal.Identity", Justification = "Low use so explicitly withheld from the API")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "System.ServiceModel.DomainServices.Server.ApplicationServices.UserBase.#System.Security.Principal.IIdentity.AuthenticationType", Justification = "Low use so explicitly withheld from the API")]
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "OpenRiaServices.DomainServices.Server.ApplicationServices.UserBase.#System.Security.Principal.IPrincipal.Identity", Justification = "Low use so explicitly withheld from the API")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "OpenRiaServices.DomainServices.Server.ApplicationServices.UserBase.#System.Security.Principal.IIdentity.AuthenticationType", Justification = "Low use so explicitly withheld from the API")]
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// Base class for user entities that has properties for passing principal values to the client.

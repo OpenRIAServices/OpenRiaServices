@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     /// <summary>
     /// Represents a REST w/ binary encoding endpoint factory for <see cref="DomainService"/>s.
@@ -77,7 +79,7 @@ namespace System.ServiceModel.DomainServices.Hosting
             ServiceEndpoint endpoint = new ServiceEndpoint(contract, binding, new EndpointAddress(address.OriginalString + "/" + this.Name));
             endpoint.Behaviors.Add(new DomainServiceWebHttpBehavior()
             {
-                DefaultBodyStyle = Web.WebMessageBodyStyle.Wrapped
+                DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
             });
             endpoint.Behaviors.Add(new SilverlightFaultBehavior());
             return endpoint;

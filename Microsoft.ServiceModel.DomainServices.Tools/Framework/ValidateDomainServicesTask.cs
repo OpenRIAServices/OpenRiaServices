@@ -7,12 +7,12 @@ using System.Linq;
 using System.Web.Compilation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Microsoft.ServiceModel.DomainServices.Tools.Validation;
+using OpenRiaServices.DomainServices.Tools.Validation;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
-    /// Task that validates the integrity of the <see cref="System.ServiceModel.DomainServices.Server.DomainService"/>s exposed by the target Web Application
+    /// Task that validates the integrity of the <see cref="OpenRiaServices.DomainServices.Server.DomainService"/>s exposed by the target Web Application
     /// </summary>
     public class ValidateDomainServicesTask : Task
     {
@@ -44,13 +44,13 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
         public string ProjectPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly containing <see cref="System.ServiceModel.DomainServices.Server.DomainService"/> types
+        /// Gets or sets the assembly containing <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> types
         /// </summary>
         [Required]
         public ITaskItem Assembly { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of reference assemblies that may contains <see cref="System.ServiceModel.DomainServices.Server.DomainService"/> types
+        /// Gets or sets the list of reference assemblies that may contains <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> types
         /// </summary>
         [Required]
         public ITaskItem[] ReferenceAssemblies { get; set; }
@@ -120,7 +120,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
         }
 
         /// <summary>
-        /// Validates the integrity of the <see cref="System.ServiceModel.DomainServices.Server.DomainService"/>s exposed by the target Web Application
+        /// Validates the integrity of the <see cref="OpenRiaServices.DomainServices.Server.DomainService"/>s exposed by the target Web Application
         /// in a separate <see cref="AppDomain"/>
         /// </summary>
         private void ValidateDomainServices()

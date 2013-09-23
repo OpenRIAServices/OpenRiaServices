@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Represents a custom method invocation on an entity.

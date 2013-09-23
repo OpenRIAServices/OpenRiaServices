@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.WindowsAzure.StorageClient;
 
-namespace Microsoft.ServiceModel.DomainServices.WindowsAzure
+namespace OpenRiaServices.DomainServices.WindowsAzure
 {
     /// <summary>
     /// Set of <see cref="TableServiceEntity"/>s that can be updated, added to, or removed

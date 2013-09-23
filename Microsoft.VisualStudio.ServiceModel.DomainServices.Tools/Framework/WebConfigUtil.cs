@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel.Configuration;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Hosting;
 using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Linq;
@@ -486,7 +486,7 @@ namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
         /// <returns>The type name of the domain service module, suitable for inclusion in web.config</returns>
         internal static string GetDomainServiceModuleTypeName()
         {
-            return typeof(System.ServiceModel.DomainServices.Hosting.DomainServiceHttpModule).AssemblyQualifiedName;
+            return typeof(OpenRiaServices.DomainServices.Hosting.DomainServiceHttpModule).AssemblyQualifiedName;
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
         /// <returns>The type name of the OData endpoint factory, suitable for inclusion in web.config</returns>
         internal static string GetODataEndpointFactoryTypeName()
         {
-            return typeof(System.ServiceModel.DomainServices.Hosting.ODataEndpointFactory).AssemblyQualifiedName;
+            return typeof(OpenRiaServices.DomainServices.Hosting.ODataEndpointFactory).AssemblyQualifiedName;
         }
     }
 }

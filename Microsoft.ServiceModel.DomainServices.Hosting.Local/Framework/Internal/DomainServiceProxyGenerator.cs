@@ -8,11 +8,11 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 using ReflectionAssemblyBuilder = System.Reflection.Emit.AssemblyBuilder;
 using ReflectionModuleBuilder = System.Reflection.Emit.ModuleBuilder;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting.Local
+namespace OpenRiaServices.DomainServices.Hosting.Local
 {
     /// <summary>
     /// Used to generate <see cref="DomainService"/> proxies.
@@ -22,7 +22,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local
         /// <summary>
         /// Dynamically generated assembly name.
         /// </summary>
-        public const string ProxyAssemblyName = "Microsoft.ServiceModel.DomainServices.Hosting.Local.{DynamicProxies}";
+        public const string ProxyAssemblyName = "OpenRiaServices.DomainServices.Hosting.Local.{DynamicProxies}";
 
         /// <summary>
         /// Type suffix used when defining dynamic proxy types.
@@ -1287,7 +1287,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local
 
         /// <summary>
         /// This method can be used to save the dynamic assembly to disk. Note that the assembly will be saved 
-        /// into the current executing directory using a name similar to "Microsoft.ServiceModel.DomainServices.Hosting.Local.{DynamicProxies}.dll".
+        /// into the current executing directory using a name similar to "OpenRiaServices.DomainServices.Hosting.Local.{DynamicProxies}.dll".
         /// </summary>
         /// <remarks>
         /// Once the dynamic assembly is written to disk, additional modifications (e.g., creating a new proxy type) will

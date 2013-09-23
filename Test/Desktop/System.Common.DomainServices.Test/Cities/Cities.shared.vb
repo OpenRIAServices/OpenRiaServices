@@ -4,7 +4,7 @@ Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
 Imports System.Text
-Imports System.ServiceModel.DomainServices.Client
+Imports OpenRiaServices.DomainServices.Client
 Imports System.Runtime.InteropServices
 
 Namespace Cities

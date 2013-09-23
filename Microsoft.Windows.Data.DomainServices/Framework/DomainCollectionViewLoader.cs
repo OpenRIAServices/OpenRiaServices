@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 
 namespace Microsoft.Windows.Data.DomainServices
 {

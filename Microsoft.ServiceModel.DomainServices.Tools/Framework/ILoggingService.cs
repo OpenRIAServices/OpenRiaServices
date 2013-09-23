@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ServiceModel.DomainServices.Tools
+﻿namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// General purpose interface to allow errors and warnings to be logged

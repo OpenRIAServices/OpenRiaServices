@@ -1,16 +1,16 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
 
     /// <summary>
     /// Proxy generator for a complex object.
     /// </summary>
     public abstract partial class ComplexObjectGenerator
     {
-        private const string ComplexObjectBaseTypeFullName = "System.ServiceModel.DomainServices.Client.ComplexObject";
+        private const string ComplexObjectBaseTypeFullName = "OpenRiaServices.DomainServices.Client.ComplexObject";
 
         /// <summary>
         /// Gets the DomainServiceDescription for the domain service associated with this complex type.

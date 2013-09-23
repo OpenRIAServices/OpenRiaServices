@@ -1,5 +1,6 @@
-﻿
-namespace System.ServiceModel.DomainServices
+﻿using System;
+
+namespace OpenRiaServices.DomainServices
 {
     /// <summary>
     /// Attribute used to indicate that an association references entities belonging to an external

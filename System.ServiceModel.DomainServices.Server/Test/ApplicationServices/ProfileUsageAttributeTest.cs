@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="ProfileUsageAttribute"/> members.

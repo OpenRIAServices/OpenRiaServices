@@ -6,14 +6,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Client.Test;
-using Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Tools.Test.T4Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests the MEF-based dispatcher to choose a code generator

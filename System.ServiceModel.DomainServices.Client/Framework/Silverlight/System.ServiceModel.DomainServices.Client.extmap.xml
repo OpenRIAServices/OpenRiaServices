@@ -2,11 +2,11 @@
 <manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <assembly>
-    <name>System.ServiceModel.DomainServices.Client</name>
+    <name>OpenRiaServices.DomainServices.Client</name>
     <version>2.0.5.0</version>
     <publickeytoken>{RiaServicesKey}</publickeytoken>
-    <relpath>System.ServiceModel.DomainServices.Client.dll</relpath>
-    <extension downloadUri="System.ServiceModel.DomainServices.Client.zip" />
+    <relpath>OpenRiaServices.DomainServices.Client.dll</relpath>
+    <extension downloadUri="OpenRiaServices.DomainServices.Client.zip" />
   </assembly>
 
 </manifest>

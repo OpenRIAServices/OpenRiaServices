@@ -6,12 +6,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using KnownTypeUtil = System.ServiceModel.DomainServices.Server.KnownTypeUtilities;
+using KnownTypeUtil = OpenRiaServices.DomainServices.Server.KnownTypeUtilities;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     /// <summary>
     /// KnownTypeUtilities tests

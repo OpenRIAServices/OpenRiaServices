@@ -1,4 +1,5 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,10 +8,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// <see cref="CodeProcessor"/> implementation that sets the base class of both the
@@ -22,7 +23,7 @@ namespace System.ServiceModel.DomainServices.Server.ApplicationServices
         #region Constants
 
         private const string AuthenticationDomainContextBaseName =
-            "System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+            "OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
 
         #endregion
 

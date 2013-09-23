@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// A generic <see cref="DomainService"/> used for unit testing.

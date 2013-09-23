@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests CustomAttributeGenerator
@@ -133,7 +133,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
                                         typeof(Mock_CG_Attr_Gen_TestAttribute),
                                         "MockProject");
 
-            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::Microsoft.ServiceModel.DomainServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::OpenRiaServices.DomainServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
                                         typeof(Mock_CG_Attr_Gen_TestAttribute),
                                         "MockProject");
 
-            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::Microsoft.ServiceModel.DomainServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::OpenRiaServices.DomainServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
         }
 
         [TestMethod]
@@ -442,7 +442,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Checks which constructor gets selected for an attribute when the actual default value is passed as parameter")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_CUST_ATTR_CS")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CUST_ATTR_CS")]
         public void CodeGen_CustomAttrGen_CtrSelectorTest()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_CUST_ATTR_CS", /*isCSharp*/ true, /*useFullTypeNames*/ false, new Type[] { typeof(DummyDomainService) }))

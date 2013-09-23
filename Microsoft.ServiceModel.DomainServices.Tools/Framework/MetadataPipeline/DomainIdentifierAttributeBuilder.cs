@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// DomainIdentifierAttribute custom attribute builder.
@@ -14,7 +14,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
         /// <param name="propertyInfo">The getter property to consider</param>
         /// <param name="attribute">The current attribute instance we are considering</param>
         /// <returns>The name of the property we should use as the setter or null to suppress codegen.</returns>
-        /// <remarks>Specifically for the <see cref="System.ServiceModel.DomainServices.DomainIdentifierAttribute"/> type, this method returns null if the property 
+        /// <remarks>Specifically for the <see cref="OpenRiaServices.DomainServices.DomainIdentifierAttribute"/> type, this method returns null if the property 
         /// name is "CodeProcessor".</remarks>
         protected override string MapProperty(PropertyInfo propertyInfo, Attribute attribute)
         {

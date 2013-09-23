@@ -7,21 +7,21 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     
     
-    #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpClientCodeGenerator.tt"
+    #line 1 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpClientCodeGenerator.tt"
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "10.0.0.0")]
-    public partial class CSharpClientCodeGenerator : Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.ClientCodeGenerator
+    public partial class CSharpClientCodeGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.ClientCodeGenerator
     {
         public override string TransformText()
         {
             this.GenerationEnvironment = null;
             this.Write("\r\n");
             
-            #line 3 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpClientCodeGenerator.tt"
+            #line 3 "d:\dd\Alex_AppFx_1\src\AppFx\RiaServices\V1SPB\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpClientCodeGenerator.tt"
  this.GenerateProxyClass(); 
             
             #line default

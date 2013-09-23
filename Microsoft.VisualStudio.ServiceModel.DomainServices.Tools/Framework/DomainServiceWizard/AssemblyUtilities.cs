@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
 {
-    //// DEVNOTE: this was copied from AssemblyUtilities in Microsoft.ServiceModel.DomainServices.Tools.
+    //// DEVNOTE: this was copied from AssemblyUtilities in OpenRiaServices.DomainServices.Tools.
     //// It was modified to use Action<string> instead of ILogger
     //// It was not shared because of dependencies on ILogger and resource strings.
 

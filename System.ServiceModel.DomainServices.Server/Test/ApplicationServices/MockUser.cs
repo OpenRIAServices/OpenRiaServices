@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {
     public class MockUserBase : UserBase
     {

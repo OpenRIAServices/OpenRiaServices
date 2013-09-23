@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using System;
 using System.Globalization;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Summary description for domain service code gen
@@ -40,7 +40,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             string generatedCode = TestHelper.GenerateCode("C#", typeof(Mock_CG_DisplayAttr_Entity_Private_ResourceType_DomainService), logger);
 
-            string expectedExceptionMessage = "Cannot retrieve property 'Name' because localization failed.  Type 'Microsoft.ServiceModel.DomainServices.Tools.Test.Mock_CG_DisplayAttr_Private_ResourceType' is not public or does not contain a public static string property with the name 'Resource2'.";
+            string expectedExceptionMessage = "Cannot retrieve property 'Name' because localization failed.  Type 'OpenRiaServices.DomainServices.Tools.Test.Mock_CG_DisplayAttr_Private_ResourceType' is not public or does not contain a public static string property with the name 'Resource2'.";
 
             AttributeBuilderException expectedException = new AttributeBuilderException(
                     new InvalidOperationException(expectedExceptionMessage),

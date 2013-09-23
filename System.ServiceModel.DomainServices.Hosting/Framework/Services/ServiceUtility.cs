@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
 
-// WARNING: Keep this file in sync with Microsoft.ServiceModel.DomainServices.Hosting
+// WARNING: Keep this file in sync with OpenRiaServices.DomainServices.Hosting
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     internal static class ServiceUtility
     {
@@ -571,7 +573,7 @@ namespace System.ServiceModel.DomainServices.Hosting
 
             public WebServiceHostInspector() : base(
                 typeof(WebServiceHostInspector.Service),
-                new Uri("http://System.ServiceModel.DomainServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
+                new Uri("http://OpenRiaServices.DomainServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
             { }
 
             public AuthenticationSchemes AuthenticationScheme

@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.ServiceModel.DomainServices.Client;
-using System.ServiceModel.DomainServices.Client.Test.Services;
+using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client.Test.Services;
 using System.Xml.Linq;
 using Cities;
 using DataTests.AdventureWorks.LTS;
@@ -17,7 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDomainServices.LTS;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     [TestClass]
     public class PerfTests : DomainContextTestBase<Catalog>

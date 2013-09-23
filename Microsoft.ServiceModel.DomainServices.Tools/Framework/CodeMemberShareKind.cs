@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Enum type that describes how code elements are shared

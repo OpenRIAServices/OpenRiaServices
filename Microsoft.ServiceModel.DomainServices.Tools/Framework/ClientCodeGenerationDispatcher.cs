@@ -8,13 +8,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 using System.Text;
 using System.Web.Hosting;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Stateless dispatcher class that discovers and invokes the appropriate
@@ -89,7 +89,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
         /// </summary>
         /// <param name="host">The host for code generation.</param>
         /// <param name="options">The options to use for code generation.</param>
-        /// <param name="domainServiceTypes">The set of <see cref="System.ServiceModel.DomainServices.Server.DomainService"/> types for which to generate code.</param>
+        /// <param name="domainServiceTypes">The set of <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> types for which to generate code.</param>
         /// <param name="compositionAssemblies">The optional set of assemblies to use to create the MEF composition container.</param>
         /// <param name="codeGeneratorName">Optional generator name.  A <c>null</c> or empty value will select the default generator.</param>
         /// <returns>The generated source code or <c>null</c> if none was generated.</returns>
@@ -110,7 +110,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
         /// </summary>
         /// <param name="host">The host for code generation.</param>
         /// <param name="options">The options to use for code generation.</param>
-        /// <param name="catalog">The catalog containing the <see cref="System.ServiceModel.DomainServices.Server.DomainService"/> types.</param>
+        /// <param name="catalog">The catalog containing the <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> types.</param>
         /// <param name="compositionAssemblies">The optional set of assemblies to use to create the MEF composition container.</param>
         /// <param name="codeGeneratorName">Optional generator name.  A <c>null</c> or empty value will select the default generator.</param>
         /// <returns>The generated source code or <c>null</c> if none was generated.</returns>

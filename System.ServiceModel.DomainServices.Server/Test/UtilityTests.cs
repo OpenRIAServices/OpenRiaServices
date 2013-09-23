@@ -7,10 +7,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
-    using BinaryTypeUtility = SystemServiceModelDomainServicesHosting::System.ServiceModel.DomainServices.BinaryTypeUtility;
-    using SerializationUtility = SystemServiceModelDomainServicesHosting::System.ServiceModel.DomainServices.SerializationUtility;
+    using BinaryTypeUtility = OpenRiaServices.DomainServices.BinaryTypeUtility;
+    using SerializationUtility = OpenRiaServices.DomainServices.SerializationUtility;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
@@ -179,5 +179,4 @@ namespace System.ServiceModel.DomainServices.Server.Test
                 "Server byte[] values should be equal.");
         }
     }
-
 }

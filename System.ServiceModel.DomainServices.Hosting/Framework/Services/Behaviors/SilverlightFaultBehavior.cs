@@ -1,10 +1,11 @@
 ﻿using System.ServiceModel;
+using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     // Taken from http://msdn.microsoft.com/en-us/library/dd470096(VS.95).aspx.
     internal class SilverlightFaultBehavior : IEndpointBehavior

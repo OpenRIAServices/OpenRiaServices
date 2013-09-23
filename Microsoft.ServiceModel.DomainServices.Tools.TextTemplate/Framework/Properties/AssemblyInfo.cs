@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.Tools.TextTemplate")]
-[assembly: AssemblyDescription("Microsoft.ServiceModel.DomainServices.Tools.TextTemplate")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Tools.TextTemplate")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Tools.TextTemplate")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -27,8 +27,8 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("3b1e477b-e9e8-4806-84f3-83c6e428db0d")]
 
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Tools.Test")]
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.TextTemplate.Test")]
 
 // Version information for an assembly consists of the following four values:
 //

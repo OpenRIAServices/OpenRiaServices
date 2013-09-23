@@ -7,16 +7,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using DomainService_Resource = System.ServiceModel.DomainServices.Server.Resource;
+using DomainService_Resource = OpenRiaServices.DomainServices.Server.Resource;
 using ComponentModelDescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     using EnumGen.Tests;
     using EnumGen.Tests2;
@@ -29,7 +28,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("Entity property returning enum type generates enum in C#")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_CS")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_CS")]
         public void Enum_Gen_Basic_CSharp()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_CS", /*isCSharp*/ true, /*useFullTypeNames*/ false, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -40,7 +39,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in C# with full type names")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_CS_FULL")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_CS_FULL")]
         public void Enum_Gen_Basic_CSharp_Full()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_CS_FULL", /*isCSharp*/ true, /*useFullTypeNames*/ true, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -51,7 +50,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in VB")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_VB")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_VB")]
         public void Enum_Gen_Basic_VB()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_VB", /*isCSharp*/ false, /*useFullTypeNames*/ false, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -62,7 +61,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in VB with full type names")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_VB_FULL")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_VB_FULL")]
         public void Enum_Gen_Basic_VB_Full()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_VB_FULL", /*isCSharp*/ false, /*useFullTypeNames*/ true, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -73,7 +72,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("If an entity has DataContract applied only enum properties with DataMember are generated")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_DataContract()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM", true, false, new Type[] { typeof(Enum_DataContract_DomainService) }))
@@ -238,7 +237,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity exposing property with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Warn_System_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -262,7 +261,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity exposing property with nested enum type is illegal")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Warn_Nested_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -284,7 +283,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing query with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Query()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -308,7 +307,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing invoke with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Invoke()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -332,7 +331,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing named update with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Named()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -356,7 +355,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing query with enum containing custom attributes that throw logs a warning")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_THROW")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_THROW")]
         public void Enum_Gen_Warning_Throwing_CustomAttribute_Query()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -527,7 +526,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 namespace EnumGen.Tests
 {
     using System.Runtime.Serialization;
-    using Microsoft.ServiceModel.DomainServices.Tools.Test;
+    using OpenRiaServices.DomainServices.Tools.Test;
     using EnumGen.Tests2;
 
     #region Enum_Basic

@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDomainServices.NamedUpdates;
 
-namespace System.ServiceModel.DomainServices.Client.Data.Test
+namespace OpenRiaServices.DomainServices.Client.Data.Test
 {
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
 
     [TestClass]
     public class InheritanceTests : UnitTestBase

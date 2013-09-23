@@ -8,16 +8,16 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using DomainClientAsyncResult = SSmDsClient::System.ServiceModel.DomainServices.Client.DomainClientAsyncResult;
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
-    using Resources = SSmDsClient::System.ServiceModel.DomainServices.Client.Resources;
+    using DomainClientAsyncResult = OpenRiaServices.DomainServices.Client.DomainClientAsyncResult;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = OpenRiaServices.DomainServices.Client.Resources;
 
     [TestClass]
     public class DomainClientTests : UnitTestBase

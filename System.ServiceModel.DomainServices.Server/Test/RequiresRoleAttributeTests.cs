@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
-using DataAnnotationsResources = System.ServiceModel.DomainServices.Server.Resource;
-
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     [TestClass]
     public class RequiresRoleAttributeTests
@@ -136,7 +135,7 @@ namespace System.ServiceModel.DomainServices.Server.Test
             Assert.AreNotEqual(attr1.TypeId, attr2.TypeId, "TypeID should be different for different attributes");
         }
 
-        [System.ServiceModel.DomainServices.Hosting.EnableClientAccess]
+        [OpenRiaServices.DomainServices.Hosting.EnableClientAccess]
         public class RequiresRoleTestService : DomainService
         {
             [RequiresRole("role1", "role2")]

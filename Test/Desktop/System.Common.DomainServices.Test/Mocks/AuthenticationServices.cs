@@ -1,5 +1,5 @@
-﻿using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server.ApplicationServices;
+﻿using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server.ApplicationServices;
 
 namespace RootNamespace.TestNamespace
 {

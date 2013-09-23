@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Security.Principal;
-using DataAnnotationsResources = System.ServiceModel.DomainServices.Server.Resource;
+using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
 namespace System.ComponentModel.DataAnnotations
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 {
     /// <summary>
     /// Subclass of <see cref="Type"/> used to create hypothetical types

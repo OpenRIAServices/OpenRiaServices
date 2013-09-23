@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Data.Linq;
 using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server;
-using ChangeSet = System.ServiceModel.DomainServices.Server.ChangeSet;
+using OpenRiaServices.DomainServices.Server;
+using ChangeSet = OpenRiaServices.DomainServices.Server.ChangeSet;
 
-namespace Microsoft.ServiceModel.DomainServices.LinqToSql
+namespace OpenRiaServices.DomainServices.LinqToSql
 {
     /// <summary>
     /// Base class for DomainServices operating on LINQ To SQL data models

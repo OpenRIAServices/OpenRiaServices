@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting;
 using ServerClassLib2;
 
 namespace ServerClassLib

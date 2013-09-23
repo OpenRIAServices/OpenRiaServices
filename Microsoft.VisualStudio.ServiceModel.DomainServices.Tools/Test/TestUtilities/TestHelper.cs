@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Microsoft.ServiceModel.DomainServices.LinqToSql;
+using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;

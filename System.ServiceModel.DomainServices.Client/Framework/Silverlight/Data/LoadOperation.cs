@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Represents an asynchronous load operation
@@ -147,7 +148,7 @@ namespace System.ServiceModel.DomainServices.Client
 
         /// <summary>
         /// Gets the total server entity count for the query used by this operation. Automatic
-        /// evaluation of the total server entity count requires the property <see cref="System.ServiceModel.DomainServices.Client.EntityQuery.IncludeTotalCount"/>
+        /// evaluation of the total server entity count requires the property <see cref="OpenRiaServices.DomainServices.Client.EntityQuery.IncludeTotalCount"/>
         /// on the query for the load operation to be set to <c>true</c>.
         /// </summary>
         public int TotalEntityCount

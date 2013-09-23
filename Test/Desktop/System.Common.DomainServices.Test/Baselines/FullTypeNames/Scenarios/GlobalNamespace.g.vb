@@ -29,7 +29,7 @@ Namespace GlobalNamespaceTest
     ''' </summary>
     <Global.GlobalNamespaceTest_Attribute(EnumProperty:=Global.GlobalNamespaceTest_Enum.NonDefaultValue)>  _
     Partial Public NotInheritable Class GlobalNamespaceTest_DomainContext
-        Inherits Global.System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -47,7 +47,7 @@ Namespace GlobalNamespaceTest
         ''' Initializes a new instance of the <see cref="GlobalNamespaceTest_DomainContext"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract)(New Global.System.Uri("GlobalNamespaceTest-GlobalNamespaceTest_DomainService.svc", Global.System.UriKind.Relative)))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract)(New Global.System.Uri("GlobalNamespaceTest-GlobalNamespaceTest_DomainService.svc", Global.System.UriKind.Relative)))
         End Sub
         
         ''' <summary>
@@ -55,14 +55,14 @@ Namespace GlobalNamespaceTest
         ''' </summary>
         ''' <param name="serviceUri">The GlobalNamespaceTest_DomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.IGlobalNamespaceTest_DomainServiceContract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="GlobalNamespaceTest_DomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -70,7 +70,7 @@ Namespace GlobalNamespaceTest
         ''' <summary>
         ''' Gets the set of <see cref="GlobalNamespaceTest_Entity"/> entity instances that have been loaded into this <see cref="GlobalNamespaceTest_DomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property GlobalNamespaceTest_Entities() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
+        Public ReadOnly Property GlobalNamespaceTest_Entities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
             End Get
@@ -81,7 +81,7 @@ Namespace GlobalNamespaceTest
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="GlobalNamespaceTest_Entity"/> entity instances.</returns>
         <Global.GlobalNamespaceTest_Attribute()>  _
-        Public Function GetEntitiesQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
+        Public Function GetEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
             Me.ValidateMethod("GetEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)("GetEntities", Nothing, false, true)
         End Function
@@ -92,7 +92,7 @@ Namespace GlobalNamespaceTest
         ''' <param name="enumParameter">The value for the 'enumParameter' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="GlobalNamespaceTest_Entity"/> entity instances.</returns>
         <Global.GlobalNamespaceTest_Attribute()>  _
-        Public Function ReadEntitiesQuery(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum) As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
+        Public Function ReadEntitiesQuery(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("enumParameter", enumParameter)
             Me.ValidateMethod("ReadEntitiesQuery", parameters)
@@ -116,11 +116,11 @@ Namespace GlobalNamespaceTest
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         <Global.GlobalNamespaceTest_Attribute()>  _
-        Public Overloads Function InvokeReturn(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum, ByVal callback As Global.System.Action(Of Global.System.ServiceModel.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum)), ByVal userState As Object) As Global.System.ServiceModel.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum)
+        Public Overloads Function InvokeReturn(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("enumParameter", enumParameter)
             Me.ValidateMethod("InvokeReturn", parameters)
-            Return CType(Me.InvokeOperation("InvokeReturn", GetType(Global.GlobalNamespaceTest_Enum), parameters, true, callback, userState),Global.System.ServiceModel.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum))
+            Return CType(Me.InvokeOperation("InvokeReturn", GetType(Global.GlobalNamespaceTest_Enum), parameters, true, callback, userState),Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum))
         End Function
         
         ''' <summary>
@@ -129,11 +129,11 @@ Namespace GlobalNamespaceTest
         ''' <param name="enumParameter">The value for the 'enumParameter' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         <Global.GlobalNamespaceTest_Attribute()>  _
-        Public Overloads Function InvokeReturn(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum) As Global.System.ServiceModel.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum)
+        Public Overloads Function InvokeReturn(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("enumParameter", enumParameter)
             Me.ValidateMethod("InvokeReturn", parameters)
-            Return CType(Me.InvokeOperation("InvokeReturn", GetType(Global.GlobalNamespaceTest_Enum), parameters, true, Nothing, Nothing),Global.System.ServiceModel.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum))
+            Return CType(Me.InvokeOperation("InvokeReturn", GetType(Global.GlobalNamespaceTest_Enum), parameters, true, Nothing, Nothing),Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.GlobalNamespaceTest_Enum))
         End Function
         
         ''' <summary>
@@ -144,7 +144,7 @@ Namespace GlobalNamespaceTest
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         <Global.GlobalNamespaceTest_Attribute()>  _
-        Public Overloads Function InvokeVoid(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum, ByVal callback As Global.System.Action(Of Global.System.ServiceModel.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.System.ServiceModel.DomainServices.Client.InvokeOperation
+        Public Overloads Function InvokeVoid(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("enumParameter", enumParameter)
             Me.ValidateMethod("InvokeVoid", parameters)
@@ -157,7 +157,7 @@ Namespace GlobalNamespaceTest
         ''' <param name="enumParameter">The value for the 'enumParameter' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
         <Global.GlobalNamespaceTest_Attribute()>  _
-        Public Overloads Function InvokeVoid(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum) As Global.System.ServiceModel.DomainServices.Client.InvokeOperation
+        Public Overloads Function InvokeVoid(<Global.GlobalNamespaceTest_ValidationAttribute()> ByVal enumParameter As Global.GlobalNamespaceTest_Enum) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("enumParameter", enumParameter)
             Me.ValidateMethod("InvokeVoid", parameters)
@@ -168,7 +168,7 @@ Namespace GlobalNamespaceTest
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.GlobalNamespaceTest.GlobalNamespaceTest_DomainContext.GlobalNamespaceTest_DomainContextEntityContainer()
         End Function
         
@@ -185,7 +185,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesDomainServiceFaul"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesDomainServiceFaul"& _ 
                 "t", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntities", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
@@ -196,7 +196,7 @@ Namespace GlobalNamespaceTest
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
+            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
             
             ''' <summary>
             ''' Asynchronously invokes the 'InvokeReturn' operation.
@@ -205,7 +205,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnDomainServiceFau"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnDomainServiceFau"& _ 
                 "lt", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturn", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnResponse")>  _
             Function BeginInvokeReturn(ByVal enumParameter As Global.GlobalNamespaceTest_Enum, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -224,7 +224,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidDomainServiceFault"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidDomainServiceFault"& _ 
                 "", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoid", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidResponse")>  _
             Function BeginInvokeVoid(ByVal enumParameter As Global.GlobalNamespaceTest_Enum, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -242,7 +242,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesDomainServiceFau"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesDomainServiceFau"& _ 
                 "lt", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntities", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
@@ -253,7 +253,7 @@ Namespace GlobalNamespaceTest
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginReadEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'ReadEntities' operation.</returns>
-            Function EndReadEntities(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
+            Function EndReadEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -262,25 +262,25 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesDomainServiceFa"& _ 
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesDomainServiceFa"& _ 
                 "ult", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChanges", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.System.ServiceModel.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.System.ServiceModel.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class GlobalNamespaceTest_DomainContextEntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.GlobalNamespaceTest.GlobalNamespaceTest_Entity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
             End Sub
         End Class
     End Class
@@ -292,7 +292,7 @@ Namespace GlobalNamespaceTest
      Global.GlobalNamespaceTest_ValidationAttribute(),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/GlobalNamespaceTest")>  _
     Partial Public NotInheritable Class GlobalNamespaceTest_Entity
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _enumProperty As Global.GlobalNamespaceTest_Enum
         

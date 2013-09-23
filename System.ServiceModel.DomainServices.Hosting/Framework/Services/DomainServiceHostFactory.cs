@@ -1,7 +1,9 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.ServiceModel;
+using OpenRiaServices;
 using System.ServiceModel.Activation;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     /// <summary>
     /// Factory that provides instances of <see cref="DomainServiceHost"/> in managed 

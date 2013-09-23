@@ -11,11 +11,11 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="Microsoft.ServiceModel.DomainServices.Tools.CreateRiaClientFilesTask"
-             AssemblyName="Microsoft.ServiceModel.DomainServices.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CreateRiaClientFilesTask"
+             AssemblyName="OpenRiaServices.DomainServices.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
 
-  <UsingTask TaskName="Microsoft.ServiceModel.DomainServices.Tools.CleanRiaClientFilesTask"
-             AssemblyName="Microsoft.ServiceModel.DomainServices.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CleanRiaClientFilesTask"
+             AssemblyName="OpenRiaServices.DomainServices.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
 
   <!--
     ============================================================
@@ -150,7 +150,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <PropertyGroup>
     <!-- Default RIA Services client references -->
-    <DefaultClientReferences>System.ComponentModel.DataAnnotations.dll;System.Runtime.Serialization.dll;System.ServiceModel.dll;System.ServiceModel.DomainServices.Client.dll;System.ServiceModel.DomainServices.Client.Web.dll;System.ServiceModel.Web.Extensions</DefaultClientReferences>
+    <DefaultClientReferences>System.ComponentModel.DataAnnotations.dll;System.Runtime.Serialization.dll;System.ServiceModel.dll;OpenRiaServices.DomainServices.Client.dll;OpenRiaServices.DomainServices.Client.Web.dll;System.ServiceModel.Web.Extensions</DefaultClientReferences>
   </PropertyGroup>
 
   <!--

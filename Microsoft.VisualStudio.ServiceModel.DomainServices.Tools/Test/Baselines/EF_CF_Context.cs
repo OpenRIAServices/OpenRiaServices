@@ -8,9 +8,9 @@ namespace BizLogic.Test
     using System.Data;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
-    using System.ServiceModel.DomainServices.EntityFramework;
-    using System.ServiceModel.DomainServices.Hosting;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.EntityFramework;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Server;
     using CodeFirstModels;
     
     

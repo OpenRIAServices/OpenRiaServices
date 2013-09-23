@@ -20,9 +20,9 @@ Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
 Imports System.ServiceModel
-Imports System.ServiceModel.DomainServices
-Imports System.ServiceModel.DomainServices.Client
-Imports System.ServiceModel.DomainServices.Client.ApplicationServices
+Imports OpenRiaServices.DomainServices
+Imports OpenRiaServices.DomainServices.Client
+Imports OpenRiaServices.DomainServices.Client.ApplicationServices
 Imports System.ServiceModel.Web
 Imports TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1
 
@@ -32,7 +32,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
     ''' The DomainContext corresponding to the 'BaseTypeConflicts' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class BaseTypeConflicts
-        Inherits System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -174,7 +174,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion")>  _
     Partial Public NotInheritable Class DomainContext
-        Inherits System.ServiceModel.DomainServices.Client.Entity
+        Inherits OpenRiaServices.DomainServices.Client.Entity
         
         Private _dataContextID As Integer
         
@@ -240,7 +240,7 @@ Namespace TestDomainServices.TypeNameConflictResolution
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion")>  _
     Partial Public NotInheritable Class Entity
-        Inherits System.ServiceModel.DomainServices.Client.Entity
+        Inherits OpenRiaServices.DomainServices.Client.Entity
         
         Private _name As String
         
@@ -306,7 +306,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     ''' The DomainContext corresponding to the 'DomainServiceScenario1' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class DomainServiceScenario1
-        Inherits System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -447,7 +447,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     ''' The DomainContext corresponding to the 'DomainServiceScenario2' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class DomainServiceScenario2
-        Inherits System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -593,7 +593,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace1")>  _
     Partial Public NotInheritable Class MockEntity1
-        Inherits System.ServiceModel.DomainServices.Client.Entity
+        Inherits OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         
@@ -659,7 +659,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace1")>  _
     Partial Public NotInheritable Class MockEntity2
-        Inherits System.ServiceModel.DomainServices.Client.Entity
+        Inherits OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         
@@ -728,7 +728,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace2")>  _
     Partial Public NotInheritable Class MockEntity1
-        Inherits System.ServiceModel.DomainServices.Client.Entity
+        Inherits OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         
@@ -794,7 +794,7 @@ Namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu"& _ 
         "tion.ExternalConflicts.Namespace2")>  _
     Partial Public NotInheritable Class MockEntity2
-        Inherits System.ServiceModel.DomainServices.Client.Entity
+        Inherits OpenRiaServices.DomainServices.Client.Entity
         
         Private _entityID As Integer
         

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.ApplicationServices;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.ApplicationServices;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="AuthenticationCodeProcessor"/> codegen with a barrage of negative tests.

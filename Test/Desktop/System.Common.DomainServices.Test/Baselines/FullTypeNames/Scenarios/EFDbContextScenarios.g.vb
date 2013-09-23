@@ -21,7 +21,7 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Category
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _categoryID As Integer
         
@@ -31,7 +31,7 @@ Namespace DbContextModels.Northwind
         
         Private _picture() As Byte
         
-        Private _products As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)
+        Private _products As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)
         
         #Region "Extensibility Method Definitions"
 
@@ -159,10 +159,10 @@ Namespace DbContextModels.Northwind
         ''' Gets the collection of associated <see cref="Product"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("Category_Product", "CategoryID", "CategoryID")>  _
-        Public ReadOnly Property Products() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)
+        Public ReadOnly Property Products() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)
             Get
                 If (Me._products Is Nothing) Then
-                    Me._products = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)(Me, "Products", AddressOf Me.FilterProducts, AddressOf Me.AttachProducts, AddressOf Me.DetachProducts)
+                    Me._products = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)(Me, "Products", AddressOf Me.FilterProducts, AddressOf Me.AttachProducts, AddressOf Me.DetachProducts)
                 End If
                 Return Me._products
             End Get
@@ -194,7 +194,7 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Customer
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _address As String
         
@@ -212,7 +212,7 @@ Namespace DbContextModels.Northwind
         
         Private _fax As String
         
-        Private _orders As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)
+        Private _orders As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)
         
         Private _phone As String
         
@@ -475,10 +475,10 @@ Namespace DbContextModels.Northwind
         ''' Gets the collection of associated <see cref="Order"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("Customer_Order", "CustomerID", "CustomerID")>  _
-        Public ReadOnly Property Orders() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)
+        Public ReadOnly Property Orders() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)
             Get
                 If (Me._orders Is Nothing) Then
-                    Me._orders = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)(Me, "Orders", AddressOf Me.FilterOrders, AddressOf Me.AttachOrders, AddressOf Me.DetachOrders)
+                    Me._orders = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)(Me, "Orders", AddressOf Me.FilterOrders, AddressOf Me.AttachOrders, AddressOf Me.DetachOrders)
                 End If
                 Return Me._orders
             End Get
@@ -579,9 +579,9 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Order
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
-        Private _customer As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Customer)
+        Private _customer As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Customer)
         
         Private _customerID As String
         
@@ -591,7 +591,7 @@ Namespace DbContextModels.Northwind
         
         Private _freight As Global.System.Nullable(Of Decimal)
         
-        Private _order_Details As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
+        Private _order_Details As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
         
         Private _orderDate As Global.System.Nullable(Of Date)
         
@@ -702,7 +702,7 @@ Namespace DbContextModels.Northwind
         Public Property Customer() As Global.DbContextModels.Northwind.Customer
             Get
                 If (Me._customer Is Nothing) Then
-                    Me._customer = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Customer)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    Me._customer = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Customer)(Me, "Customer", AddressOf Me.FilterCustomer)
                 End If
                 Return Me._customer.Entity
             End Get
@@ -820,10 +820,10 @@ Namespace DbContextModels.Northwind
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")>  _
-        Public ReadOnly Property Order_Details() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
+        Public ReadOnly Property Order_Details() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
-                    Me._order_Details = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)(Me, "Order_Details", AddressOf Me.FilterOrder_Details, AddressOf Me.AttachOrder_Details, AddressOf Me.DetachOrder_Details)
+                    Me._order_Details = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)(Me, "Order_Details", AddressOf Me.FilterOrder_Details, AddressOf Me.AttachOrder_Details, AddressOf Me.DetachOrder_Details)
                 End If
                 Return Me._order_Details
             End Get
@@ -1109,15 +1109,15 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Order_Detail
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _discount As Single
         
-        Private _order As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Order)
+        Private _order As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Order)
         
         Private _orderID As Integer
         
-        Private _product As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Product)
+        Private _product As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Product)
         
         Private _productID As Integer
         
@@ -1195,7 +1195,7 @@ Namespace DbContextModels.Northwind
         Public Property Order() As Global.DbContextModels.Northwind.Order
             Get
                 If (Me._order Is Nothing) Then
-                    Me._order = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Order)(Me, "Order", AddressOf Me.FilterOrder)
+                    Me._order = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Order)(Me, "Order", AddressOf Me.FilterOrder)
                 End If
                 Return Me._order.Entity
             End Get
@@ -1252,7 +1252,7 @@ Namespace DbContextModels.Northwind
         Public Property Product() As Global.DbContextModels.Northwind.Product
             Get
                 If (Me._product Is Nothing) Then
-                    Me._product = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Product)(Me, "Product", AddressOf Me.FilterProduct)
+                    Me._product = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Product)(Me, "Product", AddressOf Me.FilterProduct)
                 End If
                 Return Me._product.Entity
             End Get
@@ -1361,7 +1361,7 @@ Namespace DbContextModels.Northwind
         ''' </summary>
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
-            Return Global.System.ServiceModel.DomainServices.Client.EntityKey.Create(Me._orderID, Me._productID)
+            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._orderID, Me._productID)
         End Function
     End Class
     
@@ -1370,9 +1370,9 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Product
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
-        Private _category As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Category)
+        Private _category As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Category)
         
         Private _categoryID As Global.System.Nullable(Of Integer)
         
@@ -1380,7 +1380,7 @@ Namespace DbContextModels.Northwind
         
         Private _discontinued As Boolean
         
-        Private _order_Details As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
+        Private _order_Details As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
         
         Private _productID As Integer
         
@@ -1485,7 +1485,7 @@ Namespace DbContextModels.Northwind
         Public Property Category() As Global.DbContextModels.Northwind.Category
             Get
                 If (Me._category Is Nothing) Then
-                    Me._category = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Category)(Me, "Category", AddressOf Me.FilterCategory)
+                    Me._category = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Category)(Me, "Category", AddressOf Me.FilterCategory)
                 End If
                 Return Me._category.Entity
             End Get
@@ -1581,10 +1581,10 @@ Namespace DbContextModels.Northwind
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")>  _
-        Public ReadOnly Property Order_Details() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
+        Public ReadOnly Property Order_Details() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
-                    Me._order_Details = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)(Me, "Order_Details", AddressOf Me.FilterOrder_Details, AddressOf Me.AttachOrder_Details, AddressOf Me.DetachOrder_Details)
+                    Me._order_Details = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)(Me, "Order_Details", AddressOf Me.FilterOrder_Details, AddressOf Me.AttachOrder_Details, AddressOf Me.DetachOrder_Details)
                 End If
                 Return Me._order_Details
             End Get
@@ -1873,7 +1873,7 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class ProductInfo
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _categoryName As String
         
@@ -2016,13 +2016,13 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Region
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
         Private _regionDescription As String
         
         Private _regionID As Integer
         
-        Private _territories As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)
+        Private _territories As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)
         
         #Region "Extensibility Method Definitions"
 
@@ -2102,10 +2102,10 @@ Namespace DbContextModels.Northwind
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("Region_Territory", "RegionID", "RegionID"),  _
          Global.System.ComponentModel.DataAnnotations.CompositionAttribute()>  _
-        Public ReadOnly Property Territories() As Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)
+        Public ReadOnly Property Territories() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)
             Get
                 If (Me._territories Is Nothing) Then
-                    Me._territories = New Global.System.ServiceModel.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)(Me, "Territories", AddressOf Me.FilterTerritories, AddressOf Me.AttachTerritories, AddressOf Me.DetachTerritories)
+                    Me._territories = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)(Me, "Territories", AddressOf Me.FilterTerritories, AddressOf Me.AttachTerritories, AddressOf Me.DetachTerritories)
                 End If
                 Return Me._territories
             End Get
@@ -2137,9 +2137,9 @@ Namespace DbContextModels.Northwind
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/DataTests.Northwind")>  _
     Partial Public NotInheritable Class Territory
-        Inherits Global.System.ServiceModel.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
         
-        Private _region As Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Region)
+        Private _region As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Region)
         
         Private _regionID As Integer
         
@@ -2186,7 +2186,7 @@ Namespace DbContextModels.Northwind
         Public Property Region() As Global.DbContextModels.Northwind.Region
             Get
                 If (Me._region Is Nothing) Then
-                    Me._region = New Global.System.ServiceModel.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Region)(Me, "Region", AddressOf Me.FilterRegion)
+                    Me._region = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.DbContextModels.Northwind.Region)(Me, "Region", AddressOf Me.FilterRegion)
                 End If
                 Return Me._region.Entity
             End Get
@@ -2300,7 +2300,7 @@ Namespace TestDomainServices.DbCtx
     ''' The DomainContext corresponding to the 'Northwind' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class Northwind
-        Inherits Global.System.ServiceModel.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -2318,7 +2318,7 @@ Namespace TestDomainServices.DbCtx
         ''' Initializes a new instance of the <see cref="Northwind"/> class.
         ''' </summary>
         Public Sub New()
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.DbCtx.Northwind.INorthwindContract)(New Global.System.Uri("TestDomainServices-DbCtx-Northwind.svc", Global.System.UriKind.Relative)))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.DbCtx.Northwind.INorthwindContract)(New Global.System.Uri("TestDomainServices-DbCtx-Northwind.svc", Global.System.UriKind.Relative)))
         End Sub
         
         ''' <summary>
@@ -2326,14 +2326,14 @@ Namespace TestDomainServices.DbCtx
         ''' </summary>
         ''' <param name="serviceUri">The Northwind service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(New Global.System.ServiceModel.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.DbCtx.Northwind.INorthwindContract)(serviceUri))
+            Me.New(New Global.OpenRiaServices.DomainServices.Client.WebDomainClient(Of Global.TestDomainServices.DbCtx.Northwind.INorthwindContract)(serviceUri))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="Northwind"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.System.ServiceModel.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -2341,7 +2341,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="Category"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property Categories() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Category)
+        Public ReadOnly Property Categories() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Category)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.Category)
             End Get
@@ -2350,7 +2350,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="Customer"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property Customers() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Customer)
+        Public ReadOnly Property Customers() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Customer)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.Customer)
             End Get
@@ -2359,7 +2359,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="Order_Detail"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property Order_Details() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Order_Detail)
+        Public ReadOnly Property Order_Details() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Order_Detail)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.Order_Detail)
             End Get
@@ -2368,7 +2368,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="Order"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property Orders() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Order)
+        Public ReadOnly Property Orders() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Order)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.Order)
             End Get
@@ -2377,7 +2377,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="Product"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property Products() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Product)
+        Public ReadOnly Property Products() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Product)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.Product)
             End Get
@@ -2386,7 +2386,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="ProductInfo"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property ProductInfos() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.ProductInfo)
+        Public ReadOnly Property ProductInfos() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.ProductInfo)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.ProductInfo)
             End Get
@@ -2395,7 +2395,7 @@ Namespace TestDomainServices.DbCtx
         ''' <summary>
         ''' Gets the set of <see cref="Region"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         ''' </summary>
-        Public ReadOnly Property Regions() As Global.System.ServiceModel.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Region)
+        Public ReadOnly Property Regions() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.DbContextModels.Northwind.Region)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.DbContextModels.Northwind.Region)
             End Get
@@ -2405,7 +2405,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="Category"/> entity instances using the 'GetCategories' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Category"/> entity instances.</returns>
-        Public Function GetCategoriesQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Category)
+        Public Function GetCategoriesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Category)
             Me.ValidateMethod("GetCategoriesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.Category)("GetCategories", Nothing, false, true)
         End Function
@@ -2414,7 +2414,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="Customer"/> entity instances using the 'GetCustomers' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Customer"/> entity instances.</returns>
-        Public Function GetCustomersQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Customer)
+        Public Function GetCustomersQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Customer)
             Me.ValidateMethod("GetCustomersQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.Customer)("GetCustomers", Nothing, false, true)
         End Function
@@ -2423,7 +2423,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="Order_Detail"/> entity instances using the 'GetOrderDetails' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Order_Detail"/> entity instances.</returns>
-        Public Function GetOrderDetailsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Order_Detail)
+        Public Function GetOrderDetailsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Order_Detail)
             Me.ValidateMethod("GetOrderDetailsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.Order_Detail)("GetOrderDetails", Nothing, false, true)
         End Function
@@ -2432,7 +2432,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="Order"/> entity instances using the 'GetOrders' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Order"/> entity instances.</returns>
-        Public Function GetOrdersQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Order)
+        Public Function GetOrdersQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Order)
             Me.ValidateMethod("GetOrdersQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.Order)("GetOrders", Nothing, false, true)
         End Function
@@ -2442,7 +2442,7 @@ Namespace TestDomainServices.DbCtx
         ''' </summary>
         ''' <param name="id">The value for the 'id' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Product"/> entity instances.</returns>
-        Public Function GetProductByIdQuery(ByVal id As Integer) As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Product)
+        Public Function GetProductByIdQuery(ByVal id As Integer) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Product)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("id", id)
             Me.ValidateMethod("GetProductByIdQuery", parameters)
@@ -2453,7 +2453,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="ProductInfo"/> entity instances using the 'GetProductInfos' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="ProductInfo"/> entity instances.</returns>
-        Public Function GetProductInfosQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.ProductInfo)
+        Public Function GetProductInfosQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.ProductInfo)
             Me.ValidateMethod("GetProductInfosQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.ProductInfo)("GetProductInfos", Nothing, false, true)
         End Function
@@ -2462,7 +2462,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="Product"/> entity instances using the 'GetProducts' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Product"/> entity instances.</returns>
-        Public Function GetProductsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Product)
+        Public Function GetProductsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Product)
             Me.ValidateMethod("GetProductsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.Product)("GetProducts", Nothing, false, true)
         End Function
@@ -2472,7 +2472,7 @@ Namespace TestDomainServices.DbCtx
         ''' </summary>
         ''' <param name="id">The value for the 'id' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Region"/> entity instances.</returns>
-        Public Function GetRegionByIdQuery(ByVal id As Integer) As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Region)
+        Public Function GetRegionByIdQuery(ByVal id As Integer) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Region)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("id", id)
             Me.ValidateMethod("GetRegionByIdQuery", parameters)
@@ -2483,7 +2483,7 @@ Namespace TestDomainServices.DbCtx
         ''' Gets an EntityQuery instance that can be used to load <see cref="Region"/> entity instances using the 'GetRegions' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Region"/> entity instances.</returns>
-        Public Function GetRegionsQuery() As Global.System.ServiceModel.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Region)
+        Public Function GetRegionsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.DbContextModels.Northwind.Region)
             Me.ValidateMethod("GetRegionsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.DbContextModels.Northwind.Region)("GetRegions", Nothing, false, true)
         End Function
@@ -2500,7 +2500,7 @@ Namespace TestDomainServices.DbCtx
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.System.ServiceModel.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
             Return New Global.TestDomainServices.DbCtx.Northwind.NorthwindEntityContainer()
         End Function
         
@@ -2516,7 +2516,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetCategoriesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetCategoriesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetCategories", ReplyAction:="http://tempuri.org/Northwind/GetCategoriesResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetCategories(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2526,7 +2526,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCategories'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCategories' operation.</returns>
-            Function EndGetCategories(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Category)
+            Function EndGetCategories(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Category)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCustomers' operation.
@@ -2534,7 +2534,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetCustomersDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetCustomersDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetCustomers", ReplyAction:="http://tempuri.org/Northwind/GetCustomersResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetCustomers(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2544,7 +2544,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            Function EndGetCustomers(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Customer)
+            Function EndGetCustomers(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Customer)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetOrderDetails' operation.
@@ -2552,7 +2552,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetOrderDetailsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetOrderDetailsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction:="http://tempuri.org/Northwind/GetOrderDetailsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetOrderDetails(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2562,7 +2562,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetOrderDetails'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetOrderDetails' operation.</returns>
-            Function EndGetOrderDetails(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Order_Detail)
+            Function EndGetOrderDetails(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Order_Detail)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetOrders' operation.
@@ -2570,7 +2570,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetOrdersDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetOrdersDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetOrders", ReplyAction:="http://tempuri.org/Northwind/GetOrdersResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetOrders(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2580,7 +2580,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetOrders'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetOrders' operation.</returns>
-            Function EndGetOrders(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Order)
+            Function EndGetOrders(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Order)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetProductById' operation.
@@ -2589,7 +2589,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetProductByIdDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetProductByIdDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProductById", ReplyAction:="http://tempuri.org/Northwind/GetProductByIdResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetProductById(ByVal id As Integer, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2599,7 +2599,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetProductById'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetProductById' operation.</returns>
-            Function EndGetProductById(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Product)
+            Function EndGetProductById(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Product)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetProductInfos' operation.
@@ -2607,7 +2607,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetProductInfosDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetProductInfosDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProductInfos", ReplyAction:="http://tempuri.org/Northwind/GetProductInfosResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetProductInfos(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2617,7 +2617,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetProductInfos'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetProductInfos' operation.</returns>
-            Function EndGetProductInfos(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.ProductInfo)
+            Function EndGetProductInfos(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.ProductInfo)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetProducts' operation.
@@ -2625,7 +2625,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetProductsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetProductsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProducts", ReplyAction:="http://tempuri.org/Northwind/GetProductsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetProducts(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2635,7 +2635,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetProducts'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetProducts' operation.</returns>
-            Function EndGetProducts(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Product)
+            Function EndGetProducts(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Product)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetRegionById' operation.
@@ -2644,7 +2644,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetRegionByIdDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetRegionByIdDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetRegionById", ReplyAction:="http://tempuri.org/Northwind/GetRegionByIdResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetRegionById(ByVal id As Integer, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2654,7 +2654,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetRegionById'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetRegionById' operation.</returns>
-            Function EndGetRegionById(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Region)
+            Function EndGetRegionById(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Region)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetRegions' operation.
@@ -2662,7 +2662,7 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetRegionsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/GetRegionsDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetRegions", ReplyAction:="http://tempuri.org/Northwind/GetRegionsResponse"),  _
              Global.System.ServiceModel.Web.WebGetAttribute()>  _
             Function BeginGetRegions(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -2672,7 +2672,7 @@ Namespace TestDomainServices.DbCtx
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetRegions'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetRegions' operation.</returns>
-            Function EndGetRegions(ByVal result As Global.System.IAsyncResult) As Global.System.ServiceModel.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Region)
+            Function EndGetRegions(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.DbContextModels.Northwind.Region)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -2681,31 +2681,31 @@ Namespace TestDomainServices.DbCtx
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.System.ServiceModel.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/SubmitChangesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
+            <Global.System.ServiceModel.FaultContractAttribute(GetType(Global.OpenRiaServices.DomainServices.Client.DomainServiceFault), Action:="http://tempuri.org/Northwind/SubmitChangesDomainServiceFault", Name:="DomainServiceFault", [Namespace]:="DomainServices"),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/SubmitChanges", ReplyAction:="http://tempuri.org/Northwind/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.System.ServiceModel.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.System.ServiceModel.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class NorthwindEntityContainer
-            Inherits Global.System.ServiceModel.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Category)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Customer)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Order)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Order_Detail)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Product)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.ProductInfo)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Region)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Territory)(Global.System.ServiceModel.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Category)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Customer)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Order)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Order_Detail)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Product)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.ProductInfo)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Region)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.DbContextModels.Northwind.Territory)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
             End Sub
         End Class
     End Class

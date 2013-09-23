@@ -7,8 +7,8 @@ namespace AdventureWorksModelBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Data.Objects.DataClasses;
     using System.Linq;
-    using System.ServiceModel.DomainServices.Hosting;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Server;
     using AdventureWorksModel;
     
     

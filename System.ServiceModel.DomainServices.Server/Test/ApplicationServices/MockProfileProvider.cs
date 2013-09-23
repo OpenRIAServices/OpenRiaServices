@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using System.Web.Profile;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {
     public class MockProfileProvider : ProfileProvider
     {

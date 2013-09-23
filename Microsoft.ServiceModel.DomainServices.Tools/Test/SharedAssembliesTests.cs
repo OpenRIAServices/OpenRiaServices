@@ -5,14 +5,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Client.Test;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for SharedAssemblies service
@@ -24,7 +24,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service locates shared types between projects")]
         [TestMethod]
         public void SharedAssemblies_Types()
@@ -55,7 +55,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             TestHelper.AssertNoErrorsOrWarnings(logger);
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service locates shared methods between projects")]
         [TestMethod]
         public void SharedAssemblies_Methods()
@@ -84,7 +84,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies matches mscorlib types and methods")]
         [WorkItem(723391)]  // XElement entry below is regression for this
         [TestMethod]
@@ -138,7 +138,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
 
 
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service logs an info message for nonexistent assembly file")]
         [TestMethod]
         public void SharedAssemblies_Logs_Message_NonExistent_Assembly()
@@ -162,7 +162,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             TestHelper.AssertContainsMessages(logger, message);
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service logs an info message for bad image format assembly file")]
         [TestMethod]
         public void SharedAssemblies_Logs_Message_BadImageFormat_Assembly()

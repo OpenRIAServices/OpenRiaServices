@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("System.ServiceModel.DomainServices.EntityFramework")]
-[assembly: AssemblyDescription("System.ServiceModel.DomainServices.EntityFramework.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.EntityFramework")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.EntityFramework.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -25,8 +25,8 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("20790a5f-1dd7-4d1c-8303-c34256e12c68")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Server.Test")]
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Tools.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

@@ -1,7 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 
-namespace System.ServiceModel.DomainServices
+namespace OpenRiaServices.DomainServices
 {
     internal class BinaryTypeUtility
     {

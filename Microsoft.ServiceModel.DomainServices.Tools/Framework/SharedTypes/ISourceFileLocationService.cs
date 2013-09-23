@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 {
     /// <summary>
     /// General purpose interface to locate the names of the files

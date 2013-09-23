@@ -3,16 +3,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 #if SERVERFX
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Hosting;
 #else
 
 #endif
 
 #if SERVERFX
-namespace System.ServiceModel.DomainServices.Hosting.Test
+namespace OpenRiaServices.DomainServices.Hosting.Test
 #else
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 #endif
 {
     [System.Security.SecuritySafeCritical]  // Because our assembly is [APTCA] and we are used from partial trust tests

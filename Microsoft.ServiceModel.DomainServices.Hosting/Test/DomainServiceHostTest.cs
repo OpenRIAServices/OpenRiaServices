@@ -5,16 +5,16 @@ using System.Common.Test;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.ServiceModel;
+using OpenRiaServices;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.Hosting;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="DomainServiceHost"/> members.

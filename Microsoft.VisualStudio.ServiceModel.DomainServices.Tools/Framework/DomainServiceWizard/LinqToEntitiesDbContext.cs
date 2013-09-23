@@ -6,8 +6,8 @@ using System.Data.Metadata.Edm;
 using System.Data.Objects;
 using System.Globalization;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using Microsoft.ServiceModel.DomainServices.Tools;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Tools;
 
 namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
 {
@@ -174,7 +174,7 @@ namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
             // Add to the set of known references
             codeGenContext.AddReference(typeof(EntityState).Assembly.FullName);
             
-            // We used to add Microsoft.ServiceModel.DomainServices.EntityFramework, but due to
+            // We used to add OpenRiaServices.DomainServices.EntityFramework, but due to
             // vstfdevdiv/DevDiv2 Bug 442272 - Domain Service Wizard failing when an EF DbContext is selected,
             // we need to avoid doing that.
 

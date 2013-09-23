@@ -1,4 +1,4 @@
-﻿namespace System.ServiceModel.DomainServices.Server
+﻿namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Enumeration of the core operations a <see cref="DomainService"/> can perform.

@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ServiceModel;
+using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Hosting;
 using System.Xml;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     /// <summary>
     /// A SOAP endpoint behavior which injects a message inspector that parses query headers.

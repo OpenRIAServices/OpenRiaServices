@@ -20,9 +20,9 @@ Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
 Imports System.ServiceModel
-Imports System.ServiceModel.DomainServices
-Imports System.ServiceModel.DomainServices.Client
-Imports System.ServiceModel.DomainServices.Client.ApplicationServices
+Imports OpenRiaServices.DomainServices
+Imports OpenRiaServices.DomainServices.Client
+Imports OpenRiaServices.DomainServices.Client.ApplicationServices
 Imports System.ServiceModel.Web
 
 

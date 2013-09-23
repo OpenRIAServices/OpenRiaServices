@@ -6,12 +6,12 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="DomainServiceHost"/> members.

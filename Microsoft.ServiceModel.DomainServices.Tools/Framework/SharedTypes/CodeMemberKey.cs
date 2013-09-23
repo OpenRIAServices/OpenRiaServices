@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 {
     /// <summary>
     /// Class that encapsulates the description of a code member in terms of strings.

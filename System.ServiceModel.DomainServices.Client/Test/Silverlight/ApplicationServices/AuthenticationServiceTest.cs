@@ -5,14 +5,14 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Security.Principal;
 using System.Threading;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices.UnitTests
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 {
-    using AsyncResultBase = SSmDsClient::System.ServiceModel.DomainServices.Client.AsyncResultBase;
+    using AsyncResultBase = OpenRiaServices.DomainServices.Client.AsyncResultBase;
 
     /// <summary>
     /// Tests <see cref="AuthenticationService"/> members.

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
+using OpenRiaServices.DomainServices;
 using System.Xml.XPath;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Utilities related to configuring an <see cref="AppDomain"/>

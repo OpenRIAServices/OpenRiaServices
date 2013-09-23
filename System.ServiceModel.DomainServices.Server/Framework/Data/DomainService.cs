@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,9 +7,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
-using DataAnnotationsResources = System.ServiceModel.DomainServices.Server.Resource;
+using OpenRiaServices.DomainServices;
+using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
-namespace System.ServiceModel.DomainServices.Server
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Base class for all <see cref="DomainService"/>s.

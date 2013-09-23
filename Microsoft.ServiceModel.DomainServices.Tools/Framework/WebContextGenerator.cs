@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.ApplicationServices;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.ApplicationServices;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Generator for the <c>WebContext</c> application class.

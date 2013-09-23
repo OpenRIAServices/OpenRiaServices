@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator
+namespace OpenRiaServices.DomainServices.Tools.Test.T4Generator
 {
     [DomainServiceClientCodeGenerator(T4DomainServiceClientCodeGenerator.GeneratorName,  "C#")]
     public partial class T4DomainServiceClientCodeGenerator : IDomainServiceClientCodeGenerator
@@ -20,7 +20,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator
         public ClientCodeGenerationOptions CodeGenerationOptions { get { return this._options; } }
         public IEnumerable<DomainServiceDescription> DomainServiceDescriptions { get { return this._domainServiceDescriptions; } }
 
-        public string GenerateCode(ICodeGenerationHost host, IEnumerable<System.ServiceModel.DomainServices.Server.DomainServiceDescription> domainServiceDescriptions, ClientCodeGenerationOptions options)
+        public string GenerateCode(ICodeGenerationHost host, IEnumerable<OpenRiaServices.DomainServices.Server.DomainServiceDescription> domainServiceDescriptions, ClientCodeGenerationOptions options)
         {
             this._codeGenerationHost = host;
             this._options = options;

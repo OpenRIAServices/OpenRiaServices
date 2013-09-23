@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.Server.UnitTesting")]
-[assembly: AssemblyDescription("Microsoft.ServiceModel.DomainServices.Server.UnitTesting.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Server.UnitTesting")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Server.UnitTesting.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -25,7 +25,7 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("9f66f9a1-ec1b-4c8c-b82a-ed437404af72")]
 
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Server.UnitTesting.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.UnitTesting.Test")]
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

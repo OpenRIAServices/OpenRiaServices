@@ -1,4 +1,4 @@
-﻿namespace System.ServiceModel.DomainServices.Hosting.OData.UnitTests
+﻿namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
 {
     #region Namespaces
     using System;
@@ -7,7 +7,7 @@
     using System.IO;
     using System.Linq;
     using System.Net.Mime;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
     using System.Text;
     using System.Xml;
     using System.Xml.Linq;

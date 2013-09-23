@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Globalization;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using System.ServiceModel.DomainServices.Client.Test;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for SharedAssemblies service
@@ -63,7 +63,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "STS1")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS1")]
         [Description("SharedCodeService locates shared types between projects")]
         [TestMethod]
         public void SharedCodeService_Types()
@@ -104,7 +104,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "STS2")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS2")]
         [Description("SharedCodeService locates shared properties between projects")]
         [TestMethod]
         public void SharedCodeService_Properties()
@@ -126,7 +126,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "STS4")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS4")]
         [Description("SharedCodeService locates shared methods between projects")]
         [TestMethod]
         public void SharedCodeService_Methods()
@@ -155,7 +155,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "STS5")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS5")]
         [Description("SharedCodeService locates shared ctors between projects")]
         [TestMethod]
         public void SharedCodeService_Ctors()

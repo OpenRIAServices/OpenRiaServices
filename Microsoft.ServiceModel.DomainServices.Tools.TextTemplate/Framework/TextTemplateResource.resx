@@ -130,7 +130,7 @@
     <value>Enum generator not found.</value>
   </data>
   <data name="NonCSharpLanguageNotSupported" xml:space="preserve">
-    <value>Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator supports only C# code generation. Please use the default code generator for VB code generation.</value>
+    <value>OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator supports only C# code generation. Please use the default code generator for VB code generation.</value>
   </data>
   <data name="WebContextGeneratorNotFound" xml:space="preserve">
     <value>WebContext generator not found.</value>

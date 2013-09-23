@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Server
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Indicates that an entity member should not exist in the code generated 

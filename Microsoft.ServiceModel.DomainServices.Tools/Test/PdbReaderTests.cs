@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
-using Microsoft.ServiceModel.DomainServices.Tools.SourceLocation;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Tools.SourceLocation;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests PdbReader
@@ -20,7 +20,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "PDB")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "PDB")]
         [Description("PdbReader finds files defining properties in server assembly")]
         [TestMethod]
         public void PdbReader_Finds_Method_Files()
@@ -59,7 +59,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "PDB")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "PDB")]
         [Description("PdbReader finds all files for a type")]
         [TestMethod]
         public void PdbReader_Finds_Types_Files()

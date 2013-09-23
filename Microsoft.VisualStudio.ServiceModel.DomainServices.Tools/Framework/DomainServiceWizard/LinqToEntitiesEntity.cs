@@ -2,8 +2,8 @@
 using System.Data.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.EntityFramework;
-using Microsoft.ServiceModel.DomainServices.Tools;
+using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.Tools;
 
 namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools
 {

@@ -1,15 +1,15 @@
-﻿using Microsoft.ServiceModel.DomainServices.Hosting;
+﻿using OpenRiaServices.DomainServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting;
 using System.ServiceModel.Description;
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
-using System.ServiceModel;
+using OpenRiaServices;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
+namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 {
     
     

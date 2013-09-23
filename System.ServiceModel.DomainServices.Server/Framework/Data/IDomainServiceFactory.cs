@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Server
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Provides an interface for <see cref="DomainService"/> factory implementations.

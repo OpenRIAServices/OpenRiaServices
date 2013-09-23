@@ -9,16 +9,16 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Client.Test;
-using System.ServiceModel.DomainServices.EntityFramework;
-using System.ServiceModel.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.Hosting;
 using System.Text;
 using System.Threading;
 using System.Web;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Server.Test
+namespace OpenRiaServices.DomainServices.Server.Test
 {
     using System.Security;
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;

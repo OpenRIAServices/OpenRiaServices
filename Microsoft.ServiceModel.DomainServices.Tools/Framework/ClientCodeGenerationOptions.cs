@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Class to hold options used for
-    /// <see cref="System.ServiceModel.DomainServices.Server.DomainService"/>
+    /// <see cref="OpenRiaServices.DomainServices.Server.DomainService"/>
     /// client code generation.
     /// </summary>
     /// <remarks>

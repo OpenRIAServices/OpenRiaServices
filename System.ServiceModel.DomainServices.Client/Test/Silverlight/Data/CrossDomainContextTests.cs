@@ -3,16 +3,16 @@
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.ServiceModel.DomainServices.Client.UnitTest
+namespace OpenRiaServices.DomainServices.Client.UnitTest
 {
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
 
     /// <summary>
     /// Verifies the behavior of cross-domain context entity and entity collection references.

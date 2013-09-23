@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDomainServices.TypeNameConflictResolution;
 using TestDomainServices.TypeNameConflictResolution.ExternalConflicts;
 
-using ServerResource = System.ServiceModel.DomainServices.Server.Resource;
+using ServerResource = OpenRiaServices.DomainServices.Server.Resource;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Summary description for domain service code gen
@@ -24,7 +24,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             _logger = new ConsoleLogger();
         }
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Mocks", "CG_Scenarios_Complex")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Complex")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Complex")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.cs")]
         [TestMethod]
         public void TestClientCodegen_ComplexTypeScenarios()
@@ -52,7 +52,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Mocks", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.cs")]
         [TestMethod]
         public void TestClientCodegen_ComplexTypeScenarios_RootNs_FullTypeNames()
@@ -75,7 +75,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Comp")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Comp")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Comp")]
         [TestMethod]
         public void TestClientCodegen_CompositionScenarios()
         {
@@ -92,7 +92,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_CI")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_CI")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_CI")]
         [TestMethod]
         public void TestClientCodegen_CompositionInheritanceScenarios()
         {
@@ -118,7 +118,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_MP")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_MP")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_MP")]
         [TestMethod]
         public void TestClientCodegen_MultipleDomainServices()
         {
@@ -131,7 +131,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_MultipleDomainServices_FullTypes()
         {
@@ -143,7 +143,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_EFDbContext")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFDbContext")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFDbContext")]
         [TestMethod]
         public void TestClientCodegen_EFDbCtxDomainServices()
         {
@@ -155,7 +155,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFDbContext_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFDbContext_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_EFDbCtxDomainServices_FullTypes()
         {
@@ -167,7 +167,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
         [TestMethod]
         public void TestClientCodegen_EFCFDomainServices()
         {
@@ -179,7 +179,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFCFDbContext_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFCFDbContext_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFCFDbContext_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_EFCFDomainServices_FullTypes()
         {
@@ -191,7 +191,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_LTSNW")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_LTSNW")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_LTSNW")]
         [TestMethod]
         public void TestClientCodegen_LTSNorthwindScenarios()
         {
@@ -203,7 +203,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_EF_Inheritance")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_EF_Inheritance")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_EF_Inheritance")]
         [TestMethod]
         [Description("Validates baseline of simple inheritance model using LTS model")]
         public void TestClientCodegen_EF_Inheritance()
@@ -216,7 +216,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_LTS_Inheritance")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_LTS_Inheritance")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_LTS_Inheritance")]
         [TestMethod]
         [Description("Validates baseline of simple inheritance model using LTS model")]
         public void TestClientCodegen_LTS_Inheritance()
@@ -229,7 +229,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Include")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Include")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Include")]
         [TestMethod]
         public void TestClientCodegen_IncludeScenarios()
         {
@@ -241,7 +241,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Inherit")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Inherit")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Inherit")]
         [TestMethod]
         public void TestClientCodegen_InheritanceScenarios()
         {
@@ -258,7 +258,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_Inherit_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Inherit_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Inherit_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_InheritanceScenarios_FullTypes()
         {
@@ -277,7 +277,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_INTF")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_INTF")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_INTF")]
         [TestMethod]
         public void TestClientCodegen_InterfaceInheritanceScenarios()
         {
@@ -295,7 +295,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Secure")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Secure")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Secure")]
         [TestMethod]
         public void TestClientCodegen_RequiresSecureEndpointScenarios()
         {
@@ -307,7 +307,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios")]
         [TestMethod]
         public void TestClientCodegen_Scenarios_CodeGen()
         {
@@ -329,7 +329,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_1")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_1")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_1")]
         [TestMethod]
         public void TestClientCodegen_Scenarios_CodeGen_FullTypes()
         {
@@ -353,7 +353,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_1")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_1")]
         [TestMethod]
         public void TestClientCodegen_Scenarios()
         {
@@ -388,7 +388,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_2")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_2")]
         [TestMethod]
         public void TestClientCodegen_Scenarios_FullTypes()
         {
@@ -419,7 +419,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_3")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_3")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_3")]
         [TestMethod]
         [Description("Generated code should include error messages from attributes that throw exceptions")]
         public void TestClientCodeGen_AttributeThrowing()
@@ -429,7 +429,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_4")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_4")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_4")]
         [TestMethod]
         [Description("Generated code in VB should correctly handle root namespace inside VB project")]
         public void VBRootNamespaceTest()
@@ -440,7 +440,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_5")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_5")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_5")]
         [TestMethod]
         [Description("Generated code in VB should correctly handle root namespace inside VB project")]
         public void VBRootNamespaceTest_FullTypes()
@@ -454,7 +454,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities", "CG_Cities")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Cities")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Cities")]
         [TestMethod]
         [Description("Create client proxies for City domain service and compare to known good copy")]
         public void TestCityClientProxies()
@@ -475,7 +475,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Mocks")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Mocks")]
         [TestMethod]
         [Description("Create client proxies for MockCustomer domain service and compare to known good copy")]
         public void TestMockCustomerProviderClientProxies()
@@ -492,7 +492,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS", "CG_CATLTS")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATLTS")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATLTS")]
         [TestMethod]
         [Description("Create client proxies for Linq to Sql domain service and compare to known good copy")]
         public void TestCatalogLTSClientProxies()
@@ -502,7 +502,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS", "CG_NWLTS")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_NWLTS")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_NWLTS")]
         [TestMethod]
         public void TestNorthwindLTSClientProxies()
         {
@@ -511,7 +511,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\EF", "CG_NWEF")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_NWEF")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_NWEF")]
         [TestMethod]
         public void TestNorthwindEFClientProxies()
         {
@@ -520,7 +520,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\EF", "CG_CATEF")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATEF")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATEF")]
         [TestMethod]
         [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
         public void TestCatalogEFClientProxies()
@@ -530,7 +530,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\EF", "CG_CATEFDbCtx")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATEFDbCtx")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATEFDbCtx")]
         [TestMethod]
         [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
         public void TestCatalogEFDbCtxClientProxies()
@@ -540,7 +540,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_CONFLICT_RESOLUTION")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CONFLICT_RESOLUTION")]
         [TestMethod]
         [Description("Create client proxies and verifies that entity type conflicts are resolved correctly.")]
         public void TestClientCodeGen_ConflictResolution()
@@ -557,7 +557,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_CONFLICT_RESOLUTION_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_CONFLICT_RESOLUTION_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CONFLICT_RESOLUTION_FullTypes")]
         [TestMethod]
         [Description("Create client proxies and verifies that entity type conflicts are resolved correctly.")]
         public void TestClientCodeGen_ConflictResolution_FullTypes()
@@ -683,7 +683,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Global")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global")]
         [TestMethod] 
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator.")]
@@ -715,7 +715,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Global_Full")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global_Full")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global_Full")]
         [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator using full type names.")]
@@ -748,7 +748,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Global")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global")]
         [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator when the RootNamespace is empty.")]
@@ -782,7 +782,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Global_Full")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global_Full")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global_Full")]
         [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator using full type names when the RootNamespace is empty.")]
@@ -816,7 +816,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_SystemNamespace")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\SystemNamespace.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\SystemNamespace.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_SystemNamespace")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_SystemNamespace")]
         [TestMethod]
         [WorkItem(810123)]
         [Description("Verifies that codegen succeeds when System namespaces are included in user domain services")]
@@ -851,7 +851,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_SystemNamespace_Full")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\SystemNamespace.shared.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Shared\SystemNamespace.shared.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_SystemNamespace_Full")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_SystemNamespace_Full")]
         [TestMethod]
         [WorkItem(810123)]
         [Description("Verifies that codegen succeeds when System namespaces are included in user domain services using full names")]
@@ -884,7 +884,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_SharedEntities")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_SharedEntities")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_SharedEntities")]
         [TestMethod]
         [Description("Test that entities shared across two domain services can be generated.")]
         public void TestClientCodegen_SharedEntities()

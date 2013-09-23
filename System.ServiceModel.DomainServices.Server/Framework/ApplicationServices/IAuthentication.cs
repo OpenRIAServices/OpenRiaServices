@@ -1,13 +1,13 @@
-﻿using System.ServiceModel.DomainServices.Server;
+﻿using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
     /// <summary>
     /// An interface for a <see cref="DomainService"/> that encapsulates the authentication domain. A
     /// domain service implementing this interface will be used to populate the user on the client.
     /// </summary>
     /// <remarks>
-    /// <c>System.ServiceModel.DomainServices.Client.ApplicationServices.WebAuthenticationService</c>
+    /// <c>OpenRiaServices.DomainServices.Client.ApplicationServices.WebAuthenticationService</c>
     /// will work with the <c>DomainContext</c> generated for any domain service implementing this
     /// interface.
     /// <para>

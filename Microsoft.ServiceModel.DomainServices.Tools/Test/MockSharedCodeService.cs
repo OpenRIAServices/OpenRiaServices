@@ -10,13 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using System.ServiceModel.DomainServices;
-using Microsoft.ServiceModel.DomainServices.Tools.SourceLocation;
-using Microsoft.ServiceModel.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Tools.SourceLocation;
+using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TypeUtility = SystemWebDomainServices::System.ServiceModel.DomainServices.TypeUtility;
+using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// This mock class support the ISharedCodeService used for detecting shared

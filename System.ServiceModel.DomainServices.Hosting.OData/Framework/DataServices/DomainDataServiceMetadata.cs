@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Hosting.OData
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespace
     using System.Collections.Generic;
@@ -8,7 +10,8 @@
     using System.Linq;
     using System.Net;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
+
     #endregion
 
     /// <summary>Infers data service metadata from domain service description and caches it.</summary>

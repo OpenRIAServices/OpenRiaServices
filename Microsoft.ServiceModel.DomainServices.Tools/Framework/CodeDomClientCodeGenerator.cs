@@ -8,13 +8,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 using System.Text;
 using Microsoft.CSharp;
 using Microsoft.VisualBasic;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Helper base class to generate the client proxy code using a combination of Reflection and CodeDom
@@ -25,7 +25,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
         // when choosing a code generator.  We use our own type name to minimize the chance of duplication
         // by a customer.  Do not change this value because customers will be told to use this string when they
         // want to name the default code generator.
-        internal const string GeneratorName = "Microsoft.ServiceModel.DomainServices.Tools.CodeDomClientCodeGenerator";
+        internal const string GeneratorName = "OpenRiaServices.DomainServices.Tools.CodeDomClientCodeGenerator";
 
         /// <summary>
         /// These imports will be added to all namespaces generated in the client proxy file
@@ -37,9 +37,9 @@ namespace Microsoft.ServiceModel.DomainServices.Tools
             "System.ComponentModel",
             "System.ComponentModel.DataAnnotations",                           // [Key], [Validation] 
             "System.Linq", 
-            "System.ServiceModel.DomainServices",                              // [DomainIdentifier], etc
-            "System.ServiceModel.DomainServices.Client",                       // DomainContext, etc
-            "System.ServiceModel.DomainServices.Client.ApplicationServices",   // WebContextBase, etc
+            "OpenRiaServices.DomainServices",                              // [DomainIdentifier], etc
+            "OpenRiaServices.DomainServices.Client",                       // DomainContext, etc
+            "OpenRiaServices.DomainServices.Client.ApplicationServices",   // WebContextBase, etc
         };
 
         private CodeCompileUnit _compileUnit;

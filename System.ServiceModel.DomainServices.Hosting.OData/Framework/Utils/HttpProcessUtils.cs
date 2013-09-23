@@ -1,4 +1,4 @@
-namespace System.ServiceModel.DomainServices.Hosting.OData
+namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespaces
     using System;

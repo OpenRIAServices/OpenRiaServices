@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Objects;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.EntityFramework
+namespace OpenRiaServices.DomainServices.EntityFramework
 {
     /// <summary>
     /// ObjectContext extension methods useful to LinqToEntitiesDomainService authors

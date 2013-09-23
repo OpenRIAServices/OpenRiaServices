@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.Server.UnitTesting
+namespace OpenRiaServices.DomainServices.Server.UnitTesting
 {
     /// <summary>
     /// Host for invoking <see cref="DomainService"/> operations from a test environment

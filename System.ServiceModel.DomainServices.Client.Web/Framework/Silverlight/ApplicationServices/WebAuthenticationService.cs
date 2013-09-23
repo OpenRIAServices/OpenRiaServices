@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// Abstract extension of the <see cref="AuthenticationService"/> that
     /// interacts with a <see cref="DomainContext"/> generated from a domain
     /// service implementing
-    /// <c>System.ServiceModel.DomainServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
+    /// <c>OpenRiaServices.DomainServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
     /// </summary>
     public abstract class WebAuthenticationService : AuthenticationService
     {

@@ -16,9 +16,9 @@ namespace AdventureWorksModel
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -2489,9 +2489,9 @@ namespace TestDomainServices.EF
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Client;
-    using System.ServiceModel.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Client;
+    using OpenRiaServices.DomainServices.Client.ApplicationServices;
     using System.ServiceModel.Web;
     using AdventureWorksModel;
     

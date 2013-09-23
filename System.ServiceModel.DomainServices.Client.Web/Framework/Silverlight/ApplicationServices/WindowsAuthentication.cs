@@ -1,9 +1,11 @@
-﻿namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// <see cref="AuthenticationService"/> that performs Windows authentication using
-    /// a <see cref="System.ServiceModel.DomainServices.Client.DomainContext"/> generated from a domain service
-    /// implementing <c>System.ServiceModel.DomainServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
+    /// a <see cref="OpenRiaServices.DomainServices.Client.DomainContext"/> generated from a domain service
+    /// implementing <c>OpenRiaServices.DomainServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
     /// </summary>
     public class WindowsAuthentication : WebAuthenticationService
     {

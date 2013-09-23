@@ -20,9 +20,9 @@ Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
 Imports System.ServiceModel
-Imports System.ServiceModel.DomainServices
-Imports System.ServiceModel.DomainServices.Client
-Imports System.ServiceModel.DomainServices.Client.ApplicationServices
+Imports OpenRiaServices.DomainServices
+Imports OpenRiaServices.DomainServices.Client
+Imports OpenRiaServices.DomainServices.Client.ApplicationServices
 Imports System.ServiceModel.Web
 
 
@@ -76,7 +76,7 @@ Namespace TestNamespace
     ''' The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class AuthenticationService1
-        Inherits Global.System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+        Inherits Global.OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
         
         #Region "Extensibility Method Definitions"
 
@@ -262,7 +262,7 @@ Namespace TestNamespace
     ''' The DomainContext corresponding to the 'AuthenticationService2' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class AuthenticationService2
-        Inherits Global.System.ServiceModel.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+        Inherits Global.OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
         
         #Region "Extensibility Method Definitions"
 

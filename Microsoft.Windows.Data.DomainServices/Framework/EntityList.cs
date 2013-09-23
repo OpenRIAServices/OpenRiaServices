@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 
 namespace Microsoft.Windows.Data.DomainServices
 {
@@ -12,7 +12,7 @@ namespace Microsoft.Windows.Data.DomainServices
     /// </summary>
     /// <remarks>
     /// All items added or removed from this list will also be added or removed from the
-    /// backing <see cref="System.ServiceModel.DomainServices.Client.EntitySet{T}"/>.
+    /// backing <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/>.
     /// </remarks>
     /// <typeparam name="T">The entity type of this list</typeparam>
     public class EntityList<T> : ObservableCollection<T>, ICollectionChangedListener where T : Entity
@@ -35,7 +35,7 @@ namespace Microsoft.Windows.Data.DomainServices
         /// Initializes a new instance of the <see cref="EntityList{T}"/>
         /// </summary>
         /// <param name="entitySet">The
-        /// <see cref="System.ServiceModel.DomainServices.Client.EntitySet{T}"/> that backs this list. All
+        /// <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/> that backs this list. All
         /// items added or removed from this list will also be added or removed from the backing
         /// <see cref="EntitySet"/>.
         /// </param>
@@ -49,7 +49,7 @@ namespace Microsoft.Windows.Data.DomainServices
         /// <paramref name="source"/>
         /// </summary>
         /// <param name="entitySet">The
-        /// <see cref="System.ServiceModel.DomainServices.Client.EntitySet{T}"/> that backs this list. All
+        /// <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/> that backs this list. All
         /// items added or removed from this list will also be added or removed from the backing
         /// <see cref="EntitySet"/>.
         /// </param>
@@ -73,11 +73,11 @@ namespace Microsoft.Windows.Data.DomainServices
         #region Properties
 
         /// <summary>
-        /// Gets or sets the backing <see cref="System.ServiceModel.DomainServices.Client.EntitySet{T}"/>
+        /// Gets or sets the backing <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/>
         /// </summary>
         /// <remarks>
         /// All items added or removed from this list will also be added or removed from the
-        /// backing <see cref="System.ServiceModel.DomainServices.Client.EntitySet{T}"/>.
+        /// backing <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/>.
         /// </remarks>
         public EntitySet<T> EntitySet
         {

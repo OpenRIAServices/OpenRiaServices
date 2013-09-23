@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data.Linq;
 using System.Globalization;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace Microsoft.ServiceModel.DomainServices.LinqToSql
+namespace OpenRiaServices.DomainServices.LinqToSql
 {
     /// <summary>
     /// Attribute applied to a <see cref="DomainService"/> that exposes LINQ to SQL mapped

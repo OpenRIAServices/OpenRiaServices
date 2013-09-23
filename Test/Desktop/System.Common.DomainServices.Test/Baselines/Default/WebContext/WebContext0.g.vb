@@ -18,9 +18,9 @@ Imports System.Collections.Generic
 Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
-Imports System.ServiceModel.DomainServices
-Imports System.ServiceModel.DomainServices.Client
-Imports System.ServiceModel.DomainServices.Client.ApplicationServices
+Imports OpenRiaServices.DomainServices
+Imports OpenRiaServices.DomainServices.Client
+Imports OpenRiaServices.DomainServices.Client.ApplicationServices
 
 
 ''' <summary>

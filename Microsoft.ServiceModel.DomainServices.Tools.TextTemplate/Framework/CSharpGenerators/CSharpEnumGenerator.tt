@@ -1,11 +1,11 @@
-﻿<#@ template language="C#" inherits="Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.EnumGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EnumGenerator" #>
 
 <#@ import namespace="System.Runtime.Serialization" #>
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
 
 <#@ include file="Templates\Utility.ttinclude" #>
 

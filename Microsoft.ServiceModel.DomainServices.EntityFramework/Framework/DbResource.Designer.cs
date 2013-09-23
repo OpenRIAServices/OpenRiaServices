@@ -7,10 +7,9 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
-namespace System.ServiceModel.DomainServices.EntityFramework {
+namespace OpenRiaServices.DomainServices.EntityFramework
+{
     using System;
-    
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -39,7 +38,7 @@ namespace System.ServiceModel.DomainServices.EntityFramework {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.ServiceModel.DomainServices.EntityFramework.DbResource", typeof(DbResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.DomainServices.EntityFramework.DbResource", typeof(DbResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

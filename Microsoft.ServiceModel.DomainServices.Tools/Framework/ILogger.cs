@@ -1,5 +1,5 @@
 ﻿
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Abstraction to permit code gen task to report errors

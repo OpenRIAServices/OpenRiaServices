@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     /// <summary>
     /// Configures the <see cref="DomainService"/>s in this application.

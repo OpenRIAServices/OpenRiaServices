@@ -163,7 +163,7 @@
     <EmbeddedResource Include="Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.Server</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Server</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">

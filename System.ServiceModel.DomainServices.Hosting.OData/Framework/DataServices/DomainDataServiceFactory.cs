@@ -1,7 +1,8 @@
-﻿namespace System.ServiceModel.DomainServices.Hosting.OData
+﻿namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespaces
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
+
     #endregion
 
     /// <summary>Factory for creating data services on top of a domain service.</summary>

@@ -1,4 +1,4 @@
-﻿namespace System.ServiceModel.DomainServices.Server
+﻿namespace OpenRiaServices.DomainServices.Server
 {
     /// <summary>
     /// Specifies the valid values for controlling the location of the output-cached HTTP response for a resource.

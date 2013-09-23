@@ -1,12 +1,12 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Server;
-    using System.ServiceModel.DomainServices.Server.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server.ApplicationServices;
 
     /// <summary>
     /// C# generator for the WebContext class.

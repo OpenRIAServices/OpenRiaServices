@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using Microsoft.ServiceModel.DomainServices.Tools;
+using OpenRiaServices.DomainServices.Tools;
 
-namespace System.ServiceModel.DomainServices.Server.Test.Utilities
+namespace OpenRiaServices.DomainServices.Server.Test.Utilities
 {
     /// <summary>
     /// Console-based logger that implements <see cref="ILogger"/> interface,

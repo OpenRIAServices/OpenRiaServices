@@ -8,12 +8,12 @@ using System.Linq;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     using System.Reflection;
     using TestDomainServices;
-    using Resource = SSmDsClient::System.ServiceModel.DomainServices.Client.Resource;
-    using TypeUtility = SSmDsClient::System.ServiceModel.DomainServices.TypeUtility;
+    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
 
     [TestClass]
     public partial class ComplexTypeTests : UnitTestBase

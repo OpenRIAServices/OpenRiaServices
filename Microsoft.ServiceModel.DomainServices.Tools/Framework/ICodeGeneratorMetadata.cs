@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ServiceModel.DomainServices.Tools
+﻿namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// Metadata interface for code generators.

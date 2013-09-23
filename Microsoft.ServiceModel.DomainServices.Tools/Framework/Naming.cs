@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     // Note: this code taken verbatim from \\cpvsbuild\drops\orcas\rtm\raw\21022.08\sources\ndp\fx\src\DLinq\DbmlShared\Naming.cs
 

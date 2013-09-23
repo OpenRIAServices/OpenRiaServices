@@ -1,12 +1,16 @@
-namespace System.ServiceModel.DomainServices.Hosting.OData
+using System;
+using System.ServiceModel;
+
+namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespaces
     using System.ComponentModel;
     using System.Net;
     using System.Reflection;
     using System.ServiceModel.Dispatcher;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
     using System.Web;
+
     #endregion
 
     /// <summary>Base class for all operation invokers supported on the domain data service endpoint.</summary>

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 using System.Web;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting.Local
+namespace OpenRiaServices.DomainServices.Hosting.Local
 {
     /// <summary>
     /// Provides a set of methods that create <see cref="DomainService"/> proxies intended

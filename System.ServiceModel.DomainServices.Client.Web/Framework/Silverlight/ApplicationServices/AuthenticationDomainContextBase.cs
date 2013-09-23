@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 
-namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// <see cref="DomainContext"/> generated as the base class for providers implementing
-    /// <c>System.ServiceModel.DomainServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
+    /// <c>OpenRiaServices.DomainServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
     /// </summary>
     [DomainIdentifier("Authentication", IsApplicationService = true)]
     public abstract class AuthenticationDomainContextBase : DomainContext

@@ -18,24 +18,23 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Products_Categories", "Categories", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Category), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Product), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Orders_Customers", "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Customer), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Order), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Employees_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Employee), "Employees1", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Employee), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Orders_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Employee), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Order), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Order_Details_Orders", "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Order), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Order_Detail), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Order_Details_Products", "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Product), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Order_Detail), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Orders_Shippers", "Shippers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Shipper), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Order), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Products_Suppliers", "Suppliers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Supplier), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Product), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Territories_Region", "Region", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Region), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Territory), true)]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "CustomerCustomerDemo", "CustomerDemographics", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.CustomerDemographic), "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Customer))]
-[assembly: EdmRelationshipAttribute("NorthwindModel", "EmployeeTerritories", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Employee), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models.Territory))]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Products_Categories", "Categories", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Category), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Product), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Orders_Customers", "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Customer), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Order), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Employees_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Employee), "Employees1", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Employee), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Orders_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Employee), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Order), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Order_Details_Orders", "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Order), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Order_Detail), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Order_Details_Products", "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Product), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Order_Detail), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Orders_Shippers", "Shippers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Shipper), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Order), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Products_Suppliers", "Suppliers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Supplier), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Product), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "FK_Territories_Region", "Region", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Region), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Territory), true)]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "CustomerCustomerDemo", "CustomerDemographics", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.CustomerDemographic), "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Customer))]
+[assembly: EdmRelationshipAttribute("NorthwindModel", "EmployeeTerritories", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Employee), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models.Territory))]
 
 #endregion
 
-namespace System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models
+namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models
 {
     #region Contexts
-    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -709,7 +708,6 @@ namespace System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models
 
         #endregion
     }
-    
 
     #endregion
     
@@ -6707,7 +6705,5 @@ namespace System.ServiceModel.DomainServices.Hosting.OData.UnitTests.Models
 
         #endregion
     }
-
     #endregion
-    
 }

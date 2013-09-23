@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -13,9 +14,9 @@ using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 #endif
 using System.Linq;
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 
-namespace System.ServiceModel.DomainServices.EntityFramework
+namespace OpenRiaServices.DomainServices.EntityFramework
 {
 #if DBCONTEXT
     using ConcurrencyMode = System.Data.Entity.Core.Metadata.Edm.ConcurrencyMode;

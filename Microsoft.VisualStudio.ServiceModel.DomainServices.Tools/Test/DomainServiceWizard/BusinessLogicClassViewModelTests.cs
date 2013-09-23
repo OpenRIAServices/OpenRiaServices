@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.DomainServices.Client.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AdventureWorksModel;

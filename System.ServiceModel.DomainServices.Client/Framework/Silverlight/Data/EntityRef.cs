@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Represents an reference to an associated entity.
@@ -50,7 +51,7 @@ namespace System.ServiceModel.DomainServices.Client
             this._entityPredicate = entityPredicate;
             this._memberName = memberName;
 
-            PropertyInfo propInfo = this._parent.GetType().GetProperty(memberName, System.ServiceModel.DomainServices.Client.MetaType.MemberBindingFlags);
+            PropertyInfo propInfo = this._parent.GetType().GetProperty(memberName, OpenRiaServices.DomainServices.Client.MetaType.MemberBindingFlags);
             if (propInfo == null)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), "memberName");

@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ServiceModel.DomainServices.Tools
+﻿namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// CodeDom-based client proxy code generator for VisualBasic.

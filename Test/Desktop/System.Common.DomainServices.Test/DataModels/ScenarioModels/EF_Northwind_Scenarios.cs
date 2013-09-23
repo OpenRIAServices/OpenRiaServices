@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ServiceModel.DomainServices;
+using OpenRiaServices.DomainServices;
 
 namespace DataTests.Scenarios.EF.Northwind
 {

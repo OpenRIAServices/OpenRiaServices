@@ -4,11 +4,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests for custom build task to generate client proxies
@@ -20,7 +20,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
         [Description("CreateRiaClientFilesTask does not codegen shared types or properties on entities and complex types")]
         [TestMethod]
         public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties()
@@ -100,7 +100,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
         [Description("CreateRiaClientFilesTask produces error when detecting existing generated entity")]
         [TestMethod]
         public void SharedTypes_CodeGen_Errors_On_Existing_Generated_Entity()

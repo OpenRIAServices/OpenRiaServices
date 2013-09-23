@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel.Channels;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Internal <see cref="IAsyncResult"/> used during <see cref="WebDomainClient&lt;TContract&gt;"/> operations.

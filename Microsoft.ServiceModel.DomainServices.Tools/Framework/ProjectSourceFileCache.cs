@@ -8,7 +8,7 @@ using System.Text;
 using Microsoft.Build.BuildEngine;
 using Microsoft.Build.Framework;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// This class is responsible for managing the cache of

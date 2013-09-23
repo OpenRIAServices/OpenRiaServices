@@ -1,11 +1,16 @@
-namespace System.ServiceModel.DomainServices.Hosting.OData
+using System;
+using System.ServiceModel;
+
+namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespaces
+    
     using System.Diagnostics;
     using System.ServiceModel.Channels;
     using System.ServiceModel.Description;
     using System.ServiceModel.Dispatcher;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
+    
     #endregion
 
     /// <summary>

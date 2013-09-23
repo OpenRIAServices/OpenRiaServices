@@ -1,5 +1,5 @@
-﻿<#@ import namespace="Microsoft.ServiceModel.DomainServices.Tools" #>
-<#@ import namespace="System.ServiceModel.DomainServices" #>
+﻿<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
+<#@ import namespace="OpenRiaServices.DomainServices" #>
 
 <#+
 	/// <summary>

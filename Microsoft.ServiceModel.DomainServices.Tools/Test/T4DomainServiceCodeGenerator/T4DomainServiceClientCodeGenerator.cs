@@ -7,19 +7,19 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator
+namespace OpenRiaServices.DomainServices.Tools.Test.T4Generator
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
     using System.Text;
-    using Microsoft.ServiceModel.DomainServices.Tools;
+    using OpenRiaServices.DomainServices.Tools;
     
     
-    #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
+    #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "10.0.0.0")]
     public partial class T4DomainServiceClientCodeGenerator : T4DomainServiceClientCodeGeneratorBase
     {
@@ -84,14 +84,14 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator
             this.GenerationEnvironment = null;
             this.Write("// ");
             
-            #line 16 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
+            #line 16 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(T4DomainServiceClientCodeGenerator.GeneratedBoilerPlate));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 17 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
+            #line 17 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
  this.GenerateAllDomainServiceDescriptionClasses(this.DomainServiceDescriptions); 
             
             #line default
@@ -99,7 +99,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 18 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
+        #line 18 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4DomainServiceClientCodeGenerator.tt"
 
 
 public virtual void GenerateAllDomainServiceDescriptionClasses(IEnumerable<DomainServiceDescription> domainServiceDescriptions)
@@ -115,7 +115,7 @@ public virtual void GenerateAllDomainServiceDescriptionClasses(IEnumerable<Domai
         #line default
         #line hidden
         
-        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainServiceDescription.ttinclude"
+        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainServiceDescription.ttinclude"
  
 public virtual void GenerateDomainServiceDescriptionClasses(DomainServiceDescription domainServiceDescription)
 {
@@ -130,7 +130,7 @@ public virtual void GenerateDomainServiceDescriptionClasses(DomainServiceDescrip
         #line default
         #line hidden
         
-        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
  
 
 public virtual void GenerateDomainContextClass(DomainServiceDescription domainServiceDescription)
@@ -140,21 +140,21 @@ public virtual void GenerateDomainContextClass(DomainServiceDescription domainSe
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
 this.Write("namespace ");
 
         
         #line default
         #line hidden
         
-        #line 6 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 6 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainServiceDescription.DomainServiceType.Namespace));
 
         
         #line default
         #line hidden
         
-        #line 6 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 6 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
 this.Write("\r\n{\r\n    using System;\r\n    using System.Collections.Generic;\r\n    using System.C" +
         "omponentModel;\r\n    using System.ComponentModel.DataAnnotations;\r\n    using Syst" +
         "em.Data;\r\n    using System.Linq;\r\n\r\n    public class ");
@@ -163,27 +163,27 @@ this.Write("\r\n{\r\n    using System;\r\n    using System.Collections.Generic;\
         #line default
         #line hidden
         
-        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(domainServiceDescription.DomainServiceType.Name));
 
         
         #line default
         #line hidden
         
-        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
 this.Write("Context : DomainContext\r\n    {\r\n    }\r\n}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 19 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
+        #line 19 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\DomainContext.ttinclude"
  } 
         
         #line default
         #line hidden
         
-        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
  
 public virtual void GenerateEntityDeclaration(Type entityType)
 {
@@ -192,28 +192,28 @@ public virtual void GenerateEntityDeclaration(Type entityType)
         #line default
         #line hidden
         
-        #line 4 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 4 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write("    public class ");
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityType.Name));
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write(" : Entity");
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 
 }
 
@@ -237,28 +237,28 @@ public virtual void GenerateEntityClass(Type entityType)
         #line default
         #line hidden
         
-        #line 23 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 23 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write("namespace ");
 
         
         #line default
         #line hidden
         
-        #line 24 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 24 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(entityType.Namespace));
 
         
         #line default
         #line hidden
         
-        #line 24 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 24 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write("\r\n{\r\n");
 
         
         #line default
         #line hidden
         
-        #line 26 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 26 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 
     this.GenerateEntityDeclaration(entityType);
     this.GenerateEntityBody(entityType);
@@ -267,21 +267,21 @@ this.Write("\r\n{\r\n");
         #line default
         #line hidden
         
-        #line 29 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 29 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
 this.Write("    }\r\n}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 32 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
+        #line 32 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\Entity.ttinclude"
   
 } 
         
         #line default
         #line hidden
         
-        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 
 public virtual void GenerateEntityPropertyDeclaration(PropertyInfo propertyInfo)
 {
@@ -290,42 +290,42 @@ public virtual void GenerateEntityPropertyDeclaration(PropertyInfo propertyInfo)
         #line default
         #line hidden
         
-        #line 4 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 4 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write("        public  ");
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(propertyInfo.PropertyType.Name));
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(propertyInfo.Name));
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write(" ");
 
         
         #line default
         #line hidden
         
-        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 5 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 
 }
 
@@ -336,14 +336,14 @@ public virtual void GenerateEntityPropertyGetter(PropertyInfo propertyInfo)
         #line default
         #line hidden
         
-        #line 10 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 10 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write("get;");
 
         
         #line default
         #line hidden
         
-        #line 10 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 10 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 
 }
 
@@ -354,14 +354,14 @@ public virtual void GenerateEntityPropertySetter(PropertyInfo propertyInfo)
         #line default
         #line hidden
         
-        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write("set;");
 
         
         #line default
         #line hidden
         
-        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 15 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 
 }
 
@@ -372,27 +372,27 @@ public virtual void GenerateEntityPropertyBody(PropertyInfo propertyInfo)
         #line default
         #line hidden
         
-        #line 20 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 20 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write(" {");
 
         
         #line default
         #line hidden
         
-        #line 20 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 20 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
  this.GenerateEntityPropertyGetter(propertyInfo); this.GenerateEntityPropertySetter(propertyInfo); 
         
         #line default
         #line hidden
         
-        #line 20 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 20 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 this.Write("}\r\n");
 
         
         #line default
         #line hidden
         
-        #line 21 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
+        #line 21 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\EntityProperty.ttinclude"
 
 }
 
@@ -407,34 +407,34 @@ public virtual void GenerateEntityProperty(PropertyInfo propertyInfo) {
         #line default
         #line hidden
         
-        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
+        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
  public virtual void GenerateCustomAttribute(object customAttribute) { 
         
         #line default
         #line hidden
         
-        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
+        #line 1 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
 this.Write("        \r\n        [");
 
         
         #line default
         #line hidden
         
-        #line 2 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
+        #line 2 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
 this.Write(this.ToStringHelper.ToStringWithCulture(Utilities.AttributeShortName(customAttribute)));
 
         
         #line default
         #line hidden
         
-        #line 2 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
+        #line 2 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
 this.Write("]\r\n");
 
         
         #line default
         #line hidden
         
-        #line 3 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\Microsoft.ServiceModel.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
+        #line 3 "c:\dd\Alex_AppFx\AppFx\RiaServices\Main\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\CustomAttribute.ttinclude"
  } 
         
         #line default

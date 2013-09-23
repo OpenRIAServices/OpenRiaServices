@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 #if SERVERFX
-using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.Server;
 #endif
 
 #if SERVERFX
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 #else
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 #endif
 {
     /// <summary>

@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices;
+using OpenRiaServices.DomainServices;
 using System.Text;
-using Microsoft.ServiceModel.DomainServices.Tools;
+using OpenRiaServices.DomainServices.Tools;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     internal class AttributeGeneratorHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace Microsoft.ServiceModel.DomainServices.Tools.SharedTypes
+﻿namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 {
     using System;
     using System.Collections.Generic;

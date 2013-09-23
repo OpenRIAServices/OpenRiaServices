@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Client
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Event arguments for strongly typed add/remove notifications for collections

@@ -11,8 +11,8 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Data.Objects.DataClasses
 Imports System.Linq
-Imports System.ServiceModel.DomainServices.Hosting
-Imports System.ServiceModel.DomainServices.Server
+Imports OpenRiaServices.DomainServices.Hosting
+Imports OpenRiaServices.DomainServices.Server
 
 Namespace AdventureWorksModelBuddy
     

@@ -1,4 +1,6 @@
-﻿namespace System.ServiceModel.DomainServices.Client.ApplicationServices
+﻿using System;
+
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
     /// Operation type returned from <c>SaveUser</c> operations on <see cref="AuthenticationService"/>.

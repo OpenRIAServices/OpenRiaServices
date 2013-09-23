@@ -1,12 +1,9 @@
-﻿#if !SILVERLIGHT
-using System;
-#endif
-
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
-namespace System.ServiceModel.DomainServices
+namespace OpenRiaServices.DomainServices
 {
     internal static class ExceptionHandlingUtility
     {

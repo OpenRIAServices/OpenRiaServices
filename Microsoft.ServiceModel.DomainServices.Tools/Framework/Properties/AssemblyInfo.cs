@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Microsoft.ServiceModel.DomainServices.Tools")]
-[assembly: AssemblyDescription("Microsoft.ServiceModel.DomainServices.Tools.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Tools")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Tools.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -25,10 +25,10 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("6bb3f1cb-93fe-4e2f-8796-96fb78efeec7")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Server.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
 [assembly: InternalsVisibleTo("System.Common.DomainServices.Test")]
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Tools.Test")]
-[assembly: InternalsVisibleTo("Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.TextTemplate.Test")]
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

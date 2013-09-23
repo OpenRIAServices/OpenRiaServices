@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.ServiceModel.DomainServices.Server.UnitTesting {
+namespace OpenRiaServices.DomainServices.Server.UnitTesting {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Microsoft.ServiceModel.DomainServices.Server.UnitTesting {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.ServiceModel.DomainServices.Server.UnitTesting.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.DomainServices.Server.UnitTesting.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

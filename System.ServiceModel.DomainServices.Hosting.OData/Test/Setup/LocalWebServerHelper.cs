@@ -1,4 +1,4 @@
-﻿namespace System.ServiceModel.DomainServices.Hosting.OData.UnitTests
+﻿namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
 {
     #region Namespaces
     using System;
@@ -143,7 +143,7 @@
                        "   <serviceHostingEnvironment aspNetCompatibilityEnabled=\"true\"/>" +
                        "   <domainServices>\r\n" +
                        "     <endpoints>\r\n" +
-                       "       <add name=\"" + TestUtil.ODataEndPointName + "\" type=\"System.ServiceModel.DomainServices.Hosting.ODataEndpointFactory, System.ServiceModel.DomainServices.Hosting.OData, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\" />\r\n" +
+                       "       <add name=\"" + TestUtil.ODataEndPointName + "\" type=\"OpenRiaServices.DomainServices.Hosting.ODataEndpointFactory, OpenRiaServices.DomainServices.Hosting.OData, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\" />\r\n" +
                        "     </endpoints>\r\n" +
                        "   </domainServices>\r\n" +
                        "</system.serviceModel>\r\n";
@@ -232,7 +232,7 @@
             //   Setting Debug to 'true' includes symbols in the @ServiceHost directive.
             //
             string serviceContents =
-                "<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"System.ServiceModel.DomainServices.Hosting.DomainServiceHostFactory, System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\" Service=\"" + serviceType.FullName.Replace('+', '.') + "\" %>\r\n";
+                "<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"OpenRiaServices.DomainServices.Hosting.DomainServiceHostFactory, OpenRiaServices.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\" Service=\"" + serviceType.FullName.Replace('+', '.') + "\" %>\r\n";
 
                 //DomainDataServiceTest.TheDataService\" %>\r\n" +
                 //"namespace DomainDataServiceTest\r\n" +
@@ -246,7 +246,7 @@
                 "<configuration>\r\n" +
                 "  <configSections>\r\n" +
                 "    <sectionGroup name=\"system.serviceModel\">\r\n" +
-                "      <section name=\"domainServices\" type=\"System.ServiceModel.DomainServices.Hosting.DomainServicesSection, System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\" allowDefinition=\"MachineToApplication\" requirePermission=\"false\" />\r\n" +
+                "      <section name=\"domainServices\" type=\"OpenRiaServices.DomainServices.Hosting.DomainServicesSection, OpenRiaServices.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\" allowDefinition=\"MachineToApplication\" requirePermission=\"false\" />\r\n" +
                 "    </sectionGroup>\r\n" +
                 "  </configSections>\r\n" +
                 " <connectionStrings>\r\n";

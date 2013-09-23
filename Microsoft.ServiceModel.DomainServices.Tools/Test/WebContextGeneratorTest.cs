@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RootNamespace.TestNamespace;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.DomainServices.Tools.Test
 {
     /// <summary>
     /// Tests <see cref="WebContextGenerator"/> members.
@@ -16,7 +16,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.cs")]
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.vb")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices()
@@ -26,7 +26,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices_FullTypes()
@@ -36,7 +36,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices_FullTypes_NoRootNamespace()
@@ -46,7 +46,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when a single service is present.")]
         public void OneAuthenticationService()
@@ -56,7 +56,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when a single service is present.")]
         public void OneAuthenticationService_FullTypes()
@@ -66,7 +66,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void TwoAuthenticationServices()
@@ -82,7 +82,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"Microsoft.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void TwoAuthenticationServices_FullTypes()

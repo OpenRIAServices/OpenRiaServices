@@ -1,4 +1,4 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     using System;
     using System.Collections.Generic;

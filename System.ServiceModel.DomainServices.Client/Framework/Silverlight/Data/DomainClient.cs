@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
-namespace System.ServiceModel.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Base class for all <see cref="DomainClient"/> implementations. A <see cref="DomainClient"/> is
@@ -27,7 +28,7 @@ namespace System.ServiceModel.DomainServices.Client
             {
                 if (this._entityTypes != null)
                 {
-                    throw new InvalidOperationException(System.ServiceModel.DomainServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
+                    throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
                 }
                 this._entityTypes = value.ToList().AsReadOnly();
             }
@@ -156,7 +157,7 @@ namespace System.ServiceModel.DomainServices.Client
 
             if (changeSet.IsEmpty)
             {
-                throw new InvalidOperationException(System.ServiceModel.DomainServices.Client.Resource.DomainClient_EmptyChangeSet);
+                throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EmptyChangeSet);
             }
 
             DomainClientAsyncResult domainClientResult = DomainClientAsyncResult.CreateSubmitResult(this, changeSet, callback, userState);
@@ -362,7 +363,7 @@ namespace System.ServiceModel.DomainServices.Client
         {
             if (!this.SupportsCancellation)
             {
-                throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, System.ServiceModel.DomainServices.Client.Resource.DomainClient_CancellationNotSupported, this.GetType().FullName));
+                throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.Client.Resource.DomainClient_CancellationNotSupported, this.GetType().FullName));
             }
         }
     }

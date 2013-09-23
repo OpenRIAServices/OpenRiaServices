@@ -18,7 +18,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 #endif // NET40
 
-namespace Microsoft.ServiceModel.DomainServices.Tools
+namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
     /// This utility class offers basic support for reading MSBuild

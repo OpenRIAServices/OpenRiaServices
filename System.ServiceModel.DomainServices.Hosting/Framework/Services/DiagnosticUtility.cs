@@ -1,14 +1,16 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.ServiceModel.Activation;
+using System.ServiceModel.Configuration;
 using System.Diagnostics.Eventing;
 using System.Globalization;
 using System.Security;
-using System.ServiceModel.Activation;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Configuration;
 using System.Web.Configuration;
 using System.Web.Hosting;
 
-namespace System.ServiceModel.DomainServices.Hosting
+namespace OpenRiaServices.DomainServices.Hosting
 {
     internal static class DiagnosticUtility
     {

@@ -1,11 +1,14 @@
-namespace System.ServiceModel.DomainServices.Hosting.OData
+using System;
+
+namespace OpenRiaServices.DomainServices.Hosting.OData
 {
     #region Namespace
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel.Description;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server;
+
     #endregion
 
     /// <summary>
@@ -29,7 +32,7 @@ namespace System.ServiceModel.DomainServices.Hosting.OData
         /// </summary>
         /// <param name="operationDescription">The operation being examined. Use for examination only. If the operation description is modified, the results are undefined.</param>
         /// <param name="bindingParameters">The collection of objects that binding elements require to support the behavior.</param>
-        public void AddBindingParameters(OperationDescription operationDescription, ServiceModel.Channels.BindingParameterCollection bindingParameters)
+        public void AddBindingParameters(OperationDescription operationDescription, System.ServiceModel.Channels.BindingParameterCollection bindingParameters)
         {
         }
 
@@ -38,7 +41,7 @@ namespace System.ServiceModel.DomainServices.Hosting.OData
         /// </summary>
         /// <param name="operationDescription">The operation being examined. Use for examination only. If the operation description is modified, the results are undefined.</param>
         /// <param name="clientOperation">The run-time object that exposes customization properties for the operation described by operationDescription. </param>
-        public void ApplyClientBehavior(OperationDescription operationDescription, ServiceModel.Dispatcher.ClientOperation clientOperation)
+        public void ApplyClientBehavior(OperationDescription operationDescription, System.ServiceModel.Dispatcher.ClientOperation clientOperation)
         {
         }
 
@@ -47,7 +50,7 @@ namespace System.ServiceModel.DomainServices.Hosting.OData
         /// </summary>
         /// <param name="operationDescription">The operation being examined. Use for examination only. If the operation description is modified, the results are undefined.</param>
         /// <param name="dispatchOperation">The run-time object that exposes customization properties for the operation described by operationDescription.</param>
-        public void ApplyDispatchBehavior(OperationDescription operationDescription, ServiceModel.Dispatcher.DispatchOperation dispatchOperation)
+        public void ApplyDispatchBehavior(OperationDescription operationDescription, System.ServiceModel.Dispatcher.DispatchOperation dispatchOperation)
         {
                 dispatchOperation.Invoker = new DomainDataServiceInvokeOperationInvoker(this.operation);
         }

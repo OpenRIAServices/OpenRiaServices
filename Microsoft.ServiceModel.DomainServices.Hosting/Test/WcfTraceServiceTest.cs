@@ -1,4 +1,4 @@
-﻿using Microsoft.ServiceModel.DomainServices.Hosting;
+﻿using OpenRiaServices.DomainServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -7,7 +7,7 @@ using System.ServiceModel.Syndication;
 using System.ServiceModel.Channels;
 using System.Text;
 
-namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
+namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 {
     
     
@@ -69,7 +69,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
         #endregion
 
         [TestMethod()]
-        [DeploymentItem("Microsoft.ServiceModel.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
         public void CreateTraceSyndicationFeedTest()
         {
             SyndicationFeed actual = WcfTraceService_Accessor.CreateTraceSyndicationFeed();
@@ -78,7 +78,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("Microsoft.ServiceModel.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
         public void CreateTraceXmlTest()
         {
             Stream actual = WcfTraceService_Accessor.CreateTraceXml();
@@ -88,7 +88,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("Microsoft.ServiceModel.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
         public void CreateTraceHtmlTest()
         {
             Stream actual = WcfTraceService_Accessor.CreateTraceHtml();
@@ -101,7 +101,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("Microsoft.ServiceModel.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
         public void CreateTraceSyndicationItemTest()
         {
             SyndicationItem actual = WcfTraceService_Accessor.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
@@ -117,7 +117,7 @@ namespace Microsoft.ServiceModel.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("Microsoft.ServiceModel.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
         public void InstanceTest()
         {
             WcfTraceService actual;

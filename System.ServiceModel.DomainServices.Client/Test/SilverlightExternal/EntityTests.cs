@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using System.ServiceModel.DomainServices.Client;
+using OpenRiaServices.DomainServices.Client;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.ServiceModel.DomainServices.Client.Common.Test
+namespace OpenRiaServices.DomainServices.Client.Common.Test
 {
     [TestClass]
     public class EntityTests : UnitTestBase

@@ -12,9 +12,9 @@ Imports System.ComponentModel.DataAnnotations
 Imports System.Data
 Imports System.Data.Objects
 Imports System.Linq
-Imports System.ServiceModel.DomainServices.EntityFramework
-Imports System.ServiceModel.DomainServices.Hosting
-Imports System.ServiceModel.DomainServices.Server
+Imports OpenRiaServices.DomainServices.EntityFramework
+Imports OpenRiaServices.DomainServices.Hosting
+Imports OpenRiaServices.DomainServices.Server
 
 
 'Implements application logic using the NorthwindEntities context.

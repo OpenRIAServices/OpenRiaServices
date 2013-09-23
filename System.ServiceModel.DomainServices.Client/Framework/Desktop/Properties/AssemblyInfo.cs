@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("System.ServiceModel.DomainServices.Client")]
-[assembly: AssemblyDescription("System.ServiceModel.DomainServices.Client.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Client")]
+[assembly: AssemblyDescription("OpenRiaServices.DomainServices.Client.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -25,8 +25,8 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("d3a03feb-b6a1-48ac-a488-249a84498e83")]
 
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Client.Test")]
-[assembly: InternalsVisibleTo("System.ServiceModel.DomainServices.Client.Test.Vb")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test.Vb")]
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

@@ -7,8 +7,8 @@ namespace DataTests.AdventureWorks.LTSBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Data.Linq;
     using System.Linq;
-    using System.ServiceModel.DomainServices.Hosting;
-    using System.ServiceModel.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Hosting;
+    using OpenRiaServices.DomainServices.Server;
     using System.Xml.Linq;
     using DataTests.AdventureWorks.LTS;
     

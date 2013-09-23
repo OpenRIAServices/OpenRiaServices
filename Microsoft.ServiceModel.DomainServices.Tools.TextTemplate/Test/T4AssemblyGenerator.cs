@@ -5,18 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.ServiceModel.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Tasks;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
-using Microsoft.ServiceModel.DomainServices.Tools.TextTemplate;
-using Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.CSharpGenerators;
-using Microsoft.ServiceModel.DomainServices.Tools.Test;
+using OpenRiaServices.DomainServices.Tools.TextTemplate;
+using OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators;
+using OpenRiaServices.DomainServices.Tools.Test;
 
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
 {
     internal class T4AssemblyGenerator : IDisposable
     {

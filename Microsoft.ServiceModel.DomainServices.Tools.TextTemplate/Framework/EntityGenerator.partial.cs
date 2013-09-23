@@ -1,4 +1,4 @@
-namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 {
     using System;
     using System.Collections;
@@ -10,9 +10,9 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
     using System.Reflection;
     using System.Runtime.Serialization;
     using System.Security.Principal;
-    using System.ServiceModel.DomainServices;
-    using System.ServiceModel.DomainServices.Server;
-    using System.ServiceModel.DomainServices.Server.ApplicationServices;
+    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.DomainServices.Server.ApplicationServices;
 
     /// <summary>
     /// Proxy generator for an entity.
@@ -423,7 +423,7 @@ namespace Microsoft.ServiceModel.DomainServices.Tools.TextTemplate
             }
             else
             {
-                baseTypeName = "System.ServiceModel.DomainServices.Client.Entity";
+                baseTypeName = "OpenRiaServices.DomainServices.Client.Entity";
             }
 
             // We special case User type to be able to handle the User entity that we define.
