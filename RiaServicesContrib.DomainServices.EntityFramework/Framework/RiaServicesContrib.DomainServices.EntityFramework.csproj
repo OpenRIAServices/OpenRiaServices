@@ -72,9 +72,6 @@
     <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\AssociationInfo.cs">
       <Link>AssociationInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
-      <Link>DatabaseGeneratedAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\LinqToEntitiesDomainServiceDescriptionProvider.cs">
       <Link>LinqToEntitiesDomainServiceDescriptionProvider.cs</Link>
     </Compile>
@@ -134,7 +131,7 @@
       <Link>Resource.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.EntityFramework</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
       <LogicalName>System.ServiceModel.DomainServices.EntityFramework.Resource.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="DbResource.resx">

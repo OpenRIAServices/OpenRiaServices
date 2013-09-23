@@ -13,8 +13,8 @@
     <ProjectGuid>{0EE13EF8-BD66-4095-926C-A81B6350F8EA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.Hosting.Local</RootNamespace>
-    <AssemblyName>Microsoft.ServiceModel.DomainServices.Hosting.Local</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Hosting.Local</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Hosting.Local</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
@@ -28,17 +28,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Hosting.Local.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Local.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV</DefineConstants>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.Hosting.Local.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />

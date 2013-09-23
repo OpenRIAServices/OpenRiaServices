@@ -12,8 +12,8 @@
     <ProjectGuid>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.Tools</RootNamespace>
-    <AssemblyName>Microsoft.ServiceModel.DomainServices.Tools</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Tools</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Tools</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
@@ -26,17 +26,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;CODECOV;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
   </PropertyGroup>
   <!-- All configurations set NET40 if this project is to be compiled against v4.0 -->
   <PropertyGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0' ">

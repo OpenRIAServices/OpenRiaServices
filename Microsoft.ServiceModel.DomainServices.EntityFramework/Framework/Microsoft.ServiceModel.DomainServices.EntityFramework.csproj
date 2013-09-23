@@ -13,8 +13,8 @@
     <ProjectGuid>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.EntityFramework</RootNamespace>
-    <AssemblyName>Microsoft.ServiceModel.DomainServices.EntityFramework</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.EntityFramework</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.EntityFramework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
@@ -27,17 +27,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV;DBCONTEXT</DefineConstants>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -142,7 +145,7 @@
     <EmbeddedResource Include="DbResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.EntityFramework</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
