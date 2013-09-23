@@ -5,23 +5,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Server", "System.ServiceModel.DomainServices.Server\Framework\System.ServiceModel.DomainServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server", "System.ServiceModel.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.EntityFramework", "System.ServiceModel.DomainServices.EntityFramework\Framework\System.ServiceModel.DomainServices.EntityFramework.csproj", "{20790A5F-1DD7-4D1C-8303-C34256E12C68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.EntityFramework.ObjectContext", "System.ServiceModel.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj", "{20790A5F-1DD7-4D1C-8303-C34256E12C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Tools", "Microsoft.ServiceModel.DomainServices.Tools\Framework\Microsoft.ServiceModel.DomainServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools", "Microsoft.ServiceModel.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Hosting", "System.ServiceModel.DomainServices.Hosting\Framework\System.ServiceModel.DomainServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting", "System.ServiceModel.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{4449F469-F1E9-4241-A444-B2BBAC7667EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client", "System.ServiceModel.DomainServices.Client\Framework\Silverlight\System.ServiceModel.DomainServices.Client.csproj", "{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client", "System.ServiceModel.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj", "{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Controls.DomainServices", "System.Windows.Controls.DomainServices\Framework\System.Windows.Controls.DomainServices.csproj", "{174DE0B6-BBA8-43DF-8755-BC8927EB9138}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices", "System.Windows.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj", "{174DE0B6-BBA8-43DF-8755-BC8927EB9138}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{2095B11C-903C-47FF-B812-82DFA7A068AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client", "System.ServiceModel.DomainServices.Client\Framework\Desktop\System.ServiceModel.DomainServices.Client.csproj", "{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client", "System.ServiceModel.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj", "{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{E8CAC11B-50B6-4243-A12A-D831EBB064CB}"
 EndProject
@@ -91,23 +91,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightVb", "System.Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClassLib2", "Microsoft.ServiceModel.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Hosting.Local", "Microsoft.ServiceModel.DomainServices.Hosting.Local\Framework\Microsoft.ServiceModel.DomainServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Local", "Microsoft.ServiceModel.DomainServices.Hosting.Local\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Hosting.Local.Test", "Microsoft.ServiceModel.DomainServices.Hosting.Local\Test\Microsoft.ServiceModel.DomainServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.LinqToSql", "Microsoft.ServiceModel.DomainServices.LinqToSql\Framework\Microsoft.ServiceModel.DomainServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.LinqToSql", "Microsoft.ServiceModel.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VbExpressions", "System.ServiceModel.DomainServices.Client\Test\VbExpressions\VbExpressions.vbproj", "{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.Web", "System.ServiceModel.DomainServices.Client.Web\Framework\Silverlight\System.ServiceModel.DomainServices.Client.Web.csproj", "{6428863A-11FE-48EA-AE51-B2BA5DD29E57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web", "System.ServiceModel.DomainServices.Client.Web\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj", "{6428863A-11FE-48EA-AE51-B2BA5DD29E57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWap", "Microsoft.ServiceModel.DomainServices.Tools\Test\TestWap\TestWap.csproj", "{D08C2165-DC46-407B-9CCC-40ED1972F552}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.Web.Test", "System.ServiceModel.DomainServices.Client.Web\Test\Silverlight\System.ServiceModel.DomainServices.Client.Web.Test.csproj", "{DF732E93-F424-459A-978C-B3A3450C9FAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.Web", "System.ServiceModel.DomainServices.Client.Web\Framework\Desktop\System.ServiceModel.DomainServices.Client.Web.csproj", "{BDB2F9A3-5FC7-45FD-8496-B23752232688}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web", "System.ServiceModel.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj", "{BDB2F9A3-5FC7-45FD-8496-B23752232688}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Hosting", "Microsoft.ServiceModel.DomainServices.Hosting\Framework\Microsoft.ServiceModel.DomainServices.Hosting.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Endpoint", "Microsoft.ServiceModel.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Hosting.Test", "Microsoft.ServiceModel.DomainServices.Hosting\Test\Microsoft.ServiceModel.DomainServices.Hosting.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
 EndProject
@@ -115,7 +115,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFPOCOModels", "Test\Deskto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteFullTrust", "Test\WebsiteFullTrust\WebsiteFullTrust.csproj", "{FB928CDD-D223-4921-B97D-EB16EEE7D2AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Hosting.OData", "System.ServiceModel.DomainServices.Hosting.OData\Framework\System.ServiceModel.DomainServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.OData", "System.ServiceModel.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Hosting.OData.Test", "System.ServiceModel.DomainServices.Hosting.OData\Test\System.ServiceModel.DomainServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
 EndProject
@@ -132,23 +132,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.External.Test", "System.ServiceModel.DomainServices.Client\Test\DesktopExternal\System.ServiceModel.DomainServices.Client.External.Test.csproj", "{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Tools.TextTemplate", "Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.TextTemplate", "Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.WindowsAzure", "Microsoft.ServiceModel.DomainServices.WindowsAzure\Framework\Microsoft.ServiceModel.DomainServices.WindowsAzure.csproj", "{62CEDA36-AE80-411D-8A55-2D417A86960B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.WindowsAzure", "Microsoft.ServiceModel.DomainServices.WindowsAzure\Framework\OpenRiaServices.DomainServices.WindowsAzure.csproj", "{62CEDA36-AE80-411D-8A55-2D417A86960B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.WindowsAzure.Test", "Microsoft.ServiceModel.DomainServices.WindowsAzure\Test\Microsoft.ServiceModel.DomainServices.WindowsAzure.Test.csproj", "{8F638ABB-4EC6-428B-9D35-514317AECF51}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test", "Microsoft.ServiceModel.DomainServices.Tools.TextTemplate\Test\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Windows.Data.DomainServices", "Microsoft.Windows.Data.DomainServices\Framework\Microsoft.Windows.Data.DomainServices.csproj", "{835586F6-F1F4-4A3F-A24E-795D37143F4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Data.DomainServices", "Microsoft.Windows.Data.DomainServices\Framework\OpenRiaServices.Data.DomainServices.csproj", "{835586F6-F1F4-4A3F-A24E-795D37143F4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.EntityFramework", "Microsoft.ServiceModel.DomainServices.EntityFramework\Framework\Microsoft.ServiceModel.DomainServices.EntityFramework.csproj", "{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.EntityFramework", "Microsoft.ServiceModel.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj", "{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDbContextModels", "Microsoft.ServiceModel.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj", "{A87DF95C-1852-480D-8FDC-4468D4EB738E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCodeFirstModels", "Microsoft.ServiceModel.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj", "{A94B2843-C68E-4548-9168-63469D625935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Server.UnitTesting", "Microsoft.ServiceModel.DomainServices.Server.UnitTesting\Framework\Microsoft.ServiceModel.DomainServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server.UnitTesting", "Microsoft.ServiceModel.DomainServices.Server.UnitTesting\Framework\OpenRiaServices.DomainServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contrib", "Contrib", "{9FBE785E-A32B-454B-82BB-147D2F0B7FFF}"
 	ProjectSection(SolutionItems) = preProject

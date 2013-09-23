@@ -59,13 +59,13 @@
     <Reference Include="System.Data.Linq.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\System.ServiceModel.DomainServices.Hosting.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>System.ServiceModel.DomainServices.Hosting</Name>
+      <Name>OpenRiaServices.DomainServices.Hosting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\System.ServiceModel.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>System.ServiceModel.DomainServices.Server</Name>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <!-- Generated files -->

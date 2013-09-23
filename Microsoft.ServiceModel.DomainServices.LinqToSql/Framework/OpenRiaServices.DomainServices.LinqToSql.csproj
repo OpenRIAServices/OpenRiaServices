@@ -10,15 +10,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</ProjectGuid>
+    <ProjectGuid>{E9141C78-4083-4ED9-B0C3-591BF5986488}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.ServiceModel.DomainServices.EntityFramework</RootNamespace>
-    <AssemblyName>System.ServiceModel.DomainServices.EntityFramework</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.LinqToSql</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.LinqToSql</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\System.ServiceModel.DomainServices.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\Microsoft.ServiceModel.DomainServices.LinqToSql.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -26,80 +26,70 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE;SERVERFX</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SERVERFX;LINQTOSQL</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.LinqToSql.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX;LINQTOSQL</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.LinqToSql.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV;LINQTOSQL</DefineConstants>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.LinqToSql.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.Entity.Design">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml">
+    <Reference Include="System.Data.Linq">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssociationInfo.cs" />
-    <Compile Include="DatabaseGeneratedAttribute.cs" />
-    <Compile Include="DatabaseGeneratedOption.cs" />
-    <Compile Include="MetadataResource.Designer.cs">
-      <DependentUpon>MetadataResource.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
+      <Link>DatabaseGeneratedAttribute.cs</Link>
     </Compile>
-    <Compile Include="MetadataWorkspaceUtilities.cs" />
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedOption.cs">
+      <Link>DatabaseGeneratedOption.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs">
+      <Link>MetadataPropertyDescriptorWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\TypeDescriptionContextBase.cs">
+      <Link>TypeDescriptionContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\TypeDescriptorBase.cs">
+      <Link>TypeDescriptorBase.cs</Link>
+    </Compile>
+    <Compile Include="DataContextExtensions.cs" />
     <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="LinqToEntitiesDomainService.cs" />
-    <Compile Include="LinqToEntitiesDomainServiceDescriptionProvider.cs" />
-    <Compile Include="LinqToEntitiesDomainServiceDescriptionProviderAttribute.cs" />
-    <Compile Include="LinqToEntitiesTypeDescriptionContext.cs" />
-    <Compile Include="LinqToEntitiesTypeDescriptor.cs" />
-    <Compile Include="MetadataPropertyDescriptorWrapper.cs" />
-    <Compile Include="ObjectContextExtensions.cs" />
-    <Compile Include="ObjectContextUtilities.cs" />
+    <Compile Include="LinqToSqlDomainService.cs" />
+    <Compile Include="LinqToSqlDomainServiceDescriptionProvider.cs" />
+    <Compile Include="LinqToSqlDomainServiceDescriptionProviderAttribute.cs" />
+    <Compile Include="LinqToSqlTypeDescriptionContext.cs" />
+    <Compile Include="LinqToSqlTypeDescriptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="TypeDescriptionContextBase.cs" />
-    <Compile Include="TypeDescriptorBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\System.ServiceModel.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>System.ServiceModel.DomainServices.Server</Name>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MetadataResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>

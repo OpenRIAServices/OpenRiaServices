@@ -159,7 +159,7 @@
     <Compile Include="BusinessApplication\BusinessApplicationServerTemplateWizard.cs">
     </Compile>
     <Compile Include="LocalDB.cs">
-       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="DomainServiceWizard\AssemblyUtilities.cs" />
     <Compile Include="DomainServiceWizard\BusinessLogicClassConstants.cs" />
@@ -266,22 +266,22 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\System.ServiceModel.DomainServices.EntityFramework.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
       <Name>System.ServiceModel.DomainServices.EntityFramework</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting.OData\Framework\System.ServiceModel.DomainServices.Hosting.OData.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
       <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
       <Name>System.ServiceModel.DomainServices.Hosting.OData</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\System.ServiceModel.DomainServices.Hosting.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>System.ServiceModel.DomainServices.Hosting</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\System.ServiceModel.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>System.ServiceModel.DomainServices.Server</Name>
       <Private>False</Private>
