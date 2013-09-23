@@ -6,6 +6,9 @@ using System.Data.Entity.Core.Metadata.Edm;
 #else
 using System.Data.Metadata.Edm;
 #endif
+#if RIACONTRIB
+using System.ServiceModel.DomainServices.Server;
+#endif
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.EntityFramework

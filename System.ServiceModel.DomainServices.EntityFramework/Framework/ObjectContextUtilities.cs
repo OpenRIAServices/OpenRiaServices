@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
+#if RIACONTRIB
+using System.ServiceModel.DomainServices.Server;
+#endif
 
 #if DBCONTEXT
 using System.Data.Entity.Core.Metadata.Edm;

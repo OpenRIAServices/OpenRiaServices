@@ -7,6 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.EntityFramework;
 
 namespace System.ServiceModel.DomainServices.EntityFramework
 {

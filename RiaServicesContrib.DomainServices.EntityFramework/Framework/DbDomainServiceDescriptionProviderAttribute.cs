@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Globalization;
 using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.EntityFramework;
 
 namespace System.ServiceModel.DomainServices.EntityFramework
 {

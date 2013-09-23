@@ -26,7 +26,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -74,9 +74,6 @@
     </Compile>
     <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
       <Link>DatabaseGeneratedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\DatabaseGeneratedOption.cs">
-      <Link>DatabaseGeneratedOption.cs</Link>
     </Compile>
     <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\LinqToEntitiesDomainServiceDescriptionProvider.cs">
       <Link>LinqToEntitiesDomainServiceDescriptionProvider.cs</Link>
@@ -143,7 +140,7 @@
     <EmbeddedResource Include="DbResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.EntityFramework</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

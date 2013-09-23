@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.ServiceModel.DomainServices.Server;
+using OpenRiaServices.DomainServices.EntityFramework;
 
 namespace System.ServiceModel.DomainServices.EntityFramework
 {
