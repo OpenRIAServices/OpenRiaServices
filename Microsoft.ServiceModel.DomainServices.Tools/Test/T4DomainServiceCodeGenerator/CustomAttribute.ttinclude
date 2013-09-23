@@ -1,3 +1,0 @@
-﻿<#+ public virtual void GenerateCustomAttribute(object customAttribute) { #>        
-        [<#= Utilities.AttributeShortName(customAttribute) #>]
-<#+ } #>

@@ -77,7 +77,7 @@
     <Compile Include="UnitTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\System.ServiceModel.DomainServices.Client\Framework\Desktop\System.ServiceModel.DomainServices.Client.csproj">
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}</Project>
       <Name>System.ServiceModel.DomainServices.Client %28Framework\Desktop\System.ServiceModel.DomainServices.Client%29</Name>
     </ProjectReference>

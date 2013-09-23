@@ -130,26 +130,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Microsoft.ServiceModel.DomainServices.Tools\Framework\CodeDomVisitor.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\CodeDomVisitor.cs">
       <Link>DomainServiceWizard\CodeDomVisitor.cs</Link>
     </Compile>
-    <Compile Include="..\..\Microsoft.ServiceModel.DomainServices.Tools\Framework\DbContextUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\DbContextUtilities.cs">
       <Link>DomainServiceWizard\DbContextUtilities.cs</Link>
     </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
       <Link>DomainServiceWizard\TypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
       <Link>ExceptionHandlingUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\MetadataResource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.Designer.cs">
       <Link>MetadataResource.Designer.cs</Link>
       <DependentUpon>MetadataResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\MetadataWorkspaceUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataWorkspaceUtilities.cs">
       <Link>MetadataWorkspaceUtilities.cs</Link>
     </Compile>
-    <Compile Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\ObjectContextUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\ObjectContextUtilities.cs">
       <Link>ObjectContextUtilities.cs</Link>
     </Compile>
     <Compile Include="AuthenticationDomainService\AuthenticationDomainServiceWizard.cs">
@@ -251,7 +251,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\MetadataResource.resx">
+    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.resx">
       <Link>MetadataResource.resx</Link>
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -266,22 +266,22 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
       <Name>System.ServiceModel.DomainServices.EntityFramework</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
       <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
       <Name>System.ServiceModel.DomainServices.Hosting.OData</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>System.ServiceModel.DomainServices.Hosting</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>System.ServiceModel.DomainServices.Server</Name>
       <Private>False</Private>

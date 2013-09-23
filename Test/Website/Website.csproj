@@ -19,6 +19,10 @@
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -107,31 +111,31 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Microsoft.ServiceModel.DomainServices.Hosting\Framework\Microsoft.ServiceModel.DomainServices.Hosting.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.Endpoint\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj">
       <Project>{063022B7-FAF8-43FB-B605-30A5F29910C1}</Project>
       <Name>Microsoft.ServiceModel.DomainServices.Hosting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.EntityFramework\Framework\System.ServiceModel.DomainServices.EntityFramework.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
       <Name>System.ServiceModel.DomainServices.EntityFramework</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.ServiceModel.DomainServices.Tools\Framework\Microsoft.ServiceModel.DomainServices.Tools.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
       <Name>Microsoft.ServiceModel.DomainServices.Tools</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\Microsoft.ServiceModel.DomainServices.LinqToSql\Framework\Microsoft.ServiceModel.DomainServices.LinqToSql.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
       <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
       <Name>Microsoft.ServiceModel.DomainServices.LinqToSql</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Server\Framework\System.ServiceModel.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>System.ServiceModel.DomainServices.Server</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.ServiceModel.DomainServices.Hosting\Framework\System.ServiceModel.DomainServices.Hosting.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>System.ServiceModel.DomainServices.Hosting</Name>
       <Private>True</Private>
