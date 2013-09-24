@@ -23,6 +23,5 @@ This package supports versions of EntityFramework starting with EF 6.0.0-rc1.</d
     </metadata>
     <files>
         <file src="..\..\bin\MyGet\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net40\RiaServicesContrib.DomainServices.EntityFramework.dll" />
-        <file src="README.txt" target="README.txt" />
     </files>
 </package>
