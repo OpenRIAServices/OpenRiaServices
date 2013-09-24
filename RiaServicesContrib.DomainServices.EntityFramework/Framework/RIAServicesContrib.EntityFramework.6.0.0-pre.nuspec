@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>RIAServices.EntityFramework</id>
+        <id>RIAServicesContrib.EntityFramework</id>
         <version>6.0.0-pre</version>
         <title>RIA Services for EntityFramework Code-First (DbContext)</title>
         <authors>Outercurve RIA Services</authors>
