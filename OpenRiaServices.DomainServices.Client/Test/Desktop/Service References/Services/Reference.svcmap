@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4c9ec26a-ff53-4210-bbb3-ee010bba820f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:60000/Services/TestServices.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TestServices.wsdl" MetadataType="Wsdl" ID="335c2cff-79f2-4bad-9aa1-22e3fe4c1e40" SourceId="1" SourceUrl="http://localhost:60000/Services/TestServices.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="TestServices.xsd" MetadataType="Schema" ID="2bb1288e-3dbb-4602-b515-95234bba57a6" SourceId="1" SourceUrl="http://localhost:60000/Services/TestServices.svc?xsd=xsd0" />
+    <MetadataFile FileName="TestServices1.xsd" MetadataType="Schema" ID="40c12ea6-640d-401c-9610-1fd5cb833fd3" SourceId="1" SourceUrl="http://localhost:60000/Services/TestServices.svc?xsd=xsd1" />
+    <MetadataFile FileName="TestServices1.wsdl" MetadataType="Wsdl" ID="776db700-5a16-481d-8ede-a4ea5939c130" SourceId="1" SourceUrl="http://localhost:60000/Services/TestServices.svc?wsdl" />
+    <MetadataFile FileName="TestServices.disco" MetadataType="Disco" ID="eb84d57a-f564-4bd1-a963-49fd2c2f70c4" SourceId="1" SourceUrl="http://localhost:60000/Services/TestServices.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

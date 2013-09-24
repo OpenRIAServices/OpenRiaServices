@@ -1,0 +1,83 @@
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.WebContextGenerator" #>
+
+<#@ import namespace="OpenRiaServices.DomainServices" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Server.ApplicationServices" #>
+<#@ import namespace="System.Linq" #>
+
+<#@ include file="Templates\Utility.ttinclude" #>
+
+<# this.Generate(); #>
+
+<#+ 
+	private void GenerateNamespace()
+	{
+		string ns = this.ClientCodeGenerator.Options.ClientRootNamespace;
+#>
+namespace <#= ns #>
+<#+
+	}
+	
+	/// <summary>
+	/// Generates the class declaration for the WebContext class.
+	/// </summary>
+	protected virtual void GenerateClassDeclaration()
+	{
+#>
+public sealed partial class WebContext : OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase
+<#+
+	}
+	
+	private void GenerateConstructor()
+	{
+#>
+public WebContext()
+{			
+	this.OnCreated();
+}
+<#+
+	}
+	
+	/// <summary>
+	/// Generates extensibility methods on the web context class.
+	/// </summary>
+	protected virtual void GenerateExtensibilityMethods()
+	{
+#>
+partial void OnCreated();
+<#+
+	}
+	
+	/// <summary>
+	/// Generates the properties on the WebContext class.
+	/// </summary>
+	protected virtual void GenerateProperties()
+	{
+#>
+public new static WebContext Current
+{
+    get
+    {
+        return ((WebContext)(OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Current));
+    }
+}
+<#+
+		
+		DomainServiceDescription defaultAuthDescription = this.GetDefaultAuthDescription();
+		if(defaultAuthDescription != null)
+		{
+			Type genericType = null;
+            typeof(IAuthentication<>).DefinitionIsAssignableFrom(defaultAuthDescription.DomainServiceType, out genericType);
+            if ((genericType != null) && (genericType.GetGenericArguments().Count() == 1))
+            {
+				string typeName = CodeGenUtilities.GetTypeName(genericType.GetGenericArguments()[0]);
+#>
+public new <#= typeName #> User
+{
+	get { return (<#= typeName #>)base.User; }
+}
+<#+
+			}
+		}
+	}
+#>

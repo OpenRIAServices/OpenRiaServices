@@ -1,0 +1,98 @@
+﻿<!--
+***********************************************************************************************
+Microsoft.Ria.Validation.targets
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="Microsoft.ServiceModel.DomainServices.Tools.ValidateDomainServicesTask"
+             AssemblyFile="Microsoft.ServiceModel.DomainServices.Tools.dll" />
+
+  <!--
+    ============================================================
+    ValidateDomainServices
+
+    Target that validates the integrity of the DomainServices
+    exposed by the target Web Application.  It depends on
+    ValidateDomainServicesDependsOn to offer clients extension
+    points before and after validation.
+    ============================================================
+    -->
+  <PropertyGroup>
+    <ValidateDomainServicesDependsOn>
+      BeforeValidateDomainServices;
+      BuiltProjectOutputGroupDependencies;
+      CheckValidateDomainServicesPreconditions;
+      CoreValidateDomainServices;
+      AfterValidateDomainServices;
+    </ValidateDomainServicesDependsOn>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      ValidateDomainServices
+    </BuildDependsOn>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+  </PropertyGroup>
+
+  <Target Name="ValidateDomainServices"
+          DependsOnTargets="$(ValidateDomainServicesDependsOn)"/>
+
+  <!--
+    ============================================================
+    BeforeValidateDomainServices
+
+    Redefine this target in your project in order to run tasks
+    before DomainService validation
+    ============================================================
+    -->
+  <Target Name="BeforeValidateDomainServices">
+  </Target>
+
+  <!--
+    ============================================================
+    AfterValidateDomainServices
+
+    Redefine this target in your project in order to run tasks
+    after RIA Services client proxy code generation has been done
+    ============================================================
+    -->
+  <Target Name="AfterValidateDomainServices" >
+  </Target>
+
+  <Target Name="CheckValidateDomainServicesPreconditions" >
+    <PropertyGroup>
+      <!-- Only run validation in Web Application Projects -->
+      <_RIAProjectIsWebApplication>$(ProjectTypeGuids.ToLowerInvariant().Contains(349c5851-65df-11da-9384-00065b846f21))</_RIAProjectIsWebApplication>
+
+      <!-- Only run validation when the Project references System.ServiceModel.DomainServices.Server -->
+      <_RIAProjectReferences>@(Reference)</_RIAProjectReferences>
+      <_RIAProjectReferencesIncludeDomainService>$(_RIAProjectReferences.Contains(System.ServiceModel.DomainServices.Server))</_RIAProjectReferencesIncludeDomainService>
+
+      <!-- Only run validation for Projects that do not have a Silverlight link -->
+      <_RIAProjectDoesNotLinkSilverlight>True</_RIAProjectDoesNotLinkSilverlight>
+      <_RIAProjectDoesNotLinkSilverlight Condition="'$(SilverlightApplicationList)' != ''">False</_RIAProjectDoesNotLinkSilverlight>
+
+      <EnableDomainServiceValidation Condition="'$(EnableDomainServiceValidation)' == '' and '$(_RIAProjectIsWebApplication)' == 'True' and '$(_RIAProjectReferencesIncludeDomainService)' == 'True' and '$(_RIAProjectDoesNotLinkSilverlight)' == 'True'">True</EnableDomainServiceValidation>
+    </PropertyGroup>
+
+    <Message Importance="low" Text="ValidateDomainServices precondition _RIAProjectIsWebApplication = $(_RIAProjectIsWebApplication)"/>
+    <Message Importance="low" Text="ValidateDomainServices precondition _RIAProjectReferencesIncludeDomainService = $(_RIAProjectReferencesIncludeDomainService)"/>
+    <Message Importance="low" Text="ValidateDomainServices precondition _RIAProjectDoesNotLinkSilverlight = $(_RIAProjectDoesNotLinkSilverlight)"/>
+
+    <Message Importance="low" Text="ValidateDomainServices preconditions met" Condition="'$(EnableDomainServiceValidation)' == 'True'"/>
+    <Message Importance="low" Text="ValidateDomainServices preconditions not met" Condition="'$(EnableDomainServiceValidation)' != 'True'" />
+  </Target>
+
+  <Target Name="CoreValidateDomainServices" Condition="'$(EnableDomainServiceValidation)' == 'True'">
+    <ValidateDomainServicesTask
+       ProjectPath="$(MSBuildProjectFullPath)"
+       Assembly="$(TargetPath)"
+       ReferenceAssemblies="@(BuiltProjectOutputGroupDependency)">
+    </ValidateDomainServicesTask>
+  </Target>
+  
+</Project>

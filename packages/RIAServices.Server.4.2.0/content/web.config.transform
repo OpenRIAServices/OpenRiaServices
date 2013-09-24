@@ -1,0 +1,21 @@
+<configuration>
+  <configSections>
+    <sectionGroup name="system.serviceModel">
+      <section name="domainServices" type="System.ServiceModel.DomainServices.Hosting.DomainServicesSection, System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" allowDefinition="MachineToApplication" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <system.web>
+    <httpModules>
+      <add name="DomainServiceModule" type="System.ServiceModel.DomainServices.Hosting.DomainServiceHttpModule, System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </httpModules>
+  </system.web>
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="true">
+      <add name="DomainServiceModule" preCondition="managedHandler"
+          type="System.ServiceModel.DomainServices.Hosting.DomainServiceHttpModule, System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </modules>
+  </system.webServer>
+  <system.serviceModel>
+    <serviceHostingEnvironment aspNetCompatibilityEnabled="true" multipleSiteBindingsEnabled="true" />
+  </system.serviceModel>
+</configuration>

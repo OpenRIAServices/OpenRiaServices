@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DocumentationFile>..\..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.VisualStudio.Design.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU'">
+    <DocumentationFile>..\..\..\bin\CodeCov\Silverlight\OpenRiaServices.Controls.DomainServices.VisualStudio.Design.xml</DocumentationFile>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20826</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{35CD82F0-3886-4F94-A2AA-F7CA72B2F8FC}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenRiaServices.Controls.DomainServices.VisualStudio.Design</RootNamespace>
+    <AssemblyName>OpenRiaServices.Controls.DomainServices.VisualStudio.Design</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputPath>..\..\..\bin\$(Configuration)\Silverlight\</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\Silverlight\System.Windows.Controls.DomainServices.VisualStudio.Design.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <SkipCodeCoverageInstrumentation>true</SkipCodeCoverageInstrumentation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DocumentationFile>..\..\..\bin\Debug\Silverlight\OpenRiaServices.Controls.DomainServices.VisualStudio.Design.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' Or '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Windows.Design.Extensibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\PublicAssemblies\Microsoft.Windows.Design.Extensibility.dll</HintPath>
+    </Reference>
+    <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework\v2.0.50727\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v4.0\System.Core.dll</HintPath>
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+      <HintPath>..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v4.0\System.Data.DataSetExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework\v2.0.50727\System.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\Framework\v2.0.50727\System.XML.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v4.0\System.Xml.Linq.dll</HintPath>
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <HintPath>..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v4.0\WindowsBase.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Silverlight assembly references -->
+    <Reference Include="System.Net, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SLTargetFrameworkDirectory)\System.Net.dll</HintPath>
+      <Private>False</Private>
+      <Aliases>Silverlight</Aliases>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SLTargetFrameworkDirectory)\System.Runtime.Serialization.dll</HintPath>
+      <Private>False</Private>
+      <Aliases>Silverlight</Aliases>
+    </Reference>
+    <Reference Include="System.Windows, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SLTargetFrameworkDirectory)\System.Windows.dll</HintPath>
+      <Private>False</Private>
+      <Aliases>Silverlight</Aliases>
+    </Reference>
+    <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+      <Aliases>Silverlight</Aliases>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+      <Link>Design.Common\ExceptionHandlingUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\MetadataBase.cs">
+      <Link>Design.Common\MetadataBase.cs</Link>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Metadata.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.Controls.DomainServices.csproj">
+      <Project>{174DE0B6-BBA8-43DF-8755-BC8927EB9138}</Project>
+      <Name>OpenRiaServices.Controls.DomainServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\System.Windows.Controls.DomainDataSource.VisualStudio.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
+</Project>

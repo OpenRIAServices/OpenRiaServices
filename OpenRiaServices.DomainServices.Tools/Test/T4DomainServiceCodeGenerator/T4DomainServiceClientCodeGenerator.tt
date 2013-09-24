@@ -1,0 +1,28 @@
+﻿<#@  template language="C#" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.ComponentModel" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
+<#@ include file="DomainServiceDescription.ttinclude" #>
+<#@ include file="DomainContext.ttinclude" #>
+<#@ include file="Entity.ttinclude" #>
+<#@ include file="EntityProperty.ttinclude" #>
+<#@ include file="CustomAttribute.ttinclude" #>
+// <#= T4DomainServiceClientProxyGenerator.GeneratedBoilerPlate #>
+<# this.GenerateAllDomainServiceDescriptionClasses(this.DomainServiceDescriptions); #>
+<#+
+
+public virtual void GenerateAllDomainServiceDescriptionClasses(IEnumerable<DomainServiceDescription> domainServiceDescriptions)
+{
+    foreach (DomainServiceDescription domainServiceDescription in domainServiceDescriptions)
+    {
+        this.GenerateDomainServiceDescriptionClasses(domainServiceDescription);
+    }
+}
+
+#>

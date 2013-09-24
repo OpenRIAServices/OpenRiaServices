@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <assembly>
+    <name>System.Windows.Controls.DomainServices</name>
+    <version>2.0.5.0</version>
+    <publickeytoken>{RiaServicesKey}</publickeytoken>
+    <relpath>System.Windows.Controls.DomainServices.dll</relpath>
+    <extension downloadUri="System.Windows.Controls.DomainServices.zip" />
+  </assembly>
+
+</manifest>

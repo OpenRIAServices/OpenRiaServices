@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20805</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{174DE0B6-BBA8-43DF-8755-BC8927EB9138}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenRiaServices.Windows.Controls</RootNamespace>
+    <AssemblyName>OpenRiaServices.Controls.DomainServices</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
+    <OutputPath>..\..\bin\$(Configuration)\Silverlight\</OutputPath>
+    <DocumentationFile>..\..\bin\$(Configuration)\Silverlight\System.Windows.Controls.DomainServices.XML</DocumentationFile>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;RIASERVICES</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Silverlight\OpenRiaServices.Controls.DomainServices.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;SILVERLIGHT;RIASERVICES</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;CODECOV;RIASERVICES</DefineConstants>
+    <IsSilverlight>true</IsSilverlight>
+    <DocumentationFile>..\..\bin\CodeCov\Silverlight\OpenRiaServices.Controls.DomainServices.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
+      <Link>Common\BinaryTypeUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
+      <Link>Common\TypeUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+      <Link>Common\ExceptionHandlingUtility.cs</Link>
+    </Compile>
+    <Compile Include="Common\CommonResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommonResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Utilities.cs" />
+    <Compile Include="Common\DebugTrace.cs" />
+    <Compile Include="Common\DependencyObjectExtensions.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\CollectionManager.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\CollectionViewGroupInternal.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\CollectionViewGroupRoot.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\DeferHelper.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\DomainDataSourceCommand.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\DomainDataSourceView.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\EntityCollectionView.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\CollectionViewConverter.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\EntityCollectionViewResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EntityCollectionViewResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="OpenRiaServices.Windows.Controls\ExpressionCache.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\FilterCollectionManager.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\GroupCollectionManager.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\IRestorable.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\IPagedEntityList.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\LoadContext.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\LoadedDataEventArgs.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\LoadType.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\PagedEntityCollectionView.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\PagingHelper.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\ParameterCollectionManager.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\PropertyChangedNotifier.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\SortCollectionManager.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\SubmittingChangesEventArgs.cs" />
+    <Compile Include="Common\TypeHelper.cs" />
+    <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' " />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\LinqHelper.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\LoadingDataEventArgs.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\DomainDataSource.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\PagedEntityCollection.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\DomainDataSourceResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DomainDataSourceResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="OpenRiaServices.Windows.Controls\FilterDescriptor.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\FilterDescriptorCollection.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\FilterDescriptorLogicalOperator.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\FilterOperator.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\GroupDescriptor.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\GroupDescriptorCollection.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\Parameter.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\ParameterCollection.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\SortDescriptor.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\SortDescriptorCollection.cs" />
+    <Compile Include="OpenRiaServices.Windows.Controls\SubmittedChangesEventArgs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="themes\generic.xaml">
+      <Generator>MSBuild:CompileXaml</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common\CommonResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>System.Windows.Common</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenRiaServices.Windows.Controls\EntityCollectionViewResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EntityCollectionViewResources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>System.Windows.Controls</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenRiaServices.Windows.Controls\DomainDataSourceResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DomainDataSourceResources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>System.Windows.Controls</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
+      <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
+      <Name>OpenRiaServices.DomainServices.Client %28Framework\Silverlight\OpenRiaServices.DomainServices.Client%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="System.Windows.Controls.DomainServices.extmap.xml" />
+  </ItemGroup>
+  <Import Project="..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

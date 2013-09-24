@@ -1,0 +1,10 @@
+﻿<#+ 
+public virtual void GenerateDomainServiceDescriptionClasses(DomainServiceDescription domainServiceDescription)
+{
+    this.GenerateDomainContextClass(domainServiceDescription);
+    foreach (Type entityType in domainServiceDescription.EntityTypes)
+    {
+        this.GenerateEntityClass(entityType);
+    }
+}
+#>

@@ -1,0 +1,31 @@
+﻿<#+
+public virtual void GenerateEntityPropertyDeclaration(PropertyInfo propertyInfo)
+{
+#>
+        public  <#= propertyInfo.PropertyType.Name #> <#= propertyInfo.Name #> <#+
+}
+
+public virtual void GenerateEntityPropertyGetter(PropertyInfo propertyInfo)
+{
+#>get;<#+
+}
+
+public virtual void GenerateEntityPropertySetter(PropertyInfo propertyInfo)
+{
+#>set;<#+
+}
+
+public virtual void GenerateEntityPropertyBody(PropertyInfo propertyInfo)
+{
+#> {<#+ this.GenerateEntityPropertyGetter(propertyInfo); this.GenerateEntityPropertySetter(propertyInfo); #>}
+<#+
+}
+
+public virtual void GenerateEntityProperty(PropertyInfo propertyInfo) { 
+   foreach (object customAttribute in propertyInfo.GetCustomAttributes(false) ) {
+       this.GenerateCustomAttribute(customAttribute);
+   }
+   this.GenerateEntityPropertyDeclaration(propertyInfo);
+   this.GenerateEntityPropertyBody(propertyInfo);
+ } #>
+

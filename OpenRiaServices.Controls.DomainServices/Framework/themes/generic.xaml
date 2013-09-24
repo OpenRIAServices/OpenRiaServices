@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.DomainServices"
+    xmlns:vsm="clr-namespace:System.Windows;assembly=System.Windows">
+    <Style TargetType="ctl:DomainDataSource">
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="AutoLoad" Value="True" />
+        <Setter Property="LoadDelay" Value="0:0:0.75" />
+        <Setter Property="LoadInterval" Value="0:0:2" />
+    </Style>
+</ResourceDictionary>

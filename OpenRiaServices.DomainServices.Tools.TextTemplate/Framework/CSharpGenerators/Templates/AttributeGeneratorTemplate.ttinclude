@@ -1,0 +1,78 @@
+﻿<#+
+	/// <summary>
+	/// Generates attribute declarations in C#.
+	/// </summary>
+	/// <param name="attributes">The list of attributes to be generated.</param>
+	protected virtual void GenerateAttributes(IEnumerable<Attribute> attributes)
+	{	
+		this.GenerateAttributes(attributes, false);
+	}
+	
+	/// <summary>
+	/// Generates attribute declarations in C#.
+	/// </summary>
+	/// <param name="attributes">The attributes to be generated.</param>
+	/// <param name="forcePropagation">Causes the attributes to be generated even if the attribute verification fails.</param>
+	protected virtual void GenerateAttributes(IEnumerable<Attribute> attributes, bool forcePropagation)
+	{
+		foreach (Attribute attribute in attributes.OrderBy(a => a.GetType().Name))
+        {
+			AttributeDeclaration attributeDeclaration = AttributeGeneratorHelper.GetAttributeDeclaration(attribute, this.ClientCodeGenerator, forcePropagation);
+            if (attributeDeclaration == null || attributeDeclaration.HasErrors)
+			{
+				continue;
+			}
+			
+			string attributeTypeName = CodeGenUtilities.GetTypeName(attributeDeclaration.AttributeType);
+#>
+[<#=  attributeTypeName #>(<#+
+			if (attributeDeclaration.ConstructorArguments.Count > 0)
+            {
+				for (int i = 0; i < attributeDeclaration.ConstructorArguments.Count; i++)
+            	{
+                	object value = attributeDeclaration.ConstructorArguments[i];
+					string stringValue = AttributeGeneratorHelper.ConvertValueToCode(value, true);
+					#><#= stringValue #><#+
+					if (i + 1 < attributeDeclaration.ConstructorArguments.Count)
+					{
+					#>, <#+
+					}
+	            }
+			}
+			if (attributeDeclaration.NamedParameters.Count > 0)
+            {
+				if (attributeDeclaration.ConstructorArguments.Count > 0)
+            	{
+					#>, <#+
+				}
+				
+				for (int i = 0; i < attributeDeclaration.NamedParameters.Count; i++)
+                {
+                    KeyValuePair<string, object> pair = attributeDeclaration.NamedParameters.ElementAt(i);
+                    string stringValue = AttributeGeneratorHelper.ConvertValueToCode(pair.Value, true);
+					#><#= pair.Key #>=<#= stringValue #><#+
+                    if (i + 1 < attributeDeclaration.NamedParameters.Count)
+                    {
+					#>,<#+
+                    }
+                }
+			}
+#>)]
+<#+
+		}
+	}
+	
+	private void GenerateDataContractAttribute(Type sourceType)
+	{
+		string dataContractNamespace, dataContractName;
+		AttributeGeneratorHelper.GetContractNameAndNamespace(sourceType, out dataContractNamespace, out dataContractName);
+#>
+[System.Runtime.Serialization.DataContract(Namespace = "<#= dataContractNamespace #>"<#+  
+		if(!string.IsNullOrEmpty(dataContractName))
+		{
+		#>, Name = " <#= dataContractName #>"<#+
+		}
+#>)]
+<#+
+	}	
+#>

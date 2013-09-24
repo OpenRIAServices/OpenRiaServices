@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20805</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.ServiceModel.DomainServices.Client</RootNamespace>
+    <AssemblyName>System.ServiceModel.DomainServices.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
+    <OutputPath>..\..\..\bin\$(Configuration)\Silverlight\</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\Silverlight\System.ServiceModel.DomainServices.Client.XML</DocumentationFile>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;CODECOV</DefineConstants>
+    <IsSilverlight>true</IsSilverlight>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
+      <Link>Data\CompositionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="ApplicationServices\AuthenticationEventArgs.cs" />
+    <Compile Include="ApplicationServices\AuthenticationOperation.cs">
+    </Compile>
+    <Compile Include="ApplicationServices\AuthenticationResult.cs">
+    </Compile>
+    <Compile Include="ApplicationServices\LoadUserOperation.cs" />
+    <Compile Include="ApplicationServices\LoadUserResult.cs" />
+    <Compile Include="ApplicationServices\LoginOperation.cs" />
+    <Compile Include="ApplicationServices\LoginResult.cs" />
+    <Compile Include="ApplicationServices\LogoutOperation.cs" />
+    <Compile Include="ApplicationServices\LogoutResult.cs" />
+    <Compile Include="ApplicationServices\SaveUserOperation.cs" />
+    <Compile Include="ApplicationServices\SaveUserResult.cs" />
+    <Compile Include="Data\ComplexObject.cs" />
+    <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
+    <Compile Include="Data\EntityQueryable.cs" />
+    <Compile Include="Data\ObjectStateUtility.cs" />
+    <Compile Include="Data\ValidationResultCollection.cs" />
+    <Compile Include="Data\EntityVisitor.cs" />
+    <Compile Include="Data\InvokeArgs.cs" />
+    <Compile Include="Data\MetaType.cs" />
+    <Compile Include="Data\RoundtripOriginalAttribute.cs" />
+    <Compile Include="ExceptionHandlingUtility.cs" />
+    <Compile Include="Data\BinaryTypeUtility.cs" />
+    <Compile Include="OperationBase.cs">
+    </Compile>
+    <Compile Include="AsyncResultBase.cs" />
+    <Compile Include="Data\ChangeSetBuilder.cs">
+    </Compile>
+    <Compile Include="Data\QueryResult.cs">
+    </Compile>
+    <Compile Include="Data\DomainClientAsyncResult.cs">
+    </Compile>
+    <Compile Include="Data\DomainClientResult.cs">
+    </Compile>
+    <Compile Include="Data\EntityAction.cs" />
+    <Compile Include="Data\EntityCollectionChangedEventArgs.cs" />
+    <Compile Include="Data\EntityOperationType.cs" />
+    <Compile Include="Data\EntityQuery.cs">
+    </Compile>
+    <Compile Include="Data\ExternalReferenceAttribute.cs" />
+    <Compile Include="Data\InvokeOperation.cs">
+    </Compile>
+    <Compile Include="Data\DomainClient.cs" />
+    <Compile Include="Data\DomainContext.cs">
+    </Compile>
+    <Compile Include="Data\DomainOperationException.cs" />
+    <Compile Include="Data\DomainIdentifierAttribute.cs" />
+    <Compile Include="Data\DomainException.cs" />
+    <Compile Include="Data\LoadOperation.cs">
+    </Compile>
+    <Compile Include="Data\SubmitOperation.cs">
+    </Compile>
+    <Compile Include="Data\Entity.cs" />
+    <Compile Include="Data\EntityChangeSet.cs" />
+    <Compile Include="Data\EntityCollection.cs" />
+    <Compile Include="Data\EntityConflict.cs">
+    </Compile>
+    <Compile Include="Data\EntityContainer.cs" />
+    <Compile Include="Data\EntityKey.cs">
+    </Compile>
+    <Compile Include="Data\EntitySet.cs">
+    </Compile>
+    <Compile Include="Data\EntitySetOperations.cs" />
+    <Compile Include="Data\ChangeSetEntry.cs" />
+    <Compile Include="Data\EntityRef.cs" />
+    <Compile Include="Data\EntityState.cs" />
+    <Compile Include="Data\InvokeCompletedResult.cs" />
+    <Compile Include="Data\LoadBehavior.cs" />
+    <Compile Include="Data\ValidationResultInfo.cs" />
+    <Compile Include="Data\OperationErrorStatus.cs" />
+    <Compile Include="Data\QueryCompletedResult.cs" />
+    <Compile Include="Data\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\SubmitCompletedResult.cs" />
+    <Compile Include="Data\ValidationUtilities.cs" />
+    <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
+    </Compile>
+    <Compile Include="ApplicationServices\LoginParameters.cs" />
+    <Compile Include="Data\TypeUtility.cs">
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationServices\AuthenticationService.cs">
+    </Compile>
+    <Compile Include="WeakCollectionChangedListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>System.ServiceModel.DomainServices.Client</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="System.ServiceModel.DomainServices.Client.extmap.xml" />
+  </ItemGroup>
+  <Import Project="..\..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
+  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
