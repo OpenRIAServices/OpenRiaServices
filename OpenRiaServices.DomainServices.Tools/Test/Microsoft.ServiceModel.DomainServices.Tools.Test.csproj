@@ -145,11 +145,11 @@
       <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
       <Name>Microsoft.ServiceModel.DomainServices.EntityFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Test\CodeFirstModel\EFCodeFirstModels.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj">
       <Project>{A94B2843-C68E-4548-9168-63469D625935}</Project>
       <Name>EFCodeFirstModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Test\DbContextModel\EFDbContextModels.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
       <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
       <Name>EFDbContextModels</Name>
     </ProjectReference>

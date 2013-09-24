@@ -109,7 +109,7 @@
     <Compile Include="UtilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Test\DbContextModel\EFDbContextModels.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
       <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
       <Name>EFDbContextModels</Name>
     </ProjectReference>
