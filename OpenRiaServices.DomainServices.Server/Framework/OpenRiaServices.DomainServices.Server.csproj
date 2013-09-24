@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20805</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{72E74082-7928-4A70-83C1-49806B942FCB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.ServiceModel.DomainServices.Server</RootNamespace>
+    <AssemblyName>System.ServiceModel.DomainServices.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\System.ServiceModel.DomainServices.Server.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;SERVERFX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
+      <Link>Data\BinaryTypeUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\DomainException.cs">
+      <Link>Data\DomainException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\DomainIdentifierAttribute.cs">
+      <Link>Data\DomainIdentifierAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\ExternalReferenceAttribute.cs">
+      <Link>Data\ExternalAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\RoundtripOriginalAttribute.cs">
+      <Link>Data\RoundtripOriginalAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
+      <Link>Data\TypeUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\ValidationUtilities.cs">
+      <Link>Data\ValidationUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+      <Link>Data\ExceptionHandlingUtility.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\ValidationResultInfo.cs">
+      <Link>Data\ValidationResultInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs">
+      <Link>ApplicationServices\SerializationUtility.cs</Link>
+    </Compile>
+    <Compile Include="Data\AuthorizationContext.cs" />
+    <Compile Include="Data\AuthorizationResult.cs" />
+    <Compile Include="Data\ChangeOperation.cs" />
+    <Compile Include="Data\CodeProcessor.cs" />
+    <Compile Include="Data\ChangeSet.cs" />
+    <Compile Include="Data\CompositionAttribute.cs" />
+    <Compile Include="Data\DomainPropertyDescriptor.cs" />
+    <Compile Include="Data\DomainTypeDescriptor.cs" />
+    <Compile Include="Data\DynamicMethodUtility.cs" />
+    <Compile Include="Data\InvokeDescription.cs" />
+    <Compile Include="Data\MemberProjectionPropertyDescriptor.cs" />
+    <Compile Include="Data\MetaType.cs" />
+    <Compile Include="Data\OutputCacheLocation.cs" />
+    <Compile Include="Data\DomainOperationParameter.cs" />
+    <Compile Include="Data\DomainOperationType.cs" />
+    <Compile Include="Data\DomainServiceDescriptionProvider.cs">
+    </Compile>
+    <Compile Include="Data\DomainServiceDescriptionProviderAttribute.cs" />
+    <Compile Include="Data\DomainServiceErrorInfo.cs">
+    </Compile>
+    <Compile Include="Data\DomainTypeDescriptionProvider.cs">
+    </Compile>
+    <Compile Include="Data\IgnoreAttribute.cs" />
+    <Compile Include="Data\OutputCacheAttribute.cs" />
+    <Compile Include="Data\KnownTypeUtilities.cs" />
+    <Compile Include="Data\ReflectionDomainServiceDescriptionProvider.cs">
+    </Compile>
+    <Compile Include="Data\InsertAttribute.cs" />
+    <Compile Include="Data\InvokeAttribute.cs" />
+    <Compile Include="Data\DeleteAttribute.cs" />
+    <Compile Include="Data\UpdateAttribute.cs" />
+    <Compile Include="Data\QueryAttribute.cs" />
+    <Compile Include="Data\RequiresRoleAttribute.cs">
+    </Compile>
+    <Compile Include="Data\RequiresAuthenticationAttribute.cs" />
+    <Compile Include="Data\DomainOperationEntry.cs">
+    </Compile>
+    <Compile Include="Data\DomainOperation.cs" />
+    <Compile Include="Data\DomainServiceContext.cs" />
+    <Compile Include="Data\DomainService.cs">
+    </Compile>
+    <Compile Include="Data\DomainServiceDescription.cs">
+    </Compile>
+    <Compile Include="Data\ChangeSetEntry.cs" />
+    <Compile Include="Data\ExcludeAttribute.cs" />
+    <Compile Include="Data\IDomainServiceFactory.cs" />
+    <Compile Include="Data\IncludeAttribute.cs" />
+    <Compile Include="Data\AuthorizationAttribute.cs" />
+    <Compile Include="Data\QueryDescription.cs" />
+    <Compile Include="Data\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
+    </Compile>
+    <Compile Include="Linq\QueryComposer.cs">
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeDescriptorExtensions.cs" />
+    <Compile Include="ApplicationServices\AuthenticationBase.cs" />
+    <Compile Include="ApplicationServices\AuthenticationCodeProcessor.cs" />
+    <Compile Include="ApplicationServices\AuthenticationServiceAttribute.cs" />
+    <Compile Include="ApplicationServices\IAuthentication.cs" />
+    <Compile Include="ApplicationServices\IUser.cs" />
+    <Compile Include="ApplicationServices\ProfileUsageAttribute.cs" />
+    <Compile Include="ApplicationServices\UserBase.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Server</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
+</Project>

@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApplicationServices_CommentIsAuth" xml:space="preserve">
+    <value>&lt;summary&gt;
+Gets a value indicating whether the identity is authenticated.
+&lt;/summary&gt;
+&lt;remarks&gt;
+This value is &lt;c&gt;true&lt;/c&gt; if &lt;see cref="Name"/&gt; is not &lt;c&gt;null&lt;/c&gt; or empty.
+&lt;/remarks&gt;</value>
+  </data>
+  <data name="ApplicationServices_CommentIsInRole" xml:space="preserve">
+    <value>&lt;summary&gt;
+Return whether the principal is in the role.
+&lt;/summary&gt;
+&lt;remarks&gt;
+Returns whether the specified role is contained in the roles.
+This implementation is case sensitive.
+&lt;/remarks&gt;
+&lt;param name="role"&gt;The name of the role for which to check membership.&lt;/param&gt;
+&lt;returns&gt;Whether the principal is in the role.&lt;/returns&gt;</value>
+  </data>
+  <data name="ApplicationServices_CreateUserCannotBeNull" xml:space="preserve">
+    <value>The user returned from {0}.CreateUser() cannot be null.</value>
+  </data>
+  <data name="ApplicationServices_GetUserCannotBeNull" xml:space="preserve">
+    <value>The user returned from {0}.GetUser(IIdentity) or {0}.GetAnonymousUser() cannot be null.</value>
+  </data>
+  <data name="ApplicationServices_LoginLogoutOnlyForForms" xml:space="preserve">
+    <value>Login and Logout can only be invoked for Forms authentication.</value>
+  </data>
+  <data name="ApplicationServices_MustBeIAuth" xml:space="preserve">
+    <value>The AuthenticationServiceAttribute can only be applied to DomainServices that implement the IAuthentication&lt;&gt; interface.</value>
+  </data>
+  <data name="ApplicationServices_MustBeIAuthImpl" xml:space="preserve">
+    <value>The {0} type must not implement IAuthentication&lt;&gt; explicitly and each method must be included in the generated context.</value>
+  </data>
+  <data name="ApplicationServices_MustBeIUser" xml:space="preserve">
+    <value>The {0} type must not implement IUser explicitly.</value>
+  </data>
+  <data name="ApplicationServices_MustBeSerializable" xml:space="preserve">
+    <value>The {0} member in {1} must be included in the generated entity.</value>
+  </data>
+  <data name="ApplicationServices_NameMustBeAKey" xml:space="preserve">
+    <value>The Name property in {0} must be marked with the KeyAttribute.</value>
+  </data>
+  <data name="ApplicationServices_ProfilePropertyDoesNotExist" xml:space="preserve">
+    <value>A profile property does not exist for {0}.</value>
+  </data>
+  <data name="ApplicationServices_ProfilePropertyReadOnly" xml:space="preserve">
+    <value>The profile property is ReadOnly for {0}.</value>
+  </data>
+  <data name="ApplicationServices_ProfilePropertyTypeMismatch" xml:space="preserve">
+    <value>The profile property type of {0} is different from the property type.</value>
+  </data>
+  <data name="ApplicationServices_ProviderError" xml:space="preserve">
+    <value>There was a failure using the default '{0}Provider'. Please make sure it is configured correctly. {1}</value>
+  </data>
+  <data name="ApplicationServices_UnauthorizedUpdate" xml:space="preserve">
+    <value>The user cannot be updated. Users are only allowed to modify their own profile.</value>
+  </data>
+</root>
