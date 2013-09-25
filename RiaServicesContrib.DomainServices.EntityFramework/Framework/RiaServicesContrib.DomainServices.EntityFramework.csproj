@@ -6,15 +6,43 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
-    <OutputPath>bin\MyGet\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\RiaServicesContrib.DomainServices.EntityFramework.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OutputPath>bin\ReleaseNet40\</OutputPath>
+    <DefineConstants>TRACE;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DefineConstants>TRACE;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <PropertyGroup>
@@ -27,10 +55,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.ServiceModel.DomainServices.EntityFramework</RootNamespace>
     <AssemblyName>RiaServicesContrib.DomainServices.EntityFramework</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\Microsoft.ServiceModel.DomainServices.EntityFramework.XML</DocumentationFile>
+    <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
+    <DocumentationFile>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\Microsoft.ServiceModel.DomainServices.EntityFramework.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -40,14 +68,12 @@
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>..\..\bin\Debug\Desktop\RiaServicesContrib.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT;RIACONTRIB</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>..\..\bin\Release\Desktop\RiaServicesContrib.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,23 +81,35 @@
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;SERVERFX;CODECOV;DBCONTEXT;RIACONTRIB</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>..\..\bin\CodeCov\Desktop\RiaServicesContrib.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0'">
     <Reference Include="EntityFramework">
       <HintPath>..\..\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\..\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.5'">
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.6.0.0-rc1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.0.0-rc1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.ServiceModel.DomainServices.Hosting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\RIAServices.Server.4.2.0\lib\Net40\System.ServiceModel.DomainServices.Hosting.dll</HintPath>
@@ -166,4 +204,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
   <Import Project="..\..\packages\RIAServices.Server.4.2.0\tools\Microsoft.Ria.Validation.targets" />
+  <Target Name="AfterBuild">
+    <MSBuild Condition=" '$(TargetFrameworkVersion)' == 'v4.5' "
+      Projects="$(MSBuildProjectFile)"
+      Properties="TargetFrameworkVersion=v4.0"
+      RunEachTargetSeparately="true"  />
+  </Target>
 </Project>
