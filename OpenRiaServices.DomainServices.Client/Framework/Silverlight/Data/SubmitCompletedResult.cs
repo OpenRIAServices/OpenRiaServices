@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this._changeSet = changeSet;
-            this._operationResults = operationResults.ToList().AsReadOnly();
+            this._operationResults =new ReadOnlyCollection<ChangeSetEntry>(operationResults.ToList());
         }
 
         /// <summary>

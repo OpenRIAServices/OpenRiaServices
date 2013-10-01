@@ -145,25 +145,25 @@
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>System.ServiceModel.DomainServices.EntityFramework</Name>
+      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.Tools</Name>
+      <Name>OpenRiaServices.DomainServices.Tools</Name>
       <Aliases>global</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
       <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.LinqToSql</Name>
+      <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>System.ServiceModel.DomainServices.Hosting</Name>
+      <Name>OpenRiaServices.DomainServices.Hosting</Name>
       <Aliases>global,SystemServiceModelDomainServicesHosting</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>System.ServiceModel.DomainServices.Server</Name>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
       <Aliases>global,SystemWebDomainServices</Aliases>
     </ProjectReference>
   </ItemGroup>

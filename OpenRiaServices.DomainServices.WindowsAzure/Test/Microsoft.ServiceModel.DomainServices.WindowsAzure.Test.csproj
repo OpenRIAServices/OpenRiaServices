@@ -93,11 +93,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>System.ServiceModel.DomainServices.Server</Name>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.WindowsAzure.csproj">
       <Project>{62CEDA36-AE80-411D-8A55-2D417A86960B}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.WindowsAzure</Name>
+      <Name>OpenRiaServices.DomainServices.WindowsAzure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -196,15 +196,15 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
-      <Name>System.ServiceModel.DomainServices.Client.Web %28Framework\Silverlight\System.ServiceModel.DomainServices.Client.Web%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
-      <Name>System.ServiceModel.DomainServices.Client %28Framework\Silverlight\System.ServiceModel.DomainServices.Client%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client %28Framework\Silverlight\OpenRiaServices.DomainServices.Client%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.Controls.DomainServices.csproj">
       <Project>{174DE0B6-BBA8-43DF-8755-BC8927EB9138}</Project>
-      <Name>System.Windows.Controls.DomainServices</Name>
+      <Name>OpenRiaServices.Controls.DomainServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
