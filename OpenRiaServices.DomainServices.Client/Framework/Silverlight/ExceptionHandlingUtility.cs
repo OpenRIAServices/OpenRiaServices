@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices
+namespace OpenRiaServices.DomainController
 {
     internal static class ExceptionHandlingUtility
     {

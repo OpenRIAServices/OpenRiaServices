@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
-
+using OpenRiaServices.DomainController;
 #if DBCONTEXT
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
