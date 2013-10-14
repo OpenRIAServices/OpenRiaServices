@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenRiaServices.DomainServices;
 
 namespace OpenRiaServices.DomainController.Server.ApplicationServices
 {
