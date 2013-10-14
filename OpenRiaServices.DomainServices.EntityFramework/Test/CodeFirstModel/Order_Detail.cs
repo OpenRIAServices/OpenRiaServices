@@ -1,10 +1,12 @@
+
+
 namespace CodeFirstModels
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using OpenRiaServices.DomainServices.Server;
-    
+    using System.ComponentModel.DataAnnotations.Schema;    
     public partial class Order_Detail
     {
         [Key]

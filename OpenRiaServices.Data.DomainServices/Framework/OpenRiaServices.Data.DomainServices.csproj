@@ -7,7 +7,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Silverlight\Microsoft.Windows.Data.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Silverlight\Microsoft.Windows.Data.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\DebugNet40\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -29,7 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Silverlight\Microsoft.Windows.Data.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\ReleaseNet40\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,7 +40,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Silverlight\Microsoft.Windows.Data.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet40\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoStdLib>true</NoStdLib>
     <DebugType>pdbonly</DebugType>
@@ -58,8 +58,8 @@
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Windows.Data.DomainServices</RootNamespace>
-    <AssemblyName>Microsoft.Windows.Data.DomainServices</AssemblyName>
+    <RootNamespace>OpenRiaServices.Data.DomainServices</RootNamespace>
+    <AssemblyName>OpenRiaServices.Data.DomainServices</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -74,17 +74,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <IsSilverlight>true</IsSilverlight>
+    <DocumentationFile>..\..\bin\CodeCov\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

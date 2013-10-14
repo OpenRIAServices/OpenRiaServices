@@ -9,7 +9,7 @@ using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.Description
 
 namespace OpenRiaServices.DomainServices.Client.Test.Data
 {
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
     [TestClass]
     public class SharedEntitiesTests : UnitTestBase

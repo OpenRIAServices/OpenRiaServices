@@ -1,5 +1,5 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,9 +15,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using DomainClientAsyncResult = OpenRiaServices.DomainServices.Client.DomainClientAsyncResult;
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
-    using Resources = OpenRiaServices.DomainServices.Client.Resources;
+    using DomainClientAsyncResult = SSmDsClient::OpenRiaServices.DomainServices.Client.DomainClientAsyncResult;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
 
     [TestClass]
     public class DomainClientTests : UnitTestBase

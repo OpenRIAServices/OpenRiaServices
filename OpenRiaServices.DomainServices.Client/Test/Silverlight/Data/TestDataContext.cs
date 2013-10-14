@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ServiceModel;
 using OpenRiaServices;
 using DataTests.AdventureWorks.LTS;
 using System.ServiceModel.Web;

@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Association_Not_Entity_Type" xml:space="preserve">
+    <value>The property '{0}' of entity type '{1}' cannot be marked with AssociationAttribute because '{2}' is not a valid entity type.</value>
+  </data>
+  <data name="AuthorizationAttribute_Default_Message" xml:space="preserve">
+    <value>Access to operation '{0}' was denied.</value>
+  </data>
+  <data name="AuthorizationAttribute_Requires_ErrorMessage" xml:space="preserve">
+    <value>The '{0}' AuthorizationAttribute must specify a non-empty 'ErrorMessage' to access '{1}' resource type.</value>
+  </data>
+  <data name="AuthorizationAttribute_Requires_Valid_Property" xml:space="preserve">
+    <value>The resource type '{0}' does not expose a static string property named '{1}'.</value>
+  </data>
+  <data name="AuthorizationContext_Template_Only" xml:space="preserve">
+    <value>This AuthorizationContext instance is only a template and cannot be used directly."</value>
+  </data>
+  <data name="ChangeSet_ChangeSetEntryNotFound" xml:space="preserve">
+    <value>The specified entity does not exist in the ChangeSet.</value>
+  </data>
+  <data name="ChangeSet_ChildHasMultipleParents" xml:space="preserve">
+    <value>Invalid ChangeSet : Entity for operation '{0}' has multiple parents.</value>
+  </data>
+  <data name="ChangeSet_InvalidMemberExpression" xml:space="preserve">
+    <value>The member expression specified is invalid.</value>
+  </data>
+  <data name="ChangeSet_OriginalNotValidForInsert" xml:space="preserve">
+    <value>GetOriginal cannot be called for a new entity being inserted.</value>
+  </data>
+  <data name="ChangeSet_Replace_EntityTypesNotSame" xml:space="preserve">
+    <value>Cannot replace entity of type '{0}' with entity of type '{1}'.</value>
+  </data>
+  <data name="Composition_ParentsMustSupportDelete" xml:space="preserve">
+    <value>Composed type '{0}' can only have a Delete method if all of its parent types also support Update or Delete.</value>
+  </data>
+  <data name="Composition_ParentsMustSupportInsert" xml:space="preserve">
+    <value>Composed type '{0}' can only have an Insert method if all of its parent types also support Update or Insert.</value>
+  </data>
+  <data name="Composition_ParentsMustSupportUpdate" xml:space="preserve">
+    <value>Composed type '{0}' can only have an Update method if all of its parent types also support Update.</value>
+  </data>
+  <data name="CyclicMetadataTypeAttributesFound" xml:space="preserve">
+    <value>The MetadataTypeAttribute on type '{0}' results in a cyclic metadata provider chain. Either remove the attribute or remove the cycle.</value>
+  </data>
+  <data name="DerivedEntityCannotHaveKey" xml:space="preserve">
+    <value>The property '{0}' of type '{1}' is marked with the KeyAttribute.  Derived entity classes cannot declare key properties.</value>
+  </data>
+  <data name="DomainOperationEntryOverload_NotSupported" xml:space="preserve">
+    <value>A method named '{0}' is already defined. DomainOperationEntry overloads are not supported.</value>
+  </data>
+  <data name="DomainOperationEntry_ArgumentCannotBeNullOrEmpty" xml:space="preserve">
+    <value>The argument '{0}' cannot be null or empty.</value>
+  </data>
+  <data name="DomainOperation_Required_On_Root" xml:space="preserve">
+    <value>The domain operation '{0}' declared on the entity '{1}' must also be declared on the root entity '{2}'.</value>
+  </data>
+  <data name="DomainControllerContextServiceContainer_ItemAlreadyExists" xml:space="preserve">
+    <value>A service of type '{0}' already exists in the container.</value>
+  </data>
+  <data name="DomainControllerDescriptionProviderAttribute_MissingConstructor" xml:space="preserve">
+    <value>DomainControllerDescriptionProvider type '{0}' must have a constructor with two parameters of types 'Type' and 'DomainControllerDescriptionProvider', in that order.</value>
+  </data>
+  <data name="DomainControllerDescription_DataContractAttributeRequired" xml:space="preserve">
+    <value>The entity type '{0}' must be marked with DataContractAttribute since it derives from type '{1}' which is marked with DataContractAttribute.</value>
+  </data>
+  <data name="DomainControllerDescription_DefaultQuery_Cannot_Be_Singleton" xml:space="preserve">
+    <value>Query operation '{0}' cannot be marked as the default because it returns only a single value.</value>
+  </data>
+  <data name="DomainControllerDescription_DefaultQuery_Cannot_Have_Multiple" xml:space="preserve">
+    <value>Both query operations '{0}' and '{1}' cannot be marked as the default query operation because they return the same entity type '{2}'.</value>
+  </data>
+  <data name="DomainControllerDescription_DefaultQuery_Cannot_Have_Multiple_Inheritance" xml:space="preserve">
+    <value>Both query operations '{0}' and '{1}' cannot be marked as the default query operation. Entity type '{2}' derives from entity type '{3}'.  The default query can expose only a single type for an entity hierarchy.</value>
+  </data>
+  <data name="DomainControllerDescription_DefaultQuery_Cannot_Have_Params" xml:space="preserve">
+    <value>Query operation '{0}' cannot be marked as the default because it declares parameters.</value>
+  </data>
+  <data name="DomainControllerDescription_IncompatibleOperationParentType" xml:space="preserve">
+    <value>The operation '{0}' cannot be added to this DomainControllerDescription for type '{1}' because the operation's DomainControllerType is '{2}'.</value>
+  </data>
+  <data name="DomainControllerDescription_InvalidCompositionMember" xml:space="preserve">
+    <value>CompositionAttribute cannot be applied to member '{0}.{1}'. CompositionAttribute can only be applied to members marked with AssociationAttribute.</value>
+  </data>
+  <data name="DomainControllerDescription_InvalidUpdate" xml:space="preserve">
+    <value>Modifications cannot be made to a DomainControllerDescription once it has been initialized.</value>
+  </data>
+  <data name="DomainControllerDescription_MultipleVersionMembers" xml:space="preserve">
+    <value>Entity type '{0}' has more than one member marked with both TimestampAttribute and ConcurrencyCheckAttribute. An entity can have only one concurrency version member.</value>
+  </data>
+  <data name="DomainControllerDescription_SingletonQueryMethodCannotCompose" xml:space="preserve">
+    <value>Query operation '{0}' cannot be marked composable since its return type '{1}' does not implement IEnumerable of T.</value>
+  </data>
+  <data name="DomainControllerDescription_Uninitialized" xml:space="preserve">
+    <value>This DomainControllerDescription hasn't been initialized. Initialize must be called before the description can be used.</value>
+  </data>
+  <data name="DomainController_AlreadyInitialized" xml:space="preserve">
+    <value>This DomainController has already been initialized.</value>
+  </data>
+  <data name="DomainController_DuplicateCUDMethod" xml:space="preserve">
+    <value>The domain operation entry named '{0}' provides redundant functionality. Another method named '{1}' already exists.</value>
+  </data>
+  <data name="DomainController_Factory_InvalidDomainControllerType" xml:space="preserve">
+    <value>Type '{0}' is not a valid DomainController type.</value>
+  </data>
+  <data name="DomainController_InvalidDomainOperationEntry" xml:space="preserve">
+    <value>This DomainController does not support operation '{0}' for entity '{1}'.</value>
+  </data>
+  <data name="DomainController_InvalidOperationType" xml:space="preserve">
+    <value>This DomainController has been initialized for an operation of type '{0}' so it cannot be used for an operation of type '{1}'.</value>
+  </data>
+  <data name="DomainController_InvalidType" xml:space="preserve">
+    <value>The type '{0}' is not a valid DomainController type. DomainController types cannot be abstract or generic.</value>
+  </data>
+  <data name="DomainController_NotInitialized" xml:space="preserve">
+    <value>This DomainController has not been initialized.</value>
+  </data>
+  <data name="EntityTypes_Cannot_Be_Collections" xml:space="preserve">
+    <value>Entity types cannot be a collection type.</value>
+  </data>
+  <data name="EntityTypes_Cannot_Be_Generic" xml:space="preserve">
+    <value>Entity types cannot be generic.</value>
+  </data>
+  <data name="EntityTypes_Cannot_Be_Nullable" xml:space="preserve">
+    <value>Entity types cannot be nullable.</value>
+  </data>
+  <data name="EntityTypes_Cannot_Be_Primitives" xml:space="preserve">
+    <value>Entity types cannot be a primitive type or a simple type like string or Guid.</value>
+  </data>
+  <data name="EntityTypes_Must_Be_Public" xml:space="preserve">
+    <value>Entity types must be public.</value>
+  </data>
+  <data name="EntityTypes_Must_Have_Default_Constructor" xml:space="preserve">
+    <value>Entity types must have a default constructor.</value>
+  </data>
+  <data name="Entity_Has_No_Key_Properties" xml:space="preserve">
+    <value>The Entity '{0}' in DomainController '{1}' does not have a key defined. Entity types exposed by DomainController operations must have at least one public property marked with the KeyAttribute.</value>
+  </data>
+  <data name="Entity_Property_Redefined" xml:space="preserve">
+    <value>Property '{0}.{1}' is already defined by '{2} and cannot be redefined.</value>
+  </data>
+  <data name="Entity_RequiredAssociationNotAllowed" xml:space="preserve">
+    <value>Association '{0}.{1}' is marked with RequiredAttribute. Please remove the attribute and mark the underlying foreign key members with RequiredAttribute instead.</value>
+  </data>
+  <data name="IncorrectParameterType" xml:space="preserve">
+    <value>Incorrect parameter type '{0}' for parameter '{1}'. Expected type is '{2}'.</value>
+  </data>
+  <data name="InvalidAssociation_FKNotSingleton" xml:space="preserve">
+    <value>Association '{0}' defined on entity type '{1}' is invalid. It is a foreign key association but the property type is not a singleton.</value>
+  </data>
+  <data name="InvalidAssociation_IsFKInvalid" xml:space="preserve">
+    <value>Association named '{0}' defined on entity type '{1}' is invalid: one and only one side of the association must have IsForeignKey set to true.</value>
+  </data>
+  <data name="InvalidAssociation_Key_Count_Mismatch" xml:space="preserve">
+    <value>Association named '{0}' defined on entity type '{1}' is invalid: the number of keys in '{2}' does not match the number in '{3}'.</value>
+  </data>
+  <data name="InvalidAssociation_NameCannotBeNullOrEmpty" xml:space="preserve">
+    <value>Association defined on property '{0}' of entity '{1}' is invalid: Name cannot be null or empty.</value>
+  </data>
+  <data name="InvalidAssociation_NonUniqueAssociationName" xml:space="preserve">
+    <value>Association name '{0}' defined on entity type '{1}' is not unique.</value>
+  </data>
+  <data name="InvalidAssociation_OtherKeyNotFound" xml:space="preserve">
+    <value>Association named '{0}' defined on entity type '{1}' is invalid: OtherKey property named '{2}' cannot be found on entity type '{3}'.</value>
+  </data>
+  <data name="InvalidAssociation_RoundTripOriginal" xml:space="preserve">
+    <value>Association named '{0}' defined on entity type '{1}' is invalid: Association members cannot be marked with RoundtripOriginalAttribute.</value>
+  </data>
+  <data name="InvalidAssociation_StringCannotBeNullOrEmpty" xml:space="preserve">
+    <value>Association named '{0}' defined on entity type '{1}' is invalid: {2} cannot be null or empty.</value>
+  </data>
+  <data name="InvalidAssociation_ThisKeyNotFound" xml:space="preserve">
+    <value>Association named '{0}' defined on entity type '{1}' is invalid: ThisKey property named '{2}' cannot be found.</value>
+  </data>
+  <data name="InvalidAssociation_TypesDoNotAlign" xml:space="preserve">
+    <value>Association '{0}' defined on entity type '{1}' is invalid. The corresponding association on '{2}' is not a valid back reference.</value>
+  </data>
+  <data name="InvalidChangeSet" xml:space="preserve">
+    <value>Invalid ChangeSet : {0}</value>
+  </data>
+  <data name="InvalidChangeSet_AssociatedIdNotInChangeset" xml:space="preserve">
+    <value>Id '{0}' specified for association member  '{0}.{1}' is invalid.</value>
+  </data>
+  <data name="InvalidChangeSet_AssociatedIdsCannotBeNull" xml:space="preserve">
+    <value>Associated Ids for member '{0}.{1}' cannot be null.</value>
+  </data>
+  <data name="InvalidChangeSet_DuplicateEntity" xml:space="preserve">
+    <value>Only one entry for a given entity instance can exist in the ChangeSet.</value>
+  </data>
+  <data name="InvalidChangeSet_DuplicateId" xml:space="preserve">
+    <value>Id must be unique for each entry.</value>
+  </data>
+  <data name="InvalidChangeSet_InsertsCantHaveOriginal" xml:space="preserve">
+    <value>OriginalEntity cannot be specified for an Insert operation.</value>
+  </data>
+  <data name="InvalidChangeSet_InvalidAssociationMember" xml:space="preserve">
+    <value>Association member '{0}.{1}' specified in the ChangeSet does not exist or is not marked with AssociationAttribute.</value>
+  </data>
+  <data name="InvalidChangeSet_MustBeSameType" xml:space="preserve">
+    <value>Entity and OriginalEntity must be of the same type.</value>
+  </data>
+  <data name="InvalidChangeSet_NullEntity" xml:space="preserve">
+    <value>Entity cannot be null.</value>
+  </data>
+  <data name="InvalidChangeset_UpdateChildWithoutParent" xml:space="preserve">
+    <value>Child entity of type '{0}' cannot be updated independent of its parent.</value>
+  </data>
+  <data name="InvalidComplexType_AssociationMember" xml:space="preserve">
+    <value>Complex types cannot have association members.</value>
+  </data>
+  <data name="InvalidComplexType_CompositionMember" xml:space="preserve">
+    <value>Complex types cannot have composition members.</value>
+  </data>
+  <data name="InvalidComplexType_EntityInheritance" xml:space="preserve">
+    <value>DomainController '{0}' exposes both entity type '{1}' and complex type '{2}' which share an inheritance relationship. Entities cannot derive from complex types.</value>
+  </data>
+  <data name="InvalidComplexType_IncludeMember" xml:space="preserve">
+    <value>Complex types cannot have include members.</value>
+  </data>
+  <data name="InvalidComplexType_Inheritance" xml:space="preserve">
+    <value>DomainController '{0}' exposes both complex type '{1}' and complex type '{2}' which share an inheritance relationship. Only one complex type in an inheritance hierarchy can be exposed from a domain service.</value>
+  </data>
+  <data name="InvalidComplexType_KnownTypes" xml:space="preserve">
+    <value>Complex type '{0}' is invalid. Complex types cannot specify a KnownTypeAttribute.</value>
+  </data>
+  <data name="InvalidComplexType_PropertyAttribute" xml:space="preserve">
+    <value>Property '{0}' of complex type '{1}' is invalid. {2}</value>
+  </data>
+  <data name="InvalidCustomMethod_MethodCannotBeParameterless" xml:space="preserve">
+    <value>Custom methods must contain at least one parameter.</value>
+  </data>
+  <data name="InvalidDomainMethod_ParamMustBeEntity" xml:space="preserve">
+    <value>Parameter '{0}' of domain method '{1}' must be an entity type exposed by the DomainController. The entity type can be exposed either directly in a query operation, or indirectly through an association.</value>
+  </data>
+  <data name="InvalidDomainOperationEntryType" xml:space="preserve">
+    <value>'{0}' is not a valid DomainOperation type for a DomainOperationEntry.</value>
+  </data>
+  <data name="InvalidDomainOperationEntry_InvalidQueryOperationReturnType" xml:space="preserve">
+    <value>Invalid return type '{0}' for query method '{1}'. Query methods must have a return type that implements IEnumerable of T or must return a singleton.</value>
+  </data>
+  <data name="InvalidDomainOperationEntry_NonQueryMustReturnVoid" xml:space="preserve">
+    <value>DomainOperationEntry '{0}' is not a Query operation so it cannot return a value.</value>
+  </data>
+  <data name="InvalidDomainOperationEntry_ParamMustBeByVal" xml:space="preserve">
+    <value>Parameter '{1}' of domain operation entry '{0}' must be passed by value.</value>
+  </data>
+  <data name="InvalidDomainOperationEntry_ParamMustBeSimple" xml:space="preserve">
+    <value>Parameter '{1}' of domain operation entry '{0}' must be one of the predefined serializable types.</value>
+  </data>
+  <data name="InvalidDomainOperationType" xml:space="preserve">
+    <value>'{0}' is not a valid DomainOperation type for a ChangeSetEntry.</value>
+  </data>
+  <data name="InvalidExternal_NonAssociationMember" xml:space="preserve">
+    <value>Invalid External specification for member '{0}.{1}'. ExternalReferenceAttribute can only be specified on members with the AssociationAttribute applied.</value>
+  </data>
+  <data name="InvalidInclude_NonAssociationMember" xml:space="preserve">
+    <value>Invalid Include specification for member '{0}.{1}'. Non-projection includes can only be specified on members with the AssociationAttribute applied.</value>
+  </data>
+  <data name="InvalidInsertUpdateDeleteMethod_IncorrectParameterLength" xml:space="preserve">
+    <value>Domain operation entry '{0}' must take exactly one parameter.</value>
+  </data>
+  <data name="InvalidInvokeOperation_ParameterType" xml:space="preserve">
+    <value>Operation named '{0}' does not conform to the required signature. Parameter types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types.</value>
+  </data>
+  <data name="InvalidInvokeOperation_ReturnType" xml:space="preserve">
+    <value>Operation named '{0}' does not conform to the required signature. Return types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types.</value>
+  </data>
+  <data name="InvalidMemberProjection_EmptyMemberName" xml:space="preserve">
+    <value>Invalid member projection specification : MemberName cannot be empty.</value>
+  </data>
+  <data name="InvalidMemberProjection_EmptyPath" xml:space="preserve">
+    <value>Invalid member projection specification : Path cannot be empty.</value>
+  </data>
+  <data name="InvalidMemberProjection_InvalidProjectedType" xml:space="preserve">
+    <value>Invalid member projection specification : The type of member '{0}.{1}' projected from member '{2}.{3}' is not one of the predefined serializable types.</value>
+  </data>
+  <data name="InvalidMemberProjection_Path" xml:space="preserve">
+    <value>Invalid member projection specification : Projection path '{0}' is invalid for member '{1}.{2}'. Please verify that the 'Path' value specified in the IncludeAttribute on this member is correct. </value>
+  </data>
+  <data name="InvalidType" xml:space="preserve">
+    <value>Type '{0}' does not derive from '{1}'.</value>
+  </data>
+  <data name="Invalid_Entity_Property" xml:space="preserve">
+    <value>Entity '{0}' has a property '{1}' with an unsupported type.</value>
+  </data>
+  <data name="Invalid_Entity_Type" xml:space="preserve">
+    <value>Type '{0}' is not a valid entity type.  {1}</value>
+  </data>
+  <data name="Invalid_Exclude_Property_Concurency_Conflict" xml:space="preserve">
+    <value>Member '{0}.{1}' is an optimistic concurrency check member, but is either excluded or non-serializable.</value>
+  </data>
+  <data name="Invalid_Include_Invalid_Entity" xml:space="preserve">
+    <value>The property '{0}' in entity type '{1}' cannot be marked with the IncludeAttribute because '{2}' is not a valid entity type.  {3}</value>
+  </data>
+  <data name="KnownTypeAttributeRequired" xml:space="preserve">
+    <value>The derived entity type '{0}' must be declared in a KnownTypeAttribute on the root entity '{1}'.</value>
+  </data>
+  <data name="KnownTypeAttributeRequired_Abstract" xml:space="preserve">
+    <value>The entity type '{0}' in the DomainController '{1}' is abstract and must use a KnownTypeAttribute to specify at least one non-abstract derived type.</value>
+  </data>
+  <data name="MemberNotAComposition" xml:space="preserve">
+    <value>Member '{0}.{1}' is not an compositional association member marked with CompositionAttribute.</value>
+  </data>
+  <data name="MemberNotAnAssociation" xml:space="preserve">
+    <value>Member '{0}.{1}' is not an association member marked with AssociationAttribute.</value>
+  </data>
+  <data name="Method_Parameter_Count_Wrong" xml:space="preserve">
+    <value>Method '{0}' requires {1} parameters.</value>
+  </data>
+  <data name="RequiresRoleAttribute_MustSpecifyRole" xml:space="preserve">
+    <value>One or more roles must be specified.</value>
+  </data>
+  <data name="ValidationUtilities_AmbiguousMatch" xml:space="preserve">
+    <value>Ambiguous match for method '{0}'.</value>
+  </data>
+  <data name="ValidationUtilities_ContextInstance_CannotBeNull" xml:space="preserve">
+    <value>ValidationContext.ObjectInstance cannot be null.</value>
+  </data>
+  <data name="ValidationUtilities_MethodNotFound" xml:space="preserve">
+    <value>Method '{0}.{1}({3})' could not be found. Parameter count: {2}.</value>
+  </data>
+  <data name="ValidationUtilities_MethodNotFound_ZeroParams" xml:space="preserve">
+    <value>Method '{0}.{1}' accepting zero parameters could not be found.</value>
+  </data>
+</root>

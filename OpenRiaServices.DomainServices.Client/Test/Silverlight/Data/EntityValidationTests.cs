@@ -12,7 +12,7 @@ using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.Descri
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
     [TestClass]
     public class EntityValidationTests : UnitTestBase

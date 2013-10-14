@@ -4,6 +4,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.ServiceModel;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Hosting;

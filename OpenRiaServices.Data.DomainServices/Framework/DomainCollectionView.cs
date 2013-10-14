@@ -7,7 +7,7 @@ using System.Linq;
 using OpenRiaServices.DomainServices.Client;
 using System.Windows.Data;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     /// <summary>
     /// Collection view implementation that allows the view to be updated asynchronously

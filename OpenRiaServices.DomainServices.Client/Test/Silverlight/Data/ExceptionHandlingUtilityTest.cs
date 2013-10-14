@@ -1,12 +1,12 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.Reflection;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Test
 {
-    using ExceptionHandlingUtility = OpenRiaServices.DomainServices.ExceptionHandlingUtility;
+    using ExceptionHandlingUtility = SSmDsClient::OpenRiaServices.DomainServices.ExceptionHandlingUtility;
 
     [TestClass]
     public class ExceptionHandlingUtilityTests

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Linq;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.ServiceModel;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.EntityFramework;

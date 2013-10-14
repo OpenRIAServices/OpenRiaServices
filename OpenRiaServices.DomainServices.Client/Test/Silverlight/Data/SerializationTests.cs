@@ -1,4 +1,5 @@
 ﻿extern alias SSmDsClient;
+using System;
 using System.Linq;
 using System.Text;
 using Microsoft.Silverlight.Testing;

@@ -1,6 +1,6 @@
 ﻿extern alias SSmDsClient;
 extern alias SSmDsWeb;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,9 +13,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using AsyncResultBase = OpenRiaServices.DomainServices.Client.AsyncResultBase;
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
-    using Resources = OpenRiaServices.DomainServices.Client.Resources;
+    using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
     using System.Globalization;
     using System.Threading;
 

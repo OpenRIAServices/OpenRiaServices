@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     /// <summary>
     /// Abstract implementation of the <see cref="IPagedCollectionView"/> interface.

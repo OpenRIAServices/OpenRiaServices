@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using System.Data.Objects;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.ServiceModel;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices.EntityFramework;
 using OpenRiaServices.DomainServices.Hosting;

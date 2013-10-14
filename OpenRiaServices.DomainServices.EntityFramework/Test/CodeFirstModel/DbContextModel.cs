@@ -1,5 +1,5 @@
 ﻿extern alias EntityFramework;
-
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Runtime.Serialization;
@@ -10,7 +10,6 @@ using System.Runtime.Serialization;
 
 namespace CodeFirstModels
 {
-    using DatabaseGeneratedOption = EntityFramework::System.ComponentModel.DataAnnotations.DatabaseGeneratedOption;
     public partial class EFCFNorthwindEntities : DbContext
     {
         public EFCFNorthwindEntities()

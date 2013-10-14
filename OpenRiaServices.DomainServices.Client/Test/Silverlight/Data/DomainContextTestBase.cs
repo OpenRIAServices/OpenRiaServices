@@ -1,4 +1,5 @@
-﻿using Microsoft.Silverlight.Testing;
+﻿using System;
+using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Client.Test

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     /// <summary>
     /// Abstract base class that is responsible for loading data for the source collection

@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
-using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
+using TypeUtility = SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using OpenRiaServices.DomainServices.Client;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     /// <summary>
     /// Observable list of entities. This list stays in sync with its <see cref="Source"/>

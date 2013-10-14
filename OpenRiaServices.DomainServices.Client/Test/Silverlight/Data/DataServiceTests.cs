@@ -1,5 +1,5 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,7 +10,7 @@ using TestDomainServices;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
     /// <summary>
     /// Testing the DataService factory mechanisms

@@ -11,7 +11,7 @@ using TestDomainServices.LTS;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
     /// <summary>
     /// ChangeSet computation tests that are independent of actual provider communication

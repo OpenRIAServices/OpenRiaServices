@@ -14,7 +14,7 @@ using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Tools.SourceLocation;
 using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
+using TypeUtility = SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {

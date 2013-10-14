@@ -8,7 +8,7 @@ using System.Reflection;
 using OpenRiaServices.DomainServices.Client;
 using System.Windows.Data;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     using Expression = System.Linq.Expressions.Expression;
 

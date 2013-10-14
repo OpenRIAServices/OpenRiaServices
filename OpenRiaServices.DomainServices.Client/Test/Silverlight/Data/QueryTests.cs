@@ -20,8 +20,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 {
     using System.Net;
     using TestDomainServices.Saleテ;
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
-    using Resources = OpenRiaServices.DomainServices.Client.Resources;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
 
     /// <summary>
     /// Non provider specific query tests.

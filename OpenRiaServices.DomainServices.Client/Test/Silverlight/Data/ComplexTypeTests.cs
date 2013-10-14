@@ -12,8 +12,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 {
     using System.Reflection;
     using TestDomainServices;
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
-    using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using TypeUtility = SSmDsClient::OpenRiaServices.DomainServices.TypeUtility;
 
     [TestClass]
     public partial class ComplexTypeTests : UnitTestBase

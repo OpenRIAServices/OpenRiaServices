@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using OpenRiaServices.DomainServices.Client;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     /// <summary>
     /// Concrete implementation of the <see cref="CollectionViewLoader"/> that uses callbacks to

@@ -19,7 +19,7 @@ using System.Reflection;
 namespace OpenRiaServices.DomainServices.Client.Test
 {
     using Cities;
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
     [TestClass]
     public class EntityContainerTests : UnitTestBase

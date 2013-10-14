@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using OpenRiaServices.DomainServices.Client;
 
-namespace Microsoft.Windows.Data.DomainServices
+namespace OpenRiaServices.Data.DomainServices
 {
     /// <summary>
     /// Builder that can be used to compose and apply a query to existing

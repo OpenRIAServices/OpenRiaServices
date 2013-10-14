@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices.Hosting;
 

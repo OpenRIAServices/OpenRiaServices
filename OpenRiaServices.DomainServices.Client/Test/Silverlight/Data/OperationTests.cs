@@ -1,5 +1,5 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRiaServices.DomainServices.Client;
@@ -11,8 +11,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
-    using Resources = OpenRiaServices.DomainServices.Client.Resources;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
 
     #region Test Classes
     public class TestOperation : OperationBase

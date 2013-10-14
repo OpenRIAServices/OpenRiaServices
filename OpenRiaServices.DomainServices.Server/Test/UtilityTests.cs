@@ -1,16 +1,17 @@
-﻿extern alias SystemServiceModelDomainServicesHosting;
+﻿extern alias OpenRiaServicesDomainServicesHosting;
 
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
+using DbContextModels.AdventureWorks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
-    using BinaryTypeUtility = OpenRiaServices.DomainServices.BinaryTypeUtility;
-    using SerializationUtility = OpenRiaServices.DomainServices.SerializationUtility;
+    using BinaryTypeUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.DomainServices.BinaryTypeUtility;
+    using SerializationUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.DomainServices.SerializationUtility;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>

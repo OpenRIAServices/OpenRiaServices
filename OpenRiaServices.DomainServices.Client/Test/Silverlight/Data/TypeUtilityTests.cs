@@ -1,5 +1,5 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.Collections.Generic;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Client;
@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using TypeUtility = OpenRiaServices.DomainServices.TypeUtility;
+    using TypeUtility = SSmDsClient::OpenRiaServices.DomainServices.TypeUtility;
 
     [TestClass]
     public class TypeUtilityTests

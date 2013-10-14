@@ -21,11 +21,11 @@ using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using TheTypeDescriptorExtensions = OpenRiaServices.DomainServices.Server.TypeDescriptorExtensions;
+using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.TypeDescriptorExtensions;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
-    using MetaType = OpenRiaServices.DomainServices.Server.MetaType;
+    using MetaType = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.MetaType;
     using System.Data.Metadata.Edm;
 
     /// <summary>

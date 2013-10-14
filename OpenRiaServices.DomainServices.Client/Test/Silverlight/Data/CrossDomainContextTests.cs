@@ -12,7 +12,7 @@ using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.Description
 
 namespace OpenRiaServices.DomainServices.Client.UnitTest
 {
-    using Resource = OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
     /// <summary>
     /// Verifies the behavior of cross-domain context entity and entity collection references.

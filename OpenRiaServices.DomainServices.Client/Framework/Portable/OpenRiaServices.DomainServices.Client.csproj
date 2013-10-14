@@ -87,7 +87,8 @@
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
-    <DocumentationFile>..\..\..\bin\Debug\Silverlight\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\bin\Debug\Portable\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
+    <OutputPath>..\..\..\bin\Debug\Portable\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
