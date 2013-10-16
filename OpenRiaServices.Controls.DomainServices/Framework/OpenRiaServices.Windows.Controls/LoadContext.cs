@@ -6,7 +6,7 @@
     internal class LoadContext
     {
         /// <summary>
-        /// Value of the <see cref="System.Windows.Controls.DomainDataSource.LoadSize" /> property for the load operation,
+        /// Value of the <see cref="OpenRiaServices.Controls.DomainDataSource.LoadSize" /> property for the load operation,
         /// at the time the load operation was initiated.
         /// </summary>
         internal int LoadSize { get; set; }
@@ -17,7 +17,7 @@
         internal LoadType LoadType { get; set; }
 
         /// <summary>
-        /// Value of the <see cref="System.Windows.Controls.DomainDataSource.PageSize" /> property for the load operation,
+        /// Value of the <see cref="OpenRiaServices.Controls.DomainDataSource.PageSize" /> property for the load operation,
         /// at the time the load operation was initiated.
         /// </summary>
         internal int PageSize { get; set; }
@@ -49,8 +49,8 @@
         /// </remarks>
         /// <value>
         /// <c>true</c> when the <see cref="LoadType"/> is one that represents an initial load
-        /// (<see cref="System.Windows.Controls.LoadType.LoadAll"/>, <see cref="System.Windows.Controls.LoadType.LoadFirstItems"/>,
-        /// or <see cref="System.Windows.Controls.LoadType.LoadFirstPages"/>, otherwise <c>false</c>.
+        /// (<see cref="OpenRiaServices.Controls.LoadType.LoadAll"/>, <see cref="OpenRiaServices.Controls.LoadType.LoadFirstItems"/>,
+        /// or <see cref="OpenRiaServices.Controls.LoadType.LoadFirstPages"/>, otherwise <c>false</c>.
         /// </value>
         internal bool IsInitialLoad
         {
