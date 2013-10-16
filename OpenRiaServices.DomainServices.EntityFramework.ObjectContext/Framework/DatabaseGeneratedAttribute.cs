@@ -6,6 +6,8 @@ using OpenRiaServices.DomainServices.LinqToSql;
 using OpenRiaServices.DomainServices.EntityFramework;
 #endif
 
+
+#if !DBCONTEXT
 namespace System.ComponentModel.DataAnnotations.Schema
 {
     /// <summary>
@@ -49,3 +51,4 @@ namespace System.ComponentModel.DataAnnotations.Schema
         }
     }
 }
+#endif

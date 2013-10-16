@@ -1,4 +1,5 @@
-﻿namespace System.ComponentModel.DataAnnotations.Schema
+﻿#if !DBCONTEXT
+namespace System.ComponentModel.DataAnnotations.Schema
 {
     /// <summary>
     /// The list of options that the <see cref="DatabaseGeneratedAttribute"/> may have to indicate the way a property is generated.
@@ -21,3 +22,4 @@
         Computed
     }
 }
+#endif
