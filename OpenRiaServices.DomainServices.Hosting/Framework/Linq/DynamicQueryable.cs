@@ -441,14 +441,60 @@ namespace System.Linq.Dynamic
         // &&, and operator
         Expression ParseLogicalAnd()
         {
-            Expression left = ParseComparison();
+            Expression left = ParseHasOperator();
             while (token.id == TokenId.DoubleAmphersand || TokenIdentifierIs("and"))
             {
                 Token op = token;
                 NextToken();
-                Expression right = ParseComparison();
+                Expression right = ParseHasOperator();
                 CheckAndPromoteOperands(typeof(ILogicalSignatures), op.text, ref left, ref right, op.pos);
                 left = Expression.AndAlso(left, right);
+            }
+            return left;
+        }
+
+        // TODO: Find out correct place to put this function
+        // Either we place it after conditional operators (called LogicalAnd here) and before comparison
+        // * Or we place it after multiplicative but before primary function
+        // * Or we treat it as a function and treat it as primary function
+        Expression ParseHasOperator()
+        {
+            Expression left = ParseComparison();
+            while (token.id == TokenId.Has || TokenIdentifierIs("has")) // TODO: Fix to se if we can only check one of them
+            {
+                Token op = token;
+                NextToken();
+
+                Type enumType = left.Type;
+                // Assert(enumType.IsEnum);
+
+                Expression right;
+                if (TokenIdentifierIs(enumType.Name))
+                {
+                    //TODO:  Veryfy next is dot and then remove it
+                    NextToken();
+                    if (token.id != TokenId.Dot)
+                        throw new ParseException("Expected a dot", token.pos);
+                    NextToken();
+                    if (token.id != TokenId.Identifier)
+                        throw new ParseException("Expected an Identifier", token.pos);
+
+                    right = Expression.Constant(ParseEnum(token.text, enumType), enumType);
+                    NextToken();
+                }
+                else
+                {
+                    right = ParseComparison();
+                }
+
+                left = ConvertEnumExpression(left, right);
+                right = ConvertEnumExpression(right, left);
+
+                // TODO: Should we promote operands ??
+                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op.text, ref left, ref right, op.pos);
+                
+                // Treat as (left & right) == right 
+                left = Expression.Equal(Expression.And(left, right), right);
             }
             return left;
         }
