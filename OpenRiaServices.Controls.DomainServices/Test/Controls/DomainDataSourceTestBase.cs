@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
+using System.Windows.Controls;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows.Data;
+using OpenRiaServices.Silverlight.Testing;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Base class for testing the <see cref="DomainDataSource"/> control.
@@ -103,7 +107,7 @@ namespace System.Windows.Controls.DomainServices.Test
         {
             this._dds = new DomainDataSource();
             this._dds.Loaded += new RoutedEventHandler(this.DomainDataSourceLoaded);
-            this._dds.LoadingData += new EventHandler<System.Windows.Controls.LoadingDataEventArgs>(this.DomainDataSourceLoadingData);
+            this._dds.LoadingData += new EventHandler<OpenRiaServices.Controls.LoadingDataEventArgs>(this.DomainDataSourceLoadingData);
             this._dds.LoadedData += new EventHandler<LoadedDataEventArgs>(this.DomainDataSourceLoadedData);
             this._dds.SubmittingChanges += new EventHandler<SubmittingChangesEventArgs>(this.DomainDataSourceSubmittingChanges);
             this._dds.SubmittedChanges += new EventHandler<SubmittedChangesEventArgs>(this.DomainDataSourceSubmittedChanges);
@@ -155,7 +159,7 @@ namespace System.Windows.Controls.DomainServices.Test
 
             // Unsubscribe from all events
             this._dds.Loaded -= new RoutedEventHandler(this.DomainDataSourceLoaded);
-            this._dds.LoadingData -= new EventHandler<System.Windows.Controls.LoadingDataEventArgs>(this.DomainDataSourceLoadingData);
+            this._dds.LoadingData -= new EventHandler<OpenRiaServices.Controls.LoadingDataEventArgs>(this.DomainDataSourceLoadingData);
             this._dds.LoadedData -= new EventHandler<LoadedDataEventArgs>(this.DomainDataSourceLoadedData);
             this._dds.SubmittingChanges -= new EventHandler<SubmittingChangesEventArgs>(this.DomainDataSourceSubmittingChanges);
             this._dds.SubmittedChanges -= new EventHandler<SubmittedChangesEventArgs>(this.DomainDataSourceSubmittedChanges);
@@ -513,7 +517,7 @@ namespace System.Windows.Controls.DomainServices.Test
             }
         }
 
-        protected void DomainDataSourceLoadingData(object sender, System.Windows.Controls.LoadingDataEventArgs e)
+        protected void DomainDataSourceLoadingData(object sender, LoadingDataEventArgs e)
         {
             this._ddsLoadingData++;
             string messagePrefix = !string.IsNullOrEmpty(this._asyncEventFailureMessage) ? this._asyncEventFailureMessage + "; " : "";

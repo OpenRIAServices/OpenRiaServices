@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
 using OpenRiaServices.DomainServices.Client;
 using System.Windows.Common;
 using System.Windows.Data;
@@ -12,7 +14,7 @@ using TestDomainServices;
 using TestDomainServices.LTS;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Tests <see cref="DomainDataSource"/> members.
@@ -370,7 +372,7 @@ namespace System.Windows.Controls.DomainServices.Test
                 CityDomainContext context = new CityDomainContext();
                 this._dds.QueryName = "GetCitiesQuery";
                 this._dds.DomainContext = context;
-                this._dds.LoadingData += (object sender, System.Windows.Controls.LoadingDataEventArgs e) => e.Query = context.GetCitiesQuery().Where(c => c.StateName == "WA");
+                this._dds.LoadingData += (object sender, OpenRiaServices.Controls.LoadingDataEventArgs e) => e.Query = context.GetCitiesQuery().Where(c => c.StateName == "WA");
                 this._dds.Load();
             });
 
@@ -393,7 +395,7 @@ namespace System.Windows.Controls.DomainServices.Test
             {
                 this._dds.QueryName = "GetCitiesQuery";
                 this._dds.DomainContext = new CityDomainContext();
-                this._dds.LoadingData += (object sender, System.Windows.Controls.LoadingDataEventArgs e) => e.Cancel = true;
+                this._dds.LoadingData += (object sender, OpenRiaServices.Controls.LoadingDataEventArgs e) => e.Cancel = true;
                 this._dds.Load();
             });
 
@@ -434,7 +436,7 @@ namespace System.Windows.Controls.DomainServices.Test
                 this._dds.SortDescriptors[0].Direction = ListSortDirection.Descending;
                 this._dds.FilterDescriptors[0].PropertyPath = "Name";
                 this._dds.FilterDescriptors[0].Value = "Los Angeles";
-                this._dds.LoadingData += (object sender, System.Windows.Controls.LoadingDataEventArgs e) =>
+                this._dds.LoadingData += (object sender, OpenRiaServices.Controls.LoadingDataEventArgs e) =>
                 {
                     e.RestoreLoadSettings = true;
                     e.Cancel = true;

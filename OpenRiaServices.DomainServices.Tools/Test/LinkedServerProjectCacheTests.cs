@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.DomainServices.Client.Test;
 using ConsoleLogger = OpenRiaServices.DomainServices.Server.Test.Utilities.ConsoleLogger;
 
 namespace OpenRiaServices.DomainServices.Tools.Test

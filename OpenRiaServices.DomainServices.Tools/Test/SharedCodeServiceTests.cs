@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Reflection;
 using OpenRiaServices.DomainServices.Server;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;

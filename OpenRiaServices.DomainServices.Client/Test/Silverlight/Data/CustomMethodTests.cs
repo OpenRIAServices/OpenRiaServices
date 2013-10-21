@@ -1,5 +1,5 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +9,7 @@ using System.Reflection;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDomainServices.NamedUpdates;
 

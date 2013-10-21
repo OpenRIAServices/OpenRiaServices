@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,9 +11,10 @@ using OpenRiaServices.DomainServices.Client.Test;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     [TestClass]
     public class EntityCollectionViewTests : UnitTestBase
@@ -60,7 +62,7 @@ namespace System.Windows.Controls.DomainServices.Test
             Assert.IsNull(view.CurrentEditItem, "CurrentEditItem");
             Assert.IsFalse(view.IsAddingNew, "IsAddingNew");
             Assert.IsFalse(view.IsEditingItem, "IsEditingItem");
-            Assert.AreEqual<System.ComponentModel.NewItemPlaceholderPosition>(ComponentModel.NewItemPlaceholderPosition.None, view.NewItemPlaceholderPosition);
+            Assert.AreEqual<System.ComponentModel.NewItemPlaceholderPosition>(System.ComponentModel.NewItemPlaceholderPosition.None, view.NewItemPlaceholderPosition);
         }
 
         [TestMethod]

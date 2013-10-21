@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.DomainServices.Client.Test;
 using TestDomainServices;
 
 namespace OpenRiaServices.DomainServices.Server.Test

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using OpenRiaServices.DomainServices.Server;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Client.Test;
 using System.Reflection;
 using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using OpenRiaServices.DomainServices.Tools.SourceLocation;

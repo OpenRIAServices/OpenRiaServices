@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         ///A test for GetEntries
         ///</summary>
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void GetEntriesTest()
         {
             XElement[] actual;
@@ -113,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         ///A test for MaxEntries
         ///</summary>
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void MaxEntriesTest()
         {
             InMemoryTraceListener_Accessor.MaxEntries = 500;

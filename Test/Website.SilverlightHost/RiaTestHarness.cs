@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.Silverlight.Testing.UnitTesting.Harness;
+using Microsoft.Silverlight.Testing.Harness;
 using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
 
 namespace Website.SilverlightHost

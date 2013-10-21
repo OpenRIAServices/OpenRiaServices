@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using OpenRiaServices.DomainServices.Server;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using OpenRiaServices.DomainServices.Tools.SourceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

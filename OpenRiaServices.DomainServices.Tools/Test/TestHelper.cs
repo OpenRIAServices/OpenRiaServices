@@ -198,7 +198,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public static string GetProjectTestDataDir(string relativeDeployDir, string relativeTestDir)
         {
             string projectDir = GetProjectDir(relativeDeployDir);
-            string path = Path.GetFullPath(Path.Combine(projectDir, @"..\..\test\Desktop\System.Common.DomainServices.Test\Baselines"));
+            string path = Path.GetFullPath(Path.Combine(projectDir, @"..\..\test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines"));
             path = Path.Combine(path, relativeTestDir);
             if (!Directory.Exists(path))
                 Assert.Fail("Could not find expected project directory at " + path);

@@ -9,7 +9,6 @@ using System.Reflection;
 using OpenRiaServices.DomainServices.Server;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.DomainServices.Tools;
 

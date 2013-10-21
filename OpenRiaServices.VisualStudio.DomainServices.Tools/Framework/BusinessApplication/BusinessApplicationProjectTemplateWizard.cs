@@ -8,7 +8,9 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
-using Microsoft.VisualStudio.Web.Silverlight;
+using Microsoft.VisualStudio.
+
+.Silverlight;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {

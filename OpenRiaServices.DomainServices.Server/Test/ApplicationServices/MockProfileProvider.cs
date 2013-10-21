@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Web.Profile;
 
 namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test

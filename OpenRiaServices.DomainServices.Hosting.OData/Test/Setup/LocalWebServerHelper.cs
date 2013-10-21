@@ -9,7 +9,6 @@
     using System.Globalization;
     using System.IO;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Microsoft.VisualStudio.WebHost;
     #endregion
 
     /// <summary>
