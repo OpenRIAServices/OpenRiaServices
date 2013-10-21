@@ -312,7 +312,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\DataModels\ScenarioModels\Northwind.map")]
+        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\DataModels\ScenarioModels\Northwind.map")]
         public void LTS_ExternalMapping()
         {
             // verify that our external mapping file exists

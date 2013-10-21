@@ -140,7 +140,7 @@
       <Name>OpenRiaServices.DomainServices.Hosting</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Desktop\System.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
+    <ProjectReference Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
       <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
       <Name>OpenRiaServices.Common.DomainServices.Test</Name>
     </ProjectReference>

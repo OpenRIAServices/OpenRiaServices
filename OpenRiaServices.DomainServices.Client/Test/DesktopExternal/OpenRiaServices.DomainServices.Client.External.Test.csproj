@@ -87,10 +87,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
       <Link>DomainContexts\Cities.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs">
       <Link>DomainContexts\Cities.shared.cs</Link>
     </Compile>
     <Compile Include="..\Desktop\CodegenWorkaround.cs">
@@ -106,7 +106,7 @@
       <Project>{BDB2F9A3-5FC7-45FD-8496-B23752232688}</Project>
       <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Desktop\OpenRiaServices.DomainServices.Client.Web%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\Desktop\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+    <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
       <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.Test%29</Name>
     </ProjectReference>

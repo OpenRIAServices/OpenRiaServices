@@ -108,55 +108,55 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
       <Link>Data\DomainClients\Cities.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs">
       <Link>Data\DomainClients\Catalog_LTS.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs">
       <Link>Data\DomainClients\Northwind_LTS.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
       <Link>Data\DomainClients\ComplexTypeScenarios.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs">
       <Link>Data\DomainClients\MockCustomers.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs">
       <Link>Data\DomainClients\CompositionInheritanceScenarios.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionScenarios.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionScenarios.g.cs">
       <Link>Data\DomainClients\CompositionScenarios.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\EFDbContextScenarios.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\EFDbContextScenarios.g.cs">
       <Link>Data\DomainClients\EFDbContextScenarios.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs">
       <Link>Data\DomainClients\IncludeScenariosTestProvider.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\InheritanceScenarios1.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\InheritanceScenarios1.g.cs">
       <Link>Data\DomainClients\InheritanceScenarios1.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs">
       <Link>Data\DomainClients\RequiresSecureEndpointScenarios.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\SharedEntities.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\SharedEntities.g.cs">
       <Link>Data\DomainClients\SharedEntities.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs">
       <Link>Data\DomainClients\TestProvider_Scenarios.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs">
       <Link>Data\DomainClients\Cities.shared.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\CityData.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityData.cs">
       <Link>Data\DomainClients\CityData.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs">
       <Link>Data\DomainClients\Mock.shared.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs">
       <Link>Data\DomainClients\Test.shared.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\AssociationInheritanceTests.cs">
@@ -328,7 +328,7 @@
       <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Desktop\OpenRiaServices.DomainServices.Client.Web%29</Name>
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\Desktop\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+    <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
       <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.Test%29</Name>
       <Aliases>global</Aliases>

@@ -105,10 +105,10 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
       <Link>DomainContexts\Cities.g.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.cs">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs">
       <Link>DomainContexts\Cities.shared.cs</Link>
     </Compile>
     <Compile Include="EntityTests.cs" />

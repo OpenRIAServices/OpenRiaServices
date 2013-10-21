@@ -121,7 +121,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\test\desktop\system.common.domainservices.test\baselines\default\webcontext\WebContext1.g.cs">
+    <Compile Include="..\..\..\test\desktop\OpenRiaServices.Common.DomainServices.Test\baselines\default\webcontext\WebContext1.g.cs">
       <Link>Data\DomainContexts\WebContext1.g.cs</Link>
     </Compile>
     <Compile Include="ApplicationServices\AuthenticationDomainClient.cs" />

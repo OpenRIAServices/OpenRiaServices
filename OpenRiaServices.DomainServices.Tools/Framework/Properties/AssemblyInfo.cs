@@ -26,7 +26,7 @@ using System.Security;
 [assembly: Guid("6bb3f1cb-93fe-4e2f-8796-96fb78efeec7")]
 
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
-[assembly: InternalsVisibleTo("System.Common.DomainServices.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.Common.DomainServices.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.TextTemplate.Test")]
 

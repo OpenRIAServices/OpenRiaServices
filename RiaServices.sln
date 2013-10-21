@@ -37,11 +37,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2A65F
 		RiaServices.vsmdi = RiaServices.vsmdi
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Silverlight\System.Common.Test\OpenRiaServices.Common.Test.csproj", "{03788A27-145D-4282-8FDC-C336A3BBC471}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{03788A27-145D-4282-8FDC-C336A3BBC471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Desktop\System.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.DomainServices.Test", "Test\Desktop\System.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj", "{AA5C3992-1C78-4751-8E1C-421A34FD7E76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.DomainServices.Test", "Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj", "{AA5C3992-1C78-4751-8E1C-421A34FD7E76}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C} = {B15B8171-0EDC-4D96-A126-E086E4F3EA2C}
 	EndProjectSection
@@ -67,11 +67,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{1D11E83D-73E1-4194-B3B1-65BFF5DEE834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.Design", "OpenRiaServices.Controls.DomainServices\Designer\System.Windows.Controls.DomainServices.Design\OpenRiaServices.Controls.DomainServices.Design.csproj", "{7F427301-D243-4034-9181-27E6004F9669}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.Design", "OpenRiaServices.Controls.DomainServices\Designer\OpenRiaServices.Controls.DomainServices.Design\OpenRiaServices.Controls.DomainServices.Design.csproj", "{7F427301-D243-4034-9181-27E6004F9669}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.Expression.Design", "OpenRiaServices.Controls.DomainServices\Designer\System.Windows.Controls.DomainServices.Expression.Design\OpenRiaServices.Controls.DomainServices.Expression.Design.csproj", "{596C0361-054B-46CA-BA40-E01716F5042C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.Expression.Design", "OpenRiaServices.Controls.DomainServices\Designer\OpenRiaServices.Controls.DomainServices.Expression.Design\OpenRiaServices.Controls.DomainServices.Expression.Design.csproj", "{596C0361-054B-46CA-BA40-E01716F5042C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.VisualStudio.Design", "OpenRiaServices.Controls.DomainServices\Designer\System.Windows.Controls.DomainServices.VisualStudio.Design\OpenRiaServices.Controls.DomainServices.VisualStudio.Design.csproj", "{35CD82F0-3886-4F94-A2AA-F7CA72B2F8FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.VisualStudio.Design", "OpenRiaServices.Controls.DomainServices\Designer\OpenRiaServices.Controls.DomainServices.VisualStudio.Design\OpenRiaServices.Controls.DomainServices.VisualStudio.Design.csproj", "{35CD82F0-3886-4F94-A2AA-F7CA72B2F8FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Input", "Test Input", "{D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}"
 EndProject

@@ -140,28 +140,28 @@
     <Import Include="System.Windows.Shapes" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.vb">
       <Link>DomainClients\Cities.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.vb">
       <Link>DomainClients\Catalog_LTS.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.vb">
       <Link>DomainClients\Northwind_LTS.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
       <Link>DomainClients\IncludeScenariosTestProvider.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">
       <Link>DomainClients\TestProvider_Scenarios.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.vb">
       <Link>DomainClients\Cities.shared.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb">
       <Link>DomainClients\Mock.shared.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.vb">
       <Link>DomainClients\Test.shared.vb</Link>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
