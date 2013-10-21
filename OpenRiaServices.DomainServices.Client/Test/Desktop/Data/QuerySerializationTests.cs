@@ -109,6 +109,43 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
+        public void TestEnumHasFlags()
+        {
+            EntityWithEnums [] entities = new EntityWithEnums[]
+            {
+                new EntityWithEnums() { Id = 1, EnumProp1 = QuerySerialisationEnum.A, EnumProp2 = QuerySerialisationEnum.None },
+                new EntityWithEnums() { Id = 2, EnumProp1 = QuerySerialisationEnum.A, EnumProp2 = QuerySerialisationEnum.A },
+                new EntityWithEnums() { Id = 3, EnumProp1 = QuerySerialisationEnum.B, EnumProp2 = QuerySerialisationEnum.A },
+                new EntityWithEnums() { Id = 4, EnumProp1 = QuerySerialisationEnum.A |QuerySerialisationEnum.B, EnumProp2 = QuerySerialisationEnum.A },
+                new EntityWithEnums() { Id = 5, EnumProp1 = QuerySerialisationEnum.B, EnumProp2 = QuerySerialisationEnum.B | QuerySerialisationEnum.A },
+            };
+
+            // Has flags against constant
+            IQueryable<EntityWithEnums> q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = q1.Where(p => p.EnumProp1.HasFlag(QuerySerialisationEnum.A));
+            IQueryable<EntityWithEnums> q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
+            CollectionAssert.AreEquivalent(q2.ToList(), new [] { entities[0], entities[1], entities[3],});
+
+            // Has flags against integer constant
+            q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = q1.Where(p => p.EnumProp1.HasFlag((QuerySerialisationEnum)(2)));
+            q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
+            CollectionAssert.AreEquivalent(q2.ToList(), new[] { entities[2], entities[3], entities[4] });
+
+            //  Has flags against member constant
+            q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = q1.Where(p => p.EnumProp1.HasFlag(p.EnumProp2));
+            q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
+            CollectionAssert.AreEquivalent(q2.ToList(), entities.Where(e => e.EnumProp1.HasFlag(e.EnumProp2)).ToList());
+
+
+            q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = q1.Where(p => p.EnumProp2.HasFlag(p.EnumProp1));
+            q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
+            CollectionAssert.AreEquivalent(q2.ToList(), entities.Where(e => e.EnumProp2.HasFlag(e.EnumProp1)).ToList());
+        }
+
+        [TestMethod]
         [Description("Verify that VB checked expressions are treated as unchecked expressions.")]
         public void TestVBCheckedExpressions()
         {
@@ -1177,6 +1214,36 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         public bool iif
+        {
+            get;
+            set;
+        }
+    }
+
+    [Flags]
+    public enum QuerySerialisationEnum
+    {
+        None = 0x00,
+        A = 0x01,
+        B = 0x02,
+    }
+
+    public class EntityWithEnums
+    {
+        [Key]
+        public int Id
+        {
+            get;
+            set;
+        }
+
+        public QuerySerialisationEnum EnumProp1
+        {
+            get;
+            set;
+        }
+
+        public QuerySerialisationEnum EnumProp2
         {
             get;
             set;

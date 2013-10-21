@@ -264,20 +264,19 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 else if (m.Method.DeclaringType == typeof(Enum) && m.Method.Name == "HasFlag")
                 {
-                    // Serialize (p => p.enumProp.HasFlag( EnumType.A)) into it.
-                    //TODO: Serialize Enum.HasFlag(value)
+                    // Serialize (p => p.enumProp.HasFlag( EnumType.A)) into "(it.enumProp has EnumType.A)"
 
                     this._currPartBuilder.Append("(");
                     this.Visit(m.Object);
-                    // TODO: Convert to int??
-                    //this.Visit(Expression.Convert(m.Object, typeof(int)));
 
+                    // We could convert it to an int here if possible, otherwise we will do it anyway on the server
+                    //this.Visit(Expression.Convert(m.Object, typeof(int)));
                     this._currPartBuilder.Append(" has ");
 
-                    // TODO: Add conversion to int
-                    this.Visit(m.Arguments[0]);
-                    // TODO: Convert to int??
+                    // We could convert it to an int here if possible, otherwise we will do it anyway on the server
                     //this.Visit(Expression.Convert(m.Arguments[0], typeof(int)));
+                    this.Visit(m.Arguments[0]);
+                   
                     this._currPartBuilder.Append(")");
                 }
                 else

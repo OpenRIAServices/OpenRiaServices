@@ -460,7 +460,7 @@ namespace System.Linq.Dynamic
         Expression ParseHasOperator()
         {
             Expression left = ParseComparison();
-            while (token.id == TokenId.Has || TokenIdentifierIs("has")) // TODO: Fix to se if we can only check one of them
+            while (TokenIdentifierIs("has")) // TODO: Fix to se if we can only check one of them
             {
                 Token op = token;
                 NextToken();
@@ -468,32 +468,37 @@ namespace System.Linq.Dynamic
                 Type enumType = left.Type;
                 // Assert(enumType.IsEnum);
 
+                // The right hand side can either be a constant such as EnumName.EnumValue, 1 or an expression
+                // we only need to make special arrangement to handle the first case since case 2 and 3 is handled by normal parsing
                 Expression right;
                 if (TokenIdentifierIs(enumType.Name))
                 {
-                    //TODO:  Veryfy next is dot and then remove it
+                    // Remove identifier enumType.Name
                     NextToken();
+
+                    //Verify next is dot and then remove it
                     if (token.id != TokenId.Dot)
                         throw new ParseException("Expected a dot", token.pos);
                     NextToken();
+
+                    // Read the enum field name, parse it and remove it
                     if (token.id != TokenId.Identifier)
                         throw new ParseException("Expected an Identifier", token.pos);
-
                     right = Expression.Constant(ParseEnum(token.text, enumType), enumType);
                     NextToken();
                 }
-                else
-                {
+                else // Either numeric value or member access
+                {                    
                     right = ParseComparison();
                 }
 
                 left = ConvertEnumExpression(left, right);
                 right = ConvertEnumExpression(right, left);
 
-                // TODO: Should we promote operands ??
                 CheckAndPromoteOperands(typeof(IArithmeticSignatures), op.text, ref left, ref right, op.pos);
                 
-                // Treat as (left & right) == right 
+                // Treat as (left & right) == right which is the same behaviour as calling Enum.HasFlag
+                // but it will work with entity framework and probably most other query providers
                 left = Expression.Equal(Expression.And(left, right), right);
             }
             return left;
