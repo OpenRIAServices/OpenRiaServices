@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Silverlight.Testing.UnitTesting.Harness;
+using Microsoft.Silverlight.Testing.Harness;
 using Microsoft.Silverlight.Testing;
 using Microsoft.Silverlight.Testing.UnitTesting.Metadata;
 

@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -1298,6 +1299,7 @@ namespace AdventureWorksModel
         private ObjectSet<StoreContact> _StoreContacts;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -1869,11 +1871,11 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -1910,6 +1912,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2108,6 +2111,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2260,6 +2264,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2290,6 +2295,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2392,6 +2398,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2440,6 +2447,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2470,6 +2478,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2572,6 +2581,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
     }
     
@@ -2609,6 +2619,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2831,6 +2842,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2949,6 +2961,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2989,6 +3002,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3355,6 +3369,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3491,6 +3506,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3519,6 +3535,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3600,6 +3617,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3680,6 +3698,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3708,6 +3727,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3786,6 +3806,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3834,6 +3855,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3862,6 +3884,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3940,6 +3963,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3988,6 +4012,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4016,6 +4041,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4097,6 +4123,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -4177,6 +4204,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4211,6 +4239,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4361,6 +4390,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -4409,6 +4439,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4437,6 +4468,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4515,6 +4547,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -4541,6 +4574,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4569,6 +4603,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4647,6 +4682,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -4717,6 +4753,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4753,6 +4790,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4927,6 +4965,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -5029,6 +5068,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5061,6 +5101,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -5129,7 +5170,7 @@ namespace AdventureWorksModel
             {
                 OnAccountNumberChanging(value);
                 ReportPropertyChanging("AccountNumber");
-                _AccountNumber = StructuralObject.SetValidValue(value, false);
+                _AccountNumber = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("AccountNumber");
                 OnAccountNumberChanged();
             }
@@ -5211,6 +5252,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -5373,6 +5415,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5405,6 +5448,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -5534,6 +5578,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -5652,6 +5697,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5686,6 +5732,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -5884,6 +5931,7 @@ namespace AdventureWorksModel
         partial void OnXmlEventChanged();
 
         #endregion
+
     
     }
     
@@ -5915,6 +5963,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -6017,6 +6066,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -6043,6 +6093,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -6081,6 +6132,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -6327,6 +6379,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -6353,6 +6406,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -6405,6 +6459,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -6795,6 +6850,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -7045,6 +7101,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7075,6 +7132,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -7180,6 +7238,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -7260,6 +7319,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7292,6 +7352,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -7451,6 +7512,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -7569,6 +7631,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7601,6 +7664,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -7730,6 +7794,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -7772,6 +7837,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7804,6 +7870,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -8026,6 +8093,7 @@ namespace AdventureWorksModel
         partial void OnErrorMessageChanged();
 
         #endregion
+
     
     }
     
@@ -8053,6 +8121,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -8131,6 +8200,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -8157,6 +8227,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8185,6 +8256,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -8287,6 +8359,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -8367,6 +8440,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8393,6 +8467,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -8495,6 +8570,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -8537,6 +8613,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8569,6 +8646,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -8695,6 +8773,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -8743,6 +8822,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8791,6 +8871,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -9397,6 +9478,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -9861,6 +9943,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -9891,6 +9974,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -9993,6 +10077,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -10019,6 +10104,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -10049,6 +10135,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -10178,6 +10265,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -10220,6 +10308,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -10250,6 +10339,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -10352,6 +10442,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -10378,6 +10469,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -10406,6 +10498,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -10487,6 +10580,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -10567,6 +10661,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -10603,6 +10698,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -10780,6 +10876,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -10860,6 +10957,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -10890,6 +10988,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -11019,6 +11118,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -11061,6 +11161,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -11091,6 +11192,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -11241,6 +11343,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -11311,6 +11414,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -11339,6 +11443,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -11420,6 +11525,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -11500,6 +11606,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -11530,6 +11637,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -11638,6 +11746,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -11756,6 +11865,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -11782,6 +11892,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -11932,6 +12043,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -11958,6 +12070,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -11988,6 +12101,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -12093,6 +12207,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -12173,6 +12288,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -12209,6 +12325,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -12407,6 +12524,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -12449,6 +12567,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -12481,6 +12600,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -12607,6 +12727,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -12671,6 +12792,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -12709,6 +12831,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -12982,6 +13105,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -13100,6 +13224,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -13146,6 +13271,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -13464,6 +13590,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -13604,6 +13731,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -13648,6 +13776,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -13921,6 +14050,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -14001,6 +14131,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -14043,6 +14174,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -14316,6 +14448,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -14396,6 +14529,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -14454,6 +14588,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -14642,7 +14777,7 @@ namespace AdventureWorksModel
             {
                 OnSalesOrderNumberChanging(value);
                 ReportPropertyChanging("SalesOrderNumber");
-                _SalesOrderNumber = StructuralObject.SetValidValue(value, false);
+                _SalesOrderNumber = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("SalesOrderNumber");
                 OnSalesOrderNumberChanged();
             }
@@ -15108,6 +15243,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -15498,6 +15634,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -15526,6 +15663,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -15607,6 +15745,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -15687,6 +15826,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -15723,6 +15863,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -15945,6 +16086,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -16113,6 +16255,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -16145,6 +16288,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -16274,6 +16418,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -16316,6 +16461,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -16346,6 +16492,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -16448,6 +16595,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -16474,6 +16622,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -16510,6 +16659,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -16684,6 +16834,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -16726,6 +16877,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -16768,6 +16920,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -17014,6 +17167,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -17128,6 +17282,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -17160,6 +17315,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -17316,6 +17472,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -17396,6 +17553,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -17424,6 +17582,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -17502,6 +17661,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -17528,6 +17688,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -17560,6 +17721,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -17686,6 +17848,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -17712,6 +17875,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -17746,6 +17910,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -17896,6 +18061,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -17944,6 +18110,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -17978,6 +18145,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -18128,6 +18296,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -18170,6 +18339,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -18212,6 +18382,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -18482,6 +18653,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -18508,6 +18680,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -18538,6 +18711,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -18643,6 +18817,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -18745,6 +18920,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -18783,6 +18959,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -18981,6 +19158,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -19105,6 +19283,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -19135,6 +19314,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -19285,6 +19465,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -19387,6 +19568,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -19419,6 +19601,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -19548,6 +19731,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -19666,6 +19850,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -19694,6 +19879,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -19820,6 +20006,7 @@ namespace AdventureWorksModel
         partial void OndefinitionChanged();
 
         #endregion
+
     
     }
     
@@ -19861,6 +20048,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -20083,6 +20271,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -20125,6 +20314,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -20165,6 +20355,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -20387,6 +20578,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
     }
     
@@ -20416,6 +20608,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -20494,6 +20687,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -20586,6 +20780,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -20622,6 +20817,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -20820,6 +21016,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -20912,6 +21109,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -20942,6 +21140,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -21047,6 +21246,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -21165,6 +21365,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -21195,6 +21396,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -21300,6 +21502,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -21418,6 +21621,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -21456,6 +21660,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -21702,6 +21907,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -21804,6 +22010,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -21842,6 +22049,7 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -22142,6 +22350,7 @@ namespace AdventureWorksModel
         partial void OnModifiedDateChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -22222,8 +22431,10 @@ namespace AdventureWorksModel
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }

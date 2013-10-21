@@ -6,7 +6,7 @@ using System.Security;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.Silverlight.Testing
+namespace OpenRiaServices.Silverlight.Testing
 {
     /// <summary>
     /// Abstract base class for all Unit Tests in WCF RIA Services.

@@ -34,8 +34,8 @@
     <OutputType>Library</OutputType>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.ServiceModel.DomainServices.Hosting.OData.Test</RootNamespace>
-    <AssemblyName>System.ServiceModel.DomainServices.Hosting.OData.Test</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Hosting.OData.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Hosting.OData.Test</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateAssemblyRefs>true</GenerateAssemblyRefs>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

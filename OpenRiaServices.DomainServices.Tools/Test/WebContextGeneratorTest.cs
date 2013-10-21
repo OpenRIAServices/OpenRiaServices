@@ -13,9 +13,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     [TestClass]
     public class WebContextGeneratorTest
     {
-        [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.cs")]
-        [DeploymentItem(@"Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.vb")]
+        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
+        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.cs")]
+        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.vb")]
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]

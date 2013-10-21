@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.Test", "OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj", "{A94B2843-C68E-4548-9168-63469D625932}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Hosting.Test", "OpenRiaServices.DomainServices.Hosting\Test\System.ServiceModel.DomainServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Test", "OpenRiaServices.DomainServices.Hosting\Test\OpenRiaServices.DomainServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2A65FE6-AFA6-4742-A839-3DFF47893599}"
 	ProjectSection(SolutionItems) = preProject
@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2A65F
 		RiaServices.vsmdi = RiaServices.vsmdi
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Common.Test", "Test\Silverlight\System.Common.Test\System.Common.Test.csproj", "{03788A27-145D-4282-8FDC-C336A3BBC471}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Silverlight\System.Common.Test\OpenRiaServices.Common.Test.csproj", "{03788A27-145D-4282-8FDC-C336A3BBC471}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Desktop\System.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
 EndProject
@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Doma
 		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C} = {B15B8171-0EDC-4D96-A126-E086E4F3EA2C}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Silverlight\System.ServiceModel.DomainServices.Client.Test.csproj", "{18708280-F972-487E-A86C-45D518ACF831}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Silverlight\OpenRiaServices.DomainServices.Client.Test.csproj", "{18708280-F972-487E-A86C-45D518ACF831}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.SilverlightHost", "Test\Website.SilverlightHost\Website.SilverlightHost.csproj", "{8F487386-A11E-4AA8-AB5E-98B294E0328E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -61,13 +61,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Test\Website\Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj", "{7B2AB186-E78E-402A-843F-705D77179E06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Windows.Controls.DomainServices.Test", "OpenRiaServices.Controls.DomainServices\Test\System.Windows.Controls.DomainServices.Test.csproj", "{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.Test", "OpenRiaServices.Controls.DomainServices\Test\OpenRiaServices.Controls.DomainServices.Test.csproj", "{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server.Test", "OpenRiaServices.DomainServices.Server\Test\OpenRiaServices.DomainServices.Server.Test.csproj", "{CDEDEFB0-D36F-4367-B611-977099403B60}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.VisualStudio.DomainServices.Tools", "OpenRiaServices.VisualStudio.DomainServices.Tools\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj", "{E7D958FE-3D14-4EAD-B810-10471757CC4F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.Test", "Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.Test.csproj", "{B98914DC-27FD-468C-9029-08550AFF86B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{1D11E83D-73E1-4194-B3B1-65BFF5DEE834}"
 EndProject
@@ -93,7 +89,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClassLib2", "OpenRiaS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Local", "OpenRiaServices.DomainServices.Hosting.Local\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Hosting.Local.Test", "OpenRiaServices.DomainServices.Hosting.Local\Test\Microsoft.ServiceModel.DomainServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Local.Test", "OpenRiaServices.DomainServices.Hosting.Local\Test\OpenRiaServices.DomainServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.LinqToSql", "OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
 EndProject
@@ -103,13 +99,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWap", "OpenRiaServices.DomainServices.Tools\Test\TestWap\TestWap.csproj", "{D08C2165-DC46-407B-9CCC-40ED1972F552}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.Web.Test", "OpenRiaServices.DomainServices.Client.Web\Test\Silverlight\System.ServiceModel.DomainServices.Client.Web.Test.csproj", "{DF732E93-F424-459A-978C-B3A3450C9FAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web.Test", "OpenRiaServices.DomainServices.Client.Web\Test\Silverlight\OpenRiaServices.DomainServices.Client.Web.Test.csproj", "{DF732E93-F424-459A-978C-B3A3450C9FAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj", "{BDB2F9A3-5FC7-45FD-8496-B23752232688}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Endpoint", "OpenRiaServices.DomainServices.Hosting.Endpoint\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Test", "OpenRiaServices.DomainServices.Hosting.Endpoint\Test\OpenRiaServices.DomainServices.Hosting.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Endpoint.Test", "OpenRiaServices.DomainServices.Hosting.Endpoint\Test\OpenRiaServices.DomainServices.Hosting.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFPOCOModels", "Test\Desktop\EFPOCOModels\EFPOCOModels.csproj", "{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}"
 EndProject
@@ -117,7 +113,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteFullTrust", "Test\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.OData", "OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Hosting.OData.Test", "OpenRiaServices.DomainServices.Hosting.OData\Test\System.ServiceModel.DomainServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.OData.Test", "OpenRiaServices.DomainServices.Hosting.OData\Test\OpenRiaServices.DomainServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T4ClientCodeGenerator", "OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
@@ -128,7 +124,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeLoadExceptionProject", "Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj", "{2265A098-F256-418D-9D11-9FD6561E8D42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.ServiceModel.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\SilverlightExternal\System.ServiceModel.DomainServices.Client.External.Test.csproj", "{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\SilverlightExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\DesktopExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}"
 EndProject
@@ -136,9 +132,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.WindowsAzure", "OpenRiaServices.DomainServices.WindowsAzure\Framework\OpenRiaServices.DomainServices.WindowsAzure.csproj", "{62CEDA36-AE80-411D-8A55-2D417A86960B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.WindowsAzure.Test", "OpenRiaServices.DomainServices.WindowsAzure\Test\Microsoft.ServiceModel.DomainServices.WindowsAzure.Test.csproj", "{8F638ABB-4EC6-428B-9D35-514317AECF51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.WindowsAzure.Test", "OpenRiaServices.DomainServices.WindowsAzure\Test\OpenRiaServices.DomainServices.WindowsAzure.Test.csproj", "{8F638ABB-4EC6-428B-9D35-514317AECF51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test", "OpenRiaServices.DomainServices.Tools.TextTemplate\Test\Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.TextTemplate.Test", "OpenRiaServices.DomainServices.Tools.TextTemplate\Test\OpenRiaServices.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Data.DomainServices", "OpenRiaServices.Data.DomainServices\Framework\OpenRiaServices.Data.DomainServices.csproj", "{835586F6-F1F4-4A3F-A24E-795D37143F4B}"
 EndProject
@@ -390,28 +386,6 @@ Global
 		{CDEDEFB0-D36F-4367-B611-977099403B60}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDEDEFB0-D36F-4367-B611-977099403B60}.ReleaseNet40|Any CPU.ActiveCfg = ReleaseNet40|Any CPU
 		{CDEDEFB0-D36F-4367-B611-977099403B60}.ReleaseNet40|Any CPU.Build.0 = ReleaseNet40|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.CodeCov|Any CPU.ActiveCfg = CodeCov|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.CodeCov|Any CPU.Build.0 = CodeCov|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.DebugNet40|Any CPU.ActiveCfg = DebugNet40|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.DebugNet40|Any CPU.Build.0 = DebugNet40|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.MyGet|Any CPU.ActiveCfg = MyGet|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.MyGet40|Any CPU.ActiveCfg = MyGet40|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.ReleaseNet40|Any CPU.ActiveCfg = ReleaseNet40|Any CPU
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.ReleaseNet40|Any CPU.Build.0 = ReleaseNet40|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.CodeCov|Any CPU.ActiveCfg = CodeCov|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.CodeCov|Any CPU.Build.0 = CodeCov|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.DebugNet40|Any CPU.ActiveCfg = Debug|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.MyGet|Any CPU.ActiveCfg = Release|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.MyGet40|Any CPU.ActiveCfg = Release|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B98914DC-27FD-468C-9029-08550AFF86B0}.ReleaseNet40|Any CPU.ActiveCfg = Release|Any CPU
 		{7F427301-D243-4034-9181-27E6004F9669}.CodeCov|Any CPU.ActiveCfg = CodeCov|Any CPU
 		{7F427301-D243-4034-9181-27E6004F9669}.CodeCov|Any CPU.Build.0 = CodeCov|Any CPU
 		{7F427301-D243-4034-9181-27E6004F9669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -890,7 +864,6 @@ Global
 		{E3844512-48A8-451A-9BE4-AC7793016B9D} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{72E74082-7928-4A70-83C1-49806B942FCB} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{0EE13EF8-BD66-4095-926C-A81B6350F8EA} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{E9141C78-4083-4ED9-B0C3-591BF5986488} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{BDB2F9A3-5FC7-45FD-8496-B23752232688} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
@@ -910,7 +883,6 @@ Global
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{7B2AB186-E78E-402A-843F-705D77179E06} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{CDEDEFB0-D36F-4367-B611-977099403B60} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{B98914DC-27FD-468C-9029-08550AFF86B0} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{7E3F2770-7A6C-4D56-9040-C16966BB6A1B} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}

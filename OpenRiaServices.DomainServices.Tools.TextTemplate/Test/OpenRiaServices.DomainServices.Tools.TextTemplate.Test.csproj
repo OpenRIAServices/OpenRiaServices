@@ -45,8 +45,8 @@
     <ProjectGuid>{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test</RootNamespace>
-    <AssemblyName>Microsoft.ServiceModel.DomainServices.Tools.TextTemplate.Test</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Tools.TextTemplate.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Tools.TextTemplate.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -151,6 +151,10 @@
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.DomainServices.Server</Name>
       <Aliases>global,SystemWebDomainServices</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\System.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
+      <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
+      <Name>OpenRiaServices.Common.DomainServices.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj">
       <Project>{1D3AE529-961A-47FD-834B-7893FE6FF479}</Project>

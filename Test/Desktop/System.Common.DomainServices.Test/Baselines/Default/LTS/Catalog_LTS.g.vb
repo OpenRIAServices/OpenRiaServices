@@ -25,6 +25,7 @@ Imports OpenRiaServices.DomainServices
 Imports OpenRiaServices.DomainServices.Client
 Imports OpenRiaServices.DomainServices.Client.ApplicationServices
 Imports System.ServiceModel.Web
+Imports System.ServiceModel
 
 Namespace DataTests.AdventureWorks.LTS
     

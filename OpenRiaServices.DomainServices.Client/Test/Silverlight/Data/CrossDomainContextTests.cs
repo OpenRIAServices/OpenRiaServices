@@ -7,6 +7,7 @@ using OpenRiaServices.DomainServices.Client.Test;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

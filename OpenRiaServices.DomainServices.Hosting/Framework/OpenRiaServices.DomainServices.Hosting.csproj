@@ -6,7 +6,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\System.ServiceModel.DomainServices.Hosting.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\System.ServiceModel.DomainServices.Hosting.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\DebugNet40\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\System.ServiceModel.DomainServices.Hosting.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\ReleaseNet40\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,7 +36,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\System.ServiceModel.DomainServices.Hosting.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet40\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -52,8 +52,8 @@
     <ProjectGuid>{E3844512-48A8-451A-9BE4-AC7793016B9D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.ServiceModel.DomainServices.Hosting</RootNamespace>
-    <AssemblyName>System.ServiceModel.DomainServices.Hosting</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Hosting</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Hosting</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
@@ -66,17 +66,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV</DefineConstants>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />

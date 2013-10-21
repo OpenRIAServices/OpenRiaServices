@@ -8,15 +8,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-
 namespace DataTests.Scenarios.EF.Northwind
 {
     #region Contexts
@@ -159,6 +159,7 @@ namespace DataTests.Scenarios.EF.Northwind
         private ObjectSet<EmployeeWithCT> _EmployeeWithCTs;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -210,11 +211,11 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -241,6 +242,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -295,6 +297,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnContactNameChanged();
 
         #endregion
+
     
     }
     
@@ -324,6 +327,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -402,6 +406,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnLastNameChanged();
 
         #endregion
+
     
     }
     
@@ -429,6 +434,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -459,6 +465,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnEmployeeIDChanged();
 
         #endregion
+
         #region Complex Properties
     
         /// <summary>
@@ -493,6 +500,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnContactInfoChanged();
 
         #endregion
+
     
     }
     
@@ -518,6 +526,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -668,6 +677,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnConcurrencyTimestampChanged();
 
         #endregion
+
     
     }
     
@@ -699,6 +709,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -849,6 +860,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnOptionalInt32Changed();
 
         #endregion
+
     
     }
     
@@ -878,6 +890,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -956,10 +969,12 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnAChanged();
 
         #endregion
+
     
     }
 
     #endregion
+
     #region ComplexTypes
     
     /// <summary>
@@ -986,6 +1001,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1037,6 +1053,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnCityChanged();
 
         #endregion
+
     }
     
     /// <summary>
@@ -1063,6 +1080,7 @@ namespace DataTests.Scenarios.EF.Northwind
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1090,6 +1108,7 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnHomePhoneChanged();
 
         #endregion
+
         #region Complex Properties
     
         /// <summary>
@@ -1124,8 +1143,10 @@ namespace DataTests.Scenarios.EF.Northwind
         partial void OnAddressChanged();
 
         #endregion
+
     }
 
     #endregion
+
     
 }

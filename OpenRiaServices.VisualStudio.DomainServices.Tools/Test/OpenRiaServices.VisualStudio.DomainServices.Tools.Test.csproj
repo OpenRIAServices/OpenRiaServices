@@ -17,8 +17,8 @@
     <OutputType>Library</OutputType>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.Test</RootNamespace>
-    <AssemblyName>Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.Test</AssemblyName>
+    <RootNamespace>OpenRiaServices.VisualStudio.DomainServices.Tools.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.VisualStudio.DomainServices.Tools.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -159,21 +159,21 @@
   </ItemGroup>
   <!-- TODO REMOVE 
   <ItemGroup>
-    <ProjectReference Include="..\..\Framework\System.ServiceModel.DomainServices.Server.EntityFramework\System.ServiceModel.DomainServices.Server.EntityFramework.csproj">
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Server.EntityFramework.ObjectContext\OpenRiaServices.DomainServices.Server.EntityFramework.ObjectContext.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>System.ServiceModel.DomainServices.Server.EntityFramework</Name>
+      <Name>OpenRiaServices.DomainServices.Server.EntityFramework.ObjectContext</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Framework\System.ServiceModel.DomainServices.Server\System.ServiceModel.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Server\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>System.ServiceModel.DomainServices.Server</Name>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Framework\System.ServiceModel.DomainServices.Hosting\System.ServiceModel.DomainServices.Hosting.csproj">
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Hosting\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>System.ServiceModel.DomainServices.Hosting</Name>
+      <Name>OpenRiaServices.DomainServices.Hosting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Framework\Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.csproj">
+    <ProjectReference Include="..\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj">
       <Project>{E7D958FE-3D14-4EAD-B810-10471757CC4F}</Project>
-      <Name>Microsoft.VisualStudio.ServiceModel.DomainServices.Tools</Name>
+      <Name>OpenRiaServices.VisualStudio.DomainServices.Tools</Name>
     </ProjectReference>
     <ProjectReference Include="..\DomainServices\TestDomainServices.csproj">
       <Project>{EC76C275-D1A5-4563-B4C0-920F9DC1A333}</Project>
@@ -187,47 +187,47 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
       <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.EntityFramework</Name>
+      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Test\CodeFirstModel\EFCodeFirstModels.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj">
       <Project>{A94B2843-C68E-4548-9168-63469D625935}</Project>
       <Name>EFCodeFirstModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Test\DbContextModel\EFDbContextModels.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
       <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
       <Name>EFDbContextModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Microsoft.ServiceModel.DomainServices.Tools.Test.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj">
       <Project>{A94B2843-C68E-4548-9168-63469D625932}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.Tools.Test</Name>
+      <Name>OpenRiaServices.DomainServices.Tools.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>System.ServiceModel.DomainServices.EntityFramework</Name>
+      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.Tools</Name>
+      <Name>OpenRiaServices.DomainServices.Tools</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
       <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
-      <Name>Microsoft.ServiceModel.DomainServices.LinqToSql</Name>
+      <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
       <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
-      <Name>System.ServiceModel.DomainServices.Hosting.OData</Name>
+      <Name>OpenRiaServices.DomainServices.Hosting.OData</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>System.ServiceModel.DomainServices.Server</Name>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>System.ServiceModel.DomainServices.Hosting</Name>
+      <Name>OpenRiaServices.DomainServices.Hosting</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Framework\Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.csproj">
-      <Project>{E7D958FE-3D14-4EAD-B810-10471757CC4F}</Project>
-      <Name>Microsoft.VisualStudio.ServiceModel.DomainServices.Tools</Name>
+    <ProjectReference Include="..\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj">
+      <Project>{e7d958fe-3d14-4ead-b810-10471757cc4f}</Project>
+      <Name>OpenRiaServices.VisualStudio.DomainServices.Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Target Name="WriteProjectPath">

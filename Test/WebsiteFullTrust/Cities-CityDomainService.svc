@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Service="Cities.CityDomainService" Factory="Cities.CityDomainServiceHostFactory" %>

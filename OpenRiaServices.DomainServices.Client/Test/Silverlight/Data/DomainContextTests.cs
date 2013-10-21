@@ -6,6 +6,7 @@ using System.Threading;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices.LTS;
 
 namespace OpenRiaServices.DomainServices.Client.Test

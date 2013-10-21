@@ -1,4 +1,6 @@
 #region Namespaces
+
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
@@ -6,9 +8,10 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.ServiceModel;
 using OpenRiaServices.DomainServices.EntityFramework;
 using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Hosting.OData.UnitTests.Models;
+using OpenRiaServices.DomainServices.Hosting.OData.Test.Models;
 using OpenRiaServices.DomainServices.Server;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

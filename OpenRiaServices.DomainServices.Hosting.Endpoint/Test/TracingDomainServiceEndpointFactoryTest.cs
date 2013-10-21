@@ -1,4 +1,4 @@
-﻿using OpenRiaServices.DomainServices.Hosting;
+﻿using System.ServiceModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using OpenRiaServices.DomainServices.Server;

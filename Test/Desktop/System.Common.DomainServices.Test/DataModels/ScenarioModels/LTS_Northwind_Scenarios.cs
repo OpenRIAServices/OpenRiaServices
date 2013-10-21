@@ -32,7 +32,7 @@ namespace DataTests.Scenarios.LTS.Northwind
         private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
 
         public NorthwindScenarios() :
-            base(global::System.Common.DomainServices.Test.Properties.Settings.Default.NorthwindConnectionString, mappingSource)
+            base(global::OpenRiaServices.Common.DomainServices.Test.Properties.Settings.Default.NorthwindConnectionString, mappingSource)
         {
 
         }

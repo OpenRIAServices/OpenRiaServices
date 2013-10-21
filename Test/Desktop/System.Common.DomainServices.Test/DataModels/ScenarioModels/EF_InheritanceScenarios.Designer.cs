@@ -8,15 +8,15 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-
 namespace DataTests.Inheritance.EF
 {
     #region Contexts
@@ -82,6 +82,7 @@ namespace DataTests.Inheritance.EF
         private ObjectSet<A> _A;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -93,11 +94,11 @@ namespace DataTests.Inheritance.EF
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -332,6 +333,7 @@ namespace DataTests.Inheritance.EF
         partial void OnCountryChanged();
 
         #endregion
+
     
     }
     
@@ -361,6 +363,7 @@ namespace DataTests.Inheritance.EF
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -388,6 +391,7 @@ namespace DataTests.Inheritance.EF
         partial void OnPhoneChanged();
 
         #endregion
+
     
     }
     
@@ -417,6 +421,7 @@ namespace DataTests.Inheritance.EF
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -444,9 +449,11 @@ namespace DataTests.Inheritance.EF
         partial void OnFaxChanged();
 
         #endregion
+
     
     }
 
     #endregion
+
     
 }

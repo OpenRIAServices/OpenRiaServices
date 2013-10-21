@@ -51,8 +51,8 @@
     <OutputType>Library</OutputType>
     <OutputPath>bin\$(Configuration)</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.ServiceModel.DomainServices.Client.Test</RootNamespace>
-    <AssemblyName>System.ServiceModel.DomainServices.Client.Test</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Client.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <SupportedCultures>
@@ -247,6 +247,10 @@
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
       <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web%29</Name>
       <Aliases>global,SSmDsWeb</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Test\Silverlight\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+      <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
+      <Name>OpenRiaServices.Common.Test %28Test\Silverlight\OpenRiaServices.Common.Test%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>

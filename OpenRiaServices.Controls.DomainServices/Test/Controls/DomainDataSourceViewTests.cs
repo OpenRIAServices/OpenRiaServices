@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using OpenRiaServices.DomainServices.Client;
@@ -11,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Tests the <see cref="DomainDataSourceView"/> members.

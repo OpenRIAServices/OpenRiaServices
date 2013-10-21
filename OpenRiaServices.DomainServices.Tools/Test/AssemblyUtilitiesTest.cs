@@ -25,12 +25,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assembly dataAnnotations = typeof(System.ComponentModel.DataAnnotations.DisplayAttribute).Assembly;
             Assembly excutingAssembly = Assembly.GetExecutingAssembly();
 
-            Assert.IsTrue(TypeUtility.IsSystemAssembly(mscorlib), "mscorlib");
-            Assert.IsTrue(TypeUtility.IsSystemAssembly(system), "system");
-            Assert.IsTrue(TypeUtility.IsSystemAssembly(systemCore), "systemCore");
-            Assert.IsTrue(TypeUtility.IsSystemAssembly(domainServices), "domainServices");
-            Assert.IsTrue(TypeUtility.IsSystemAssembly(dataAnnotations), "dataAnnotations");
-            Assert.IsFalse(TypeUtility.IsSystemAssembly(excutingAssembly), "Executing Assembly");
+            Assert.IsTrue(SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(mscorlib), "mscorlib");
+            Assert.IsTrue(SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(system), "system");
+            Assert.IsTrue(SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(systemCore), "systemCore");
+            Assert.IsTrue(SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(domainServices), "domainServices");
+            Assert.IsTrue(SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(dataAnnotations), "dataAnnotations");
+            Assert.IsFalse(SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(excutingAssembly), "Executing Assembly");
         }
 
         [TestMethod]

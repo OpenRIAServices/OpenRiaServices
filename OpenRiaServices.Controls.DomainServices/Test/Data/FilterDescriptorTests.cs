@@ -1,5 +1,7 @@
 ﻿using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Controls;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace System.Windows.Controls.Tests
 {

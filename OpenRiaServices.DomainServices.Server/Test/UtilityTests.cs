@@ -7,6 +7,7 @@ using DbContextModels.AdventureWorks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;
+using Address = TestDomainServices.Address;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {

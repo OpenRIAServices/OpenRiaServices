@@ -77,7 +77,7 @@ namespace DataTests.Scenarios.LTS.Northwind_ExternalMapping
         private static MappingSource mapping = XmlMappingSource.FromXml(Northwind_Resources.NorthwindMapFile);
         
         public Northwind() :
-            base(global::System.Common.DomainServices.Test.Properties.Settings.Default.NorthwindConnectionString, mapping)
+            base(global::OpenRiaServices.Common.DomainServices.Test.Properties.Settings.Default.NorthwindConnectionString, mapping)
         {
             OnCreated();
         }

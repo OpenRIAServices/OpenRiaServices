@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Tests the filtering aspects of the <see cref="DomainDataSource"/> feature.

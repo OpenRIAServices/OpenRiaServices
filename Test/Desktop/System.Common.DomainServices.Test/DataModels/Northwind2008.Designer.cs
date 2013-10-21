@@ -8,31 +8,32 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Products_Categories", "Categories", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.Common.DomainServices.Test.DataModels.Category), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Product), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_CustomerCustomerDemo", "CustomerDemographics", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.Common.DomainServices.Test.DataModels.CustomerDemographic), "CustomerCustomerDemo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.CustomerCustomerDemo), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Orders_Customers", "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.Common.DomainServices.Test.DataModels.Customer), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Order), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Employees_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.Common.DomainServices.Test.DataModels.Employee), "Employees1", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Employee), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Orders_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.Common.DomainServices.Test.DataModels.Employee), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Order), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Order_Details_Orders", "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.Common.DomainServices.Test.DataModels.Order), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Order_Detail), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Order_Details_Products", "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.Common.DomainServices.Test.DataModels.Product), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Order_Detail), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Orders_Shippers", "Shippers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.Common.DomainServices.Test.DataModels.Shipper), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Order), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Products_Suppliers", "Suppliers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(System.Common.DomainServices.Test.DataModels.Supplier), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Product), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Territories_Region", "Region", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(System.Common.DomainServices.Test.DataModels.Region), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Territory), true)]
-[assembly: EdmRelationshipAttribute("northwindModel2008", "EmployeeTerritories", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Employee), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(System.Common.DomainServices.Test.DataModels.Territory))]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Products_Categories", "Categories", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Category), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Product), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_CustomerCustomerDemo", "CustomerDemographics", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.CustomerDemographic), "CustomerCustomerDemo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.CustomerCustomerDemo), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Orders_Customers", "Customers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Customer), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Order), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Employees_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Employee), "Employees1", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Employee), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Orders_Employees", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Employee), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Order), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Order_Details_Orders", "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Order), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Order_Detail), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Order_Details_Products", "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Product), "Order_Details", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Order_Detail), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Orders_Shippers", "Shippers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Shipper), "Orders", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Order), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Products_Suppliers", "Suppliers", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Supplier), "Products", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Product), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "FK_Territories_Region", "Region", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Region), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Territory), true)]
+[assembly: EdmRelationshipAttribute("northwindModel2008", "EmployeeTerritories", "Employees", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Employee), "Territories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(OpenRiaServices.Common.DomainServices.Test.DataModels.Territory))]
 
 #endregion
 
-namespace System.Common.DomainServices.Test.DataModels
+namespace OpenRiaServices.Common.DomainServices.Test.DataModels
 {
     #region Contexts
     
@@ -305,6 +306,7 @@ namespace System.Common.DomainServices.Test.DataModels
         private ObjectSet<Territory> _Territories;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -420,11 +422,11 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -451,6 +453,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -553,6 +556,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnPictureChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -579,6 +583,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -605,6 +610,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -875,6 +881,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnFaxChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -901,6 +908,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -927,6 +935,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -984,6 +993,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnCustomerTypeIDChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1026,6 +1036,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1050,6 +1061,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1104,6 +1116,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnCustomerDescChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1130,6 +1143,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1156,6 +1170,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1453,6 +1468,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnTimestampColumnChanged();
 
         #endregion
+
     
     }
     
@@ -1482,6 +1498,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1659,6 +1676,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnversionChanged();
 
         #endregion
+
     
     }
     
@@ -1688,6 +1706,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2126,6 +2145,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnPhotoPathChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2234,6 +2254,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2258,6 +2279,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2600,6 +2622,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnShipCountryChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2740,6 +2763,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2772,6 +2796,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2901,6 +2926,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnDiscountChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2981,6 +3007,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3009,6 +3036,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3255,6 +3283,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnDiscontinuedChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3357,6 +3386,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3383,6 +3413,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3437,6 +3468,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnRegionDescriptionChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3463,6 +3495,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3489,6 +3522,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3567,6 +3601,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnPhoneChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3593,6 +3628,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3619,6 +3655,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3913,6 +3950,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnHomePageChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3939,6 +3977,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3967,6 +4006,7 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -4045,6 +4085,7 @@ namespace System.Common.DomainServices.Test.DataModels
         partial void OnRegionIDChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -4109,8 +4150,10 @@ namespace System.Common.DomainServices.Test.DataModels
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Enum used for testing.

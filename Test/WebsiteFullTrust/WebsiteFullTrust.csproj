@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AllTests.html" />
+    <Content Include="Cities-CityDomainService.svc" />
     <Content Include="ClientBin\System.Test.xap" />
     <Content Include="CodeCoverageTests.html" />
     <Content Include="Services\Cities-CityDomainService.svc" />

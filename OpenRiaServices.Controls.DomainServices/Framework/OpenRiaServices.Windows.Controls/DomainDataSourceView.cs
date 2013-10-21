@@ -10,12 +10,12 @@ using System.Globalization;
 namespace OpenRiaServices.Controls
 {
     /// <summary>
-    /// Collection view for the <see cref="System.Windows.Controls.DomainDataSource"/>.
+    /// Collection view for the <see cref="OpenRiaServices.Controls.DomainDataSource"/>.
     /// </summary>
     /// <remarks>
     /// This view supports adding, removing, access, and paging. For other standard view
     /// functions like sorting, filtering, and grouping, use of the Descriptor collections
-    /// on the <see cref="System.Windows.Controls.DomainDataSource"/> is recommended.
+    /// on the <see cref="OpenRiaServices.Controls.DomainDataSource"/> is recommended.
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "It's a view, not a collection.")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1010:CollectionsShouldImplementGenericInterface", Justification = "Again, it's a view.")]
@@ -55,7 +55,7 @@ namespace OpenRiaServices.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainDataSourceView"/> class.
         /// </summary>
-        /// <param name="entityCollectionView">The <see cref="System.Windows.Controls.PagedEntityCollectionView"/> to wrap</param>
+        /// <param name="entityCollectionView">The <see cref="OpenRiaServices.Controls.PagedEntityCollectionView"/> to wrap</param>
         internal DomainDataSourceView(PagedEntityCollectionView entityCollectionView)
         {
             Debug.Assert(entityCollectionView != null, "EntityCollectionView cannot be null.");
@@ -814,9 +814,9 @@ namespace OpenRiaServices.Controls
         }
 
         /// <summary>
-        /// Handles property changed events raised by the <see cref="System.Windows.Controls.PagedEntityCollectionView"/>.
+        /// Handles property changed events raised by the <see cref="OpenRiaServices.Controls.PagedEntityCollectionView"/>.
         /// </summary>
-        /// <param name="sender">The <see cref="System.Windows.Controls.PagedEntityCollectionView"/></param>
+        /// <param name="sender">The <see cref="OpenRiaServices.Controls.PagedEntityCollectionView"/></param>
         /// <param name="e">The event to handle</param>
         private void OnPagedEntityCollectionViewPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

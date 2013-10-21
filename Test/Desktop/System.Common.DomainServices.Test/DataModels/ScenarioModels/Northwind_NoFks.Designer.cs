@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -103,6 +104,7 @@ namespace NorthwindNoFks
         private ObjectSet<Category> _Categories;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -122,11 +124,11 @@ namespace NorthwindNoFks
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -153,6 +155,7 @@ namespace NorthwindNoFks
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -255,6 +258,7 @@ namespace NorthwindNoFks
         partial void OnPictureChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -281,6 +285,7 @@ namespace NorthwindNoFks
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -309,6 +314,7 @@ namespace NorthwindNoFks
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -555,6 +561,7 @@ namespace NorthwindNoFks
         partial void OnDiscontinuedChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -597,8 +604,10 @@ namespace NorthwindNoFks
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }

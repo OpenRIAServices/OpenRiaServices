@@ -8,7 +8,6 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
-    <NoWarn>108</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -20,7 +19,6 @@
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <Optimize>true</Optimize>
-    <NoWarn>108</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,7 +30,6 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
-    <NoWarn>108</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -44,112 +41,94 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DF732E93-F424-459A-978C-B3A3450C9FAE}</ProjectGuid>
+    <ProjectGuid>{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.ServiceModel.DomainServices.Client.Web.Test</RootNamespace>
-    <AssemblyName>System.ServiceModel.DomainServices.Client.Web.Test</AssemblyName>
+    <RootNamespace>S.SM.DS.Client.External.Test</RootNamespace>
+    <AssemblyName>S.SM.DS.Client.External.Test</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
-    <SupportedCultures>
-    </SupportedCultures>
+    <ValidateXaml>true</ValidateXaml>
     <SignAssembly>false</SignAssembly>
     <DelaySign>true</DelaySign>
-    <ValidateXaml>true</ValidateXaml>
-    <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
     <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>108</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>108</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SILVERLIGHT;CODECOV</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <NoWarn>108</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Silverlight.Testing, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageIgnite)\Microsoft.Silverlight.Testing.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageIgnite)\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Silverlight\v4.0\Toolkit\Apr10\Testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.ComponentModel.DataAnnotations, Version=2.0.5.0, Culture=neutral, PublicKeyToken=ddd0da4d3e678217, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Extensions" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.ServiceModel.Web.Extensions" />
+    <Reference Include="System.ServiceModel.Web.Extensions, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
-    <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\test\desktop\system.common.domainservices.test\baselines\default\webcontext\WebContext1.g.cs">
-      <Link>Data\DomainContexts\WebContext1.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
+      <Link>DomainContexts\Cities.g.cs</Link>
     </Compile>
-    <Compile Include="ApplicationServices\AuthenticationDomainClient.cs" />
-    <Compile Include="ApplicationServices\AuthenticationDomainContext.cs" />
-    <Compile Include="ApplicationServices\FormsAuthenticationTest.cs" />
-    <Compile Include="ApplicationServices\WebAuthenticationServiceTest.cs" />
-    <Compile Include="ApplicationServices\WebContextBaseTest.cs" />
-    <Compile Include="ApplicationServices\WindowsAuthenticationTest.cs" />
+    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.cs">
+      <Link>DomainContexts\Cities.shared.cs</Link>
+    </Compile>
+    <Compile Include="EntityTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
-      <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client %28Framework\Silverlight\OpenRiaServices.DomainServices.Client%29</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj">
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
       <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Test\Silverlight\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+      <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
+      <Name>OpenRiaServices.Common.Test %28Test\Silverlight\OpenRiaServices.Common.Test%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
+      <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
+      <Name>OpenRiaServices.DomainServices.Client %28Framework\Silverlight\OpenRiaServices.DomainServices.Client%29</Name>
+    </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
@@ -157,4 +136,11 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

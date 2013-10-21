@@ -1,17 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build;WriteProjectPath" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
   <PropertyGroup>
     <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
-  </PropertyGroup>
-  <PropertyGroup>
-    <NoWarn>618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <NoWarn>618</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -21,7 +17,6 @@
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -31,7 +26,6 @@
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -41,82 +35,72 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}</ProjectGuid>
+    <ProjectGuid>{8F638ABB-4EC6-428B-9D35-514317AECF51}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.Hosting.Local.Test</RootNamespace>
-    <AssemblyName>Microsoft.ServiceModel.DomainServices.Hosting.Local.Test</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.WindowsAzure.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.WindowsAzure.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <SignAssembly>false</SignAssembly>
     <DelaySign>true</DelaySign>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;CODECOV</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.StorageClient">
+      <HintPath>$(FeaturePackageRoot)\External\WindowsAzure\ref\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Abstractions">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OperationExceptionTests.cs" />
-    <Compile Include="DomainServiceProxyTests.cs" />
+    <Compile Include="QueryComposerTests.cs" />
+    <Compile Include="TableDomainServiceTests.cs" />
+    <Compile Include="TableEntityContextTests.cs" />
+    <Compile Include="TableEntitySetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TableMetadataProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.DomainServices.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj">
-      <Project>{0EE13EF8-BD66-4095-926C-A81B6350F8EA}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting.Local</Name>
+    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.WindowsAzure.csproj">
+      <Project>{62CEDA36-AE80-411D-8A55-2D417A86960B}</Project>
+      <Name>OpenRiaServices.DomainServices.WindowsAzure</Name>
     </ProjectReference>
   </ItemGroup>
-  <Target Name="WriteProjectPath">
-    <Message Text="Writing project path" />
-    <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
-  </Target>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

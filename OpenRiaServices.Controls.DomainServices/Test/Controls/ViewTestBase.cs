@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using OpenRiaServices.Controls;
 using OpenRiaServices.DomainServices.Client;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Base class for testing views used by the <see cref="DomainDataSource"/> control.

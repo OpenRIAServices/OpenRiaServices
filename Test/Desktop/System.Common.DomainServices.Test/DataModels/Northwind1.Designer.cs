@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -257,6 +258,7 @@ namespace NorthwindModel
         private ObjectSet<Territory> _Territories;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -348,11 +350,11 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -379,6 +381,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -481,6 +484,7 @@ namespace NorthwindModel
         partial void OnPictureChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -507,6 +511,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -533,6 +538,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -803,6 +809,7 @@ namespace NorthwindModel
         partial void OnFaxChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -851,6 +858,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -875,6 +883,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -929,6 +938,7 @@ namespace NorthwindModel
         partial void OnCustomerDescChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -955,6 +965,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -983,6 +994,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1421,6 +1433,7 @@ namespace NorthwindModel
         partial void OnPhotoPathChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1529,6 +1542,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1553,6 +1567,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1895,6 +1910,7 @@ namespace NorthwindModel
         partial void OnShipCountryChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2035,6 +2051,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2067,6 +2084,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2196,6 +2214,7 @@ namespace NorthwindModel
         partial void OnDiscountChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2276,6 +2295,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2304,6 +2324,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2550,6 +2571,7 @@ namespace NorthwindModel
         partial void OnDiscontinuedChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2652,6 +2674,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2678,6 +2701,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2732,6 +2756,7 @@ namespace NorthwindModel
         partial void OnRegionDescriptionChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2758,6 +2783,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2784,6 +2810,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -2862,6 +2889,7 @@ namespace NorthwindModel
         partial void OnPhoneChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -2888,6 +2916,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2914,6 +2943,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3208,6 +3238,7 @@ namespace NorthwindModel
         partial void OnHomePageChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3234,6 +3265,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3262,6 +3294,7 @@ namespace NorthwindModel
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -3340,6 +3373,7 @@ namespace NorthwindModel
         partial void OnRegionIDChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -3404,8 +3438,10 @@ namespace NorthwindModel
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }

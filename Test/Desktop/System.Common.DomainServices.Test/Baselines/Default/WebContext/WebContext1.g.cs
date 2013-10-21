@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ServiceModel;
+
 namespace RootNamespace
 {
     using System;

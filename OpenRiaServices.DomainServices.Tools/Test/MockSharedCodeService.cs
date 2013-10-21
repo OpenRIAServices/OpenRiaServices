@@ -258,7 +258,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             // If this isn't a system assembly, we know immediately that
             // it's not a shared framework type
-            if (!TypeUtility.IsSystemAssembly(t.Assembly))
+            if (!SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(t.Assembly))
             {
                 return false;
             }
@@ -291,7 +291,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Type systemType = Type.GetType(typeName, /*throwOnError*/ false);
             if (systemType != null)
             {
-                if (!TypeUtility.IsSystemAssembly(systemType.Assembly))
+                if (!SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(systemType.Assembly))
                 {
                     return false;
                 }

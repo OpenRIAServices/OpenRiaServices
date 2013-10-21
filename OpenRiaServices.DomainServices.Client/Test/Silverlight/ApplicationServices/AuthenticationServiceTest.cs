@@ -1,5 +1,5 @@
 ﻿extern alias SSmDsClient;
-
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -8,11 +8,12 @@ using System.Threading;
 using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 {
-    using AsyncResultBase = OpenRiaServices.DomainServices.Client.AsyncResultBase;
+    using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
 
     /// <summary>
     /// Tests <see cref="AuthenticationService"/> members.

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.Silverlight.Testing
+namespace OpenRiaServices.Silverlight.Testing
 {
     /// <summary>
     /// Abstract base class for all Unit Tests in WCF RIA Services.
@@ -71,7 +72,7 @@ namespace Microsoft.Silverlight.Testing
             return failureMessage;
         }
 
-        public override void EnqueueWorkItem(IWorkItem testTaskObject)
+        public override void EnqueueWorkItem(WorkItem testTaskObject) //CDB IWorkItem replaced with WorkItem
         {
             if (UnitTestBase.NumberOfTimeouts >= UnitTestBase.DefaultTimeoutThreshold)
             {

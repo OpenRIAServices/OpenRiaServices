@@ -161,6 +161,18 @@
       <Name>OpenRiaServices.DomainServices.Hosting</Name>
       <Aliases>global,OpenRiaServicesDomainServicesHosting</Aliases>
     </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj">
+      <Project>{1a2b04d0-1a09-414e-bc3f-c0c159ad668b}</Project>
+      <Name>EFPOCOModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\System.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
+      <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
+      <Name>OpenRiaServices.Common.DomainServices.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+      <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
+      <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.Test%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.DomainServices.Server</Name>

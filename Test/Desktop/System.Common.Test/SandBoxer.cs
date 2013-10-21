@@ -12,7 +12,7 @@ using System.Text;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace System.Common.Test
+namespace OpenRiaServices.Common.Test
 {
     /// <summary>
     /// Helper class to sandbox code to run in partial trust

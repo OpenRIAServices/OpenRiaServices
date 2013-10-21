@@ -2,15 +2,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Common.Test;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security;
+using OpenRiaServices.Common.Test;
 using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.EntityFramework;
 using OpenRiaServices.DomainServices.Hosting;
@@ -19,6 +20,7 @@ using System.Threading;
 using Cities;
 using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.TypeDescriptorExtensions;
@@ -32,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     /// DomainServiceDescription tests
     /// </summary>
     [TestClass]
-    public class DomainServiceDescriptionTest : Microsoft.Silverlight.Testing.UnitTestBase
+    public class DomainServiceDescriptionTest : UnitTestBase
     {
         [TestMethod]
         [WorkItem(193755)]
@@ -354,7 +356,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             // First create a context manually and verify that POCO metadata is configured correctly
             NorthwindPOCOModel.NorthwindEntities ctxt = new NorthwindPOCOModel.NorthwindEntities();
-            Data.Metadata.Edm.EntityType entityType = ctxt.Products.EntitySet.ElementType;
+            EntityType entityType = ctxt.Products.EntitySet.ElementType;
             Assert.IsNotNull(entityType);
 
             // direct test verifying that our helper methods work for POCO metadata
@@ -1417,8 +1419,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // first try a model where FKs are part of CSDL
             Type contextType = typeof(NorthwindModel.NorthwindEntities);
             LinqToEntitiesTypeDescriptionContext ctxt = new LinqToEntitiesTypeDescriptionContext(contextType);
-            Data.Metadata.Edm.EntityType edmType = (EntityType)ctxt.GetEdmType(typeof(NorthwindModel.Product));
-            Data.Metadata.Edm.NavigationProperty navProp = edmType.NavigationProperties.Single(p => p.Name == "Category");
+            EntityType edmType = (EntityType)ctxt.GetEdmType(typeof(NorthwindModel.Product));
+            NavigationProperty navProp = edmType.NavigationProperties.Single(p => p.Name == "Category");
             AssociationInfo assocInfo = ctxt.GetAssociationInfo(navProp);
             Assert.IsNotNull(assocInfo);
 
@@ -3094,7 +3096,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             throw new NotImplementedException();
         }
 
-        public Data.EntityState EntityState
+        public EntityState EntityState
         {
             get { throw new NotImplementedException(); }
         }

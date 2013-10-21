@@ -2,8 +2,8 @@
 using System.Collections.Specialized;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 
 namespace OpenRiaServices.DomainServices.Client.Test

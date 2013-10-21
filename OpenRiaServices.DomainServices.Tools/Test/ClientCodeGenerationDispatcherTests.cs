@@ -6,10 +6,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Server;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Tools.Test.T4Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

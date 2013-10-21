@@ -10,7 +10,7 @@ using TestDomainServices;
 using TestDomainServices.LTS;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Tests the QueryParameter aspects of the <see cref="DomainDataSource"/> feature.

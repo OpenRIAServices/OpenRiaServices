@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Common.Test;
+using OpenRiaServices.Common.Test;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;

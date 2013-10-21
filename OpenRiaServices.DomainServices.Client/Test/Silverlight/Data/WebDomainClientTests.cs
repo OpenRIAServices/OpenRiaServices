@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
-using OpenRiaServices.DomainServices.Client;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -563,7 +563,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         new Uri(uri.OriginalString + "/binary", UriKind.Absolute)));
             factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
             {
-                DefaultBodyStyle = Web.WebMessageBodyStyle.Wrapped
+                DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
             });
 
             this.CityDomainContext =
@@ -634,7 +634,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
             CityDomainContext dc = new CityDomainContext(GenerateUriBase(1000)); // --> the length when localized to Turkish is > 2083
             ExceptionHelper.ExpectException<InvalidOperationException>(() => dc.Echo(""),
-                String.Format(OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
+                String.Format(SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
         }
 
         [TestMethod]
@@ -643,7 +643,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
             CityDomainContext dc = new CityDomainContext(GenerateUriBase(1000)); // --> the length when localized to Turkish is > 2083
             ExceptionHelper.ExpectException<InvalidOperationException>(() => dc.Load(dc.GetCitiesQuery()),
-                String.Format(OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
+                String.Format(SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
         }
 
         private static Uri GenerateUriBase(int length)

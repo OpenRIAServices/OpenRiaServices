@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 
-namespace System.Windows.Controls
+namespace OpenRiaServices.Windows.Controls
 {
     internal static class DependencyObjectExtensions
     {
