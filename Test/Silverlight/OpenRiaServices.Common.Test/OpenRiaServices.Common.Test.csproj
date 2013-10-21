@@ -48,12 +48,9 @@
     <OutputType>Library</OutputType>
     <OutputPath>bin\$(Configuration)</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.Common.Test</RootNamespace>
-    <AssemblyName>System.Common.Test</AssemblyName>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <RootNamespace>OpenRiaServices.Common.Test</RootNamespace>
     <AssemblyName>OpenRiaServices.Common.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
