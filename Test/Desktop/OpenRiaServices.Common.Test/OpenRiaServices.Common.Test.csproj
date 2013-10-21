@@ -83,19 +83,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Silverlight\System.Common.Test\ExceptionHelper.cs">
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\ExceptionHelper.cs">
       <Link>ExceptionHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\Silverlight\System.Common.Test\FullTrustTestAttribute.cs">
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\FullTrustTestAttribute.cs">
       <Link>FullTrustTestAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\Silverlight\System.Common.Test\PerfTestAttribute.cs">
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\PerfTestAttribute.cs">
       <Link>PerfTestAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\Silverlight\System.Common.Test\TestUris.cs">
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\TestUris.cs">
       <Link>TestUris.cs</Link>
     </Compile>
-    <Compile Include="..\..\Silverlight\System.Common.Test\UnitTestHelper.cs">
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestHelper.cs">
       <Link>UnitTestHelper.cs</Link>
     </Compile>
     <Compile Include="IgniteHelper.cs" />
