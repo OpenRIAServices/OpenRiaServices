@@ -122,25 +122,25 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Silverlight assembly references -->
-    <Reference Include="System.Net, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+    <Reference Include="System.Net, Version=5.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SLTargetFrameworkDirectory)\System.Net.dll</HintPath>
       <Private>False</Private>
       <Aliases>Silverlight</Aliases>
     </Reference>
-    <Reference Include="System.Runtime.Serialization, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+    <Reference Include="System.Runtime.Serialization, Version=5.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SLTargetFrameworkDirectory)\System.Runtime.Serialization.dll</HintPath>
       <Private>False</Private>
       <Aliases>Silverlight</Aliases>
     </Reference>
-    <Reference Include="System.Windows, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+    <Reference Include="System.Windows, Version=5.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(SLTargetFrameworkDirectory)\System.Windows.dll</HintPath>
       <Private>False</Private>
       <Aliases>Silverlight</Aliases>
     </Reference>
-    <Reference Include="System.Windows.Data, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Windows.Data, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
       <Aliases>Silverlight</Aliases>

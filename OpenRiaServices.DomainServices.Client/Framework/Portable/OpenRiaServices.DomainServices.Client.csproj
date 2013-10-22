@@ -75,7 +75,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <OutputPath>..\..\..\bin\$(Configuration)\Silverlight\</OutputPath>
-    <DocumentationFile>..\..\..\bin\$(Configuration)\Silverlight\System.ServiceModel.DomainServices.Client.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\Silverlight\OpenRiaServices.DomainServices.Client.XML</DocumentationFile>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <WarningLevel>4</WarningLevel>
@@ -227,7 +227,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="System.ServiceModel.DomainServices.Client.extmap.xml" />
+    <Content Include="OpenRiaServices.DomainServices.Client.extmap.xml" />
   </ItemGroup>
   <Import Project="..\..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
