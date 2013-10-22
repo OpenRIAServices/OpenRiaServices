@@ -1,1 +1,1 @@
-C:\Users\colin\Source\Repos\openriaservices\Microsoft.ServiceModel.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj,Generated_Code,
+C:\Users\blaircd\Source\Repos\openriaservices\RiaServicesContrib.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj,Generated_Code,

@@ -36,7 +36,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\Microsoft.ServiceModel.DomainServices.Hosting.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.Hosting.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,7 +57,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\Microsoft.ServiceModel.DomainServices.Hosting.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Hosting.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -231,14 +231,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Linq\Resource.resx">
-      <LogicalName>System.ServiceModel.DomainServices.Hosting.Linq.Resource.resources</LogicalName>
+      <LogicalName>OpenRiaServices.DomainServices.Hosting.Linq.Resource.resources</LogicalName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>
       <Link>Linq\Resource.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Resource.resx">
-      <LogicalName>System.ServiceModel.DomainServices.Hosting.Services.Resource.resources</LogicalName>
+      <LogicalName>OpenRiaServices.DomainServices.Hosting.Services.Resource.resources</LogicalName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>

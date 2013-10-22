@@ -49,7 +49,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Client.Test.Vb</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <SupportedCultures>
     </SupportedCultures>
@@ -93,15 +93,11 @@
     <RunCodeAnalysis>False</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Silverlight.Testing, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageIgnite)\Microsoft.Silverlight.Testing.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\..\..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageIgnite)\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
+      <HintPath>..\..\..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Runtime.Serialization" />
@@ -116,19 +112,19 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Xml.Linq, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\DomainContextTestBase.cs">
-      <Link>System.ServiceModel.DomainServices.Client\Data\DomainContextTestBase.cs</Link>
+      <Link>OpenRiaServices.DomainServices.Client\Data\DomainContextTestBase.cs</Link>
     </Compile>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\QueryTests.cs">
-      <Link>System.ServiceModel.DomainServices.Client\Data\QueryTests.cs</Link>
+      <Link>OpenRiaServices.DomainServices.Client\Data\QueryTests.cs</Link>
     </Compile>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\TestDataContext.cs">
-      <Link>System.ServiceModel.DomainServices.Client\Data\TestDataContext.cs</Link>
+      <Link>OpenRiaServices.DomainServices.Client\Data\TestDataContext.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\OperationErrorTest.cs">
       <Link>OperationErrorTest.cs</Link>
@@ -141,6 +137,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Service References\Services\TestServices.wsdl" />
     <None Include="Service References\Services\TestServices.xsd" />
@@ -160,7 +157,7 @@
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
       <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\Silverlight\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+    <ProjectReference Include="..\..\..\Test\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
       <Name>OpenRiaServices.Common.Test %28Test\Silverlight\OpenRiaServices.Common.Test%29</Name>
     </ProjectReference>
@@ -180,7 +177,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Services\" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

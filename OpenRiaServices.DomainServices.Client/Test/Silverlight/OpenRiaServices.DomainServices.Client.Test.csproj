@@ -53,7 +53,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Client.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <SupportedCultures>
     </SupportedCultures>
@@ -93,15 +93,11 @@
     <NoWarn>108</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Silverlight.Testing, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageIgnite)\Microsoft.Silverlight.Testing.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\..\..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight, Version=2.0.21210.1508, Culture=neutral, PublicKeyToken=2c5c654d367bf4a7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageIgnite)\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
+      <HintPath>..\..\..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Runtime.Serialization" />
@@ -234,6 +230,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\ServiceReferences.ClientConfig" />
+    <None Include="packages.config" />
     <None Include="Service References\Services\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -248,7 +245,7 @@
       <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web%29</Name>
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\Silverlight\System.Common.Test\OpenRiaServices.Common.Test.csproj">
+    <ProjectReference Include="..\..\..\Test\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
       <Name>OpenRiaServices.Common.Test %28Test\Silverlight\OpenRiaServices.Common.Test%29</Name>
     </ProjectReference>
@@ -272,7 +269,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Services\" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

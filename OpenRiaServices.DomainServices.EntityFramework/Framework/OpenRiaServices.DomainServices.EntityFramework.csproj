@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\Microsoft.ServiceModel.DomainServices.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,7 +58,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\Microsoft.ServiceModel.DomainServices.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -173,14 +173,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
-      <LogicalName>System.ServiceModel.DomainServices.EntityFramework.MetadataResource.resources</LogicalName>
+      <LogicalName>OpenRiaServices.DomainServices.EntityFramework.MetadataResource.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\Resource.resx">
       <Link>Resource.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.ServiceModel.DomainServices.EntityFramework</CustomToolNamespace>
-      <LogicalName>System.ServiceModel.DomainServices.EntityFramework.Resource.resources</LogicalName>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
+      <LogicalName>OpenRiaServices.DomainServices.EntityFramework.Resource.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="DbResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -39,8 +39,8 @@
     <ProjectGuid>{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator</RootNamespace>
-    <AssemblyName>Microsoft.ServiceModel.DomainServices.Tools.Test.T4Generator</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Tools.Test.T4Generator</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Tools.Test.T4Generator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>

@@ -61,7 +61,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\System.ServiceModel.DomainServices.Hosting.OData.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Hosting.OData.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ErrorReport>prompt</ErrorReport>

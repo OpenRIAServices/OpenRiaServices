@@ -58,7 +58,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\System.ServiceModel.DomainServices.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
