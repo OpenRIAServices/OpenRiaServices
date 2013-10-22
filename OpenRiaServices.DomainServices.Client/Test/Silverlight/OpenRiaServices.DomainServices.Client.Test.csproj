@@ -51,7 +51,6 @@
     <OutputType>Library</OutputType>
     <OutputPath>bin\$(Configuration)</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Client.Test</AssemblyName>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
