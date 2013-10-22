@@ -1,10 +1,12 @@
 ﻿extern alias SSmDsClient;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.ServiceModel;
 using OpenRiaServices.DomainServices.Client.Test.Services;
 using System.Threading;
 using System.Xml.Linq;
@@ -846,7 +848,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             TestDomainServices.TestProvider_Scenarios provider = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
-            Linq.Expressions.Expression<Func<TestSideEffects, bool>> predicate = (res) => res.Name.StartsWith("Test");
+            System.Linq.Expressions.Expression<Func<TestSideEffects, bool>> predicate = (res) => res.Name.StartsWith("Test");
             EntityQuery<TestSideEffects> entityQuery = provider.CreateAndGetSideEffectsObjectsQuery("TestName").Where(predicate);
             entityQuery.IncludeTotalCount = true;
             LoadOperation<TestSideEffects> result = provider.Load(entityQuery, false);

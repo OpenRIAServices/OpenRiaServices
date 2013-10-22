@@ -119,7 +119,7 @@ namespace OpenRiaServices.Controls
         /// If <see cref="Value"/> matches <see cref="IgnoredValue"/>, this filter will not be applied
         /// to the load query by the <see cref="DomainDataSource"/>. The <see cref="IgnoredValue"/> is
         /// compared to <see cref="Value"/> twice in the <see cref="DomainDataSource"/>. First, it is
-        /// strictly compared using an <see cref="System.Object.Equals(Object, Object)"/> comparison. Second,
+        /// strictly compared using an <see cref="System.Object.Equals(System.Object, System.Object)"/> comparison. Second,
         /// both values are converted to type of the property specified by the <see cref="PropertyPath"/>
         /// and compared again. If either conversion matches, this filter is ignored.
         /// <para>

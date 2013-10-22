@@ -1,7 +1,9 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Principal;
 using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using MockUser = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
 using UserType = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.UserType;

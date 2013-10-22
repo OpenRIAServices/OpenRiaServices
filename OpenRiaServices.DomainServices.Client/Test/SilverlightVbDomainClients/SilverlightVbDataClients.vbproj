@@ -11,6 +11,7 @@
     <RootNamespace>
     </RootNamespace>
     <AssemblyName>System.ServiceModel.DomainServices.Hosting.Test.SilverlightVbDataClients</AssemblyName>
+    <AssemblyName>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients</AssemblyName>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
@@ -36,7 +37,7 @@
     <NoConfig>true</NoConfig>
     <MyType>Empty</MyType>
     <OutputPath>Bin\Debug</OutputPath>
-    <DocumentationFile>System.ServiceModel.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
+    <DocumentationFile>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DefineConstants>SILVERLIGHT=1</DefineConstants>
   </PropertyGroup>
@@ -48,7 +49,7 @@
     <NoConfig>true</NoConfig>
     <Optimize>true</Optimize>
     <OutputPath>Bin\Release</OutputPath>
-    <DocumentationFile>System.ServiceModel.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
+    <DocumentationFile>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DefineConstants>SILVERLIGHT=1</DefineConstants>
   </PropertyGroup>
@@ -73,7 +74,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>SILVERLIGHT=1</DefineConstants>
-    <DocumentationFile>System.ServiceModel.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
+    <DocumentationFile>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <NoStdLib>true</NoStdLib>
     <DebugType>full</DebugType>
@@ -85,7 +86,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>SILVERLIGHT=1</DefineConstants>
-    <DocumentationFile>System.ServiceModel.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
+    <DocumentationFile>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <NoStdLib>true</NoStdLib>
@@ -98,7 +99,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>SILVERLIGHT=1</DefineConstants>
-    <DocumentationFile>System.ServiceModel.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
+    <DocumentationFile>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <NoStdLib>true</NoStdLib>
@@ -140,28 +141,28 @@
     <Import Include="System.Windows.Shapes" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.vb">
       <Link>DomainClients\Cities.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.vb">
       <Link>DomainClients\Catalog_LTS.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.vb">
       <Link>DomainClients\Northwind_LTS.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
       <Link>DomainClients\IncludeScenariosTestProvider.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">
       <Link>DomainClients\TestProvider_Scenarios.g.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Cities\Cities.shared.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.vb">
       <Link>DomainClients\Cities.shared.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Shared\Mock.shared.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb">
       <Link>DomainClients\Mock.shared.vb</Link>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\System.Common.DomainServices.Test\Shared\Test.shared.vb">
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.vb">
       <Link>DomainClients\Test.shared.vb</Link>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />

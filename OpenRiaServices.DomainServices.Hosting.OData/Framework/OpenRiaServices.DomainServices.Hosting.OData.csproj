@@ -6,7 +6,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\System.ServiceModel.DomainServices.Hosting.OData.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>pdbonly</DebugType>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\System.ServiceModel.DomainServices.Hosting.OData.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\DebugNet40\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -28,7 +28,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\System.ServiceModel.DomainServices.Hosting.OData.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\ReleaseNet40\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>pdbonly</DebugType>
@@ -39,7 +39,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\System.ServiceModel.DomainServices.Hosting.OData.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet40\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>pdbonly</DebugType>
@@ -56,12 +56,12 @@
     <ProjectGuid>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.ServiceModel.DomainServices.Hosting.OData</RootNamespace>
-    <AssemblyName>System.ServiceModel.DomainServices.Hosting.OData</AssemblyName>
+    <RootNamespace>OpenRiaServices.DomainServices.Hosting.OData</RootNamespace>
+    <AssemblyName>OpenRiaServices.DomainServices.Hosting.OData</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\System.ServiceModel.DomainServices.Hosting.OData.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Hosting.OData.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ErrorReport>prompt</ErrorReport>
@@ -73,17 +73,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV</DefineConstants>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml</DocumentationFile>
   </PropertyGroup>
   <!-- References -->
   <ItemGroup>

@@ -70,7 +70,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <OutputPath>..\..\..\bin\$(Configuration)\Silverlight\</OutputPath>
-    <DocumentationFile>..\..\..\bin\$(Configuration)\Silverlight\System.ServiceModel.DomainServices.Client.Web.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\Silverlight\OpenRiaServices.DomainServices.Client.Web.XML</DocumentationFile>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <WarningLevel>4</WarningLevel>
@@ -162,7 +162,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="System.ServiceModel.DomainServices.Client.Web.extmap.xml" />
+    <Content Include="OpenRiaServices.DomainServices.Client.Web.extmap.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Resource.resx">

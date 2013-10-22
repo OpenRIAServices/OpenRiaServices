@@ -1,0 +1,428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugNet40\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
+    <OutputPath>bin\ReleaseNet40\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
+    <OutputPath>bin\MyGet40\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenRiaServices.Common.DomainServices.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.Common.DomainServices.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SignAssembly>false</SignAssembly>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;CODECOV</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\..\packages\EntityFramework.6.0.0-rc1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
+      <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
+      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj">
+      <Project>{A94B2843-C68E-4548-9168-63469D625935}</Project>
+      <Name>EFCodeFirstModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
+      <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
+      <Name>EFDbContextModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj">
+      <Name>EFPOCOModels</Name>
+      <Project>{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}</Project>
+    </ProjectReference>
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFDbContextScenarios.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFDbContextScenarios.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.cs" />
+    <Compile Include="AdventureWorks\EF_DbCtx_Catalog.cs" />
+    <Compile Include="Northwind\EFCF_Northwind.cs" />
+    <Compile Include="Northwind\EFDbCtx_Northwind.cs" />
+    <Compile Include="Shared\Test.shared.cs" />
+    <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.vb" />
+    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\SharedEntities.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\SystemNamespace.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace_NoRootNamespace.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\MultipleProviderScenarios.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\SharedEntities.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios_CodeGen.g.cs" />
+    <Content Include="Baselines\Default\Mocks\MockCustomers.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\InheritanceScenarios1.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\ConflictResolution.EntityConflicts.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\ConflictResolution.EntityConflicts.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs" />
+    <Content Include="Baselines\Default\WebContext\WebContext0.g.cs" />
+    <Content Include="Baselines\Default\WebContext\WebContext1.g.cs" />
+    <Content Include="Baselines\Default\WebContext\WebContext2.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\InterfaceInheritance.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\InterfaceInheritance.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\ConflictResolution.EntityConflicts.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\SystemNamespace.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace_NoRootNamespace.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\InheritanceScenarios1.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\MultipleProviderScenarios.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios_CodeGen.g.cs" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext0.g.cs" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext1.g.cs" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext2.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\CompositionScenarios.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace_NoRootNamespace.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace_NoRootNamespace.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\SystemNamespace.g.cs" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\SystemNamespace.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs" />
+    <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.vb" />
+    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" />
+    <Compile Include="Cities\Cities.shared.cs" />
+    <Compile Include="Cities\CityData.cs" />
+    <Compile Include="Cities\CityDomainService.cs" />
+    <Compile Include="Cities\CityDomainServiceHost.cs" />
+    <Compile Include="Cities\CityDomainServiceHostFactory.cs" />
+    <Compile Include="Cities\CityDomainService_AuthRequired.cs" />
+    <Compile Include="Cities\CityEntities.cs" />
+    <Compile Include="Cities\CityTypes.cs" />
+    <Compile Include="AdventureWorks\EF_Catalog.cs" />
+    <Compile Include="AdventureWorks\LTS_Catalog.cs" />
+    <Compile Include="Cities\RequiresUserAttribute.cs" />
+    <Compile Include="Cities\RequiresUserForStateAttribute.cs" />
+    <Compile Include="DataModels\AdventureWorks.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\AdventureWorks1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Northwind.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Northwind.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Northwind1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Northwind.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Northwind2008.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Northwind2008.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.metadata.cs" />
+    <Compile Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LTS_InheritanceScenarios.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\ScenarioModels\EF_InheritanceScenarios.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EF_InheritanceScenarios.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
+    <Compile Include="DataModels\ScenarioModels\ContextInstantiationScenarios.cs" />
+    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.cs" />
+    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EF_Northwind_Scenarios.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\ScenarioModels\LTS_Northwind_ExternalMapping.cs" />
+    <Compile Include="DataModels\ScenarioModels\LTS_Northwind_Scenarios.cs" />
+    <Compile Include="DataModels\ScenarioModels\LTS_Northwind_Scenarios.metadata.cs" />
+    <Compile Include="DataModels\ScenarioModels\Northwind_Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Northwind_Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\ScenarioModels\Northwind_NoFks.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Northwind_NoFks.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DBImager.cs" />
+    <Compile Include="Inheritance\EF_Inheritance_DomainService.cs" />
+    <Compile Include="Inheritance\LTS_Inheritance_DomainService.cs" />
+    <Compile Include="Mocks\AssociationInheritanceScenarios.cs" />
+    <Compile Include="Mocks\AuthenticationServices.cs" />
+    <Compile Include="Mocks\ComplexTypeScenarios.cs" />
+    <Compile Include="Mocks\CompositionAndInheritanceScenarios.cs" />
+    <Compile Include="Mocks\CompositionScenarios.cs" />
+    <Compile Include="Mocks\MockDomainServices.cs" />
+    <Compile Include="Mocks\SharedScenarios.cs" />
+    <Compile Include="Northwind\EF_Northwind.cs" />
+    <Compile Include="Northwind\EF_Northwind_POCO.cs" />
+    <Compile Include="Northwind\LTS_Northwind.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Shared\SystemNamespace.shared.cs" />
+    <Compile Include="Shared\Global.shared.cs" />
+    <Compile Include="Shared\Mock.shared.cs" />
+    <Content Include="Cities\Cities.shared.vb" />
+    <Content Include="Shared\Test.shared.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
+      <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
+      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
+      <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
+      <Name>OpenRiaServices.DomainServices.Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
+      <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
+      <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
+      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
+      <Name>OpenRiaServices.DomainServices.Hosting</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Baselines\Default\Cities\Cities.g.cs" />
+    <Content Include="Baselines\Default\Cities\Cities.g.vb" />
+    <Content Include="Baselines\Default\EF\Catalog_EF.g.vb" />
+    <Content Include="Baselines\Default\EF\Northwind_EF.g.vb" />
+    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.vb" />
+    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.vb" />
+    <Content Include="Baselines\Default\EF\Catalog_EF.g.cs" />
+    <Content Include="Baselines\Default\EF\Northwind_EF.g.cs" />
+    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.cs" />
+    <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.vb" />
+    <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.cs" />
+    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.cs" />
+    <Content Include="Baselines\Default\Mocks\MockCustomers.g.vb" />
+    <Content Include="Baselines\Default\WebContext\WebContext0.g.vb" />
+    <Content Include="Baselines\Default\WebContext\WebContext1.g.vb" />
+    <Content Include="Baselines\Default\WebContext\WebContext2.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\CompositionScenarios.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios_CodeGen.g.vb" />
+    <Content Include="Baselines\Default\Scenarios\VBRootNamespaceScenarios.g.vb" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext0.g.vb" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext1.g.vb" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext2.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\ConflictResolution.EntityConflicts.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios_CodeGen.g.vb" />
+    <Content Include="Baselines\FullTypeNames\Scenarios\VBRootNamespaceScenarios.g.vb" />
+    <Content Include="Shared\SystemNamespace.shared.vb" />
+    <Content Include="Shared\Global.shared.vb" />
+    <Content Include="Shared\Mock.shared.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DataModels\AdventureWorks.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>AdventureWorks.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="DataModels\AdventureWorks.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AdventureWorks1.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AdventureWorksModel</CustomToolNamespace>
+    </EntityDeploy>
+    <None Include="DataModels\Northwind.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Northwind.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="DataModels\Northwind.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Northwind1.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>NorthwindModel</CustomToolNamespace>
+    </EntityDeploy>
+    <EntityDeploy Include="DataModels\ScenarioModels\Northwind_NoFks.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Northwind_NoFks.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>NorthwindNoFks</CustomToolNamespace>
+    </EntityDeploy>
+    <EntityDeploy Include="DataModels\Northwind2008.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Northwind2008.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="DataModels\ScenarioModels\EF_InheritanceScenarios.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EF_InheritanceScenarios.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>DataTests.Inheritance.EF</CustomToolNamespace>
+    </EntityDeploy>
+    <None Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LTS_InheritanceScenarios.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>DataTests.Inheritance.LTS</CustomToolNamespace>
+    </None>
+    <None Include="DataModels\ScenarioModels\Northwind.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataModels\Northwind.dbml.layout">
+      <DependentUpon>Northwind.dbml</DependentUpon>
+    </None>
+    <EntityDeploy Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EF_Northwind_Scenarios.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>DataTests.Scenarios.EF.Northwind</CustomToolNamespace>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataModels\AdventureWorks.dbml.layout">
+      <DependentUpon>AdventureWorks.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.dbml.layout">
+      <DependentUpon>LTS_InheritanceScenarios.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataModels\ScenarioModels\Northwind_Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Northwind_Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>DataTests.Scenarios.LTS.Northwind_ExternalMapping</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

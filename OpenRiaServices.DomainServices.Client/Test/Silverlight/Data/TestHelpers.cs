@@ -52,7 +52,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         internal static void SetAddress(TestServicesClient ts)
         {
 #if SILVERLIGHT
-            ts.Endpoint.Address = new ServiceModel.EndpointAddress(
+            ts.Endpoint.Address = new System.ServiceModel.EndpointAddress(
                 new Uri(
                     new Uri(
                         System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped),

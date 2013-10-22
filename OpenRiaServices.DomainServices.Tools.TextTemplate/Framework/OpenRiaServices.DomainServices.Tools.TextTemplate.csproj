@@ -332,7 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Resource.resx">
-      <LogicalName>Microsoft.ServiceModel.DomainServices.Tools.Resource.resources</LogicalName>
+      <LogicalName>OpenRiaServices.DomainServices.Tools.Resource.resources</LogicalName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>

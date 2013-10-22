@@ -90,12 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientBin\System.Test.xap" />
-    <Content Include="System.ServiceModel.DomainServices.Client.Test.Perf.html" />
+    <Content Include="OpenRiaServices.DomainServices.Client.Test.Perf.html" />
     <Content Include="Services\Cities-CityDomainService.svc" />
-    <Content Include="System.ServiceModel.DomainServices.Client.Test.Vb.html" />
-    <Content Include="System.ServiceModel.DomainServices.Client.Web.Test.html" />
-    <Content Include="System.Windows.Controls.DomainServices.Test.html" />
-    <Content Include="System.ServiceModel.DomainServices.Client.Test.html" />
+    <Content Include="OpenRiaServices.DomainServices.Client.Test.Vb.html" />
+    <Content Include="OpenRiaServices.DomainServices.Client.Web.Test.html" />
+    <Content Include="OpenRiaServices.Controls.DomainServices.Test.html" />
+    <Content Include="OpenRiaServices.DomainServices.Client.Test.html" />
     <Content Include="Services\TestServices.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -140,7 +140,7 @@
       <Name>OpenRiaServices.DomainServices.Hosting</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\Desktop\System.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
+    <ProjectReference Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
       <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
       <Name>OpenRiaServices.Common.DomainServices.Test</Name>
     </ProjectReference>

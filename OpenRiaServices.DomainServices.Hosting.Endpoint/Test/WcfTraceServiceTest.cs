@@ -69,7 +69,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         #endregion
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationFeedTest()
         {
             SyndicationFeed actual = WcfTraceService_Accessor.CreateTraceSyndicationFeed();
@@ -78,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceXmlTest()
         {
             Stream actual = WcfTraceService_Accessor.CreateTraceXml();
@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceHtmlTest()
         {
             Stream actual = WcfTraceService_Accessor.CreateTraceHtml();
@@ -101,7 +101,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationItemTest()
         {
             SyndicationItem actual = WcfTraceService_Accessor.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
@@ -117,7 +117,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.dll")]
+        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void InstanceTest()
         {
             WcfTraceService actual;

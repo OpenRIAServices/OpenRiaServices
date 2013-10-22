@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Common.Test;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using OpenRiaServices;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using System.Web;

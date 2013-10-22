@@ -1,11 +1,12 @@
-﻿using OpenRiaServices.DomainServices.Client.Test;
+﻿using System;
+using OpenRiaServices.DomainServices.Client.Test;
 using System.Windows.Input;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace System.Windows.Controls.DomainServices.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     /// <summary>
     /// Tests the <see cref="DomainDataSourceCommand"/> members and the <see cref="DomainDataSource.LoadCommand"/>,

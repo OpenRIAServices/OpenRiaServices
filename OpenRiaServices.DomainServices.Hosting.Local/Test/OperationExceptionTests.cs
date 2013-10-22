@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
