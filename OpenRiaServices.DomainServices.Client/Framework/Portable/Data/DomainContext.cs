@@ -994,7 +994,8 @@ namespace OpenRiaServices.DomainServices.Client
 
                 if (customMethod != null)
                 {
-                    
+                    try
+                    {
                         // DomainContext custom methods always differ from the entity version because
                         // the first param is the entity. Ensure the entity is the first param in the list.
                         object[] parameters = new object[customMethod.Parameters.Count() + 1];
@@ -1007,8 +1008,11 @@ namespace OpenRiaServices.DomainServices.Client
 
                         // Validate the method exists.
                         ValidationUtilities.GetMethod(this, customMethod.Name, parameters);
-                    
-                    
+                    }
+                    catch (MissingMemberException innerException)
+                    {
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_NamedUpdateMethodDoesNotExist, customMethod.Name, entity.GetType(), this.GetType()), innerException);
+                    }
                 }
             }
 

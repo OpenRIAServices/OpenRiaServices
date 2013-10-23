@@ -60,19 +60,19 @@ namespace OpenRiaServices.DomainServices.Client
                 .Where(m => m.Name == methodName && IsBindable(m, parameters))
                 .ToArray();
 
+
             if (candidates.Length == 0)
             {
                 int parameterLength = (parameters == null) ? 0 : parameters.Length;
                 if (parameterLength == 0)
                 {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound_ZeroParams, instanceType, methodName));
-                    
+                    throw new MissingMemberException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound_ZeroParams, instanceType, methodName));
                 }
                 else
                 {
                     // convert parameter types into a string of this format e.g. ('string', null, 'int')
                     string[] parameterTypes = parameters.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
+                    throw new MissingMemberException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
                 }
             }
 
