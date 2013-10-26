@@ -441,14 +441,65 @@ namespace System.Linq.Dynamic
         // &&, and operator
         Expression ParseLogicalAnd()
         {
-            Expression left = ParseComparison();
+            Expression left = ParseHasOperator();
             while (token.id == TokenId.DoubleAmphersand || TokenIdentifierIs("and"))
             {
                 Token op = token;
                 NextToken();
-                Expression right = ParseComparison();
+                Expression right = ParseHasOperator();
                 CheckAndPromoteOperands(typeof(ILogicalSignatures), op.text, ref left, ref right, op.pos);
                 left = Expression.AndAlso(left, right);
+            }
+            return left;
+        }
+
+        // Is this the correct place for this operator?
+        // Either we place it here after conditional operators (called LogicalAnd here) and before comparison
+        // * Or we place it after multiplicative but before primary function
+        // * Or we treat it as a function and treat it as primary function
+        // Either way it will always work with the OpenRiaServices client since it will add paranthesis, so it should not be much of an issue
+        Expression ParseHasOperator()
+        {
+            Expression left = ParseComparison();
+            while (TokenIdentifierIs("has"))
+            {
+                Token op = token;
+                NextToken();
+
+                Type enumType = left.Type;
+
+                // The right hand side can either be a constant such as EnumName.EnumValue, 1 or an expression
+                // we only need to make special arrangement to handle the first case since case 2 and 3 is handled by normal parsing
+                Expression right;
+                if (TokenIdentifierIs(enumType.Name))
+                {
+                    // Remove identifier enumType.Name
+                    NextToken();
+
+                    //Verify next is dot and then remove it
+                    if (token.id != TokenId.Dot)
+                        throw new ParseException("Expected a dot", token.pos);
+                    NextToken();
+
+                    // Read the enum field name, parse it and remove it
+                    if (token.id != TokenId.Identifier)
+                        throw new ParseException("Expected an Identifier", token.pos);
+                    right = Expression.Constant(ParseEnum(token.text, enumType), enumType);
+                    NextToken();
+                }
+                else // Either numeric value or member access
+                {                    
+                    right = ParseComparison();
+                }
+
+                left = ConvertEnumExpression(left, right);
+                right = ConvertEnumExpression(right, left);
+
+                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op.text, ref left, ref right, op.pos);
+                
+                // Treat as (left & right) == right which is the same behaviour as calling Enum.HasFlag
+                // but it will work with entity framework and probably most other query providers
+                left = Expression.Equal(Expression.And(left, right), right);
             }
             return left;
         }

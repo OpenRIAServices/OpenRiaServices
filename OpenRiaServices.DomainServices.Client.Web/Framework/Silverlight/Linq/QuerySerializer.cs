@@ -262,6 +262,23 @@ namespace OpenRiaServices.DomainServices.Client
                         this._currPartBuilder.Append(" desc");
                     }
                 }
+                else if (m.Method.DeclaringType == typeof(Enum) && m.Method.Name == "HasFlag")
+                {
+                    // Serialize (p => p.enumProp.HasFlag( EnumType.A)) into "(it.enumProp has EnumType.A)"
+
+                    this._currPartBuilder.Append("(");
+                    this.Visit(m.Object);
+
+                    // We could convert it to an int here if possible, otherwise we will do it anyway on the server
+                    //this.Visit(Expression.Convert(m.Object, typeof(int)));
+                    this._currPartBuilder.Append(" has ");
+
+                    // We could convert it to an int here if possible, otherwise we will do it anyway on the server
+                    //this.Visit(Expression.Convert(m.Arguments[0], typeof(int)));
+                    this.Visit(m.Arguments[0]);
+                   
+                    this._currPartBuilder.Append(")");
+                }
                 else
                 {
                     // Ensure that the method is accessible

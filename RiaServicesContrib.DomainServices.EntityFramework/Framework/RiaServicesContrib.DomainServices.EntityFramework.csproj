@@ -203,7 +203,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
-  <Import Project="..\..\packages\RIAServices.Server.4.2.0\tools\Microsoft.Ria.Validation.targets" />
   <Target Name="AfterBuild">
     <MSBuild Condition=" '$(TargetFrameworkVersion)' == 'v4.5' " Projects="$(MSBuildProjectFile)" Properties="TargetFrameworkVersion=v4.0" RunEachTargetSeparately="true" />
   </Target>
