@@ -453,20 +453,20 @@ namespace System.Linq.Dynamic
             return left;
         }
 
-        // TODO: Find out correct place to put this function
-        // Either we place it after conditional operators (called LogicalAnd here) and before comparison
+        // Is this the correct place for this operator?
+        // Either we place it here after conditional operators (called LogicalAnd here) and before comparison
         // * Or we place it after multiplicative but before primary function
         // * Or we treat it as a function and treat it as primary function
+        // Either way it will always work with the OpenRiaServices client since it will add paranthesis, so it should not be much of an issue
         Expression ParseHasOperator()
         {
             Expression left = ParseComparison();
-            while (TokenIdentifierIs("has")) // TODO: Fix to se if we can only check one of them
+            while (TokenIdentifierIs("has"))
             {
                 Token op = token;
                 NextToken();
 
                 Type enumType = left.Type;
-                // Assert(enumType.IsEnum);
 
                 // The right hand side can either be a constant such as EnumName.EnumValue, 1 or an expression
                 // we only need to make special arrangement to handle the first case since case 2 and 3 is handled by normal parsing
