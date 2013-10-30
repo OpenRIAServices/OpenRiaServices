@@ -334,7 +334,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this.MetaType.DataMembers.Select(p => p.Member).Where(this.PropertyHasChanged);
+                return this.MetaType.DataMembers.Where(f=> f.IsSerialised).Select(p => p.Member).Where(this.PropertyHasChanged);
             }
         }
 
@@ -1107,8 +1107,19 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 this._editSession.OnDataMemberUpdate(propertyName);
             }
+
+            if (this._isDeserializing)
+            {
+                MetaType metaType = MetaType.GetMetaType(this.GetType());
+
+                if (metaType.Members.Any(m => m.Member.Name == propertyName))
+                {
+                    metaType.Members.First(m => m.Member.Name == propertyName).IsSerialised = true;
+                }
+            }
         }
 
+        
         private void OnDataMemberChanging()
         {
             EntitySet set = this.LastSet;
@@ -1704,6 +1715,7 @@ namespace OpenRiaServices.DomainServices.Client
         public void OnDeserialized(StreamingContext context)
         {
             this._isDeserializing = false;
+            
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 
 namespace OpenRiaServices.DomainServices.Client
@@ -36,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Client
                 visited.Add(o);
             }
 
-            foreach (MetaMember metaMember in metaType.DataMembers)
+            foreach (MetaMember metaMember in metaType.DataMembers.Where(f => f.IsSerialised))
             {
                 object value = metaMember.GetValue(o);
 
@@ -202,7 +203,7 @@ namespace OpenRiaServices.DomainServices.Client
             MetaType metaType = MetaType.GetMetaType(type);
             Dictionary<string, object> resultRoundtripState = new Dictionary<string, object>();
 
-            foreach (MetaMember metaMember in metaType.DataMembers)
+            foreach (MetaMember metaMember in metaType.DataMembers.Where(f=> f.IsSerialised))
             {
                 if (!metaMember.IsRoundtripMember)
                 {

@@ -301,6 +301,14 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
+        public IEnumerable<String> SerialisedMembers
+        {
+            get
+            {
+                return this._metaMembers.Values.Where(m => m.IsSerialised).Select(m => m.Member.Name);
+            }
+        }
+
         /// <summary>
         /// Gets the collection of child types this entity Type composes.
         /// </summary>
@@ -470,6 +478,12 @@ namespace OpenRiaServices.DomainServices.Client
             // TODO : In the future as a performance optimization we should emit a delegate
             // to invoke the getter, rather than use reflection.
             return this.Member.GetValue(instance, null);
+        }
+
+        public bool IsSerialised
+        {
+            get; 
+            set;
         }
     }
 }
