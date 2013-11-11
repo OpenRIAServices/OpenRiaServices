@@ -1,0 +1,27 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.DomainServices.Server</id>
+    <version>4.3.0-alpha1</version>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      OpenRiaServices.DomainServices.Server provides the OpenRiaServices.DomainServices.Hosting and OpenRiaServices.DomainServices.Server assemblies.
+
+      The web.config.transform adds the necessary configSections, HTTP modules, and system.serviceModel elements to make your Domain Services available at runtime.
+
+      The package also includes a targets file and tools assembly that provides build-time validation of your DomainService classes.
+
+      KNOWN ISSUE
+      Some users have experienced duplicate web.config entries getting created as a result of installing this package.  To resolve this issue, simply eliminate one of the duplicate entries -- they vary only by character case.
+    </description>
+    <summary>WCF RIA Services Toolkit - Server-side assemblies, configuration, and build targets.</summary>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices Server aspnet</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
+  </metadata>
+</package>
