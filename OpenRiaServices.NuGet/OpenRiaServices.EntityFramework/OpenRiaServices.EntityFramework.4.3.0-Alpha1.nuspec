@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.EntityFramework</id>
+    <title>RIA Services for EntityFramework Code-First (DbContext)</title>
+    <version>4.3.0-alpha1</version>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OpenRiaServices.EntityFramework provides the DbDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DbContext from the EntityFramework package.
+
+This package supports versions of EntityFramework starting with EF 6.0.1</description>
+    <summary>Open RIA Services - Entity Framework Code-First (DbContext) support with DbDomainService</summary>
+    <releaseNotes />
+    <copyright>2013 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
+    <dependencies>
+      <dependency id="EntityFramework" version="6.0.1" />
+    </dependencies>
+  </metadata>
+</package>

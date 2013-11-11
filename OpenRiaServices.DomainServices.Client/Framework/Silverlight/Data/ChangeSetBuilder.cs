@@ -65,6 +65,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 // create the operation and apply any original values
                 ChangeSetEntry changeSetEntry = new ChangeSetEntry(entity, clientID++, operationType);
+                
                 if (entity.OriginalValues != null)
                 {
                     if (entity.MetaType.ShouldRoundtripOriginal && entity.OriginalValues != null)

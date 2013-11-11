@@ -278,13 +278,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Microsoft.Ria.Client.v4.0.targets">
+    <None Include="OpenRiaServices.Client.v4.0.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Microsoft.Ria.Client.v5.0.targets">
+    <None Include="OpenRiaServices.Client.v5.0.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Microsoft.Ria.Validation.targets">
+    <None Include="OpenRiaServices.Validation.targets">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
