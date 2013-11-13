@@ -18,10 +18,6 @@
       <dependencies>
         <dependency id="OpenRiaServices.Silverlight.Core" />
       </dependencies>
-        <references>
-            <reference file="OpenRiaServices.DomainServices.Client.dll" />
-            <reference file="OpenRiaServices.DomainServices.Client.Web.dll" />
-        </references>
     </metadata>
     <files>
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
