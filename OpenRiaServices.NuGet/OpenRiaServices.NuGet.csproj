@@ -42,6 +42,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="OpenRiaServices.Silverlight.CodeGen\OpenRiaServices.Silverlight.CodeGen.4.3.0-Alpha1.nuspec" />
+    <None Include="OpenRiaServices.Silverlight.Core\OpenRiaServices.Silverlight.Core.4.3.0-Alpha1.nuspec" />
     <None Include="OpenRiaServices.Endpoints\content\web.config.transform" />
     <None Include="OpenRiaServices.Endpoints\OpenRiaServices.Endpoints.4.3.0-Alpha1.nuspec" />
     <None Include="OpenRiaServices.EntityFramework\OpenRiaServices.EntityFramework.4.3.0-Alpha1.nuspec" />
@@ -55,6 +57,7 @@
     <None Include="OpenRiaServices.T4\OpenRiaServices.T4.4.3.0-Alpha1.nuspec" />
     <None Include="OpenRiaServices.UnitTesting\OpenRiaServices.UnitTesting.4.3.0-Alpha1.nuspec" />
     <None Include="OpenRiaServices.ViewModel\OpenRiaServices.ViewModel.4.3.0-Alpha1.nuspec" />
+    <None Include="RiaServicesContrib.EntityFramework\RIAServicesContrib.EntityFramework.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

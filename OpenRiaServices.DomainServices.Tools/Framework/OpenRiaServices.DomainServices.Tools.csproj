@@ -138,7 +138,7 @@
       <Link>TypeDescriptorExtensions.cs</Link>
     </Compile>
     <Compile Include="AssemblyUtilities.cs" />
-    <Compile Include="CleanRiaClientFilesTask.cs" />
+    <Compile Include="CleanOpenRiaClientFilesTask.cs" />
     <Compile Include="ClientProxyFixupCodeDomVisitor.cs" />
     <Compile Include="ClientCodeGenerationOptions.cs" />
     <Compile Include="ClientCodeGenerationDispatcher.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="CodeGenUtilities.cs" />
     <Compile Include="CodeMemberShareKind.cs" />
     <Compile Include="ComplexTypeProxyGenerator.cs" />
-    <Compile Include="CreateRiaClientFilesTask.cs" />
+    <Compile Include="CreateOpenRiaClientFilesTask.cs" />
     <Compile Include="CSharpCodeDomClientCodeGenerator.cs" />
     <Compile Include="DataContractProxyGenerator.cs" />
     <Compile Include="DbContextUtilities.cs" />
@@ -274,7 +274,6 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

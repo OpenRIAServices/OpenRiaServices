@@ -42,9 +42,4 @@ using System.Security;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("4.0.0.0")]
 
-#if CODECOV
-[assembly: SecurityRules(SecurityRuleSet.Level2, SkipVerificationInFullTrust = true)]
-#else
-[assembly: SecurityRules(SecurityRuleSet.Level2)]
-[assembly: SecurityTransparent]
-#endif
+

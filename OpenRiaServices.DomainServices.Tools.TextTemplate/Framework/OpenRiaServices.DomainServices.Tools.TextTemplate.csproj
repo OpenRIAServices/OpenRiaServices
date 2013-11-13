@@ -335,7 +335,6 @@
       <LogicalName>OpenRiaServices.DomainServices.Tools.Resource.resources</LogicalName>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>
       <Link>Resource.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="TextTemplateResource.resx">

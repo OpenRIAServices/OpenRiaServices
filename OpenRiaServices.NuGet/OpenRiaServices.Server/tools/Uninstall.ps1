@@ -9,7 +9,7 @@ try {
 if ($projectPath -ne $null) {
     $rootElement = [Microsoft.Build.Construction.ProjectRootElement]::Open($projectPath)
 
-    $targetsImport = $rootElement.Imports | Where-Object {$_.Project -like "*Microsoft.Ria.Validation.targets"}
+    $targetsImport = $rootElement.Imports | Where-Object {$_.Project -like "*OpenRia.Validation.targets"}
     while ($targetsImport.Parent.Count -eq 1) {$targetsImport = $targetsImport.Parent}
     $targetsImport.Parent.RemoveChild($targetsImport)
 }

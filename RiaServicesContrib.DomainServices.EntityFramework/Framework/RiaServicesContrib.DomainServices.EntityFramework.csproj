@@ -199,7 +199,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="RIAServicesContrib.EntityFramework.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />

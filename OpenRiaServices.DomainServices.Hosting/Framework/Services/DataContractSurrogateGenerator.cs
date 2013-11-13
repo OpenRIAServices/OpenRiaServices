@@ -694,18 +694,10 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
             // and permits the assembly builder to inherit the security permissions of the
-            // app domain.
+            // app domain. - CDB Removed, Medium trust support removed
             AssemblyBuilder assemblyBuilder = myDomain.DefineDynamicAssembly(
                 assemName,
-                AssemblyBuilderAccess.Run,
-                new CustomAttributeBuilder[] 
-                {
-                    securityAttribute,
-                    new CustomAttributeBuilder(
-                        typeof(SecurityRulesAttribute).GetConstructor(new Type[] { typeof(SecurityRuleSet) }),
-                        new object[] { SecurityRuleSet.Level2 })
-                },
-                SecurityContextSource.CurrentAppDomain);
+                AssemblyBuilderAccess.Run);
 
             return assemblyBuilder.DefineDynamicModule(name);
         }

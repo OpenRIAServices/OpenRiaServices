@@ -11,7 +11,7 @@ using OpenRiaServices.DomainServices.Tools.SharedTypes;
 namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
-    /// Common base class shared by <see cref="CreateRiaClientFilesTask"/> and <see cref="CleanRiaClientFilesTask"/>
+    /// Common base class shared by <see cref="CreateOpenRiaClientFilesTask"/> and <see cref="CleanOpenRiaClientFilesTask"/>
     /// </summary>
     public abstract class RiaClientFilesTask : Task, ILogger, ILoggingService
     {

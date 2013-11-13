@@ -3,29 +3,22 @@
     <metadata>
         <id>OpenRiaServices.Silverlight</id>
         <version>4.3.0-alpha1</version>
-        <title>RIA Services Silverlight Client</title>
+        <title>Open RIA Services Silverlight Client, Code Generator, and MVVM Support</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.Silverlight provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your Silverlight projects.</description>
-        <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
+        <description>OpenRiaServices.Silverlight is the full Silverlight client in a single package.</description>
+        <summary>Open RIA Services - Full Silverlight client</summary>
         <releaseNotes />
         <copyright>2013 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
-        <frameworkAssemblies>
-            <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="Silverlight5.0" />
-            <frameworkAssembly assemblyName="System.ServiceModel.Web.Extensions" targetFramework="Silverlight5.0" />
-        </frameworkAssemblies>
+      <dependencies>
+        <dependency id="OpenRiaServices.Silverlight.Core" version="4.3" />
+        <dependency id="OpenRiaServices.Silverlight.ViewModel" version="4.3" />
+        <dependency id="OpenRiaServices.Silverlight.CodeGen" version="4.3" />
+      </dependencies>
     </metadata>
-    <files>
-        <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.dll" target="lib\sl50\OpenRiaServices.DomainServices.Client.dll" />
-        <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.pdb" target="lib\sl50\OpenRiaServices.DomainServices.Client.pdb" />
-        <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.Web.dll" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.dll" />
-        <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.pdb" />
-        <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.xml" />
-        <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.xml" target="lib\sl50\OpenRiaServices.DomainServices.Client.xml" />
-    </files>
 </package>

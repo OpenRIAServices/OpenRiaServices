@@ -44,7 +44,3 @@ using System.Security;
 // AssemblyFileVersion attribute is generated automatically by a custom MSBuild task inside AutomaticAssemblyVersion.targets
 //[assembly: AssemblyFileVersion("1.0.0.14")]
 
-// Specifically opt in to the .Net 4.0 transparency rules
-// and mark the entire assembly to be SecurityTransparent
-[assembly: SecurityRules(SecurityRuleSet.Level2)]
-[assembly: SecurityTransparent]
