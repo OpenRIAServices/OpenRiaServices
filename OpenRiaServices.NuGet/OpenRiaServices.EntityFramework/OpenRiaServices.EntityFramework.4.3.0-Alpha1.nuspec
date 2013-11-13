@@ -21,7 +21,7 @@
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
     <dependencies>
       <dependency id="EntityFramework" version="6.0.1" />
-      <dependency id="OpenRiaServices.Server" version="4.3" />
+      <dependency id="OpenRiaServices.Server"/>
     </dependencies>
   </metadata>
   <files>

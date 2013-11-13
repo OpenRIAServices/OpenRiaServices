@@ -16,7 +16,7 @@
     <language />
     <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Silverlight.Core" version="4.3" />
+      <dependency id="OpenRiaServices.Silverlight.Core"/>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="OpenRiaServices.DomainServices.Client" targetFramework="Silverlight5.0" />

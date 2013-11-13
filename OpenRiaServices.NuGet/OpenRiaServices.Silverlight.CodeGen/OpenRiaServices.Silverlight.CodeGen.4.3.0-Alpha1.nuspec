@@ -16,7 +16,7 @@
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Silverlight.Core" version="4.3" />
+        <dependency id="OpenRiaServices.Silverlight.Core" />
       </dependencies>
         <references>
             <reference file="OpenRiaServices.DomainServices.Client.dll" />

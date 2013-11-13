@@ -16,7 +16,7 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices T4 OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="4.3" />
+      <dependency id="OpenRiaServices.Server" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="OpenRiaServices.DomainServices.Tools" targetFramework=".NETFramework4.0" />
