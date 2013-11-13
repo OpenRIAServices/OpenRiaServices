@@ -19,19 +19,19 @@ namespace OpenRiaServices.DomainServices.Tools
         internal const string GeneratedCodeFolderName = "Generated_Code";
 
         // Name of file where we keep track of the files we generated (in OutputPath)
-        internal const string FileListFileName = "RiaFiles.txt";
+        internal const string FileListFileName = "OpenRiaFiles.txt";
 
         // Name of file where we keep track of the client references between builds (in OutputPath)
-        internal const string ClientReferenceListFileName = "RiaClientRefs.txt";
+        internal const string ClientReferenceListFileName = "OpenRiaClientRefs.txt";
 
         // Name of file where we keep track of the server references between builds (in OutputPath)
-        internal const string ServerReferenceListFileName = "RiaServerRefs.txt";
+        internal const string ServerReferenceListFileName = "OpenRiaServerRefs.txt";
 
         // Name of file where we keep track of the known source files from the server projects
-        internal const string SourceFileListFileName = "RiaSourceFiles.txt";
+        internal const string SourceFileListFileName = "OpenRiaSourceFiles.txt";
 
         // Name of file where we keep track of the known <LinkedServerProjects> for client projects
-        internal const string LinkedServerProjectsFileName = "RiaLinks.txt";
+        internal const string LinkedServerProjectsFileName = "OpenRiaLinks.txt";
 
         private string _outputDirectory;
         private string _generatedCodePath;
