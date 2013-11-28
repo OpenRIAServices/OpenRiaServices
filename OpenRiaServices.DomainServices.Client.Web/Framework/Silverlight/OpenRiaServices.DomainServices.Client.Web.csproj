@@ -179,7 +179,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client %28Framework\Silverlight\OpenRiaServices.DomainServices.Client%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />

@@ -647,6 +647,8 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
+        protected internal bool IsMergingState { get; set; }
+
         /// <summary>
         /// Begin editing this instance
         /// </summary>
