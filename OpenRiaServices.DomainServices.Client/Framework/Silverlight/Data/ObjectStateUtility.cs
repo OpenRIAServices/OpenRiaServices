@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace OpenRiaServices.DomainServices.Client
@@ -37,7 +36,7 @@ namespace OpenRiaServices.DomainServices.Client
                 visited.Add(o);
             }
 
-            foreach (MetaMember metaMember in metaType.DataMembers.Where(f => f.IsSerialised))
+            foreach (MetaMember metaMember in metaType.DataMembers)
             {
                 object value = metaMember.GetValue(o);
 
@@ -78,12 +77,14 @@ namespace OpenRiaServices.DomainServices.Client
 
             MetaType metaType = MetaType.GetMetaType(o.GetType());
 
+            bool isMerging = (o as Entity) == null ? (o as ComplexObject) != null && (o as ComplexObject).IsMergingState : (o as Entity).IsMergingState; 
+
             foreach (MetaMember metaMember in metaType.DataMembers)
             {
                 PropertyInfo propertyInfo = metaMember.Member;
                 object newValue;
 
-                if (stateToApply.TryGetValue(propertyInfo.Name, out newValue))
+                if ((isMerging && metaMember.IsMergable || !isMerging) && stateToApply.TryGetValue(propertyInfo.Name, out newValue))
                 {
                     if (newValue != null && metaMember.IsComplex && !metaMember.IsCollection)
                     {
@@ -203,7 +204,7 @@ namespace OpenRiaServices.DomainServices.Client
             MetaType metaType = MetaType.GetMetaType(type);
             Dictionary<string, object> resultRoundtripState = new Dictionary<string, object>();
 
-            foreach (MetaMember metaMember in metaType.DataMembers.Where(f=> f.IsSerialised))
+            foreach (MetaMember metaMember in metaType.DataMembers)
             {
                 if (!metaMember.IsRoundtripMember)
                 {

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using OpenRiaServices.DomainServices.Server.Data;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -119,6 +120,9 @@ namespace OpenRiaServices.DomainServices.Client
                     metaMember.IsRoundtripMember = true;
                 }
 
+                metaMember.IsMergable = MetaType.IsMergeableMember(metaMember);
+                
+
                 metaMember.EditableAttribute = (EditableAttribute)property.GetCustomAttributes(typeof(EditableAttribute), false).SingleOrDefault();
                 this._metaMembers.Add(property.Name, metaMember);
             }
@@ -176,6 +180,14 @@ namespace OpenRiaServices.DomainServices.Client
             return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
                        (isRoundtripEntity || metaMember.Member.GetCustomAttributes(typeof(RoundtripOriginalAttribute), false).Length != 0);
         }
+
+        private static bool IsMergeableMember(MetaMember metaMember)
+        {
+            return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
+                   (metaMember.Member.GetCustomAttributes(typeof (MergeAttribute), true).Length == 0 ||
+                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof (MergeAttribute), true).GetValue(0)).IsMergeable);
+        }
+
 
         private static Dictionary<Type, MetaType> MetaTypes
         {
@@ -301,11 +313,11 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        public IEnumerable<String> SerialisedMembers
+        public IEnumerable<String> MergableMembers
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsSerialised).Select(m => m.Member.Name);
+                return this._metaMembers.Values.Where(m => m.IsMergable).Select(m => m.Member.Name);
             }
         }
 
@@ -480,7 +492,7 @@ namespace OpenRiaServices.DomainServices.Client
             return this.Member.GetValue(instance, null);
         }
 
-        public bool IsSerialised
+        public bool IsMergable
         {
             get; 
             set;

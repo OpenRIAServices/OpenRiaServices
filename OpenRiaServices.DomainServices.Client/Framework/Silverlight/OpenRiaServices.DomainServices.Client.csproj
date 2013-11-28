@@ -128,6 +128,7 @@
     <Compile Include="Data\ComplexObject.cs" />
     <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
+    <Compile Include="Data\MergeAttribute.cs" />
     <Compile Include="Data\ObjectStateUtility.cs" />
     <Compile Include="Data\ValidationResultCollection.cs" />
     <Compile Include="Data\EntityVisitor.cs" />
