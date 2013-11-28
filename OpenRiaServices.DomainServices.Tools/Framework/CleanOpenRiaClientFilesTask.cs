@@ -7,9 +7,9 @@ using Microsoft.Build.Framework;
 namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
-    /// Custom MSBuild task to delete all generated files created by <see cref="CreateRiaClientFilesTask"/>
+    /// Custom MSBuild task to delete all generated files created by <see cref="CreateOpenRiaClientFilesTask"/>
     /// </summary>
-    public class CleanRiaClientFilesTask : RiaClientFilesTask
+    public class CleanOpenRiaClientFilesTask : RiaClientFilesTask
     {
         /// <summary>
         /// Internal implementation of <see cref="ITask.Execute"/> called from base class.

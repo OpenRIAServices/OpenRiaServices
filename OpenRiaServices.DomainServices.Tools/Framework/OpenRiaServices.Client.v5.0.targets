@@ -11,118 +11,118 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CreateRiaClientFilesTask"
-             AssemblyName="OpenRiaServices.DomainServices.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CreateOpenRiaClientFilesTask"
+             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" />
 
-  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CleanRiaClientFilesTask"
-             AssemblyName="OpenRiaServices.DomainServices.Tools, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CleanOpenRiaClientFilesTask"
+             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" />
 
   <!--
     ============================================================
-    RiaClientCodeGen
+    OpenRiaClientCodeGen
 
     Target to generate the RIA Services client proxy classes.
     This target is hooked into the CoreCompileDependsOn group
     so that it executes at compile time.  It depends on
-    RiaClientCodeGenDependsOn to offer clients extension points
+    OpenRiaClientCodeGenDependsOn to offer clients extension points
     before and after code generation.
     ============================================================
     -->
   <PropertyGroup>
-    <RiaClientCodeGenDependsOn>
-      BeforeRiaClientCodeGen;
-      CoreRiaClientCodeGen;
-      AfterRiaClientCodeGen;
-    </RiaClientCodeGenDependsOn>
+    <OpenRiaClientCodeGenDependsOn>
+      BeforeOpenRiaClientCodeGen;
+      CoreOpenRiaClientCodeGen;
+      AfterOpenRiaClientCodeGen;
+    </OpenRiaClientCodeGenDependsOn>
   </PropertyGroup>
 
-  <Target Name="RiaClientCodeGen"
-          DependsOnTargets="$(RiaClientCodeGenDependsOn)" />
+  <Target Name="OpenRiaClientCodeGen"
+          DependsOnTargets="$(OpenRiaClientCodeGenDependsOn)" />
 
   <!--
     ============================================================
-    BeforeRiaClientCodeGen
+    BeforeOpenRiaClientCodeGen
 
     Redefine this target in your project in order to run tasks
     before RIA Services client proxy code generation occurs
     ============================================================
     -->
-  <Target Name="BeforeRiaClientCodeGen">
+  <Target Name="BeforeOpenRiaClientCodeGen">
   </Target>
 
   <!--
     ============================================================
-    AfterRiaClientCodeGen
+    AfterOpenRiaClientCodeGen
 
     Redefine this target in your project in order to run tasks
     after RIA Services client proxy code generation has been done
     ============================================================
     -->
-  <Target Name="AfterRiaClientCodeGen" >
+  <Target Name="AfterOpenRiaClientCodeGen" >
   </Target>
 
   <!--
     ================================================================
-    CoreRiaClientCodeGen
+    CoreOpenRiaClientCodeGen
 
     Target to generate the RIA Services client proxy classes,
-    called after BeforeRiaClientCodeGen and before AfterRiaClientCodeGen.
-    This target depends on CoreRiaClientCodeGenDependsOn to provide an
+    called after BeforeOpenRiaClientCodeGen and before AfterOpenRiaClientCodeGen.
+    This target depends on CoreOpenRiaClientCodeGenDependsOn to provide an
     extension point for clients.
       
     ================================================================
     -->
   <PropertyGroup>
-    <CoreRiaClientCodeGenDependsOn>
-      PrepareForRiaClientCodeGen;
-      CreateRiaClientFiles;
-    </CoreRiaClientCodeGenDependsOn>
+    <CoreOpenRiaClientCodeGenDependsOn>
+      PrepareForOpenRiaClientCodeGen;
+      CreateOpenRiaClientFiles;
+    </CoreOpenRiaClientCodeGenDependsOn>
   </PropertyGroup>
 
-  <Target Name="CoreRiaClientCodeGen"
-        DependsOnTargets="$(CoreRiaClientCodeGenDependsOn)">
+  <Target Name="CoreOpenRiaClientCodeGen"
+        DependsOnTargets="$(CoreOpenRiaClientCodeGenDependsOn)">
   </Target>
 
 
- <!--
+  <!--
     ============================================================
-    RiaClientClean
+    OpenRiaClientClean
 
     Target to remove the generated files.  Other code generators
-    can add themselves to $(RiaClientCleanDependsOn) to be
+    can add themselves to $(OpenRiaClientCleanDependsOn) to be
     invoked.
     ============================================================
     -->
   <PropertyGroup>
-    <RiaClientCleanDependsOn>
-      CleanRiaClientFiles;
-    </RiaClientCleanDependsOn>
+    <OpenRiaClientCleanDependsOn>
+      CleanOpenRiaClientFiles;
+    </OpenRiaClientCleanDependsOn>
   </PropertyGroup>
 
-  <Target Name="RiaClientClean"
-          DependsOnTargets="$(RiaClientCleanDependsOn)" />
+  <Target Name="OpenRiaClientClean"
+          DependsOnTargets="$(OpenRiaClientCleanDependsOn)" />
 
   <PropertyGroup>
-      <_RiaClientCodeGenOutputPath>$([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)'))</_RiaClientCodeGenOutputPath>
-      <_RiaClientCodeGenHistoryFile>$([System.IO.Path]::Combine('$(_RiaClientCodeGenOutputPath)', '$(MSBuildProjectName).RiaFiles.txt'))</_RiaClientCodeGenHistoryFile>
+    <_OpenRiaClientCodeGenOutputPath>$([System.IO.Path]::Combine('$(MSBuildProjectDirectory)', '$(IntermediateOutputPath)'))</_OpenRiaClientCodeGenOutputPath>
+    <_OpenRiaClientCodeGenHistoryFile>$([System.IO.Path]::Combine('$(_OpenRiaClientCodeGenOutputPath)', '$(MSBuildProjectName).RiaFiles.txt'))</_OpenRiaClientCodeGenHistoryFile>
   </PropertyGroup>
 
   <!--
     ================================================================
     WCF RIA Link is present
-      CoreCompile will execute RiaClientCodeGen to generate code, and
-      Clean will exectute RiaClientClean to delete it
+      CoreCompile will execute OpenRiaClientCodeGen to generate code, and
+      Clean will exectute OpenRiaClientClean to delete it
     ================================================================
     -->
-  <PropertyGroup  Condition="'$(LinkedServerProject)' != '' ">
+  <PropertyGroup  Condition="'$(LinkedOpenRiaServerProject)' != '' ">
 
     <CleanDependsOn>
       $(CleanDependsOn);
-      RiaClientClean;
+      OpenRiaClientClean;
     </CleanDependsOn>
 
     <CoreCompileDependsOn>
-      RiaClientCodeGen;
+      OpenRiaClientCodeGen;
       $(CoreCompileDependsOn);
     </CoreCompileDependsOn>
   </PropertyGroup>
@@ -130,19 +130,19 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
   <!--
     ================================================================
     WCF RIA Link is absent but residual generated files remain
-      CoreCompile and Clean will both execute RiaClientClean
+      CoreCompile and Clean will both execute OpenRiaClientClean
       to delete obsolete generated files.
     ================================================================
     -->
-  <PropertyGroup  Condition="'$(LinkedServerProject)' == '' and Exists('$(_RiaClientCodeGenHistoryFile)') ">
+  <PropertyGroup  Condition="'$(LinkedOpenRiaServerProject)' == '' and Exists('$(_OpenRiaClientCodeGenHistoryFile)') ">
 
     <CleanDependsOn>
       $(CleanDependsOn);
-      RiaClientClean;
+      OpenRiaClientClean;
     </CleanDependsOn>
 
     <CoreCompileDependsOn>
-      RiaClientClean;
+      OpenRiaClientClean;
       $(CoreCompileDependsOn);
     </CoreCompileDependsOn>
   </PropertyGroup>
@@ -155,20 +155,20 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!--
     ================================================================
-    CleanRiaClientFiles
+    CleanOpenRiaClientFiles
 
-    Target to invoke the CleanRiaClientFilesTask to delete all
-    files generated by CreateRiaClientFilesTask
+    Target to invoke the CleanOpenRiaClientFilesTask to delete all
+    files generated by CreateOpenRiaClientFilesTask
       
     ================================================================
     -->
-  <Target Name="CleanRiaClientFiles">
+  <Target Name="CleanOpenRiaClientFiles">
 
     <!--
     ================================================================
-    CleanRiaClientFilesTask
+    CleanOpenRiaClientFilesTask
 
-    Task that deletes the RIA client files created by CreateRiaClientFiles 
+    Task that deletes the RIA client files created by CreateOpenRiaClientFiles 
     
     Arguments are:
       ClientProjectPath:          path to currently executing (client) project file
@@ -179,96 +179,96 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       
     ================================================================
     -->
-    <CleanRiaClientFilesTask
+    <CleanOpenRiaClientFilesTask
        ClientProjectPath="$(MSBuildProjectFullPath)"
        OutputPath="$(IntermediateOutputPath)"
        ContinueOnError="false">
-    </CleanRiaClientFilesTask>
+    </CleanOpenRiaClientFilesTask>
 
   </Target>
 
 
   <!--
     ================================================================
-    PrepareForRiaClientCodeGen
+    PrepareForOpenRiaClientCodeGen
 
     Target to prepare all the inputs necessary for RIA Services
     client proxy class generation.  This target depends on
-    PrepareForRiaClientCodeGenDependsOn to permit clients to
+    PrepareForOpenRiaClientCodeGenDependsOn to permit clients to
     preprocess or postprocess the inputs.
       
     ================================================================
     -->
   <PropertyGroup>
-    <PrepareForRiaClientCodeGenDependsOn>
-      ResolveRiaClientCodeGenInputs;
-    </PrepareForRiaClientCodeGenDependsOn>
+    <PrepareForOpenRiaClientCodeGenDependsOn>
+      ResolveOpenRiaClientCodeGenInputs;
+    </PrepareForOpenRiaClientCodeGenDependsOn>
   </PropertyGroup>
 
-  <Target Name="PrepareForRiaClientCodeGen"
-          DependsOnTargets="$(PrepareForRiaClientCodeGenDependsOn)" >
+  <Target Name="PrepareForOpenRiaClientCodeGen"
+          DependsOnTargets="$(PrepareForOpenRiaClientCodeGenDependsOn)" >
   </Target>
 
   <!--
     ================================================================
-    ResolveRiaClientCodeGenInputs
+    ResolveOpenRiaClientCodeGenInputs
 
-    Target to extract all required inputs for the CreateRiaClientFiles
+    Target to extract all required inputs for the CreateOpenRiaClientFiles
     target.  It invokes MSBuild targets to extract the assembly references
     for both client and server projects.  The item collections created
-    here are consumed by CreateRiaClientFiles.
+    here are consumed by CreateOpenRiaClientFiles.
       
     ================================================================
     -->
-  <Target Name="ResolveRiaClientCodeGenInputs" DependsOnTargets="ResolveReferences" Condition="Exists('$(LinkedServerProject)')">
+  <Target Name="ResolveOpenRiaClientCodeGenInputs" DependsOnTargets="ResolveReferences" Condition="Exists('$(LinkedOpenRiaServerProject)')">
 
     <!-- Gather the build outputs of the server project -->
-    <MSBuild   Projects="$(LinkedServerProject)" Targets="GetTargetPath">
-      <Output TaskParameter="TargetOutputs" ItemName="RiaClientCodeGenServerBuildOutput" />
+    <MSBuild   Projects="$(LinkedOpenRiaServerProject)" Targets="GetTargetPath">
+      <Output TaskParameter="TargetOutputs" ItemName="OpenRiaClientCodeGenServerBuildOutput" />
     </MSBuild>
 
     <!-- Gather the reference assemblies used by the server project -->
-    <MSBuild   Projects="$(LinkedServerProject)" Targets="BuiltProjectOutputGroupDependencies">
-      <Output TaskParameter="TargetOutputs" ItemName="RiaClientCodeGenServerReferenceAssemblies" />
+    <MSBuild   Projects="$(LinkedOpenRiaServerProject)" Targets="BuiltProjectOutputGroupDependencies">
+      <Output TaskParameter="TargetOutputs" ItemName="OpenRiaClientCodeGenServerReferenceAssemblies" />
     </MSBuild>
 
     <!-- Gather the source files used by the client project -->
     <MSBuild   Projects="$(MSBuildProjectFullPath)" Targets="SourceFilesProjectOutputGroup">
-      <Output TaskParameter="TargetOutputs" ItemName="RiaClientCodeGenClientSourceFiles" />
+      <Output TaskParameter="TargetOutputs" ItemName="OpenRiaClientCodeGenClientSourceFiles" />
     </MSBuild>
 
     <!-- Extract the assembly references of the current project -->
     <ItemGroup>
-      <RiaClientCodeGenClientReferenceAssemblies Include="@(ReferencePath)" />
+      <OpenRiaClientCodeGenClientReferenceAssemblies Include="@(ReferencePath)" />
     </ItemGroup>
 
     <ItemGroup>
-      <RiaClientCodeGenClientAssemblySearchPath Include="$(TargetFrameworkDirectory)" />
-      <RiaClientCodeGenClientAssemblySearchPath Include="$(TargetFrameworkSDKDirectory)" />
+      <OpenRiaClientCodeGenClientAssemblySearchPath Include="$(TargetFrameworkDirectory)" />
+      <OpenRiaClientCodeGenClientAssemblySearchPath Include="$(TargetFrameworkSDKDirectory)" />
     </ItemGroup>
 
   </Target>
 
   <!--
     ================================================================
-    CreateRiaClientFiles
+    CreateOpenRiaClientFiles
 
-    Target to invoke the CreateRiaClientFilesTask after gathering
-    information from $(LinkedServerProject).  It is not executed
-    unless $(LinkedServerProject) is non-empty and points to a
+    Target to invoke the CreateOpenRiaClientFilesTask after gathering
+    information from $(LinkedOpenRiaServerProject).  It is not executed
+    unless $(LinkedOpenRiaServerProject) is non-empty and points to a
     valid project file.
     
     This target represents the second phase of code generation
-    and executes after PrepareForRiaClientCodeGen has prepared
+    and executes after PrepareForOpenRiaClientCodeGen has prepared
     the item collections it requires for input.
           
     ================================================================
     -->
-  <Target Name="CreateRiaClientFiles">
+  <Target Name="CreateOpenRiaClientFiles">
 
     <!--
     ================================================================
-    CreateRiaClientFilesTask
+    CreateOpenRiaClientFilesTask
 
     Task that generates the RIA client files from the linked server project 
     
@@ -299,28 +299,28 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       
     ================================================================
     -->
-    <CreateRiaClientFilesTask
+    <CreateOpenRiaClientFilesTask
        ClientProjectRootNamespace="$(RootNamespace)"
-       ServerProjectPath="$(LinkedServerProject)"
-       ServerAssemblies="@(RiaClientCodeGenServerBuildOutput)"
-       ServerReferenceAssemblies="@(RiaClientCodeGenServerReferenceAssemblies)"
+       ServerProjectPath="$(LinkedOpenRiaServerProject)"
+       ServerAssemblies="@(OpenRiaClientCodeGenServerBuildOutput)"
+       ServerReferenceAssemblies="@(OpenRiaClientCodeGenServerReferenceAssemblies)"
        ClientProjectPath="$(MSBuildProjectFullPath)"
-       ClientReferenceAssemblies="@(RiaClientCodeGenClientReferenceAssemblies)"
-       ClientSourceFiles="@(RiaClientCodeGenClientSourceFiles)"
+       ClientReferenceAssemblies="@(OpenRiaClientCodeGenClientReferenceAssemblies)"
+       ClientSourceFiles="@(OpenRiaClientCodeGenClientSourceFiles)"
        ClientFrameworkPath="$(FrameworkPathOverride)"
        OutputPath="$(IntermediateOutputPath)"
        Language="$(Language)"
        ContinueOnError="false"
        IsClientApplication="$(SilverlightApplication)"
-       UseFullTypeNames="$(RiaClientUseFullTypeNames)"
-       ClientAssemblySearchPaths="@(RiaClientCodeGenClientAssemblySearchPath)"
-       CodeGeneratorName="$(RiaClientCodeGeneratorName)">
+       UseFullTypeNames="$(OpenRiaClientUseFullTypeNames)"
+       ClientAssemblySearchPaths="@(OpenRiaClientCodeGenClientAssemblySearchPath)"
+       CodeGeneratorName="$(OpenRiaClientCodeGeneratorName)">
 
       <!-- Copy the task outputs to global item collections for other tasks -->
-      <Output ItemName="RiaClientGeneratedFiles" TaskParameter="GeneratedFiles" />
-      <Output ItemName="RiaClientSharedFiles" TaskParameter="SharedFiles" />
-      <Output ItemName="RiaClientCopiedFiles" TaskParameter="CopiedFiles" />
-      <Output ItemName="RiaClientLinkedFiles" TaskParameter="LinkedFiles" />
+      <Output ItemName="OpenRiaClientGeneratedFiles" TaskParameter="GeneratedFiles" />
+      <Output ItemName="OpenRiaClientSharedFiles" TaskParameter="SharedFiles" />
+      <Output ItemName="OpenRiaClientCopiedFiles" TaskParameter="CopiedFiles" />
+      <Output ItemName="OpenRiaClientLinkedFiles" TaskParameter="LinkedFiles" />
 
       <!-- Inform the compiler of the newly generated and copied files -->
       <Output ItemName="Compile" TaskParameter="GeneratedFiles" />
@@ -329,16 +329,16 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       <Output ItemName="FileWrites" TaskParameter="GeneratedFiles" />
       <Output ItemName="FileWrites" TaskParameter="CopiedFiles" />
 
-    </CreateRiaClientFilesTask>
+    </CreateOpenRiaClientFilesTask>
 
   </Target>
 
   <!-- Import the WCF targets for proxy generation if it exists -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets"
           Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
-  
+
   <!-- Import the Visual Studio RIA Services package targets file if it exists -->
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets" 
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets"
           Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets')"/>
 
 </Project>

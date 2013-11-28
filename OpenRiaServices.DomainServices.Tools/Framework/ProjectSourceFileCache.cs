@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Tools
     /// source file names for all projects visible to a root project.
     /// </summary>
     /// <remarks>
-    /// This class is used by the <see cref="CreateRiaClientFilesTask"/> to
+    /// This class is used by the <see cref="CreateOpenRiaClientFilesTask"/> to
     /// capture the list of project-to-project references from the root
     /// project and all the source files within those projects.  It
     /// has the ability to write this information to disk between builds to
