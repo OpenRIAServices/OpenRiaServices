@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Tools
     /// <summary>
     /// Custom MSBuild task to generate client proxy classes from server's entities and business objects
     /// </summary>
-    public class CreateRiaClientFilesTask : RiaClientFilesTask
+    public class CreateOpenRiaClientFilesTask : RiaClientFilesTask
     {
         private string _serverProjectDirectory;
         private string _serverOutputPath;

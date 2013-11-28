@@ -1,0 +1,11 @@
+<configuration>
+  <system.serviceModel>
+    <domainServices>
+      <endpoints>
+        <add name="soap" type="OpenRiaServices.DomainServices.Hosting.SoapXmlEndpointFactory, OpenRiaServices.DomainServices.Hosting" />    
+        <add name="json" type="OpenRiaServices.DomainServices.Hosting.JsonEndpointFactory, OpenRiaServices.DomainServices.Hosting" />  
+      </endpoints>
+    </domainServices>
+  </system.serviceModel>
+</configuration>
+   

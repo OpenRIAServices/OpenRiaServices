@@ -249,5 +249,16 @@ namespace OpenRiaServices.DomainServices.Client
             get;
             set;
         }
+        /// <summary>
+        /// Gets string identity of Entity
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string Identity
+        {
+            get
+            {
+                return Entity != null ? Entity.GetIdentity().ToString() : null;
+            }
+        }
     }
 }

@@ -273,5 +273,10 @@ namespace OpenRiaServices.DomainServices.Server
             get;
             set;
         }
+        /// <summary>
+        /// Gets or sets the string identity of the Entity
+        /// </summary>
+        [DataMember]
+        public string Identity { get; set; }
     }
 }

@@ -45,8 +45,3 @@ using System.Security;
 [assembly: AssemblyVersion("4.0.0.0")]
 // AssemblyFileVersion attribute is generated automatically by a custom MSBuild task inside AutomaticAssemblyVersion.targets
 //[assembly: AssemblyFileVersion("1.0.0.14")]
-
-// Assembly verification must be skipped for Code Coverage runs
-#if CODECOV
-[assembly: SecurityRules(SecurityRuleSet.Level2, SkipVerificationInFullTrust = true)]
-#endif
