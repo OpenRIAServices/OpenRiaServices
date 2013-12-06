@@ -159,6 +159,12 @@
     <Compile Include="..\Silverlight\Data\EntitySetOperations.cs">
       <Link>Data\EntitySetOperations.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\LoadResult.cs">
+      <Link>Data\LoadResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\SubmitResult.cs">
+      <Link>Data\SubmitResult.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\ObjectStateUtility.cs">
       <Link>Data\ObjectStateUtility.cs</Link>
     </Compile>

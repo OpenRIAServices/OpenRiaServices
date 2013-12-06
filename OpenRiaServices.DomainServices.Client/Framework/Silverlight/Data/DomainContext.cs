@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -313,6 +314,69 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
+        /// Submit all pending changes to the DomainService asyncronously.
+        /// </summary>
+        /// <returns>The <see cref="SubmitResult"/>.</returns>
+        public virtual Task<SubmitResult> SubmitChangesAsync(CancellationToken cancellationToken)
+        {
+            TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
+
+            var submitOp = this.SubmitChanges((res) => SetTaskResult(res, tcs, (op) => new SubmitResult(op.ChangeSet)), userState: null);
+            RegisterCancellationToken(cancellationToken, submitOp, tcs);
+
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// Tries to set the return value on the TaskCompletionSource, using the TrySetXXX function family based on the status of a completed operation. 
+        /// </summary>
+        /// <typeparam name="TOperation">The type of the operation.</typeparam>
+        /// <typeparam name="TResult">The type of the return type.</typeparam>
+        /// <param name="operation">The operation which has completed.</param>
+        /// <param name="tcs">The TaskCompletionSource used to create a task for the specified operation.</param>
+        /// <param name="toResult">Function used to convert an operation into the corresponding result-type.</param>
+        private void SetTaskResult<TOperation, TResult>(TOperation operation, TaskCompletionSource<TResult> tcs, Func<TOperation, TResult> toResult)
+            where TOperation : OperationBase
+        {
+            //if (!operation.IsComplete)
+            //    throw new ArgumentException("The operation must have completed before calling SetTaskResult");
+
+            if (operation.IsCanceled)
+                tcs.TrySetCanceled();
+            else if (operation.HasError)
+            {
+                operation.MarkErrorAsHandled();
+                // TODO: Make sure domain exception get all interesting validation errors
+                tcs.TrySetException(operation.Error);
+            }
+            else
+            {
+                tcs.TrySetResult(toResult(operation));
+            }
+        }
+
+        /// <summary>
+        /// Registers the operation with the CancellationToken so that the operation is cancelled whenever the cancellation is requested.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="operation">The operation.</param>
+        /// <param name="tcs">The TaskCompletionSource used to create a task for the specified operation.</param>
+        private static void RegisterCancellationToken<TResult>(CancellationToken cancellationToken, OperationBase operation, TaskCompletionSource<TResult> tcs)
+        {
+            if (cancellationToken.CanBeCanceled)
+            {
+                cancellationToken.Register(() =>
+                {
+                    if (operation.CanCancel)
+                        operation.Cancel();
+                    else
+                        tcs.TrySetCanceled();
+                });
+            }
+        }
+
+        /// <summary>
         /// Creates an <see cref="EntityQuery"/>.
         /// </summary>
         /// <typeparam name="TEntity">The entity Type the query applies to.</typeparam>
@@ -552,6 +616,22 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 loadOperation.Complete(error);
             }
+        }
+
+        /// <summary>
+        /// Initiates a load operation for the specified query.
+        /// </summary>
+        /// <param name="query">The query to invoke.</param>
+        /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to apply.</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
+                where TEntity : Entity
+        {
+            var tcs = new TaskCompletionSource<LoadResult<TEntity>>();
+
+            var loadOp = this.Load(query, loadBehavior, (res) => SetTaskResult(res, tcs, (op) => new LoadResult<TEntity>(op)), userState: null);
+            RegisterCancellationToken(cancellationToken, loadOp, tcs);
+            return tcs.Task;
         }
 
         /// <summary>
