@@ -21,6 +21,6 @@
     </metadata>
     <files>
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-        <file src="..\..\bin\Release\Desktop\OpenRiaServices.Client.v5.0.targets" target="build\OpenRiaServices.Silverlight.targets" />
+        <file src="..\..\bin\Release\Desktop\OpenRiaServices.Client.v5.0.targets" target="build\OpenRiaServices.Silverlight.CodeGen.targets" />
     </files>
 </package>

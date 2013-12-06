@@ -15,7 +15,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Assembly level utilities.
     /// </summary>
-    internal static class AssemblyUtilities
+    public static class AssemblyUtilities
     {   
         /// <summary>
         /// Loads the specified assembly file.
@@ -26,7 +26,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// (and an error message will have been logged).
         /// </returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "This code is doing exception type check only."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.Reflection.Assembly.LoadFrom", Justification = "This code needs to call into the problematic methods")]
-        internal static Assembly LoadAssembly(string assemblyFileName, Action<string> logger)
+        public static Assembly LoadAssembly(string assemblyFileName, Action<string> logger)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(assemblyFileName), "assemblyFileName is required");
 
@@ -77,7 +77,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <returns>The loaded <see cref="Assembly"/> if successful, null if it could not be loaded for a known reason
         /// (and an error message will have been logged).
         /// </returns>
-        internal static Assembly LoadAssembly(AssemblyName assemblyName, Action<string> logger)
+        public static Assembly LoadAssembly(AssemblyName assemblyName, Action<string> logger)
         {
             System.Diagnostics.Debug.Assert(assemblyName != null, "assemblyName is required");
 
@@ -122,7 +122,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="assembly">The <see cref="Assembly"/> whose referenced assemblies are required.</param>
         /// <param name="logger">The optional logger to use to report known load failures.</param>
         /// <returns>The collection of referenced assemblies.</returns>
-        internal static IEnumerable<Assembly> GetReferencedAssemblies(Assembly assembly, Action<string> logger)
+        public static IEnumerable<Assembly> GetReferencedAssemblies(Assembly assembly, Action<string> logger)
         {
             System.Diagnostics.Debug.Assert(assembly != null, "assembly cannot be null");
             AssemblyName[] assemblyNames = (assembly == null) ? new AssemblyName[0] : assembly.GetReferencedAssemblies();
@@ -144,7 +144,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="assembly">The <see cref="Assembly"/> whose types are required.</param>
         /// <param name="logger">The optional logger to use to report known load failures.</param>
         /// <returns>The collection of types exported by <paramref name="assembly"/>.</returns>
-        internal static IEnumerable<Type> GetExportedTypes(Assembly assembly, Action<string> logger)
+        public static IEnumerable<Type> GetExportedTypes(Assembly assembly, Action<string> logger)
         {
             System.Diagnostics.Debug.Assert(assembly != null, "assembly cannot be null");
             Type[] types = null;

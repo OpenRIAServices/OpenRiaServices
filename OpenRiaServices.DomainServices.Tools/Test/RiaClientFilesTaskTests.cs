@@ -56,7 +56,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void RiaClientFilesTask_Safe_File_Copy()
         {
-            CleanRiaClientFilesTask task = new CleanRiaClientFilesTask();
+            CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
             task.BuildEngine = mockBuildEngine;
 
@@ -128,7 +128,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void RiaClientFilesTask_Safe_File_Move()
         {
-            CleanRiaClientFilesTask task = new CleanRiaClientFilesTask();
+            CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
             task.BuildEngine = mockBuildEngine;
 

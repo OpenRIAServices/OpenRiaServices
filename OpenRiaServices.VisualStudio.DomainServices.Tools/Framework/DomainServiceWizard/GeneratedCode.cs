@@ -7,7 +7,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Tuple to hold the source code and references for generated code
     /// </summary>
-    internal class GeneratedCode : MarshalByRefObject
+    public class GeneratedCode : MarshalByRefObject, IGeneratedCode
     {
         private string _sourceCode;
         private IEnumerable<string> _references;
@@ -15,7 +15,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Initializes a new empty instance of the <see cref="GeneratedCode"/> class.
         /// </summary>
-        internal GeneratedCode()
+        public GeneratedCode()
         {
             this._sourceCode = string.Empty;
             this._references = Enumerable.Empty<string>();
@@ -26,7 +26,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="sourceCode">The source code as a string.  It can be empty but it cannot be null.</param>
         /// <param name="references">The assembly references.  The list can be empty but it cannot be null.</param>
-        internal GeneratedCode(string sourceCode, IEnumerable<string> references)
+        public GeneratedCode(string sourceCode, IEnumerable<string> references)
         {
             // Empty is allowed, null is not
             if (sourceCode == null)
@@ -44,7 +44,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the generated source code.  It may be empty but it cannot be null.
         /// </summary>
-        internal string SourceCode
+        public string SourceCode
         {
             get
             {
@@ -55,7 +55,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the assembly references required to compile the code.  It may be empty but it cannot be null.
         /// </summary>
-        internal IEnumerable<string> References
+        public IEnumerable<string> References
         {
             get
             {

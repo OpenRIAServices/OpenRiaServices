@@ -24,7 +24,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     using IVsShell = Microsoft.VisualStudio.Shell.Interop.IVsShell;
     using __VSSPROPID = Microsoft.VisualStudio.Shell.Interop.__VSSPROPID;
 
-    internal class LocalDBUtil : IDisposable
+    public class LocalDBUtil : IDisposable
     {
         private IServiceProvider _serviceProvider;
         private string _webConfigPath;
@@ -580,7 +580,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     // ported from $/DevDiv/PU/WPT/venus/mvw/Util/MVWUtilities.cs
     static class MVWUtilities
     {
-        internal static ValueType GetProjectProperty<ValueType>(EnvDTE.Project project, string propertyName, ValueType defaultValue)
+        public static ValueType GetProjectProperty<ValueType>(EnvDTE.Project project, string propertyName, ValueType defaultValue)
         {
             ValueType returnValue = defaultValue;
             try
@@ -608,7 +608,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             return returnValue;
         }
 
-        internal static string GetUniqueInitialCatalogName(string projectName)
+        public static string GetUniqueInitialCatalogName(string projectName)
         {
             //Initial Catalog=aspnet-{ProjectName}-{Timestamp}
             //Where {Timestamp} is yyyyMMddhhmmss
@@ -629,7 +629,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             return catalogName;
         }
 
-        internal static bool GetLocalDBIsDefault(IServiceProvider serviceProvider)
+        public static bool GetLocalDBIsDefault(IServiceProvider serviceProvider)
         {
             bool defaultValue = true;
             string localreg = GetLocalRegRoot(serviceProvider);

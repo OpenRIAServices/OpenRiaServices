@@ -129,7 +129,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
-      <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Test\Silverlight\OpenRiaServices.DomainServices.Client.Web.Test.csproj">
       <Project>{DF732E93-F424-459A-978C-B3A3450C9FAE}</Project>
@@ -137,7 +137,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj">
       <Project>{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}</Project>
-      <Name>OpenRiaServices.DomainServices.Client.External.Test %28Test\Silverlight\OpenRiaServices.DomainServices.Client.External.Test%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client.External.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj">
       <Project>{174DE0B6-BBA8-43DF-8755-BC8927EB9138}</Project>
@@ -149,7 +149,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client %28Framework\Silverlight\OpenRiaServices.DomainServices.Client%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj">
       <Project>{A1407522-0D18-4D64-A5B9-8E5C569AAA51}</Project>
@@ -161,11 +161,11 @@
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\OpenRiaServices.DomainServices.Client.Test.csproj">
       <Project>{18708280-F972-487E-A86C-45D518ACF831}</Project>
-      <Name>OpenRiaServices.DomainServices.Client.Test %28Test\Silverlight\OpenRiaServices.DomainServices.Client.Test%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
-      <Name>OpenRiaServices.Common.Test %28Test\Silverlight\OpenRiaServices.Common.Test%29</Name>
+      <Name>OpenRiaServices.Common.Test</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />

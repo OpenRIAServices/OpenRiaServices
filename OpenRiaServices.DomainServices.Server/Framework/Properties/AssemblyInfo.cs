@@ -28,12 +28,12 @@ using System.Security;
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.TextTemplate.Test")]
-
+#endif
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

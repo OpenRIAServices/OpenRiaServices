@@ -12,7 +12,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <remarks>This view model class shares state with its corresponding <see cref="BusinessLogicEntity"/>
     /// across AppDomin boundaries via state shared in <see cref="EntityData"/>.
     /// </remarks>
-    internal class EntityViewModel : INotifyPropertyChanged
+    public class EntityViewModel : INotifyPropertyChanged
     {
         private ContextViewModel _contextViewModel;
         private EntityData _entityData;

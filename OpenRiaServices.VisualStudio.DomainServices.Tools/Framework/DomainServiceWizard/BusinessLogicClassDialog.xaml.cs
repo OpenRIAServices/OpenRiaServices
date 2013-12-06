@@ -21,7 +21,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             this.InitializeComponent();
         }
 
-        internal BusinessLogicViewModel Model
+        public BusinessLogicViewModel Model
         {
             get
             {

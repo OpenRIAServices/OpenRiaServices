@@ -8,7 +8,7 @@ try {
 #
 if ($projectPath -ne $null) {
     $relativeToolsPath = [NuGet.PathUtility]::GetRelativePath($projectPath, $toolsPath)
-    $relativeTargetsPath = Join-Path $relativeToolsPath -ChildPath "OpenRia.Validation.targets"
+    $relativeTargetsPath = Join-Path $relativeToolsPath -ChildPath "OpenRiaServices.Validation.targets"
 
     $rootElement = [Microsoft.Build.Construction.ProjectRootElement]::Open($projectPath)
     $rootElement.AddImport($relativeTargetsPath)

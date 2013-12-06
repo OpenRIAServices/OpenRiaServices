@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
-    internal static class TypeUtilities
+    public static class TypeUtilities
     {
         // list of "simple" types we will always accept for
         // serialization, inclusion from entities, etc.
@@ -176,7 +176,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="type">The type whose attributes are needed</param>
         /// <returns>The associated metadata type or null.</returns>
-        internal static Type GetAssociatedMetadataType(Type type)
+        public static Type GetAssociatedMetadataType(Type type)
         {
             Type metadataClassType = null;
             Attribute metadataTypeAttribute = type.GetCustomAttributes(true).OfType<Attribute>().Where(a => a.GetType().Name == BusinessLogicClassConstants.MetadataTypeAttributeTypeName).FirstOrDefault();

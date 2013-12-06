@@ -8,13 +8,13 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
-using Microsoft.VisualStudio.
-
-.Silverlight;
+using Microsoft.VisualStudio.Web.Silverlight;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
     using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+    
+    
 
     public class BusinessApplicationProjectTemplateWizard : IWizard
     {

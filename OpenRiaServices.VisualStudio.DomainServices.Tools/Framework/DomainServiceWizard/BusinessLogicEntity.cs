@@ -11,10 +11,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </summary>
     /// <remarks>Different domain service types are expected to subclass this for their own entity types.
     /// </remarks>
-    internal class BusinessLogicEntity
+    public class BusinessLogicEntity : IBusinessLogicEntity
     {
-        private BusinessLogicContext _businessLogicContext;
-        private EntityData _entityData;
+        private IBusinessLogicContext _businessLogicContext;
+        private IEntityData _entityData;
         private string _name;
         private Type _type;
 
@@ -24,7 +24,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicContext">The context that owns this entity.  It cannot be null.</param>
         /// <param name="name">The name of the entity as it will appear in the UI</param>
         /// <param name="type">The CLR type of the entity as it will be used in code gen</param>
-        public BusinessLogicEntity(BusinessLogicContext businessLogicContext, string name, Type type)
+        public BusinessLogicEntity(IBusinessLogicContext businessLogicContext, string name, Type type)
         {
             this._businessLogicContext = businessLogicContext;
             this._name = name;
@@ -35,7 +35,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Gets or sets the data object used to share state across
         /// AppDomain boundaries with <see cref="EntityViewModel"/>.
         /// </summary>
-        public EntityData EntityData
+        public IEntityData EntityData
         {
             get
             {
@@ -62,7 +62,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the BusinessLogicContext that owns this entity
         /// </summary>
-        public BusinessLogicContext BusinessLogicContext
+        public IBusinessLogicContext BusinessLogicContext
         {
             get
             {

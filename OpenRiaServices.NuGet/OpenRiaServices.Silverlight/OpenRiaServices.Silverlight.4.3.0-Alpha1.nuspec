@@ -17,7 +17,7 @@
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
       <dependencies>
         <dependency id="OpenRiaServices.Silverlight.Core"/>
-        <dependency id="OpenRiaServices.Silverlight.ViewModel"/>
+        <dependency id="OpenRiaServices.ViewModel"/>
         <dependency id="OpenRiaServices.Silverlight.CodeGen" />
       </dependencies>
     </metadata>

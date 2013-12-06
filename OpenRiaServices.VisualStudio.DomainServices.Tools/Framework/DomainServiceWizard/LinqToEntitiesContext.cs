@@ -3,7 +3,10 @@ using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Metadata.Edm;
+using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects.DataClasses;
 using System.Globalization;
 using System.IO;
 using OpenRiaServices.DomainServices.EntityFramework;
@@ -14,7 +17,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Subclass of <see cref="LinqToEntitiesContextBase"/> that handles the LinqToEntities type of domain services based on ObjectContext
     /// </summary>
-    internal class LinqToEntitiesContext : LinqToEntitiesContextBase
+    public class LinqToEntitiesContext : LinqToEntitiesContextBase
     {
         // Name of helper method we generate when we see POCO entities
         private const string GetEntityStateHelperMethodName = "GetEntityState";
@@ -60,7 +63,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeNamespace">The namespace into which to generate code.</param>
         /// <param name="className">The name to use for the class.</param>
         /// <returns>The new type</returns>
-        protected override CodeTypeDeclaration CreateBusinessLogicClass(CodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
+        protected override CodeTypeDeclaration CreateBusinessLogicClass(ICodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
         {
             // Add an import for our domain service
             foreach (string import in BusinessLogicClassConstants.LinqToEntitiesImports)
@@ -75,7 +78,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             }
 
             // Add to the set of known references
-            codeGenContext.AddReference(typeof(System.Data.Objects.ObjectContext).Assembly.FullName);
+            codeGenContext.AddReference(typeof(ObjectContext).Assembly.FullName);
             codeGenContext.AddReference(typeof(LinqToEntitiesDomainService<>).Assembly.FullName);
 
             CodeTypeDeclaration businessLogicClass = CodeGenUtilities.CreateTypeDeclaration(className, codeNamespace.Name);
@@ -91,7 +94,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicClass">Contains the business logic.</param>
         /// <param name="entity">The entity.</param>
         /// <returns>The newly created method.</returns>
-        protected override CodeMemberMethod GenerateSelectMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override CodeMemberMethod GenerateSelectMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             CodeMemberMethod method = null;
             LinqToEntitiesEntity efEntity = entity as LinqToEntitiesEntity;
@@ -128,7 +131,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The code gen context.</param>
         /// <param name="businessLogicClass">Contains the business logic.</param>
         /// <param name="entity">The entity.</param>
-        protected override void GenerateInsertMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateInsertMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             // public void Insert$EntityName$($entityType$ $entityName$)
             CodeMemberMethod method = new CodeMemberMethod();
@@ -198,7 +201,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context to use</param>
         /// <param name="businessLogicClass">The business logic class into which to generate it</param>
         /// <param name="entity">The entity for which to generate the method</param>
-        protected override void GenerateUpdateMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateUpdateMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             string currentParameterName = "current" + entity.ClrType.Name;
 
@@ -245,7 +248,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context to use</param>
         /// <param name="businessLogicClass">The business logic class into which to generate it</param>
         /// <param name="entity">The entity for which to generate the method</param>
-        protected override void GenerateDeleteMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateDeleteMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             string parameterName = CodeGenUtilities.MakeLegalParameterName(entity.Name);
 
@@ -319,7 +322,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context in which we are generating code.</param>
         /// <param name="businessLogicClass">The class we are generating.</param>
         /// <returns>The <see cref="CodeTypeMember"/> containing the helper method.</returns>
-        private static CodeTypeMember GenerateGetEntityState(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass)
+        private static CodeTypeMember GenerateGetEntityState(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass)
         {
             // Add an import for System.Data.Objects
             CodeNamespace codeNamespace = codeGenContext.GetNamespace(businessLogicClass);
@@ -408,9 +411,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicClass">The class containing the generated code.</param>
         /// <param name="entity">The entity that we need to test to determine whether the helper is needed.</param>
         /// <returns><c>true</c> means the helper should be used.</returns>
-        private static bool GenerateGetEntityStateIfNecessary(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        private static bool GenerateGetEntityStateIfNecessary(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
-            if (typeof(System.Data.Objects.DataClasses.EntityObject).IsAssignableFrom(entity.ClrType))
+            if (typeof(EntityObject).IsAssignableFrom(entity.ClrType))
             {
                 return false;
             }

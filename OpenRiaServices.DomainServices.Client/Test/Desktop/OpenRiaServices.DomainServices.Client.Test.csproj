@@ -309,10 +309,6 @@
       <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
       <Aliases>DomainServicesLts</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
-      <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.DomainServices.Server</Name>
@@ -325,22 +321,22 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Project>{BDB2F9A3-5FC7-45FD-8496-B23752232688}</Project>
-      <Name>OpenRiaServices.DomainServices.Client.Web %28Framework\Desktop\OpenRiaServices.DomainServices.Client.Web%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client.Web</Name>
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
-      <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.Test%29</Name>
+      <Name>OpenRiaServices.Common.Test</Name>
       <Aliases>global</Aliases>
     </ProjectReference>
-	<ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
+    <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
       <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
-      <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.DomainServices.Test%29</Name>
+      <Name>OpenRiaServices.Common.DomainServices.Test</Name>
       <Aliases>DomainServicesTests</Aliases>
-    </ProjectReference>	
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client %28Framework\Desktop\OpenRiaServices.DomainServices.Client%29</Name>
+      <Name>OpenRiaServices.DomainServices.Client</Name>
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbExpressions\VbExpressions.vbproj">

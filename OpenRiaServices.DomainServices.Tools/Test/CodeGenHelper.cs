@@ -313,7 +313,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// Deletes all the files and folders created by the given CreteRiaClientFilesTask
         /// </summary>
         /// <param name="task"></param>
-        public static void DeleteTempFolder(CreateRiaClientFilesTask task)
+        public static void DeleteTempFolder(CreateOpenRiaClientFilesTask task)
         {
             if (task != null)
             {
@@ -351,12 +351,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         /// <summary>
-        /// Creates a new CreateRiaClientFilesTask instance to use to generate code
+        /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
         /// </summary>
         /// <param name="relativeTestDir"></param>
         /// <param name="includeClientOutputAssembly">if <c>true</c> include clients own output assembly in analysis</param>
         /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateRiaClientFilesTask CreateRiaClientFilesTaskInstance(string relativeTestDir, bool includeClientOutputAssembly)
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance(string relativeTestDir, bool includeClientOutputAssembly)
         {
             string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
             string projectPath = null;
@@ -367,19 +367,19 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
-            return CodeGenHelper.CreateRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, includeClientOutputAssembly);
+            return CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, includeClientOutputAssembly);
         }
 
         /// <summary>
-        /// Creates a new CreateRiaClientFilesTask instance to use to generate code
+        /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
         /// </summary>
         /// <param name="serverProjectPath">The file path to the ASP.NET server project</param>
         /// <param name="clientProjectPath">The file path to the Silverlight client project</param>
         /// <param name="includeClientOutputAssembly">if <c>true</c> include client's own output assembly in analysis</param>
         /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateRiaClientFilesTask CreateRiaClientFilesTaskInstance(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly)
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly)
         {
-            CreateRiaClientFilesTask task = new CreateRiaClientFilesTask();
+            CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
 
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
             task.BuildEngine = mockBuildEngine;
@@ -404,12 +404,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         /// <summary>
-        /// Creates a new CreateRiaClientFilesTask instance to use to generate code
+        /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
         /// </summary>
         /// <param name="relativeTestDir"></param>
         /// <param name="includeClientOutputAssembly">if <c>true</c> include clients own output assembly in analysis</param>
         /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateRiaClientFilesTask CreateRiaClientFilesTaskInstance_CopyClientProjectToOutput(string relativeTestDir, bool includeClientOutputAssembly)
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance_CopyClientProjectToOutput(string relativeTestDir, bool includeClientOutputAssembly)
         {
             string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
             string projectPath = null;
@@ -420,18 +420,18 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
-            return CodeGenHelper.CreateRiaClientFilesTaskInstance_CopyClientProjectToOutput(serverProjectPath, clientProjectPath, includeClientOutputAssembly);
+            return CodeGenHelper.CreateOpenRiaClientFilesTaskInstance_CopyClientProjectToOutput(serverProjectPath, clientProjectPath, includeClientOutputAssembly);
         }
 
         /// <summary>
-        /// Creates a new CreateRiaClientFilesTask instance to use to generate code
+        /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
         /// </summary>
         /// <param name="relativeTestDir"></param>
         /// <param name="includeClientOutputAssembly">if <c>true</c> include clients own output assembly in analysis</param>
         /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateRiaClientFilesTask CreateRiaClientFilesTaskInstance_CopyClientProjectToOutput(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly)
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance_CopyClientProjectToOutput(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly)
         {
-            CreateRiaClientFilesTask task = new CreateRiaClientFilesTask();
+            CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
 
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
             task.BuildEngine = mockBuildEngine;
@@ -459,12 +459,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         /// <summary>
-        /// Creates a new CreateRiaClientFilesTask instance to use to generate code
+        /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
         /// using the TestWap project.
         /// </summary>
         /// <param name="relativeTestDir"></param>
         /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateRiaClientFilesTask CreateRiaClientFilesTaskInstanceForWAP(string relativeTestDir)
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstanceForWAP(string relativeTestDir)
         {
             string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
             string projectPath = null;
@@ -475,7 +475,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string serverProjectPath = CodeGenHelper.ServerWapProjectPath(projectPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
-            return CodeGenHelper.CreateRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
+            return CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
         }
 
         /// <summary>

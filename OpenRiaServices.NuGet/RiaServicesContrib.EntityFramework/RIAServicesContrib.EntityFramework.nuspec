@@ -1,30 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
-  <metadata>
-    <id>RIAServicesContrib.EntityFramework</id>
-    <version>6.0.1-pre1</version>
-    <title>RIA Services for Entity Framework 6+</title>
-    <authors>Outercurve RIA Services</authors>
-    <owners>Outercurve</owners>
-    <projectUrl>http://www.openriaservices.net</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>
-      RIAServicesContrib.EntityFramework provides the DbDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DbContext from the EntityFramework package.
+    <metadata>
+        <id>RIAServicesContrib.EntityFramework</id>
+        <version>4.2.0-pre1</version>
+        <title>RIA Services for Entity Framework 6+</title>
+        <authors>Outercurve RIA Services</authors>
+        <owners>Outercurve</owners>
+        <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+        <projectUrl>http://www.openriaservices.net</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>RIAServicesContrib.EntityFramework provides the DbDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DbContext from the EntityFramework package.
 
-      This package supports versions of EntityFramework starting with EF 6.0.1.
-    </description>
-    <summary>RIA Services Contrib - Entity Framework 6+ support with DbDomainService</summary>
-    <releaseNotes />
-    <copyright>Copyright (c) 2013, The Outercurve Foundation</copyright>
-    <language>en-US</language>
-    <tags>WCF RIA Services RIAServices EntityFramework CodeFirst</tags>
+      This package supports versions of EntityFramework starting with EF 6.0.1.</description>
+        <summary>RIA Services Contrib - Entity Framework 6+ support with DbDomainService</summary>
+        <releaseNotes>Check http://www.openriaservices.net for known issues as they happen.
+
+We are not currently creating the web.config file that the original Microsoft version made. If you are using a class library then copying the contents of the app.config to a web.config file should work.</releaseNotes>
+        <copyright>Copyright (c) 2013, The Outercurve Foundation</copyright>
+        <language>en-US</language>
+        <tags>WCF RIA Services RIAServices EntityFramework CodeFirst</tags>
     <dependencies>
       <dependency id="EntityFramework" version="6.0.1" />
       <dependency id="RIAServices.Server" version="4.2.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\MyGet\v4.0\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net40\RiaServicesContrib.DomainServices.EntityFramework.dll" />
-    <file src="..\..\bin\MyGet\v4.5\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net45\RiaServicesContrib.DomainServices.EntityFramework.dll" />
+    <file src="..\..\bin\Release\v4.0\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net40\RiaServicesContrib.DomainServices.EntityFramework.dll" />
+    <file src="..\..\bin\Release\v4.5\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net45\RiaServicesContrib.DomainServices.EntityFramework.dll" />
   </files>
 </package>

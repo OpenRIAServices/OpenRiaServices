@@ -5,6 +5,9 @@
     <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
     <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
@@ -15,6 +18,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT</DefineConstants>
@@ -25,6 +31,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
     <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
@@ -35,6 +44,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
     <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
@@ -47,6 +59,9 @@
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -55,7 +70,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.DomainServices.EntityFramework</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.EntityFramework</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
     <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
@@ -63,6 +77,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -70,17 +87,26 @@
     <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
     <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV;DBCONTEXT</DefineConstants>
     <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(Framework)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -97,61 +123,40 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
       <Link>ExceptionHandlingUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\AssociationInfo.cs">
-      <Link>AssociationInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\DatabaseGeneratedAttribute.cs">
-      <Link>DatabaseGeneratedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\DatabaseGeneratedOption.cs">
-      <Link>DatabaseGeneratedOption.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\LinqToEntitiesDomainServiceDescriptionProvider.cs">
-      <Link>LinqToEntitiesDomainServiceDescriptionProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\LinqToEntitiesTypeDescriptionContext.cs">
-      <Link>LinqToEntitiesTypeDescriptionContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\LinqToEntitiesTypeDescriptor.cs">
-      <Link>LinqToEntitiesTypeDescriptor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataPropertyDescriptorWrapper.cs">
-      <Link>MetadataPropertyDescriptorWrapper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.Designer.cs">
-      <Link>MetadataResource.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MetadataResource.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataWorkspaceUtilities.cs">
-      <Link>MetadataWorkspaceUtilities.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\ObjectContextUtilities.cs">
-      <Link>ObjectContextUtilities.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\Resource.Designer.cs">
-      <Link>Resource.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
+    <Compile Include="AssociationInfo.cs" />
+    <Compile Include="DatabaseGeneratedAttribute.cs" />
+    <Compile Include="DatabaseGeneratedOption.cs" />
     <Compile Include="DbResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DbResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\TypeDescriptionContextBase.cs">
-      <Link>TypeDescriptionContextBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\TypeDescriptorBase.cs">
-      <Link>TypeDescriptorBase.cs</Link>
-    </Compile>
     <Compile Include="DbContextExtensions.cs" />
     <Compile Include="DbDomainService.cs" />
     <Compile Include="DbDomainServiceDescriptionProviderAttribute.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="LinqToEntitiesDomainService.cs" />
+    <Compile Include="LinqToEntitiesDomainServiceDescriptionProvider.cs" />
+    <Compile Include="LinqToEntitiesDomainServiceDescriptionProviderAttribute.cs" />
+    <Compile Include="LinqToEntitiesTypeDescriptionContext.cs" />
+    <Compile Include="LinqToEntitiesTypeDescriptor.cs" />
+    <Compile Include="MetadataPropertyDescriptorWrapper.cs" />
+    <Compile Include="MetadataResource.Designer.cs">
+      <DependentUpon>MetadataResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MetadataWorkspaceUtilities.cs" />
+    <Compile Include="ObjectContextExtensions.cs" />
+    <Compile Include="ObjectContextUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <DependentUpon>Resource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="TypeDescriptionContextBase.cs" />
+    <Compile Include="TypeDescriptorBase.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFrameworkVersion)' == 'v4.0'">
     <Reference Include="EntityFramework">
@@ -182,25 +187,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.resx">
-      <Link>MetadataResource.resx</Link>
+    <EmbeddedResource Include="DbResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetadataResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
-      <LogicalName>OpenRiaServices.DomainServices.EntityFramework.MetadataResource.resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\Resource.resx">
-      <Link>Resource.resx</Link>
+    <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
-      <LogicalName>OpenRiaServices.DomainServices.EntityFramework.Resource.resources</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DbResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +208,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
-  <Target Name="AfterBuild">
-    <MSBuild Condition=" '$(TargetFrameworkVersion)' == 'v4.5' " Projects="$(MSBuildProjectFile)" Properties="TargetFrameworkVersion=v4.0" RunEachTargetSeparately="true" />
+  <Target Name="AfterBuild" Condition=" '$(ChildBuild)' == 'True' ">
+    <!-- Build NET40 -->
+    <MSBuild Condition=" '$(TargetFrameworkVersion)' != 'v4.0' " Projects="$(MSBuildProjectFile)" ToolsVersion="4.0" Properties="TargetFrameworkVersion=v4.0; ChildBuild=False" RunEachTargetSeparately="true" />
+    <!-- Build NET45 -->
+    <MSBuild Condition=" '$(TargetFrameworkVersion)' != 'v4.5' " Projects="$(MSBuildProjectFile)" ToolsVersion="4.0" Properties="TargetFrameworkVersion=v4.5; ChildBuild=False" RunEachTargetSeparately="true" />
   </Target>
 </Project>

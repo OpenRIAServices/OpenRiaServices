@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif
-
+using System.Data.Entity;
 #if DBCONTEXT
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects.DataClasses;
@@ -90,7 +90,7 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             return structuralType;
         }
 
-#if !DBCONTEXT
+
         /// <summary>
         /// Method used to return the current <see cref="EntityState"/> of the specified
         /// entity.
@@ -116,7 +116,7 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             }
             return stateEntry.State;
         }
-#endif
+
 
         /// <summary>
         /// Determines if the specified EdmMember is a concurrency timestamp.

@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Data.Metadata.Edm;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.DomainServices.EntityFramework;
@@ -10,7 +11,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Subclass of <see cref="BusinessLogicEntity"/> for the LinqToEntities domain service
     /// </summary>
-    internal class LinqToEntitiesEntity : BusinessLogicEntity
+    public class LinqToEntitiesEntity : BusinessLogicEntity
     {
         private string _defaultObjectSetName;
         private bool _hasTimestampMember;
@@ -140,7 +141,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             }
             else
             {
-                return t.GetGenericTypeDefinition() == typeof(System.Data.Objects.ObjectSet<>);
+                return t.GetGenericTypeDefinition() == typeof(ObjectSet<>);
             }
         }
     }

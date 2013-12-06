@@ -135,10 +135,6 @@
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
       <Name>OpenRiaServices.DomainServices.Tools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
-      <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>OpenRiaServices.DomainServices.Hosting</Name>

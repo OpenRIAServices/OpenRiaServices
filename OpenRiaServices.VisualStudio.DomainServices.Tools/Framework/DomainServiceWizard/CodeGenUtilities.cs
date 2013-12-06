@@ -7,14 +7,14 @@ using System.Text;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
-    internal static class CodeGenUtilities
+    public static class CodeGenUtilities
     {
         /// <summary>
         /// Makes an entity name legal for use in a method name
         /// </summary>
         /// <param name="entityName">The name to convert</param>
         /// <returns>The legal entity name</returns>
-        internal static string MakeLegalEntityName(string entityName)
+        public static string MakeLegalEntityName(string entityName)
         {
             // First character is lower-case, so just return the string as-is.
             if (Char.IsLower(entityName[0]))
@@ -31,7 +31,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="entityName">The name to convert</param>
         /// <returns>The legal parameter name</returns>
-        internal static string MakeLegalParameterName(string entityName)
+        public static string MakeLegalParameterName(string entityName)
         {
             // First character must be lower case
             if (Char.IsUpper(entityName[0]))
@@ -48,7 +48,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="attributeTypeName">Name of attribute type</param>
         /// <returns>A new attribute declaration</returns>
-        internal static CodeAttributeDeclaration CreateAttributeDeclaration(string attributeTypeName)
+        public static CodeAttributeDeclaration CreateAttributeDeclaration(string attributeTypeName)
         {
             CodeTypeReference attribute = new CodeTypeReference(attributeTypeName);
             return new CodeAttributeDeclaration(attribute);
@@ -60,7 +60,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="s">The string to strip.</param>
         /// <param name="isCSharp">Indicates whether the generated code is C#.</param>
         /// <returns>The code remaining after stripping the comment</returns>
-        internal static string StripAutoGenPrefix(string s, bool isCSharp)
+        public static string StripAutoGenPrefix(string s, bool isCSharp)
         {
             string lineCommentStart = isCSharp ? "//" : "'";
             while (s.StartsWith(lineCommentStart, StringComparison.Ordinal))
@@ -79,7 +79,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="right">The right side of the test.</param>
         /// <param name="isCSharp">Indicates whether or not the output should be C# specific.</param>
         /// <returns>A new <see cref="CodeExpression"/>.</returns>
-        internal static CodeExpression MakeEqual(Type clrType, CodeExpression left, CodeExpression right, bool isCSharp)
+        public static CodeExpression MakeEqual(Type clrType, CodeExpression left, CodeExpression right, bool isCSharp)
         {
             if (isCSharp)
             {
@@ -119,7 +119,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="right">The right side of the test.</param>
         /// <param name="isCSharp">Indicates whether or not the output should be C# specific.</param>
         /// <returns>A new <see cref="CodeExpression"/>.</returns>
-        internal static CodeExpression MakeNotEqual(Type clrType, CodeExpression left, CodeExpression right, bool isCSharp)
+        public static CodeExpression MakeNotEqual(Type clrType, CodeExpression left, CodeExpression right, bool isCSharp)
         {
             if (isCSharp)
             {
@@ -138,7 +138,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="section">Section such as "Summary"</param>
         /// <param name="body">The body of the comment</param>
         /// <returns>A collection of Xml comments that can be added to some member.</returns>
-        internal static CodeCommentStatementCollection GenerateXmlComments(string section, string body)
+        public static CodeCommentStatementCollection GenerateXmlComments(string section, string body)
         {
             CodeCommentStatementCollection result = new CodeCommentStatementCollection();
             result.Add(new CodeCommentStatement(@"<" + section + ">", true));
@@ -152,7 +152,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="comment">Entire comment</param>
         /// <returns>The new Xml comment</returns>
-        internal static CodeCommentStatement GenerateXmlComment(string comment)
+        public static CodeCommentStatement GenerateXmlComment(string comment)
         {
             return new CodeCommentStatement(comment, true);
         }
@@ -162,7 +162,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="type">A CLR type.</param>
         /// <returns>A <see cref="CodeTypeReference"/> for a CLR type.</returns>
-        internal static CodeTypeReference GetTypeReference(Type type)
+        public static CodeTypeReference GetTypeReference(Type type)
         {
             return GetTypeReference(type, null, null);
         }
@@ -174,7 +174,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codegenContext">A <see cref="ClientProxyGenerator"/>.</param>
         /// <param name="referencingType">The referencing type.</param>
         /// <returns>A <see cref="CodeTypeReference"/> for a CLR type.</returns>
-        internal static CodeTypeReference GetTypeReference(Type type, CodeGenContext codegenContext, CodeTypeDeclaration referencingType)
+        public static CodeTypeReference GetTypeReference(Type type, ICodeGenContext codegenContext, CodeTypeDeclaration referencingType)
         {
             if (type.IsPrimitive || type == typeof(void) || type == typeof(decimal) || type == typeof(string) || type == typeof(object))
             {
@@ -219,7 +219,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeNamespace">The namespace to which to add the import</param>
         /// <param name="importNamespace">The import name to add</param>
         /// <returns><c>true</c> means one was added</returns>
-        internal static bool AddImportIfNeeded(CodeNamespace codeNamespace, string importNamespace)
+        public static bool AddImportIfNeeded(CodeNamespace codeNamespace, string importNamespace)
         {
             if (string.IsNullOrEmpty(importNamespace) || string.Equals(codeNamespace.Name, importNamespace, StringComparison.OrdinalIgnoreCase))
             {
@@ -242,7 +242,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="typeName">The name of the type.</param>
         /// <param name="ns">The type's namespace.</param>
         /// <returns>A type declaration.</returns>
-        internal static CodeTypeDeclaration CreateTypeDeclaration(string typeName, string ns)
+        public static CodeTypeDeclaration CreateTypeDeclaration(string typeName, string ns)
         {
             CodeTypeDeclaration decl = new CodeTypeDeclaration(typeName);
             decl.UserData["Namespace"] = ns;
@@ -257,7 +257,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="propertyInfo"><see cref="PropertyInfo"/> for the original property.</param>
         /// <param name="insideNamespace">Whether or not our buddy class is inside a namespace.</param>
         /// <returns>A code snippet for a buddy property.</returns>
-        internal static CodeSnippetTypeMember CreateAutomaticPropertyDeclaration(CodeGenContext codeGenContext, CodeTypeDeclaration buddyClass, PropertyInfo propertyInfo, bool insideNamespace)
+        public static CodeSnippetTypeMember CreateAutomaticPropertyDeclaration(ICodeGenContext codeGenContext, CodeTypeDeclaration buddyClass, PropertyInfo propertyInfo, bool insideNamespace)
         {
             // Create a field declaration: public static $propertyType$ $propertyName;
             CodeTypeReference propTypeRef = CodeGenUtilities.GetTypeReference(propertyInfo.PropertyType, codeGenContext, buddyClass);

@@ -27,9 +27,9 @@ using System.Security;
 
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Hosting.OData.Test")]
-
+#endif
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

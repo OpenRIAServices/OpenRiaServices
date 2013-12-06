@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Data.Entity.Core.Objects;
 using System.Data.Linq;
-using System.Data.Objects;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,10 +16,10 @@ using EnvDTE80;
 using OpenRiaServices.DomainServices.Tools;
 using Microsoft.VisualStudio.ManagedInterfaces9;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Design;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
 using VSLangProj;
+using Microsoft.VisualStudio.Shell.Design;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
@@ -30,7 +30,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// This wizard is invoked by VS in response to creating a new Business Logic Class item template.
     /// It manages the user interaction to select which entities to use to create the domain service.
     /// </remarks>
-    internal partial class DomainServiceClassWizard : IWizard
+    public partial class DomainServiceClassWizard : IWizard
     {
         private bool _generateMetadataFile;
         private DTE2 _dte2;
@@ -39,8 +39,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         // The dialog is a member only so the test helper can locate it
         BusinessLogicClassDialog _dialog;
 
-        private GeneratedCode _businessLogicCode;
-        private GeneratedCode _metadataCode;
+        private IGeneratedCode _businessLogicCode;
+        private IGeneratedCode _metadataCode;
         private bool _isClientAccessEnabled;
         private bool _isODataEndpointEnabled;
       
@@ -209,7 +209,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     namespaceName = this.ComputeNamespace();
 
                     // User said OK -- so let's generate the code
-                    GeneratedCode generatedCode = businessLogicViewModel.GenerateBusinessLogicClass(namespaceName);
+                    IGeneratedCode generatedCode = businessLogicViewModel.GenerateBusinessLogicClass(namespaceName);
 
                     replacementsDictionary.Add("$generatedcode$", generatedCode.SourceCode);
                     this.AddReferences(generatedCode.References);
@@ -219,7 +219,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     if (businessLogicViewModel.IsMetadataClassGenerationRequested)
                     {
                         // The null namespace asks to generate into the entity types own namespaces
-                        GeneratedCode generatedMetadataCode = businessLogicViewModel.GenerateMetadataClasses(null /* optionalSuffix */);
+                        IGeneratedCode generatedMetadataCode = businessLogicViewModel.GenerateMetadataClasses(null /* optionalSuffix */);
                         replacementsDictionary.Add("$generatedmetadatacode$", generatedMetadataCode.SourceCode);
                         this.AddReferences(generatedMetadataCode.References);
                         this._generateMetadataFile = generatedMetadataCode.SourceCode.Length > 0;
@@ -411,7 +411,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="dataContextEnabled">Flag indicating if the datacontext is enabled.</param>
         /// <param name="allowDbContext">A boolean indicating if DbContext is an allowable context type</param>
         /// <returns><c>true</c> if the type is one of the context types and <c>false</c> otherwise.</returns>
-        internal static bool IsContextType(Type t, bool dataContextEnabled, bool allowDbContext, out bool isDbContext)
+        public static bool IsContextType(Type t, bool dataContextEnabled, bool allowDbContext, out bool isDbContext)
         {
             isDbContext = false;
 

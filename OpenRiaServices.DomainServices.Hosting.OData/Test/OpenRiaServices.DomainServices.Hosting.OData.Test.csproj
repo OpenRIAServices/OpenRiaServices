@@ -92,6 +92,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj">
+      <Project>{20790a5f-1dd7-4d1c-8303-c34256e12c68}</Project>
+      <Name>OpenRiaServices.DomainServices.EntityFramework.EF4</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.DomainServices.Server</Name>
@@ -99,10 +103,6 @@
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
-      <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
       <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>

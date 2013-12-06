@@ -277,9 +277,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="OpenRiaServices.Client.v4.0.targets">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="OpenRiaServices.Client.v5.0.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>Domain Service</Name>
+    <Description>Open RIA Services DomainService</Description>
+    <Icon>DomainServiceClass.ico</Icon>
+    <TemplateID>OpenRiaServices.Web.CSharp.DomainService</TemplateID>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <DefaultName>DomainService.cs</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">DomainService.cs</ProjectItem>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.metadata.cs" ReplaceParameters="true">DomainService.metadata.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.12.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.DomainServiceClassWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

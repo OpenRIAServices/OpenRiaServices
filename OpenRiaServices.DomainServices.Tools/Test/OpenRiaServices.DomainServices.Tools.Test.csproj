@@ -185,10 +185,6 @@
       <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
       <Name>EFDbContextModels</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
-      <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
       <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
       <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
@@ -208,7 +204,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
-      <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.Test%29</Name>
+      <Name>OpenRiaServices.Common.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
