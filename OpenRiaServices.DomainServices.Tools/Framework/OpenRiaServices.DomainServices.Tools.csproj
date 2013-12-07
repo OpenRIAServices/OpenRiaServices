@@ -65,7 +65,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERVERFX;NET40;DBCONTEXT</DefineConstants>
     <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

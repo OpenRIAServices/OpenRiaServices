@@ -93,7 +93,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;WIZARD;VS10</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERVERFX;WIZARD;VS10;VS10;DBCONTEXT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>

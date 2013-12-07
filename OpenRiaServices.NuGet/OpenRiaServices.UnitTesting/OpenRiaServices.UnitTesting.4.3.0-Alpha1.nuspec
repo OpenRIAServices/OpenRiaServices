@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
-    <id>Open RIA Services Unit Testing</id>
+    <id>OpenRiaServices.UnitTesting</id>
     <version>4.3.0-alpha1</version>
-    <title>OpenRiaServices.UnitTesting</title>
+    <title>Open RIA Services Unit Testing</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
