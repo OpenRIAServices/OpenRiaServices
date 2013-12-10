@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Linq;
 using System.Globalization;
@@ -187,17 +188,13 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         {
                             this._contexts.Add(new LinqToEntitiesContext(t));
                         }
+                        else if (typeof(DbContext).IsAssignableFrom(t))
+                            this._contexts.Add(new LinqToEntitiesDbContext(t));
                         else
                         {
-                            Type dbContextTypeReference = DbContextUtilities.GetDbContextTypeReference(t);
-                            if (dbContextTypeReference != null && dbContextTypeReference.IsAssignableFrom(t))
-                            {
-                                this._contexts.Add(new LinqToEntitiesDbContext(t));
-                            }
-                            else
-                            {
+                            
                                 this._logger(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_InvalidContextType, t.FullName));
-                            }
+                            
                         }
                     }
                     catch(Exception ex)

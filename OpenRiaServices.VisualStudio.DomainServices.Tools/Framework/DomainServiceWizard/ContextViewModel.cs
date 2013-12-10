@@ -118,7 +118,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     IEntityData[] entityStates = this._businessLogicModel.GetEntityDataItemsForContext(this.ContextData);
                     this._entities = new List<EntityViewModel>();
 
-                    foreach (EntityData entityState in entityStates)
+                    foreach (IEntityData entityState in entityStates)
                     {
                         EntityViewModel entityViewModel = new EntityViewModel(this, entityState);
                         this._entities.Add(entityViewModel);

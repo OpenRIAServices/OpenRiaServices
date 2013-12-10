@@ -486,7 +486,7 @@ namespace DataTests.Scenarios.EF.Northwind
             {
                 OnContactInfoChanging(value);
                 ReportPropertyChanging("ContactInfo");
-                _ContactInfo = SetValidValue(_ContactInfo, value);
+                _ContactInfo = SetValidValue(_ContactInfo, value, "ContactInfo");
                 _ContactInfoInitialized = true;
                 ReportPropertyChanged("ContactInfo");
                 OnContactInfoChanged();
@@ -1125,7 +1125,7 @@ namespace DataTests.Scenarios.EF.Northwind
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = SetValidValue(_Address, value);
+                _Address = SetValidValue(_Address, value, "Address");
                 _AddressInitialized = true;
                 ReportPropertyChanged("Address");
                 OnAddressChanged();

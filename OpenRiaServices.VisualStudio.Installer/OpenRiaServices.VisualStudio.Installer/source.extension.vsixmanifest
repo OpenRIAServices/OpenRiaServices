@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="OpenRiaServices.Tools.Outercurve" Version="1.0" Language="en-US" Publisher="Outercurve Foundation" />
+    <Identity Id="OpenRiaServices.Tools.Outercurve" Version="1.0.0.6" Language="en-US" Publisher="Outercurve Foundation" />
     <DisplayName>Open RIA Services Tools</DisplayName>
     <Description xml:space="preserve">Visual Studio 2013 tooling for Open RIA Services</Description>
   </Metadata>
@@ -17,7 +17,6 @@
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Hosting" Path="|OpenRiaServices.DomainServices.Hosting|" AssemblyName="|OpenRiaServices.DomainServices.Hosting;AssemblyName|" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Hosting.OData" Path="|OpenRiaServices.DomainServices.Hosting.OData|" AssemblyName="|OpenRiaServices.DomainServices.Hosting.OData;AssemblyName|" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Server" Path="|OpenRiaServices.DomainServices.Server|" AssemblyName="|OpenRiaServices.DomainServices.Server;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.EntityFramework.ObjectContext" Path="|OpenRiaServices.DomainServices.EntityFramework.ObjectContext|" AssemblyName="|OpenRiaServices.DomainServices.EntityFramework.ObjectContext;AssemblyName|" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.dll" AssemblyName="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.SqlServer.dll" AssemblyName="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   </Assets>

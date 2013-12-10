@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Silverlight.CodeGen</id>
-        <version>4.3.0-alpha1</version>
+        <version>4.3.0-alpha2</version>
         <title>Open RIA Services Silverlight Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -20,6 +20,7 @@
       </dependencies>
     </metadata>
     <files>
+        <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll" />
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.Client.v5.0.targets" target="build\OpenRiaServices.Silverlight.CodeGen.targets" />
     </files>

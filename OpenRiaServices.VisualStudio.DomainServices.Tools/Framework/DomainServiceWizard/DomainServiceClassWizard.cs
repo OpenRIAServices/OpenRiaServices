@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Linq;
 using System.Globalization;
@@ -418,7 +419,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             // We are looking for ObjectContext, DbContext or DataContext types only. So we skip Value types and interfaces for performance.
             if (!t.IsValueType && !t.IsInterface)
             {
-                isDbContext = t.IsDbContext();
+                isDbContext = typeof(DbContext).IsAssignableFrom(t);
                 if (typeof(ObjectContext).IsAssignableFrom(t) ||
                         (allowDbContext && isDbContext) ||
                         (dataContextEnabled && typeof(DataContext).IsAssignableFrom(t)))

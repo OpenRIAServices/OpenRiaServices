@@ -47,7 +47,7 @@ CodeGenerationTools code = new CodeGenerationTools(this){FullyQualifySystemTypes
 ItemCollection = loader.CreateEdmItemCollection(SourceCsdlPath, ReferenceCsdlPaths.ToArray());
 ModelNamespace = loader.GetModelNamespace(SourceCsdlPath);
 string namespaceName = GetNamespaceName(code);
-    namespaceName = "Northwind_NoFks";
+    namespaceName = "NorthwindNoFks";
 UpdateObjectNamespaceMap(namespaceName);
 
 #>

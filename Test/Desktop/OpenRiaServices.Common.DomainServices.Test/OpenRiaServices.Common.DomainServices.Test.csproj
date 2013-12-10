@@ -47,7 +47,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.Common.DomainServices.Test</RootNamespace>
     <AssemblyName>OpenRiaServices.Common.DomainServices.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SignAssembly>false</SignAssembly>
@@ -80,10 +80,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\..\packages\EntityFramework.6.0.1\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\..\packages\EntityFramework.6.0.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -103,7 +103,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
-      <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
+      <Project>{72137db5-8a91-4ff8-a292-5f6e73a66cd6}</Project>
       <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj">
@@ -151,15 +151,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind2008.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EF_Northwind_Scenarios.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataModels\ScenarioModels\Model1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\ScenarioModels\Model2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\ScenarioModels\Northwind_NoFks.cs">
       <AutoGen>True</AutoGen>
@@ -416,11 +416,6 @@
       <LastGenOutput>Northwind2008.cs</LastGenOutput>
       <DependentUpon>Northwind2008.edmx</DependentUpon>
     </None>
-    <None Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>EF_Northwind_Scenarios1.cs</LastGenOutput>
-      <DependentUpon>EF_Northwind_Scenarios.edmx</DependentUpon>
-    </None>
     <None Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>LTS_InheritanceScenarios.designer.cs</LastGenOutput>
@@ -431,6 +426,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model1.cs</LastGenOutput>
       <DependentUpon>EF_InheritanceScenarios.edmx</DependentUpon>
+    </None>
+    <None Include="DataModels\ScenarioModels\Model2.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model2.cs</LastGenOutput>
+      <DependentUpon>EF_Northwind_Scenarios.edmx</DependentUpon>
     </None>
     <None Include="DataModels\ScenarioModels\Northwind.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -19,11 +19,11 @@ using System.Xml.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("Northwind_NoFks", "FK_Products_Categories", "Category", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Northwind_NoFks.Category), "Product", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Northwind_NoFks.Product))]
+[assembly: EdmRelationshipAttribute("Northwind_NoFks", "FK_Products_Categories", "Category", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(NorthwindNoFks.Category), "Product", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(NorthwindNoFks.Product))]
 
 #endregion
 
-namespace Northwind_NoFks
+namespace NorthwindNoFks
 {
     #region Contexts
     

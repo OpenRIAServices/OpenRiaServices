@@ -10,19 +10,19 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// View model class entity in the corresponding <see cref="BusinessLogicEntity"/> class.
     /// </summary>
     /// <remarks>This view model class shares state with its corresponding <see cref="BusinessLogicEntity"/>
-    /// across AppDomin boundaries via state shared in <see cref="EntityData"/>.
+    /// across AppDomin boundaries via state shared in <see cref="IEntityData"/>.
     /// </remarks>
     public class EntityViewModel : INotifyPropertyChanged
     {
         private ContextViewModel _contextViewModel;
-        private EntityData _entityData;
+        private IEntityData _entityData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityViewModel"/> class.
         /// </summary>
         /// <param name="contextViewModel">The owning <see cref="ContextViewModel"/>.</param>
-        /// <param name="entityData">The shared <see cref="EntityData"/> state.</param>
-        public EntityViewModel(ContextViewModel contextViewModel, EntityData entityData)
+        /// <param name="entityData">The shared <see cref="IEntityData"/> state.</param>
+        public EntityViewModel(ContextViewModel contextViewModel, IEntityData entityData)
         {
             this._contextViewModel = contextViewModel;
             this._entityData = entityData;
@@ -43,7 +43,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Gets the <see cref="EntityData"/> state shared with the corresponding
         /// <see cref="BusinessLogicEntity"/>.
         /// </summary>
-        public EntityData EntityData
+        public IEntityData EntityData
         {
             get
             {

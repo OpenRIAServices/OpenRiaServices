@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Objects;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Json;
 using System.Security.Principal;
 using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Hosting;
 using System.Text;
 using System.Threading;
@@ -231,9 +232,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             nw.InsertOrderDetail(detail);
             nw.InsertOrderDetail(detail2);
 
-            Assert.AreEqual(System.Data.EntityState.Modified, order.EntityState);
-            Assert.AreEqual(System.Data.EntityState.Added, detail.EntityState);
-            Assert.AreEqual(System.Data.EntityState.Added, detail2.EntityState);
+            Assert.AreEqual(System.Data.Entity.EntityState.Modified, order.EntityState);
+            Assert.AreEqual(System.Data.Entity.EntityState.Added, detail.EntityState);
+            Assert.AreEqual(System.Data.Entity.EntityState.Added, detail2.EntityState);
         }
 
         /// <summary>
