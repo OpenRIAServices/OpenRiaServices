@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
                 }
-                this._entityTypes = value.ToList().AsReadOnly();
+                this._entityTypes =new ReadOnlyCollection<Type>(value.ToList());
             }
         }
 
