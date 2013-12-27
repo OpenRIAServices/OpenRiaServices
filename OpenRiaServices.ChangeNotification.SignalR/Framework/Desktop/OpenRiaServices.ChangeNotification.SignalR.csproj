@@ -40,6 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\EntityKey.cs">
+      <Link>EntityKey.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\CodeGenUtilities.cs">
+      <Link>CodeGenUtilities.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

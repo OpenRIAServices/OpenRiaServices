@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="OpenRiaServices.Tools.Outercurve" Version="1.0.0.6" Language="en-US" Publisher="Outercurve Foundation" />
-    <DisplayName>Open RIA Services Tools</DisplayName>
-    <Description xml:space="preserve">Visual Studio 2013 tooling for Open RIA Services</Description>
+    <Identity Id="VSIXProject1.State of Illinois.a5582e5c-fe84-42d6-b11f-b60ff46fca6a" Version="1.0" Language="en-US" Publisher="State of Illinois" />
+    <DisplayName>VSIXProject1</DisplayName>
+    <Description>Empty VSIX Project.</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0]" />
@@ -11,13 +11,4 @@
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="OpenDomainService" d:TargetPath="|OpenDomainService;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" AssemblyName="|OpenRiaServices.VisualStudio.DomainServices.Tools;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Hosting" Path="|OpenRiaServices.DomainServices.Hosting|" AssemblyName="|OpenRiaServices.DomainServices.Hosting;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Hosting.OData" Path="|OpenRiaServices.DomainServices.Hosting.OData|" AssemblyName="|OpenRiaServices.DomainServices.Hosting.OData;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Server" Path="|OpenRiaServices.DomainServices.Server|" AssemblyName="|OpenRiaServices.DomainServices.Server;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.dll" AssemblyName="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.SqlServer.dll" AssemblyName="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  </Assets>
 </PackageManifest>

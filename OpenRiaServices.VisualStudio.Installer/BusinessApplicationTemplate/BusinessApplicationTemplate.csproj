@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>12.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{49D3206F-6908-4048-AA02-927C637B415A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessApplicationTemplate</RootNamespace>
+    <AssemblyName>BusinessApplicationTemplate</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CreateVsixContainer>false</CreateVsixContainer>
+    <DeployExtension>false</DeployExtension>
+    <DeployVSTemplates>false</DeployVSTemplates>
+    <CopyVsixManifestToOutput>false</CopyVsixManifestToOutput>
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Content>
+    <Content Include="Assets\Resources\ApplicationResources.cs" />
+    <Content Include="Assets\Resources\ApplicationStrings.Designer.cs" />
+    <Content Include="Assets\Resources\ErrorResources.Designer.cs" />
+    <Content Include="Assets\Resources\SecurityQuestions.Designer.cs" />
+    <Content Include="BA.Web.10.0\GlobalSuppressions.cs" />
+    <Content Include="BA.Web.10.0\Models\RegistrationData.cs" />
+    <Content Include="BA.Web.10.0\Models\Shared\User.shared.cs" />
+    <Content Include="BA.Web.10.0\Models\User.cs" />
+    <Content Include="BA.Web.10.0\Properties\AssemblyInfo.cs" />
+    <Content Include="BA.Web.10.0\Resources\RegistrationDataResources.Designer.cs" />
+    <Content Include="BA.Web.10.0\Resources\ValidationErrorResources.Designer.cs" />
+    <Content Include="BA.Web.10.0\Services\AuthenticationService.cs" />
+    <Content Include="BA.Web.10.0\Services\UserRegistrationService.cs" />
+    <Content Include="BA.Web\GlobalSuppressions.cs" />
+    <Content Include="BA.Web\Models\RegistrationData.cs" />
+    <Content Include="BA.Web\Models\Shared\User.shared.cs" />
+    <Content Include="BA.Web\Models\User.cs" />
+    <Content Include="BA.Web\Properties\AssemblyInfo.cs" />
+    <Content Include="BA.Web\Resources\RegistrationDataResources.Designer.cs" />
+    <Content Include="BA.Web\Resources\ValidationErrorResources.Designer.cs" />
+    <Content Include="BA.Web\Services\AuthenticationService.cs" />
+    <Content Include="BA.Web\Services\UserRegistrationService.cs" />
+    <Content Include="Controls\BusyIndicator.cs" />
+    <Content Include="Controls\VisualStates.cs" />
+    <Content Include="GlobalSuppressions.cs" />
+    <Content Include="Helpers\DataFieldExtensions.cs" />
+    <Content Include="Helpers\NotOperatorValueConverter.cs" />
+    <Content Include="Helpers\TargetNullValueConverter.cs" />
+    <Content Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Content>
+    <Content Include="Models\LoginInfo.cs" />
+    <Content Include="Models\RegistrationData.partial.cs" />
+    <Content Include="Models\User.partial.cs" />
+    <Content Include="Views\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Content>
+    <Content Include="Views\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Content>
+    <Content Include="Views\Home.xaml.cs">
+      <DependentUpon>Home.xaml</DependentUpon>
+    </Content>
+    <Content Include="Views\Login\LoginForm.xaml.cs">
+      <DependentUpon>LoginForm.xaml</DependentUpon>
+    </Content>
+    <Content Include="Views\Login\LoginRegistrationWindow.xaml.cs">
+      <DependentUpon>LoginRegistrationWindow.xaml</DependentUpon>
+    </Content>
+    <Content Include="Views\Login\LoginStatus.xaml.cs">
+      <DependentUpon>LoginStatus.xaml</DependentUpon>
+    </Content>
+    <Content Include="Views\Login\RegistrationForm.xaml.cs">
+      <DependentUpon>RegistrationForm.xaml</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\AssemblyInfo.cs" />
+    <None Include="BA.Web.10.0\Web.config" />
+    <None Include="BA.Web.10.0\Web.Debug.config" />
+    <None Include="BA.Web.10.0\Web.Release.config" />
+    <None Include="BA.Web\Web.config" />
+    <None Include="BA.Web\Web.Debug.config" />
+    <None Include="BA.Web\Web.Release.config" />
+    <None Include="BusinessApplicationTemplate.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BA.Web.10.0\BusinessApplication.Web.csproj" />
+    <Content Include="BA.Web.10.0\server.vstemplate" />
+    <Content Include="BA.Web.10.0\Silverlight.js" />
+    <Content Include="BA.Web.10.0\__safeclientprojectname__TestPage.aspx" />
+    <Content Include="BA.Web.10.0\__safeclientprojectname__TestPage.html" />
+    <Content Include="BA.Web\BusinessApplication.Web.csproj" />
+    <Content Include="BA.Web\server.vstemplate" />
+    <Content Include="BA.Web\Silverlight.js" />
+    <Content Include="BA.Web\__safeclientprojectname__TestPage.aspx" />
+    <Content Include="BA.Web\__safeclientprojectname__TestPage.html" />
+    <Content Include="BusinessApplication.csproj" />
+    <VSTemplate Include="BusinessApplication.vstemplate" />
+    <Content Include="CSBusinessApplication.10.0.ico" />
+    <Content Include="CSBusinessApplication.ico" />
+    <Content Include="Libs\System.Windows.Controls.Data.DataForm.Toolkit.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Resources\ApplicationStrings.resx" />
+    <EmbeddedResource Include="Assets\Resources\ErrorResources.resx" />
+    <EmbeddedResource Include="Assets\Resources\SecurityQuestions.resx" />
+    <EmbeddedResource Include="BA.Web.10.0\Resources\RegistrationDataResources.resx" />
+    <EmbeddedResource Include="BA.Web.10.0\Resources\ValidationErrorResources.resx" />
+    <EmbeddedResource Include="BA.Web\Resources\RegistrationDataResources.resx" />
+    <EmbeddedResource Include="BA.Web\Resources\ValidationErrorResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Assets\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Controls\BusyIndicator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\About.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\ErrorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Home.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Login\LoginForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Login\LoginRegistrationWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Login\LoginStatus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Login\RegistrationForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

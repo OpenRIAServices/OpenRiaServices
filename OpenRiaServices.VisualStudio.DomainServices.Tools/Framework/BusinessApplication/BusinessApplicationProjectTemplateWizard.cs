@@ -13,8 +13,8 @@ using Microsoft.VisualStudio.Web.Silverlight;
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
     using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-    
-    
+
+
 
     public class BusinessApplicationProjectTemplateWizard : IWizard
     {
@@ -93,7 +93,12 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 // Link the server project to the client
                 if (silverlightProject != null)
                 {
-                    Property prop = silverlightProject.Properties.Item("SilverlightProject.LinkedServerProject");
+                    Property prop = silverlightProject.Properties.Item("LinkedOpenRiaServerProject");
+                    string projectReference = webProject.FullName;
+                    if ((webProject.FullName.Length > 0) && Path.IsPathRooted(webProject.FullName))
+                    {
+                        projectReference = MakeProjectPathRelative(projectReference, silverlightProject.FullName);
+                    }
                     prop.Value = webProject.FullName;
 
                     // Add this client to the list of clients in the server project
@@ -122,6 +127,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         System.Diagnostics.Debug.Assert(result == 0, "Unexpected failure.");
                         if (result == 0)
                         {
+
                             // Cast the server one to a silverlight project consumer
                             IVsSilverlightProjectConsumer spc = webHierarchy as IVsSilverlightProjectConsumer;
 
@@ -134,6 +140,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     }
                 }
             }
+
+
 
             // Add Links to .resx files
             FileInfo webProjectProjectFile = new FileInfo(webProject.FullName);
@@ -164,6 +172,43 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             ProjectItem mainPage = this._solution2.FindProjectItem("MainPage.xaml");
             System.Diagnostics.Debug.Assert(mainPage != null, "MainPage.xaml should always exist in the Silverlight project.");
             mainPage.Open(EnvDTE.Constants.vsViewKindPrimary);
+        }
+
+        string MakeProjectPathRelative(string fullPath, string basePath)
+        {
+            string localBasePath = basePath;
+            string localFullPath = fullPath;
+            string relativePath = null;
+            if (!localBasePath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+            {
+                localBasePath = localBasePath + Path.DirectorySeparatorChar.ToString();
+            }
+            localFullPath = localFullPath.ToLowerInvariant();
+            localBasePath = localBasePath.ToLowerInvariant();
+            while (!string.IsNullOrEmpty(localBasePath))
+            {
+                if (localFullPath.StartsWith(localBasePath, StringComparison.Ordinal))
+                {
+                    relativePath = relativePath + fullPath.Remove(0, localBasePath.Length);
+                    if (relativePath == Path.DirectorySeparatorChar.ToString())
+                    {
+                        relativePath = "";
+                    }
+                    return relativePath;
+                }
+                localBasePath = localBasePath.Remove(localBasePath.Length - 1);
+                int lastIndex = localBasePath.LastIndexOf(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
+                if (-1 != lastIndex)
+                {
+                    localBasePath = localBasePath.Remove(lastIndex + 1);
+                    relativePath = relativePath + ".." + Path.DirectorySeparatorChar.ToString();
+                }
+                else
+                {
+                    return fullPath;
+                }
+            }
+            return fullPath;
         }
 
         public void RunStarted(object automationObject,

@@ -1,0 +1,52 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BusinessApplication.Web</Name>
+    <Description>BusinessApplication.Web</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType></ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>false</CreateNewFolder>
+    <DefaultName>BusinessApplication.Web</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$safeprojectname$.Web.csproj" File="BusinessApplication.Web.csproj" ReplaceParameters="true">
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="App_Data" TargetFolderName="App_Data" />
+      <Folder Name="ClientBin" TargetFolderName="ClientBin" />
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ValidationErrorResources.resx">ValidationErrorResources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationDataResources.resx">RegistrationDataResources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ValidationErrorResources.Designer.cs">ValidationErrorResources.Designer.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationDataResources.Designer.cs">RegistrationDataResources.Designer.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Services" TargetFolderName="Services">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AuthenticationService.cs">AuthenticationService.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserRegistrationService.cs">UserRegistrationService.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Models" TargetFolderName="Models">
+        <Folder Name="Shared" TargetFolderName="Shared">
+          <ProjectItem ReplaceParameters="true" TargetFileName="User.shared.cs">User.shared.cs</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="User.cs">User.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationData.cs">RegistrationData.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true">__safeclientprojectname__TestPage.aspx</ProjectItem>
+      <ProjectItem ReplaceParameters="true">__safeclientprojectname__TestPage.html</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Silverlight.js">Silverlight.js</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Release.config">Web.Release.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="GlobalSuppressions.cs">GlobalSuppressions.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.11.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, Custom=null</Assembly>
+    <FullClassName>Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.BusinessApplicationServerTemplateWizard</FullClassName>
+  </WizardExtension>  
+</VSTemplate>

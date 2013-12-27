@@ -105,14 +105,13 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 solution2.AddFromTemplate(netClassLibProjectTemplate, destination, netClassLibProjectName, false);
             }
 
-            SLProjectExtender slProjectExtender = this._slClassLibProject.get_Extender("SilverlightProject") as SLProjectExtender;
 
             // Link the two class libraries together
-            if (slProjectExtender != null)
-            {
-                string extension = Path.GetExtension(slClassLibProjectPath);
-                slProjectExtender.LinkedServerProject = Path.Combine("..", Path.Combine(netClassLibProjectName, netClassLibProjectName + extension));
-            }
+
+            string extension = Path.GetExtension(slClassLibProjectPath);
+            Property prop = this._slClassLibProject.Properties.Item("LinkedOpenRiaServerProject");
+            prop.Value = Path.Combine("..", Path.Combine(netClassLibProjectName, netClassLibProjectName + extension));
+
         }
 
         public void RunStarted(object automationObject,

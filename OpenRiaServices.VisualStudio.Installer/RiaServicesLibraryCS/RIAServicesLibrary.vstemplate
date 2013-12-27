@@ -1,0 +1,31 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name Package="{AF2C7B8E-F503-48FB-8208-2EB3F98C20CB}"/>
+    <Description Package="{AF2C7B8E-F503-48FB-8208-2EB3F98C20CB}"/>
+    <Icon>CSRIAServicesLibrary.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <TemplateGroupID>Silverlight</TemplateGroupID>
+    <TemplateID>OpenRiaServices.Silverlight.CSharp.OpenRiaServicesLibrary</TemplateID>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>RIAServicesLibrary</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <SortOrder>45</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="RIAServicesLibrary.csproj" ReplaceParameters="true">
+      <ProjectItem OpenInEditor="true" ReplaceParameters="true">Class1.cs</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.12.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.RiaServicesLibraryWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
