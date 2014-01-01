@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using OpenRiaServices.DomainServices.Client;
 using Cities;
@@ -22,6 +23,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, doe.Status, "Default status s/b ServerError");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
 
             // ctor(message)
             doe = new DomainOperationException("message");
@@ -30,6 +32,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, doe.Status, "Default status s/b ServerError");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
 
             // ctor(message, status)
             doe = new DomainOperationException("message", OperationErrorStatus.Unauthorized);
@@ -38,6 +41,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
 
             // ctor(message, status, errCode)
             doe = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5);
@@ -46,6 +50,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(5, doe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
 
             // ctor(message, status, errCode, stackTrace)
             doe = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5, "stackTrace");
@@ -54,6 +59,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual("stackTrace", doe.StackTrace, "StackTrace failed");
             Assert.AreEqual(5, doe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
 
             // ctor(message, innerException)
             InvalidOperationException ioe = new InvalidOperationException("ioe");
@@ -63,6 +69,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, doe.Status, "Default status s/b ServerError");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
 
             // ctor(message, doe)
             DomainOperationException doe2 = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5, "stackTrace");
@@ -72,6 +79,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual("stackTrace", doe.StackTrace, "StackTrace failed");
             Assert.AreEqual(5, doe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
+            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+
+            // ctor(message, validationerrors)
+            var validationErrors = new List<ValidationResult>() {new ValidationResult("validation message")};
+            doe = new DomainOperationException("message", validationErrors);
+            Assert.AreEqual("message", doe.Message, "ctor(message, validationerrors) failed message");
+            Assert.IsNull(doe.InnerException, "InnerException s/b null");
+            Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
+            Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, doe.Status, "ctor(message, validationerrors) status s/b ValidationFailed");
+            CollectionAssert.AreEqual(validationErrors, doe.ValidationErrors.ToList());
         }
 
         [TestMethod]

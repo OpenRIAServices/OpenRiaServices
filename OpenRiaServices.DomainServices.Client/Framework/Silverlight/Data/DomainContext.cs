@@ -346,7 +346,6 @@ namespace OpenRiaServices.DomainServices.Client
             else if (operation.HasError)
             {
                 operation.MarkErrorAsHandled();
-                // TODO: Make sure domain exception get all interesting validation errors
                 tcs.TrySetException(operation.Error);
             }
             else
