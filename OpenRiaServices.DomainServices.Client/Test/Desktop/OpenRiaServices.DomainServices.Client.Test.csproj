@@ -244,6 +244,9 @@
     <Compile Include="..\Silverlight\Data\PoxTests.cs">
       <Link>Data\PoxTests.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\SubmitOperationExceptionTests.cs">
+      <Link>Data\SubmitOperationExceptionTests.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\ValidationResultCollectionTests.cs">
       <Link>Data\ValidationResultCollectionTests.cs</Link>
     </Compile>

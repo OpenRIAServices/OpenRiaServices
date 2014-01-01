@@ -106,11 +106,11 @@ namespace OpenRiaServices.DomainServices.Client
             DomainOperationException domainOperationException = error as DomainOperationException;
             if (domainOperationException != null)
             {
-                error = new DomainOperationException(message, domainOperationException);
+                error = new SubmitOperationException(ChangeSet, message, domainOperationException);
             }
             else
             {
-                error = new DomainOperationException(message, error);
+                error = new SubmitOperationException(ChangeSet, message, error);
             }
 
             base.Complete(error);
@@ -121,11 +121,11 @@ namespace OpenRiaServices.DomainServices.Client
             DomainOperationException error = null;
             if (errorStatus == OperationErrorStatus.ValidationFailed)
             {
-                error = new DomainOperationException(Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
+                error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
             }
             else if (errorStatus == OperationErrorStatus.Conflicts)
             {
-                error = new DomainOperationException(Resource.DomainContext_SubmitOperationFailed_Conflicts, OperationErrorStatus.Conflicts);
+                error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Conflicts, OperationErrorStatus.Conflicts);
             }
 
             base.Complete(error);

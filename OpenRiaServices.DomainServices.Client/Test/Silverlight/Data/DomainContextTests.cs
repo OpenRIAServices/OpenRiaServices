@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -125,6 +126,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
+        public void LoadAsync_CancellationBehavior()
+        {
+            var cts = new CancellationTokenSource();
+            var loadResult = BeginLoadCityDataAsync(cts.Token);
+            cts.Cancel();
+
+            this.EnqueueConditional(() => loadResult.IsCompleted);
+            this.EnqueueCallback(() =>
+            {
+                Assert.AreEqual(true, loadResult.IsCanceled);
+            });
+            this.EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Asynchronous]
         public void SubmitChanges_DefaultBehavior()
         {
             this.EnqueueCallback(() =>
@@ -151,6 +168,25 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueCallback(() =>
             {
                 this.AssertSubmitCancelled();
+            });
+            this.EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Asynchronous]
+        public void SubmitChangesAsync_CancellationBehavior()
+        {
+            var cts = new CancellationTokenSource();
+            EntitySet entitySet = this.CityDomainContext.EntityContainer.GetEntitySet<City>();
+            entitySet.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+
+            var submitTask = CityDomainContext.SubmitChangesAsync(cts.Token);
+            cts.Cancel();
+
+            this.EnqueueConditional(() => submitTask.IsCompleted);
+            this.EnqueueCallback(() =>
+            {
+                Assert.IsTrue(submitTask.IsCanceled);
             });
             this.EnqueueTestComplete();
         }
@@ -184,6 +220,28 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationCalled);
             });
 
+            this.EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Asynchronous]
+        public void DomainContextCallsVirtualMethods_Async()
+        {
+            this.EnqueueCallback(() =>
+            {
+                var query = this.CityDomainContext.GetCitiesQuery();
+                this.CityDomainContext.LoadAsync(query);                
+                Assert.IsTrue(this.CityDomainContext.LoadAsyncCalled);
+                Assert.IsTrue(this.CityDomainContext.LoadCalled, "LoadAsync should invoke Load");
+            });
+
+            this.EnqueueCallback(() =>
+            {
+                this.CityDomainContext.SubmitChangesAsync();
+                Assert.IsTrue(this.CityDomainContext.SubmitChangesAsyncCalled);
+                Assert.IsTrue(this.CityDomainContext.SubmitChangesCalled, "SubmitChangesAsync should invoke SubmitChanges");
+            });
+          
             this.EnqueueTestComplete();
         }
 
@@ -315,6 +373,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             var query = this.CityDomainContext.GetCitiesQuery();
             this.LoadOperation = this.CityDomainContext.Load(query, LoadBehavior.RefreshCurrent, callback, userState);
+        }
+
+        private Task<LoadResult<City>>  BeginLoadCityDataAsync(CancellationToken cts)
+        {
+            var query = this.CityDomainContext.GetCitiesQuery();
+            return this.CityDomainContext.LoadAsync(query, LoadBehavior.RefreshCurrent, cts);
         }
 
         private void BeginLoadCityData(Action<LoadOperation<City>> callback, bool assertInProgress)

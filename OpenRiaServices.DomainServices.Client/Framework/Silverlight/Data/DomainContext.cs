@@ -317,6 +317,16 @@ namespace OpenRiaServices.DomainServices.Client
         /// Submit all pending changes to the DomainService asyncronously.
         /// </summary>
         /// <returns>The <see cref="SubmitResult"/>.</returns>
+        public Task<SubmitResult> SubmitChangesAsync()
+        {
+            return SubmitChangesAsync(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Submit all pending changes to the DomainService asyncronously.
+        /// </summary>
+        /// <returns>The <see cref="SubmitResult"/>.</returns>
+        /// <param name="cancellationToken">cancellation token</param>
         public virtual Task<SubmitResult> SubmitChangesAsync(CancellationToken cancellationToken)
         {
             TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
@@ -621,7 +631,42 @@ namespace OpenRiaServices.DomainServices.Client
         /// Initiates a load operation for the specified query.
         /// </summary>
         /// <param name="query">The query to invoke.</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query)
+            where TEntity : Entity
+        {
+            return LoadAsync(query, LoadBehavior.KeepCurrent, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Initiates a load operation for the specified query.
+        /// </summary>
+        /// <param name="query">The query to invoke.</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, CancellationToken cancellationToken)
+            where TEntity : Entity
+        {
+            return LoadAsync(query, LoadBehavior.KeepCurrent, cancellationToken);
+        }
+
+        /// <summary>
+        /// Initiates a load operation for the specified query.
+        /// </summary>
+        /// <param name="query">The query to invoke.</param>
         /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to apply.</param>
+        public Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior)
+                where TEntity : Entity
+        {
+            return LoadAsync(query, loadBehavior, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Initiates a load operation for the specified query.
+        /// </summary>
+        /// <param name="query">The query to invoke.</param>
+        /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to apply.</param>
+        /// <param name="cancellationToken">cancellation token</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
                 where TEntity : Entity

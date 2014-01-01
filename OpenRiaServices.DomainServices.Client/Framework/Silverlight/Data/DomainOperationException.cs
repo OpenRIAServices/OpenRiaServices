@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    public sealed class DomainOperationException : Exception
+    public class DomainOperationException : Exception
     {
 #if !SILVERLIGHT
         // The internal safe serialization state object must not be implicitly serialized.
@@ -155,7 +155,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="errorCode">custom error code</param>
         /// <param name="stackTrace">stack trace of the exception</param>
         /// <param name="validationErrors">validation errror of the exception</param>
-        private DomainOperationException(string message, Exception innerException, OperationErrorStatus status, int errorCode, string stackTrace, IEnumerable<ValidationResult> validationErrors)
+        protected DomainOperationException(string message, Exception innerException, OperationErrorStatus status, int errorCode, string stackTrace, IEnumerable<ValidationResult> validationErrors)
             : base(message, innerException)
         {
             Debug.Assert(!innerException.IsFatal(), "Fatal exception passed in as InnerException");
@@ -231,4 +231,3 @@ namespace OpenRiaServices.DomainServices.Client
         }
     }
 }
-
