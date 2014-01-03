@@ -18,7 +18,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     using ConnectionStringSettings = global::System.Configuration.ConnectionStringSettings;
     using ConnectionStringSettingsCollection = global::System.Configuration.ConnectionStringSettingsCollection;
     using ConnectionStringsSection           = global::System.Configuration.ConnectionStringsSection;
-    using EntityConnectionStringBuilder      = global::System.Data.EntityClient.EntityConnectionStringBuilder;
+    using EntityConnectionStringBuilder      = global::System.Data.Entity.Core.EntityClient.EntityConnectionStringBuilder;
     using SqlConnectionStringBuilder         = global::System.Data.SqlClient.SqlConnectionStringBuilder;
     using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
     using IVsShell = Microsoft.VisualStudio.Shell.Interop.IVsShell;

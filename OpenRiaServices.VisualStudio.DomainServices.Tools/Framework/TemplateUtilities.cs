@@ -18,13 +18,18 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     {
 #if VS10
         private const string SilverlightDesignerKeyName = @"Software\Microsoft\VisualStudio\10.0\DesignerPlatforms\Silverlight";
+        public const decimal DefaultSilverlightVersion = 4.0m;
 #elif VS11
         private const string SilverlightDesignerKeyName = @"Software\Microsoft\VisualStudio\11.0\DesignerPlatforms\Silverlight";
+        public const decimal DefaultSilverlightVersion = 4.0m;
+#elif VS12
+        private const string SilverlightDesignerKeyName = @"Software\Microsoft\VisualStudio\12.0\DesignerPlatforms\Silverlight";
+        public const decimal DefaultSilverlightVersion = 5.0m;
 #else
-#error OpenRiaServices.VisualStudio.DomainServices.Tools must target either Visual Studio Version 10.0 or 11.0
+#error OpenRiaServices.VisualStudio.DomainServices.Tools must target either Visual Studio Version 10.0 or 11.0 or 12.0
 #endif
         private const string SilverlightHostValueName = "SilverlightHost";
-        public const decimal DefaultSilverlightVersion = 4.0m;
+        
 
         // Copied from Microsoft.VisualStudio.Shell.ServiceProvider in Microsoft.VisualStudio.Shell.10.0.dll
         public static InterfaceType GetService<InterfaceType, ServiceType>(IServiceProvider serviceProvider)

@@ -113,14 +113,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             // Link the two class libraries together
 
             string extension = Path.GetExtension(slClassLibProjectPath);
-
-            IVsSolution ivsSolution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution;
-
+            IVsSolution ivsSolution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             IVsHierarchy hierarchy;
-
             ivsSolution.GetProjectOfUniqueName(_slClassLibProject.UniqueName, out hierarchy);
-
-            IVsBuildPropertyStorage buildPropertyStorage = hierarchy as IVsBuildPropertyStorage;
+            IVsBuildPropertyStorage buildPropertyStorage = (IVsBuildPropertyStorage)hierarchy;
             buildPropertyStorage.SetPropertyValue("LinkedOpenRiaServerProject", null,
                 (uint)_PersistStorageType.PST_PROJECT_FILE,
                 Path.Combine("..", Path.Combine(netClassLibProjectName, netClassLibProjectName + extension)));

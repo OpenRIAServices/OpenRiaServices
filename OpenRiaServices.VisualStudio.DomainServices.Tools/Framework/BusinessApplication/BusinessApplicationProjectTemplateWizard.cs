@@ -93,13 +93,21 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 // Link the server project to the client
                 if (silverlightProject != null)
                 {
-                    Property prop = silverlightProject.Properties.Item("LinkedOpenRiaServerProject");
                     string projectReference = webProject.FullName;
                     if ((webProject.FullName.Length > 0) && Path.IsPathRooted(webProject.FullName))
                     {
                         projectReference = MakeProjectPathRelative(projectReference, silverlightProject.FullName);
                     }
-                    prop.Value = webProject.FullName;
+
+                    string extension = Path.GetExtension(silverlightProject.FullName);
+                    IVsSolution ivsSolution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+                    IVsHierarchy hierarchy;
+                    ivsSolution.GetProjectOfUniqueName(silverlightProject.UniqueName, out hierarchy);
+                    IVsBuildPropertyStorage buildPropertyStorage = (IVsBuildPropertyStorage)hierarchy;
+                    buildPropertyStorage.SetPropertyValue("LinkedOpenRiaServerProject", null,
+                        (uint)_PersistStorageType.PST_PROJECT_FILE,
+                        projectReference);
+
 
                     // Add this client to the list of clients in the server project
 
