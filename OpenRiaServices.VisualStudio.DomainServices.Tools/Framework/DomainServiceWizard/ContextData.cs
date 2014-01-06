@@ -12,7 +12,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <see cref="ContextViewModel"/>
     /// </summary>
     [Serializable]
-    internal class ContextData : MarshalByRefObject
+    public class ContextData : MarshalByRefObject, IContextData
     {
         /// <summary>
         /// Gets or sets the user-visible name of this context, including the DAL technology as a string

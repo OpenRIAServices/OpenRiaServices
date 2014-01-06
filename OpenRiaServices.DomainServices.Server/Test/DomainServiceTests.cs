@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Security.Principal;
 using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Hosting;
 using System.Xml.Linq;
 using Cities;
@@ -569,14 +570,14 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             var current = new NorthwindModel.Category()
             {
-                EntityKey = new System.Data.EntityKey("NorthwindEntities.Categories", "CategoryID", 1),
+                EntityKey = new System.Data.Entity.Core.EntityKey("NorthwindEntities.Categories", "CategoryID", 1),
                 CategoryID = 1,
                 CategoryName = "Category",
                 Description = "My category"
             };
             var original = new NorthwindModel.Category()
             {
-                EntityKey = new System.Data.EntityKey("NorthwindEntities.Categories", "CategoryID", 1),
+                EntityKey = new System.Data.Entity.Core.EntityKey("NorthwindEntities.Categories", "CategoryID", 1),
                 CategoryID = 1,
                 CategoryName = "Category"
             };

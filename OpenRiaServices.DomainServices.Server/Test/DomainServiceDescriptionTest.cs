@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -28,7 +30,7 @@ using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Dom
 namespace OpenRiaServices.DomainServices.Server.Test
 {
     using MetaType = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.MetaType;
-    using System.Data.Metadata.Edm;
+    
 
     /// <summary>
     /// DomainServiceDescription tests
@@ -3074,7 +3076,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
     }
 
-    public class EFPocoEntity_IEntityChangeTracker : System.Data.Objects.DataClasses.IEntityChangeTracker
+    public class EFPocoEntity_IEntityChangeTracker : System.Data.Entity.Core.Objects.DataClasses.IEntityChangeTracker
     {
         public void EntityComplexMemberChanged(string entityMemberName, object complexObject, string complexObjectMemberName)
         {

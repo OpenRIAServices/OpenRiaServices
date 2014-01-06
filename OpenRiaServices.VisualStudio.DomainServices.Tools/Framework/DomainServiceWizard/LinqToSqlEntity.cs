@@ -7,7 +7,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Subclass of <see cref="BusinessLogicEntity"/> to describe a LinqToSql entity
     /// </summary>
-    internal class LinqToSqlEntity : BusinessLogicEntity
+    public class LinqToSqlEntity : BusinessLogicEntity
     {
         private string _tablePropertyName;
         private bool _hasTimestampMember;

@@ -7,40 +7,56 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;WIZARD;VS10</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX;WIZARD;VS12</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;WIZARD;VS10</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERVERFX;WIZARD;VS11</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;WIZARD;VS10</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX;WIZARD;VS11</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;WIZARD;VS10;VS10</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX;WIZARD;VS12</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <!--
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
+    <OutputPath>bin\Signed\</OutputPath>
+    <DefineConstants>TRACE;SERVERFX;WIZARD;VS12;SIGNED</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>OpenRiaServices.VisualStudio.Tools.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>-->
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -49,13 +65,12 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E7D958FE-3D14-4EAD-B810-10471757CC4F}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <VsVersion Condition=" '$(VsVersion)' == '' ">10.0</VsVersion>
+    <VsVersion Condition=" '$(VsVersion)' == '' ">12.0</VsVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.VisualStudio.DomainServices.Tools</RootNamespace>
-    <AssemblyName>OpenRiaServices.VisualStudio.DomainServices.Tools.10.0</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>OpenRiaServices.VisualStudio.DomainServices.Tools.12.0</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -78,7 +93,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;WIZARD</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SERVERFX;WIZARD;DBCONTEXT;VS12</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -86,7 +101,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVERFX;WIZARD</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX;WIZARD;DBCONTEXT;VS12</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -95,36 +110,50 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;SERVERFX;CODECOV;WIZARD</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX;CODECOV;WIZARD;VS12</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="'$(VsVersion)' == '10.0'">$(DefineConstants);VS10</DefineConstants>
     <DefineConstants Condition="'$(VsVersion)' == '11.0'">$(DefineConstants);VS11</DefineConstants>
+    <DefineConstants Condition="'$(VsVersion)' == '12.0'">$(DefineConstants);VS12</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.6.0.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.0.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.VisualStudio.Shell, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Design, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageRoot)\External\VisualStudio\$(VsVersion)\Microsoft.VisualStudio.Shell.Design.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Design, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Microsoft.VisualStudio.Silverlight">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageRoot)\External\VisualStudio\$(VsVersion)\Microsoft.VisualStudio.Silverlight.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 12.0\VSSDK\VisualStudioIntegration\Common\Assemblies\v2.0\Microsoft.VisualStudio.Shell.Interop.8.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 12.0\VSSDK\VisualStudioIntegration\Common\Assemblies\v2.0\Microsoft.VisualStudio.Shell.Interop.9.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Silverlight, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\Microsoft Visual Studio 12.0\Common7\IDE\Microsoft.VisualStudio.Silverlight.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TemplateWizardInterface, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.VisualStudio.Web.Application">
+    <Reference Include="Microsoft.VisualStudio.Web.Application, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(FeaturePackageRoot)\External\VisualStudio\$(VsVersion)\Microsoft.VisualStudio.Web.Application.dll</HintPath>
+      <HintPath>$(ProgramFiles)\Microsoft Visual Studio 12.0\Common7\IDE\Microsoft.VisualStudio.Web.Application.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore">
@@ -137,9 +166,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.Entity">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data.Linq">
@@ -182,16 +208,16 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
       <Link>ExceptionHandlingUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.Designer.cs">
       <Link>MetadataResource.Designer.cs</Link>
       <DependentUpon>MetadataResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataWorkspaceUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataWorkspaceUtilities.cs">
       <Link>MetadataWorkspaceUtilities.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\ObjectContextUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\ObjectContextUtilities.cs">
       <Link>ObjectContextUtilities.cs</Link>
     </Compile>
     <Compile Include="AuthenticationDomainService\AuthenticationDomainServiceWizard.cs">
@@ -200,6 +226,10 @@
     </Compile>
     <Compile Include="BusinessApplication\BusinessApplicationServerTemplateWizard.cs">
     </Compile>
+    <Compile Include="DomainServiceWizard\BusinessLogicContext.cs" />
+    <Compile Include="DomainServiceWizard\CodeGenContext.cs" />
+    <Compile Include="DomainServiceWizard\LinqToEntitiesContext.cs" />
+    <Compile Include="DomainServiceWizard\LinqToSqlContext.cs" />
     <Compile Include="LocalDB.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -218,24 +248,23 @@
     <Compile Include="DomainServiceWizard\IVsHelp.cs" />
     <Compile Include="DomainServiceWizard\LinqToEntitiesContextBase.cs" />
     <Compile Include="DomainServiceWizard\LinqToEntitiesDbContext.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="RiaLinker.cs" />
     <Compile Include="TemplateUtilities.cs" />
     <Compile Include="TestHooks\DomainServiceClassWizardInternalTestHook.cs">
     </Compile>
     <Compile Include="DomainServiceWizard\DomainServiceClassWizard.cs">
     </Compile>
-    <Compile Include="DomainServiceWizard\BusinessLogicContext.cs" />
     <Compile Include="DomainServiceWizard\BusinessLogicEntity.cs" />
     <Compile Include="DomainServiceWizard\BusinessLogicViewModel.cs" />
-    <Compile Include="DomainServiceWizard\CodeGenContext.cs">
-    </Compile>
     <Compile Include="DomainServiceWizard\CodeGenUtilities.cs">
     </Compile>
     <Compile Include="DomainServiceWizard\GeneratedCode.cs" />
-    <Compile Include="DomainServiceWizard\LinqToEntitiesContext.cs">
-    </Compile>
     <Compile Include="DomainServiceWizard\LinqToEntitiesEntity.cs">
-    </Compile>
-    <Compile Include="DomainServiceWizard\LinqToSqlContext.cs">
     </Compile>
     <Compile Include="DomainServiceWizard\LinqToSqlEntity.cs">
     </Compile>
@@ -244,11 +273,6 @@
     <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="RiaServicesLibrary\RiaServicesLibraryWizard.cs">
     </Compile>
     <Compile Include="WebConfigUtil.cs">
@@ -293,7 +317,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.resx">
+    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.resx">
       <Link>MetadataResource.resx</Link>
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -308,10 +332,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
-      <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
-      <Private>False</Private>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
+      <Project>{72137db5-8a91-4ff8-a292-5f6e73a66cd6}</Project>
+      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
       <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
@@ -328,6 +351,15 @@
       <Name>OpenRiaServices.DomainServices.Server</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.VisualStudio.Interface\OpenRiaServices.VisualStudio.Interface.csproj">
+      <Project>{9cfb422b-2995-4813-831c-2bdc013b68bf}</Project>
+      <Name>OpenRiaServices.VisualStudio.Interface</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />

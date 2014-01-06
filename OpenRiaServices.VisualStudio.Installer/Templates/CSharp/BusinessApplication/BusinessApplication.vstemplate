@@ -1,0 +1,93 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+    <TemplateData>
+        <Name Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2302"/>
+        <Description Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2303"/>
+        <Icon>CSBusinessApplication.ico</Icon>
+        <ProjectType>CSharp</ProjectType>
+        <TemplateGroupID>Silverlight</TemplateGroupID>
+        <TemplateID>OpenRiaServices.Silverlight.CSharp.BusinessApplication</TemplateID>
+        <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+        <SortOrder>44</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>BusinessApplication</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    </TemplateData>
+    <TemplateContent>
+        <Project TargetFileName="$safeprojectname$.csproj" File="BusinessApplication.csproj" ReplaceParameters="true">
+            <Folder Name="Properties" TargetFolderName="Properties">
+                <ProjectItem ReplaceParameters="true" TargetFileName="AppManifest.xml">AppManifest.xml</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="OutOfBrowserSettings.xml">OutOfBrowserSettings.xml</ProjectItem>
+            </Folder>
+            <Folder Name="Assets" TargetFolderName="Assets">
+                <Folder Name="Resources" TargetFolderName="Resources">
+                    <ProjectItem ReplaceParameters="true" TargetFileName="ApplicationResources.cs">ApplicationResources.cs</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="ApplicationStrings.resx">ApplicationStrings.resx</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="ApplicationStrings.Designer.cs">ApplicationStrings.Designer.cs</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="ErrorResources.resx">ErrorResources.resx</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="ErrorResources.Designer.cs">ErrorResources.Designer.cs</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="SecurityQuestions.resx">SecurityQuestions.resx</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="SecurityQuestions.Designer.cs">SecurityQuestions.Designer.cs</ProjectItem>
+                </Folder>
+                <ProjectItem ReplaceParameters="true" TargetFileName="Styles.xaml">Styles.xaml</ProjectItem>
+            </Folder>
+            <Folder Name="Models" TargetFolderName="Models">
+                <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationData.partial.cs">RegistrationData.partial.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="User.partial.cs">User.partial.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="LoginInfo.cs">LoginInfo.cs</ProjectItem>
+            </Folder>
+            <Folder Name="Controls" TargetFolderName="Controls">
+                <ProjectItem ReplaceParameters="true" TargetFileName="VisualStates.cs">VisualStates.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="BusyIndicator.cs">BusyIndicator.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="BusyIndicator.xaml">BusyIndicator.xaml</ProjectItem>
+            </Folder>
+            <Folder Name="Helpers" TargetFolderName="Helpers">
+                <ProjectItem ReplaceParameters="true" TargetFileName="DataFieldExtensions.cs">DataFieldExtensions.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="NotOperatorValueConverter.cs">NotOperatorValueConverter.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="TargetNullValueConverter.cs">TargetNullValueConverter.cs</ProjectItem>
+            </Folder>
+            <Folder Name="Views" TargetFolderName="Views">
+                <Folder Name="Login" TargetFolderName="Login">
+                    <ProjectItem ReplaceParameters="true" TargetFileName="LoginStatus.xaml">LoginStatus.xaml</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="LoginStatus.xaml.cs">LoginStatus.xaml.cs</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="LoginForm.xaml">LoginForm.xaml</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="LoginForm.xaml.cs">LoginForm.xaml.cs</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="LoginRegistrationWindow.xaml">LoginRegistrationWindow.xaml</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="LoginRegistrationWindow.xaml.cs">LoginRegistrationWindow.xaml.cs</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationForm.xaml">RegistrationForm.xaml</ProjectItem>
+                    <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationForm.xaml.cs">RegistrationForm.xaml.cs</ProjectItem>
+                </Folder>
+                <ProjectItem ReplaceParameters="true" TargetFileName="About.xaml">About.xaml</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="About.xaml.cs">About.xaml.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="ErrorWindow.xaml">ErrorWindow.xaml</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="ErrorWindow.xaml.cs">ErrorWindow.xaml.cs</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="Home.xaml">Home.xaml</ProjectItem>
+                <ProjectItem ReplaceParameters="true" TargetFileName="Home.xaml.cs">Home.xaml.cs</ProjectItem>
+            </Folder>
+            <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml">App.xaml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml.cs">App.xaml.cs</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml">MainPage.xaml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml.cs">MainPage.xaml.cs</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="GlobalSuppressions.cs">GlobalSuppressions.cs</ProjectItem>
+        </Project>
+    </TemplateContent>
+    <WizardExtension>
+    <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+    <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <packages repository="extension"
+          repositoryId="OpenRiaServices.Tools.Outercurve.83014b5f-3f89-4eff-a7fa-b5ec62657247">
+        <package id="OpenRiaServices.Silverlight" version = "4.3.0.0"/>
+        <package id="SilverlightToolkit-Data" version = "4.2010.4"/>
+    </packages>
+  </WizardData>
+  <WizardExtension>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.12.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.BusinessApplicationProjectTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

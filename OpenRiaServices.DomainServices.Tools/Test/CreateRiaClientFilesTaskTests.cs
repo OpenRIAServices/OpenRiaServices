@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     /// Tests for custom build task to generate client proxies
     /// </summary>
     [TestClass]
-    public class CreateRiaClientFilesTaskTests
+    public class CreateOpenRiaClientFilesTaskTests
     {
         // Expected shared and linked files from ServerClassLib/ServerClassLib2
         private static readonly string[] expectedServerNamedSharedFiles = new string[] { 
@@ -42,20 +42,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private static readonly string[] expectedClientLinkedFiles = new string[] { 
                         "TestEntity.reverse.linked.cs"};
 
-        public CreateRiaClientFilesTaskTests()
+        public CreateOpenRiaClientFilesTaskTests()
         {
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF0")]
-        [Description("CreateRiaClientFilesTask populates its internal computed properties correctly")]
+        [Description("CreateOpenRiaClientFilesTask populates its internal computed properties correctly")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Internal_Computed_Task_Properties()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF0", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF0", /*includeClientOutputAssembly*/ false);
 
                 // ServerProjectRootNamespace
                 string serverRootNamespace = task.ServerProjectRootNameSpace;
@@ -78,15 +78,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF1")]
-        [Description("CreateRiaClientFilesTask should issue warning if no server assembly was specified")]
+        [Description("CreateOpenRiaClientFilesTask should issue warning if no server assembly was specified")]
         [TestMethod]
         public void CreateRiaClientFiles_Warn_No_Assembly_Specified()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF1", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF1", /*includeClientOutputAssembly*/ false);
 
                 task.ServerAssemblies = new TaskItem[0];
                 task.ServerReferenceAssemblies = new TaskItem[0];
@@ -107,15 +107,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF2")]
-        [Description("CreateRiaClientFilesTask should issue warning if server assembly does not exist")]
+        [Description("CreateOpenRiaClientFilesTask should issue warning if server assembly does not exist")]
         [TestMethod]
         public void CreateRiaClientFiles_Warn_No_Assembly_Exists()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF2", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF2", /*includeClientOutputAssembly*/ false);
                 task.ServerAssemblies = MsBuildHelper.AsTaskItems(new string[] { "NotExist.dll" }).ToArray();
                 task.ServerReferenceAssemblies = new TaskItem[0];
 
@@ -136,11 +136,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
 
-        [Description("CreateRiaClientFilesTask.SafeFolderCreate catches expected exceptions")]
+        [Description("CreateOpenRiaClientFilesTask.SafeFolderCreate catches expected exceptions")]
         [TestMethod]
         public void CreateRiaClientFiles_Safe_Folder_Create()
         {
-            CleanRiaClientFilesTask task = new CleanRiaClientFilesTask();
+            CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
             task.BuildEngine = mockBuildEngine;
 
@@ -186,15 +186,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF3")]
-        [Description("CreateRiaClientFilesTask issues no warning if ask to write null content to non-existant file")]
+        [Description("CreateOpenRiaClientFilesTask issues no warning if ask to write null content to non-existant file")]
         [TestMethod]
         public void CreateRiaClientFiles_No_Warning_Write_Empty_Content()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF3", false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF3", false);
 
                 // Create place to write file that should not exist
                 string outputFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -215,15 +215,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF12")]
-        [Description("CreateRiaClientFilesTask logs error if the RIA Link points to non-existent file")]
+        [Description("CreateOpenRiaClientFilesTask logs error if the RIA Link points to non-existent file")]
         [TestMethod]
         public void CreateRiaClientFiles_Bad_RIA_Link()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF12", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF12", /*includeClientOutputAssembly*/ false);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
                 task.ServerProjectPath = task.ServerProjectPath + "bogus";  // tweak RIA Link to point to non existent file
 
@@ -232,7 +232,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
                 bool success = task.Execute();
 
-                Assert.IsFalse(success, "CreateRiaClientFilesTask should have failed with bad RIA Link");
+                Assert.IsFalse(success, "CreateOpenRiaClientFilesTask should have failed with bad RIA Link");
                 string error = string.Format(CultureInfo.CurrentCulture, Resource.Server_Project_File_Does_Not_Exist, "ClientClassLib.csproj", task.ServerProjectPath);
                 TestHelper.AssertContainsErrors(mockBuildEngine.ConsoleLogger, error);
             }
@@ -245,15 +245,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF4")]
-        [Description("CreateRiaClientFilesTask issues warning if no PDB is found")]
+        [Description("CreateOpenRiaClientFilesTask issues warning if no PDB is found")]
         [TestMethod]
         public void CreateRiaClientFiles_Missing_Pdb_Warns()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF4", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF4", /*includeClientOutputAssembly*/ false);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
                 string serverAssemblyFile = task.ServerAssemblies[0].ItemSpec;  // use name we mapped to deployment dir
                 string serverPdbFile = Path.ChangeExtension(serverAssemblyFile, "pdb");
@@ -272,7 +272,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string error = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_No_Pdb, serverAssemblyFile);
@@ -285,20 +285,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF5")]
-        [Description("CreateRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
+        [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Generated_Files()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF5", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF5", /*includeClientOutputAssembly*/ false);
                 bool success = task.Execute();
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -415,11 +415,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
         
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF11")]
-        [Description("CreateRiaClientFilesTask can access web.config using ASP.NET AppDomain")]
+        [Description("CreateOpenRiaClientFilesTask can access web.config using ASP.NET AppDomain")]
         [TestMethod]
         public void CreateRiaClientFiles_ASPNET_AppDomain()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
@@ -431,13 +431,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 //    the same as we would expect at runtime.  We use the CodeProcessor
                 //    approach because it is called by the code generator while it is
                 //    running within a ASP.NET AppDomain
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstanceForWAP("CRCF11");
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstanceForWAP("CRCF11");
 
                 bool success = task.Execute();
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 // Validate ServerOutputPath is what we expect -- it is critical for ASP.NET AppDomain
@@ -480,7 +480,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF7")]
-        [Description("CreateRiaClientFilesTask computes the correct set of shared files")]
+        [Description("CreateOpenRiaClientFilesTask computes the correct set of shared files")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Shared_Files()
         {
@@ -488,11 +488,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string outputPath = null;
             TestHelper.GetProjectPaths("CRCF7", out projectPath, out outputPath);
 
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF7", /*includeClientOutputAssembly*/ true);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF7", /*includeClientOutputAssembly*/ true);
 
                 // Note: we do not execute this task because it will fail (due to true passed to helper above)
 
@@ -540,20 +540,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF8")]
-        [Description("CreateRiaClientFilesTask does not regen files on second code-gen")]
+        [Description("CreateOpenRiaClientFilesTask does not regen files on second code-gen")]
         [TestMethod]
         public void CreateRiaClientFiles_Second_CodeGen_Does_Nothing()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF8", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF8", /*includeClientOutputAssembly*/ false);
                 bool success = task.Execute();
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -591,7 +591,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed on 2nd pass:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed on 2nd pass:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -631,20 +631,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF8")]
-        [Description("CreateRiaClientFilesTask generates breadcrumb files with relative paths, and does nothing on second build")]
+        [Description("CreateOpenRiaClientFilesTask generates breadcrumb files with relative paths, and does nothing on second build")]
         [TestMethod]
         public void CreateRiaClientFiles_CopyClientProject()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance_CopyClientProjectToOutput("CRCF8", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance_CopyClientProjectToOutput("CRCF8", /*includeClientOutputAssembly*/ false);
                 bool success = task.Execute();
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -690,7 +690,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed on 2nd pass:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed on 2nd pass:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -736,20 +736,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF9")]
-        [Description("CreateRiaClientFilesTask regenerates code if list of references changes")]
+        [Description("CreateOpenRiaClientFilesTask regenerates code if list of references changes")]
         [TestMethod]
         public void CreateRiaClientFiles_Missing_ReferenceList_Regens()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF9", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF9", /*includeClientOutputAssembly*/ false);
                 bool success = task.Execute();
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -791,7 +791,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 if (!success)
                 {
                     MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed on 2nd pass:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed on 2nd pass:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -819,15 +819,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CRCF10")]
-        [Description("CreateRiaClientFilesTask purges orphan files and folders on subsequent builds")]
+        [Description("CreateOpenRiaClientFilesTask purges orphan files and folders on subsequent builds")]
         [TestMethod]
         public void CreateRiaClientFiles_Deletes_Orphan_Files()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
             string tempSharedFileFolder = CodeGenHelper.GenerateTempFolder();
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CRCF10", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF10", /*includeClientOutputAssembly*/ false);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
                 string serverProjectPath = task.ServerProjectPath;
 
@@ -862,7 +862,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 bool success = task.Execute();
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -886,7 +886,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 success = task.Execute();
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
                 Assert.IsTrue(Directory.Exists(generatedOuterFolder), "Expected no change for folder " + generatedOuterFolder);
                 Assert.IsTrue(Directory.Exists(generatedInnerFolder), "Expected no change for folder " + generatedInnerFolder);
@@ -903,7 +903,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 success = task.Execute();
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
                 Assert.IsTrue(Directory.Exists(generatedOuterFolder), "Expected no change for folder " + generatedOuterFolder);
                 // TODO, 244509: we no longer remove empty folder
@@ -926,7 +926,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 success = task.Execute();
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
                 Assert.IsTrue(Directory.Exists(generatedOuterFolder), "Expected no change for folder " + generatedOuterFolder);
                 Assert.IsFalse(File.Exists(generatedOuterSharedFile), "Expected deletion file " + generatedOuterSharedFile);
@@ -948,7 +948,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
                 Assert.IsTrue(Directory.Exists(generatedOuterFolder), "Expected no change for folder " + generatedOuterFolder);
                 Assert.IsFalse(File.Exists(generatedRenamedFile), "Expected deletion of file " + generatedRenamedFile);
@@ -963,14 +963,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [Description("CreateRiaClientFilesTask.IsClientApplication property setter & getter tests")]
+        [Description("CreateOpenRiaClientFilesTask.IsClientApplication property setter & getter tests")]
         [TestMethod]
-        public void CreateRiaClientFilesTask_Validate_IsClientApplication_Property()
+        public void CreateOpenRiaClientFilesTask_Validate_IsClientApplication_Property()
         {
             // All these strings should be considered 'false' when parsed in this string property
             string[] falseStrings = { Boolean.FalseString, string.Empty, null, "1", "junk" };
 
-            CreateRiaClientFilesTask task = new CreateRiaClientFilesTask();
+            CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
 
             // Default is null which translates to 'false'
             Assert.IsNull(task.IsClientApplication, "IsClientApplication should default to null");
@@ -990,14 +990,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [Description("CreateRiaClientFilesTask.UseFullTypeNames property setter & getter tests")]
+        [Description("CreateOpenRiaClientFilesTask.UseFullTypeNames property setter & getter tests")]
         [TestMethod]
-        public void CreateRiaClientFilesTask_Validate_UseFullTypeNames_Property()
+        public void CreateOpenRiaClientFilesTask_Validate_UseFullTypeNames_Property()
         {
             // All these strings should be considered 'false' when parsed in this string property
             string[] falseStrings = { Boolean.FalseString, string.Empty, null, "1", "junk" };
 
-            CreateRiaClientFilesTask task = new CreateRiaClientFilesTask();
+            CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
 
             // Default is null which translates to 'false'
             Assert.IsNull(task.UseFullTypeNames, "UseFullTypeNames should default to null");
@@ -1017,11 +1017,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [Description("CreateRiaClientFilesTask.GeneratedCodePath property setter & getter tests")]
+        [Description("CreateOpenRiaClientFilesTask.GeneratedCodePath property setter & getter tests")]
         [TestMethod]
-        public void CreateRiaClientFilesTask_Validate_GeneratedCodePath_Property()
+        public void CreateOpenRiaClientFilesTask_Validate_GeneratedCodePath_Property()
         {
-            CreateRiaClientFilesTask task = new CreateRiaClientFilesTask();
+            CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
 
             // Create a dummy folder and project file.  They don't have to exist for this test to run
             string clientProjectFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());

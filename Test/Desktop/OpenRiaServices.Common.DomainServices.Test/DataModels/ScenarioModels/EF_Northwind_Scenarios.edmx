@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DataTests.Scenarios.EF.Northwind.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="DataTests.Scenarios.EF.Northwind.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="DataTestsScenariosEFNorthwindStoreContainer">
           <EntitySet Name="Categories" EntityType="DataTests.Scenarios.EF.Northwind.Store.Categories" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <EntitySet Name="CustomerCustomerDemo" EntityType="DataTests.Scenarios.EF.Northwind.Store.CustomerCustomerDemo" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -387,7 +387,7 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="DataTests.Scenarios.EF.Northwind" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <Schema Namespace="DataTests.Scenarios.EF.Northwind" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
         <EntityContainer Name="NorthwindEntities_Scenarios">
           <EntitySet Name="EmployeeSet" EntityType="DataTests.Scenarios.EF.Northwind.Employee" />
           <EntitySet Name="CustomerSet" EntityType="DataTests.Scenarios.EF.Northwind.Customer" />
@@ -412,7 +412,7 @@
           <Key>
             <PropertyRef Name="Id" /></Key>
           <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="Binary" Name="Timestamp" Nullable="false" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" FixedLength="true" MaxLength="8" ConcurrencyMode="Fixed" />
+          <Property Type="Binary" Name="Timestamp" Nullable="false" a:StoreGeneratedPattern="Computed" FixedLength="true" MaxLength="8" ConcurrencyMode="Fixed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="A" Nullable="false" ConcurrencyMode="Fixed" /></EntityType>
         <EntityType Name="RequiredAttributeTestEntity">
           <Key>
@@ -436,18 +436,18 @@
           <Property Type="String" Name="StringWithoutComputed" ConcurrencyMode="Fixed" FixedLength="true" MaxLength="8" />
           <Property Type="String" Name="ConcurrencyTimestamp" ConcurrencyMode="Fixed" FixedLength="true" MaxLength="8" a:StoreGeneratedPattern="Computed" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
         </EntityType>
-        <EntityType Name="EmployeeWithCT" >
+        <EntityType Name="EmployeeWithCT">
           <Key>
             <PropertyRef Name="EmployeeID" />
           </Key>
           <Property Type="Int32" Name="EmployeeID" Nullable="false" />
           <Property Name="ContactInfo" Type="DataTests.Scenarios.EF.Northwind.ContactInfoCT" Nullable="false" ConcurrencyMode="Fixed" />
         </EntityType>
-        <ComplexType Name="AddressCT" >
+        <ComplexType Name="AddressCT">
           <Property Type="String" Name="AddressLine" Nullable="false" MaxLength="100" ConcurrencyMode="Fixed" />
           <Property Type="String" Name="City" Nullable="false" MaxLength="50" ConcurrencyMode="Fixed" />
         </ComplexType>
-        <ComplexType Name="ContactInfoCT" >
+        <ComplexType Name="ContactInfoCT">
           <Property Type="DataTests.Scenarios.EF.Northwind.AddressCT" Name="Address" Nullable="false" ConcurrencyMode="Fixed" />
           <Property Type="String" Name="HomePhone" Nullable="false" MaxLength="24" ConcurrencyMode="Fixed" />
         </ComplexType>
@@ -455,7 +455,7 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DataTestsScenariosEFNorthwindStoreContainer" CdmEntityContainer="NorthwindEntities_Scenarios">
           <EntitySetMapping Name="EmployeeSet">
             <EntityTypeMapping TypeName="IsTypeOf(DataTests.Scenarios.EF.Northwind.Employee)">
@@ -470,7 +470,7 @@
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" /></MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="EmployeeWithCTs">
             <EntityTypeMapping TypeName="IsTypeOf(DataTests.Scenarios.EF.Northwind.EmployeeWithCT)">
-              <MappingFragment StoreEntitySet="Employees" >
+              <MappingFragment StoreEntitySet="Employees">
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ComplexProperty Name="ContactInfo">
                   <ScalarProperty Name="HomePhone" ColumnName="HomePhone" />
@@ -496,6 +496,7 @@
     <edmx:Options>
       <edmx:DesignerInfoPropertySet>
         <edmx:DesignerProperty Name="ValidateOnBuild" Value="False" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </edmx:DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

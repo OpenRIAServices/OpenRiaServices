@@ -49,7 +49,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 
                 this._storeEntity = storeEntity;
-                this._propertyNames = propertyNames.ToList().AsReadOnly();
+                this._propertyNames = new ReadOnlyCollection<string>(propertyNames.ToList());
             }
         }
 

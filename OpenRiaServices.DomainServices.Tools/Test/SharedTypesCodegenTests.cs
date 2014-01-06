@@ -21,11 +21,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
-        [Description("CreateRiaClientFilesTask does not codegen shared types or properties on entities and complex types")]
+        [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types")]
         [TestMethod]
         public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
             string[] expectedOutputFiles = new string[] {
                 "ServerClassLib.g.cs",          // generated
                 "TestEntity.shared.cs",         // via server project
@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("STT", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("STT", /*includeClientOutputAssembly*/ false);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
 
                 // Work Item 199139:
@@ -49,7 +49,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 bool success = task.Execute();
                 if (!success)
                 {
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 ITaskItem[] outputFiles = task.OutputFiles.ToArray();
@@ -101,15 +101,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
-        [Description("CreateRiaClientFilesTask produces error when detecting existing generated entity")]
+        [Description("CreateOpenRiaClientFilesTask produces error when detecting existing generated entity")]
         [TestMethod]
         public void SharedTypes_CodeGen_Errors_On_Existing_Generated_Entity()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
 
             try
             {
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("STT", /*includeClientOutputAssembly*/ true);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("STT", /*includeClientOutputAssembly*/ true);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
 
                 bool success = task.Execute();

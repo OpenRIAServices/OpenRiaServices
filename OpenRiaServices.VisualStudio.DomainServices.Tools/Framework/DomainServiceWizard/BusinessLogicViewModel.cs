@@ -17,7 +17,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// This model has no knowledge of any UI but is a pure model.  The UI is expected
     /// to data-bind to appropriate properties and/or set any it wants to set.
     /// </remarks>
-    internal class BusinessLogicViewModel : INotifyPropertyChanged, IDisposable
+    public class BusinessLogicViewModel : INotifyPropertyChanged, IDisposable
     {
         private string _projectDirectory;
         private string _className;
@@ -28,7 +28,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         private ContextViewModel _currentContextViewModel;
         private bool _generateMetadataClasses;
         private ClientBuildManager _clientBuildManager;
-        private BusinessLogicModel _businessLogicModel;
+        private IBusinessLogicModel _businessLogicModel;
         private List<Type> _contextTypes;
         private IVsHelp _help;
 
@@ -117,7 +117,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the language for which code will be generated.   It cannot be null.
         /// </summary>
-        internal string Language
+        public string Language
         {
             get
             {
@@ -128,7 +128,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the root namespace.  It can be null.
         /// </summary>
-        internal string RootNamespace
+        public string RootNamespace
         {
             get
             {
@@ -139,7 +139,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the assembly name in which the domain service is being generated.
         /// </summary>
-        internal string AssemblyName
+        public string AssemblyName
         {
             get
             {
@@ -157,8 +157,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (this._contextViewModels == null)
                 {
                     this._contextViewModels = new List<ContextViewModel>();
-                    IEnumerable<ContextData> contextDataItems = this.BusinessLogicModel.GetContextDataItems().OrderBy(c => c.Name);
-                    foreach (ContextData contextData in contextDataItems)
+                    IEnumerable<IContextData> contextDataItems = ((IContextData[])(this.BusinessLogicModel.GetContextDataItems())).OrderBy(c => c.Name);
+                    foreach (IContextData contextData in contextDataItems)
                     {
                         this._contextViewModels.Add(new ContextViewModel(this.BusinessLogicModel, contextData));
                     }
@@ -337,14 +337,14 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
          /// <value>This object is <see cref="IDisposable"/>, and we will dispose it
         /// when the current instance is disposed.
         /// </value>
-        private BusinessLogicModel BusinessLogicModel
+        private IBusinessLogicModel BusinessLogicModel
         {
             get
             {
                 if (this._businessLogicModel == null)
                 {
                     // Note: this is IDisposable and we control its lifespan and dispose in Dispose() method
-                    this._businessLogicModel = (BusinessLogicModel) this.ClientBuildManager.CreateObject(typeof(BusinessLogicModel), false);
+                    this._businessLogicModel =  (IBusinessLogicModel)ClientBuildManager.CreateObject(typeof(BusinessLogicModel), false);
 
                     HashSet<string> assemblyNames = new HashSet<string>();
                     HashSet<string> referenceAssemblyNames = new HashSet<string>();
@@ -374,7 +374,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         }
                     }
 
-                    BusinessLogicData data = new BusinessLogicData()
+                    IBusinessLogicData data = new BusinessLogicData()
                     {
                         Language = this.Language,
                         AssemblyPaths = assemblyNames.ToArray(),
@@ -394,7 +394,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="namespaceName">The namespace into which to generate the class</param>
         /// <returns>The generated code and references</returns>
-        public GeneratedCode GenerateBusinessLogicClass(string namespaceName)
+        public IGeneratedCode GenerateBusinessLogicClass(string namespaceName)
         {
             ContextViewModel contextViewModel = this.CurrentContextViewModel;
             if (contextViewModel != null)
@@ -412,7 +412,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="optionalSuffix">If not blank, an optional suffix for namespace and class (for testing)</param>
         /// <returns>The generated code and references</returns>
-        public GeneratedCode GenerateMetadataClasses(string optionalSuffix)
+        public IGeneratedCode GenerateMetadataClasses(string optionalSuffix)
         {
             ContextViewModel contextViewModel = this.CurrentContextViewModel;
             if (contextViewModel != null)
@@ -508,7 +508,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             GC.SuppressFinalize(this);
 
-            if (this._businessLogicModel != null)
+            if (this._businessLogicModel  != null)
             {
                 try
                 {

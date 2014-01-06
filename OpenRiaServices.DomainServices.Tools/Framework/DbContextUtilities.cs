@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             DbContextUtilities._dbContextTypeReference = null;
         }
-
+        
         /// <summary>
         /// Sets the Database initializer associated to the DbContext with the given value.
         /// </summary>
@@ -35,6 +35,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <param name="initializer">The initializer object.</param>
         public static void SetDbInitializer(Type contextType, Type dbContextTypeReference, object initializer)
         {
+            
             // We need the context type and the reference to DbContext type to be not null to set the database initializer.
             if (contextType == null || dbContextTypeReference == null)
             {
@@ -122,6 +123,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>The reference to DbContext type.</returns>
         public static Type GetDbContextTypeReference(Type contextType)
         {
+            
             if (DbContextUtilities._dbContextTypeReference == null)
             {
                 // if contextType is an interface or a value type, then we know it is not a DbContext type.

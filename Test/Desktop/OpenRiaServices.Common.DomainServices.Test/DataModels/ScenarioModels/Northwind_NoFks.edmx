@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Northwind_NoFks.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="Northwind_NoFks.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="Northwind_NoFksStoreContainer">
-          <EntitySet Name="Categories" EntityType="Northwind_NoFks.Store.Categories" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Products" EntityType="Northwind_NoFks.Store.Products" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Categories" EntityType="Northwind_NoFks.Store.Categories" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Products" EntityType="Northwind_NoFks.Store.Products" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <AssociationSet Name="FK_Products_Categories" Association="Northwind_NoFks.Store.FK_Products_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
@@ -52,8 +52,8 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Northwind_NoFks" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="Northwind_NoFks_Entities" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="Northwind_NoFks" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="Northwind_NoFks_Entities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="Products" EntityType="Northwind_NoFks.Product" />
           <EntitySet Name="Categories" EntityType="Northwind_NoFks.Category" />
           <AssociationSet Name="FK_Products_Categories" Association="Northwind_NoFks.FK_Products_Categories">
@@ -64,7 +64,7 @@
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
-          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="ProductName" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="false" />
           <Property Name="SupplierID" Type="Int32" />
           <Property Name="CategoryID" Type="Int32" />
@@ -79,7 +79,7 @@
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="CategoryID" /></Key>
-          <Property Type="Int32" Name="CategoryID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="CategoryID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="CategoryName" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Binary" Name="Picture" MaxLength="Max" FixedLength="false" />
@@ -91,7 +91,7 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Northwind_NoFksStoreContainer" CdmEntityContainer="Northwind_NoFks_Entities">
           <EntitySetMapping Name="Products"><EntityTypeMapping TypeName="Northwind_NoFks.Product"><MappingFragment StoreEntitySet="Products">
             <ScalarProperty Name="ProductID" ColumnName="ProductID" />
@@ -123,26 +123,27 @@
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-    <Connection>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
-      </DesignerInfoPropertySet>
-    </Connection>
-    <Options>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="ValidateOnBuild" Value="False" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
-      </DesignerInfoPropertySet>
-    </Options>
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="False" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams>
-      <Diagram Name="Northwind_NoFks">
-        <EntityTypeShape EntityType="Northwind_NoFks.Product" Width="1.5" PointX="0.75" PointY="0.75" Height="2.9417936197916665" IsExpanded="true" />
-        <EntityTypeShape EntityType="Northwind_NoFks.Category" Width="1.5" PointX="0.75" PointY="5.375" Height="1.9802864583333335" />
-        <AssociationConnector Association="Northwind_NoFks.FK_Products_Categories" >
-          <ConnectorPoint PointX="1.5" PointY="5.375" />
-          <ConnectorPoint PointX="1.5" PointY="3.8840950520833331" /></AssociationConnector></Diagram></Diagrams>
-  </Designer>
+    <edmx:Diagrams>
+      <edmx:Diagram Name="Northwind_NoFks">
+        <edmx:EntityTypeShape EntityType="Northwind_NoFks.Product" Width="1.5" PointX="0.75" PointY="0.75" Height="2.9417936197916665" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="Northwind_NoFks.Category" Width="1.5" PointX="0.75" PointY="5.375" Height="1.9802864583333335" />
+        <edmx:AssociationConnector Association="Northwind_NoFks.FK_Products_Categories">
+          <edmx:ConnectorPoint PointX="1.5" PointY="5.375" />
+          <edmx:ConnectorPoint PointX="1.5" PointY="3.8840950520833331" /></edmx:AssociationConnector></edmx:Diagram></edmx:Diagrams>
+  </edmx:Designer>
 </edmx:Edmx>

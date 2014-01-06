@@ -1,13 +1,13 @@
 ﻿namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
-    internal partial class DomainServiceClassWizard
+    public partial class DomainServiceClassWizard
     {
         private InternalTestHook _testHook;
 
         /// <summary>
-        /// Internal property to expose the TestHook object
+        /// public property to expose the TestHook object
         /// </summary>
-        internal InternalTestHook TestHook
+        public InternalTestHook TestHook
         {
             get
             {
@@ -21,21 +21,21 @@
         }
 
         /// <summary>
-        /// Test hook class that exposes internal and private members of the wizard
+        /// Test hook class that exposes public and private members of the wizard
         /// </summary>
-        internal class InternalTestHook
+        public class InternalTestHook
         {
             //Reference to the outer 'parent' wizard
             private DomainServiceClassWizard _wizard;
 
-            internal InternalTestHook(DomainServiceClassWizard wizard)
+            public InternalTestHook(DomainServiceClassWizard wizard)
             {
                 this._wizard = wizard;
             }
 
-            #region Internal Properties
+            #region public Properties
 
-            internal string GeneratedBusinessLogicCode
+            public string GeneratedBusinessLogicCode
             {
                 get
                 {
@@ -43,7 +43,7 @@
                 }
             }
 
-            internal string GeneratedMetadataCode
+            public string GeneratedMetadataCode
             {
                 get
                 {
@@ -51,7 +51,7 @@
                 }
             }
 
-            internal BusinessLogicClassDialog BusinessLogicClassDialog
+            public BusinessLogicClassDialog BusinessLogicClassDialog
             {
                 get
                 {

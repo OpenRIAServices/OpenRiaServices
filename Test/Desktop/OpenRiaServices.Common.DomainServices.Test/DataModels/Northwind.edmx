@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="northwindModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+      <Schema Namespace="northwindModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="northwindModelStoreContainer">
-          <EntitySet Name="Categories" EntityType="northwindModel.Store.Categories" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CustomerCustomerDemo" EntityType="northwindModel.Store.CustomerCustomerDemo" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CustomerDemographics" EntityType="northwindModel.Store.CustomerDemographics" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Customers" EntityType="northwindModel.Store.Customers" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Employees" EntityType="northwindModel.Store.Employees" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="EmployeeTerritories" EntityType="northwindModel.Store.EmployeeTerritories" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Order Details" EntityType="northwindModel.Store.Order Details" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Orders" EntityType="northwindModel.Store.Orders" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Products" EntityType="northwindModel.Store.Products" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Region" EntityType="northwindModel.Store.Region" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Shippers" EntityType="northwindModel.Store.Shippers" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Suppliers" EntityType="northwindModel.Store.Suppliers" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Territories" EntityType="northwindModel.Store.Territories" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Categories" EntityType="northwindModel.Store.Categories" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CustomerCustomerDemo" EntityType="northwindModel.Store.CustomerCustomerDemo" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CustomerDemographics" EntityType="northwindModel.Store.CustomerDemographics" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Customers" EntityType="northwindModel.Store.Customers" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Employees" EntityType="northwindModel.Store.Employees" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="EmployeeTerritories" EntityType="northwindModel.Store.EmployeeTerritories" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Order Details" EntityType="northwindModel.Store.Order Details" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Orders" EntityType="northwindModel.Store.Orders" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Products" EntityType="northwindModel.Store.Products" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Region" EntityType="northwindModel.Store.Region" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Shippers" EntityType="northwindModel.Store.Shippers" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Suppliers" EntityType="northwindModel.Store.Suppliers" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Territories" EntityType="northwindModel.Store.Territories" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <AssociationSet Name="FK_CustomerCustomerDemo" Association="northwindModel.Store.FK_CustomerCustomerDemo">
             <End Role="CustomerDemographics" EntitySet="CustomerDemographics" />
             <End Role="CustomerCustomerDemo" EntitySet="CustomerCustomerDemo" />
@@ -388,8 +388,8 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="northwindModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="NorthwindEntities" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="northwindModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="NorthwindEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="Categories" EntityType="northwindModel.Category" />
           <EntitySet Name="CustomerDemographics" EntityType="northwindModel.CustomerDemographic" />
           <EntitySet Name="Customers" EntityType="northwindModel.Customer" />
@@ -450,7 +450,7 @@
           <Key>
             <PropertyRef Name="CategoryID" />
           </Key>
-          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="15" Unicode="true" FixedLength="false" ConcurrencyMode="None" />
           <Property Name="Description" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" ConcurrencyMode="None" />
           <Property Name="Picture" Type="Binary" MaxLength="Max" FixedLength="false" />
@@ -486,7 +486,7 @@
           <Key>
             <PropertyRef Name="EmployeeID" />
           </Key>
-          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" ConcurrencyMode="Fixed" />
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="false" ConcurrencyMode="Fixed" />
           <Property Name="Title" Type="String" MaxLength="30" Unicode="true" FixedLength="false" ConcurrencyMode="Fixed" />
@@ -526,7 +526,7 @@
           <Key>
             <PropertyRef Name="OrderID" />
           </Key>
-          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="Fixed" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="CustomerID" Type="String" MaxLength="5" Unicode="true" FixedLength="true" ConcurrencyMode="Fixed" />
           <Property Name="EmployeeID" Type="Int32" ConcurrencyMode="Fixed" />
           <Property Name="OrderDate" Type="DateTime" ConcurrencyMode="Fixed" />
@@ -549,7 +549,7 @@
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
-          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="None" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" ConcurrencyMode="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="ProductName" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="false" ConcurrencyMode="Fixed" />
           <Property Name="SupplierID" Type="Int32" ConcurrencyMode="Fixed" />
           <Property Name="CategoryID" Type="Int32" ConcurrencyMode="Fixed" />
@@ -575,7 +575,7 @@
           <Key>
             <PropertyRef Name="ShipperID" />
           </Key>
-          <Property Name="ShipperID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShipperID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="false" />
           <Property Name="Phone" Type="String" MaxLength="24" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Orders" Relationship="northwindModel.FK_Orders_Shippers" FromRole="Shippers" ToRole="Orders" />
@@ -584,7 +584,7 @@
           <Key>
             <PropertyRef Name="SupplierID" />
           </Key>
-          <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="40" Unicode="true" FixedLength="false" />
           <Property Name="ContactName" Type="String" MaxLength="30" Unicode="true" FixedLength="false" />
           <Property Name="ContactTitle" Type="String" MaxLength="30" Unicode="true" FixedLength="false" />
@@ -728,7 +728,7 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="northwindModelStoreContainer" CdmEntityContainer="NorthwindEntities">
           <EntitySetMapping Name="Categories"><EntityTypeMapping TypeName="northwindModel.Category"><MappingFragment StoreEntitySet="Categories">
             <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
@@ -857,77 +857,78 @@
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-    <Connection>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
-      </DesignerInfoPropertySet>
-    </Connection>
-    <Options>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
-      </DesignerInfoPropertySet>
-    </Options>
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <edmx:DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams>
-      <Diagram Name="Northwind">
-        <EntityTypeShape EntityType="northwindModel.Category" Width="1.5" PointX="3" PointY="14.5" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.CustomerDemographic" Width="1.5" PointX="0.75" PointY="2.5" Height="1.5956835937500005" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Customer" Width="1.5" PointX="3" PointY="1.5" Height="3.5186979166666661" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Employee" Width="1.5" PointX="3" PointY="8.375" Height="5.2494108072916674" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Order_Detail" Width="1.5" PointX="7.5" PointY="2.125" Height="2.3648893229166656" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Order" Width="1.5" PointX="5.25" PointY="1" Height="4.480205078125" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Product" Width="1.5" PointX="5.25" PointY="15.875" Height="3.5186979166666674" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Region" Width="1.5" PointX="5.75" PointY="7.125" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Shipper" Width="1.5" PointX="3" PointY="5.875" Height="1.7879850260416674" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Supplier" Width="1.5" PointX="3" PointY="17.25" Height="3.5186979166666674" IsExpanded="true" />
-        <EntityTypeShape EntityType="northwindModel.Territory" Width="1.5" PointX="8" PointY="9.375" Height="1.9802864583333353" IsExpanded="true" />
-        <AssociationConnector Association="northwindModel.FK_Products_Categories" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="16.177643229166666" />
-          <ConnectorPoint PointX="5.25" PointY="16.177643229166666" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Orders_Customers" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="3.2593489583333328" />
-          <ConnectorPoint PointX="5.25" PointY="3.2593489583333328" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Employees_Employees" ManuallyRouted="false">
-          <ConnectorPoint PointX="3.5319230769230767" PointY="13.624410807291667" />
-          <ConnectorPoint PointX="3.5319230769230767" PointY="13.874410807291667" />
-          <ConnectorPoint PointX="3.9784615384615383" PointY="13.874410807291667" />
-          <ConnectorPoint PointX="3.9784615384615383" PointY="13.624410807291667" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Orders_Employees" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="11.203797200520834" />
-          <ConnectorPoint PointX="5.46875" PointY="11.203797200520834" />
-          <ConnectorPoint PointX="5.46875" PointY="5.480205078125" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Order_Details_Orders" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="3.3074446614583328" />
-          <ConnectorPoint PointX="7.5" PointY="3.3074446614583328" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Order_Details_Products" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="17.634348958333334" />
-          <ConnectorPoint PointX="7.71875" PointY="17.634348958333334" />
-          <ConnectorPoint PointX="7.71875" PointY="4.4898893229166656" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Orders_Shippers" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="6.46875" />
-          <ConnectorPoint PointX="5.3281225" PointY="6.46875" />
-          <ConnectorPoint PointX="5.3281225" PointY="5.480205078125" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Products_Suppliers" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="18.321848958333334" />
-          <ConnectorPoint PointX="5.25" PointY="18.321848958333334" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.FK_Territories_Region" ManuallyRouted="false">
-          <ConnectorPoint PointX="7.25" PointY="7.922841796875" />
-          <ConnectorPoint PointX="7.635416666666667" PointY="7.9228417968749989" />
-          <ConnectorPoint PointX="7.802083333333333" PointY="7.922841796875" />
-          <ConnectorPoint PointX="8.75" PointY="7.922841796875" />
-          <ConnectorPoint PointX="8.75" PointY="9.375" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.CustomerCustomerDemo" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="3.2978417968750002" />
-          <ConnectorPoint PointX="3" PointY="3.2978417968750002" /></AssociationConnector>
-        <AssociationConnector Association="northwindModel.EmployeeTerritories" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="10.226898600260416" />
-          <ConnectorPoint PointX="5.385416666666667" PointY="10.226898600260416" />
-          <ConnectorPoint PointX="5.552083333333333" PointY="10.226898600260416" />
-          <ConnectorPoint PointX="7.635416666666667" PointY="10.226898600260416" />
-          <ConnectorPoint PointX="7.802083333333333" PointY="10.226898600260416" />
-          <ConnectorPoint PointX="8" PointY="10.226898600260416" /></AssociationConnector></Diagram></Diagrams>
-  </Designer>
+    <edmx:Diagrams>
+      <edmx:Diagram Name="Northwind">
+        <edmx:EntityTypeShape EntityType="northwindModel.Category" Width="1.5" PointX="3" PointY="14.5" Height="1.9802864583333317" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.CustomerDemographic" Width="1.5" PointX="0.75" PointY="2.5" Height="1.5956835937500005" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Customer" Width="1.5" PointX="3" PointY="1.5" Height="3.5186979166666661" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Employee" Width="1.5" PointX="3" PointY="8.375" Height="5.2494108072916674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Order_Detail" Width="1.5" PointX="7.5" PointY="2.125" Height="2.3648893229166656" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Order" Width="1.5" PointX="5.25" PointY="1" Height="4.480205078125" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Product" Width="1.5" PointX="5.25" PointY="15.875" Height="3.5186979166666674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Region" Width="1.5" PointX="5.75" PointY="7.125" Height="1.5956835937499996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Shipper" Width="1.5" PointX="3" PointY="5.875" Height="1.7879850260416674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Supplier" Width="1.5" PointX="3" PointY="17.25" Height="3.5186979166666674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="northwindModel.Territory" Width="1.5" PointX="8" PointY="9.375" Height="1.9802864583333353" IsExpanded="true" />
+        <edmx:AssociationConnector Association="northwindModel.FK_Products_Categories" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="16.177643229166666" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="16.177643229166666" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Orders_Customers" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="3.2593489583333328" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="3.2593489583333328" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Employees_Employees" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="3.5319230769230767" PointY="13.624410807291667" />
+          <edmx:ConnectorPoint PointX="3.5319230769230767" PointY="13.874410807291667" />
+          <edmx:ConnectorPoint PointX="3.9784615384615383" PointY="13.874410807291667" />
+          <edmx:ConnectorPoint PointX="3.9784615384615383" PointY="13.624410807291667" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Orders_Employees" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="11.203797200520834" />
+          <edmx:ConnectorPoint PointX="5.46875" PointY="11.203797200520834" />
+          <edmx:ConnectorPoint PointX="5.46875" PointY="5.480205078125" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Order_Details_Orders" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="6.75" PointY="3.3074446614583328" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="3.3074446614583328" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Order_Details_Products" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="6.75" PointY="17.634348958333334" />
+          <edmx:ConnectorPoint PointX="7.71875" PointY="17.634348958333334" />
+          <edmx:ConnectorPoint PointX="7.71875" PointY="4.4898893229166656" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Orders_Shippers" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="6.46875" />
+          <edmx:ConnectorPoint PointX="5.3281225" PointY="6.46875" />
+          <edmx:ConnectorPoint PointX="5.3281225" PointY="5.480205078125" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Products_Suppliers" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="18.321848958333334" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="18.321848958333334" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.FK_Territories_Region" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="7.25" PointY="7.922841796875" />
+          <edmx:ConnectorPoint PointX="7.635416666666667" PointY="7.9228417968749989" />
+          <edmx:ConnectorPoint PointX="7.802083333333333" PointY="7.922841796875" />
+          <edmx:ConnectorPoint PointX="8.75" PointY="7.922841796875" />
+          <edmx:ConnectorPoint PointX="8.75" PointY="9.375" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.CustomerCustomerDemo" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="2.25" PointY="3.2978417968750002" />
+          <edmx:ConnectorPoint PointX="3" PointY="3.2978417968750002" /></edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="northwindModel.EmployeeTerritories" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="10.226898600260416" />
+          <edmx:ConnectorPoint PointX="5.385416666666667" PointY="10.226898600260416" />
+          <edmx:ConnectorPoint PointX="5.552083333333333" PointY="10.226898600260416" />
+          <edmx:ConnectorPoint PointX="7.635416666666667" PointY="10.226898600260416" />
+          <edmx:ConnectorPoint PointX="7.802083333333333" PointY="10.226898600260416" />
+          <edmx:ConnectorPoint PointX="8" PointY="10.226898600260416" /></edmx:AssociationConnector></edmx:Diagram></edmx:Diagrams>
+  </edmx:Designer>
 </edmx:Edmx>

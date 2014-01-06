@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.Silverlight.DomainDataSource</id>
+    <version>4.3.0.0</version>
+    <title>Open RIA Services Silverlight DomainDataSource</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OpenRiaServices.Silverlight.DomainDataSource provides the DomainDataSource control for Silverlight, providing a declarative model for binding UI controls to a DomainContext.</description>
+    <summary>Open RIA Services - Silverlight DomainDataSource control</summary>
+    <releaseNotes />
+    <copyright>2013 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices Silverlight DomainDataSource OpenRIAServices</tags>
+    <dependencies>
+      <group targetFramework="Silverlight5.0">
+        <dependency id="OpenRiaServices.Silverlight.Core" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.dll" target="lib\sl50\OpenRiaServices.Controls.DomainServices.dll" />
+    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.pdb" target="lib\sl50\OpenRiaServices.Controls.DomainServices.pdb" />
+    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.xml" target="lib\sl50\OpenRiaServices.Controls.DomainServices.xml" />
+  </files>
+</package>

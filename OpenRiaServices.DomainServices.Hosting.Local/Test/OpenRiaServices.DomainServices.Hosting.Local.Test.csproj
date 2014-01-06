@@ -109,7 +109,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
-      <Name>OpenRiaServices.Common.Test %28Test\Desktop\OpenRiaServices.Common.Test%29</Name>
+      <Name>OpenRiaServices.Common.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj">
       <Project>{0EE13EF8-BD66-4095-926C-A81B6350F8EA}</Project>

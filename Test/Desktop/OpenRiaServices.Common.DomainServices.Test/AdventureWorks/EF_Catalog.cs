@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Server;
 using OpenRiaServices.DomainServices.Hosting;
 using AdventureWorksModel;

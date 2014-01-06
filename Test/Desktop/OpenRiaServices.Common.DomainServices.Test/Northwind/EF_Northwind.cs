@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Data.Objects;
+using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using NorthwindModel;

@@ -12,7 +12,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <see cref="EntityViewModel"/>
     /// </summary>
     [Serializable]
-    internal class EntityData : MarshalByRefObject
+    public class EntityData : MarshalByRefObject, IEntityData
     {
         /// <summary>
         /// Gets or sets the user-visible name of the entity.

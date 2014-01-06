@@ -24,9 +24,9 @@ using System.Security;
 [assembly: CLSCompliant(false)]
 
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.VisualStudio.DomainServices.Tools.Test")]
-
+#endif
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("ffba88cc-80fb-4495-82d3-efe26e296a81")]

@@ -115,9 +115,9 @@
       <Project>{063022B7-FAF8-43FB-B605-30A5F29910C1}</Project>
       <Name>OpenRiaServices.DomainServices.Hosting.Endpoint</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\OpenRiaServices.DomainServices.EntityFramework.ObjectContext.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj">
       <Project>{20790A5F-1DD7-4D1C-8303-C34256E12C68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.ObjectContext</Name>
+      <Name>OpenRiaServices.DomainServices.EntityFramework.EF4</Name>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">

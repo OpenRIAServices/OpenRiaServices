@@ -15,7 +15,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// This class captures the CodeDom provider, root namespace, etc and provides some common code gen helper methods
     /// </summary>
-    internal sealed class CodeGenContext : IDisposable
+    public sealed class CodeGenContext : IDisposable, ICodeGenContext
     {
         private CodeDomProvider _provider;
         private CodeCompileUnit _compileUnit = new CodeCompileUnit();
@@ -66,7 +66,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the CodeGeneratorOptions for this context
         /// </summary>
-        internal CodeGeneratorOptions CodeGeneratorOptions
+        public CodeGeneratorOptions CodeGeneratorOptions
         {
             get
             {
@@ -77,7 +77,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the CodeDomProvider for this context
         /// </summary>
-        internal CodeDomProvider Provider
+        public CodeDomProvider Provider
         {
             get
             {
@@ -88,7 +88,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the value indicating whether the language is C#
         /// </summary>
-        internal bool IsCSharp
+        public bool IsCSharp
         {
             get
             {
@@ -103,7 +103,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// This set represents only those additional references required for
         /// the entity types and DAL types appearing in the generated code
         /// </remarks>
-        internal IEnumerable<string> References
+        public IEnumerable<string> References
         {
             get
             {
@@ -114,7 +114,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the root namespace.  For use with VB codegen only.
         /// </summary>
-        internal string RootNamespace
+        public string RootNamespace
         {
             get
             {
@@ -127,7 +127,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// necessary to compile
         /// </summary>
         /// <param name="reference">The full name of the assembly reference.</param>
-        internal void AddReference(string reference)
+        public void AddReference(string reference)
         {
             if (!this._references.Contains(reference, StringComparer.OrdinalIgnoreCase))
             {
@@ -140,7 +140,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="identifier">The string to check for validity.  Null will cause a <c>false</c> to be returned.</param>
         /// <returns><c>true</c> if the identifier is valid</returns>
-        internal bool IsValidIdentifier(string identifier)
+        public bool IsValidIdentifier(string identifier)
         {
             return !string.IsNullOrEmpty(identifier) && this._provider.IsValidIdentifier(identifier);
         }
@@ -149,7 +149,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Generates code for the current compile unit into a string.  Also strips out auto-generated comments/
         /// </summary>
         /// <returns>The generated code and necessary references.</returns>
-        internal GeneratedCode GenerateCode()
+        public IGeneratedCode GenerateCode()
         {
             string generatedCode = string.Empty;
             using (TextWriter t = new StringWriter(CultureInfo.InvariantCulture))
@@ -209,7 +209,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="namespaceName">The namespace in which to generate code.</param>
         /// <returns>namespace with the given name</returns>
-        internal CodeNamespace GetOrGenNamespace(string namespaceName)
+        public CodeNamespace GetOrGenNamespace(string namespaceName)
         {
             CodeNamespace ns = null;
 
@@ -261,7 +261,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="typeDecl">A <see cref="CodeTypeDeclaration"/>.</param>
         /// <returns>A <see cref="CodeNamespace"/> or null.</returns>
-        internal CodeNamespace GetNamespace(CodeTypeDeclaration typeDecl)
+        public CodeNamespace GetNamespace(CodeTypeDeclaration typeDecl)
         {
             string namespaceName = typeDecl.UserData["Namespace"] as string;
             Debug.Assert(namespaceName != null, "Null namespace");

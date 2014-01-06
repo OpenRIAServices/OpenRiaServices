@@ -16,10 +16,10 @@ using EnvDTE;
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
     /// <summary>
-    /// Internal helper class for reading and writing sections of the
+    /// public helper class for reading and writing sections of the
     /// configuration file significant to the domain service wizards
     /// </summary>
-    internal class WebConfigUtil
+    public class WebConfigUtil
     {
         private const string ValidationSectionName = "validation";
         private const string ValidateIntegratedModeConfigurationAttributeName = "validateIntegratedModeConfiguration";
@@ -39,7 +39,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Creates a new instance.
         /// </summary>
         /// <param name="configuration">The configuration to use.</param>
-        internal WebConfigUtil(System.Configuration.Configuration configuration)
+        public WebConfigUtil(System.Configuration.Configuration configuration)
         {
             if (configuration == null)
             {
@@ -56,7 +56,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// we initialize it to empty but valid xml so that it can be manipulated.
         /// </remarks>
         /// <returns>The existing or new system.webServer section.</returns>
-        internal IgnoreSection GetOrCreateSystemWebServerSection()
+        public IgnoreSection GetOrCreateSystemWebServerSection()
         {
             // This section has no strongly typed equivalent, so we treat it only as an IgnoreSection
             IgnoreSection webServerSection = this._configuration.GetSection(SystemWebServerSectionName) as IgnoreSection;
@@ -83,7 +83,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// section group.  If it does not exist, a new default one will be created.
         /// </summary>
         /// <returns>A new or existing <see cref="ServiceModelSectionGroup"/></returns>
-        internal ServiceModelSectionGroup GetOrCreateServiceModelSectionGroup()
+        public ServiceModelSectionGroup GetOrCreateServiceModelSectionGroup()
         {
             ServiceModelSectionGroup serviceModelSectionGroup = this._configuration.GetSectionGroup(SystemServiceModelSectionName) as ServiceModelSectionGroup;
             if (serviceModelSectionGroup == null)
@@ -100,7 +100,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="created">Output parameter that is set to <c>true</c> if the section did not exist and was created here.</param>
         /// <returns>A new or existing <see cref="DomainServicesSection"/>.</returns>
-        internal DomainServicesSection GetOrCreateDomainServicesSection(out bool created)
+        public DomainServicesSection GetOrCreateDomainServicesSection(out bool created)
         {
             created = false;
             DomainServicesSection domainServicesSection = this._configuration.GetSection(DomainServicesFullSectionName) as DomainServicesSection;
@@ -127,7 +127,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="endpointName">The name of the endpoint to check.</param>
         /// <returns><c>true</c> means there is an endpoint with that name declared.</returns>
-        internal bool IsEndpointDeclared(string endpointName)
+        public bool IsEndpointDeclared(string endpointName)
         {
             Debug.Assert(!string.IsNullOrEmpty(endpointName), "endpointName cannot be empty");
 
@@ -141,7 +141,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="endpointName">The name of the new endpoint to add.</param>
         /// <param name="endpointFactoryTypeName">The fully qualified type name of the endpoint factory type.</param>
-        internal void AddEndpointDeclaration(string endpointName, string endpointFactoryTypeName)
+        public void AddEndpointDeclaration(string endpointName, string endpointFactoryTypeName)
         {
             Debug.Assert(!string.IsNullOrEmpty(endpointName), "endpointName cannot be empty");
             Debug.Assert(!string.IsNullOrEmpty(endpointFactoryTypeName), "endpointFactoryTypeName cannot be empty");
@@ -191,7 +191,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// is properly configured to support our domain service.
         /// </summary>
         /// <returns><c>true</c> means the aspNetCompatibilityEnabled property is set in the configuration.</returns>
-        internal bool IsAspNetCompatibilityEnabled()
+        public bool IsAspNetCompatibilityEnabled()
         {
             ServiceHostingEnvironmentSection section = this._configuration.GetSection(ServiceHostingEnvironmentFullSectionName) as ServiceHostingEnvironmentSection;
             return (section != null && section.AspNetCompatibilityEnabled);
@@ -202,7 +202,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// is properly configured to support our domain service.
         /// </summary>
         /// <returns><c>true</c> means the aspNetCompatibilityEnabled property is set in the configuration.</returns>
-        internal bool IsMultipleSiteBindingsEnabled()
+        public bool IsMultipleSiteBindingsEnabled()
         {
             ServiceHostingEnvironmentSection section = this._configuration.GetSection(ServiceHostingEnvironmentFullSectionName) as ServiceHostingEnvironmentSection;
             return (section != null && section.MultipleSiteBindingsEnabled);
@@ -213,7 +213,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// specified value.
         /// </summary>
         /// <param name="enabled">The value to set for the aspNetCompatibilityEnabled property.</param>
-        internal void SetAspNetCompatibilityEnabled(bool enabled)
+        public void SetAspNetCompatibilityEnabled(bool enabled)
         {
             ServiceHostingEnvironmentSection section = this._configuration.GetSection(ServiceHostingEnvironmentFullSectionName) as ServiceHostingEnvironmentSection;
             if (section != null)
@@ -227,7 +227,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// specified value.
         /// </summary>
         /// <param name="enabled">The value to set for the multipleSiteBindingsEnabled property.</param>
-        internal void SetMultipleSiteBindingsEnabled(bool enabled)
+        public void SetMultipleSiteBindingsEnabled(bool enabled)
         {
             ServiceHostingEnvironmentSection section = this._configuration.GetSection(ServiceHostingEnvironmentFullSectionName) as ServiceHostingEnvironmentSection;
             if (section != null)
@@ -240,7 +240,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Determines whether we need to add an httpModule to system.web for our domain service module
         /// </summary>
         /// <returns><c>true</c> means we need to modify the configuration to add an httpModule</returns>
-        internal bool DoWeNeedToAddHttpModule()
+        public bool DoWeNeedToAddHttpModule()
         {
             System.Web.Configuration.HttpModulesSection httpModulesSection = (System.Web.Configuration.HttpModulesSection)this._configuration.GetSection("system.web/httpModules");
             if (httpModulesSection != null)
@@ -256,7 +256,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <remarks>This module section is used by IIS in integrated mode and is necessary to deploy this domain service.</remarks>
         /// <returns><c>true</c> if we need to add a module to the system.webServer section.</returns>
-        internal bool DoWeNeedToAddModuleToWebServer()
+        public bool DoWeNeedToAddModuleToWebServer()
         {
             IgnoreSection webServerSection = this._configuration.GetSection(SystemWebServerSectionName) as IgnoreSection;
             if (webServerSection != null)
@@ -297,7 +297,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <remarks>This section is used by IIS in integrated mode and is necessary to deploy this domain service.</remarks>
         /// <returns><c>true</c> if we need to add validateIntegratedModeConfiguration to the system.webServer section.</returns>
-        internal bool DoWeNeedToValidateIntegratedModeToWebServer()
+        public bool DoWeNeedToValidateIntegratedModeToWebServer()
         {
             IgnoreSection webServerSection = this._configuration.GetSection(SystemWebServerSectionName) as IgnoreSection;
             if (webServerSection != null)
@@ -328,7 +328,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Adds an httpModule to the system.web section to point to our domain service module
         /// </summary>
         /// <param name="domainServiceModuleTypeName">Full type name to the domain service module</param>
-        internal void AddHttpModule(string domainServiceModuleTypeName)
+        public void AddHttpModule(string domainServiceModuleTypeName)
         {
             Debug.Assert(!string.IsNullOrEmpty(domainServiceModuleTypeName), "domainServiceModuleTypeName cannot be empty");
 
@@ -348,7 +348,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Adds a module to the system.webServer section to point to our domain service module
         /// </summary>
         /// <param name="domainServiceModuleTypeName">Full type name of the domain service module</param>
-        internal void AddModuleToWebServer(string domainServiceModuleTypeName)
+        public void AddModuleToWebServer(string domainServiceModuleTypeName)
         {
             IgnoreSection webServerSection = this.GetOrCreateSystemWebServerSection();
             SectionInformation sectionInformation = webServerSection.SectionInformation;
@@ -390,7 +390,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Adds the validateIntegratedModeConfiguration to the system.webServer/validation section
         /// </summary>
-        internal void AddValidateIntegratedModeToWebServer()
+        public void AddValidateIntegratedModeToWebServer()
         {
             IgnoreSection webServerSection = this.GetOrCreateSystemWebServerSection();
    
@@ -484,7 +484,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Obtains the full type name of the domain service module.
         /// </summary>
         /// <returns>The type name of the domain service module, suitable for inclusion in web.config</returns>
-        internal static string GetDomainServiceModuleTypeName()
+        public static string GetDomainServiceModuleTypeName()
         {
             return typeof(OpenRiaServices.DomainServices.Hosting.DomainServiceHttpModule).AssemblyQualifiedName;
         }
@@ -493,7 +493,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Obtains the full type name of the OData endpoint factory type.
         /// </summary>
         /// <returns>The type name of the OData endpoint factory, suitable for inclusion in web.config</returns>
-        internal static string GetODataEndpointFactoryTypeName()
+        public static string GetODataEndpointFactoryTypeName()
         {
             return typeof(OpenRiaServices.DomainServices.Hosting.ODataEndpointFactory).AssemblyQualifiedName;
         }

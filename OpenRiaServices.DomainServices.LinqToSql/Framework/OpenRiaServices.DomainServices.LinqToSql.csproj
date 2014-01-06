@@ -92,19 +92,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\DatabaseGeneratedAttribute.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
       <Link>DatabaseGeneratedAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\DatabaseGeneratedOption.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedOption.cs">
       <Link>DatabaseGeneratedOption.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataPropertyDescriptorWrapper.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs">
       <Link>MetadataPropertyDescriptorWrapper.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\TypeDescriptionContextBase.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptionContextBase.cs">
       <Link>TypeDescriptionContextBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\TypeDescriptorBase.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptorBase.cs">
       <Link>TypeDescriptorBase.cs</Link>
     </Compile>
     <Compile Include="DataContextExtensions.cs" />

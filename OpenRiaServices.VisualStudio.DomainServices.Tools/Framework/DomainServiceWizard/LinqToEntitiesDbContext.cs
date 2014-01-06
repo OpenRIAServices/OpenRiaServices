@@ -2,8 +2,9 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Metadata.Edm;
-using System.Data.Objects;
+using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects;
 using System.Globalization;
 using System.Reflection;
 using OpenRiaServices.DomainServices;
@@ -14,7 +15,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Subclass of <see cref="LinqToEntitiesContextBase"/> that handles the LinqToEntities type of domain services based on DbContext
     /// </summary>
-    internal class LinqToEntitiesDbContext : LinqToEntitiesContextBase
+    public class LinqToEntitiesDbContext : LinqToEntitiesContextBase
     {        
         private MetadataWorkspace _metadataWorkspace;
         private bool? _isCodeFirstModel = null;
@@ -42,7 +43,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Returns true is we need to generate a metadata class.
         /// </summary>
-        internal override bool NeedToGenerateMetadataClasses
+        public override bool NeedToGenerateMetadataClasses
         {
             get
             {
@@ -156,7 +157,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeNamespace">The namespace into which to generate code.</param>
         /// <param name="className">The name to use for the class.</param>
         /// <returns>The new type</returns>
-        protected override CodeTypeDeclaration CreateBusinessLogicClass(CodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
+        protected override CodeTypeDeclaration CreateBusinessLogicClass(ICodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
         {
             // Add an import for our domain service
             foreach (string import in BusinessLogicClassConstants.LinqToEntitiesDbImports)
@@ -196,7 +197,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicClass">Contains the business logic.</param>
         /// <param name="entity">The entity.</param>
         /// <returns>The newly created method.</returns>
-        protected override CodeMemberMethod GenerateSelectMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override CodeMemberMethod GenerateSelectMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             CodeMemberMethod method = null;
             LinqToEntitiesEntity efDbEntity = entity as LinqToEntitiesEntity;
@@ -233,7 +234,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The code generation context.</param>
         /// <param name="businessLogicClass">Contains the business logic.</param>
         /// <param name="entity">The entity.</param>
-        protected override void GenerateInsertMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateInsertMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             // public void Insert$EntityName$($entityType$ $entityName$)
             CodeMemberMethod method = new CodeMemberMethod();
@@ -291,7 +292,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context to use</param>
         /// <param name="businessLogicClass">The business logic class into which to generate it</param>
         /// <param name="entity">The entity for which to generate the method</param>
-        protected override void GenerateUpdateMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateUpdateMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             string currentParameterName = "current" + entity.ClrType.Name;
 
@@ -340,7 +341,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context to use</param>
         /// <param name="businessLogicClass">The business logic class into which to generate it</param>
         /// <param name="entity">The entity for which to generate the method</param>
-        protected override void GenerateDeleteMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateDeleteMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             string parameterName = CodeGenUtilities.MakeLegalParameterName(entity.Name);
 

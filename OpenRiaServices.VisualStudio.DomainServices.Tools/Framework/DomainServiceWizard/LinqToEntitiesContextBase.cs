@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Metadata.Edm;
+using System.Data.Entity.Core.Metadata.Edm;
 using OpenRiaServices.DomainServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
@@ -8,12 +8,12 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Subclass of <see cref="BusinessLogicContext"/> that handles the LinqToEntities type of domain service
     /// </summary>
-    internal abstract class LinqToEntitiesContextBase : BusinessLogicContext
+    public abstract class LinqToEntitiesContextBase : BusinessLogicContext
     {
         private Dictionary<ComplexType, Type> _complexTypes;
         private HashSet<Type> _visitedComplexTypes = new HashSet<Type>();
 
-        internal Dictionary<ComplexType, Type> ComplexTypes
+        public Dictionary<ComplexType, Type> ComplexTypes
         {
             get
             {
@@ -58,7 +58,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Invoked to create the entities known to this context
         /// </summary>
         /// <returns>The list of entities</returns>
-        protected override IEnumerable<BusinessLogicEntity> CreateEntities()
+        protected override IEnumerable<IBusinessLogicEntity> CreateEntities()
         {
             List<BusinessLogicEntity> entities = new List<BusinessLogicEntity>();
 
@@ -147,7 +147,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="optionalSuffix">If not null, optional suffix to class name and namespace</param>
         /// <param name="entity">The entity for which to generate the additional metadata.</param>
         /// <returns><c>true</c> means at least some code was generated.</returns>
-        protected override bool GenerateAdditionalMetadataClasses(CodeGenContext codeGenContext, string optionalSuffix, BusinessLogicEntity entity)
+        protected override bool GenerateAdditionalMetadataClasses(ICodeGenContext codeGenContext, string optionalSuffix, BusinessLogicEntity entity)
         {
             LinqToEntitiesEntity linqToEntitiesEntity = (LinqToEntitiesEntity)entity;
             bool generatedCode = this.GenerateMetadataClassesForComplexTypes(codeGenContext, optionalSuffix, linqToEntitiesEntity.EntityType.Properties);
@@ -161,7 +161,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="optionalSuffix">If not null, optional suffix to class name and namespace</param>
         /// <param name="properties">The list of properties for which to generate metadata classes.</param>
         /// <returns><c>true</c> means at least some code was generated.</returns>
-        private bool GenerateMetadataClassesForComplexTypes(CodeGenContext codeGenContext, string optionalSuffix, IEnumerable<EdmProperty> properties)
+        private bool GenerateMetadataClassesForComplexTypes(ICodeGenContext codeGenContext, string optionalSuffix, IEnumerable<EdmProperty> properties)
         {
             bool generatedCode = false;
             foreach (var prop in properties)

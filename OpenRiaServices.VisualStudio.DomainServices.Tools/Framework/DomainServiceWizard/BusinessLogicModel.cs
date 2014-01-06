@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Linq;
-using System.Data.Objects;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting;
 using System.Web.Hosting;
 using OpenRiaServices.DomainServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
+    
     /// <summary>
     /// Class that can be used across AppDomain boundaries by
     /// <see cref="BusinessLogicViewModel"/> to retrieve available
     /// contexts and their entities, to choose which ones to use, and
     /// to generate code.
     /// </summary>
-    internal class BusinessLogicModel : MarshalByRefObject, IRegisteredObject, IDisposable
+    public class BusinessLogicModel : MarshalByRefObject, IRegisteredObject, IDisposable, IBusinessLogicModel
     {
-        private BusinessLogicData _businessLogicData;
-        private List<BusinessLogicContext> _contexts;
+        private IBusinessLogicData _businessLogicData;
+        private List<IBusinessLogicContext> _contexts;
         private Action<string> _logger;
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// with a callback to receive error messages.
         /// </summary>
         /// <param name="logger">Callback to invoke to report errors during processing.</param>
-        internal BusinessLogicModel(Action<string> logger)
+        public BusinessLogicModel(Action<string> logger)
         {
             if (logger == null)
             {
@@ -52,8 +55,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// instantiating an instance of this class and before using any of its
         /// other methods.
         /// </summary>
-        /// <param name="businessLogicData">The <see cref="BusinessLogicData"/> for this model.</param>
-        internal void Initialize(BusinessLogicData businessLogicData)
+        /// <param name="businessLogicData">The <see cref="IBusinessLogicData"/> for this model.</param>
+        public void Initialize(IBusinessLogicData businessLogicData)
         {
             System.Diagnostics.Debug.Assert(businessLogicData != null, "BusinessLogicData cannot be null");
             this._businessLogicData = businessLogicData;
@@ -71,7 +74,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Gets the data object used to share state across
         /// the AppDomain boundary with <see cref="BusinessLogicViewModel"/>.
         /// </summary>
-        private BusinessLogicData BusinessLogicData
+        private IBusinessLogicData BusinessLogicData
         {
             get
             {
@@ -86,7 +89,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the language to use for code generation.
         /// </summary>
-        internal string Language
+        public string Language
         {
             get
             {
@@ -102,13 +105,13 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <returns>The set of data objects for the <see cref="BusinessLogicContext"/>s.  
         /// This collection will always contain at least one element for the
         /// default empty context.</returns>
-        internal ContextData[] GetContextDataItems()
+        public IContextData[] GetContextDataItems()
         {
             // This is lazily computed and cached.
             if (this._contexts == null)
             {
                 List<Assembly> loadedAssemblies = new List<Assembly>();
-                this._contexts = new List<BusinessLogicContext>();
+                this._contexts = new List<IBusinessLogicContext>();
 
                 // First load into this AppDomain all the assemblies we have been
                 // asked to load.  These 2 lists represent the assemblies of the candidate
@@ -185,17 +188,13 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         {
                             this._contexts.Add(new LinqToEntitiesContext(t));
                         }
+                        else if (typeof(DbContext).IsAssignableFrom(t))
+                            this._contexts.Add(new LinqToEntitiesDbContext(t));
                         else
                         {
-                            Type dbContextTypeReference = DbContextUtilities.GetDbContextTypeReference(t);
-                            if (dbContextTypeReference != null && dbContextTypeReference.IsAssignableFrom(t))
-                            {
-                                this._contexts.Add(new LinqToEntitiesDbContext(t));
-                            }
-                            else
-                            {
+                            
                                 this._logger(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_InvalidContextType, t.FullName));
-                            }
+                            
                         }
                     }
                     catch(Exception ex)
@@ -214,7 +213,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             // just select out all the ContextData's.  The other AppDomain does not get access
             // to the BusinessLogicContext objects, because we maintain type separation between
             // the AppDomains.
-            return this._contexts.Select<BusinessLogicContext, ContextData>(blc => blc.ContextData).ToArray();
+            return this._contexts.Select<IBusinessLogicContext, IContextData>(blc => blc.ContextData).ToArray();
         }
 
         /// <summary>
@@ -230,11 +229,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="contextData">The <see cref="ContextData"/> to use to locate
         /// the respective <see cref="BusinessLogicContext"/>.</param>
         /// <returns>The set of <see cref="EntityData"/> objects for the given context.</returns>
-        public EntityData[] GetEntityDataItemsForContext(ContextData contextData)
+        public IEntityData[] GetEntityDataItemsForContext(IContextData contextData)
         {
-            BusinessLogicContext context = this._contexts[contextData.ID];
-            List<BusinessLogicEntity> entities = (context == null) ? new List<BusinessLogicEntity>() : context.Entities.ToList();
-            return entities.Select<BusinessLogicEntity, EntityData>(ble => ble.EntityData).ToArray();
+            IBusinessLogicContext context = this._contexts[contextData.ID];
+            List<IBusinessLogicEntity> entities = (context == null) ? new List<IBusinessLogicEntity>() : context.Entities.ToList();
+            return entities.Select<IBusinessLogicEntity, IEntityData>(ble => ble.EntityData).ToArray();
         }
 
         /// <summary>
@@ -245,9 +244,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="namespaceName">The namespace to use for the class.</param>
         /// <param name="rootNamespace">The root namespace (VB).</param>
         /// <returns>A value containing the generated source code and necessary references.</returns>
-        public GeneratedCode GenerateBusinessLogicClass(ContextData contextData, string className, string namespaceName, string rootNamespace)
+        public IGeneratedCode GenerateBusinessLogicClass(IContextData contextData, string className, string namespaceName, string rootNamespace)
         {
-            BusinessLogicContext context = this._contexts.SingleOrDefault(c => c.ContextData.ID == contextData.ID);
+            IBusinessLogicContext context = this._contexts.SingleOrDefault(c => c.ContextData.ID == contextData.ID);
             return context != null
                         ? context.GenerateBusinessLogicClass(this.Language, className, namespaceName, rootNamespace)
                         : new GeneratedCode();
@@ -260,17 +259,17 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="rootNamespace">The root namespace (VB).</param>
         /// <param name="optionalSuffix">If nonblank, the suffix to append to namespace and class names for testing</param>
         /// <returns>A value containing the generated source code and necessary references.</returns>
-        public GeneratedCode GenerateMetadataClasses(ContextData contextData, string rootNamespace, string optionalSuffix)
+        public IGeneratedCode GenerateMetadataClasses(IContextData contextData, string rootNamespace, string optionalSuffix)
         {
-            BusinessLogicContext context = this._contexts.Single(c => c.ContextData.ID == contextData.ID);
+            IBusinessLogicContext context = this._contexts.Single(c => c.ContextData.ID == contextData.ID);
             return (context) != null
                         ? context.GenerateMetadataClasses(this.Language, rootNamespace, optionalSuffix)
                         : new GeneratedCode(string.Empty, new string[0]);
         }
 
-        public bool IsMetadataGenerationRequired(ContextData contextData)
+        public bool IsMetadataGenerationRequired(IContextData contextData)
         {
-            BusinessLogicContext context = this._contexts.SingleOrDefault(c => c.ContextData.ID == contextData.ID);
+            IBusinessLogicContext context = this._contexts.SingleOrDefault(c => c.ContextData.ID == contextData.ID);
             return (context) != null
                         ? context.NeedToGenerateMetadataClasses
                         : false;

@@ -746,7 +746,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -765,7 +765,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductIDChanging(value);
                     ReportPropertyChanging("ProductID");
-                    _ProductID = StructuralObject.SetValidValue(value);
+                    _ProductID = StructuralObject.SetValidValue(value, "ProductID");
                     ReportPropertyChanged("ProductID");
                     OnProductIDChanged();
                 }
@@ -792,7 +792,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -817,7 +817,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnSupplierIDChanging(value);
                 ReportPropertyChanging("SupplierID");
-                _SupplierID = StructuralObject.SetValidValue(value);
+                _SupplierID = StructuralObject.SetValidValue(value, "SupplierID");
                 ReportPropertyChanged("SupplierID");
                 OnSupplierIDChanged();
             }
@@ -841,7 +841,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCategoryIDChanging(value);
                 ReportPropertyChanging("CategoryID");
-                _CategoryID = StructuralObject.SetValidValue(value);
+                _CategoryID = StructuralObject.SetValidValue(value, "CategoryID");
                 ReportPropertyChanged("CategoryID");
                 OnCategoryIDChanged();
             }
@@ -865,7 +865,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnQuantityPerUnitChanging(value);
                 ReportPropertyChanging("QuantityPerUnit");
-                _QuantityPerUnit = StructuralObject.SetValidValue(value, true);
+                _QuantityPerUnit = StructuralObject.SetValidValue(value, true, "QuantityPerUnit");
                 ReportPropertyChanged("QuantityPerUnit");
                 OnQuantityPerUnitChanged();
             }
@@ -889,7 +889,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitPriceChanging(value);
                 ReportPropertyChanging("UnitPrice");
-                _UnitPrice = StructuralObject.SetValidValue(value);
+                _UnitPrice = StructuralObject.SetValidValue(value, "UnitPrice");
                 ReportPropertyChanged("UnitPrice");
                 OnUnitPriceChanged();
             }
@@ -913,7 +913,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitsInStockChanging(value);
                 ReportPropertyChanging("UnitsInStock");
-                _UnitsInStock = StructuralObject.SetValidValue(value);
+                _UnitsInStock = StructuralObject.SetValidValue(value, "UnitsInStock");
                 ReportPropertyChanged("UnitsInStock");
                 OnUnitsInStockChanged();
             }
@@ -937,7 +937,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitsOnOrderChanging(value);
                 ReportPropertyChanging("UnitsOnOrder");
-                _UnitsOnOrder = StructuralObject.SetValidValue(value);
+                _UnitsOnOrder = StructuralObject.SetValidValue(value, "UnitsOnOrder");
                 ReportPropertyChanged("UnitsOnOrder");
                 OnUnitsOnOrderChanged();
             }
@@ -961,7 +961,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnReorderLevelChanging(value);
                 ReportPropertyChanging("ReorderLevel");
-                _ReorderLevel = StructuralObject.SetValidValue(value);
+                _ReorderLevel = StructuralObject.SetValidValue(value, "ReorderLevel");
                 ReportPropertyChanged("ReorderLevel");
                 OnReorderLevelChanged();
             }
@@ -987,7 +987,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnDiscontinuedChanging(value);
                     ReportPropertyChanging("Discontinued");
-                    _Discontinued = StructuralObject.SetValidValue(value);
+                    _Discontinued = StructuralObject.SetValidValue(value, "Discontinued");
                     ReportPropertyChanged("Discontinued");
                     OnDiscontinuedChanged();
                 }
@@ -1014,7 +1014,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryNameChanging(value);
                     ReportPropertyChanging("CategoryName");
-                    _CategoryName = StructuralObject.SetValidValue(value, false);
+                    _CategoryName = StructuralObject.SetValidValue(value, false, "CategoryName");
                     ReportPropertyChanged("CategoryName");
                     OnCategoryNameChanged();
                 }
@@ -1026,7 +1026,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -1054,7 +1053,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1073,7 +1072,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryIDChanging(value);
                     ReportPropertyChanging("CategoryID");
-                    _CategoryID = StructuralObject.SetValidValue(value);
+                    _CategoryID = StructuralObject.SetValidValue(value, "CategoryID");
                     ReportPropertyChanged("CategoryID");
                     OnCategoryIDChanged();
                 }
@@ -1098,7 +1097,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCategoryNameChanging(value);
                 ReportPropertyChanging("CategoryName");
-                _CategoryName = StructuralObject.SetValidValue(value, false);
+                _CategoryName = StructuralObject.SetValidValue(value, false, "CategoryName");
                 ReportPropertyChanged("CategoryName");
                 OnCategoryNameChanged();
             }
@@ -1122,7 +1121,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnDescriptionChanging(value);
                 ReportPropertyChanging("Description");
-                _Description = StructuralObject.SetValidValue(value, true);
+                _Description = StructuralObject.SetValidValue(value, true, "Description");
                 ReportPropertyChanged("Description");
                 OnDescriptionChanged();
             }
@@ -1146,7 +1145,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPictureChanging(value);
                 ReportPropertyChanging("Picture");
-                _Picture = StructuralObject.SetValidValue(value, true);
+                _Picture = StructuralObject.SetValidValue(value, true, "Picture");
                 ReportPropertyChanged("Picture");
                 OnPictureChanged();
             }
@@ -1157,7 +1156,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -1209,7 +1207,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1228,7 +1226,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryNameChanging(value);
                     ReportPropertyChanging("CategoryName");
-                    _CategoryName = StructuralObject.SetValidValue(value, false);
+                    _CategoryName = StructuralObject.SetValidValue(value, false, "CategoryName");
                     ReportPropertyChanged("CategoryName");
                     OnCategoryNameChanged();
                 }
@@ -1253,7 +1251,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCategorySalesChanging(value);
                 ReportPropertyChanging("CategorySales");
-                _CategorySales = StructuralObject.SetValidValue(value);
+                _CategorySales = StructuralObject.SetValidValue(value, "CategorySales");
                 ReportPropertyChanged("CategorySales");
                 OnCategorySalesChanged();
             }
@@ -1264,7 +1262,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -1292,7 +1289,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1311,7 +1308,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductIDChanging(value);
                     ReportPropertyChanging("ProductID");
-                    _ProductID = StructuralObject.SetValidValue(value);
+                    _ProductID = StructuralObject.SetValidValue(value, "ProductID");
                     ReportPropertyChanged("ProductID");
                     OnProductIDChanged();
                 }
@@ -1338,7 +1335,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -1350,7 +1347,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -1378,7 +1374,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1397,7 +1393,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCustomerIDChanging(value);
                     ReportPropertyChanging("CustomerID");
-                    _CustomerID = StructuralObject.SetValidValue(value, false);
+                    _CustomerID = StructuralObject.SetValidValue(value, false, "CustomerID");
                     ReportPropertyChanged("CustomerID");
                     OnCustomerIDChanged();
                 }
@@ -1422,7 +1418,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCompanyNameChanging(value);
                 ReportPropertyChanging("CompanyName");
-                _CompanyName = StructuralObject.SetValidValue(value, false);
+                _CompanyName = StructuralObject.SetValidValue(value, false, "CompanyName");
                 ReportPropertyChanged("CompanyName");
                 OnCompanyNameChanged();
             }
@@ -1446,7 +1442,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnContactNameChanging(value);
                 ReportPropertyChanging("ContactName");
-                _ContactName = StructuralObject.SetValidValue(value, true);
+                _ContactName = StructuralObject.SetValidValue(value, true, "ContactName");
                 ReportPropertyChanged("ContactName");
                 OnContactNameChanged();
             }
@@ -1470,7 +1466,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnContactTitleChanging(value);
                 ReportPropertyChanging("ContactTitle");
-                _ContactTitle = StructuralObject.SetValidValue(value, true);
+                _ContactTitle = StructuralObject.SetValidValue(value, true, "ContactTitle");
                 ReportPropertyChanged("ContactTitle");
                 OnContactTitleChanged();
             }
@@ -1494,7 +1490,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
+                _Address = StructuralObject.SetValidValue(value, true, "Address");
                 ReportPropertyChanged("Address");
                 OnAddressChanged();
             }
@@ -1518,7 +1514,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, true);
+                _City = StructuralObject.SetValidValue(value, true, "City");
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -1542,7 +1538,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionChanging(value);
                 ReportPropertyChanging("Region");
-                _Region = StructuralObject.SetValidValue(value, true);
+                _Region = StructuralObject.SetValidValue(value, true, "Region");
                 ReportPropertyChanged("Region");
                 OnRegionChanged();
             }
@@ -1566,7 +1562,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPostalCodeChanging(value);
                 ReportPropertyChanging("PostalCode");
-                _PostalCode = StructuralObject.SetValidValue(value, true);
+                _PostalCode = StructuralObject.SetValidValue(value, true, "PostalCode");
                 ReportPropertyChanged("PostalCode");
                 OnPostalCodeChanged();
             }
@@ -1590,7 +1586,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCountryChanging(value);
                 ReportPropertyChanging("Country");
-                _Country = StructuralObject.SetValidValue(value, true);
+                _Country = StructuralObject.SetValidValue(value, true, "Country");
                 ReportPropertyChanged("Country");
                 OnCountryChanged();
             }
@@ -1614,7 +1610,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPhoneChanging(value);
                 ReportPropertyChanging("Phone");
-                _Phone = StructuralObject.SetValidValue(value, true);
+                _Phone = StructuralObject.SetValidValue(value, true, "Phone");
                 ReportPropertyChanged("Phone");
                 OnPhoneChanged();
             }
@@ -1638,7 +1634,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnFaxChanging(value);
                 ReportPropertyChanging("Fax");
-                _Fax = StructuralObject.SetValidValue(value, true);
+                _Fax = StructuralObject.SetValidValue(value, true, "Fax");
                 ReportPropertyChanged("Fax");
                 OnFaxChanged();
             }
@@ -1649,7 +1645,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -1725,7 +1720,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1742,7 +1737,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, true);
+                _City = StructuralObject.SetValidValue(value, true, "City");
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -1768,7 +1763,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCompanyNameChanging(value);
                     ReportPropertyChanging("CompanyName");
-                    _CompanyName = StructuralObject.SetValidValue(value, false);
+                    _CompanyName = StructuralObject.SetValidValue(value, false, "CompanyName");
                     ReportPropertyChanged("CompanyName");
                     OnCompanyNameChanged();
                 }
@@ -1793,7 +1788,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnContactNameChanging(value);
                 ReportPropertyChanging("ContactName");
-                _ContactName = StructuralObject.SetValidValue(value, true);
+                _ContactName = StructuralObject.SetValidValue(value, true, "ContactName");
                 ReportPropertyChanged("ContactName");
                 OnContactNameChanged();
             }
@@ -1819,7 +1814,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnRelationshipChanging(value);
                     ReportPropertyChanging("Relationship");
-                    _Relationship = StructuralObject.SetValidValue(value, false);
+                    _Relationship = StructuralObject.SetValidValue(value, false, "Relationship");
                     ReportPropertyChanged("Relationship");
                     OnRelationshipChanged();
                 }
@@ -1831,7 +1826,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -1857,7 +1851,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1876,7 +1870,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCustomerTypeIDChanging(value);
                     ReportPropertyChanging("CustomerTypeID");
-                    _CustomerTypeID = StructuralObject.SetValidValue(value, false);
+                    _CustomerTypeID = StructuralObject.SetValidValue(value, false, "CustomerTypeID");
                     ReportPropertyChanged("CustomerTypeID");
                     OnCustomerTypeIDChanged();
                 }
@@ -1901,7 +1895,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCustomerDescChanging(value);
                 ReportPropertyChanging("CustomerDesc");
-                _CustomerDesc = StructuralObject.SetValidValue(value, true);
+                _CustomerDesc = StructuralObject.SetValidValue(value, true, "CustomerDesc");
                 ReportPropertyChanged("CustomerDesc");
                 OnCustomerDescChanged();
             }
@@ -1912,7 +1906,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -1968,7 +1961,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1987,7 +1980,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnEmployeeIDChanging(value);
                     ReportPropertyChanging("EmployeeID");
-                    _EmployeeID = StructuralObject.SetValidValue(value);
+                    _EmployeeID = StructuralObject.SetValidValue(value, "EmployeeID");
                     ReportPropertyChanged("EmployeeID");
                     OnEmployeeIDChanged();
                 }
@@ -2012,7 +2005,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnLastNameChanging(value);
                 ReportPropertyChanging("LastName");
-                _LastName = StructuralObject.SetValidValue(value, false);
+                _LastName = StructuralObject.SetValidValue(value, false, "LastName");
                 ReportPropertyChanged("LastName");
                 OnLastNameChanged();
             }
@@ -2036,7 +2029,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnFirstNameChanging(value);
                 ReportPropertyChanging("FirstName");
-                _FirstName = StructuralObject.SetValidValue(value, false);
+                _FirstName = StructuralObject.SetValidValue(value, false, "FirstName");
                 ReportPropertyChanged("FirstName");
                 OnFirstNameChanged();
             }
@@ -2060,7 +2053,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnTitleChanging(value);
                 ReportPropertyChanging("Title");
-                _Title = StructuralObject.SetValidValue(value, true);
+                _Title = StructuralObject.SetValidValue(value, true, "Title");
                 ReportPropertyChanged("Title");
                 OnTitleChanged();
             }
@@ -2084,7 +2077,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnTitleOfCourtesyChanging(value);
                 ReportPropertyChanging("TitleOfCourtesy");
-                _TitleOfCourtesy = StructuralObject.SetValidValue(value, true);
+                _TitleOfCourtesy = StructuralObject.SetValidValue(value, true, "TitleOfCourtesy");
                 ReportPropertyChanged("TitleOfCourtesy");
                 OnTitleOfCourtesyChanged();
             }
@@ -2108,7 +2101,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnBirthDateChanging(value);
                 ReportPropertyChanging("BirthDate");
-                _BirthDate = StructuralObject.SetValidValue(value);
+                _BirthDate = StructuralObject.SetValidValue(value, "BirthDate");
                 ReportPropertyChanged("BirthDate");
                 OnBirthDateChanged();
             }
@@ -2132,7 +2125,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnHireDateChanging(value);
                 ReportPropertyChanging("HireDate");
-                _HireDate = StructuralObject.SetValidValue(value);
+                _HireDate = StructuralObject.SetValidValue(value, "HireDate");
                 ReportPropertyChanged("HireDate");
                 OnHireDateChanged();
             }
@@ -2156,7 +2149,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
+                _Address = StructuralObject.SetValidValue(value, true, "Address");
                 ReportPropertyChanged("Address");
                 OnAddressChanged();
             }
@@ -2180,7 +2173,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, true);
+                _City = StructuralObject.SetValidValue(value, true, "City");
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -2204,7 +2197,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionChanging(value);
                 ReportPropertyChanging("Region");
-                _Region = StructuralObject.SetValidValue(value, true);
+                _Region = StructuralObject.SetValidValue(value, true, "Region");
                 ReportPropertyChanged("Region");
                 OnRegionChanged();
             }
@@ -2228,7 +2221,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPostalCodeChanging(value);
                 ReportPropertyChanging("PostalCode");
-                _PostalCode = StructuralObject.SetValidValue(value, true);
+                _PostalCode = StructuralObject.SetValidValue(value, true, "PostalCode");
                 ReportPropertyChanged("PostalCode");
                 OnPostalCodeChanged();
             }
@@ -2252,7 +2245,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCountryChanging(value);
                 ReportPropertyChanging("Country");
-                _Country = StructuralObject.SetValidValue(value, true);
+                _Country = StructuralObject.SetValidValue(value, true, "Country");
                 ReportPropertyChanged("Country");
                 OnCountryChanged();
             }
@@ -2276,7 +2269,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnHomePhoneChanging(value);
                 ReportPropertyChanging("HomePhone");
-                _HomePhone = StructuralObject.SetValidValue(value, true);
+                _HomePhone = StructuralObject.SetValidValue(value, true, "HomePhone");
                 ReportPropertyChanged("HomePhone");
                 OnHomePhoneChanged();
             }
@@ -2300,7 +2293,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnExtensionChanging(value);
                 ReportPropertyChanging("Extension");
-                _Extension = StructuralObject.SetValidValue(value, true);
+                _Extension = StructuralObject.SetValidValue(value, true, "Extension");
                 ReportPropertyChanged("Extension");
                 OnExtensionChanged();
             }
@@ -2324,7 +2317,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPhotoChanging(value);
                 ReportPropertyChanging("Photo");
-                _Photo = StructuralObject.SetValidValue(value, true);
+                _Photo = StructuralObject.SetValidValue(value, true, "Photo");
                 ReportPropertyChanged("Photo");
                 OnPhotoChanged();
             }
@@ -2348,7 +2341,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnNotesChanging(value);
                 ReportPropertyChanging("Notes");
-                _Notes = StructuralObject.SetValidValue(value, true);
+                _Notes = StructuralObject.SetValidValue(value, true, "Notes");
                 ReportPropertyChanged("Notes");
                 OnNotesChanged();
             }
@@ -2372,7 +2365,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnReportsToChanging(value);
                 ReportPropertyChanging("ReportsTo");
-                _ReportsTo = StructuralObject.SetValidValue(value);
+                _ReportsTo = StructuralObject.SetValidValue(value, "ReportsTo");
                 ReportPropertyChanged("ReportsTo");
                 OnReportsToChanged();
             }
@@ -2396,7 +2389,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPhotoPathChanging(value);
                 ReportPropertyChanging("PhotoPath");
-                _PhotoPath = StructuralObject.SetValidValue(value, true);
+                _PhotoPath = StructuralObject.SetValidValue(value, true, "PhotoPath");
                 ReportPropertyChanged("PhotoPath");
                 OnPhotoPathChanged();
             }
@@ -2407,7 +2400,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -2557,7 +2549,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -2574,7 +2566,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipNameChanging(value);
                 ReportPropertyChanging("ShipName");
-                _ShipName = StructuralObject.SetValidValue(value, true);
+                _ShipName = StructuralObject.SetValidValue(value, true, "ShipName");
                 ReportPropertyChanged("ShipName");
                 OnShipNameChanged();
             }
@@ -2598,7 +2590,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipAddressChanging(value);
                 ReportPropertyChanging("ShipAddress");
-                _ShipAddress = StructuralObject.SetValidValue(value, true);
+                _ShipAddress = StructuralObject.SetValidValue(value, true, "ShipAddress");
                 ReportPropertyChanged("ShipAddress");
                 OnShipAddressChanged();
             }
@@ -2622,7 +2614,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipCityChanging(value);
                 ReportPropertyChanging("ShipCity");
-                _ShipCity = StructuralObject.SetValidValue(value, true);
+                _ShipCity = StructuralObject.SetValidValue(value, true, "ShipCity");
                 ReportPropertyChanged("ShipCity");
                 OnShipCityChanged();
             }
@@ -2646,7 +2638,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipRegionChanging(value);
                 ReportPropertyChanging("ShipRegion");
-                _ShipRegion = StructuralObject.SetValidValue(value, true);
+                _ShipRegion = StructuralObject.SetValidValue(value, true, "ShipRegion");
                 ReportPropertyChanged("ShipRegion");
                 OnShipRegionChanged();
             }
@@ -2670,7 +2662,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipPostalCodeChanging(value);
                 ReportPropertyChanging("ShipPostalCode");
-                _ShipPostalCode = StructuralObject.SetValidValue(value, true);
+                _ShipPostalCode = StructuralObject.SetValidValue(value, true, "ShipPostalCode");
                 ReportPropertyChanged("ShipPostalCode");
                 OnShipPostalCodeChanged();
             }
@@ -2694,7 +2686,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipCountryChanging(value);
                 ReportPropertyChanging("ShipCountry");
-                _ShipCountry = StructuralObject.SetValidValue(value, true);
+                _ShipCountry = StructuralObject.SetValidValue(value, true, "ShipCountry");
                 ReportPropertyChanged("ShipCountry");
                 OnShipCountryChanged();
             }
@@ -2718,7 +2710,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCustomerIDChanging(value);
                 ReportPropertyChanging("CustomerID");
-                _CustomerID = StructuralObject.SetValidValue(value, true);
+                _CustomerID = StructuralObject.SetValidValue(value, true, "CustomerID");
                 ReportPropertyChanged("CustomerID");
                 OnCustomerIDChanged();
             }
@@ -2744,7 +2736,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCustomerNameChanging(value);
                     ReportPropertyChanging("CustomerName");
-                    _CustomerName = StructuralObject.SetValidValue(value, false);
+                    _CustomerName = StructuralObject.SetValidValue(value, false, "CustomerName");
                     ReportPropertyChanged("CustomerName");
                     OnCustomerNameChanged();
                 }
@@ -2769,7 +2761,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
+                _Address = StructuralObject.SetValidValue(value, true, "Address");
                 ReportPropertyChanged("Address");
                 OnAddressChanged();
             }
@@ -2793,7 +2785,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, true);
+                _City = StructuralObject.SetValidValue(value, true, "City");
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -2817,7 +2809,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionChanging(value);
                 ReportPropertyChanging("Region");
-                _Region = StructuralObject.SetValidValue(value, true);
+                _Region = StructuralObject.SetValidValue(value, true, "Region");
                 ReportPropertyChanged("Region");
                 OnRegionChanged();
             }
@@ -2841,7 +2833,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPostalCodeChanging(value);
                 ReportPropertyChanging("PostalCode");
-                _PostalCode = StructuralObject.SetValidValue(value, true);
+                _PostalCode = StructuralObject.SetValidValue(value, true, "PostalCode");
                 ReportPropertyChanged("PostalCode");
                 OnPostalCodeChanged();
             }
@@ -2865,7 +2857,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCountryChanging(value);
                 ReportPropertyChanging("Country");
-                _Country = StructuralObject.SetValidValue(value, true);
+                _Country = StructuralObject.SetValidValue(value, true, "Country");
                 ReportPropertyChanged("Country");
                 OnCountryChanged();
             }
@@ -2891,7 +2883,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnSalespersonChanging(value);
                     ReportPropertyChanging("Salesperson");
-                    _Salesperson = StructuralObject.SetValidValue(value, false);
+                    _Salesperson = StructuralObject.SetValidValue(value, false, "Salesperson");
                     ReportPropertyChanged("Salesperson");
                     OnSalespersonChanged();
                 }
@@ -2918,7 +2910,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -2943,7 +2935,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnOrderDateChanging(value);
                 ReportPropertyChanging("OrderDate");
-                _OrderDate = StructuralObject.SetValidValue(value);
+                _OrderDate = StructuralObject.SetValidValue(value, "OrderDate");
                 ReportPropertyChanged("OrderDate");
                 OnOrderDateChanged();
             }
@@ -2967,7 +2959,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRequiredDateChanging(value);
                 ReportPropertyChanging("RequiredDate");
-                _RequiredDate = StructuralObject.SetValidValue(value);
+                _RequiredDate = StructuralObject.SetValidValue(value, "RequiredDate");
                 ReportPropertyChanged("RequiredDate");
                 OnRequiredDateChanged();
             }
@@ -2991,7 +2983,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShippedDateChanging(value);
                 ReportPropertyChanging("ShippedDate");
-                _ShippedDate = StructuralObject.SetValidValue(value);
+                _ShippedDate = StructuralObject.SetValidValue(value, "ShippedDate");
                 ReportPropertyChanged("ShippedDate");
                 OnShippedDateChanged();
             }
@@ -3017,7 +3009,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnShipperNameChanging(value);
                     ReportPropertyChanging("ShipperName");
-                    _ShipperName = StructuralObject.SetValidValue(value, false);
+                    _ShipperName = StructuralObject.SetValidValue(value, false, "ShipperName");
                     ReportPropertyChanged("ShipperName");
                     OnShipperNameChanged();
                 }
@@ -3044,7 +3036,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductIDChanging(value);
                     ReportPropertyChanging("ProductID");
-                    _ProductID = StructuralObject.SetValidValue(value);
+                    _ProductID = StructuralObject.SetValidValue(value, "ProductID");
                     ReportPropertyChanged("ProductID");
                     OnProductIDChanged();
                 }
@@ -3071,7 +3063,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -3098,7 +3090,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnUnitPriceChanging(value);
                     ReportPropertyChanging("UnitPrice");
-                    _UnitPrice = StructuralObject.SetValidValue(value);
+                    _UnitPrice = StructuralObject.SetValidValue(value, "UnitPrice");
                     ReportPropertyChanged("UnitPrice");
                     OnUnitPriceChanged();
                 }
@@ -3125,7 +3117,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnQuantityChanging(value);
                     ReportPropertyChanging("Quantity");
-                    _Quantity = StructuralObject.SetValidValue(value);
+                    _Quantity = StructuralObject.SetValidValue(value, "Quantity");
                     ReportPropertyChanged("Quantity");
                     OnQuantityChanged();
                 }
@@ -3152,7 +3144,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnDiscountChanging(value);
                     ReportPropertyChanging("Discount");
-                    _Discount = StructuralObject.SetValidValue(value);
+                    _Discount = StructuralObject.SetValidValue(value, "Discount");
                     ReportPropertyChanged("Discount");
                     OnDiscountChanged();
                 }
@@ -3177,7 +3169,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnExtendedPriceChanging(value);
                 ReportPropertyChanging("ExtendedPrice");
-                _ExtendedPrice = StructuralObject.SetValidValue(value);
+                _ExtendedPrice = StructuralObject.SetValidValue(value, "ExtendedPrice");
                 ReportPropertyChanged("ExtendedPrice");
                 OnExtendedPriceChanged();
             }
@@ -3201,7 +3193,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnFreightChanging(value);
                 ReportPropertyChanging("Freight");
-                _Freight = StructuralObject.SetValidValue(value);
+                _Freight = StructuralObject.SetValidValue(value, "Freight");
                 ReportPropertyChanged("Freight");
                 OnFreightChanged();
             }
@@ -3212,7 +3204,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -3238,7 +3229,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3257,7 +3248,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -3282,7 +3273,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCustomerIDChanging(value);
                 ReportPropertyChanging("CustomerID");
-                _CustomerID = StructuralObject.SetValidValue(value, true);
+                _CustomerID = StructuralObject.SetValidValue(value, true, "CustomerID");
                 ReportPropertyChanged("CustomerID");
                 OnCustomerIDChanged();
             }
@@ -3306,7 +3297,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnEmployeeIDChanging(value);
                 ReportPropertyChanging("EmployeeID");
-                _EmployeeID = StructuralObject.SetValidValue(value);
+                _EmployeeID = StructuralObject.SetValidValue(value, "EmployeeID");
                 ReportPropertyChanged("EmployeeID");
                 OnEmployeeIDChanged();
             }
@@ -3330,7 +3321,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnOrderDateChanging(value);
                 ReportPropertyChanging("OrderDate");
-                _OrderDate = StructuralObject.SetValidValue(value);
+                _OrderDate = StructuralObject.SetValidValue(value, "OrderDate");
                 ReportPropertyChanged("OrderDate");
                 OnOrderDateChanged();
             }
@@ -3354,7 +3345,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRequiredDateChanging(value);
                 ReportPropertyChanging("RequiredDate");
-                _RequiredDate = StructuralObject.SetValidValue(value);
+                _RequiredDate = StructuralObject.SetValidValue(value, "RequiredDate");
                 ReportPropertyChanged("RequiredDate");
                 OnRequiredDateChanged();
             }
@@ -3378,7 +3369,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShippedDateChanging(value);
                 ReportPropertyChanging("ShippedDate");
-                _ShippedDate = StructuralObject.SetValidValue(value);
+                _ShippedDate = StructuralObject.SetValidValue(value, "ShippedDate");
                 ReportPropertyChanged("ShippedDate");
                 OnShippedDateChanged();
             }
@@ -3402,7 +3393,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipViaChanging(value);
                 ReportPropertyChanging("ShipVia");
-                _ShipVia = StructuralObject.SetValidValue(value);
+                _ShipVia = StructuralObject.SetValidValue(value, "ShipVia");
                 ReportPropertyChanged("ShipVia");
                 OnShipViaChanged();
             }
@@ -3426,7 +3417,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnFreightChanging(value);
                 ReportPropertyChanging("Freight");
-                _Freight = StructuralObject.SetValidValue(value);
+                _Freight = StructuralObject.SetValidValue(value, "Freight");
                 ReportPropertyChanged("Freight");
                 OnFreightChanged();
             }
@@ -3450,7 +3441,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipNameChanging(value);
                 ReportPropertyChanging("ShipName");
-                _ShipName = StructuralObject.SetValidValue(value, true);
+                _ShipName = StructuralObject.SetValidValue(value, true, "ShipName");
                 ReportPropertyChanged("ShipName");
                 OnShipNameChanged();
             }
@@ -3474,7 +3465,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipAddressChanging(value);
                 ReportPropertyChanging("ShipAddress");
-                _ShipAddress = StructuralObject.SetValidValue(value, true);
+                _ShipAddress = StructuralObject.SetValidValue(value, true, "ShipAddress");
                 ReportPropertyChanged("ShipAddress");
                 OnShipAddressChanged();
             }
@@ -3498,7 +3489,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipCityChanging(value);
                 ReportPropertyChanging("ShipCity");
-                _ShipCity = StructuralObject.SetValidValue(value, true);
+                _ShipCity = StructuralObject.SetValidValue(value, true, "ShipCity");
                 ReportPropertyChanged("ShipCity");
                 OnShipCityChanged();
             }
@@ -3522,7 +3513,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipRegionChanging(value);
                 ReportPropertyChanging("ShipRegion");
-                _ShipRegion = StructuralObject.SetValidValue(value, true);
+                _ShipRegion = StructuralObject.SetValidValue(value, true, "ShipRegion");
                 ReportPropertyChanged("ShipRegion");
                 OnShipRegionChanged();
             }
@@ -3546,7 +3537,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipPostalCodeChanging(value);
                 ReportPropertyChanging("ShipPostalCode");
-                _ShipPostalCode = StructuralObject.SetValidValue(value, true);
+                _ShipPostalCode = StructuralObject.SetValidValue(value, true, "ShipPostalCode");
                 ReportPropertyChanged("ShipPostalCode");
                 OnShipPostalCodeChanged();
             }
@@ -3570,7 +3561,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipCountryChanging(value);
                 ReportPropertyChanging("ShipCountry");
-                _ShipCountry = StructuralObject.SetValidValue(value, true);
+                _ShipCountry = StructuralObject.SetValidValue(value, true, "ShipCountry");
                 ReportPropertyChanged("ShipCountry");
                 OnShipCountryChanged();
             }
@@ -3581,7 +3572,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -3755,7 +3745,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -3774,7 +3764,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -3801,7 +3791,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductIDChanging(value);
                     ReportPropertyChanging("ProductID");
-                    _ProductID = StructuralObject.SetValidValue(value);
+                    _ProductID = StructuralObject.SetValidValue(value, "ProductID");
                     ReportPropertyChanged("ProductID");
                     OnProductIDChanged();
                 }
@@ -3826,7 +3816,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitPriceChanging(value);
                 ReportPropertyChanging("UnitPrice");
-                _UnitPrice = StructuralObject.SetValidValue(value);
+                _UnitPrice = StructuralObject.SetValidValue(value, "UnitPrice");
                 ReportPropertyChanged("UnitPrice");
                 OnUnitPriceChanged();
             }
@@ -3850,7 +3840,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnQuantityChanging(value);
                 ReportPropertyChanging("Quantity");
-                _Quantity = StructuralObject.SetValidValue(value);
+                _Quantity = StructuralObject.SetValidValue(value, "Quantity");
                 ReportPropertyChanged("Quantity");
                 OnQuantityChanged();
             }
@@ -3874,7 +3864,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnDiscountChanging(value);
                 ReportPropertyChanging("Discount");
-                _Discount = StructuralObject.SetValidValue(value);
+                _Discount = StructuralObject.SetValidValue(value, "Discount");
                 ReportPropertyChanged("Discount");
                 OnDiscountChanged();
             }
@@ -3885,7 +3875,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -4001,7 +3990,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -4020,7 +4009,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -4047,7 +4036,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductIDChanging(value);
                     ReportPropertyChanging("ProductID");
-                    _ProductID = StructuralObject.SetValidValue(value);
+                    _ProductID = StructuralObject.SetValidValue(value, "ProductID");
                     ReportPropertyChanged("ProductID");
                     OnProductIDChanged();
                 }
@@ -4074,7 +4063,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -4101,7 +4090,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnUnitPriceChanging(value);
                     ReportPropertyChanging("UnitPrice");
-                    _UnitPrice = StructuralObject.SetValidValue(value);
+                    _UnitPrice = StructuralObject.SetValidValue(value, "UnitPrice");
                     ReportPropertyChanged("UnitPrice");
                     OnUnitPriceChanged();
                 }
@@ -4128,7 +4117,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnQuantityChanging(value);
                     ReportPropertyChanging("Quantity");
-                    _Quantity = StructuralObject.SetValidValue(value);
+                    _Quantity = StructuralObject.SetValidValue(value, "Quantity");
                     ReportPropertyChanged("Quantity");
                     OnQuantityChanged();
                 }
@@ -4155,7 +4144,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnDiscountChanging(value);
                     ReportPropertyChanging("Discount");
-                    _Discount = StructuralObject.SetValidValue(value);
+                    _Discount = StructuralObject.SetValidValue(value, "Discount");
                     ReportPropertyChanged("Discount");
                     OnDiscountChanged();
                 }
@@ -4180,7 +4169,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnExtendedPriceChanging(value);
                 ReportPropertyChanging("ExtendedPrice");
-                _ExtendedPrice = StructuralObject.SetValidValue(value);
+                _ExtendedPrice = StructuralObject.SetValidValue(value, "ExtendedPrice");
                 ReportPropertyChanged("ExtendedPrice");
                 OnExtendedPriceChanged();
             }
@@ -4191,7 +4180,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -4217,7 +4205,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -4236,7 +4224,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -4261,7 +4249,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnSubtotalChanging(value);
                 ReportPropertyChanging("Subtotal");
-                _Subtotal = StructuralObject.SetValidValue(value);
+                _Subtotal = StructuralObject.SetValidValue(value, "Subtotal");
                 ReportPropertyChanged("Subtotal");
                 OnSubtotalChanged();
             }
@@ -4272,7 +4260,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -4300,7 +4287,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -4319,7 +4306,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -4344,7 +4331,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCustomerIDChanging(value);
                 ReportPropertyChanging("CustomerID");
-                _CustomerID = StructuralObject.SetValidValue(value, true);
+                _CustomerID = StructuralObject.SetValidValue(value, true, "CustomerID");
                 ReportPropertyChanged("CustomerID");
                 OnCustomerIDChanged();
             }
@@ -4368,7 +4355,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnEmployeeIDChanging(value);
                 ReportPropertyChanging("EmployeeID");
-                _EmployeeID = StructuralObject.SetValidValue(value);
+                _EmployeeID = StructuralObject.SetValidValue(value, "EmployeeID");
                 ReportPropertyChanged("EmployeeID");
                 OnEmployeeIDChanged();
             }
@@ -4392,7 +4379,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnOrderDateChanging(value);
                 ReportPropertyChanging("OrderDate");
-                _OrderDate = StructuralObject.SetValidValue(value);
+                _OrderDate = StructuralObject.SetValidValue(value, "OrderDate");
                 ReportPropertyChanged("OrderDate");
                 OnOrderDateChanged();
             }
@@ -4416,7 +4403,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRequiredDateChanging(value);
                 ReportPropertyChanging("RequiredDate");
-                _RequiredDate = StructuralObject.SetValidValue(value);
+                _RequiredDate = StructuralObject.SetValidValue(value, "RequiredDate");
                 ReportPropertyChanged("RequiredDate");
                 OnRequiredDateChanged();
             }
@@ -4440,7 +4427,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShippedDateChanging(value);
                 ReportPropertyChanging("ShippedDate");
-                _ShippedDate = StructuralObject.SetValidValue(value);
+                _ShippedDate = StructuralObject.SetValidValue(value, "ShippedDate");
                 ReportPropertyChanged("ShippedDate");
                 OnShippedDateChanged();
             }
@@ -4464,7 +4451,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipViaChanging(value);
                 ReportPropertyChanging("ShipVia");
-                _ShipVia = StructuralObject.SetValidValue(value);
+                _ShipVia = StructuralObject.SetValidValue(value, "ShipVia");
                 ReportPropertyChanged("ShipVia");
                 OnShipViaChanged();
             }
@@ -4488,7 +4475,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnFreightChanging(value);
                 ReportPropertyChanging("Freight");
-                _Freight = StructuralObject.SetValidValue(value);
+                _Freight = StructuralObject.SetValidValue(value, "Freight");
                 ReportPropertyChanged("Freight");
                 OnFreightChanged();
             }
@@ -4512,7 +4499,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipNameChanging(value);
                 ReportPropertyChanging("ShipName");
-                _ShipName = StructuralObject.SetValidValue(value, true);
+                _ShipName = StructuralObject.SetValidValue(value, true, "ShipName");
                 ReportPropertyChanged("ShipName");
                 OnShipNameChanged();
             }
@@ -4536,7 +4523,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipAddressChanging(value);
                 ReportPropertyChanging("ShipAddress");
-                _ShipAddress = StructuralObject.SetValidValue(value, true);
+                _ShipAddress = StructuralObject.SetValidValue(value, true, "ShipAddress");
                 ReportPropertyChanged("ShipAddress");
                 OnShipAddressChanged();
             }
@@ -4560,7 +4547,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipCityChanging(value);
                 ReportPropertyChanging("ShipCity");
-                _ShipCity = StructuralObject.SetValidValue(value, true);
+                _ShipCity = StructuralObject.SetValidValue(value, true, "ShipCity");
                 ReportPropertyChanged("ShipCity");
                 OnShipCityChanged();
             }
@@ -4584,7 +4571,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipRegionChanging(value);
                 ReportPropertyChanging("ShipRegion");
-                _ShipRegion = StructuralObject.SetValidValue(value, true);
+                _ShipRegion = StructuralObject.SetValidValue(value, true, "ShipRegion");
                 ReportPropertyChanged("ShipRegion");
                 OnShipRegionChanged();
             }
@@ -4608,7 +4595,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipPostalCodeChanging(value);
                 ReportPropertyChanging("ShipPostalCode");
-                _ShipPostalCode = StructuralObject.SetValidValue(value, true);
+                _ShipPostalCode = StructuralObject.SetValidValue(value, true, "ShipPostalCode");
                 ReportPropertyChanged("ShipPostalCode");
                 OnShipPostalCodeChanged();
             }
@@ -4632,7 +4619,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShipCountryChanging(value);
                 ReportPropertyChanging("ShipCountry");
-                _ShipCountry = StructuralObject.SetValidValue(value, true);
+                _ShipCountry = StructuralObject.SetValidValue(value, true, "ShipCountry");
                 ReportPropertyChanged("ShipCountry");
                 OnShipCountryChanged();
             }
@@ -4658,7 +4645,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCompanyNameChanging(value);
                     ReportPropertyChanging("CompanyName");
-                    _CompanyName = StructuralObject.SetValidValue(value, false);
+                    _CompanyName = StructuralObject.SetValidValue(value, false, "CompanyName");
                     ReportPropertyChanged("CompanyName");
                     OnCompanyNameChanged();
                 }
@@ -4683,7 +4670,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
+                _Address = StructuralObject.SetValidValue(value, true, "Address");
                 ReportPropertyChanged("Address");
                 OnAddressChanged();
             }
@@ -4707,7 +4694,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, true);
+                _City = StructuralObject.SetValidValue(value, true, "City");
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -4731,7 +4718,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionChanging(value);
                 ReportPropertyChanging("Region");
-                _Region = StructuralObject.SetValidValue(value, true);
+                _Region = StructuralObject.SetValidValue(value, true, "Region");
                 ReportPropertyChanged("Region");
                 OnRegionChanged();
             }
@@ -4755,7 +4742,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPostalCodeChanging(value);
                 ReportPropertyChanging("PostalCode");
-                _PostalCode = StructuralObject.SetValidValue(value, true);
+                _PostalCode = StructuralObject.SetValidValue(value, true, "PostalCode");
                 ReportPropertyChanged("PostalCode");
                 OnPostalCodeChanged();
             }
@@ -4779,7 +4766,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCountryChanging(value);
                 ReportPropertyChanging("Country");
-                _Country = StructuralObject.SetValidValue(value, true);
+                _Country = StructuralObject.SetValidValue(value, true, "Country");
                 ReportPropertyChanged("Country");
                 OnCountryChanged();
             }
@@ -4790,7 +4777,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -4820,7 +4806,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -4839,7 +4825,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductIDChanging(value);
                     ReportPropertyChanging("ProductID");
-                    _ProductID = StructuralObject.SetValidValue(value);
+                    _ProductID = StructuralObject.SetValidValue(value, "ProductID");
                     ReportPropertyChanged("ProductID");
                     OnProductIDChanged();
                 }
@@ -4864,7 +4850,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnProductNameChanging(value);
                 ReportPropertyChanging("ProductName");
-                _ProductName = StructuralObject.SetValidValue(value, false);
+                _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                 ReportPropertyChanged("ProductName");
                 OnProductNameChanged();
             }
@@ -4888,7 +4874,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnSupplierIDChanging(value);
                 ReportPropertyChanging("SupplierID");
-                _SupplierID = StructuralObject.SetValidValue(value);
+                _SupplierID = StructuralObject.SetValidValue(value, "SupplierID");
                 ReportPropertyChanged("SupplierID");
                 OnSupplierIDChanged();
             }
@@ -4912,7 +4898,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCategoryIDChanging(value);
                 ReportPropertyChanging("CategoryID");
-                _CategoryID = StructuralObject.SetValidValue(value);
+                _CategoryID = StructuralObject.SetValidValue(value, "CategoryID");
                 ReportPropertyChanged("CategoryID");
                 OnCategoryIDChanged();
             }
@@ -4936,7 +4922,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnQuantityPerUnitChanging(value);
                 ReportPropertyChanging("QuantityPerUnit");
-                _QuantityPerUnit = StructuralObject.SetValidValue(value, true);
+                _QuantityPerUnit = StructuralObject.SetValidValue(value, true, "QuantityPerUnit");
                 ReportPropertyChanged("QuantityPerUnit");
                 OnQuantityPerUnitChanged();
             }
@@ -4960,7 +4946,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitPriceChanging(value);
                 ReportPropertyChanging("UnitPrice");
-                _UnitPrice = StructuralObject.SetValidValue(value);
+                _UnitPrice = StructuralObject.SetValidValue(value, "UnitPrice");
                 ReportPropertyChanged("UnitPrice");
                 OnUnitPriceChanged();
             }
@@ -4984,7 +4970,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitsInStockChanging(value);
                 ReportPropertyChanging("UnitsInStock");
-                _UnitsInStock = StructuralObject.SetValidValue(value);
+                _UnitsInStock = StructuralObject.SetValidValue(value, "UnitsInStock");
                 ReportPropertyChanged("UnitsInStock");
                 OnUnitsInStockChanged();
             }
@@ -5008,7 +4994,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitsOnOrderChanging(value);
                 ReportPropertyChanging("UnitsOnOrder");
-                _UnitsOnOrder = StructuralObject.SetValidValue(value);
+                _UnitsOnOrder = StructuralObject.SetValidValue(value, "UnitsOnOrder");
                 ReportPropertyChanged("UnitsOnOrder");
                 OnUnitsOnOrderChanged();
             }
@@ -5032,7 +5018,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnReorderLevelChanging(value);
                 ReportPropertyChanging("ReorderLevel");
-                _ReorderLevel = StructuralObject.SetValidValue(value);
+                _ReorderLevel = StructuralObject.SetValidValue(value, "ReorderLevel");
                 ReportPropertyChanged("ReorderLevel");
                 OnReorderLevelChanged();
             }
@@ -5056,7 +5042,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnDiscontinuedChanging(value);
                 ReportPropertyChanging("Discontinued");
-                _Discontinued = StructuralObject.SetValidValue(value);
+                _Discontinued = StructuralObject.SetValidValue(value, "Discontinued");
                 ReportPropertyChanged("Discontinued");
                 OnDiscontinuedChanged();
             }
@@ -5067,7 +5053,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -5197,7 +5182,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5216,7 +5201,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryNameChanging(value);
                     ReportPropertyChanging("CategoryName");
-                    _CategoryName = StructuralObject.SetValidValue(value, false);
+                    _CategoryName = StructuralObject.SetValidValue(value, false, "CategoryName");
                     ReportPropertyChanged("CategoryName");
                     OnCategoryNameChanged();
                 }
@@ -5243,7 +5228,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -5268,7 +5253,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnProductSalesChanging(value);
                 ReportPropertyChanging("ProductSales");
-                _ProductSales = StructuralObject.SetValidValue(value);
+                _ProductSales = StructuralObject.SetValidValue(value, "ProductSales");
                 ReportPropertyChanged("ProductSales");
                 OnProductSalesChanged();
             }
@@ -5279,7 +5264,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -5305,7 +5289,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5324,7 +5308,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -5349,7 +5333,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitPriceChanging(value);
                 ReportPropertyChanging("UnitPrice");
-                _UnitPrice = StructuralObject.SetValidValue(value);
+                _UnitPrice = StructuralObject.SetValidValue(value, "UnitPrice");
                 ReportPropertyChanged("UnitPrice");
                 OnUnitPriceChanged();
             }
@@ -5360,7 +5344,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -5390,7 +5373,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5409,7 +5392,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryNameChanging(value);
                     ReportPropertyChanging("CategoryName");
-                    _CategoryName = StructuralObject.SetValidValue(value, false);
+                    _CategoryName = StructuralObject.SetValidValue(value, false, "CategoryName");
                     ReportPropertyChanged("CategoryName");
                     OnCategoryNameChanged();
                 }
@@ -5436,7 +5419,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -5461,7 +5444,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnQuantityPerUnitChanging(value);
                 ReportPropertyChanging("QuantityPerUnit");
-                _QuantityPerUnit = StructuralObject.SetValidValue(value, true);
+                _QuantityPerUnit = StructuralObject.SetValidValue(value, true, "QuantityPerUnit");
                 ReportPropertyChanged("QuantityPerUnit");
                 OnQuantityPerUnitChanged();
             }
@@ -5485,7 +5468,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnUnitsInStockChanging(value);
                 ReportPropertyChanging("UnitsInStock");
-                _UnitsInStock = StructuralObject.SetValidValue(value);
+                _UnitsInStock = StructuralObject.SetValidValue(value, "UnitsInStock");
                 ReportPropertyChanged("UnitsInStock");
                 OnUnitsInStockChanged();
             }
@@ -5511,7 +5494,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnDiscontinuedChanging(value);
                     ReportPropertyChanging("Discontinued");
-                    _Discontinued = StructuralObject.SetValidValue(value);
+                    _Discontinued = StructuralObject.SetValidValue(value, "Discontinued");
                     ReportPropertyChanged("Discontinued");
                     OnDiscontinuedChanged();
                 }
@@ -5523,7 +5506,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -5551,7 +5533,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5570,7 +5552,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnRegionIDChanging(value);
                     ReportPropertyChanging("RegionID");
-                    _RegionID = StructuralObject.SetValidValue(value);
+                    _RegionID = StructuralObject.SetValidValue(value, "RegionID");
                     ReportPropertyChanged("RegionID");
                     OnRegionIDChanged();
                 }
@@ -5595,7 +5577,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionDescriptionChanging(value);
                 ReportPropertyChanging("RegionDescription");
-                _RegionDescription = StructuralObject.SetValidValue(value, false);
+                _RegionDescription = StructuralObject.SetValidValue(value, false, "RegionDescription");
                 ReportPropertyChanged("RegionDescription");
                 OnRegionDescriptionChanged();
             }
@@ -5606,7 +5588,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -5662,7 +5643,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5681,7 +5662,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryIDChanging(value);
                     ReportPropertyChanging("CategoryID");
-                    _CategoryID = StructuralObject.SetValidValue(value);
+                    _CategoryID = StructuralObject.SetValidValue(value, "CategoryID");
                     ReportPropertyChanged("CategoryID");
                     OnCategoryIDChanged();
                 }
@@ -5708,7 +5689,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCategoryNameChanging(value);
                     ReportPropertyChanging("CategoryName");
-                    _CategoryName = StructuralObject.SetValidValue(value, false);
+                    _CategoryName = StructuralObject.SetValidValue(value, false, "CategoryName");
                     ReportPropertyChanged("CategoryName");
                     OnCategoryNameChanged();
                 }
@@ -5735,7 +5716,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnProductNameChanging(value);
                     ReportPropertyChanging("ProductName");
-                    _ProductName = StructuralObject.SetValidValue(value, false);
+                    _ProductName = StructuralObject.SetValidValue(value, false, "ProductName");
                     ReportPropertyChanged("ProductName");
                     OnProductNameChanged();
                 }
@@ -5760,7 +5741,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnProductSalesChanging(value);
                 ReportPropertyChanging("ProductSales");
-                _ProductSales = StructuralObject.SetValidValue(value);
+                _ProductSales = StructuralObject.SetValidValue(value, "ProductSales");
                 ReportPropertyChanged("ProductSales");
                 OnProductSalesChanged();
             }
@@ -5771,7 +5752,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -5799,7 +5779,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5816,7 +5796,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnSaleAmountChanging(value);
                 ReportPropertyChanging("SaleAmount");
-                _SaleAmount = StructuralObject.SetValidValue(value);
+                _SaleAmount = StructuralObject.SetValidValue(value, "SaleAmount");
                 ReportPropertyChanged("SaleAmount");
                 OnSaleAmountChanged();
             }
@@ -5842,7 +5822,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -5869,7 +5849,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnCompanyNameChanging(value);
                     ReportPropertyChanging("CompanyName");
-                    _CompanyName = StructuralObject.SetValidValue(value, false);
+                    _CompanyName = StructuralObject.SetValidValue(value, false, "CompanyName");
                     ReportPropertyChanged("CompanyName");
                     OnCompanyNameChanged();
                 }
@@ -5894,7 +5874,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShippedDateChanging(value);
                 ReportPropertyChanging("ShippedDate");
-                _ShippedDate = StructuralObject.SetValidValue(value);
+                _ShippedDate = StructuralObject.SetValidValue(value, "ShippedDate");
                 ReportPropertyChanged("ShippedDate");
                 OnShippedDateChanged();
             }
@@ -5905,7 +5885,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -5933,7 +5912,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5952,7 +5931,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnShipperIDChanging(value);
                     ReportPropertyChanging("ShipperID");
-                    _ShipperID = StructuralObject.SetValidValue(value);
+                    _ShipperID = StructuralObject.SetValidValue(value, "ShipperID");
                     ReportPropertyChanged("ShipperID");
                     OnShipperIDChanged();
                 }
@@ -5977,7 +5956,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCompanyNameChanging(value);
                 ReportPropertyChanging("CompanyName");
-                _CompanyName = StructuralObject.SetValidValue(value, false);
+                _CompanyName = StructuralObject.SetValidValue(value, false, "CompanyName");
                 ReportPropertyChanged("CompanyName");
                 OnCompanyNameChanged();
             }
@@ -6001,7 +5980,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPhoneChanging(value);
                 ReportPropertyChanging("Phone");
-                _Phone = StructuralObject.SetValidValue(value, true);
+                _Phone = StructuralObject.SetValidValue(value, true, "Phone");
                 ReportPropertyChanged("Phone");
                 OnPhoneChanged();
             }
@@ -6012,7 +5991,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -6064,7 +6042,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6081,7 +6059,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShippedDateChanging(value);
                 ReportPropertyChanging("ShippedDate");
-                _ShippedDate = StructuralObject.SetValidValue(value);
+                _ShippedDate = StructuralObject.SetValidValue(value, "ShippedDate");
                 ReportPropertyChanged("ShippedDate");
                 OnShippedDateChanged();
             }
@@ -6107,7 +6085,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -6132,7 +6110,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnSubtotalChanging(value);
                 ReportPropertyChanging("Subtotal");
-                _Subtotal = StructuralObject.SetValidValue(value);
+                _Subtotal = StructuralObject.SetValidValue(value, "Subtotal");
                 ReportPropertyChanged("Subtotal");
                 OnSubtotalChanged();
             }
@@ -6143,7 +6121,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -6169,7 +6146,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6186,7 +6163,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnShippedDateChanging(value);
                 ReportPropertyChanging("ShippedDate");
-                _ShippedDate = StructuralObject.SetValidValue(value);
+                _ShippedDate = StructuralObject.SetValidValue(value, "ShippedDate");
                 ReportPropertyChanged("ShippedDate");
                 OnShippedDateChanged();
             }
@@ -6212,7 +6189,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnOrderIDChanging(value);
                     ReportPropertyChanging("OrderID");
-                    _OrderID = StructuralObject.SetValidValue(value);
+                    _OrderID = StructuralObject.SetValidValue(value, "OrderID");
                     ReportPropertyChanged("OrderID");
                     OnOrderIDChanged();
                 }
@@ -6237,7 +6214,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnSubtotalChanging(value);
                 ReportPropertyChanging("Subtotal");
-                _Subtotal = StructuralObject.SetValidValue(value);
+                _Subtotal = StructuralObject.SetValidValue(value, "Subtotal");
                 ReportPropertyChanged("Subtotal");
                 OnSubtotalChanged();
             }
@@ -6248,7 +6225,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
     }
     
     /// <summary>
@@ -6276,7 +6252,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6295,7 +6271,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnSupplierIDChanging(value);
                     ReportPropertyChanging("SupplierID");
-                    _SupplierID = StructuralObject.SetValidValue(value);
+                    _SupplierID = StructuralObject.SetValidValue(value, "SupplierID");
                     ReportPropertyChanged("SupplierID");
                     OnSupplierIDChanged();
                 }
@@ -6320,7 +6296,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCompanyNameChanging(value);
                 ReportPropertyChanging("CompanyName");
-                _CompanyName = StructuralObject.SetValidValue(value, false);
+                _CompanyName = StructuralObject.SetValidValue(value, false, "CompanyName");
                 ReportPropertyChanged("CompanyName");
                 OnCompanyNameChanged();
             }
@@ -6344,7 +6320,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnContactNameChanging(value);
                 ReportPropertyChanging("ContactName");
-                _ContactName = StructuralObject.SetValidValue(value, true);
+                _ContactName = StructuralObject.SetValidValue(value, true, "ContactName");
                 ReportPropertyChanged("ContactName");
                 OnContactNameChanged();
             }
@@ -6368,7 +6344,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnContactTitleChanging(value);
                 ReportPropertyChanging("ContactTitle");
-                _ContactTitle = StructuralObject.SetValidValue(value, true);
+                _ContactTitle = StructuralObject.SetValidValue(value, true, "ContactTitle");
                 ReportPropertyChanged("ContactTitle");
                 OnContactTitleChanged();
             }
@@ -6392,7 +6368,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnAddressChanging(value);
                 ReportPropertyChanging("Address");
-                _Address = StructuralObject.SetValidValue(value, true);
+                _Address = StructuralObject.SetValidValue(value, true, "Address");
                 ReportPropertyChanged("Address");
                 OnAddressChanged();
             }
@@ -6416,7 +6392,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCityChanging(value);
                 ReportPropertyChanging("City");
-                _City = StructuralObject.SetValidValue(value, true);
+                _City = StructuralObject.SetValidValue(value, true, "City");
                 ReportPropertyChanged("City");
                 OnCityChanged();
             }
@@ -6440,7 +6416,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionChanging(value);
                 ReportPropertyChanging("Region");
-                _Region = StructuralObject.SetValidValue(value, true);
+                _Region = StructuralObject.SetValidValue(value, true, "Region");
                 ReportPropertyChanged("Region");
                 OnRegionChanged();
             }
@@ -6464,7 +6440,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPostalCodeChanging(value);
                 ReportPropertyChanging("PostalCode");
-                _PostalCode = StructuralObject.SetValidValue(value, true);
+                _PostalCode = StructuralObject.SetValidValue(value, true, "PostalCode");
                 ReportPropertyChanged("PostalCode");
                 OnPostalCodeChanged();
             }
@@ -6488,7 +6464,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnCountryChanging(value);
                 ReportPropertyChanging("Country");
-                _Country = StructuralObject.SetValidValue(value, true);
+                _Country = StructuralObject.SetValidValue(value, true, "Country");
                 ReportPropertyChanged("Country");
                 OnCountryChanged();
             }
@@ -6512,7 +6488,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnPhoneChanging(value);
                 ReportPropertyChanging("Phone");
-                _Phone = StructuralObject.SetValidValue(value, true);
+                _Phone = StructuralObject.SetValidValue(value, true, "Phone");
                 ReportPropertyChanged("Phone");
                 OnPhoneChanged();
             }
@@ -6536,7 +6512,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnFaxChanging(value);
                 ReportPropertyChanging("Fax");
-                _Fax = StructuralObject.SetValidValue(value, true);
+                _Fax = StructuralObject.SetValidValue(value, true, "Fax");
                 ReportPropertyChanged("Fax");
                 OnFaxChanged();
             }
@@ -6560,7 +6536,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnHomePageChanging(value);
                 ReportPropertyChanging("HomePage");
-                _HomePage = StructuralObject.SetValidValue(value, true);
+                _HomePage = StructuralObject.SetValidValue(value, true, "HomePage");
                 ReportPropertyChanged("HomePage");
                 OnHomePageChanged();
             }
@@ -6571,7 +6547,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -6627,7 +6602,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-        #region Primitive Properties
+        #region Simple Properties
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -6646,7 +6621,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
                 {
                     OnTerritoryIDChanging(value);
                     ReportPropertyChanging("TerritoryID");
-                    _TerritoryID = StructuralObject.SetValidValue(value, false);
+                    _TerritoryID = StructuralObject.SetValidValue(value, false, "TerritoryID");
                     ReportPropertyChanged("TerritoryID");
                     OnTerritoryIDChanged();
                 }
@@ -6671,7 +6646,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnTerritoryDescriptionChanging(value);
                 ReportPropertyChanging("TerritoryDescription");
-                _TerritoryDescription = StructuralObject.SetValidValue(value, false);
+                _TerritoryDescription = StructuralObject.SetValidValue(value, false, "TerritoryDescription");
                 ReportPropertyChanged("TerritoryDescription");
                 OnTerritoryDescriptionChanged();
             }
@@ -6695,7 +6670,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
             {
                 OnRegionIDChanging(value);
                 ReportPropertyChanging("RegionID");
-                _RegionID = StructuralObject.SetValidValue(value);
+                _RegionID = StructuralObject.SetValidValue(value, "RegionID");
                 ReportPropertyChanged("RegionID");
                 OnRegionIDChanged();
             }
@@ -6706,7 +6681,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
         #endregion
 
-    
         #region Navigation Properties
     
         /// <summary>
@@ -6775,5 +6749,4 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test.Models
 
     #endregion
 
-    
 }

@@ -10,30 +10,30 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     /// Tests for custom build task to generate client proxies
     /// </summary>
     [TestClass]
-    public class CleanRiaClientFilesTaskTests
+    public class CleanOpenRiaClientFilesTaskTests
     {
-        public CleanRiaClientFilesTaskTests()
+        public CleanOpenRiaClientFilesTaskTests()
         {
         }
 
         [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CLRCF1")]
-        [Description("CleanRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
+        [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CleanRiaClientFiles_Deletes_Generated_Files()
         {
-            CreateRiaClientFilesTask task = null;
+            CreateOpenRiaClientFilesTask task = null;
             MockBuildEngine mockBuildEngine;
             try
             {
                 // ====================================================
                 // Test setup -- generate code by calling Create task
                 // ====================================================
-                task = CodeGenHelper.CreateRiaClientFilesTaskInstance("CLRCF1", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CLRCF1", /*includeClientOutputAssembly*/ false);
                 bool success = task.Execute();
                 if (!success)
                 {
                     mockBuildEngine = task.BuildEngine as MockBuildEngine;
-                    Assert.Fail("CreateRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
+                    Assert.Fail("CreateOpenRiaClientFilesTask failed:\r\n" + mockBuildEngine.ConsoleLogger.Errors);
                 }
 
                 string generatedCodeOutputFolder = task.GeneratedCodePath;
@@ -86,7 +86,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // ==========================================
 
                 // Step 1: instantiate Clean task instance and execute it, giving it same info as the Create task
-                CleanRiaClientFilesTask cleanTask = new CleanRiaClientFilesTask();
+                CleanOpenRiaClientFilesTask cleanTask = new CleanOpenRiaClientFilesTask();
                 mockBuildEngine = new MockBuildEngine();
                 cleanTask.BuildEngine = mockBuildEngine;
                 cleanTask.OutputPath = task.OutputPath;
@@ -116,11 +116,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [Description("CleanRiaClientFilesTask.SafeFileDelete catches expected exceptions")]
+        [Description("CleanOpenRiaClientFilesTask.SafeFileDelete catches expected exceptions")]
         [TestMethod]
         public void CleanRiaClientFiles_Safe_File_Delete()
         {
-            CleanRiaClientFilesTask task = new CleanRiaClientFilesTask();
+            CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
             task.BuildEngine = mockBuildEngine;
 

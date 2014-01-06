@@ -5,6 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Silverlight;
 using Microsoft.VisualStudio.TemplateWizard;
 
@@ -98,6 +101,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     solution2.Remove(this._slClassLibProject);
 
                     this._slClassLibProject = libFolder.AddFromFile(slClassLibProjectPath);
+
                 }
             }
             else
@@ -105,14 +109,19 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 solution2.AddFromTemplate(netClassLibProjectTemplate, destination, netClassLibProjectName, false);
             }
 
-            SLProjectExtender slProjectExtender = this._slClassLibProject.get_Extender("SilverlightProject") as SLProjectExtender;
 
             // Link the two class libraries together
-            if (slProjectExtender != null)
-            {
-                string extension = Path.GetExtension(slClassLibProjectPath);
-                slProjectExtender.LinkedServerProject = Path.Combine("..", Path.Combine(netClassLibProjectName, netClassLibProjectName + extension));
-            }
+
+            string extension = Path.GetExtension(slClassLibProjectPath);
+            IVsSolution ivsSolution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            IVsHierarchy hierarchy;
+            ivsSolution.GetProjectOfUniqueName(_slClassLibProject.UniqueName, out hierarchy);
+            IVsBuildPropertyStorage buildPropertyStorage = (IVsBuildPropertyStorage)hierarchy;
+            buildPropertyStorage.SetPropertyValue("LinkedOpenRiaServerProject", null,
+                (uint)_PersistStorageType.PST_PROJECT_FILE,
+                Path.Combine("..", Path.Combine(netClassLibProjectName, netClassLibProjectName + extension)));
+
+
         }
 
         public void RunStarted(object automationObject,

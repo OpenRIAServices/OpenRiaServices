@@ -15,7 +15,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Subclass of <see cref="BusinessLogicContext"/> for the LinqToSql domain service
     /// </summary>
-    internal class LinqToSqlContext : BusinessLogicContext
+    public class LinqToSqlContext : BusinessLogicContext
     {
         // This class supports LinqToSqlDomainService code gen only when the RIA Services Toolkit is installed.
 
@@ -103,7 +103,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the path to the Linq to Sql domain service or <c>null</c> if the toolkit has not been installed.
         /// </summary>
-        internal static string LinqToSqlDomainServiceAssemblyPath
+        public static string LinqToSqlDomainServiceAssemblyPath
         {
             get
             {
@@ -129,7 +129,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="assemblyPath">The path for the LinqToSql assembly. Passing in <c>null</c> will
         /// reset the override.
         /// </param>
-        internal static void OverrideAssemblyPath(string assemblyPath)
+        public static void OverrideAssemblyPath(string assemblyPath)
         {
             LinqToSqlContext.EnableDataContextTypes_TestOverride = !string.IsNullOrEmpty(assemblyPath);
             LinqToSqlContext.linqToSqlDomainServiceAssemblyPath = assemblyPath;
@@ -139,7 +139,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Called to create the entities known to this <see cref="DomainContext"/>
         /// </summary>
         /// <returns>The list of entities</returns>
-        protected override IEnumerable<BusinessLogicEntity> CreateEntities()
+        protected override IEnumerable<IBusinessLogicEntity> CreateEntities()
         {
             MetaModel mm = this.MetaModel;
             IEnumerable<MetaTable> tables = mm.GetTables().Where(t => t.RowType.IsEntity);
@@ -161,7 +161,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeNamespace">The namespace name.</param>
         /// <param name="className">The class name.</param>
         /// <returns>the new type</returns>
-        protected override CodeTypeDeclaration CreateBusinessLogicClass(CodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
+        protected override CodeTypeDeclaration CreateBusinessLogicClass(ICodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
         {
             Debug.Assert(LinqToSqlContext.linqToSqlDomainServiceAssemblyPath != null, "Unexpected method call when LinqToSqlDomainService assembly path has not been initialized!");
 
@@ -199,7 +199,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicClass">The business logic class.</param>
         /// <param name="entity">The entity.</param>
         /// <returns>The newly created method</returns>
-        protected override CodeMemberMethod GenerateSelectMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override CodeMemberMethod GenerateSelectMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             CodeMemberMethod method = null;
             LinqToSqlEntity ltsEntity = entity as LinqToSqlEntity;
@@ -232,7 +232,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The code gen context.></param>
         /// <param name="businessLogicClass">The business logic class.</param>
         /// <param name="entity">The entity.</param>
-        protected override void GenerateInsertMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateInsertMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             // public void Insert$EntityName$($entityType$ $entityName$)
             CodeMemberMethod method = new CodeMemberMethod();
@@ -260,7 +260,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The code gen context.></param>
         /// <param name="businessLogicClass">The business logic class.</param>
         /// <param name="entity">The entity.</param>
-        protected override void GenerateUpdateMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateUpdateMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             string currentParameterName = "current" + entity.ClrType.Name;
 
@@ -304,7 +304,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The code gen context.></param>
         /// <param name="businessLogicClass">The business logic class.</param>
         /// <param name="entity">The entity.</param>
-        protected override void GenerateDeleteMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
+        protected override void GenerateDeleteMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
         {
             string parameterName = CodeGenUtilities.MakeLegalParameterName(entity.Name);
 

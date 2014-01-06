@@ -24,15 +24,15 @@ namespace OpenRiaServices.DomainServices.Client
         private DomainClientResult(object returnValue, IEnumerable<ValidationResult> validationErrors)
         {
             this._returnValue = returnValue;
-            this._validationErrors = validationErrors.ToList().AsReadOnly();
+            this._validationErrors = new ReadOnlyCollection<ValidationResult>(validationErrors.ToList());
         }
 
         private DomainClientResult(IEnumerable<Entity> entities, IEnumerable<Entity> allEntities, int totalEntityCount, IEnumerable<ValidationResult> validationErrors)
         {
-            this._entities = entities.ToList().AsReadOnly();
-            this._allEntities = allEntities.ToList().AsReadOnly();
+            this._entities = new ReadOnlyCollection<Entity>(entities.ToList());
+            this._allEntities = new ReadOnlyCollection<Entity>(allEntities.ToList());
             this._totalEntityCount = totalEntityCount;
-            this._validationErrors = validationErrors.ToList().AsReadOnly();
+            this._validationErrors = new ReadOnlyCollection<ValidationResult>(validationErrors.ToList());
         }
 
         /// <summary>

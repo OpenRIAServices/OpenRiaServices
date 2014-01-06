@@ -21,10 +21,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// counterpart across AppDomain boundaries by using a shared copy of 
     /// <see cref="ContextData"/> state.
     /// </remarks>
-    internal class ContextViewModel : INotifyPropertyChanged
+    public class ContextViewModel : INotifyPropertyChanged
     {
-        private BusinessLogicModel _businessLogicModel;
-        private ContextData _contextData;
+        private IBusinessLogicModel _businessLogicModel;
+        private IContextData _contextData;
         private List<EntityViewModel> _entities;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="businessLogicModel">The <see cref="BusinessLogicModel"/> in the other AppDomain with which to communicate.</param>
         /// <param name="contextData">The shared state with the corresponding <see cref="BusinessLogicContext"/> instance in the other AppDomain.</param>
-        public ContextViewModel(BusinessLogicModel businessLogicModel, ContextData contextData)
+        public ContextViewModel(IBusinessLogicModel businessLogicModel, IContextData contextData)
         {
             System.Diagnostics.Debug.Assert(businessLogicModel != null, "businessLogicModel cannot be null");
             System.Diagnostics.Debug.Assert(contextData != null, "contextData cannot be null");
@@ -53,10 +53,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         /// <summary>
-        /// Gets the <see cref="ContextData"/> state shared with the corresponding
+        /// Gets the <see cref="IContextData"/> state shared with the corresponding
         /// <see cref="BusinessLogicContext"/> in the other AppDomain.
         /// </summary>
-        public ContextData ContextData
+        public IContextData ContextData
         {
             get
             {
@@ -115,10 +115,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             {
                 if (this._entities == null)
                 {
-                    EntityData[] entityStates = this._businessLogicModel.GetEntityDataItemsForContext(this.ContextData);
+                    IEntityData[] entityStates = this._businessLogicModel.GetEntityDataItemsForContext(this.ContextData);
                     this._entities = new List<EntityViewModel>();
 
-                    foreach (EntityData entityState in entityStates)
+                    foreach (IEntityData entityState in entityStates)
                     {
                         EntityViewModel entityViewModel = new EntityViewModel(this, entityState);
                         this._entities.Add(entityViewModel);
@@ -134,7 +134,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Invoked internally whenever any state changes on an entity
         /// belonging to this context.  Used to refresh calculated fields
         /// </summary>
-        internal void EntityStateChanged()
+        public void EntityStateChanged()
         {
             // Raise a property change for our calculated properties
             // to force them to be re-evaluated by any UI bound to them

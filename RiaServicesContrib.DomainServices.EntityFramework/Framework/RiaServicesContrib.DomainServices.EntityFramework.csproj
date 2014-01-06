@@ -53,7 +53,7 @@
     <ProjectGuid>{E078A28C-0C43-48E4-AFE0-37101C07B9BD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.ServiceModel.DomainServices.EntityFramework</RootNamespace>
+    <RootNamespace>OpenRiaServices.DomainServices.EntityFramework</RootNamespace>
     <AssemblyName>RiaServicesContrib.DomainServices.EntityFramework</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -124,34 +124,34 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
       <Link>ExceptionHandlingUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\AssociationInfo.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\AssociationInfo.cs">
       <Link>AssociationInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\LinqToEntitiesDomainServiceDescriptionProvider.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\LinqToEntitiesDomainServiceDescriptionProvider.cs">
       <Link>LinqToEntitiesDomainServiceDescriptionProvider.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\LinqToEntitiesTypeDescriptionContext.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\LinqToEntitiesTypeDescriptionContext.cs">
       <Link>LinqToEntitiesTypeDescriptionContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\LinqToEntitiesTypeDescriptor.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\LinqToEntitiesTypeDescriptor.cs">
       <Link>LinqToEntitiesTypeDescriptor.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataPropertyDescriptorWrapper.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs">
       <Link>MetadataPropertyDescriptorWrapper.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.Designer.cs">
       <Link>MetadataResource.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MetadataResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataWorkspaceUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataWorkspaceUtilities.cs">
       <Link>MetadataWorkspaceUtilities.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\ObjectContextUtilities.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\ObjectContextUtilities.cs">
       <Link>ObjectContextUtilities.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\Resource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\Resource.Designer.cs">
       <Link>Resource.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -162,10 +162,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DbResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\TypeDescriptionContextBase.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptionContextBase.cs">
       <Link>TypeDescriptionContextBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\TypeDescriptorBase.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptorBase.cs">
       <Link>TypeDescriptorBase.cs</Link>
     </Compile>
     <Compile Include="DbContextExtensions.cs" />
@@ -175,19 +175,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\MetadataResource.resx">
+    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.resx">
       <Link>MetadataResource.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
-      <LogicalName>System.ServiceModel.DomainServices.EntityFramework.MetadataResource.resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework.ObjectContext\Framework\Resource.resx">
+    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\Resource.resx">
       <Link>Resource.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.EntityFramework</CustomToolNamespace>
-      <LogicalName>System.ServiceModel.DomainServices.EntityFramework.Resource.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="DbResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
