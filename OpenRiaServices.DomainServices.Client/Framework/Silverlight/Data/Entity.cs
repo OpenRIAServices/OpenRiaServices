@@ -468,7 +468,7 @@ namespace OpenRiaServices.DomainServices.Client
             get { return this._isMerging; }
             private set
             {
-                _isMerging = value;
+                this._isMerging = value;
 
                 MetaType metaType = MetaType.GetMetaType(this.GetType());
 
@@ -478,7 +478,7 @@ namespace OpenRiaServices.DomainServices.Client
                     ComplexObject propertyValue = propertyInfo.GetValue(this,null) as ComplexObject;
                     if (propertyValue != null)
                     {
-                        propertyValue.IsMergingState = _isMerging;
+                        propertyValue.IsMergingState = this._isMerging;
                     }
 
                 }
