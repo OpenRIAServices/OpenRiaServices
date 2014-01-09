@@ -105,10 +105,10 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
             return entitySetOperationsEnumValue;
         }
 
-        internal string GetInvokeMethodReturnTypeName(DomainOperationEntry domainOperationEntry)
+        internal string GetInvokeMethodReturnTypeName(DomainOperationEntry domainOperationEntry, InvokeKind invokeKind)
         {
             Type returnType = CodeGenUtilities.TranslateType(domainOperationEntry.ReturnType);
-            string returnTypeString = "InvokeOperation";
+            string returnTypeString = (invokeKind == InvokeKind.Async) ? "Task" :  "InvokeOperation";
             if (returnType != typeof(void))
             {
                 if (!this.RegisterEnumTypeIfNecessary(returnType, domainOperationEntry))
