@@ -1034,6 +1034,50 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
+        /// Invokes an invoke operation.
+        /// </summary>
+        /// <param name="operationName">The name of the operation.</param>
+        /// <param name="parameters">Optional parameters to the operation. Specify null
+        /// if the operation takes no parameters.</param>
+        /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>The invoke operation.</returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual Task InvokeOperationAsync(string operationName,
+            IDictionary<string, object> parameters, bool hasSideEffects,
+            CancellationToken cancellationToken = default (CancellationToken))
+        {
+            var tcs = new TaskCompletionSource<object>();
+
+            var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => op.Value), tcs);
+            RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
+
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// Invokes an invoke operation.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value that will be returned.</typeparam>
+        /// <param name="operationName">The name of the operation.</param>
+        /// <param name="parameters">Optional parameters to the operation. Specify null
+        /// if the operation takes no parameters.</param>
+        /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>The invoke operation.</returns>
+        public virtual Task<TValue> InvokeOperationAsync<TValue>(string operationName,
+            IDictionary<string, object> parameters, bool hasSideEffects,
+            CancellationToken cancellationToken = default (CancellationToken))
+        {
+            var tcs = new TaskCompletionSource<TValue>();
+
+            var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => op.Value), tcs);
+            RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
+
+            return tcs.Task;
+        }
+
+        /// <summary>
         /// Raises the PropertyChanged event for the specified property
         /// </summary>
         /// <param name="propertyName">The property to raise the event for</param>

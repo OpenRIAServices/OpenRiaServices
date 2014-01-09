@@ -118,7 +118,7 @@ namespace OpenRiaServices.DomainServices.Client
 
         internal void Complete(OperationErrorStatus errorStatus)
         {
-            DomainOperationException error = null;
+            SubmitOperationException error = null;
             if (errorStatus == OperationErrorStatus.ValidationFailed)
             {
                 error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
