@@ -635,4 +635,7 @@ Gets a user representing the authenticated identity.
   <data name="ClientCodeGen_ComplexTypesCannotBeShared_Reference" xml:space="preserve">
     <value>The Complex Type '{0}' already exists in another assembly. Complex Types cannot be defined in multiple assemblies.</value>
   </data>
+  <data name="CodeGen_DomainContext_Invoke_Method_CancellationToken_Parameter_Comment" xml:space="preserve">
+    <value>A cancellation token that can be used to cancel the work</value>
+  </data>
 </root>
