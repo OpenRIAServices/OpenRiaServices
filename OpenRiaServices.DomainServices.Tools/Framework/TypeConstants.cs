@@ -16,6 +16,14 @@
         public const string InvokeOperationTypeFullName = "OpenRiaServices.DomainServices.Client.InvokeOperation";
 
         /// <summary>
+        /// The 'OpenRiaServices.DomainServices.Client.InvokeResult' type name.
+        /// </summary>
+        /// <remarks>
+        /// Used during code generation.
+        /// </remarks>
+        public const string InvokeResultTypeFullName = "OpenRiaServices.DomainServices.Client.InvokeResult";
+
+        /// <summary>
         /// The 'OpenRiaServices.DomainServices.Client.EntityQuery' type name.
         /// </summary>
         /// <remarks>

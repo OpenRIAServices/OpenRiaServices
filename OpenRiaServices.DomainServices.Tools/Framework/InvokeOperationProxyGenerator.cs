@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Tools
             // ----------------------------------------------------------------
             CodeTypeReference operationReturnType = null;
             Type returnType = CodeGenUtilities.TranslateType(domainOperationEntry.ReturnType);
-            var methodReturnTypeName = (invokeKind == InvokeKind.Async) ? typeof (System.Threading.Tasks.Task).FullName : TypeConstants.InvokeOperationTypeFullName;
+            var methodReturnTypeName = (invokeKind == InvokeKind.Async) ? TypeConstants.InvokeResultTypeFullName: TypeConstants.InvokeOperationTypeFullName;
 
             CodeTypeReference invokeOperationType = CodeGenUtilities.GetTypeReference(methodReturnTypeName, (string)this._proxyClass.UserData["Namespace"], false);
             if (returnType != typeof(void))
@@ -122,6 +122,15 @@ namespace OpenRiaServices.DomainServices.Tools
                 operationReturnType.Options |= CodeTypeReferenceOptions.GenericTypeParameter;
                 invokeOperationType.TypeArguments.Add(operationReturnType);
             }
+
+            // InvokeResults are wrapped in task (always)
+            if (invokeKind == InvokeKind.Async)
+            {
+                //invokeOperationType.Options |= CodeTypeReferenceOptions.GenericTypeParameter;                
+                invokeOperationType = new CodeTypeReference(typeof(Task).Name, invokeOperationType);
+            }
+
+
             CodeMemberMethod method = new CodeMemberMethod()
             {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,

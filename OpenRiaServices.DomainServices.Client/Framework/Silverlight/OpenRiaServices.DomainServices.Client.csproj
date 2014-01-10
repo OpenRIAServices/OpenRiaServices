@@ -131,6 +131,7 @@
     <Compile Include="Data\LoadResult.cs" />
     <Compile Include="Data\ObjectStateUtility.cs" />
     <Compile Include="Data\SubmitOperationException.cs" />
+    <Compile Include="Data\InvokeResult.cs" />
     <Compile Include="Data\SubmitResult.cs" />
     <Compile Include="Data\ValidationResultCollection.cs" />
     <Compile Include="Data\EntityVisitor.cs" />

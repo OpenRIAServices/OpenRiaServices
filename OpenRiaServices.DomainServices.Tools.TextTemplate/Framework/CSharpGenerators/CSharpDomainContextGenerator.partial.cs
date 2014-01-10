@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         internal string GetInvokeMethodReturnTypeName(DomainOperationEntry domainOperationEntry, InvokeKind invokeKind)
         {
             Type returnType = CodeGenUtilities.TranslateType(domainOperationEntry.ReturnType);
-            string returnTypeString = (invokeKind == InvokeKind.Async) ? "Task" :  "InvokeOperation";
+            string returnTypeString = (invokeKind == InvokeKind.Async) ? "InvokeResult" :  "InvokeOperation";
             if (returnType != typeof(void))
             {
                 if (!this.RegisterEnumTypeIfNecessary(returnType, domainOperationEntry))
@@ -117,6 +117,9 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
                 }
                 returnTypeString = returnTypeString + "<" + CodeGenUtilities.GetTypeName(returnType) + ">";
             }
+
+            if (invokeKind == InvokeKind.Async)
+                returnTypeString = string.Format("Task<{0}>", returnTypeString);
             return returnTypeString;
         }
 

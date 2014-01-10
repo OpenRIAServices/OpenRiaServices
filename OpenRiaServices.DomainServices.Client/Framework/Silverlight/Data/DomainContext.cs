@@ -1043,13 +1043,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual Task InvokeOperationAsync(string operationName,
+        public virtual Task<InvokeResult> InvokeOperationAsync(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
             CancellationToken cancellationToken = default (CancellationToken))
         {
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<InvokeResult>();
 
-            var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => op.Value), tcs);
+            var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult()), tcs);
             RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
 
             return tcs.Task;
@@ -1065,13 +1065,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
-        public virtual Task<TValue> InvokeOperationAsync<TValue>(string operationName,
+        public virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
             CancellationToken cancellationToken = default (CancellationToken))
         {
-            var tcs = new TaskCompletionSource<TValue>();
+            var tcs = new TaskCompletionSource<InvokeResult<TValue>>();
 
-            var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => op.Value), tcs);
+            var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult<TValue>(op.Value)), tcs);
             RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
 
             return tcs.Task;

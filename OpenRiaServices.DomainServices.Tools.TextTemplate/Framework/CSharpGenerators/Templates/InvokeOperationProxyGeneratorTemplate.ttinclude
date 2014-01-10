@@ -36,6 +36,7 @@ protected virtual void GenerateInvokeOperation(DomainOperationEntry domainOperat
 /// Generates an async invoke operation.
 /// </summary>
 /// <param name="domainOperationEntry">The invoke operation to be generated.</param>
+/// <param name="invokeKind">The type of invoke operation to be generated.</param>
 protected virtual void GenerateInvokeOperation(DomainOperationEntry domainOperationEntry, InvokeKind invokeKind)
 {	
 	this.GenerateInvokeOperationDeclaration(domainOperationEntry, invokeKind);
