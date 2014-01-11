@@ -24,17 +24,38 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="loadOperation">The load operation which have been completed.</param>
         /// <exception cref="System.ArgumentException">load operation must have been completed successfully</exception>
-        internal LoadResult(LoadOperation<TEntity> loadOperation)
+        public LoadResult(LoadOperation<TEntity> loadOperation)
         {
             if (loadOperation.IsCanceled || loadOperation.HasError || !loadOperation.IsComplete)
-                throw new ArgumentException("load operation must have been completed successfully");
+                throw new ArgumentException(Resources.OperationNotComplete);
 
             // LoadOperation.Entities is a ReadOnlyObservableCollection which inherit ReadOnlyCollection
             _loadedEntites = (ReadOnlyCollection<TEntity>)loadOperation.Entities;
+
+            EntityQuery = loadOperation.EntityQuery; 
             AllEntities = loadOperation.AllEntities;
-            EntityQuery = loadOperation.EntityQuery;
+            
             TotalEntityCount = loadOperation.TotalEntityCount;
             LoadBehavior = loadOperation.LoadBehavior;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoadResult{TEntity}"/> class.
+        /// </summary>
+        /// <param name="query">The entity query which was completed.</param>
+        /// <param name="loadBehavior">The load behavior used for load.</param>
+        /// <param name="entities">Top level entities loaded.</param>
+        /// <param name="allEntities">All entities loaded.</param>
+        /// <param name="totalEntityCount">The total entity count.</param>
+        public LoadResult(EntityQuery<TEntity> query, LoadBehavior loadBehavior, IEnumerable<TEntity> entities, IEnumerable<Entity> allEntities, int totalEntityCount)
+        {
+            _loadedEntites = (entities as ReadOnlyCollection<TEntity>) ?? new ReadOnlyCollection<TEntity>(entities.ToList());
+
+            EntityQuery = query;
+            LoadBehavior = loadBehavior;            
+            AllEntities = allEntities;            
+            TotalEntityCount = totalEntityCount;
+            
         }
 
         /// <summary>

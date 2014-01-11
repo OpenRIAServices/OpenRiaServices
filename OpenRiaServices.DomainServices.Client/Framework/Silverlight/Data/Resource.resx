@@ -258,6 +258,9 @@
   <data name="IsNotSupported" xml:space="preserve">
     <value>'{0}' is not supported.</value>
   </data>
+  <data name="LoadResult_OperationNotSucessfullyCompleted" xml:space="preserve">
+    <value>The operation must have been sucessfully completed</value>
+  </data>
   <data name="MemberMustBeAssociation" xml:space="preserve">
     <value>Member '{0}' must be marked with AssociationAttribute</value>
   </data>
