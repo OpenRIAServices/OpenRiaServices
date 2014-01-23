@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OpenRiaServices.ChangeNotification.SignalR")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("State of Illinois")]
+[assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("OpenRiaServices.ChangeNotification.SignalR")]
-[assembly: AssemblyCopyright("Copyright © State of Illinois 2013")]
+[assembly: AssemblyCopyright("Copyright © Outercurve Foundation 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
