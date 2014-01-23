@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 using System.Web.Http;
+using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Server;
 using DataAnnotationsResources = OpenRiaServices.DomainController.Server.Resource;
 
 

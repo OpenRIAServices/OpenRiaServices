@@ -99,7 +99,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         projectReference = MakeProjectPathRelative(projectReference, silverlightProject.FullName);
                     }
 
-                    string extension = Path.GetExtension(silverlightProject.FullName);
+                    
                     IVsSolution ivsSolution = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
                     IVsHierarchy hierarchy;
                     ivsSolution.GetProjectOfUniqueName(silverlightProject.UniqueName, out hierarchy);
@@ -182,7 +182,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             mainPage.Open(EnvDTE.Constants.vsViewKindPrimary);
         }
 
-        string MakeProjectPathRelative(string fullPath, string basePath)
+        public static string MakeProjectPathRelative(string fullPath, string basePath)
         {
             string localBasePath = basePath;
             string localFullPath = fullPath;

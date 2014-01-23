@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenDomainService")]
+[assembly: AssemblyTitle("DomainServiceWizard")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("State of Illinois")]
-[assembly: AssemblyProduct("OpenDomainService")]
-[assembly: AssemblyCopyright("Copyright © State of Illinois 2013")]
+[assembly: AssemblyCompany("Outercurve Foundation")]
+[assembly: AssemblyProduct("DomainServiceWizard")]
+[assembly: AssemblyCopyright("Copyright © Outercurve Foundation 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2a8149fa-b849-4a3a-a16f-085c0db919f1")]
+[assembly: Guid("56214a6b-6570-4796-9453-df774469a886")]
 
 // Version information for an assembly consists of the following four values:
 //
