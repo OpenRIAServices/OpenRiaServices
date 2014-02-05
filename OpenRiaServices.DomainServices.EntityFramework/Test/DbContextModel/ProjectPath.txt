@@ -1,1 +1,9 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+C:\GitHub\riaservicesclientproperties\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj,Generated_Code,
+=======
+C:\Users\blaircd\Source\Repos\openriaservices\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj,Generated_Code,
+>>>>>>> upstream/master
+=======
 C:\Code\Repos\openriaservices\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj,Generated_Code,
+>>>>>>> upstream/master

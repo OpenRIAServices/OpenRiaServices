@@ -463,11 +463,25 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        internal bool IsMergingState
+        protected internal bool IsMergingState
         {
-            get
+            get { return this._isMerging; }
+            private set
             {
-                return this._isMerging;
+                this._isMerging = value;
+
+                MetaType metaType = MetaType.GetMetaType(this.GetType());
+
+                foreach (MetaMember metaMember in metaType.DataMembers.Where(f=> f.IsComplex && !f.IsCollection))
+                {
+                    PropertyInfo propertyInfo = metaMember.Member;
+                    ComplexObject propertyValue = propertyInfo.GetValue(this,null) as ComplexObject;
+                    if (propertyValue != null)
+                    {
+                        propertyValue.IsMergingState = this._isMerging;
+                    }
+
+                }
             }
         }
 
@@ -924,7 +938,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             // set this flag so change tracking and edit enforcement
             // is suspended during the merge
-            this._isMerging = true;
+            this.IsMergingState = true;
 
             IDictionary<string, object> otherState = otherEntity.ExtractState();
             this.ApplyState(otherState, loadBehavior);
@@ -952,7 +966,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            this._isMerging = false;
+            this.IsMergingState = false;
             this.OnLoaded(false);
         }
 
@@ -1109,6 +1123,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
+        
         private void OnDataMemberChanging()
         {
             EntitySet set = this.LastSet;
@@ -1703,7 +1718,7 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnDeserialized(StreamingContext context)
         {
-            this._isDeserializing = false;
+            this._isDeserializing = false;   
         }
 
         /// <summary>

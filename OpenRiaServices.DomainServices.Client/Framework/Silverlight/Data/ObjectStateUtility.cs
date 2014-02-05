@@ -77,12 +77,14 @@ namespace OpenRiaServices.DomainServices.Client
 
             MetaType metaType = MetaType.GetMetaType(o.GetType());
 
+            bool isMerging = (o as Entity) == null ? (o as ComplexObject) != null && (o as ComplexObject).IsMergingState : (o as Entity).IsMergingState; 
+
             foreach (MetaMember metaMember in metaType.DataMembers)
             {
                 PropertyInfo propertyInfo = metaMember.Member;
                 object newValue;
 
-                if (stateToApply.TryGetValue(propertyInfo.Name, out newValue))
+                if ((isMerging && metaMember.IsMergable || !isMerging) && stateToApply.TryGetValue(propertyInfo.Name, out newValue))
                 {
                     if (newValue != null && metaMember.IsComplex && !metaMember.IsCollection)
                     {

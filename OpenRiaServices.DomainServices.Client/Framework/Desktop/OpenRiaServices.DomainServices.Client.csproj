@@ -159,6 +159,9 @@
     <Compile Include="..\Silverlight\Data\EntitySetOperations.cs">
       <Link>Data\EntitySetOperations.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\MergeAttribute.cs">
+      <Link>Data\MergeAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\ObjectStateUtility.cs">
       <Link>Data\ObjectStateUtility.cs</Link>
     </Compile>
