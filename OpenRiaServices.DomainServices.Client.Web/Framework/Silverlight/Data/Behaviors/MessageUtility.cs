@@ -32,7 +32,6 @@ namespace OpenRiaServices.DomainServices.Client
         private const string QueryValueAttribute = "Value";
         private const string QueryIncludeTotalCountOption = "includeTotalCount";
 
-#if !SERVERFX
         /// <summary>
         /// Checks if the HTTP method used is POST.
         /// </summary>
@@ -50,6 +49,31 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
             return false;
+        }
+
+#if !SERVERFX
+        /// <summary>
+        /// Changes a HTTP GET into a POST.
+        /// </summary>
+        /// <param name="properties">Properties for which the HTTP method is to be changed.</param>
+        public static void MakeHttpPOSTMethod(MessageProperties properties)
+        {
+            object property;
+            HttpRequestMessageProperty httpMessageProperty = null;
+
+            if (properties.TryGetValue(MessageUtility.HttpRequestName, out property))
+            {
+                httpMessageProperty = property as HttpRequestMessageProperty;
+            }
+
+            if (httpMessageProperty == null)
+            {
+                httpMessageProperty = new HttpRequestMessageProperty();
+                properties.Add(MessageUtility.HttpRequestName, httpMessageProperty);
+            }
+
+            httpMessageProperty.Method = MessageUtility.HttpPostMethodName;
+            httpMessageProperty.SuppressEntityBody = false;
         }
 
         /// <summary>
@@ -72,7 +96,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="request">The original message.</param>
         /// <param name="queryOptions">The query parameters to be added to the message URL.</param>
-        internal static void AddQueryToUrl(Message request, List<KeyValuePair<string, string>> queryOptions)
+        internal static void AddQueryToUrl(ref Message request, List<KeyValuePair<string, string>> queryOptions)
         {
             Uri originalTo = request.Headers.To;
             StringBuilder queryBuilder = new StringBuilder(originalTo.Query);
@@ -95,7 +119,17 @@ namespace OpenRiaServices.DomainServices.Client
 
             UriBuilder builder = new UriBuilder(originalTo);
             builder.Query = queryBuilder.ToString();
-            request.Headers.To = request.Properties.Via = builder.Uri;
+            var uri = builder.Uri;
+
+            if (uri.AbsoluteUri.Length <= WebHttpQueryClientMessageFormatter.MaximumUriLength)
+            {
+                request.Headers.To = request.Properties.Via = builder.Uri;
+            }
+            else // fallback to POST if the Uri would become to long
+            {
+                MakeHttpPOSTMethod(System.ServiceModel.OperationContext.Current.OutgoingMessageProperties);
+                AddMessageQueryOptions(ref request, queryOptions);
+            }
         }
 
 
