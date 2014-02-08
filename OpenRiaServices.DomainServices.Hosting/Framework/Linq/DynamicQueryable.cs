@@ -1413,7 +1413,15 @@ namespace System.Linq.Dynamic
                                 else if (target == typeof(char))
                                 {
                                     // promote from a number to a char
-                                    value = Convert.ToChar(ce.Value, CultureInfo.InvariantCulture);
+                                    try
+                                    {
+                                        value = Convert.ToChar(ce.Value, CultureInfo.InvariantCulture);
+                                    }
+                                    catch (OverflowException)
+                                    {
+                                        // The value was to large to convert to char/byte so fail
+                                        return null;
+                                    }
                                 }
                                 else
                                 {
