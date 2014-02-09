@@ -252,7 +252,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void Cities_ShouldSupportLongQueries()
         {
             LoadOperation<Zip> lo = null;
-            Exception error = null;
             const int zipToFind = 98053;
             const int QUERY_ITERATIONS = 50;
 
