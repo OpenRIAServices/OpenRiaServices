@@ -456,7 +456,7 @@ namespace OpenRiaServices.DomainServices.Tools
 
         /// <summary>
         /// Gets the cache of client project references and their corresponding
-        /// server projects if they have a RIA Link.
+        /// server projects if they have a Open RIA Services Link.
         /// </summary>
         internal LinkedServerProjectCache LinkedServerProjectCache
         {
@@ -523,7 +523,7 @@ namespace OpenRiaServices.DomainServices.Tools
                     }
                 }
 
-                // Write out our cache of RIA Links
+                // Write out our cache of Open RIA Services Links
                 if (!this.LinkedServerProjectCache.IsFileCacheCurrent)
                 {
                     if (this.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath())))
@@ -610,7 +610,7 @@ namespace OpenRiaServices.DomainServices.Tools
             // (it is currently a collection to be consistent with MSBuild item collections).
             // If there is no output assembly, log a warning.
             // We consider this non-fatal because an Intellisense build can trivially
-            // encounter this immediately after creating a new WCF RIA Services application
+            // encounter this immediately after creating a new Open Ria Services application
             string assemblyFile = assemblies.FirstOrDefault();
             if (string.IsNullOrEmpty(assemblyFile) || !File.Exists(assemblyFile))
             {
@@ -1371,7 +1371,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 this.ServerProjectPath = this.GetFullPathRelativeToDirectory(this.ServerProjectPath, this.ClientProjectDirectory);
             }
 
-            // If we detect a WCF RIA Link but cannot locate the specified server project, it probably
+            // If we detect a Open Ria Services  Link but cannot locate the specified server project, it probably
             // means the user renamed or moved it.   Warn them of that and give a hint how to fix.
             if (!this.IsServerProjectAvailable)
             {
