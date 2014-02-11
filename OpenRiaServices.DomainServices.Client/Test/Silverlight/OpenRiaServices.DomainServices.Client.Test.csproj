@@ -182,6 +182,7 @@
     <Compile Include="Data\CompositionInheritanceTests.cs" />
     <Compile Include="Data\CompositionTests.cs" />
     <Compile Include="Data\DomainContexts\ExtensibilityScenarios.cs" />
+    <Compile Include="Data\SubmitOperationExceptionTests.cs" />
     <Compile Include="Data\DomainOperationExceptionTests.cs" />
     <Compile Include="Data\EntityCollectionTests.cs" />
     <Compile Include="Data\EntitySetTests.cs" />

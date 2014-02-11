@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Server;
 
@@ -39,24 +42,34 @@ namespace OpenRiaServices.DomainServices.Tools
             foreach (DomainOperationEntry operation in this._domainServiceDescription.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Invoke).OrderBy(m => m.Name))
             {
                 // generates 2 overloads for each invoke operation: one with a callback and one without
-                this.GenerateInvokeOperation(operation, true);
-                this.GenerateInvokeOperation(operation, false);
+                this.GenerateInvokeOperation(operation, InvokeKind.WithCallback);
+                this.GenerateInvokeOperation(operation, InvokeKind.WithoutCallback);
+                this.GenerateInvokeOperation(operation, InvokeKind.Async);
             }
         }
+
+        public enum InvokeKind
+        {
+            WithoutCallback,
+            WithCallback,
+            Async
+        };
+
 
         /// <summary>
         /// Generates an invoke operation.
         /// </summary>
         /// <param name="domainOperationEntry">The invoke operation.</param>
-        /// <param name="generateCallback">bool flag indicating whether to generate callback and user state parameters.</param>
-        private void GenerateInvokeOperation(DomainOperationEntry domainOperationEntry, bool generateCallback)
+        /// <param name="invokeKind">the type of invoke method to generate.</param>
+        private void GenerateInvokeOperation(DomainOperationEntry domainOperationEntry, InvokeKind invokeKind)
         {
+            // Determine the name of the generated invoke function
             string methodName = domainOperationEntry.Name;
 
             // ----------------------------------------------------------------
             // Check for name conflicts
             // ----------------------------------------------------------------
-            if (generateCallback && this._proxyClass.Members.Cast<CodeTypeMember>().Any(c => c.Name == methodName && c.GetType() != typeof(CodeMemberMethod)))
+            if ((invokeKind ==  InvokeKind.WithCallback) && this._proxyClass.Members.Cast<CodeTypeMember>().Any(c => c.Name == methodName && c.GetType() != typeof(CodeMemberMethod)))
             {
                 this.ClientProxyGenerator.LogError(
                     string.Format(CultureInfo.CurrentCulture,
@@ -70,10 +83,14 @@ namespace OpenRiaServices.DomainServices.Tools
             // InvokeResult<T> InvokeOperation(args);
             //
             // InvokeResult<T> InvokeOperation(args, callback, userState);
+            //
+            // Task<T> InvokeOperationAsync(args);
             // ----------------------------------------------------------------
             CodeTypeReference operationReturnType = null;
             Type returnType = CodeGenUtilities.TranslateType(domainOperationEntry.ReturnType);
-            CodeTypeReference invokeOperationType = CodeGenUtilities.GetTypeReference(TypeConstants.InvokeOperationTypeFullName, (string)this._proxyClass.UserData["Namespace"], false);
+            var methodReturnTypeName = (invokeKind == InvokeKind.Async) ? TypeConstants.InvokeResultTypeFullName: TypeConstants.InvokeOperationTypeFullName;
+
+            CodeTypeReference invokeOperationType = CodeGenUtilities.GetTypeReference(methodReturnTypeName, (string)this._proxyClass.UserData["Namespace"], false);
             if (returnType != typeof(void))
             {
                 // If this is an enum type, we need to ensure it is either shared or
@@ -105,10 +122,19 @@ namespace OpenRiaServices.DomainServices.Tools
                 operationReturnType.Options |= CodeTypeReferenceOptions.GenericTypeParameter;
                 invokeOperationType.TypeArguments.Add(operationReturnType);
             }
+
+            // InvokeResults are wrapped in task (always)
+            if (invokeKind == InvokeKind.Async)
+            {
+                //invokeOperationType.Options |= CodeTypeReferenceOptions.GenericTypeParameter;                
+                invokeOperationType = new CodeTypeReference(typeof(Task).Name, invokeOperationType);
+            }
+
+
             CodeMemberMethod method = new CodeMemberMethod()
             {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Name = methodName,
+                Name =  (invokeKind == InvokeKind.Async) ? (methodName + "Async") : methodName,
                 ReturnType = invokeOperationType,
             };
             this._proxyClass.Members.Add(method);
@@ -127,10 +153,14 @@ namespace OpenRiaServices.DomainServices.Tools
             }
 
             // Conditionally add the callback and userState <param> doc comments
-            if (generateCallback)
+            if (invokeKind == InvokeKind.WithCallback)
             {
                 method.Comments.AddRange(CodeGenUtilities.GenerateParamCodeComment("callback", Resource.CodeGen_DomainContext_Invoke_Method_Callback_Parameter_Comment, this.ClientProxyGenerator.IsCSharp));
                 method.Comments.AddRange(CodeGenUtilities.GenerateParamCodeComment("userState", Resource.CodeGen_DomainContext_Invoke_Method_UserState_Parameter_Comment, this.ClientProxyGenerator.IsCSharp));
+            }
+            else if(invokeKind == InvokeKind.Async)
+            {
+                method.Comments.AddRange(CodeGenUtilities.GenerateParamCodeComment("cancellationToken", Resource.CodeGen_DomainContext_Invoke_Method_CancellationToken_Parameter_Comment, this.ClientProxyGenerator.IsCSharp)); 
             }
 
             // Generate <returns> doc comments
@@ -148,13 +178,15 @@ namespace OpenRiaServices.DomainServices.Tools
 
             // ----------------------------------------------------------------
             // generate invoke operation body:
-            //    return (InvokeOperation<T>) base.InvokeOperation(methodName, typeof(T), parameters, hasSideEffects, callback, userState);
+            //     return base.InvokeOperation<T>(methodName, typeof(T), parameters, hasSideEffects, callback, userState);
+            // or  return base.InvokeOperationAsync<T>(methodName, parameters, hasSideEffects);
             // ----------------------------------------------------------------
             List<CodeExpression> invokeParams = new List<CodeExpression>();
             invokeParams.Add(new CodePrimitiveExpression(methodName));
 
             // add the return Type parameter
-            invokeParams.Add(new CodeTypeOfExpression(operationReturnType));
+            if (invokeKind != InvokeKind.Async)
+                invokeParams.Add(new CodeTypeOfExpression(operationReturnType));
 
             // add any operation parameters
 
@@ -247,24 +279,34 @@ namespace OpenRiaServices.DomainServices.Tools
             InvokeAttribute invokeAttribute = (InvokeAttribute)domainOperationEntry.OperationAttribute;
             invokeParams.Add(new CodePrimitiveExpression(invokeAttribute.HasSideEffects));
 
-            if (generateCallback)
+            switch (invokeKind)
             {
-                CodeTypeReference callbackType = CodeGenUtilities.GetTypeReference(typeof(Action).FullName, (string)this._proxyClass.UserData["Namespace"], false);
-                callbackType.TypeArguments.Add(invokeOperationType);
+                case InvokeKind.WithCallback:
+                {
+                    CodeTypeReference callbackType = CodeGenUtilities.GetTypeReference(typeof(Action).FullName, (string)this._proxyClass.UserData["Namespace"], false);
+                    callbackType.TypeArguments.Add(invokeOperationType);
 
-                // add callback method parameter
-                method.Parameters.Add(new CodeParameterDeclarationExpression(callbackType, "callback"));
-                invokeParams.Add(new CodeVariableReferenceExpression("callback"));
+                    // add callback method parameter
+                    method.Parameters.Add(new CodeParameterDeclarationExpression(callbackType, "callback"));
+                    invokeParams.Add(new CodeVariableReferenceExpression("callback"));
 
-                // add the userState parameter to the end
-                method.Parameters.Add(new CodeParameterDeclarationExpression(CodeGenUtilities.GetTypeReference(typeof(object), this.ClientProxyGenerator, this._proxyClass), "userState"));
-                invokeParams.Add(new CodeVariableReferenceExpression("userState"));
-            }
-            else
-            {
-                // no callback or user state
-                invokeParams.Add(new CodePrimitiveExpression(null));
-                invokeParams.Add(new CodePrimitiveExpression(null));
+                    // add the userState parameter to the end
+                    method.Parameters.Add(new CodeParameterDeclarationExpression(CodeGenUtilities.GetTypeReference(typeof(object), this.ClientProxyGenerator, this._proxyClass), "userState"));
+                    invokeParams.Add(new CodeVariableReferenceExpression("userState"));
+                }
+                    break;
+                case InvokeKind.WithoutCallback:
+                    invokeParams.Add(new CodePrimitiveExpression(null));
+                    invokeParams.Add(new CodePrimitiveExpression(null));
+                    break;
+                case InvokeKind.Async:
+                    var cancellationTokenParmeter = new CodeParameterDeclarationExpression(CodeGenUtilities.GetTypeReference(typeof (CancellationToken), this.ClientProxyGenerator,this._proxyClass), "cancellationToken");
+                    // Add [Optional] attribute, this is the same as adding "= default(CancellationToken)"
+                    cancellationTokenParmeter.CustomAttributes.Add(
+                        new CodeAttributeDeclaration(new CodeTypeReference(typeof(OptionalAttribute))));
+                    method.Parameters.Add(cancellationTokenParmeter);
+                    invokeParams.Add(new CodeVariableReferenceExpression(cancellationTokenParmeter.Name));
+                    break;
             }
 
             // this.ValidateMethod("methodName", parameters);
@@ -285,16 +327,11 @@ namespace OpenRiaServices.DomainServices.Tools
 
             method.Statements.Add(validateMethodCall);
 
-            CodeMethodReferenceExpression invokeMethodReference = new CodeMethodReferenceExpression(
-                    new CodeThisReferenceExpression(),
-                    "InvokeOperation");
-            CodeExpression invokeCall = new CodeMethodInvokeExpression(invokeMethodReference, invokeParams.ToArray());
-            if (returnType != typeof(void))
-            {
-                // generate the required cast
-                invokeCall = new CodeCastExpression(invokeOperationType, invokeCall);
-            }
+            var invokeMethod = (invokeKind == InvokeKind.Async) ? "InvokeOperationAsync" : "InvokeOperation";
+            var typeParameters = (domainOperationEntry.ReturnType == typeof(void)) ? new CodeTypeReference[0] : new[] { operationReturnType };
+            var invokeMethodReference = new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), invokeMethod, typeParameters);
 
+            CodeExpression invokeCall = new CodeMethodInvokeExpression(invokeMethodReference, invokeParams.ToArray());
             method.Statements.Add(new CodeMethodReturnStatement(invokeCall));
         }
     }

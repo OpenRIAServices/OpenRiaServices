@@ -622,6 +622,15 @@ namespace OpenRiaServices.DomainServices.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A cancellation token that can be used to cancel the work.
+        /// </summary>
+        internal static string CodeGen_DomainContext_Invoke_Method_CancellationToken_Parameter_Comment {
+            get {
+                return ResourceManager.GetString("CodeGen_DomainContext_Invoke_Method_CancellationToken_Parameter_Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value for the &apos;{0}&apos; parameter of this action..
         /// </summary>
         internal static string CodeGen_DomainContext_Invoke_Method_Parameter_Comment {

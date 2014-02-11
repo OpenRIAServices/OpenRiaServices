@@ -259,7 +259,7 @@ namespace OpenRiaServices.DomainServices.Client
             string message = string.Format(CultureInfo.CurrentCulture, 
                 Resource.DomainContext_LoadOperationFailed_Validation, 
                 this.EntityQuery.QueryName);
-            DomainOperationException error = new DomainOperationException(message, OperationErrorStatus.ValidationFailed);
+            DomainOperationException error = new DomainOperationException(message, validationErrors);
 
             base.Complete(error);
         }

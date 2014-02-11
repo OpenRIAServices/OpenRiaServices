@@ -36,7 +36,8 @@ namespace OpenRiaServices.DomainServices.Tools
             "System.Collections.Generic", 
             "System.ComponentModel",
             "System.ComponentModel.DataAnnotations",                           // [Key], [Validation] 
-            "System.Linq", 
+            "System.Linq",
+            "System.Threading.Tasks",                                      // Task
             "OpenRiaServices.DomainServices",                              // [DomainIdentifier], etc
             "OpenRiaServices.DomainServices.Client",                       // DomainContext, etc
             "OpenRiaServices.DomainServices.Client.ApplicationServices",   // WebContextBase, etc

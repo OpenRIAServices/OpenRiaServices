@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Client;
 
 namespace Cities
@@ -11,7 +13,9 @@ namespace Cities
         internal bool InvokeOperationCalled { get; set; }
         internal bool InvokeOperationGenericCalled { get; set; }
         internal bool LoadCalled { get; set; }
+        internal bool LoadAsyncCalled { get; set; }
         internal bool SubmitChangesCalled { get; set; }
+        internal bool SubmitChangesAsyncCalled { get; set; }
 
         public override InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
         {
@@ -35,6 +39,19 @@ namespace Cities
         {
             this.SubmitChangesCalled = true;
             return base.SubmitChanges(callback, userState);
+        }
+
+        public override Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            LoadAsyncCalled = true;
+            return base.LoadAsync(query, loadBehavior, cancellationToken);
+        }
+
+        public override Task<SubmitResult> SubmitChangesAsync(CancellationToken cancellationToken)
+        {
+            SubmitChangesAsyncCalled = true;
+            return base.SubmitChangesAsync(cancellationToken);
         }
     }
 }
