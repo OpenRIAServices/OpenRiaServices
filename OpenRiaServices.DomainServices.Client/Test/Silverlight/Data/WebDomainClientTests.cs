@@ -374,6 +374,54 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
+        public void Query_ShouldSupportLongQueries()
+        {
+            LoadOperation<Zip> op = null;
+            Exception error = null;
+            const int zipToFind = 98053;
+            const int QUERY_ITERATIONS = 50;
+
+            this.EnqueueCallback(() =>
+            {
+                this.CreateDomainContext();
+
+                // Generate a really long query
+                // The load will result in a query where just the query part has length > 3000
+                var query = CityDomainContext.GetZipsQuery();
+
+                // Create a query with QUERY_ITERATIONS where statements checking a range of QUERY_ITERATIONS each
+                // this should in the end if simplified result in Code = zipToFind (zipToFind - 1 < Code  <= zipToFind)
+                for (int i = 0; i < QUERY_ITERATIONS; ++i)
+                {
+                    int min = zipToFind + i - QUERY_ITERATIONS;
+                    int max = zipToFind + i;
+                    query = query.Where(c => min < c.Code && c.Code <= max);
+                }
+
+                op = this.CityDomainContext.Load(query,
+                    (lo) => WebDomainClientTests.HandleError(lo, ref error),
+                    null);
+            });
+            this.EnqueueConditional(() => op.IsComplete);
+#if SILVERLIGHT
+            this.EnqueueCallback(() =>
+            {
+                // The query should match a single zip 
+                //new Zip() { Code=98053, FourDigit=8625, CityName="Redmond", CountyName="King", StateName="WA" },
+                Assert.IsFalse(op.HasError, string.Format("The query returned the following error: {0}", op.Error));
+                Assert.AreEqual(1, op.Entities.Count(), "A single entity was expected");
+
+                var zip = op.Entities.First();
+                Assert.AreEqual(zipToFind, zip.Code, "A single entity was expected");
+                Assert.AreEqual(8625, zip.FourDigit);
+                Assert.AreEqual("Redmond", zip.CityName);
+            });
+#endif
+            this.EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Asynchronous]
         public void Invoke_MaximumUriLengthExceeded()
         {
             OperationBase op = null;

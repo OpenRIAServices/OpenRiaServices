@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         internal const long MaxReceivedMessageSize = int.MaxValue;
         internal const string SubmitOperationName = "SubmitChanges";
         internal const string ServiceFileExtension = ".svc";
-        
+
         internal static readonly object[] EmptyObjectArray = new object[0];
 
         private static readonly object _inspectorLock = new object();
@@ -274,6 +274,12 @@ namespace OpenRiaServices.DomainServices.Hosting
                 //         all operations are [WebInvoke] by default.
                 ServiceUtility.EnsureBehavior<WebInvokeAttribute>(operationDesc);
             }
+            else if (operation.Operation == DomainOperation.Query && !((QueryAttribute)operation.OperationAttribute).HasSideEffects)
+            {
+                // This is a query with HasSideEffects == false, allow both POST and GET
+                ServiceUtility.EnsureBehavior<WebInvokeAttribute>(operationDesc)
+                    .Method = "*";
+            }
             else
             {
                 ServiceUtility.EnsureBehavior<WebGetAttribute>(operationDesc);
@@ -512,7 +518,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                         // also send the stack trace if custom errors is disabled
                         fault.StackTrace = dpe.StackTrace;
                     }
-                    
+
                     return new FaultException<DomainServiceFault>(fault, new FaultReason(new FaultReasonText(fault.ErrorMessage ?? String.Empty, CultureInfo.CurrentCulture)));
                 }
                 else
@@ -571,9 +577,10 @@ namespace OpenRiaServices.DomainServices.Hosting
             private AuthenticationSchemes _authenticationScheme = AuthenticationSchemes.None;
             private HttpClientCredentialType _credentialType = HttpClientCredentialType.None;
 
-            public WebServiceHostInspector() : base(
-                typeof(WebServiceHostInspector.Service),
-                new Uri("http://OpenRiaServices.DomainServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
+            public WebServiceHostInspector()
+                : base(
+                    typeof(WebServiceHostInspector.Service),
+                    new Uri("http://OpenRiaServices.DomainServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
             { }
 
             public AuthenticationSchemes AuthenticationScheme

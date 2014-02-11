@@ -160,8 +160,14 @@ namespace OpenRiaServices.DomainServices.Hosting
             void IDispatchMessageFormatter.DeserializeRequest(Message message, object[] parameters)
             {
                 Message originalMessage = message;
+                var isPost = MessageUtility.IsHttpPOSTMethod(message.Properties);
 
-                if (this._queryHasSideEffects)
+                // If user tried to GET a query with side-effects then fail
+                // Note: This should never ever happen since it would fail earlier in the WCF pipeline since the method should be "POST"-only
+                if (_queryHasSideEffects && !isPost)
+                    throw new FaultException("Must use POST to for queries with side effects");
+
+                if (isPost)
                 {
                     // If the HTTP Method is POST, get the query from the message body instead from the URL
                     ServiceQuery serviceQuery = MessageUtility.GetServiceQuery(ref message);

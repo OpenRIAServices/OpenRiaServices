@@ -247,6 +247,52 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueTestComplete();
         }
 
+        [TestMethod]
+        [Asynchronous]
+        public void Cities_ShouldSupportLongQueries()
+        {
+            LoadOperation<Zip> lo = null;
+            const int zipToFind = 98053;
+            const int QUERY_ITERATIONS = 50;
+
+            EnqueueCallback(() =>
+            {
+                CityDomainContext dp = new CityDomainContext(TestURIs.Cities);    // Abs URI so runs on desktop too
+
+                // Generate a really long query
+                // The load will result in a query where just the query part has length > 3000
+                var query = dp.GetZipsQuery();
+
+                // Create a query with QUERY_ITERATIONS where statements checking a range of QUERY_ITERATIONS each
+                // this should in the end if simplified result in Code = zipToFind (zipToFind - 1 < Code  <= zipToFind)
+                for (int i = 0; i < QUERY_ITERATIONS; ++i)
+                {
+                    int min = zipToFind + i - QUERY_ITERATIONS;
+                    int max = zipToFind + i;
+                    query = query.Where(c => min < c.Code && c.Code <= max);
+                }
+
+                lo = dp.Load(query, false);
+            });
+
+            EnqueueConditional(() => lo.IsComplete);
+
+            EnqueueCallback(() =>
+            {
+                if (lo.Error != null)
+                    Assert.Fail("LoadOperation.Error: " + lo.Error.Message);
+                var expected = new CityData().Zips.Single(z => z.Code == zipToFind);
+                Assert.AreEqual(1, lo.Entities.Count(), "Wrong number of entities returned");
+                var returned = lo.Entities.Single();
+
+                Assert.AreEqual(expected.Code, returned.Code);
+                Assert.AreEqual(expected.FourDigit, returned.FourDigit); 
+                Assert.AreEqual(expected.CityName, returned.CityName);
+                Assert.AreEqual(expected.CountyName, returned.CountyName);
+                Assert.AreEqual(expected.StateName, returned.StateName);
+            });
+            EnqueueTestComplete();
+        }
 
         private void AssertSame(IEnumerable<City> expected, IEnumerable<City> actual)
         {
