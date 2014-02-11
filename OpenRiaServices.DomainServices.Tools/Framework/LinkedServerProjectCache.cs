@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Tools
     internal class LinkedServerProjectCache
     {
         // The name of the MSBuild property for RIA Links
-        private const string LinkedServerProjectPropertyName = "LinkedServerProject";
+        private const string LinkedServerProjectPropertyName = "LinkedOpenRiaServerProject";
 
         private string _rootProjectPath;
         private string _historyFilePath;

@@ -109,7 +109,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!--
     ================================================================
-    WCF RIA Link is present
+    Open Ria Services Link is present
       CoreCompile will execute OpenRiaClientCodeGen to generate code, and
       Clean will exectute OpenRiaClientClean to delete it
     ================================================================
@@ -129,7 +129,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!--
     ================================================================
-    WCF RIA Link is absent but residual generated files remain
+    Open Ria Services Link is absent but residual generated files remain
       CoreCompile and Clean will both execute OpenRiaClientClean
       to delete obsolete generated files.
     ================================================================
@@ -149,7 +149,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
 
   <PropertyGroup>
-    <!-- Default RIA Services client references -->
+    <!-- Default Open RIA Services client references -->
     <DefaultClientReferences>System.ComponentModel.DataAnnotations.dll;System.Runtime.Serialization.dll;System.ServiceModel.dll;OpenRiaServices.DomainServices.Client.dll;OpenRiaServices.DomainServices.Client.Web.dll;System.ServiceModel.Web.Extensions</DefaultClientReferences>
   </PropertyGroup>
 
@@ -337,7 +337,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets"
           Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
 
-  <!-- Import the Visual Studio RIA Services package targets file if it exists -->
+  <!-- Import the Visual Studio WCF RIA Services package targets file if it exists -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets"
           Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets')"/>
 
