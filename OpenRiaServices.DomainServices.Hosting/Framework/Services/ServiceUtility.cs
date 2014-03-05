@@ -255,6 +255,27 @@ namespace OpenRiaServices.DomainServices.Hosting
             return operationDesc;
         }
 
+       /// <summary>
+       /// Get the <see cref="WebInvokeAttribute.UriTemplate"/> which corresponds to the default generated 
+       /// UriTemplate for "GET" methods for a given query operation.
+       /// </summary>
+       /// <param name="operation">the query operation for which to get the UriTemplate</param>
+       /// <returns>the default default UriTemplate for "GET" methods in case no UriTemplate is specified</returns>
+       private static string GetDefaultQueryUriTemplate(DomainOperationEntry operation)
+       {
+          StringBuilder stringBuilder = new StringBuilder(operation.Name);
+          if (operation.Parameters.Count > 0)
+            {
+                stringBuilder.Append("?");
+                foreach (DomainOperationParameter parameter in operation.Parameters)
+                {
+                    stringBuilder.AppendFormat("{0}={{{0}}}&",parameter.Name);
+                }
+                stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            }
+            return stringBuilder.ToString();
+         }
+
         private static OperationDescription CreateOperationDescription(ContractDescription declaringContract, DomainOperationEntry operation)
         {
             OperationDescription operationDesc = ServiceUtility.CreateBasicOperationDescription(declaringContract, operation.Name);
@@ -277,8 +298,11 @@ namespace OpenRiaServices.DomainServices.Hosting
             else if (operation.Operation == DomainOperation.Query && !((QueryAttribute)operation.OperationAttribute).HasSideEffects)
             {
                 // This is a query with HasSideEffects == false, allow both POST and GET
-                ServiceUtility.EnsureBehavior<WebInvokeAttribute>(operationDesc)
-                    .Method = "*";
+               var invoke = ServiceUtility.EnsureBehavior<WebInvokeAttribute>(operationDesc);
+               invoke.Method = "*";
+               // We need to set URI template in order to allow the normal parameters to be extracted from the Uri
+               if (operation.Parameters.Count > 0)
+                  invoke.UriTemplate = GetDefaultQueryUriTemplate(operation);
             }
             else
             {

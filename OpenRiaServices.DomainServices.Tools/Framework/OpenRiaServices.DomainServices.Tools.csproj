@@ -277,14 +277,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="OpenRiaServices.Client.v5.0.targets">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenRiaServices.Validation.targets">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.DomainServices.Server</Name>

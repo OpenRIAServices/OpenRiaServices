@@ -4,16 +4,6 @@ try {
     $projectPath = Join-Path $project.Properties.Item("FullPath").Value -ChildPath $project.Properties.Item("FileName").Value
 } catch { }
 
-# Add a project import element for the validation targets
-#
-if ($projectPath -ne $null) {
-    $relativeToolsPath = [NuGet.PathUtility]::GetRelativePath($projectPath, $toolsPath)
-    $relativeTargetsPath = Join-Path $relativeToolsPath -ChildPath "OpenRiaServices.Validation.targets"
-
-    $rootElement = [Microsoft.Build.Construction.ProjectRootElement]::Open($projectPath)
-    $rootElement.AddImport($relativeTargetsPath)
-}
-
 # Remove duplicate config entries to work around NuGet issue 1971 which creates duplicates when PublicKeyTokens only differ by case
 #
 try {

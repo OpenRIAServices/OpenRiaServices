@@ -20,8 +20,8 @@
       </dependencies>
     </metadata>
     <files>
+        <file src="build\OpenRiaServices.Silverlight.CodeGen.targets" target="build\OpenRiaServices.Silverlight.CodeGen.targets" />
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll" />
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-        <file src="..\..\bin\Release\Desktop\OpenRiaServices.Client.v5.0.targets" target="build\OpenRiaServices.Silverlight.CodeGen.targets" />
     </files>
 </package>
