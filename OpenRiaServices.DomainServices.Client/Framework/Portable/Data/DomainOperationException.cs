@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -10,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client
 #if !SILVERLIGHT
     [Serializable]
 #endif
-    public sealed class DomainOperationException : Exception
+    public class DomainOperationException : Exception
     {
 #if !SILVERLIGHT
         // The internal safe serialization state object must not be implicitly serialized.
@@ -31,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Client
             public OperationErrorStatus Status;
             public string StackTrace;
             public int ErrorCode;
-
+            public IEnumerable<ValidationResult> ValidationResults;
 #if !SILVERLIGHT
 
             // TODO: uncomment when CLR fixes 851783
@@ -51,8 +54,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Default constructor
         /// </summary>
-        public DomainOperationException() 
-            : this(/*message*/ null, /*innerException*/ null, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null)
+        public DomainOperationException()
+            : this(/*message*/ null, /*innerException*/ null, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null, /*validationErrors*/ null)
         {
         }
 
@@ -60,8 +63,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// Constructor that accepts only a localized exception message
         /// </summary>
         /// <param name="message">The localized exception message</param>
-        public DomainOperationException(string message) 
-            : this(message, /*innerException*/ null, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null)
+        public DomainOperationException(string message)
+            : this(message, /*innerException*/ null, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null, /*validationErrors*/ null)
         {
         }
 
@@ -71,7 +74,17 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="message">The localized exception message</param>
         /// <param name="status">The status of the exception</param>
         public DomainOperationException(string message, OperationErrorStatus status)
-            : this(message, /*innerException*/ null, status, /*errorCode*/ 0, /*stackTrace*/ null)
+            : this(message, /*innerException*/ null, status, /*errorCode*/ 0, /*stackTrace*/ null, /*validationErrors*/ null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor that accepts a localized exception message and validation errors
+        /// </summary>
+        /// <param name="message">The localized exception message</param>
+        /// <param name="validationErrors">The validation errors </param>
+        public DomainOperationException(string message, IEnumerable<ValidationResult> validationErrors)
+            : this(message, /*innerException*/ null, OperationErrorStatus.ValidationFailed, /*errorCode*/ 0, /*stackTrace*/ null, /*validationErrors:*/ validationErrors)
         {
         }
 
@@ -82,17 +95,17 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="status">The status of the exception</param>
         /// <param name="errorCode">The custom error code</param>
         public DomainOperationException(string message, OperationErrorStatus status, int errorCode)
-            : this(message, /*innerException*/ null, status, errorCode, /*stackTrace*/ null)
+            : this(message, /*innerException*/ null, status, errorCode, /*stackTrace*/ null, /*validationErrors*/ null)
         {
         }
-    
+
         /// <summary>
         /// Constructor that accepts a localized exception message and an inner exception
         /// </summary>
         /// <param name="message">The localized exception message</param>
         /// <param name="innerException">The inner exception</param>
         public DomainOperationException(string message, Exception innerException)
-            : this(message, innerException, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null)
+            : this(message, innerException, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null, /*validationErrors*/ null)
         {
         }
 
@@ -105,7 +118,21 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="errorCode">custom error code</param>
         /// <param name="stackTrace">stack trace of the exception</param>
         public DomainOperationException(string message, OperationErrorStatus status, int errorCode, string stackTrace)
-            : this(message, /*innerException*/ null, status, errorCode, stackTrace)
+            : this(message, /*innerException*/ null, status, errorCode, stackTrace, /*validationErrors*/ null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor accepting optional localized message, status, 
+        /// custom error code, stack trace of the exception and validation errors. 
+        /// </summary>
+        /// <param name="message">The localized error message</param>
+        /// <param name="status">status of the exception</param>
+        /// <param name="errorCode">custom error code</param>
+        /// <param name="stackTrace">stack trace of the exception</param>
+        /// <param name="validationErrors">validation errror of the exception</param>
+        public DomainOperationException(string message, OperationErrorStatus status, int errorCode, string stackTrace, IEnumerable<ValidationResult> validationErrors)
+            : this(message, /*innerException*/ null, status, errorCode, stackTrace, /*validationErrors*/ validationErrors)
         {
         }
 
@@ -115,10 +142,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="message">The new error message to use</param>
         /// <param name="exception">The exception to copy</param>
         internal DomainOperationException(string message, DomainOperationException exception)
-            : this(message, exception.InnerException, exception.Status, exception.ErrorCode, exception.StackTrace)
+            : this(message, exception.InnerException, exception.Status, exception.ErrorCode, exception.StackTrace, exception.ValidationErrors)
         {
         }
-
+        
         /// <summary>
         /// Private constructor used by all public constructors.
         /// </summary>
@@ -127,7 +154,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="status">status of the exception</param>
         /// <param name="errorCode">custom error code</param>
         /// <param name="stackTrace">stack trace of the exception</param>
-        private DomainOperationException(string message, Exception innerException, OperationErrorStatus status, int errorCode, string stackTrace)
+        /// <param name="validationErrors">validation errror of the exception</param>
+        protected DomainOperationException(string message, Exception innerException, OperationErrorStatus status, int errorCode, string stackTrace, IEnumerable<ValidationResult> validationErrors)
             : base(message, innerException)
         {
             Debug.Assert(!innerException.IsFatal(), "Fatal exception passed in as InnerException");
@@ -135,7 +163,8 @@ namespace OpenRiaServices.DomainServices.Client
             this._data.Status = status;
             this._data.StackTrace = stackTrace;
             this._data.ErrorCode = errorCode;
-
+            this._data.ValidationResults = validationErrors;
+            
 #if !SILVERLIGHT
             // TODO: uncomment when CLR fixes 851783
             //// The new CLR 4.0 safe serialization model accepts custom data through
@@ -187,6 +216,18 @@ namespace OpenRiaServices.DomainServices.Client
             get { return this._data.ErrorCode; }
             set { this._data.ErrorCode = value; }
         }
+
+        /// <summary>
+        /// Gets any validation errors for this exception.
+        /// </summary>
+        public IEnumerable<ValidationResult> ValidationErrors
+        {
+            get
+            {
+                if (_data.ValidationResults == null)
+                    _data.ValidationResults = Enumerable.Empty<ValidationResult>();
+                return _data.ValidationResults;
+            }
+        }
     }
 }
-
