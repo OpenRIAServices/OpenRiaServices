@@ -150,3 +150,5 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+Test/Website/ClientBin/System.Test.xap
+Test/WebsiteFullTrust/ClientBin/System.Test.xap
