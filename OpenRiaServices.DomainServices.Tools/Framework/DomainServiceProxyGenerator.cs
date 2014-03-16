@@ -431,7 +431,7 @@ namespace OpenRiaServices.DomainServices.Tools
                                     ctorParams,
                                     new CodeExpression[] { 
                                         new CodeTypeOfExpression(contractTypeParameter),
-                                        relativeUriExpression, 
+                                        new CodeArgumentReferenceExpression("serviceUri"), 
                                         new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)
                                     }
                                     , comments

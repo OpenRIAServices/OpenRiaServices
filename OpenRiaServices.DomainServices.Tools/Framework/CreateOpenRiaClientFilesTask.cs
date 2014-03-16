@@ -714,8 +714,6 @@ namespace OpenRiaServices.DomainServices.Tools
                         ClientProjectTargetPlatform = this.ClientTargetPlatform,
                     };
 
-                    Log.LogMessage("ClientTargetPlatform is determined to be {0}", options.ClientProjectTargetPlatform);
-
                     // The other AppDomain gets a logger that will log back to this AppDomain
                     CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
 

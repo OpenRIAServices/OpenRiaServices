@@ -301,14 +301,24 @@ namespace OpenRiaServices.DomainServices.Tools
                     break;
                 case InvokeKind.Async:
                     var cancellationTokenParmeter = new CodeParameterDeclarationExpression(CodeGenUtilities.GetTypeReference(typeof (CancellationToken), this.ClientProxyGenerator,this._proxyClass), "cancellationToken");
-                    cancellationTokenParmeter.Name = cancellationTokenParmeter.Name + " = default(CancellationToken)";
-                    
-                    //// Add [Optional] attribute, this is the same as adding "= default(CancellationToken)"
-                    //cancellationTokenParmeter.CustomAttributes.Add(
-//                        new CodeAttributeDeclaration(new CodeTypeReference(typeof(OptionalAttribute))));
+
+                    // For C# add "  = default(CancellationToken)"
+                    // For VB add "Optional" ByVal .... = Nothing
+                    // otherwise fall back to adding [Optional] attribute, this is the same as adding "= default(CancellationToken)"
+                    if (ClientProxyGenerator.IsCSharp)
+                        cancellationTokenParmeter.Name = cancellationTokenParmeter.Name + " = default(CancellationToken)";
+                    else if (ClientProxyGenerator.IsVB) // VB
+                    {
+                        // Set an invalid field direction in order to have VB Code gen from generating 
+                        cancellationTokenParmeter.Direction = (FieldDirection)0xff;
+                        cancellationTokenParmeter.Name = "Optional ByVal " + cancellationTokenParmeter.Name;
+                        cancellationTokenParmeter.Type = new CodeTypeReference(typeof (CancellationToken).Name + " = Nothing");
+                    }
+                    else
+                        cancellationTokenParmeter.CustomAttributes.Add(new CodeAttributeDeclaration(new CodeTypeReference(typeof(OptionalAttribute))));
 
                     method.Parameters.Add(cancellationTokenParmeter);
-                    invokeParams.Add(new CodeVariableReferenceExpression(cancellationTokenParmeter.Name));
+                    invokeParams.Add(new CodeVariableReferenceExpression("cancellationToken"));
                     break;
             }
 
