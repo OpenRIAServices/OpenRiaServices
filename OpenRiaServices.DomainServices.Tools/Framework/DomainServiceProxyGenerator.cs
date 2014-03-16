@@ -372,27 +372,6 @@ namespace OpenRiaServices.DomainServices.Tools
                 uriTypeRef,
                 new CodePrimitiveExpression(relativeServiceUri),
                 new CodePropertyReferenceExpression(new CodeTypeReferenceExpression(uriKindTypeRef), "Relative"));
-            CodeExpression domainClientExpressionFromUri = null;
-            if (!enableClientAccessAttribute.RequiresSecureEndpoint)
-            {
-                // new WebDomainClient<Contract>(new Uri("Service.svc", UriKind.Relative))
-                CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-                clientRef.TypeArguments.Add(contractTypeParameter);
-
-                domainClientExpressionFromUri = new CodeObjectCreateExpression(clientRef, relativeUriExpression);
-            }
-            else
-            {
-                // new WebDomainClient<Contract>(new Uri("Service.svc", UriKind.Relative), true)
-                CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-                clientRef.TypeArguments.Add(contractTypeParameter);
-
-                domainClientExpressionFromUri =
-                    new CodeObjectCreateExpression(
-                        clientRef,
-                        relativeUriExpression,
-                        new CodePrimitiveExpression(true));
-            }
 
             // ----------------------------------------------------------------
             // Default ctor decl (using relative URI)
@@ -403,17 +382,15 @@ namespace OpenRiaServices.DomainServices.Tools
 
             // base params
             List<CodeExpression> baseParams = new List<CodeExpression>(1);
-            baseParams.Add(domainClientExpressionFromUri);
+            baseParams.Add(relativeUriExpression);
 
             // add <summary> doc comments
             string comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_Default_Constructor_Summary_Comments, proxyClass.Name);
             CodeCommentStatementCollection comments = CodeGenUtilities.GenerateSummaryCodeComment(comment, this.ClientProxyGenerator.IsCSharp);
 
             // <comments>...</comments>
-            // public .ctor() : this(new WebDomainClient<TContract>(new Uri("Foo-Bar.svc", UriKind.Relative)))]
-            //  or
-            // public .ctor() : this(new WebDomainClient<TContract>(new Uri("Foo-Bar.svc", UriKind.Relative), true))]
-            GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
+            // public .ctor() : this(new Uri("Foo-Bar.svc", UriKind.Relative))
+             GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
 
             // ----------------------------------------------------------------
             // DomainContext(System.Uri serviceUri) ctor decl
@@ -425,29 +402,17 @@ namespace OpenRiaServices.DomainServices.Tools
 
             // ctor base parameters
             baseParams = new List<CodeExpression>(1);
-            if (!enableClientAccessAttribute.RequiresSecureEndpoint)
-            {
-                // new WebDomainClient<TContract>(serviceUri)
-                CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-                clientRef.TypeArguments.Add(contractTypeParameter);
 
-                baseParams.Add(
-                    new CodeObjectCreateExpression(
-                        clientRef,
-                        new CodeArgumentReferenceExpression("serviceUri")));
-            }
-            else
-            {
-                // new WebDomainClient<TContract>(serviceUri, true)
-                CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-                clientRef.TypeArguments.Add(contractTypeParameter);
+            // new WebDomainClient<TContract>(serviceUri, true/false)
+            CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
+            clientRef.TypeArguments.Add(contractTypeParameter);
 
-                baseParams.Add(
-                    new CodeObjectCreateExpression(
-                        clientRef,
-                        new CodeArgumentReferenceExpression("serviceUri"),
-                        new CodePrimitiveExpression(true)));
-            }
+            baseParams.Add(
+                new CodeObjectCreateExpression(
+                    clientRef,
+                    new CodeArgumentReferenceExpression("serviceUri"),
+                    new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
+            
 
             // add <summary> and <param> comments
             comments = CodeGenUtilities.GenerateSummaryCodeComment(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_ConstructorComments_Summary_ServiceUri, proxyClass.Name), this.ClientProxyGenerator.IsCSharp);
@@ -457,7 +422,21 @@ namespace OpenRiaServices.DomainServices.Tools
             // public .ctor(Uri serviceUri) : this(new WebDomainClient<TContract>(serviceUri))]
             //  or
             // public .ctor(Uri serviceUri) : this(new WebDomainClient<TContract>(serviceUri, true))]
-            GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
+            // or
+            // public .ctor(Uri serviceUri) : base(typeof(TContract), serviceUri, true/false)
+            if (this.ClientProxyGenerator.ClientProxyCodeGenerationOptions.ClientProjectTargetPlatform == TargetPlatform.Silverlight)
+                GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
+            else
+                GenerateConstructor(proxyClass,
+                                    ctorParams,
+                                    new CodeExpression[] { 
+                                        new CodeTypeOfExpression(contractTypeParameter),
+                                        relativeUriExpression, 
+                                        new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)
+                                    }
+                                    , comments
+                                    , true);
+
 
             // -----------------------------------------------------------------------
             // DomainContext(DomainClient domainClient) ctor decl
@@ -666,12 +645,9 @@ namespace OpenRiaServices.DomainServices.Tools
                 endMethod.ReturnType = CodeGenUtilities.GetTypeReference(CodeGenUtilities.TranslateType(operation.ReturnType), this.ClientProxyGenerator, contractInterface, false);
             }
 
-            if (!hasSideEffects)
-            {
-                // Generate [WebGet]. (Default is [WebInvoke], so we never need to generate that.)
-                CodeAttributeDeclaration webGetAtt = CodeGenUtilities.CreateAttributeDeclaration(typeof(WebGetAttribute), this.ClientProxyGenerator, contractInterface);
-                beginMethod.CustomAttributes.Add(webGetAtt);
-            }
+            // Generate [HasSideEffects(...)]. 
+            beginMethod.CustomAttributes.Add(new CodeAttributeDeclaration("HasSideEffects",
+                                                                            new CodeAttributeArgument(new CodePrimitiveExpression(hasSideEffects))));
 
             // Generate <summary> doc comment for the End method
             comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_DomainContext_ServiceContract_End_Method_Summary_Comment, beginMethod.Name);
@@ -776,6 +752,7 @@ namespace OpenRiaServices.DomainServices.Tools
             operationContractAtt.Arguments.Add(new CodeAttributeArgument("ReplyAction", new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, DomainServiceProxyGenerator.DefaultReplyActionSchema, domainServiceName, operationName))));
             beginQueryMethod.CustomAttributes.Add(operationContractAtt);
 
+            /*
             string faultTypeName = typeof(DomainServiceFault).Name;
             CodeAttributeDeclaration faultContractAtt = CodeGenUtilities.CreateAttributeDeclaration(typeof(FaultContractAttribute), this.ClientProxyGenerator, contractInterface);
             faultContractAtt.Arguments.Add(new CodeAttributeArgument(new CodeTypeOfExpression(CodeGenUtilities.GetTypeReference(TypeConstants.DomainServiceFaultFullName, contractInterface.UserData["Namespace"] as string, false))));
@@ -783,6 +760,7 @@ namespace OpenRiaServices.DomainServices.Tools
             faultContractAtt.Arguments.Add(new CodeAttributeArgument("Name", new CodePrimitiveExpression(faultTypeName)));
             faultContractAtt.Arguments.Add(new CodeAttributeArgument("Namespace", new CodePrimitiveExpression("DomainServices")));
             beginQueryMethod.CustomAttributes.Add(faultContractAtt);
+            */
         }
 
         /// <summary>

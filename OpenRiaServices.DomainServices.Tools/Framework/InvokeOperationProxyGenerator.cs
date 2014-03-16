@@ -301,9 +301,12 @@ namespace OpenRiaServices.DomainServices.Tools
                     break;
                 case InvokeKind.Async:
                     var cancellationTokenParmeter = new CodeParameterDeclarationExpression(CodeGenUtilities.GetTypeReference(typeof (CancellationToken), this.ClientProxyGenerator,this._proxyClass), "cancellationToken");
-                    // Add [Optional] attribute, this is the same as adding "= default(CancellationToken)"
-                    cancellationTokenParmeter.CustomAttributes.Add(
-                        new CodeAttributeDeclaration(new CodeTypeReference(typeof(OptionalAttribute))));
+                    cancellationTokenParmeter.Name = cancellationTokenParmeter.Name + " = default(CancellationToken)";
+                    
+                    //// Add [Optional] attribute, this is the same as adding "= default(CancellationToken)"
+                    //cancellationTokenParmeter.CustomAttributes.Add(
+//                        new CodeAttributeDeclaration(new CodeTypeReference(typeof(OptionalAttribute))));
+
                     method.Parameters.Add(cancellationTokenParmeter);
                     invokeParams.Add(new CodeVariableReferenceExpression(cancellationTokenParmeter.Name));
                     break;

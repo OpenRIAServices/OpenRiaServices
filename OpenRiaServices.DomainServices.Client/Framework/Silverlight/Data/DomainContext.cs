@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,6 +49,52 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._domainClient = domainClient;
             this._syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+        }
+
+        /// <summary>
+        /// Protected constructor
+        /// </summary>
+        /// <param name="serviceContract">The service contract type.</param>
+        /// <param name="serviceUri">The service URI.</param>
+        /// <param name="usesHttps"><c>true</c> to use https instead of http</param>
+        /// <exception cref="System.ArgumentNullException">serviceContract or serviceUri is null </exception>
+        /// <exception cref="System.ArgumentException">service contract must be an interface;serviceContract</exception>
+        /// <exception cref="System.InvalidOperationException">Faild to construct generic WebDomainClient</exception>
+        protected DomainContext(Type serviceContract, Uri serviceUri, bool usesHttps)
+            : this(CreateDomainClient(serviceContract, serviceUri, usesHttps))
+        {
+        }
+
+        /// <summary>
+        /// Creates a WebDomainClient for the specified service contract and uri
+        /// </summary>
+        /// <param name="serviceContract">The service contract.</param>
+        /// <param name="serviceUri">The service URI.</param>
+        /// <param name="usesHttps"><c>true</c> to use https instead of http</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">serviceContract or serviceUri is null </exception>
+        /// <exception cref="System.ArgumentException">service contract must be an interface;serviceContract</exception>
+        /// <exception cref="System.InvalidOperationException">Faild to construct generic WebDomainClient</exception>
+        private static DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool usesHttps)
+        {
+            if(serviceContract == null)
+                throw new ArgumentNullException("serviceContract");
+            if(serviceUri == null)
+                throw new ArgumentNullException("serviceUri");
+            if (!serviceContract.IsInterface)
+                throw new ArgumentException("Service contract must be an interface", "serviceContract");
+
+            var webDomainClientName = "OpenRiaServices.DomainServices.Client.WebDomainClient`1, "
+                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+            var webDomainClientType = Type.GetType(webDomainClientName);
+            if (webDomainClientType == null)
+                throw new InvalidOperationException("You must reference the assembly 'OpenRiaServices.DomainServices.Client.Web'");
+
+            var domainClientType = webDomainClientType.MakeGenericType(serviceContract);
+            if (domainClientType == null)
+                throw new InvalidOperationException("Faild to construct generic WebDomainClient");
+
+            return (DomainClient)Activator.CreateInstance(domainClientType, serviceUri, usesHttps);
         }
 
         /// <summary>

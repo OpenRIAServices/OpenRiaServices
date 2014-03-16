@@ -7,7 +7,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-
+using System.ServiceModel.Web;
 #if SILVERLIGHT
 using System.Windows.Browser;
 #endif
@@ -39,6 +39,47 @@ namespace OpenRiaServices.DomainServices.Client
             // The wrapping formatter is meant format just query requests. We cannot tell the
             // difference at build time, just at run time.
             return new WebHttpQueryClientMessageFormatter(formatter);
+        }
+
+        public override void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
+        {
+            foreach (var od in endpoint.Contract.Operations)
+            {
+                if (od.Faults.Count == 0)
+                {
+                    od.Faults.Add(new FaultDescription(od.Messages[0].Action + "DomainServiceFault")
+                    {
+                        DetailType = typeof(DomainServiceFault),
+                        Name =  typeof(DomainServiceFault).Name,
+                        Namespace = "DomainServices",
+                    });
+                }
+
+                if (od.Behaviors.Contains(typeof(WebGetAttribute)) || od.Behaviors.Contains(typeof(WebInvokeAttribute)))
+                    continue;
+
+                // Add WebGetAttribute if method don't have any side effects
+                if (od.BeginMethod != null)
+                {
+                    var hasSideEffectsAttribute = (HasSideEffectsAttribute)Attribute.GetCustomAttribute(od.BeginMethod, typeof(HasSideEffectsAttribute), inherit:false);
+                    if(hasSideEffectsAttribute != null && hasSideEffectsAttribute.HasSideEffects == false)
+                        EnsureBehavior<WebGetAttribute>(od);
+                }
+            }
+            
+
+            base.ApplyClientBehavior(endpoint, clientRuntime);
+        }
+
+        public static T EnsureBehavior<T>(OperationDescription operationDesc) where T : IOperationBehavior, new()
+        {
+            T behavior = operationDesc.Behaviors.Find<T>();
+            if (behavior == null)
+            {
+                behavior = new T();
+                operationDesc.Behaviors.Insert(0, behavior);
+            }
+            return behavior;
         }
     }
 
@@ -80,6 +121,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             object queryProperty = null;
             object includeTotalCountProperty = null;
+            bool hasSideEffects = false;
             if (OperationContext.Current != null)
             {
                 OperationContext.Current.OutgoingMessageProperties.TryGetValue(WebDomainClient<object>.QueryPropertyName, out queryProperty);
