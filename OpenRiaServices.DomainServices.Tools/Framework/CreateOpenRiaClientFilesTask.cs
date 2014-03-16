@@ -372,6 +372,26 @@ namespace OpenRiaServices.DomainServices.Tools
             }
         }
 
+        internal TargetPlatform ClientTargetPlatform
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(ClientFrameworkPath))
+                    return TargetPlatform.Unknown;
+
+                if (ClientFrameworkPath.IndexOf("Silverlight", StringComparison.InvariantCultureIgnoreCase) != -1)
+                    return TargetPlatform.Silverlight;
+                if (ClientFrameworkPath.IndexOf(".NETPortable", StringComparison.InvariantCultureIgnoreCase) != -1)
+                    return TargetPlatform.Portable;
+                if (ClientFrameworkPath.IndexOf(".NETFramework", StringComparison.InvariantCultureIgnoreCase) != -1)
+                    return TargetPlatform.Desktop;
+                if (ClientFrameworkPath.IndexOf(".NETCore", StringComparison.InvariantCultureIgnoreCase) != -1)
+                    return TargetPlatform.Win8;
+
+                return TargetPlatform.Unknown;
+            }
+        }
+
         /// <summary>
         /// Gets a value indicating whether the server project file has been specified
         /// and exists on disk.
@@ -691,7 +711,10 @@ namespace OpenRiaServices.DomainServices.Tools
                         ServerProjectPath = this.ServerProjectPath,
                         IsApplicationContextGenerationEnabled = this.IsClientApplicationAsBool,
                         UseFullTypeNames = this.UseFullTypeNamesAsBool,
+                        ClientProjectTargetPlatform = this.ClientTargetPlatform,
                     };
+
+                    Log.LogMessage("ClientTargetPlatform is determined to be {0}", options.ClientProjectTargetPlatform);
 
                     // The other AppDomain gets a logger that will log back to this AppDomain
                     CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
