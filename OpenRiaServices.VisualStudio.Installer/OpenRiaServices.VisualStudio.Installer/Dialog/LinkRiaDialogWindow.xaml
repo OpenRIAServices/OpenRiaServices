@@ -1,0 +1,21 @@
+﻿<dialog:VsDialogWindow x:Class="OpenRiaServices.VisualStudio.Installer.Dialog.LinkRiaDialogWindow"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialog="clr-namespace:OpenRiaServices.VisualStudio.Installer.Dialog"
+        Title="LinkRiaDialogWindow" Height="300" Width="300" Initialized="VsDialogWindow_Initialized">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Linked Open RIA Project"  Grid.Row="0" Grid.Column="0"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Linked Project:"/>
+        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Grid.Row="1" Grid.Column="1" x:Name="Projects"/>
+        <Button Grid.Row="2" Grid.Column="1" Height="20" Click="Button_Click">Save</Button>
+    </Grid>
+</dialog:VsDialogWindow>

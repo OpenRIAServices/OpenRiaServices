@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="OpenRiaServices.Tools.Outercurve.83014b5f-3f89-4eff-a7fa-b5ec62657247" Version="1.0.0.1" Language="en-US" Publisher="Outercurve Foundation" />
+    <Identity Id="83014b5f-3f89-4eff-a7fa-b5ec62657247" Version="1.0.0.1" Language="en-US" Publisher="Outercurve Foundation" />
     <DisplayName>Open RIA Services</DisplayName>
     <Description xml:space="preserve">Open RIA Services Tooling and Templates</Description>
     <MoreInfo>http://www.openriaservices.net</MoreInfo>
@@ -12,6 +12,7 @@
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.12.0" DisplayName="Visual Studio MPF 12.0" d:Source="Installed" Version="[12.0]" />
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" AssemblyName="|OpenRiaServices.VisualStudio.DomainServices.Tools;AssemblyName|" />
@@ -28,6 +29,6 @@
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\1033\Open RIA Services Class Library.zip" />
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\1033\Silverlight Business Application.zip" />
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\1033\Open RIA Services Class Library.zip" />
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="VisualStudio.MenuExtension" Path="|VisualStudio.MenuExtension;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
   </Assets>
 </PackageManifest>

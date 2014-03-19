@@ -25,6 +25,8 @@
 
   <!--The Commands section is where we the commands, menus and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
+  !--The Commands section is where we the commands, menus and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
   <Commands package="guidVisualStudio_MenuExtensionPkg">
     <!-- Inside this section we have different sub-sections: one for the menus, another  
     for the menu groups, one for the buttons (the actual commands), one for the combos 
@@ -83,6 +85,10 @@
   <CommandPlacements>
     <CommandPlacement guid="guidVisualStudio_MenuExtensionCmdSet" id="cmdidLinkOpenRiaServicesProject" priority="0xF100">
           <Parent guid="guidSHLMainMenu" id="IDG_VS_PROJ_OPTIONS"/>
+      </CommandPlacement>
+      
+    <CommandPlacement guid="guidVisualStudio_MenuExtensionCmdSet" id="cmdidLinkOpenRiaServicesProject" priority="0x0001">
+          <Parent guid="guidSHLMainMenu" id="IDG_VS_CTXT_PROJECT_PROPERTIES"/>
       </CommandPlacement>
   </CommandPlacements>
   
