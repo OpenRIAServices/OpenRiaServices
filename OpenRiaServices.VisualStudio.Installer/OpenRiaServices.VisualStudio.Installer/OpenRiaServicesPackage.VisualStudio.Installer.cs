@@ -56,9 +56,7 @@ namespace OpenRiaServices.VisualStudio.Installer
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
         }
-
-       
-        
+    
 
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation
@@ -75,9 +73,6 @@ namespace OpenRiaServices.VisualStudio.Installer
             AddMenuCommandHandlers();
 
         }
-
-       
-
 
         #endregion
 
@@ -118,6 +113,7 @@ namespace OpenRiaServices.VisualStudio.Installer
         private void LinkRiaProjectCallback(object sender, EventArgs e)
         {
             Project project = VsMonitorSelection.GetActiveProject();
+            
             if (project != null && !project.IsUnloaded() && project.IsSupported())
             {
                 ShowLinkedProjectDialog(project);
@@ -127,18 +123,17 @@ namespace OpenRiaServices.VisualStudio.Installer
                 // show error message when no supported project is selected.
                 string projectName = project != null ? project.Name : String.Empty;
 
-                /*string errorMessage = String.IsNullOrEmpty(projectName)
+                string errorMessage = String.IsNullOrEmpty(projectName)
                     ? Resources.NoProjectSelected
-                    : String.Format(CultureInfo.CurrentCulture, VsResources.DTE_ProjectUnsupported, projectName);
-                */
-                //  MessageHelper.ShowWarningMessage(errorMessage, Resources.ErrorDialogBoxTitle);
+                    : String.Format(CultureInfo.CurrentCulture, Resources.DTE_ProjectUnsupported, projectName);
+                
+                MessageHelper.ShowWarningMessage(errorMessage, Resources.ErrorDialogBoxTitle);
             }
         }
 
         private static void ShowLinkedProjectDialog(Project project)
         {
-            // try
-            //{
+         
 
             DialogWindow window = GetVSRiaLinkWindow(project);
 
@@ -153,31 +148,6 @@ namespace OpenRiaServices.VisualStudio.Installer
 
 
         }
-
-#if VS10 || VS11
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private static DialogWindow GetVS10PackageManagerWindow(Project project, string parameterString)
-        {
-            return new VS10ManagePackageDialog(project, parameterString);
-        }
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private static DialogWindow GetVS11PackageManagerWindow(Project project, string parameterString)
-        {
-            return new VS11ManagePackageDialog(project, parameterString);
-        }
-#endif
-
-#if VS12
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private static DialogWindow GetVS12PackageManagerWindow(Project project, string parameterString)
-        {
-            return new VS12ManagePackageDialog(project, parameterString);
-        }
-#endif
-
-
-      
 
         private bool HasActiveLoadedSupportedProject
         {

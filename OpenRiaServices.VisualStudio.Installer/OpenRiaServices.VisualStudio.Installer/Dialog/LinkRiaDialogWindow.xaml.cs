@@ -43,15 +43,20 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
 
         private void VsDialogWindow_Initialized(object sender, System.EventArgs e)
         {
+            var noneComboBoxItem = new ComboBoxItem {DataContext = null, Content = "<No Project Set>"};
             //load our combobox items
-            this.Projects.Items.Add(new ComboBoxItem { DataContext = null, Content = "<none>" });
+            this.Projects.Items.Add(noneComboBoxItem);
             //add all the other projects too
             foreach (var i in _dte.Solution.GetSupportedChildProjects().Where(p => p != _project))
             {
                 this.Projects.Items.Add(new ComboBoxItem { DataContext = i, Content = i.Name });
             }
-            this.Projects.SelectedItem =
-                this.Projects.Items.OfType<ComboBoxItem>().First(i => i.DataContext == _linker.LinkedProject);
+            // if this is null
+            var selectedItem = this.Projects.Items.OfType<ComboBoxItem>().FirstOrDefault(i => i.DataContext == _linker.LinkedProject);
+
+            this.Projects.SelectedItem = selectedItem ?? noneComboBoxItem;
+
+
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)

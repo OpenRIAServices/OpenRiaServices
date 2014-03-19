@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using EnvDTE;
@@ -15,8 +16,18 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
     /// <from>NuGet</from>
     internal static class VsUtility
     {
-
+        // some of thses probably won't ever be seen but let's be safe!
+        private static HashSet<string> _unsupportedTypes = new HashSet<string>
+        {
+            VsConstants.UnloadedProjectTypeGuid, 
+            VsConstants.VsProjectItemKindPhysicalFile,
+            VsConstants.VsProjectItemKindPhysicalFolder, 
+            VsConstants.VsProjectItemKindSolutionFolder,
+            VsConstants.VsProjectItemKindSolutionItem,
+            VsConstants.VsProjectKindMisc
+        };
      
+
         public static Project GetActiveProject(IVsMonitorSelection vsMonitorSelection)
         {
             IntPtr ppHier = IntPtr.Zero;
@@ -68,15 +79,23 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         }
 
 
-        /// <summary>
-        /// Doesn't really do much now 
-        /// </summary>
-        /// <param name="project"></param>
-        /// <returns></returns>
         public static bool IsSupported(this Project project)
         {
             Debug.Assert(project != null);
-            return project.Kind != null;
+            try
+            {
+                // if we can't open it as an MSBuild project, we do anything with it
+                var p = project.AsMSBuildProject();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            
+
+            
         }
 
     }
