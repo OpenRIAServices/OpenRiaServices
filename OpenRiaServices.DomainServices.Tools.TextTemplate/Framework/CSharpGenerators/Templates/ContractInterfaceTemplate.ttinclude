@@ -42,13 +42,9 @@ public interface <#= this.ContractInterfaceName #>
 	
 	private void GenerateContractMethod(DomainOperationEntry operation)
 	{
-		bool hasSideEffects = DomainContextGenerator.OperationHasSideEffects(operation);
-		if(!hasSideEffects)
-		{
 #>
-[System.ServiceModel.Web.WebGet]
+[HasSideEffects(<#= DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower() #>)]
 <#+
-		}
 		this.GenerateContractMethodAttributes(operation.Name);
 #>
 System.IAsyncResult Begin<#= operation.Name #>(
@@ -87,7 +83,6 @@ IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);
 		string faultActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultFaultActionSchema, domainServiceName, operationName, faultTypeName);
 		
 #>
-[FaultContract(typeof(DomainServiceFault), Action="<#= faultActionString #>", Name="<#= faultTypeName #>", Namespace="DomainServices")]
 [OperationContract(AsyncPattern=true, Action="<#= actionString #>", ReplyAction="<#= replyActionString #>")]	
 <#+
 	}
