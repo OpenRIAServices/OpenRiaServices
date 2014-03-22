@@ -425,8 +425,11 @@ namespace OpenRiaServices.DomainServices.Tools
             // or
             // public .ctor(Uri serviceUri) : base(typeof(TContract), serviceUri, true/false)
             if (this.ClientProxyGenerator.ClientProxyCodeGenerationOptions.ClientProjectTargetPlatform == TargetPlatform.Silverlight)
+            {
                 GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
+            }
             else
+            {
                 GenerateConstructor(proxyClass,
                                     ctorParams,
                                     new CodeExpression[] { 
@@ -435,8 +438,9 @@ namespace OpenRiaServices.DomainServices.Tools
                                         new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)
                                     }
                                     , comments
-                                    , true);
-
+                                    , true)
+                    .Statements.Add(onCreatedExpression);
+            }
 
             // -----------------------------------------------------------------------
             // DomainContext(DomainClient domainClient) ctor decl
