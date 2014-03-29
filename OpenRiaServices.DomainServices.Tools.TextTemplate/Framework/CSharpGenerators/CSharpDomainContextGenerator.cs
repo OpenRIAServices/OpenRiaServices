@@ -106,7 +106,7 @@ this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\t\t\r\npublic ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
-this.Write("(Uri serviceUri) : \r\n\tbase(typeof(");
+this.Write("(Uri serviceUri) : \r\n\tthis(DomainContext.CreateDomainClient(typeof(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
 
@@ -114,7 +114,7 @@ this.Write("), serviceUri, ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(requiresSecureEndpoint.ToString().ToLower()));
 
-this.Write(")\r\n{\r\n\tthis.OnCreated();\r\n}\r\n\r\npublic ");
+this.Write("))\r\n{\r\n\t\r\n}\r\n\r\npublic ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 

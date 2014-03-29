@@ -52,20 +52,6 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Protected constructor
-        /// </summary>
-        /// <param name="serviceContract">The service contract type.</param>
-        /// <param name="serviceUri">The service URI.</param>
-        /// <param name="usesHttps"><c>true</c> to use https instead of http</param>
-        /// <exception cref="System.ArgumentNullException">serviceContract or serviceUri is null </exception>
-        /// <exception cref="System.ArgumentException">service contract must be an interface;serviceContract</exception>
-        /// <exception cref="System.InvalidOperationException">Faild to construct generic WebDomainClient</exception>
-        protected DomainContext(Type serviceContract, Uri serviceUri, bool usesHttps)
-            : this(CreateDomainClient(serviceContract, serviceUri, usesHttps))
-        {
-        }
-
-        /// <summary>
         /// Creates a WebDomainClient for the specified service contract and uri
         /// </summary>
         /// <param name="serviceContract">The service contract.</param>
@@ -75,7 +61,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="System.ArgumentNullException">serviceContract or serviceUri is null </exception>
         /// <exception cref="System.ArgumentException">service contract must be an interface;serviceContract</exception>
         /// <exception cref="System.InvalidOperationException">Faild to construct generic WebDomainClient</exception>
-        private static DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool usesHttps)
+        protected static DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool usesHttps)
         {
             if (serviceContract == null)
                 throw new ArgumentNullException("serviceContract");

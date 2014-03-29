@@ -400,20 +400,6 @@ namespace OpenRiaServices.DomainServices.Tools
             ctorParams = new List<CodeParameterDeclarationExpression>(1);
             ctorParams.Add(new CodeParameterDeclarationExpression(uriTypeRef, "serviceUri"));
 
-            // ctor base parameters
-            baseParams = new List<CodeExpression>(1);
-
-            // new WebDomainClient<TContract>(serviceUri, true/false)
-            CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-            clientRef.TypeArguments.Add(contractTypeParameter);
-
-            baseParams.Add(
-                new CodeObjectCreateExpression(
-                    clientRef,
-                    new CodeArgumentReferenceExpression("serviceUri"),
-                    new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
-            
-
             // add <summary> and <param> comments
             comments = CodeGenUtilities.GenerateSummaryCodeComment(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_ConstructorComments_Summary_ServiceUri, proxyClass.Name), this.ClientProxyGenerator.IsCSharp);
             comments.AddRange(CodeGenUtilities.GenerateParamCodeComment("serviceUri", string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_ConstructorComments_Param_ServiceUri, this._domainServiceDescription.DomainServiceType.Name), this.ClientProxyGenerator.IsCSharp));
@@ -423,24 +409,33 @@ namespace OpenRiaServices.DomainServices.Tools
             //  or
             // public .ctor(Uri serviceUri) : this(new WebDomainClient<TContract>(serviceUri, true))]
             // or
-            // public .ctor(Uri serviceUri) : base(typeof(TContract), serviceUri, true/false)
+            // public .ctor(Uri serviceUri) : this(DomainContext.CreateDomainClient(typeof(TContract), serviceUri, true/false))
+
+            // ctor base parameters
+            baseParams = new List<CodeExpression>(1);
             if (this.ClientProxyGenerator.ClientProxyCodeGenerationOptions.ClientProjectTargetPlatform == TargetPlatform.Silverlight)
             {
-                GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
+                // new WebDomainClient<TContract>(serviceUri, true/false)
+                CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
+                clientRef.TypeArguments.Add(contractTypeParameter);
+
+                baseParams.Add(
+                    new CodeObjectCreateExpression(
+                        clientRef,
+                        new CodeArgumentReferenceExpression("serviceUri"),
+                        new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
             }
             else
             {
-                GenerateConstructor(proxyClass,
-                                    ctorParams,
-                                    new CodeExpression[] { 
-                                        new CodeTypeOfExpression(contractTypeParameter),
-                                        new CodeArgumentReferenceExpression("serviceUri"), 
-                                        new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)
-                                    }
-                                    , comments
-                                    , true)
-                    .Statements.Add(onCreatedExpression);
+                // public .ctor(Uri serviceUri) : this(DomainContext.CreateDomainClient(typeof(TContract), serviceUri, true/false))
+                CodeTypeReference domainContextRef = CodeGenUtilities.GetTypeReference(TypeConstants.DomainContextTypeFullName, proxyClass.UserData["Namespace"] as string, false);
+                baseParams.Add( new CodeMethodInvokeExpression(
+                                    new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(domainContextRef), "CreateDomainClient"),
+                                    new CodeTypeOfExpression(contractTypeParameter),
+                                    new CodeArgumentReferenceExpression("serviceUri"),
+                                    new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
             }
+            GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
 
             // -----------------------------------------------------------------------
             // DomainContext(DomainClient domainClient) ctor decl

@@ -63,9 +63,9 @@ public <#= this.DomainContextTypeName #>() :
 }
 		
 public <#= this.DomainContextTypeName #>(Uri serviceUri) : 
-	base(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>)
+	this(DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
 {
-	this.OnCreated();
+	
 }
 
 public <#= this.DomainContextTypeName #>(DomainClient domainClient) :
