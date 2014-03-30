@@ -405,36 +405,17 @@ namespace OpenRiaServices.DomainServices.Tools
             comments.AddRange(CodeGenUtilities.GenerateParamCodeComment("serviceUri", string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_ConstructorComments_Param_ServiceUri, this._domainServiceDescription.DomainServiceType.Name), this.ClientProxyGenerator.IsCSharp));
 
             // <comments>...</comments>
-            // public .ctor(Uri serviceUri) : this(new WebDomainClient<TContract>(serviceUri))]
-            //  or
-            // public .ctor(Uri serviceUri) : this(new WebDomainClient<TContract>(serviceUri, true))]
-            // or
             // public .ctor(Uri serviceUri) : this(DomainContext.CreateDomainClient(typeof(TContract), serviceUri, true/false))
 
             // ctor base parameters
             baseParams = new List<CodeExpression>(1);
-            if (this.ClientProxyGenerator.ClientProxyCodeGenerationOptions.ClientProjectTargetPlatform == TargetPlatform.Silverlight)
-            {
-                // new WebDomainClient<TContract>(serviceUri, true/false)
-                CodeTypeReference clientRef = CodeGenUtilities.GetTypeReference(TypeConstants.DefaultDomainClientTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-                clientRef.TypeArguments.Add(contractTypeParameter);
+            CodeTypeReference domainContextRef = CodeGenUtilities.GetTypeReference(TypeConstants.DomainContextTypeFullName, proxyClass.UserData["Namespace"] as string, false);
+            baseParams.Add( new CodeMethodInvokeExpression(
+                                new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(domainContextRef), "CreateDomainClient"),
+                                new CodeTypeOfExpression(contractTypeParameter),
+                                new CodeArgumentReferenceExpression("serviceUri"),
+                                new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
 
-                baseParams.Add(
-                    new CodeObjectCreateExpression(
-                        clientRef,
-                        new CodeArgumentReferenceExpression("serviceUri"),
-                        new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
-            }
-            else
-            {
-                // public .ctor(Uri serviceUri) : this(DomainContext.CreateDomainClient(typeof(TContract), serviceUri, true/false))
-                CodeTypeReference domainContextRef = CodeGenUtilities.GetTypeReference(TypeConstants.DomainContextTypeFullName, proxyClass.UserData["Namespace"] as string, false);
-                baseParams.Add( new CodeMethodInvokeExpression(
-                                    new CodeMethodReferenceExpression(new CodeTypeReferenceExpression(domainContextRef), "CreateDomainClient"),
-                                    new CodeTypeOfExpression(contractTypeParameter),
-                                    new CodeArgumentReferenceExpression("serviceUri"),
-                                    new CodePrimitiveExpression(enableClientAccessAttribute.RequiresSecureEndpoint)));
-            }
             GenerateConstructor(proxyClass, ctorParams, baseParams, comments, false);
 
             // -----------------------------------------------------------------------
@@ -750,16 +731,6 @@ namespace OpenRiaServices.DomainServices.Tools
             operationContractAtt.Arguments.Add(new CodeAttributeArgument("Action", new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, DomainServiceProxyGenerator.DefaultActionSchema, domainServiceName, operationName))));
             operationContractAtt.Arguments.Add(new CodeAttributeArgument("ReplyAction", new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, DomainServiceProxyGenerator.DefaultReplyActionSchema, domainServiceName, operationName))));
             beginQueryMethod.CustomAttributes.Add(operationContractAtt);
-
-            /*
-            string faultTypeName = typeof(DomainServiceFault).Name;
-            CodeAttributeDeclaration faultContractAtt = CodeGenUtilities.CreateAttributeDeclaration(typeof(FaultContractAttribute), this.ClientProxyGenerator, contractInterface);
-            faultContractAtt.Arguments.Add(new CodeAttributeArgument(new CodeTypeOfExpression(CodeGenUtilities.GetTypeReference(TypeConstants.DomainServiceFaultFullName, contractInterface.UserData["Namespace"] as string, false))));
-            faultContractAtt.Arguments.Add(new CodeAttributeArgument("Action", new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, DomainServiceProxyGenerator.DefaultFaultActionSchema, domainServiceName, operationName, faultTypeName))));
-            faultContractAtt.Arguments.Add(new CodeAttributeArgument("Name", new CodePrimitiveExpression(faultTypeName)));
-            faultContractAtt.Arguments.Add(new CodeAttributeArgument("Namespace", new CodePrimitiveExpression("DomainServices")));
-            beginQueryMethod.CustomAttributes.Add(faultContractAtt);
-            */
         }
 
         /// <summary>

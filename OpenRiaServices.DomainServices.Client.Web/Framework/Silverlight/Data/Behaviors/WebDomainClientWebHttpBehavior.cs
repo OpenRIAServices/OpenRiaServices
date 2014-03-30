@@ -121,7 +121,6 @@ namespace OpenRiaServices.DomainServices.Client
 
             object queryProperty = null;
             object includeTotalCountProperty = null;
-            bool hasSideEffects = false;
             if (OperationContext.Current != null)
             {
                 OperationContext.Current.OutgoingMessageProperties.TryGetValue(WebDomainClient<object>.QueryPropertyName, out queryProperty);
