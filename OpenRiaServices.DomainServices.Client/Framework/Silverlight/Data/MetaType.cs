@@ -39,6 +39,8 @@ namespace OpenRiaServices.DomainServices.Client
         private Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private MetaMember _versionMember;
 
+        private IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string,EntityActionAttribute>();
+        
         /// <summary>
         /// Returns the MetaType for the specified Type.
         /// </summary>
@@ -59,6 +61,12 @@ namespace OpenRiaServices.DomainServices.Client
 
         private MetaType(Type type)
         {
+            _customUpdateMethods = (from method in type.GetMethods(MemberBindingFlags)
+                                    let attributes = method.GetCustomAttributes(typeof(EntityActionAttribute), false)
+                                    where attributes.Length == 1
+                                    select (EntityActionAttribute)attributes[0]
+                                   ).ToDictionary(cua => cua.Name, cua => cua);
+
             IEnumerable<PropertyInfo> properties = type.GetProperties(MemberBindingFlags).Where(p => p.GetIndexParameters().Length == 0).OrderBy(p => p.Name);
 
             this._isComplex = TypeUtility.IsComplexType(type);
@@ -171,6 +179,18 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 return null;
             }
+        }
+
+        public EntityActionAttribute GetCustomUpdate(string name)
+        {
+            EntityActionAttribute res;
+            _customUpdateMethods.TryGetValue(name, out res);
+            return res;
+        }
+
+        public IEnumerable<EntityActionAttribute> GetCustomUpdates()
+        {
+            return _customUpdateMethods.Values;
         }
 
         private static bool IsRoundtripMember(MetaMember metaMember)
@@ -402,6 +422,31 @@ namespace OpenRiaServices.DomainServices.Client
                     this.CalculateAttributesRecursive(elementType, visited);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// This class caches all the interesting attributes of a method.
+    /// </summary>
+    [DebuggerDisplay("Name = {Method.Name}")]
+    internal sealed class MetaMethod
+    {
+        public MetaMethod(MetaType metaType, MethodInfo methodInfo)
+        {
+            this.Method = methodInfo;
+            this.MetaType = metaType;
+        }
+
+        public MetaType MetaType
+        {
+            get;
+            private set;
+        }
+
+        public MethodInfo Method
+        {
+            get;
+            private set;
         }
     }
 

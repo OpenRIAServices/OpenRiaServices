@@ -126,6 +126,7 @@
     <Compile Include="ApplicationServices\SaveUserOperation.cs" />
     <Compile Include="ApplicationServices\SaveUserResult.cs" />
     <Compile Include="Data\ComplexObject.cs" />
+    <Compile Include="Data\EntityActionAttribute.cs" />
     <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
     <Compile Include="Data\MergeAttribute.cs" />

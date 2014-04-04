@@ -117,6 +117,9 @@
     <Compile Include="..\Silverlight\Data\ComplexObject.cs">
       <Link>Data\ComplexObject.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\EntityActionAttribute.cs">
+      <Link>Data\EntityActionAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\DomainClient.cs">
       <Link>Data\DomainClient.cs</Link>
     </Compile>

@@ -137,9 +137,9 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 entity.VerifyNotEditing();
                 bool entityRequiresValidation = entity.MetaType.RequiresValidation;
-                EntityAction customMethod = entity.EntityActions.SingleOrDefault();
+                var entityActions = entity.EntityActions;
 
-                if (!entityRequiresValidation && customMethod == null)
+                if (!entityRequiresValidation && !entityActions.Any())
                 {
                     continue;
                 }
@@ -158,7 +158,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 // validate any Custom Method invocations
-                if (customMethod != null)
+                foreach(var customMethod in entityActions)
                 {
                     // validate the method call
                     object[] parameters = customMethod.HasParameters ? customMethod.Parameters.ToArray() : null;
