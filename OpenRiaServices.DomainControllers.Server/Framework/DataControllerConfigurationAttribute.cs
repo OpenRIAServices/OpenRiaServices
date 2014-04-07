@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 namespace OpenRiaServices.DomainControllers.Server
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    internal sealed class DataControllerConfigurationAttribute : Attribute, IControllerConfiguration
+    internal sealed class DomainControllerConfigurationAttribute : Attribute, IControllerConfiguration
     {
         private static ConcurrentDictionary<Type, IEnumerable<SerializerInfo>> _serializerCache = new ConcurrentDictionary<Type, IEnumerable<SerializerInfo>>();
 
@@ -26,8 +26,8 @@ namespace OpenRiaServices.DomainControllers.Server
                 settings.Formatters.Add(formatter);
             }
 
-            settings.Services.Replace(typeof(IHttpActionInvoker), new DataControllerActionInvoker());
-            settings.Services.Replace(typeof(IHttpActionSelector), new DataControllerActionSelector());
+            settings.Services.Replace(typeof(IHttpActionInvoker), new DomainControllerActionInvoker());
+            settings.Services.Replace(typeof(IHttpActionSelector), new DomainControllerActionSelector());
 
             // Clear the validator to disable validation.
             settings.Services.Replace(typeof(IBodyModelValidator), null);
@@ -36,16 +36,16 @@ namespace OpenRiaServices.DomainControllers.Server
         private static IEnumerable<MediaTypeFormatter> GetFormatters(HttpControllerDescriptor descr)
         {
             HttpConfiguration config = descr.Configuration;
-            DataControllerDescription dataDesc = DataControllerDescription.GetDescription(descr);
+            DomainControllerDescription dataDesc = DomainControllerDescription.GetDescription(descr);
 
             List<MediaTypeFormatter> list = new List<MediaTypeFormatter>();
             AddFormattersFromConfig(list, config);
-            AddDataControllerFormatters(list, dataDesc);
+            AddDomainControllerFormatters(list, dataDesc);
 
             return list;
         }
 
-        private static void AddDataControllerFormatters(List<MediaTypeFormatter> formatters, DataControllerDescription description)
+        private static void AddDomainControllerFormatters(List<MediaTypeFormatter> formatters, DomainControllerDescription description)
         {
             var cachedSerializers = _serializerCache.GetOrAdd(description.ControllerType, controllerType =>
             {

@@ -61,7 +61,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The DbContext type &apos;{0}&apos; does not contain a parameterless constructor. A parameterless constructor is required to use EntityFramework in the Code-First mode with a DataController..
+        ///   Looks up a localized string similar to The DbContext type &apos;{0}&apos; does not contain a parameterless constructor. A parameterless constructor is required to use EntityFramework in the Code-First mode with a DomainController..
         /// </summary>
         internal static string DefaultCtorNotFound {
             get {
@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be applied to DataController type &apos;{1}&apos; because &apos;{1}&apos; does not derive from &apos;{2}&apos;..
+        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be applied to DomainController type &apos;{1}&apos; because &apos;{1}&apos; does not derive from &apos;{2}&apos;..
         /// </summary>
         internal static string InvalidMetadataProviderSpecification {
             get {

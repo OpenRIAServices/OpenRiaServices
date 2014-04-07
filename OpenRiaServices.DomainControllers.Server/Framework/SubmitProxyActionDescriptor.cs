@@ -64,7 +64,7 @@ namespace OpenRiaServices.DomainControllers.Server
                 ChangeSet changeSet = new ChangeSet(changeSetEntries);
                 changeSet.SetEntityAssociations();
 
-                DataController controller = (DataController)controllerContext.Controller;
+                DomainController controller = (DomainController)controllerContext.Controller;
                 if (!controller.Submit(changeSet) &&
                     controller.ActionContext.Response != null)
                 {

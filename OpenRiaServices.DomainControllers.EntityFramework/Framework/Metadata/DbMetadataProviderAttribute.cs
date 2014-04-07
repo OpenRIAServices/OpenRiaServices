@@ -9,7 +9,7 @@ using OpenRiaServices.DomainControllers.Server.Metadata;
 namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
 {
     /// <summary>
-    /// Attribute applied to a <see cref="DbDataController{DbContext}"/> that exposes LINQ to Entities mapped
+    /// Attribute applied to a <see cref="DbDomainController{DbContext}"/> that exposes LINQ to Entities mapped
     /// Types.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
 
         /// <summary>
         /// Default constructor. Using this constructor, the Type of the LINQ To Entities
-        /// DbContext will be inferred from the <see cref="DataController"/> the
+        /// DbContext will be inferred from the <see cref="DomainController"/> the
         /// attribute is applied to.
         /// </summary>
         public DbMetadataProviderAttribute()
@@ -49,7 +49,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
         /// <summary>
         /// This method creates an instance of the <see cref="MetadataProvider"/>.
         /// </summary>
-        /// <param name="controllerType">The <see cref="DataController"/> Type to create a metadata provider for.</param>
+        /// <param name="controllerType">The <see cref="DomainController"/> Type to create a metadata provider for.</param>
         /// <param name="parent">The existing parent metadata provider.</param>
         /// <returns>The metadata provider.</returns>
         public override MetadataProvider CreateProvider(Type controllerType, MetadataProvider parent)
@@ -73,23 +73,23 @@ namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
         }
 
         /// <summary>
-        /// Extracts the context type from the specified <paramref name="dataControllerType"/>.
+        /// Extracts the context type from the specified <paramref name="DomainControllerType"/>.
         /// </summary>
-        /// <param name="dataControllerType">A LINQ to Entities data controller type.</param>
+        /// <param name="DomainControllerType">A LINQ to Entities data controller type.</param>
         /// <returns>The type of the object context.</returns>
-        private static Type GetContextType(Type dataControllerType)
+        private static Type GetContextType(Type DomainControllerType)
         {
-            Type efDataControllerType = dataControllerType.BaseType;
-            while (!efDataControllerType.IsGenericType || efDataControllerType.GetGenericTypeDefinition() != typeof(DbDataController<>))
+            Type efDomainControllerType = DomainControllerType.BaseType;
+            while (!efDomainControllerType.IsGenericType || efDomainControllerType.GetGenericTypeDefinition() != typeof(DbDomainController<>))
             {
-                if (efDataControllerType == typeof(object))
+                if (efDomainControllerType == typeof(object))
                 {
-                    throw Error.InvalidOperation(Resource.InvalidMetadataProviderSpecification, typeof(DbMetadataProviderAttribute).Name, dataControllerType.Name, typeof(DbDataController<>).Name);
+                    throw Error.InvalidOperation(Resource.InvalidMetadataProviderSpecification, typeof(DbMetadataProviderAttribute).Name, DomainControllerType.Name, typeof(DbDomainController<>).Name);
                 }
-                efDataControllerType = efDataControllerType.BaseType;
+                efDomainControllerType = efDomainControllerType.BaseType;
             }
 
-            return efDataControllerType.GetGenericArguments()[0];
+            return efDomainControllerType.GetGenericArguments()[0];
         }
     }
 }

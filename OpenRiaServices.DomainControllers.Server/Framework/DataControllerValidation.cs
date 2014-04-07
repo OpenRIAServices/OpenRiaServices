@@ -12,7 +12,7 @@ using System.Web.Http.ValueProviders;
 
 namespace OpenRiaServices.DomainControllers.Server
 {
-    internal static class DataControllerValidation
+    internal static class DomainControllerValidation
     {
         internal static bool ValidateObject(object o, List<ValidationResultInfo> validationErrors, HttpActionContext actionContext)
         {

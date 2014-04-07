@@ -8,7 +8,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
 {
     /// <summary>
     /// A <see cref="MetadataProvider"/> is used to provide the metadata description for
-    /// types exposed by a <see cref="DataController"/>.
+    /// types exposed by a <see cref="DomainController"/>.
     /// </summary>
     public abstract class MetadataProvider
     {
@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
         /// <summary>
         /// Determines if the specified <see cref="Type"/> is an entity <see cref="Type"/> by consulting
         /// the <see cref="LookUpIsEntityType"/> method of all <see cref="MetadataProvider"/>s
-        /// in the provider chain for the <see cref="DataController"/>.
+        /// in the provider chain for the <see cref="DomainController"/>.
         /// </summary>
         /// <param name="type">The <see cref="Type"/> to check.</param>
         /// <returns>Returns <c>true</c> if the <see cref="Type"/> is an entity, <c>false</c> otherwise.</returns>

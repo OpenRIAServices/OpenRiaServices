@@ -14,11 +14,11 @@ using OpenRiaServices.DomainControllers.Server;
 namespace OpenRiaServices.DomainControllers.EntityFramework
 {
     /// <summary>
-    /// Base class for DataControllers operating on LINQ To Entities data models
+    /// Base class for DomainControllers operating on LINQ To Entities data models
     /// </summary>
     /// <typeparam name="TContext">The Type of the LINQ To Entities ObjectContext</typeparam>
     [LinqToEntitiesMetadataProvider]
-    public abstract class LinqToEntitiesDataController<TContext> : DataController where TContext : ObjectContext, new()
+    public abstract class LinqToEntitiesDomainController<TContext> : DomainController where TContext : ObjectContext, new()
     {
         private TContext _objectContext;
         private TContext _refreshContext;
@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework
         /// <summary>
         /// Protected constructor because this is an abstract class
         /// </summary>
-        protected LinqToEntitiesDataController()
+        protected LinqToEntitiesDomainController()
         {
         }
 
@@ -61,9 +61,9 @@ namespace OpenRiaServices.DomainControllers.EntityFramework
         }
 
         /// <summary>
-        /// Initializes this <see cref="DataController"/>.
+        /// Initializes this <see cref="DomainController"/>.
         /// </summary>
-        /// <param name="controllerContext">The <see cref="HttpControllerContext"/> for this <see cref="DataController"/>
+        /// <param name="controllerContext">The <see cref="HttpControllerContext"/> for this <see cref="DomainController"/>
         /// instance. Overrides must call the base method.</param>
         protected override void Initialize(HttpControllerContext controllerContext)
         {

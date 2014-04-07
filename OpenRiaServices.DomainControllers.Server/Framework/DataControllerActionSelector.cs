@@ -6,7 +6,7 @@ using System.Web.Http.Controllers;
 
 namespace OpenRiaServices.DomainControllers.Server
 {
-    internal sealed class DataControllerActionSelector : ApiControllerActionSelector
+    internal sealed class DomainControllerActionSelector : ApiControllerActionSelector
     {
         private const string ActionRouteKey = "action";
         private const string SubmitActionValue = "Submit";
@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainControllers.Server
             }
 
             // next check to see if this is a direct invocation of a CUD action
-            DataControllerDescription description = DataControllerDescription.GetDescription(controllerContext.ControllerDescriptor);
+            DomainControllerDescription description = DomainControllerDescription.GetDescription(controllerContext.ControllerDescriptor);
             UpdateActionDescriptor action = description.GetUpdateAction(actionName);
             if (action != null)
             {

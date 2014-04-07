@@ -13,11 +13,11 @@ using System.Web.Http.Controllers;
 
 namespace OpenRiaServices.DomainControllers.Server
 {
-    [DataControllerConfiguration]
-    public abstract class DataController : ApiController
+    [DomainControllerConfiguration]
+    public abstract class DomainController : ApiController
     {
         private ChangeSet _changeSet;
-        private DataControllerDescription _description;
+        private DomainControllerDescription _description;
 
         /// <summary>
         /// Gets the current <see cref="ChangeSet"/>. Returns null if no change operations are being performed.
@@ -28,9 +28,9 @@ namespace OpenRiaServices.DomainControllers.Server
         }
 
         /// <summary>
-        /// Gets the <see cref="DataControllerDescription"/> for this <see cref="DataController"/>.
+        /// Gets the <see cref="DomainControllerDescription"/> for this <see cref="DomainController"/>.
         /// </summary>
-        protected DataControllerDescription Description
+        protected DomainControllerDescription Description
         {
             get { return _description; }
         }
@@ -44,7 +44,7 @@ namespace OpenRiaServices.DomainControllers.Server
         {
             // ensure that the service is valid and all custom metadata providers
             // have been registered
-            _description = DataControllerDescription.GetDescription(controllerContext.ControllerDescriptor);
+            _description = DomainControllerDescription.GetDescription(controllerContext.ControllerDescriptor);
 
             base.Initialize(controllerContext);
         }
@@ -96,7 +96,7 @@ namespace OpenRiaServices.DomainControllers.Server
         /// For all operations in the current changeset, validate that the operation exists, and
         /// set the operation entry.
         /// </summary>
-        internal static void ResolveActions(DataControllerDescription description, IEnumerable<ChangeSetEntry> changeSet)
+        internal static void ResolveActions(DomainControllerDescription description, IEnumerable<ChangeSetEntry> changeSet)
         {
             // Resolve and set the action for each operation in the changeset
             foreach (ChangeSetEntry changeSetEntry in changeSet)
@@ -118,7 +118,7 @@ namespace OpenRiaServices.DomainControllers.Server
                     UpdateActionDescriptor customMethodOperation = description.GetCustomMethod(entityType, entityAction.Key);
                     if (customMethodOperation == null)
                     {
-                        throw Error.InvalidOperation(Resource.DataController_InvalidAction, entityAction.Key, entityType.Name);
+                        throw Error.InvalidOperation(Resource.DomainController_InvalidAction, entityAction.Key, entityType.Name);
                     }
 
                     // if the primary action for an update is null but the entry
@@ -128,7 +128,7 @@ namespace OpenRiaServices.DomainControllers.Server
 
                 if (actionDescriptor == null && !isCustomUpdate)
                 {
-                    throw Error.InvalidOperation(Resource.DataController_InvalidAction, changeSetEntry.Operation.ToString(), entityType.Name);
+                    throw Error.InvalidOperation(Resource.DomainController_InvalidAction, changeSetEntry.Operation.ToString(), entityType.Name);
                 }
 
                 changeSetEntry.ActionDescriptor = actionDescriptor;

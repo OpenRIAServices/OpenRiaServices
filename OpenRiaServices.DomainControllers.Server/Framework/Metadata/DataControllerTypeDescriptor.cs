@@ -9,15 +9,15 @@ using System.Linq;
 namespace OpenRiaServices.DomainControllers.Server.Metadata
 {
     /// <summary>
-    /// Custom TypeDescriptor for Types exposed by a <see cref="DataController"/>.
+    /// Custom TypeDescriptor for Types exposed by a <see cref="DomainController"/>.
     /// </summary>
-    internal class DataControllerTypeDescriptor : CustomTypeDescriptor
+    internal class DomainControllerTypeDescriptor : CustomTypeDescriptor
     {
         private readonly HashSet<string> _foreignKeyMembers;
         private readonly bool _keyIsEditable;
         private PropertyDescriptorCollection _properties;
 
-        public DataControllerTypeDescriptor(ICustomTypeDescriptor parent, bool keyIsEditable, HashSet<string> foreignKeyMembers)
+        public DomainControllerTypeDescriptor(ICustomTypeDescriptor parent, bool keyIsEditable, HashSet<string> foreignKeyMembers)
             : base(parent)
         {
             _keyIsEditable = keyIsEditable;
@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
                     Attribute[] newMetadata = GetAdditionalAttributes(propDescriptor);
                     if (newMetadata.Length > 0)
                     {
-                        tempPropertyDescriptors.Add(new DataControllerPropertyDescriptor(propDescriptor, newMetadata));
+                        tempPropertyDescriptors.Add(new DomainControllerPropertyDescriptor(propDescriptor, newMetadata));
                         customDescriptorsCreated = true;
                     }
                     else
@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
 
         /// <summary>
         /// Determines whether a type uses any features requiring the
-        /// <see cref="DataControllerTypeDescriptor"/> to be registered. We do this
+        /// <see cref="DomainControllerTypeDescriptor"/> to be registered. We do this
         /// check as an optimization so we're not adding additional TDPs to the
         /// chain when they're not necessary.
         /// </summary>
@@ -97,7 +97,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
         /// <param name="keyIsEditable">Indicates whether the key for this Type is editable.</param>
         /// <param name="foreignKeyMembers">The set of foreign key members for the Type.</param>
         /// <returns>Returns <c>true</c> if the type uses any features requiring the
-        /// <see cref="DataControllerTypeDescriptionProvider"/> to be registered.</returns>
+        /// <see cref="DomainControllerTypeDescriptionProvider"/> to be registered.</returns>
         internal static bool ShouldRegister(ICustomTypeDescriptor descriptor, bool keyIsEditable, HashSet<string> foreignKeyMembers)
         {
             foreach (PropertyDescriptor pd in descriptor.GetProperties())
@@ -194,11 +194,11 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
     /// <summary>
     /// PropertyDescriptor wrapper.
     /// </summary>
-    internal class DataControllerPropertyDescriptor : PropertyDescriptor
+    internal class DomainControllerPropertyDescriptor : PropertyDescriptor
     {
         private PropertyDescriptor _base;
 
-        public DataControllerPropertyDescriptor(PropertyDescriptor pd, Attribute[] attribs)
+        public DomainControllerPropertyDescriptor(PropertyDescriptor pd, Attribute[] attribs)
             : base(pd, attribs)
         {
             _base = pd;

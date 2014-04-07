@@ -65,7 +65,7 @@ namespace OpenRiaServices.DomainControllers.Server
         {
             return TaskHelpers.RunSynchronously(() =>
             {
-                DataController controller = (DataController)controllerContext.Controller;
+                DomainController controller = (DomainController)controllerContext.Controller;
                 object[] paramValues = arguments.Select(p => p.Value).ToArray();
 
                 return _method.Invoke(controller, paramValues);

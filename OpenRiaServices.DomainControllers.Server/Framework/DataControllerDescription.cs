@@ -15,42 +15,42 @@ using OpenRiaServices.DomainControllers.Server.Metadata;
 
 namespace OpenRiaServices.DomainControllers.Server
 {
-    public class DataControllerDescription
+    public class DomainControllerDescription
     {
-        private static readonly ConcurrentDictionary<Type, DataControllerDescription> _descriptionMap = new ConcurrentDictionary<Type, DataControllerDescription>();
+        private static readonly ConcurrentDictionary<Type, DomainControllerDescription> _descriptionMap = new ConcurrentDictionary<Type, DomainControllerDescription>();
         private static ConcurrentDictionary<Type, HashSet<Type>> _typeDescriptionProviderMap = new ConcurrentDictionary<Type, HashSet<Type>>();
 
         private static readonly string[] _deletePrefixes = { "Delete", "Remove" };
         private static readonly string[] _insertPrefixes = { "Insert", "Add", "Create" };
         private static readonly string[] _updatePrefixes = { "Update", "Change", "Modify" };
-        private Type _dataControllerType;
+        private Type _DomainControllerType;
         private ReadOnlyCollection<Type> _entityTypes;
         private List<UpdateActionDescriptor> _updateActions;
 
-        internal DataControllerDescription(Type dataControllerType, IEnumerable<Type> entityTypes, List<UpdateActionDescriptor> actions)
+        internal DomainControllerDescription(Type DomainControllerType, IEnumerable<Type> entityTypes, List<UpdateActionDescriptor> actions)
         {
-            _dataControllerType = dataControllerType;
+            _DomainControllerType = DomainControllerType;
             _entityTypes = entityTypes.ToList().AsReadOnly();
             _updateActions = actions;
         }
 
         /// <summary>
-        /// Gets the Type of the <see cref="DataController"/>
+        /// Gets the Type of the <see cref="DomainController"/>
         /// </summary>
         public Type ControllerType
         {
-            get { return _dataControllerType; }
+            get { return _DomainControllerType; }
         }
 
         /// <summary>
-        /// Gets the entity types exposed by the <see cref="DataController"/>
+        /// Gets the entity types exposed by the <see cref="DomainController"/>
         /// </summary>
         public IEnumerable<Type> EntityTypes
         {
             get { return _entityTypes; }
         }
 
-        public static DataControllerDescription GetDescription(HttpControllerDescriptor controllerDescriptor)
+        public static DomainControllerDescription GetDescription(HttpControllerDescriptor controllerDescriptor)
         {
             return _descriptionMap.GetOrAdd(controllerDescriptor.ControllerType, type =>
             {
@@ -59,16 +59,16 @@ namespace OpenRiaServices.DomainControllers.Server
         }
 
         /// <summary>
-        /// Creates and returns the metadata provider for the specified DataController Type.
+        /// Creates and returns the metadata provider for the specified DomainController Type.
         /// </summary>
-        /// <param name="dataControllerType">The DataController Type.</param>
+        /// <param name="DomainControllerType">The DomainController Type.</param>
         /// <returns>The metadata provider.</returns>
-        internal static MetadataProvider CreateMetadataProvider(Type dataControllerType)
+        internal static MetadataProvider CreateMetadataProvider(Type DomainControllerType)
         {
             // construct a list of all types in the inheritance hierarchy for the controller
             List<Type> baseTypes = new List<Type>();
-            Type currType = dataControllerType;
-            while (currType != typeof(DataController))
+            Type currType = DomainControllerType;
+            while (currType != typeof(DomainController))
             {
                 baseTypes.Add(currType);
                 currType = currType.BaseType;
@@ -85,7 +85,7 @@ namespace OpenRiaServices.DomainControllers.Server
             // Now from most derived to base, create any declared metadata providers,
             // chaining the instances as we progress. Note that ordering from derived to
             // base is important - we want to ensure that any providers the user has placed on
-            // their DataController directly come before any DAL providers.
+            // their DomainController directly come before any DAL providers.
             MetadataProvider currProvider = reflectionProvider;
             providerList.Add(currProvider);
             for (int i = 0; i < baseTypes.Count; i++)
@@ -98,7 +98,7 @@ namespace OpenRiaServices.DomainControllers.Server
                 foreach (MetadataProviderAttribute providerAttribute in
                     currType.GetCustomAttributes(typeof(MetadataProviderAttribute), false))
                 {
-                    currProvider = providerAttribute.CreateProvider(dataControllerType, currProvider);
+                    currProvider = providerAttribute.CreateProvider(DomainControllerType, currProvider);
                     currProvider.SetIsEntityTypeFunc(isEntityTypeFunc);
                     providerList.Add(currProvider);
                 }
@@ -107,17 +107,17 @@ namespace OpenRiaServices.DomainControllers.Server
             return currProvider;
         }
 
-        private static DataControllerDescription CreateDescription(HttpControllerDescriptor controllerDescriptor)
+        private static DomainControllerDescription CreateDescription(HttpControllerDescriptor controllerDescriptor)
         {
-            Type dataControllerType = controllerDescriptor.ControllerType;
-            MetadataProvider metadataProvider = CreateMetadataProvider(dataControllerType);
+            Type DomainControllerType = controllerDescriptor.ControllerType;
+            MetadataProvider metadataProvider = CreateMetadataProvider(DomainControllerType);
 
             // get all public candidate methods and create the operations
             HashSet<Type> entityTypes = new HashSet<Type>();
             List<UpdateActionDescriptor> actions = new List<UpdateActionDescriptor>();
             IEnumerable<MethodInfo> methodsToInspect =
-                dataControllerType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                    .Where(p => (p.DeclaringType != typeof(DataController) && (p.DeclaringType != typeof(object))) && !p.IsSpecialName);
+                DomainControllerType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .Where(p => (p.DeclaringType != typeof(DomainController) && (p.DeclaringType != typeof(object))) && !p.IsSpecialName);
 
             foreach (MethodInfo method in methodsToInspect)
             {
@@ -126,9 +126,9 @@ namespace OpenRiaServices.DomainControllers.Server
                     continue;
                 }
 
-                if (method.IsVirtual && method.GetBaseDefinition().DeclaringType == typeof(DataController))
+                if (method.IsVirtual && method.GetBaseDefinition().DeclaringType == typeof(DomainController))
                 {
-                    // don't want to infer overrides of DataController virtual methods as
+                    // don't want to infer overrides of DomainController virtual methods as
                     // operations
                     continue;
                 }
@@ -169,7 +169,7 @@ namespace OpenRiaServices.DomainControllers.Server
                 }
             }
 
-            return new DataControllerDescription(dataControllerType, entityTypes, actions);
+            return new DomainControllerDescription(DomainControllerType, entityTypes, actions);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace OpenRiaServices.DomainControllers.Server
             }
 
             entityTypes.Add(entityType);
-            RegisterDataControllerTypeDescriptionProvider(entityType, metadataProvider);
+            RegisterDomainControllerTypeDescriptionProvider(entityType, metadataProvider);
 
             foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(entityType))
             {
@@ -380,14 +380,14 @@ namespace OpenRiaServices.DomainControllers.Server
         }
 
         /// <summary>
-        /// Register our DataControllerTypeDescriptionProvider for the specified Type. This provider is responsible for surfacing the
+        /// Register our DomainControllerTypeDescriptionProvider for the specified Type. This provider is responsible for surfacing the
         /// custom TDs returned by metadata providers.
         /// </summary>
         /// <param name="type">The Type that we should register for.</param>
         /// <param name="metadataProvider">The metadata provider.</param>
-        private static void RegisterDataControllerTypeDescriptionProvider(Type type, MetadataProvider metadataProvider)
+        private static void RegisterDomainControllerTypeDescriptionProvider(Type type, MetadataProvider metadataProvider)
         {
-            DataControllerTypeDescriptionProvider tdp = new DataControllerTypeDescriptionProvider(type, metadataProvider);
+            DomainControllerTypeDescriptionProvider tdp = new DomainControllerTypeDescriptionProvider(type, metadataProvider);
             RegisterCustomTypeDescriptor(tdp, type);
         }
 

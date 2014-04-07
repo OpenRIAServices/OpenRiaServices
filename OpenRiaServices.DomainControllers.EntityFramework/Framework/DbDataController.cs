@@ -17,7 +17,7 @@ using OpenRiaServices.DomainControllers.Server;
 namespace OpenRiaServices.DomainControllers.EntityFramework
 {
     [DbMetadataProvider]
-    public abstract class DbDataController<TContext> : DataController
+    public abstract class DbDomainController<TContext> : DomainController
         where TContext : DbContext, new()
     {
         private TContext _dbContext;
@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework
         /// <summary>
         /// Protected constructor for the abstract class.
         /// </summary>
-        protected DbDataController()
+        protected DbDomainController()
         {
         }
 
@@ -62,9 +62,9 @@ namespace OpenRiaServices.DomainControllers.EntityFramework
         }
 
         /// <summary>
-        /// Initializes the <see cref="DbDataController{T}"/>.
+        /// Initializes the <see cref="DbDomainController{T}"/>.
         /// </summary>
-        /// <param name="controllerContext">The <see cref="HttpControllerContext"/> for this <see cref="DataController"/>
+        /// <param name="controllerContext">The <see cref="HttpControllerContext"/> for this <see cref="DomainController"/>
         /// instance. Overrides must call the base method.</param>
         protected override void Initialize(HttpControllerContext controllerContext)
         {

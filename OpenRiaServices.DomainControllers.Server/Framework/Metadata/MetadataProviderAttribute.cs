@@ -6,7 +6,7 @@ using System.Web.Http;
 namespace OpenRiaServices.DomainControllers.Server.Metadata
 {
     /// <summary>
-    /// Attribute applied to a <see cref="DataController"/> type to specify the <see cref="MetadataProvider"/>
+    /// Attribute applied to a <see cref="DomainController"/> type to specify the <see cref="MetadataProvider"/>
     /// for the type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
@@ -48,7 +48,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
         /// This method creates an instance of the <see cref="MetadataProvider"/>. Subclasses can override this
         /// method to provide their own construction logic.
         /// </summary>
-        /// <param name="controllerType">The <see cref="DataController"/> type to create a metadata provider for.</param>
+        /// <param name="controllerType">The <see cref="DomainController"/> type to create a metadata provider for.</param>
         /// <param name="parent">The parent provider. May be null.</param>
         /// <returns>The metadata provider</returns>
         public virtual MetadataProvider CreateProvider(Type controllerType, MetadataProvider parent)
@@ -58,9 +58,9 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
                 throw Error.ArgumentNull("controllerType");
             }
 
-            if (!typeof(DataController).IsAssignableFrom(controllerType))
+            if (!typeof(DomainController).IsAssignableFrom(controllerType))
             {
-                throw Error.Argument("controllerType", Resource.InvalidType, controllerType.FullName, typeof(DataController).FullName);
+                throw Error.Argument("controllerType", Resource.InvalidType, controllerType.FullName, typeof(DomainController).FullName);
             }
 
             if (!typeof(MetadataProvider).IsAssignableFrom(_providerType))

@@ -15,7 +15,7 @@ using System.Web.Http.Controllers;
 namespace OpenRiaServices.DomainControllers.Server
 {
     /// <summary>
-    /// Represents a set of changes to be processed by a <see cref="DataController"/>.
+    /// Represents a set of changes to be processed by a <see cref="DomainController"/>.
     /// </summary>
     public sealed class ChangeSet
     {
@@ -253,7 +253,7 @@ namespace OpenRiaServices.DomainControllers.Server
                 // TODO: support for method level / parameter validation?
 
                 List<ValidationResultInfo> validationErrors = new List<ValidationResultInfo>();
-                if (!DataControllerValidation.ValidateObject(entry.Entity, validationErrors, actionContext))
+                if (!DomainControllerValidation.ValidateObject(entry.Entity, validationErrors, actionContext))
                 {
                     entry.ValidationErrors = validationErrors.Distinct(EqualityComparer<ValidationResultInfo>.Default).ToList();
                     success = false;
@@ -285,7 +285,7 @@ namespace OpenRiaServices.DomainControllers.Server
             {
                 if (associationValue == null)
                 {
-                    throw Error.InvalidOperation(Resource.DataController_AssociationCollectionPropertyIsNull, associationProperty.ComponentType.Name, associationProperty.Name);
+                    throw Error.InvalidOperation(Resource.DomainController_AssociationCollectionPropertyIsNull, associationProperty.ComponentType.Name, associationProperty.Name);
                 }
 
                 IList list = associationValue as IList;
@@ -298,7 +298,7 @@ namespace OpenRiaServices.DomainControllers.Server
                     addMethod = associationValue.GetType().GetMethod("Add", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { associatedEntityType }, null);
                     if (addMethod == null)
                     {
-                        throw Error.InvalidOperation(Resource.DataController_InvalidCollectionMember, associationProperty.Name);
+                        throw Error.InvalidOperation(Resource.DomainController_InvalidCollectionMember, associationProperty.Name);
                     }
                     associationSequence = ((IEnumerable)associationValue).Cast<object>();
                 }

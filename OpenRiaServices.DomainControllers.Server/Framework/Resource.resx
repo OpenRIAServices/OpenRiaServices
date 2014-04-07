@@ -126,17 +126,17 @@
   <data name="CyclicMetadataTypeAttributesFound" xml:space="preserve">
     <value>The MetadataTypeAttribute on type '{0}' results in a cyclic metadata provider chain. Either remove the attribute or remove the cycle.</value>
   </data>
-  <data name="DataController_AssociationCollectionPropertyIsNull" xml:space="preserve">
+  <data name="DomainController_AssociationCollectionPropertyIsNull" xml:space="preserve">
     <value>One or more associated objects were passed for collection property '{1}' on type '{0}', but the target collection is null.</value>
   </data>
-  <data name="DataController_InvalidAction" xml:space="preserve">
-    <value>This DataController does not support operation '{0}' for entity '{1}'.</value>
+  <data name="DomainController_InvalidAction" xml:space="preserve">
+    <value>This DomainController does not support operation '{0}' for entity '{1}'.</value>
   </data>
-  <data name="DataController_InvalidCollectionMember" xml:space="preserve">
+  <data name="DomainController_InvalidCollectionMember" xml:space="preserve">
     <value>Association collection member '{0}' does not implement IList and does not have an Add method.</value>
   </data>
   <data name="InvalidAction_UnsupportedFilterType" xml:space="preserve">
-    <value>Action '{0}.{1}' has one or more filters applied that do not derive from AuthorizationFilterAttribute. Only authorization filters are supported on DataController Insert/Update/Delete actions.</value>
+    <value>Action '{0}.{1}' has one or more filters applied that do not derive from AuthorizationFilterAttribute. Only authorization filters are supported on DomainController Insert/Update/Delete actions.</value>
   </data>
   <data name="InvalidChangeSet" xml:space="preserve">
     <value>Invalid ChangeSet: {0}</value>

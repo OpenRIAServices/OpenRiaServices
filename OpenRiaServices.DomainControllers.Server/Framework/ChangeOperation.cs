@@ -3,7 +3,7 @@
 namespace OpenRiaServices.DomainControllers.Server
 {
     /// <summary>
-    /// Enumeration of the types of operations a <see cref="DataController"/> can perform.
+    /// Enumeration of the types of operations a <see cref="DomainController"/> can perform.
     /// </summary>
     public enum ChangeOperation
     {

@@ -9,15 +9,15 @@ using System.Web.Http;
 namespace OpenRiaServices.DomainControllers.Server.Metadata
 {
     /// <summary>
-    /// Custom TypeDescriptionProvider conditionally registered for Types exposed by a <see cref="DataController"/>.
+    /// Custom TypeDescriptionProvider conditionally registered for Types exposed by a <see cref="DomainController"/>.
     /// </summary>
-    internal class DataControllerTypeDescriptionProvider : TypeDescriptionProvider
+    internal class DomainControllerTypeDescriptionProvider : TypeDescriptionProvider
     {
         private readonly MetadataProvider _metadataProvider;
         private readonly Type _type;
         private ICustomTypeDescriptor _customTypeDescriptor;
 
-        public DataControllerTypeDescriptionProvider(Type type, MetadataProvider metadataProvider)
+        public DomainControllerTypeDescriptionProvider(Type type, MetadataProvider metadataProvider)
             : base(TypeDescriptor.GetProvider(type))
         {
             if (metadataProvider == null)
@@ -67,10 +67,10 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
                     }
                 }
 
-                if (DataControllerTypeDescriptor.ShouldRegister(_customTypeDescriptor, keyIsEditable, foreignKeyMembers))
+                if (DomainControllerTypeDescriptor.ShouldRegister(_customTypeDescriptor, keyIsEditable, foreignKeyMembers))
                 {
                     // Extend the chain with one more descriptor.
-                    _customTypeDescriptor = new DataControllerTypeDescriptor(_customTypeDescriptor, keyIsEditable, foreignKeyMembers);
+                    _customTypeDescriptor = new DomainControllerTypeDescriptor(_customTypeDescriptor, keyIsEditable, foreignKeyMembers);
                 }
             }
 

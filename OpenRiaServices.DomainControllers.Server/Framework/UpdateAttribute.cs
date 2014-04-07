@@ -5,7 +5,7 @@ using System;
 namespace OpenRiaServices.DomainControllers.Server
 {
     /// <summary>
-    /// Attribute applied to a <see cref="DataController"/> method to indicate that it is an update method.
+    /// Attribute applied to a <see cref="DomainController"/> method to indicate that it is an update method.
     /// </summary>
     [AttributeUsage(
         AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property,

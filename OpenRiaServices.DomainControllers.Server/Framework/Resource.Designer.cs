@@ -90,32 +90,32 @@ namespace OpenRiaServices.DomainControllers.Server {
         /// <summary>
         ///   Looks up a localized string similar to One or more associated objects were passed for collection property &apos;{1}&apos; on type &apos;{0}&apos;, but the target collection is null..
         /// </summary>
-        internal static string DataController_AssociationCollectionPropertyIsNull {
+        internal static string DomainController_AssociationCollectionPropertyIsNull {
             get {
-                return ResourceManager.GetString("DataController_AssociationCollectionPropertyIsNull", resourceCulture);
+                return ResourceManager.GetString("DomainController_AssociationCollectionPropertyIsNull", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This DataController does not support operation &apos;{0}&apos; for entity &apos;{1}&apos;..
+        ///   Looks up a localized string similar to This DomainController does not support operation &apos;{0}&apos; for entity &apos;{1}&apos;..
         /// </summary>
-        internal static string DataController_InvalidAction {
+        internal static string DomainController_InvalidAction {
             get {
-                return ResourceManager.GetString("DataController_InvalidAction", resourceCulture);
+                return ResourceManager.GetString("DomainController_InvalidAction", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Association collection member &apos;{0}&apos; does not implement IList and does not have an Add method..
         /// </summary>
-        internal static string DataController_InvalidCollectionMember {
+        internal static string DomainController_InvalidCollectionMember {
             get {
-                return ResourceManager.GetString("DataController_InvalidCollectionMember", resourceCulture);
+                return ResourceManager.GetString("DomainController_InvalidCollectionMember", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Action &apos;{0}.{1}&apos; has one or more filters applied that do not derive from AuthorizationFilterAttribute. Only authorization filters are supported on DataController Insert/Update/Delete actions..
+        ///   Looks up a localized string similar to Action &apos;{0}.{1}&apos; has one or more filters applied that do not derive from AuthorizationFilterAttribute. Only authorization filters are supported on DomainController Insert/Update/Delete actions..
         /// </summary>
         internal static string InvalidAction_UnsupportedFilterType {
             get {

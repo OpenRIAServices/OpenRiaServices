@@ -7,11 +7,11 @@ using System.Web.Http.Controllers;
 
 namespace OpenRiaServices.DomainControllers.Server
 {
-    internal sealed class DataControllerActionInvoker : ApiControllerActionInvoker
+    internal sealed class DomainControllerActionInvoker : ApiControllerActionInvoker
     {
         public override Task<HttpResponseMessage> InvokeActionAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            DataController controller = (DataController)actionContext.ControllerContext.Controller;
+            DomainController controller = (DomainController)actionContext.ControllerContext.Controller;
             controller.ActionContext = actionContext;
             return base.InvokeActionAsync(actionContext, cancellationToken);
         }
