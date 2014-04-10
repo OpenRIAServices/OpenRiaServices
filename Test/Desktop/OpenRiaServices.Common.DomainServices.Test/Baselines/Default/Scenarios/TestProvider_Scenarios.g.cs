@@ -13266,7 +13266,7 @@ namespace TestDomainServices.NamedUpdates
         /// Invokes the 'NamedUpdateMethod' action on this entity.
         /// </summary>
         /// <param name="newProperty1">The value to pass to the server method's 'newProperty1' parameter.</param>
-        [EntityAction("NamedUpdateMethod", "CanNamedUpdateMethod", "IsNamedUpdateMethodInvoked")]
+        [EntityAction("NamedUpdateMethod")]
         public void NamedUpdateMethod(string newProperty1)
         {
             this.OnNamedUpdateMethodInvoking(newProperty1);
@@ -13454,7 +13454,7 @@ namespace TestDomainServices.NamedUpdates
         /// Invokes the 'NamedUpdateMethod' action on this entity.
         /// </summary>
         /// <param name="newProperty1">The value to pass to the server method's 'newProperty1' parameter.</param>
-        [EntityAction("NamedUpdateMethod", "CanNamedUpdateMethod", "IsNamedUpdateMethodInvoked")]
+        [EntityAction("NamedUpdateMethod")]
         public void NamedUpdateMethod(string newProperty1)
         {
             this.OnNamedUpdateMethodInvoking(newProperty1);
@@ -13698,7 +13698,7 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="array">The value to pass to the server method's 'array' parameter.</param>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        [EntityAction("NamedUpdateWithParamValidation", "CanNamedUpdateWithParamValidation", "IsNamedUpdateWithParamValidationInvoked")]
+        [EntityAction("NamedUpdateWithParamValidation")]
         public void NamedUpdateWithParamValidation([CustomValidation(typeof(DynamicTestValidator), "Validate")] MockComplexObject1[] array, [CustomValidation(typeof(DynamicTestValidator), "Validate")] MockComplexObject1 complexObject)
         {
             this.OnNamedUpdateWithParamValidationInvoking(array, complexObject);
@@ -13711,7 +13711,7 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="array">The value to pass to the server method's 'array' parameter.</param>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        [EntityAction("NamedUpdateWithPropValidation", "CanNamedUpdateWithPropValidation", "IsNamedUpdateWithPropValidationInvoked")]
+        [EntityAction("NamedUpdateWithPropValidation")]
         public void NamedUpdateWithPropValidation(MockComplexObject1[] array, MockComplexObject1 complexObject)
         {
             this.OnNamedUpdateWithPropValidationInvoking(array, complexObject);
