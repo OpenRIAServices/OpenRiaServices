@@ -71,6 +71,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
             this.IsAbstract = this.Type.IsAbstract;
             this._notificationMethodList = new List<PropertyDescriptor>();
             this._properties = this.GetPropertiesToGenerate();
+            this.GenerationEnvironment.Clear();
         }
 
         internal abstract string GetBaseTypeName();

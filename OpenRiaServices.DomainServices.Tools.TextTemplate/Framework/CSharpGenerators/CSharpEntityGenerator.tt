@@ -29,7 +29,10 @@
 			domainOperationparameterList.Add(paramInfo);
 		}
 
+		var customMethodAttribute = customMethod.OperationAttribute as EntityActionAttribute;
+		bool allowMultipleInvocations = customMethodAttribute != null && customMethodAttribute.AllowMultipleInvocations;
 #>
+[OpenRiaServices.DomainServices.Client.EntityAction("<#= customMethod.Name #>", AllowMultipleInvocations = <#= allowMultipleInvocations.ToString().ToLower() #>)]
 public void <#= customMethod.Name #>(<#+
 this.GenerateParameterDeclaration(domainOperationparameterList, true);
 #>)
@@ -83,27 +86,6 @@ public bool Is<#= customMethod.Name #>Invoked
 <#+
 	}
 
-	private void GenerateOnActionStateChanged(IEnumerable<DomainOperationEntry> customMethods)
-	{
-#>
-protected override void OnActionStateChanged()
-<#+
-		this.GenerateOpeningBrace();
-		if(this.IsDerivedType)
-		{
-#>
-base.OnActionStateChanged();
-<#+
-		}
-		foreach(DomainOperationEntry customMethod in customMethods)
-		{
-#>
-base.UpdateActionState("<#= customMethod.Name #>", "Can<#= customMethod.Name #>", "Is<#= customMethod.Name #>Invoked");
-<#+
-		}
-		this.GenerateClosingBrace();
-	}
-	
 	/// <summary>
 	/// Generates the GetIdentity() method on the entity.
 	/// </summary>

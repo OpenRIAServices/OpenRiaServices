@@ -160,6 +160,7 @@
     <Compile Include="ILoggingService.cs" />
     <Compile Include="IndentationLevel.cs">
     </Compile>
+    <Compile Include="InvokeKind.cs" />
     <Compile Include="ISharedCodeService.cs" />
     <Compile Include="LinkedServerProjectCache.cs" />
     <Compile Include="MetadataPipeline\AttributeBuilderException.cs" />
