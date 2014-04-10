@@ -1598,6 +1598,13 @@ namespace OpenRiaServices.DomainServices.Client
                 this.RaisePropertyChanged(customMethodInfo.IsInvokedPropertyName);
         }
 
+        /// <summary>
+        /// Undoes a previously invoked action.
+        /// </summary>
+        /// <param name="action">The action to undo.</param>
+        /// <exception cref="System.ArgumentNullException">action</exception>
+        /// <exception cref="System.InvalidOperationException">A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted</exception>
+        /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions"/> </exception>
         protected void UndoAction(EntityAction action)
         {
             if (action == null)
