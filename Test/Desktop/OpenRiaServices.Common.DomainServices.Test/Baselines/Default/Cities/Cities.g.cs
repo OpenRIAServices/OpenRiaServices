@@ -428,6 +428,7 @@ namespace Cities
         // - The attribute 'System.ComponentModel.DataAnnotations.CustomValidationAttribute' references a method 'ValidateMethod' on type 'Cities.CityMethodValidator' that is not accessible in the client project 'MockProject'.
         // [CustomValidationAttribute(typeof(Cities.CityMethodValidator), "ValidateMethod")]
         // 
+        [EntityAction("AssignCityZone")]
         public void AssignCityZone(string zoneName)
         {
             this.OnAssignCityZoneInvoking(zoneName);
@@ -439,6 +440,7 @@ namespace Cities
         /// Invokes the 'AssignCityZoneIfAuthorized' action on this entity.
         /// </summary>
         /// <param name="zoneName">The value to pass to the server method's 'zoneName' parameter.</param>
+        [EntityAction("AssignCityZoneIfAuthorized")]
         public void AssignCityZoneIfAuthorized(string zoneName)
         {
             this.OnAssignCityZoneIfAuthorizedInvoking(zoneName);
@@ -449,18 +451,12 @@ namespace Cities
         /// <summary>
         /// Invokes the 'AutoAssignCityZone' action on this entity.
         /// </summary>
+        [EntityAction("AutoAssignCityZone")]
         public void AutoAssignCityZone()
         {
             this.OnAutoAssignCityZoneInvoking();
             base.InvokeAction("AutoAssignCityZone");
             this.OnAutoAssignCityZoneInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("AssignCityZone", "CanAssignCityZone", "IsAssignCityZoneInvoked");
-            base.UpdateActionState("AssignCityZoneIfAuthorized", "CanAssignCityZoneIfAuthorized", "IsAssignCityZoneIfAuthorizedInvoked");
-            base.UpdateActionState("AutoAssignCityZone", "CanAutoAssignCityZone", "IsAutoAssignCityZoneInvoked");
         }
     }
     
@@ -1296,17 +1292,12 @@ namespace Cities
         /// Invokes the 'TouchHistory' action on this entity.
         /// </summary>
         /// <param name="touchString">The value to pass to the server method's 'touchString' parameter.</param>
+        [EntityAction("TouchHistory")]
         public void TouchHistory(string touchString)
         {
             this.OnTouchHistoryInvoking(touchString);
             base.InvokeAction("TouchHistory", touchString);
             this.OnTouchHistoryInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.OnActionStateChanged();
-            base.UpdateActionState("TouchHistory", "CanTouchHistory", "IsTouchHistoryInvoked");
         }
     }
     
@@ -1421,17 +1412,12 @@ namespace Cities
         /// Invokes the 'SetCityInfo' action on this entity.
         /// </summary>
         /// <param name="info">The value to pass to the server method's 'info' parameter.</param>
+        [EntityAction("SetCityInfo")]
         public void SetCityInfo(string info)
         {
             this.OnSetCityInfoInvoking(info);
             base.InvokeAction("SetCityInfo", info);
             this.OnSetCityInfoInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.OnActionStateChanged();
-            base.UpdateActionState("SetCityInfo", "CanSetCityInfo", "IsSetCityInfoInvoked");
         }
     }
     
@@ -2147,6 +2133,7 @@ namespace Cities
         /// <param name="offset">The value to pass to the server method's 'offset' parameter.</param>
         /// <param name="useFull">The value to pass to the server method's 'useFull' parameter.</param>
         [CustomValidation(typeof(ZipValidator), "IsZipValid", ErrorMessage="Zip codes cannot have matching city and state names")]
+        [EntityAction("ReassignZipCode")]
         public void ReassignZipCode([Range(-9999, 9999)] int offset, bool useFull)
         {
             this.OnReassignZipCodeInvoking(offset, useFull);
@@ -2159,17 +2146,12 @@ namespace Cities
         /// </summary>
         /// <param name="scenario">The value to pass to the server method's 'scenario' parameter.</param>
         [CustomValidation(typeof(ThrowExValidator), "IsThrowExValid")]
+        [EntityAction("ThrowException")]
         public void ThrowException(string scenario)
         {
             this.OnThrowExceptionInvoking(scenario);
             base.InvokeAction("ThrowException", scenario);
             this.OnThrowExceptionInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("ReassignZipCode", "CanReassignZipCode", "IsReassignZipCodeInvoked");
-            base.UpdateActionState("ThrowException", "CanThrowException", "IsThrowExceptionInvoked");
         }
     }
     

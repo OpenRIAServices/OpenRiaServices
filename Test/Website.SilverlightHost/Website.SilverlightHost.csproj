@@ -86,9 +86,11 @@
   <ItemGroup>
     <Reference Include="Microsoft.Silverlight.Testing">
       <HintPath>..\..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.Silverlight.Testing.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
       <HintPath>..\..\packages\SilverlightToolkit-Testing.5.2011.12.1\lib\SL5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Windows.Data">

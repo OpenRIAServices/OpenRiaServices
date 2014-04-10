@@ -472,7 +472,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // invoke domain methods on a few entities
             container.LoadEntities(_cities);
-            _cities[1].CustomMethodInvocation = _assignCityZone;
+            _cities[1].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters);
 
             // submit changeset with hand-crafted entities: valid invocation and null invocation
             modifiedEntities.Add(_cities[0]);
@@ -960,7 +960,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation submitOp = null;
             LoadOperation<Zip> loadOp = null;
             EventHandler completedDelegate = (sender, args) => completed = true;
-
+            
             CityDomainContext context = new CityDomainContext(TestURIs.Cities);
             loadOp = context.Load(context.GetZipsQuery(), false);
             loadOp.Completed += completedDelegate;
@@ -982,7 +982,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Verify entity state
                 Assert.IsTrue(zip.IsReadOnly, "Expected Zip to be in a read-only state.");
                 Assert.IsTrue(zip.IsSubmitting, "Expected Zip to be in a submitting state.");
-                Assert.IsNotNull(zip.CustomMethodInvocation, "Expected Zip CustomMethodInvocation property to be non-null");
+                Assert.AreEqual(1, zip.EntityActions.Count(), "Expected Zip EntityActions property to contain a single invocation");
             });
             this.EnqueueConditional(() => completed);
             this.EnqueueCallback(() =>
@@ -996,7 +996,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Verify entity state
                 Assert.IsFalse(zip.IsReadOnly, "Zip should not be in a read-only state.");
                 Assert.IsFalse(zip.IsSubmitting, "Zip should not be in a submitting state.");
-                Assert.IsNotNull(zip.CustomMethodInvocation, "Expected Zip CustomMethodInvocation property to be non-null");
+                Assert.AreEqual(1, zip.EntityActions.Count(), "Expected Zip EntityActions property to contain a single invocation");
 
                 // Explicitly set a property
                 zip.StateName += "x";
@@ -1117,7 +1117,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 propChanged.Add(e.PropertyName);
             };
 
-            Assert.IsFalse(_cities[0].CanInvokeAction(null));
+            Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
 
@@ -1125,7 +1125,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(_cities[0].CanInvokeAction(null));
+                Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
             });
 
             EnqueueTestComplete();
@@ -1139,7 +1139,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             List<string> propChanged = new List<string>();
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
-            Assert.IsTrue(_cities[0].CanInvokeAction(null));
+            Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and invoke
             _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1152,7 +1152,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsFalse(_cities[0].CanInvokeAction(null));
+                Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
             });
 
             EnqueueTestComplete();
@@ -1166,7 +1166,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             List<string> propChanged = new List<string>();
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
-            Assert.IsTrue(_cities[0].CanInvokeAction(null));
+            Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and Remove
             _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1179,7 +1179,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsFalse(_cities[0].CanInvokeAction(null));
+                Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
             });
 
             EnqueueTestComplete();
@@ -1197,7 +1197,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // invoke domain method and remove the entity
             _cities[0].AssignCityZone("Zone1");
             container.GetEntitySet<City>().Remove(_cities[0]);
-            Assert.IsFalse(_cities[0].CanInvokeAction(null));
+            Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and call RejectChanges
             _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1210,7 +1210,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(_cities[0].CanInvokeAction(null));
+                Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
                 // verify RejectChanges does not cause multiple property change notifications
                 Assert.IsNotNull(propChanged.Single<string>(p => p == "CanAssignCityZone"));

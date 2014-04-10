@@ -269,6 +269,7 @@ namespace SharedEntities
         /// <summary>
         /// Invokes the 'UpdateAThroughChild' action on this entity.
         /// </summary>
+        [EntityAction("UpdateAThroughChild")]
         public void UpdateAThroughChild()
         {
             this.OnUpdateAThroughChildInvoking();
@@ -279,17 +280,12 @@ namespace SharedEntities
         /// <summary>
         /// Invokes the 'UpdateAThroughParent' action on this entity.
         /// </summary>
+        [EntityAction("UpdateAThroughParent")]
         public void UpdateAThroughParent()
         {
             this.OnUpdateAThroughParentInvoking();
             base.InvokeAction("UpdateAThroughParent");
             this.OnUpdateAThroughParentInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("UpdateAThroughChild", "CanUpdateAThroughChild", "IsUpdateAThroughChildInvoked");
-            base.UpdateActionState("UpdateAThroughParent", "CanUpdateAThroughParent", "IsUpdateAThroughParentInvoked");
         }
     }
     

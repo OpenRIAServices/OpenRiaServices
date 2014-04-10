@@ -4925,6 +4925,7 @@ namespace TestDomainServices
         /// <param name="g">The value to pass to the server method's 'g' parameter.</param>
         /// <param name="en">The value to pass to the server method's 'en' parameter.</param>
         /// <param name="dto">The value to pass to the server method's 'dto' parameter.</param>
+        [EntityAction("TestNullablePredefined")]
         public void TestNullablePredefined(Nullable<decimal> d, Nullable<DateTime> dt, Nullable<TimeSpan> ts, Nullable<Guid> g, Nullable<TestEnum> en, Nullable<DateTimeOffset> dto)
         {
             this.OnTestNullablePredefinedInvoking(d, dt, ts, g, en, dto);
@@ -4947,6 +4948,7 @@ namespace TestDomainServices
         /// <param name="ch">The value to pass to the server method's 'ch' parameter.</param>
         /// <param name="d">The value to pass to the server method's 'd' parameter.</param>
         /// <param name="s">The value to pass to the server method's 's' parameter.</param>
+        [EntityAction("TestNullablePrimitive")]
         public void TestNullablePrimitive(Nullable<bool> b1, Nullable<byte> b2, Nullable<sbyte> sb, Nullable<short> int16, Nullable<ushort> uint16, Nullable<int> int32, Nullable<uint> uint32, Nullable<long> int64, Nullable<ulong> uint64, Nullable<char> ch, Nullable<double> d, Nullable<float> s)
         {
             this.OnTestNullablePrimitiveInvoking(b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s);
@@ -4969,6 +4971,7 @@ namespace TestDomainServices
         /// <param name="en">The value to pass to the server method's 'en' parameter.</param>
         /// <param name="dictionary">The value to pass to the server method's 'dictionary' parameter.</param>
         /// <param name="dto">The value to pass to the server method's 'dto' parameter.</param>
+        [EntityAction("TestPredefined")]
         public void TestPredefined(string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g, byte[] b, byte[] bArray, TestEnum en, Dictionary<string, string> dictionary, DateTimeOffset dto)
         {
             this.OnTestPredefinedInvoking(s, d, dt, ts, strings, uri, g, b, bArray, en, dictionary, dto);
@@ -4991,19 +4994,12 @@ namespace TestDomainServices
         /// <param name="ch">The value to pass to the server method's 'ch' parameter.</param>
         /// <param name="d">The value to pass to the server method's 'd' parameter.</param>
         /// <param name="s">The value to pass to the server method's 's' parameter.</param>
+        [EntityAction("TestPrimitive")]
         public void TestPrimitive(bool b1, byte b2, sbyte sb, short int16, ushort uint16, int int32, uint uint32, long int64, ulong uint64, char ch, double d, float s)
         {
             this.OnTestPrimitiveInvoking(b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s);
             base.InvokeAction("TestPrimitive", b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s);
             this.OnTestPrimitiveInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("TestNullablePredefined", "CanTestNullablePredefined", "IsTestNullablePredefinedInvoked");
-            base.UpdateActionState("TestNullablePrimitive", "CanTestNullablePrimitive", "IsTestNullablePrimitiveInvoked");
-            base.UpdateActionState("TestPredefined", "CanTestPredefined", "IsTestPredefinedInvoked");
-            base.UpdateActionState("TestPrimitive", "CanTestPrimitive", "IsTestPrimitiveInvoked");
         }
     }
     
@@ -13270,16 +13266,12 @@ namespace TestDomainServices.NamedUpdates
         /// Invokes the 'NamedUpdateMethod' action on this entity.
         /// </summary>
         /// <param name="newProperty1">The value to pass to the server method's 'newProperty1' parameter.</param>
+        [EntityAction("NamedUpdateMethod", "CanNamedUpdateMethod", "IsNamedUpdateMethodInvoked")]
         public void NamedUpdateMethod(string newProperty1)
         {
             this.OnNamedUpdateMethodInvoking(newProperty1);
             base.InvokeAction("NamedUpdateMethod", newProperty1);
             this.OnNamedUpdateMethodInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("NamedUpdateMethod", "CanNamedUpdateMethod", "IsNamedUpdateMethodInvoked");
         }
     }
     
@@ -13462,16 +13454,12 @@ namespace TestDomainServices.NamedUpdates
         /// Invokes the 'NamedUpdateMethod' action on this entity.
         /// </summary>
         /// <param name="newProperty1">The value to pass to the server method's 'newProperty1' parameter.</param>
+        [EntityAction("NamedUpdateMethod", "CanNamedUpdateMethod", "IsNamedUpdateMethodInvoked")]
         public void NamedUpdateMethod(string newProperty1)
         {
             this.OnNamedUpdateMethodInvoking(newProperty1);
             base.InvokeAction("NamedUpdateMethod", newProperty1);
             this.OnNamedUpdateMethodInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("NamedUpdateMethod", "CanNamedUpdateMethod", "IsNamedUpdateMethodInvoked");
         }
     }
     
@@ -13710,6 +13698,7 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="array">The value to pass to the server method's 'array' parameter.</param>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("NamedUpdateWithParamValidation", "CanNamedUpdateWithParamValidation", "IsNamedUpdateWithParamValidationInvoked")]
         public void NamedUpdateWithParamValidation([CustomValidation(typeof(DynamicTestValidator), "Validate")] MockComplexObject1[] array, [CustomValidation(typeof(DynamicTestValidator), "Validate")] MockComplexObject1 complexObject)
         {
             this.OnNamedUpdateWithParamValidationInvoking(array, complexObject);
@@ -13722,17 +13711,12 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="array">The value to pass to the server method's 'array' parameter.</param>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("NamedUpdateWithPropValidation", "CanNamedUpdateWithPropValidation", "IsNamedUpdateWithPropValidationInvoked")]
         public void NamedUpdateWithPropValidation(MockComplexObject1[] array, MockComplexObject1 complexObject)
         {
             this.OnNamedUpdateWithPropValidationInvoking(array, complexObject);
             base.InvokeAction("NamedUpdateWithPropValidation", array, complexObject);
             this.OnNamedUpdateWithPropValidationInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("NamedUpdateWithParamValidation", "CanNamedUpdateWithParamValidation", "IsNamedUpdateWithParamValidationInvoked");
-            base.UpdateActionState("NamedUpdateWithPropValidation", "CanNamedUpdateWithPropValidation", "IsNamedUpdateWithPropValidationInvoked");
         }
     }
     
@@ -13946,16 +13930,12 @@ namespace TestDomainServices.NamedUpdates
         /// </summary>
         /// <param name="array">The value to pass to the server method's 'array' parameter.</param>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("NamedUpdateWithTypeValidation")]
         public void NamedUpdateWithTypeValidation(MockComplexObject2[] array, MockComplexObject2 complexObject)
         {
             this.OnNamedUpdateWithTypeValidationInvoking(array, complexObject);
             base.InvokeAction("NamedUpdateWithTypeValidation", array, complexObject);
             this.OnNamedUpdateWithTypeValidationInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("NamedUpdateWithTypeValidation", "CanNamedUpdateWithTypeValidation", "IsNamedUpdateWithTypeValidationInvoked");
         }
     }
     
@@ -14196,16 +14176,12 @@ namespace TestDomainServices.NamedUpdates
         /// Invokes the 'NamedUpdateWithCommonProperties' action on this entity.
         /// </summary>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("NamedUpdateWithCommonProperties")]
         public void NamedUpdateWithCommonProperties(MockComplexObject3 complexObject)
         {
             this.OnNamedUpdateWithCommonPropertiesInvoking(complexObject);
             base.InvokeAction("NamedUpdateWithCommonProperties", complexObject);
             this.OnNamedUpdateWithCommonPropertiesInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("NamedUpdateWithCommonProperties", "CanNamedUpdateWithCommonProperties", "IsNamedUpdateWithCommonPropertiesInvoked");
         }
     }
     
@@ -14388,16 +14364,12 @@ namespace TestDomainServices.NamedUpdates
         /// Invokes the 'NamedUpdateWithNoEntityValidation' action on this entity.
         /// </summary>
         /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("NamedUpdateWithNoEntityValidation")]
         public void NamedUpdateWithNoEntityValidation(MockComplexObject2 complexObject)
         {
             this.OnNamedUpdateWithNoEntityValidationInvoking(complexObject);
             base.InvokeAction("NamedUpdateWithNoEntityValidation", complexObject);
             this.OnNamedUpdateWithNoEntityValidationInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("NamedUpdateWithNoEntityValidation", "CanNamedUpdateWithNoEntityValidation", "IsNamedUpdateWithNoEntityValidationInvoked");
         }
     }
     
