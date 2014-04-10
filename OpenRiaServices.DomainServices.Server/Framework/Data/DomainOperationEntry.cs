@@ -273,10 +273,10 @@ namespace OpenRiaServices.DomainServices.Server
                     }
                     break;
                 case DomainOperation.Custom:
-                    this._operationAttribute = this._attributes[typeof(UpdateAttribute)];
+                    this._operationAttribute = this._attributes[typeof(EntityActionAttribute)];
                     if (this._operationAttribute == null)
                     {
-                        this._operationAttribute = new UpdateAttribute { UsingCustomMethod = true };
+                        this._operationAttribute = new EntityActionAttribute();
                         attributeCreated = true;
                     }
                     break;

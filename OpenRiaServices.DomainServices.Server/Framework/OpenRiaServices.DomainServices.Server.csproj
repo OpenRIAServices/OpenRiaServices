@@ -148,6 +148,7 @@
     <Compile Include="Data\CodeProcessor.cs" />
     <Compile Include="Data\ChangeSet.cs" />
     <Compile Include="Data\CompositionAttribute.cs" />
+    <Compile Include="Data\EntityActionAttribute.cs" />
     <Compile Include="Data\DomainPropertyDescriptor.cs" />
     <Compile Include="Data\DomainTypeDescriptor.cs" />
     <Compile Include="Data\DynamicMethodUtility.cs" />
