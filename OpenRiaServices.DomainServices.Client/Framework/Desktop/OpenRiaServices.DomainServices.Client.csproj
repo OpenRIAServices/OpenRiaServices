@@ -171,6 +171,9 @@
     <Compile Include="..\Silverlight\Data\LoadResult.cs">
       <Link>Data\LoadResult.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\Serialization\KeyValue.cs">
+      <Link>Data\Serialization\KeyValue.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\SubmitOperationException.cs">
       <Link>Data\SubmitOperationException.cs</Link>
     </Compile>

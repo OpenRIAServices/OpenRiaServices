@@ -82,7 +82,8 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 // add any custom method invocations
-                foreach (EntityAction customInvokation in entity.EntityActions)
+                var entityActions = (ICollection<EntityAction>)entity.EntityActions;
+                foreach (EntityAction customInvokation in entityActions)
                 {
                     if (string.IsNullOrEmpty(customInvokation.Name))
                     {
@@ -91,10 +92,10 @@ namespace OpenRiaServices.DomainServices.Client
 
                     if (changeSetEntry.EntityActions == null)
                     {
-                        changeSetEntry.EntityActions = new List<KeyValuePair<string, object[]>>();
+                        changeSetEntry.EntityActions = new List<Serialization.KeyValue<string, object[]>>();
                     }
                     changeSetEntry.EntityActions.Add(
-                            new KeyValuePair<string,object[]>(customInvokation.Name, customInvokation.Parameters.ToArray()));
+                        new Serialization.KeyValue<string, object[]>(customInvokation.Name, customInvokation.Parameters.ToArray()));
                 }
 
                 operations.Add(changeSetEntry);

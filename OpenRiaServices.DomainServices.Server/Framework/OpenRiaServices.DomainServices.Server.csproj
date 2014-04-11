@@ -127,6 +127,9 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\RoundtripOriginalAttribute.cs">
       <Link>Data\RoundtripOriginalAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\Serialization\KeyValue.cs">
+      <Link>Data\Serialization\KeyValue.cs</Link>
+    </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
       <Link>Data\TypeUtility.cs</Link>
     </Compile>

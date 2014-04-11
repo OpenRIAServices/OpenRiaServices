@@ -191,7 +191,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// of method name / parameter set pairs.
         /// </summary>
         [DataMember]
-        public IList<KeyValuePair<string, object[]>> EntityActions
+        public IList<Serialization.KeyValue<string, object[]>> EntityActions
         {
             get;
             set;

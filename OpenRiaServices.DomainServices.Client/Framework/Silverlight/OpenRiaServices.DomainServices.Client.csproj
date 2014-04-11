@@ -132,6 +132,7 @@
     <Compile Include="Data\MergeAttribute.cs" />
     <Compile Include="Data\LoadResult.cs" />
     <Compile Include="Data\ObjectStateUtility.cs" />
+    <Compile Include="Data\Serialization\KeyValue.cs" />
     <Compile Include="Data\SubmitOperationException.cs" />
     <Compile Include="Data\InvokeResult.cs" />
     <Compile Include="Data\SubmitResult.cs" />
@@ -228,6 +229,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="OpenRiaServices.DomainServices.Client.extmap.xml" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
