@@ -698,15 +698,42 @@ namespace OpenRiaServices.DomainServices.Server
                     TryValidateOperation(operation.DomainOperationEntry, validationContext, new object[] { entity }, validationResults);
                 }
 
-                // if the entity has a custom method invocation, validate the method call
+                // if the entity has a custom method invocation, validate the all method calls
                 if (hasCustomMethod)
                 {
-                    var action = operation.EntityActions.Single();
-                    DomainOperationEntry customMethodOperation = domainServiceDescription.GetCustomMethod(operation.Entity.GetType(), action.Key);
-                    if (customMethodOperation.RequiresValidation)
+                    Dictionary<string, DomainOperationEntry> invokedActions = null;
+                    for (int i = 0; i < operation.EntityActions.Count; ++i)
                     {
-                        object[] parameters = DomainService.GetCustomMethodParams(customMethodOperation, operation.Entity, action.Value);
-                        TryValidateOperation(customMethodOperation, validationContext, parameters, validationResults);
+                        var action = operation.EntityActions[i];
+
+                        DomainOperationEntry customMethodOperation = null;
+                        bool alreadyInvoked = invokedActions != null && invokedActions.TryGetValue(action.Key, out customMethodOperation);
+
+                        if (!alreadyInvoked) // equivalent to (customMethodOperation != null)
+                            customMethodOperation = domainServiceDescription.GetCustomMethod(operation.Entity.GetType(), action.Key);
+
+                        // Of more that one action is queued check for multiple invocations, this way we don't have to allocate
+                        // a dictionary unless necessary
+                        if (operation.EntityActions.Count > 1)
+                        {
+                            if (invokedActions == null) // alreadyInvoked will be false since this is first action
+                                invokedActions = new Dictionary<string, DomainOperationEntry>();
+
+                            if (!alreadyInvoked)
+                            {
+                                invokedActions.Add(action.Key, customMethodOperation);
+                            }
+                            else if (((EntityActionAttribute)customMethodOperation.OperationAttribute).AllowMultipleInvocations == false)
+                            {
+                                throw new InvalidOperationException(string.Format("Can not invoke '{0}.{1}' multiple times", operation.Entity.GetType(), action.Key));
+                            }
+                        }
+
+                        if (customMethodOperation.RequiresValidation)
+                        {
+                            object[] parameters = DomainService.GetCustomMethodParams(customMethodOperation, operation.Entity, action.Value);
+                            TryValidateOperation(customMethodOperation, validationContext, parameters, validationResults);
+                        }
                     }
                 }
 
@@ -762,9 +789,11 @@ namespace OpenRiaServices.DomainServices.Server
                 // we need to authorize that as well
                 if (op.EntityActions != null && op.EntityActions.Any())
                 {
-                    var entityAction = op.EntityActions.Single();
-                    DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethod(entity.GetType(), entityAction.Key);
-                    this.ValidateMethodPermissions(customMethodOperation, entity);
+                    foreach (var entityAction in op.EntityActions)
+                    {
+                        DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethod(entity.GetType(), entityAction.Key);
+                        this.ValidateMethodPermissions(customMethodOperation, entity);
+                    }
                 }
             }
 
@@ -835,21 +864,23 @@ namespace OpenRiaServices.DomainServices.Server
                 bool isNamedUpdate = false;
                 if (changeSetEntry.EntityActions != null && changeSetEntry.EntityActions.Any())
                 {
-                    var entityAction = changeSetEntry.EntityActions.Single();
-                    DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethod(entityType, entityAction.Key);
-                    if (customMethodOperation == null)
+                    foreach (var entityAction in changeSetEntry.EntityActions)
                     {
-                        throw new InvalidOperationException(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            Resource.DomainService_InvalidDomainOperationEntry,
-                            entityAction.Key,
-                            entityType.Name));
-                    }
+                        DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethod(entityType, entityAction.Key);
+                        if (customMethodOperation == null)
+                        {
+                            throw new InvalidOperationException(
+                            string.Format(
+                                CultureInfo.CurrentCulture,
+                                Resource.DomainService_InvalidDomainOperationEntry,
+                                entityAction.Key,
+                                entityType.Name));
+                        }
 
-                    // if the primary operation for an update is null and there is a valid
-                    // custom method, its considered a "named update"
-                    isNamedUpdate = domainOperationEntry == null && customMethodOperation != null;
+                        // if the primary operation for an update is null and there is a valid
+                        // custom method, its considered a "named update"
+                        isNamedUpdate = isNamedUpdate || (domainOperationEntry == null && customMethodOperation != null);
+                    }
                 }
 
                 // if we were unable to find the primary operation entry and the type isn't
@@ -1117,15 +1148,17 @@ namespace OpenRiaServices.DomainServices.Server
         {
             foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
             {
-                var entityAction = operation.EntityActions.Single();
-                DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethod(operation.Entity.GetType(), entityAction.Key);
-                object[] parameters = DomainService.GetCustomMethodParams(customMethodOperation, operation.Entity, entityAction.Value);
-                this.InvokeDomainOperationEntry(customMethodOperation, parameters, operation);
-
-                // Remove any associated entities if an error occurred.
-                if (operation.HasError)
+                foreach (var entityAction in operation.EntityActions)
                 {
-                    this.ChangeSet.EntitiesToReplace.Remove(operation.Entity);
+                    var customMethodOperation = this.ServiceDescription.GetCustomMethod(operation.Entity.GetType(), entityAction.Key);
+                    object[] parameters = DomainService.GetCustomMethodParams(customMethodOperation, operation.Entity, entityAction.Value);
+                    this.InvokeDomainOperationEntry(customMethodOperation, parameters, operation);
+
+                    // Remove any associated entities if an error occurred.
+                    if (operation.HasError)
+                    {
+                        this.ChangeSet.EntitiesToReplace.Remove(operation.Entity);
+                    }
                 }
             }
 
