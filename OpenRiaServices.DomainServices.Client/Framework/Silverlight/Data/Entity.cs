@@ -380,7 +380,7 @@ namespace OpenRiaServices.DomainServices.Client
 
         private void RaiseCanInvokeChanged()
         {
-            foreach (var customMethod in MetaType.GetCustomUpdates())
+            foreach (var customMethod in MetaType.GetEntityActions())
             {
                 this.RaisePropertyChanged(customMethod.CanInvokePropertyName);
             }
@@ -402,6 +402,7 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets or sets the custom method invocation on this entity (if any)
+        /// while bypassing lots of the validation (this is only used by the old tests)
         /// </summary>
         [Obsolete("Use EntityActions instead")]
         internal EntityAction CustomMethodInvocation
@@ -421,9 +422,17 @@ namespace OpenRiaServices.DomainServices.Client
 
                     UndoAllEntityActions();
 
-                    // TODO: BYPASS VALIDATION?? (OLD APPROACH DID THIS!)
                     if (value != null)
-                        InvokeActionCore(value);
+                    {
+                        // Many of the old tests uses invalid method names, construct a dummy EntityActionAttribute
+                        // if no exists
+                        var customMethod = MetaType.GetEntityAction(value.Name);
+                        if (customMethod == null)
+                            customMethod = new EntityActionAttribute(value.Name, false);
+
+                        InvokeActionCore(value, customMethod);
+                    }
+                        
 
                     if (value != null && this._entityState == EntityState.Unmodified)
                     {
@@ -822,7 +831,7 @@ namespace OpenRiaServices.DomainServices.Client
             var previouslyInvoked = _customMethodInvocations;
             _customMethodInvocations = null;
 
-            foreach (var customMethodInfo in MetaType.GetCustomUpdates())
+            foreach (var customMethodInfo in MetaType.GetEntityActions())
             {
                 bool wasInvoked = previouslyInvoked != null 
                     && previouslyInvoked.Any(action => action.Name == customMethodInfo.Name);
@@ -1528,19 +1537,14 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(actionName))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "actionName"));
+                throw new ArgumentException(Resource.DomainClient_InvocationNameCannotBeNullOrEmpty);
             }
-
-            // record invocation on the entity, which does proper state transition and raising property changed events
-            var action = new EntityAction(actionName, parameters);
 
             // verify that the action can currently be invoked
             if (this.IsSubmitting)
             {
                 throw new InvalidOperationException(Resource.Entity_InvokeWhileSubmitting);
             }
-
-            // TODO: verify that this specific custom method has not already been called on this entity (unless multiple invocations is allowed for the specific function)
 
             // custom methods cannot be called on deleted entities
             if (this._entityState == EntityState.Deleted)
@@ -1559,16 +1563,20 @@ namespace OpenRiaServices.DomainServices.Client
 
             // call validation helper to loop through the validation attributes
             // on the method itself as well as all the parameters
-            ValidationUtilities.ValidateCustomUpdateMethodCall(action.Name, this.CreateValidationContext(), action.Parameters.ToArray());
+            ValidationUtilities.ValidateCustomUpdateMethodCall(actionName, this.CreateValidationContext(), parameters);
 
-            InvokeActionCore(action);
+            var customMethodInfo = MetaType.GetEntityAction(actionName);
+            if (customMethodInfo == null)
+                throw new InvalidOperationException(string.Format("No custom update named {0}", actionName));
+
+            // record invocation on the entity, which does proper state transition and raising property changed events
+            InvokeActionCore(new EntityAction(actionName, parameters), customMethodInfo);
         }
 
-        internal void InvokeActionCore(EntityAction action)
+        internal void InvokeActionCore(EntityAction action, EntityActionAttribute customMethodInfo)
         {
             bool wasReadOnly = this.IsReadOnly;
             bool wasInvoked = this.IsActionInvoked(action.Name);
-            var customMethodInfo = MetaType.GetCustomUpdate(action.Name);
 
             if (wasInvoked && customMethodInfo.AllowMultipleInvocations == false)
                 throw new InvalidOperationException(Resources.MethodCanOnlyBeInvokedOnce);
@@ -1614,11 +1622,12 @@ namespace OpenRiaServices.DomainServices.Client
             if (this.IsSubmitting)
                 throw new InvalidOperationException("A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted");
 
-            var removed = this._customMethodInvocations.Remove(action);
+            var removed = _customMethodInvocations != null && this._customMethodInvocations.Remove(action);
             if (!removed)
                 throw new ArgumentException("Can only undo currently invoked action pending to be submitted");
 
-            var customUpdate = MetaType.GetCustomUpdate(action.Name);
+            var customUpdate = MetaType.GetEntityAction(action.Name);
+            Debug.Assert(customUpdate != null, "EntityAction have valid name since it is part of EntityActions");
             RaisePropertyChanged(customUpdate.CanInvokePropertyName);
 
             // If no additional invocations are recorded, then raise an update
@@ -1636,8 +1645,17 @@ namespace OpenRiaServices.DomainServices.Client
             // custom methods cannot be invoked if the entity is deleted, or if the entity is unattached.
             bool canInvoke = this.EntityState != EntityState.Deleted 
                              && this.EntitySet != null
-                             && !this.IsSubmitting
-                             && (MetaType.GetCustomUpdate(name).AllowMultipleInvocations ||  !IsActionInvoked(name));
+                             && !this.IsSubmitting;
+
+            if (canInvoke)
+            {
+                // return false if method name is invalid 
+                //  or the action is already invoked and multiple invocations are not allowd
+                var customMethod = MetaType.GetEntityAction(name);
+                if (customMethod == null 
+                        || (customMethod.AllowMultipleInvocations == false && IsActionInvoked(name)))
+                    canInvoke = false;
+            }
 
             return canInvoke;
         }
@@ -1932,7 +1950,9 @@ namespace OpenRiaServices.DomainServices.Client
                             removedInvocations = removedInvocations.Where(item => !this._entity._customMethodInvocations.Contains(item));
 
                         foreach (var method in removedInvocations.ToArray())
-                            this._entity.InvokeActionCore(method);
+                        {
+                            this._entity.InvokeActionCore(method, _entity.MetaType.GetEntityAction(method.Name));
+                        }
                     }
                 }
 

@@ -181,14 +181,23 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        public EntityActionAttribute GetCustomUpdate(string name)
+        /// <summary>
+        /// Gets the <see cref="EntityActionAttribute"/> for the custom update method with the given name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>the EntityActionAttribute for the custom method; or <c>null</c> if no method was found</returns>
+        public EntityActionAttribute GetEntityAction(string name)
         {
             EntityActionAttribute res;
             _customUpdateMethods.TryGetValue(name, out res);
             return res;
         }
 
-        public IEnumerable<EntityActionAttribute> GetCustomUpdates()
+        /// <summary>
+        /// Gets <see cref="EntityActionAttribute" /> for all custom update method on the MetaType.
+        /// </summary>
+        /// <returns>Meta information about all entity actions on the type</returns>
+        public IEnumerable<EntityActionAttribute> GetEntityActions()
         {
             return _customUpdateMethods.Values;
         }
