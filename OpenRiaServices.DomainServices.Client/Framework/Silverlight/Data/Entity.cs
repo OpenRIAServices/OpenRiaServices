@@ -1537,7 +1537,8 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(actionName))
             {
-                throw new ArgumentException(Resource.DomainClient_InvocationNameCannotBeNullOrEmpty);
+                throw new ArgumentNullException("actionName", 
+                    string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "actionName"));
             }
 
             // verify that the action can currently be invoked

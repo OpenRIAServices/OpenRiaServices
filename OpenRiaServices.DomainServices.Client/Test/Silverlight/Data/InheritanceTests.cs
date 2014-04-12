@@ -71,15 +71,15 @@ namespace OpenRiaServices.DomainServices.Client.Data.Test
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_citiesWithInfo);
             Assert.AreEqual(EntityState.Unmodified, _citiesWithInfo[0].EntityState);
-            Assert.IsNull(_citiesWithInfo[0].CustomMethodInvocation);
+            Assert.AreEqual(0, _citiesWithInfo[0].EntityActions.Count());
             Assert.IsTrue(_citiesWithInfo[0].CanInvokeAction(_setCityInfo.Name));
 
             // verify invoke on a new entity succeeds and subsequent CanInvoke returns false
             _citiesWithInfo[0].InvokeAction(_setCityInfo.Name, _setCityInfo.Parameters.ToArray<object>());
-            Assert.IsNotNull(_citiesWithInfo[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _citiesWithInfo[0].EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, _citiesWithInfo[0].EntityState);
-            Assert.AreEqual<string>(_setCityInfo.Name, _citiesWithInfo[0].CustomMethodInvocation.Name);
-            Assert.AreEqual<int>(_setCityInfo.Parameters.Count(), _citiesWithInfo[0].CustomMethodInvocation.Parameters.Count());
+            Assert.AreEqual<string>(_setCityInfo.Name, _citiesWithInfo[0].EntityActions.Single().Name);
+            Assert.AreEqual<int>(_setCityInfo.Parameters.Count(), _citiesWithInfo[0].EntityActions.Single().Parameters.Count());
             Assert.IsFalse(_citiesWithInfo[0].CanInvokeAction(_setCityInfo.Name));
         }
 
