@@ -420,7 +420,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     bool wasReadOnly = this.IsReadOnly;
 
-                    UndoAllEntityActions();
+                    UndoAllEntityActions(preventRaiseReadOnly: true);
 
                     if (value != null)
                     {
@@ -452,10 +452,17 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Undo all entity actions currently queued
         /// </summary>
-        private void UndoAllEntityActions()
+        private void UndoAllEntityActions(bool preventRaiseReadOnly = false)
         {
+            bool wasReadOnly = this.IsReadOnly;
+
             while (this._customMethodInvocations != null && this._customMethodInvocations.Count > 0)
                 this.UndoAction(this._customMethodInvocations[0]);
+
+            if (IsReadOnly != wasReadOnly && !preventRaiseReadOnly)
+            {
+                RaisePropertyChanged("IsReadOnly");
+            }
         }
 
         /// <summary>
@@ -576,6 +583,17 @@ namespace OpenRiaServices.DomainServices.Client
                     if (wasReadOnly != this.IsReadOnly)
                     {
                         this.RaisePropertyChanged("IsReadOnly");
+                    }
+
+                    foreach (var entityAction in MetaType.GetEntityActions())
+                    {
+                        // Check if CanInvoke might have changed
+                        if (this.EntityState != EntityState.Deleted 
+                            && this.EntitySet != null)
+                        {
+                            if (entityAction.AllowMultipleInvocations || !this.IsActionInvoked(entityAction.Name))
+                                RaisePropertyChanged(entityAction.CanInvokePropertyName);
+                        }
                     }
                 }
             }
@@ -1537,8 +1555,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(actionName))
             {
-                throw new ArgumentNullException("actionName", 
-                    string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "actionName"));
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "actionName"));
             }
 
             // verify that the action can currently be invoked
@@ -1614,7 +1631,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="System.ArgumentNullException">action</exception>
         /// <exception cref="System.InvalidOperationException">A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted</exception>
         /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions"/> </exception>
-        protected void UndoAction(EntityAction action)
+        internal protected void UndoAction(EntityAction action)
         {
             if (action == null)
                 throw new ArgumentNullException("action");

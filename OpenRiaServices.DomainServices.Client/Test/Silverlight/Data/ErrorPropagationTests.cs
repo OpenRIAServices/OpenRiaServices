@@ -245,7 +245,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(1, errors.Count());
 
                 // Verify that failed submission does not clear out the last invocation
-                Assert.IsFalse(zip.CanReassignZipCode);
+                Assert.IsFalse(zip.CanThrowException);
+                Assert.IsTrue(zip.EntityActions.Any(a => a.Name == "ThrowException"));
 
                 // Add a custom validation error to ensure it gets cleared
                 zip.ValidationErrors.Add(new ValidationResult("Temporary Error"));

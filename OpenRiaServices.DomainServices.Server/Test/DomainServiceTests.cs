@@ -858,8 +858,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             ChangeSetEntry customUpdateOperation = new ChangeSetEntry();
             customUpdateOperation.Entity = invalidCity;
-            customUpdateOperation.EntityActions = new Dictionary<string, object[]>();
-            customUpdateOperation.EntityActions.Add("CityCustomMethod", new object[0]);
+            customUpdateOperation.EntityActions = new EntityActionCollection { { "CityCustomMethod", new object[0] } };
 
             // pass an update and a custom update, and make sure the custom update is processed.
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { updateOperation, customUpdateOperation }, domainServiceDescription, null);
@@ -887,8 +886,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation1.Entity = entity1;
             customUpdateOperation1.Operation = DomainOperation.Insert;
             customUpdateOperation1.DomainOperationEntry = insert;
-            customUpdateOperation1.EntityActions = new Dictionary<string, object[]>();
-            customUpdateOperation1.EntityActions.Add("UpdateEntityWithInt", new object[] { 1 });
+            customUpdateOperation1.EntityActions = new EntityActionCollection { {"UpdateEntityWithInt", new object[] { 1 } }};
 
             // Custom update arrives with an updated entity.
             // This ensures complex type deep validation is respected.
@@ -896,8 +894,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation2.Entity = entity2;
             customUpdateOperation2.Operation = DomainOperation.Update;
             customUpdateOperation2.DomainOperationEntry = update;
-            customUpdateOperation2.EntityActions = new Dictionary<string, object[]>();
-            customUpdateOperation2.EntityActions.Add("UpdateEntityWithObject", new object[] { new DomainServiceInsertCustom_Validated_Object() });
+            customUpdateOperation2.EntityActions = new EntityActionCollection { { "UpdateEntityWithObject", new object[] { new DomainServiceInsertCustom_Validated_Object() } } };
 
             // Custom update arrives with an entity with no other changes than a custom update.
             // This ensures complex type collection deep validation is respected.
@@ -905,10 +902,10 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation3.Entity = entity2;
             customUpdateOperation3.Operation = DomainOperation.None;
             customUpdateOperation3.DomainOperationEntry = null;
-            customUpdateOperation3.EntityActions = new Dictionary<string, object[]>();
+            
             List<DomainServiceInsertCustom_Validated_Object> param = new List<DomainServiceInsertCustom_Validated_Object>();
             param.Add(new DomainServiceInsertCustom_Validated_Object());
-            customUpdateOperation3.EntityActions.Add("UpdateEntityWithCollection", new object[] { param });
+            customUpdateOperation3.EntityActions = new EntityActionCollection { { "UpdateEntityWithCollection", new object[] { param } } };
 
             bool success = DomainService.ValidateOperations(
                 new ChangeSetEntry[] { customUpdateOperation1, customUpdateOperation2, customUpdateOperation3 },
@@ -1074,7 +1071,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ChangeSetEntry operation = new ChangeSetEntry();
             operation.DomainOperationEntry = _domainServiceDescription.GetCustomMethod(typeof(Zip), "ReassignZipCode");
             operation.Operation = DomainOperation.Update;
-            operation.EntityActions = new Dictionary<string, object[]> { { "ReassignZipCode", new object[] { 10, false } } };
+            operation.EntityActions = new EntityActionCollection { { "ReassignZipCode", new object[] { 10, false } } };
             operation.Entity = invalidZip;
 
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
@@ -1099,7 +1096,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ChangeSetEntry zipInvokeOp = new ChangeSetEntry();
             zipInvokeOp.DomainOperationEntry = _domainServiceDescription.GetCustomMethod(typeof(Zip), "ReassignZipCode");
             zipInvokeOp.Operation = DomainOperation.Update;
-            zipInvokeOp.EntityActions = new Dictionary<string, object[]> { { "ReassignZipCode", new object[] { -10000, false } } };
+            zipInvokeOp.EntityActions = new EntityActionCollection { { "ReassignZipCode", new object[] { -10000, false } } };
             zipInvokeOp.Entity = invalidZip;
             operations.Add(zipInvokeOp);
 
@@ -1128,7 +1125,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // invoke domain method with an invalid entity of a different type
             ChangeSetEntry cityInvokeOp = new ChangeSetEntry();
             cityInvokeOp.DomainOperationEntry = _domainServiceDescription.GetCustomMethod(typeof(City), "AssignCityZone");
-            cityInvokeOp.EntityActions = new Dictionary<string, object[]> { { "AssignCityZone", new object[] { "SomeZone" } } };
+            cityInvokeOp.EntityActions = new EntityActionCollection { { "AssignCityZone", new object[] { "SomeZone" } } };
             cityInvokeOp.Operation = DomainOperation.Update;
             cityInvokeOp.Entity = invalidCityForInvoke;
             operations.Add(cityInvokeOp);
@@ -1296,7 +1293,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             {
                 Entity = pmEntity1,
                 Operation = DomainOperation.Update,
-                EntityActions = new Dictionary<string, object[]> { { "CustomCustomerUpdate", new object[] { false } } }
+                EntityActions = new EntityActionCollection { { "CustomCustomerUpdate", new object[] { false } } }
             };
             var changeSet = new ChangeSet(new[] { customOp });
             pmEntity1.Message = "ReplaceInTransform";
@@ -1337,7 +1334,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             {
                 Entity = pmEntity1,
                 Operation = DomainOperation.Update,
-                EntityActions = new Dictionary<string, object[]> { { "CustomCustomerUpdate", new object[] { true } } }
+                EntityActions = new EntityActionCollection { { "CustomCustomerUpdate", new object[] { true } } }
             };
             var changeSet = new ChangeSet(new[] { customOp });
             pmEntity1.Message = "UseEntityNotInChangeSet";

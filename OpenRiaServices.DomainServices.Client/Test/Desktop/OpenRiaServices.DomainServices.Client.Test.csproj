@@ -306,6 +306,7 @@
     </Compile>
     <Compile Include="CodegenWorkaround.cs" />
     <Compile Include="Data\QuerySerializationTests.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>

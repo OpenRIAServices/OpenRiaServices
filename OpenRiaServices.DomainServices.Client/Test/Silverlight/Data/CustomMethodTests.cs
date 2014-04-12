@@ -291,7 +291,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // delete the entity - expect the actions to be cleared
             container.GetEntitySet<City>().Remove(city);
             Assert.AreEqual(0, city.EntityActions.Count());
-            Assert.AreEqual(null, city.EntityActions.Single());
             Assert.IsFalse(city.CanInvokeAction(_assignCityZone.Name));
         }
 
@@ -324,7 +323,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
                 _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
-            }, Resource.Entity_MultipleCustomMethodInvocations);
+            }, "Method can only be invoked once.");
             Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].EntityActions.Single().Name);
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
         }
@@ -440,7 +439,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ExceptionHelper.ExpectArgumentException(delegate
             {
                 _cities[0].InvokeAction("");
-            }, Resource.DomainClient_InvocationNameCannotBeNullOrEmpty);
+            }, string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty,"actionName"));
         }
 
         [TestMethod]
@@ -460,7 +459,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // invoke domain methods on a few entities
             container.LoadEntities(_cities);
-            _cities[1].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters);
+            _cities[1].AssignCityZone(_assignCityZone.Parameters.First().ToString());
 
             // submit changeset with hand-crafted entities: valid invocation and null invocation
             modifiedEntities.Add(_cities[0]);
@@ -770,7 +769,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("CanAutoAssignCityZone"));
+                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
+                Assert.IsFalse(propChanged.Contains("CanAutoAssignCityZone"));
                 propChanged.Clear();
 
                 Assert.IsTrue(lastRootCity.CanAutoAssignCityZone);
@@ -793,13 +793,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(2, so.ChangeSet.ModifiedEntities.Count);
 
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(6, propChanged.Count);
-                Assert.IsTrue(propChanged.Contains("ZoneName"));
-                Assert.IsTrue(propChanged.Contains("ZoneID"));
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
-                Assert.IsTrue(propChanged.Contains("CanAutoAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZoneIfAuthorized"));
+                Assert.AreEqual(8, propChanged.Count);
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneName"));
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneID"));
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "CanAssignCityZone"));
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "IsAssignCityZoneInvoked"));
+                Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAutoAssignCityZone"));
+                Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZoneIfAuthorized"));
 
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server
                 Assert.AreEqual(15, citiesProvider.Cities.Single<City>(c => (c.ZoneName == "Zone15")).ZoneID);
@@ -867,7 +867,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     }
                 };
 
+                Assert.IsTrue(newCity.CanAssignCityZoneIfAuthorized);
+                Assert.IsTrue(newCity.CanAutoAssignCityZone);
+
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
+
+                Assert.IsFalse(newCity.CanAssignCityZoneIfAuthorized);
+                Assert.IsFalse(newCity.CanAutoAssignCityZone);
 
                 Assert.AreEqual(3, so.ChangeSet.ModifiedEntities.Count);
                 Assert.AreEqual(1, so.ChangeSet.AddedEntities.Count);
@@ -877,15 +883,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error, string.Format("SubmitOperation.Error should be null.\r\nMessage: {0}\r\nStack Trace:\r\n{1}", so.Error != null ? so.Error.Message : string.Empty, so.Error != null ? so.Error.StackTrace : string.Empty));
+                Assert.IsTrue(newCity.CanAssignCityZoneIfAuthorized);
+                Assert.IsTrue(newCity.CanAutoAssignCityZone);
+                Assert.IsTrue(newCity.CanAssignCityZone);
 
                 // verify we got property change notifications for the new city entity (guard property should be reverted once SubmitChanges is called)
-                Assert.AreEqual(7, propChanged_addedCity.Count);
-                Assert.IsTrue(propChanged_addedCity.Contains("ZoneName"));
-                Assert.IsTrue(propChanged_addedCity.Contains("ZoneID"));
-                Assert.IsTrue(propChanged_addedCity.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged_addedCity.Contains("CanAssignCityZoneIfAuthorized"));
-                Assert.IsTrue(propChanged_addedCity.Contains("IsAssignCityZoneInvoked"));
-                Assert.IsTrue(propChanged_addedCity.Contains("CanAutoAssignCityZone"));
+                Assert.AreEqual(9, propChanged_addedCity.Count);
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneName"));
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneID"));
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "CanAssignCityZone"));
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "IsAssignCityZoneInvoked"));
+                // The other custom method invocations should have changed from true -> false during submit
+                // and from false -> true after submit
+                Assert.AreEqual(2, propChanged_addedCity.Count(prop => prop == "CanAssignCityZoneIfAuthorized"));
+                Assert.AreEqual(2, propChanged_addedCity.Count(prop => prop == "CanAutoAssignCityZone"));
+
 
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server
                 Assert.AreEqual(1, citiesProvider.Cities.Single<City>(c => (c.ZoneName == "Zone1" && c.CountyName == "King")).ZoneID);
