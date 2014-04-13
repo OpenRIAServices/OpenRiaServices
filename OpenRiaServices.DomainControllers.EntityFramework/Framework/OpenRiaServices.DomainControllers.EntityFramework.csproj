@@ -104,9 +104,9 @@
       <Link>Common\Error.cs</Link>
     </Compile>
     <Compile Include="DbContextExtensions.cs" />
-    <Compile Include="DbDataController.cs" />
+    <Compile Include="DbDomainController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="LinqToEntitiesDataController.cs" />
+    <Compile Include="LinqToEntitiesDomainController.cs" />
     <Compile Include="Metadata\AssociationInfo.cs" />
     <Compile Include="Metadata\DbMetadataProviderAttribute.cs" />
     <Compile Include="Metadata\LinqToEntitiesMetadataProvider.cs" />
