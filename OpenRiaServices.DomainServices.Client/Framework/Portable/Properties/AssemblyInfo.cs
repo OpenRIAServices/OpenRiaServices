@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test.Vb")]
-[assembly: InternalsVisibleTo("System.Windows.Controls.DomainServices.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.Controls.DomainServices.Test")]
 
 // Version information for an assembly consists of the following four values:
 //

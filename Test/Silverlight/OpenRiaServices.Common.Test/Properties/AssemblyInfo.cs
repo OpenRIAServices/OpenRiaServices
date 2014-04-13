@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("a64ee4bb-9922-4605-8f32-ae8c100ec4d5")]
 
-[assembly: InternalsVisibleTo("System.Windows.Controls.DomainServices.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.Controls.DomainServices.Test")]
 
 // Version information for an assembly consists of the following four values:
 //
