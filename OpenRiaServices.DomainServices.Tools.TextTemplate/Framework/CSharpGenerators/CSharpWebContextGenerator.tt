@@ -1,4 +1,4 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.WebContextGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.WebContextGenerator" linePragmas="false" #>
 
 <#@ import namespace="OpenRiaServices.DomainServices" #>
 <#@ import namespace="OpenRiaServices.DomainServices.Server" #>

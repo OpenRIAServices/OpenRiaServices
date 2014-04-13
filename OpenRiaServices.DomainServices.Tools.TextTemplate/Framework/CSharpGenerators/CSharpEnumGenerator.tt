@@ -1,4 +1,4 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EnumGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EnumGenerator" linePragmas="false" #>
 
 <#@ import namespace="System.Runtime.Serialization" #>
 <#@ import namespace="System.Reflection" #>

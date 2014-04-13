@@ -14,28 +14,18 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
     /// <summary>
     /// Class to produce the template output
     /// </summary>
-    
-    #line 1 "D:\Users\Daniel\Documents\GitHub\openriaservices\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpClientCodeGenerator.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class CSharpClientCodeGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.ClientCodeGenerator
     {
-#line hidden
         /// <summary>
         /// Create the template output
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\r\n");
-            
-            #line 3 "D:\Users\Daniel\Documents\GitHub\openriaservices\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\CSharpGenerators\CSharpClientCodeGenerator.tt"
+            this.Write("\n\n");
  this.GenerateProxyClass(); 
-            
-            #line default
-            #line hidden
+            this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
     }
-    
-    #line default
-    #line hidden
 }

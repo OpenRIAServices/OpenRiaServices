@@ -1,4 +1,4 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.ComplexObjectGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.ComplexObjectGenerator" linePragmas="false" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>

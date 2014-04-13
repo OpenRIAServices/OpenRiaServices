@@ -1,1 +1,1 @@
-﻿<#@ template language="C#" #>
+﻿<#@ template language="C#" linePragmas="false" #>

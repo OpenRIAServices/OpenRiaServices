@@ -1,4 +1,4 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EntityGenerator" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EntityGenerator" linePragmas="false" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>
