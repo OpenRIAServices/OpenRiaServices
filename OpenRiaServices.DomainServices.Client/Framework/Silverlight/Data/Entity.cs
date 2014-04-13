@@ -856,6 +856,19 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
+        /// Updates the original values with those of the specified
+        /// entity. This method is used during refresh loading scenarios
+        /// and conflict resolution to update original with the latest
+        /// store values.
+        /// </summary>
+        /// <param name="entityStateToApply">IDictionary with the new original state.</param>
+        internal void UpdateOriginalValues(IDictionary<string, object> entityStateToApply)
+        {
+            Debug.Assert(this._originalValues != null, "Should only call UpdateOriginalValues if the entity has original values.");
+            this._originalValues = new Dictionary<string, object>(entityStateToApply);
+        }
+
+        /// <summary>
         /// Returns the <see cref="IEntityRef"/> corresponding to the specified
         /// EntityRef association member name.
         /// </summary>
@@ -881,7 +894,7 @@ namespace OpenRiaServices.DomainServices.Client
             this.ApplyState(entityStateToApply, LoadBehavior.RefreshCurrent);
         }
 
-        private void ApplyState(IDictionary<string, object> entityStateToApply, LoadBehavior loadBehavior)
+        internal void ApplyState(IDictionary<string, object> entityStateToApply, LoadBehavior loadBehavior)
         {
             if (loadBehavior == LoadBehavior.KeepCurrent)
             {
@@ -931,6 +944,25 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="loadBehavior">The load behavior to use</param>
         internal void Merge(Entity otherEntity, LoadBehavior loadBehavior)
         {
+            //This is redundant with main merge, but it prevents doing undeeded ExtractStates
+            if (loadBehavior == LoadBehavior.KeepCurrent)
+            {
+                return;
+            }
+            
+            IDictionary<string, object> otherState = otherEntity.ExtractState();
+            Merge(otherState, loadBehavior);
+        }
+
+        /// <summary>
+        /// Merge differs from ApplyState in that its the merge of an entire
+        /// entity as opposed to an arbitrary set (possibly subset) of values.
+        /// Change tracking is suspended for the entity during the merge.
+        /// </summary>
+        /// <param name="otherEntity">The entity to merge into the current instance</param>
+        /// <param name="loadBehavior">The load behavior to use</param>
+        internal void Merge(IDictionary<string, object> otherState, LoadBehavior loadBehavior)
+        {
             if (loadBehavior == LoadBehavior.KeepCurrent)
             {
                 return;
@@ -939,8 +971,7 @@ namespace OpenRiaServices.DomainServices.Client
             // set this flag so change tracking and edit enforcement
             // is suspended during the merge
             this.IsMergingState = true;
-
-            IDictionary<string, object> otherState = otherEntity.ExtractState();
+            
             this.ApplyState(otherState, loadBehavior);
 
             // after the merge update our original state based on the
@@ -1874,5 +1905,47 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         }
         #endregion
+    }
+}
+
+namespace OpenRiaServices.DomainServices.Client.EntityExtensions
+{
+    public static class EntityExtensions
+    {
+        public static IDictionary<string, object> ExtractState(this Entity targetEntity)
+        {
+            return targetEntity.ExtractState();
+        }
+        public static void ExtractState(this Entity targetEntity, IDictionary<string, object> entityStateToApply)
+        {
+            targetEntity.ApplyState(entityStateToApply);
+        }
+        public static void ExtractState(this Entity targetEntity, IDictionary<string, object> entityStateToApply, LoadBehavior loadBehavior)
+        {
+            targetEntity.ApplyState(entityStateToApply, loadBehavior);
+        }
+
+        public static void UpdateOriginalValues(this Entity targetEntity, Entity entity)
+        {
+            targetEntity.UpdateOriginalValues(entity);
+        }
+        public static void UpdateOriginalValues(this Entity targetEntity, IDictionary<string, object> entityStateToApply)
+        {
+            targetEntity.UpdateOriginalValues(entityStateToApply);
+        }
+        public static void Merge(this Entity targetEntity, Entity otherEntity, LoadBehavior loadBehavior)
+        {
+            targetEntity.Merge(otherEntity, loadBehavior);
+        }
+
+        public static void Merge(this Entity targetEntity, IDictionary<string,object> otherState, LoadBehavior loadBehavior)
+        {
+            targetEntity.Merge(otherState, loadBehavior);
+        }
+
+        public static EntitySet<TEntity> GetEntitySet<TEntity>(this TEntity entity) where TEntity : Entity
+        {
+            return entity.EntitySet as EntitySet<TEntity>;
+        }
     }
 }
