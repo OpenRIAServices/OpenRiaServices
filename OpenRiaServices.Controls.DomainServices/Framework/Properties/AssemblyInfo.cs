@@ -27,8 +27,8 @@ using System.Windows.Markup;
 
 [assembly: CLSCompliant(true)]
 
-[assembly: XmlnsPrefix("clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.DomainServices", "riaControls")]
-[assembly: XmlnsDefinitionAttribute("clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.DomainServices", "System.Windows.Controls")]
+[assembly: XmlnsPrefix("clr-namespace:OpenRiaServices.Windows.Controls;assembly=OpenRiaServices.Controls.DomainServices", "riaControls")]
+[assembly: XmlnsDefinitionAttribute("clr-namespace:OpenRiaServices.Windows.Controls;assembly=OpenRiaServices.Controls.DomainServices", "OpenRiaServices.Controls.DomainServices")]
 
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: InternalsVisibleTo("OpenRiaServices.Controls.DomainServices.Test")]

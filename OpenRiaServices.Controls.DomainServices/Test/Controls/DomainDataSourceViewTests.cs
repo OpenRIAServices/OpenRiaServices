@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Globalization;
 using OpenRiaServices.DomainServices.Client;
 using OpenRiaServices.DomainServices.Client.Test;
-using System.Windows.Controls.Test;
 using Cities;
 using DataTests.Northwind.LTS;
 using Microsoft.Silverlight.Testing;

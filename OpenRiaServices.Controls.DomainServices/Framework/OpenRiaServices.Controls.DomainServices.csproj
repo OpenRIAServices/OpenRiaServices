@@ -192,13 +192,13 @@
     <EmbeddedResource Include="OpenRiaServices.Windows.Controls\EntityCollectionViewResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EntityCollectionViewResources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.Windows.Controls</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Controls</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OpenRiaServices.Windows.Controls\DomainDataSourceResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DomainDataSourceResources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>System.Windows.Controls</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Controls</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

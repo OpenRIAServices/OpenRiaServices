@@ -1,6 +1,6 @@
 ﻿using OpenRiaServices.DomainServices.Client;
 
-namespace System.Windows.Controls.Test
+namespace OpenRiaServices.Controls.DomainServices.Test
 {
     public class MockEntityContainer : EntityContainer
     {
