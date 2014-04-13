@@ -1402,6 +1402,10 @@ namespace OpenRiaServices.DomainServices.Tools
             {
                 this.baseLogger.LogError(message);
             }
+            public void LogException(Exception ex)
+            {
+                this.baseLogger.LogException(ex);
+            }
 
             public void LogWarning(string message)
             {

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace OpenRiaServices.DomainServices.Tools
 {
     /// <summary>
@@ -31,5 +33,10 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         /// <param name="message">Message to log</param>
         void LogMessage(string message);
+        /// <summary>
+        /// Logs the given exception as error
+        /// </summary>
+        /// <param name="ex">Exception to log</param>
+        void LogException(Exception ex);
     }
 }

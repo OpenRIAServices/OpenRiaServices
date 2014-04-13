@@ -273,6 +273,18 @@ namespace OpenRiaServices.DomainServices.Tools
         }
 
         /// <summary>
+        /// Logs the given exception to the logger associated with this task
+        /// </summary>
+        /// <param name="ex">MessageException to log</param>
+        public void LogException(Exception ex)
+        {
+            this.HasLoggedErrors = true;
+            this.Log.LogError("Exception :" + ex.Message);
+            if (ex.InnerException != null)
+                LogException(ex.InnerException);
+        }
+
+        /// <summary>
         /// Logs the given warning message to the logger associated with this task
         /// </summary>
         /// <param name="message">Message to log</param>

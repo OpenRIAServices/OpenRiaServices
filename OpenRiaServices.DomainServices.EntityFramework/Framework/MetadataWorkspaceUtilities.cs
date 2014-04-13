@@ -56,7 +56,7 @@ namespace System.Data.Mapping
                         throw;
                     }
                     
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.EntityFramework.DbResource.MetadataWorkspaceNotFound, contextType.FullName), efException);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.EntityFramework.DbResource.MetadataWorkspaceNotFound + ProcessException(efException), contextType.FullName), efException);
                 }
             }
 #endif
@@ -70,6 +70,13 @@ namespace System.Data.Mapping
             }
         }
 
+        static string ProcessException(Exception ex)
+        {
+            if (ex == null)
+                return string.Empty;
+            else
+                return " Exception: " + ex.Message + ProcessException(ex.InnerException);
+        }
         /// <summary>
         /// Creates the MetadataWorkspace for the given context type and base context type.
         /// </summary>

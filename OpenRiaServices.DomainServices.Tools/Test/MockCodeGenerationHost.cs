@@ -49,6 +49,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             this.LoggingService.LogError(message);
         }
 
+        public void LogException(Exception ex)
+        {
+            this.LoggingService.LogException(ex);
+        }
+
         public void LogWarning(string message)
         {
             this.LoggingService.LogWarning(message);

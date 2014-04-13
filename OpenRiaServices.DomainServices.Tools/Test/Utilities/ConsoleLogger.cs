@@ -41,6 +41,16 @@ namespace OpenRiaServices.DomainServices.Server.Test.Utilities
         }
 
         /// <summary>
+        /// Log exception message to Console
+        /// </summary>
+        /// <param name="message">message to be logged</param>
+        public void LogException(Exception ex)
+        {
+            Console.WriteLine(string.Format(CultureInfo.CurrentCulture, "Error: {0}", ex.Message));
+            _errorMsgs.Add(ex.Message);
+        }
+
+        /// <summary>
         /// Log warning message to Console
         /// </summary>
         /// <param name="message">message to be logged</param>

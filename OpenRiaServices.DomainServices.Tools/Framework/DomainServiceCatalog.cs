@@ -141,6 +141,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 // Translate these exceptions into clean error logs
                 // so that they appear in the Error window in VS
                 this.LogError(ae.Message);
+                
             }
             catch (InvalidOperationException ioe)
             {
@@ -157,6 +158,18 @@ namespace OpenRiaServices.DomainServices.Tools
             if (this._logger != null)
             {
                 this._logger.LogError(message);
+            }
+        }
+
+        /// <summary>
+        /// Log an error exception
+        /// </summary>
+        /// <param name="ex">Exception to be logged</param>
+        private void LogException(Exception ex)
+        {
+            if (this._logger != null)
+            {
+                this._logger.LogException(ex);
             }
         }
 

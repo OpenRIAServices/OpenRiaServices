@@ -215,6 +215,14 @@ namespace OpenRiaServices.DomainServices.Tools
                 this.Log.LogError(message);
             }
 
+            public void LogException(Exception ex)
+            {
+                this._hasLoggedErrors = true;
+                this.Log.LogError("Exception: " + ex.Message);
+                if (ex.InnerException != null)
+                    LogException(ex.InnerException);
+            }
+
             public void LogWarning(string message)
             {
                 this.Log.LogWarning(message);

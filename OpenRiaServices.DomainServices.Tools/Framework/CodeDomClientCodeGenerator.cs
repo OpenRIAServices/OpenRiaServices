@@ -799,6 +799,11 @@ namespace OpenRiaServices.DomainServices.Tools
             this.CodeGenerationHost.LogError(message);
         }
 
+        public void LogException(Exception ex)
+        {
+            this.CodeGenerationHost.LogException(ex);
+        }
+
         public void LogWarning(string message)
         {
             this.CodeGenerationHost.LogWarning(message);
