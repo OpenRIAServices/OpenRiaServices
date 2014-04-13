@@ -107,7 +107,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     buildPropertyStorage.SetPropertyValue("LinkedOpenRiaServerProject", null,
                         (uint)_PersistStorageType.PST_PROJECT_FILE,
                         projectReference);
-
+                    buildPropertyStorage.SetPropertyValue("DisableFastUpToDateCheck", null,
+                        (uint)_PersistStorageType.PST_PROJECT_FILE,
+                        "true");
 
                     // Add this client to the list of clients in the server project
 
@@ -184,7 +186,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 
         public static string MakeProjectPathRelative(string fullPath, string basePath)
         {
-            string localBasePath = basePath;
+            string localBasePath = basePath.Remove(basePath.LastIndexOf(Path.DirectorySeparatorChar.ToString()) + 1);   //This removes project file;
             string localFullPath = fullPath;
             string relativePath = null;
             if (!localBasePath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))

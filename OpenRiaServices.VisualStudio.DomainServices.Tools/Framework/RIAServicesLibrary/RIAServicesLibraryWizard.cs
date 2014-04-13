@@ -120,7 +120,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             buildPropertyStorage.SetPropertyValue("LinkedOpenRiaServerProject", null,
                 (uint)_PersistStorageType.PST_PROJECT_FILE,
                 Path.Combine("..", Path.Combine(netClassLibProjectName, netClassLibProjectName + extension)));
-
+            buildPropertyStorage.SetPropertyValue("DisableFastUpToDateCheck", null,
+                        (uint)_PersistStorageType.PST_PROJECT_FILE,
+                        "true");
 
         }
 
