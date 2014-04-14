@@ -274,6 +274,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+	  <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
