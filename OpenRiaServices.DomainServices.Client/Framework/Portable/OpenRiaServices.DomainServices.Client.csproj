@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
+  </PropertyGroup>
+  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
@@ -14,23 +19,23 @@
     <TargetFrameworkProfile>Profile47</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputPath>..\..\..\bin\$(Configuration)\Portable\</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\Portable\OpenRiaServices.DomainServices.Client.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -55,6 +60,9 @@
     <Compile Include="Data\ComplexObject.cs" />
     <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
+    <Compile Include="Data\HasSideEffectsAttribute.cs" />
+    <Compile Include="Data\InvokeResult.cs" />
+    <Compile Include="Data\LoadResult.cs" />
     <Compile Include="Data\ObjectStateUtility.cs" />
     <Compile Include="Data\EntityVisitor.cs" />
     <Compile Include="Data\InvokeArgs.cs" />
@@ -65,6 +73,7 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="Data\RoundtripOriginalAttribute.cs" />
+    <Compile Include="Data\SubmitResult.cs" />
     <Compile Include="Data\ValidationResultCollection.cs" />
     <Compile Include="Data\ValidationResultInfo.cs" />
     <Compile Include="Data\ValidationUtilities.cs" />

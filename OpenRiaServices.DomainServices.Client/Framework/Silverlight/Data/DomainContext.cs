@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,6 +49,43 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._domainClient = domainClient;
             this._syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+        }
+
+        /// <summary>
+        /// Creates a WebDomainClient for the specified service contract and uri
+        /// </summary>
+        /// <param name="serviceContract">The service contract.</param>
+        /// <param name="serviceUri">The service URI.</param>
+        /// <param name="usesHttps"><c>true</c> to use https instead of http</param>
+        /// <remarks>
+        ///  This implementation should be replaced with a call to an IDomainClientFactory interface so 
+        ///  the logic can be replaced. If no specific IDomainClientFactory is choosen by user then we can 
+        ///  fall back to a "DefaultDomainClientFactory" with the same behaviour as in this function.
+        /// </remarks>
+        /// <returns>A domain client which can be used to access the service which the serviceContract reference</returns>
+        /// <exception cref="System.ArgumentNullException">serviceContract or serviceUri is null </exception>
+        /// <exception cref="System.ArgumentException">service contract must be an interface;serviceContract</exception>
+        /// <exception cref="System.InvalidOperationException">Faild to construct generic WebDomainClient</exception>
+        protected static DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool usesHttps)
+        {
+            if(serviceContract == null)
+                throw new ArgumentNullException("serviceContract");
+            if(serviceUri == null)
+                throw new ArgumentNullException("serviceUri");
+            if (!serviceContract.IsInterface)
+                throw new ArgumentException(Resource.DomainClientFactory_ServiceContractMustBeAnInterface, "serviceContract");
+
+            var webDomainClientName = "OpenRiaServices.DomainServices.Client.WebDomainClient`1, "
+                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+            var webDomainClientType = Type.GetType(webDomainClientName);
+            if (webDomainClientType == null)
+                throw new InvalidOperationException(Resource.DomainClientFactory_MissingClientWebReference);
+
+            var domainClientType = webDomainClientType.MakeGenericType(serviceContract);
+            if (domainClientType == null)
+                throw new InvalidOperationException(Resource.DomainClientFactory_FaildToGetGenericDomainClient);
+
+            return (DomainClient)Activator.CreateInstance(domainClientType, serviceUri, usesHttps);
         }
 
         /// <summary>

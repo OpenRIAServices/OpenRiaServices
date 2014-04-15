@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Tools
             Debug.Assert(parameters != null, "parameters cannot be null");
             Debug.Assert(loggingService != null, "loggingService cannot be null");
 
-            SilverlightAppDomainUtilities.ConfigureAppDomain(options.ClientFrameworkPath);
+            AppDomainUtilities.ConfigureAppDomain(options);
 
             using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
             {

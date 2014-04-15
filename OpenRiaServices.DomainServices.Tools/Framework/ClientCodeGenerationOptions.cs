@@ -78,6 +78,11 @@ namespace OpenRiaServices.DomainServices.Tools
         public bool IsApplicationContextGenerationEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value the target platform of the client.
+        /// </summary>
+        public TargetPlatform ClientProjectTargetPlatform { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether fully qualified type names
         /// should be used during code generation
         /// </summary>

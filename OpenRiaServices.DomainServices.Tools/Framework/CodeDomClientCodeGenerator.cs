@@ -185,6 +185,17 @@ namespace OpenRiaServices.DomainServices.Tools
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether or not this instance is generating Visual basic code.
+        /// </summary>
+        internal bool IsVB
+        {
+            get
+            {
+                return this.Provider is VBCodeProvider;
+            }
+        }
+
         internal string ClientProjectName
         {
             get

@@ -231,9 +231,10 @@
     <Compile Include="SharedTypes\SharedAssemblies.cs" />
     <Compile Include="SharedTypes\SharedSourceFiles.cs" />
     <Compile Include="SharedTypes\VirtualType.cs" />
-    <Compile Include="SilverlightAppDomainUtilities.cs" />
+    <Compile Include="AppDomainUtilities.cs" />
     <Compile Include="SourceInfo\SourceInfo.cs" />
     <Compile Include="SourceInfo\SourceInfoSourceFileProviderFactory.cs" />
+    <Compile Include="TargetPlatform.cs" />
     <Compile Include="TypeConstants.cs" />
     <Compile Include="MetadataPipeline\DomainIdentifierAttributeBuilder.cs" />
     <Compile Include="MetadataPipeline\CustomAttributeGenerator.cs" />

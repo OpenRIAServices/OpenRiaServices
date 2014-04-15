@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.DomainServices;
@@ -16,7 +17,7 @@ namespace OpenRiaServices.DomainServices.Tools
     /// versioning to allow referenced Silverlight assemblies to be loaded
     /// and examined properly.
     /// </remarks>
-    internal static class SilverlightAppDomainUtilities
+    internal static class AppDomainUtilities
     {
         /// <summary>
         /// The key to use for storing the framework manifest as data on
@@ -25,16 +26,34 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         private const string FrameworkManifestKey = "FrameworkManifest";
 
+        private const string SilverlightManifestFilename = "slr.dll.managed_manifest";
+
         /// <summary>
         /// Creates an <see cref="AppDomain"/> configured for Silverlight code generation.
         /// </summary>
-        /// <param name="silverlightFrameworkDirectory">The directory containing the Silverlight framework manifest.</param>
-        internal static void ConfigureAppDomain(string silverlightFrameworkDirectory)
+        /// <param name="options">The code generation options.</param>
+        internal static void ConfigureAppDomain(ClientCodeGenerationOptions options)
         {
-            FrameworkManifest frameworkManifest = SilverlightAppDomainUtilities.GetFrameworkManifest(silverlightFrameworkDirectory);
+            FrameworkManifest frameworkManifest;
+            if (options.ClientProjectTargetPlatform == TargetPlatform.Silverlight)
+                frameworkManifest = GetSilverlightFrameworkManifest(options.ClientFrameworkPath);
+            else
+                frameworkManifest = GetFrameworkManifest(options.ClientFrameworkPath);
 
-            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += SilverlightAppDomainUtilities.ResolveFrameworkAssemblyVersioning;
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainUtilities.ResolveFrameworkAssemblyVersioning;
             AppDomain.CurrentDomain.SetData(FrameworkManifestKey, frameworkManifest);
+        }
+
+        /// <summary>
+        /// Determine if a specific framework directory is a silverlight framework directory by looking for 
+        /// the "slr.dll.managed_manifest" which is only present for Silverlight.
+        /// </summary>
+        /// <param name="frameworkDirectory">The directory possibly containing the Silverlight framework manifest.</param>
+        /// <returns><C>true</C> if the directory is a silverlight framework directory; otherwise <c>false</c></returns>
+        private static bool IsSilverlightDirectory(string frameworkDirectory)
+        {
+            return File.Exists(Path.Combine(frameworkDirectory, SilverlightManifestFilename));
+
         }
 
         /// <summary>
@@ -43,12 +62,12 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         /// <param name="silverlightFrameworkDirectory">The directory containing the Silverlight framework manifest.</param>
         /// <returns>The list of assemblies that are part of the Silverlight runtime.</returns>
-        private static FrameworkManifest GetFrameworkManifest(string silverlightFrameworkDirectory)
+        private static FrameworkManifest GetSilverlightFrameworkManifest(string silverlightFrameworkDirectory)
         {
             FrameworkManifest manifest = new FrameworkManifest();
             List<FrameworkManifestEntry> assemblies = new List<FrameworkManifestEntry>();
 
-            XPathDocument manifestDocument = new XPathDocument(silverlightFrameworkDirectory + "slr.dll.managed_manifest");
+            XPathDocument manifestDocument = new XPathDocument(silverlightFrameworkDirectory + SilverlightManifestFilename);
             XPathNavigator navigator = manifestDocument.CreateNavigator();
             XPathNodeIterator iterator = navigator.Select("/manifest/*[name and publickeytoken and version]");
 
@@ -88,6 +107,38 @@ namespace OpenRiaServices.DomainServices.Tools
         }
 
         /// <summary>
+        /// Gets the list of Portable assemblies found for the specified directory
+        /// </summary>
+        /// <param name="frameworkDirectory">The directory containing the Silverlight framework manifest.</param>
+        /// <returns>The list of assemblies that are part of the Silverlight runtime.</returns>
+        private static FrameworkManifest GetFrameworkManifest(string frameworkDirectory)
+        {
+            var assemblies = from dll in Directory.EnumerateFiles(frameworkDirectory, "*.dll")
+                             let assemblyName = TrGetAssemblyName(dll)
+                             where assemblyName != null
+                             select new FrameworkManifestEntry()
+            {
+                Name = assemblyName.Name,
+                Version = assemblyName.Version, 
+                PublicKeyTokenBytes = assemblyName.GetPublicKeyToken()
+            };
+
+            return new FrameworkManifest() { Assemblies = assemblies.ToArray() };
+        }
+
+        private static AssemblyName TrGetAssemblyName(string dll)
+        {
+            try
+            {
+                return AssemblyName.GetAssemblyName(dll);
+            }
+            catch (BadImageFormatException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// An event handler for resolving Silverlight framework assembly versioning.
         /// </summary>
         /// <remarks>
@@ -99,7 +150,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>The <see cref="Assembly"/> from the targeted version of Silverlight, or <c>null</c>.</returns>
         private static Assembly ResolveFrameworkAssemblyVersioning(object sender, ResolveEventArgs args)
         {
-            FrameworkManifest frameworkManifest = (FrameworkManifest)AppDomain.CurrentDomain.GetData(SilverlightAppDomainUtilities.FrameworkManifestKey);
+            FrameworkManifest frameworkManifest = (FrameworkManifest)AppDomain.CurrentDomain.GetData(AppDomainUtilities.FrameworkManifestKey);
             System.Diagnostics.Debug.Assert(frameworkManifest != null, "The FrameworkManifest must have been set on the AppDomain");
 
             AssemblyName requestedAssembly = new AssemblyName(args.Name);

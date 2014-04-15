@@ -58,23 +58,14 @@ public sealed partial class <#= this.DomainContextTypeName #> : <#= baseType #>
 		string relativeServiceUri = string.Format(CultureInfo.InvariantCulture, "{0}.svc", this.DomainServiceDescription.DomainServiceType.FullName.Replace('.', '-'));
 #>
 public <#= this.DomainContextTypeName #>() : 
-	this(new WebDomainClient<<#= this.ContractInterfaceName #>>(new Uri("<#= relativeServiceUri #>", UriKind.Relative)<#+ 
-	if(requiresSecureEndpoint)
-	{
-		#>,true<#+
-	}
-#>))
+	this(new Uri("<#= relativeServiceUri #>", UriKind.Relative))
 {
 }
 		
 public <#= this.DomainContextTypeName #>(Uri serviceUri) : 
-	this(new WebDomainClient<<#= this.ContractInterfaceName #>>(serviceUri<#+ 
-	if(requiresSecureEndpoint)
-	{
-		#>,true<#+
-	}
-	#>))
+	this(DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
 {
+	
 }
 
 public <#= this.DomainContextTypeName #>(DomainClient domainClient) :

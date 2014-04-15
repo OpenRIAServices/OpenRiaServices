@@ -14,6 +14,8 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         /// <returns>The generated code</returns>
         protected override string GenerateDomainContextClass()
         {
+            // Clear environment to remove contents from previously generated DomainContexts
+            base.GenerationEnvironment.Clear();
             return this.TransformText();
         }
 

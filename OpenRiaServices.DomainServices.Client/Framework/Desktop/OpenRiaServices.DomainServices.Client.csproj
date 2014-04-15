@@ -270,6 +270,9 @@
       <DependentUpon>Resource.resx</DependentUpon>
       <Link>Data\Resource.Designer.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\HasSideEffectsAttribute.cs">
+      <Link>HasSideEffectsAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\OperationBase.cs">
       <Link>OperationBase.cs</Link>
     </Compile>
