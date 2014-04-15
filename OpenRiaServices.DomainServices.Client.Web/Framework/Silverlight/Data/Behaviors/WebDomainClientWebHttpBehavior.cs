@@ -41,10 +41,17 @@ namespace OpenRiaServices.DomainServices.Client
             return new WebHttpQueryClientMessageFormatter(formatter);
         }
 
+        /// <summary>
+        /// Apply contract behaviour such as [WebGet] and [FaultDescri
+        /// Implements the <see cref="M:System.ServiceModel.Description.IEndpointBehavior.ApplyClientBehavior(System.ServiceModel.Description.ServiceEndpoint,System.ServiceModel.Dispatcher.ClientRuntime)" /> method to support modification or extension of the client across an endpoint.
+        /// </summary>
+        /// <param name="endpoint">The endpoint that exposes the contract the client is to access.</param>
+        /// <param name="clientRuntime">The client to which the custom behavior is applied.</param>
         public override void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
         {
             foreach (var od in endpoint.Contract.Operations)
             {
+                // Add FaultDescription if [FaultContractAttribute] has not already been added (by old code-generation)
                 if (od.Faults.Count == 0)
                 {
                     od.Faults.Add(new FaultDescription(od.Messages[0].Action + "DomainServiceFault")
@@ -55,12 +62,13 @@ namespace OpenRiaServices.DomainServices.Client
                     });
                 }
 
+                // If [WebGet] or [WebInvoke] has already been applied (by old code-generation) then no further action is required
                 if (od.Behaviors.Contains(typeof(WebGetAttribute)) || od.Behaviors.Contains(typeof(WebInvokeAttribute)))
                     continue;
 
-                // Add WebGetAttribute if method don't have any side effects
                 if (od.BeginMethod != null)
                 {
+                    // Add [WebGet] to methods which don't have any side effects ([WebInvoke] is default action)
                     var hasSideEffectsAttribute = (HasSideEffectsAttribute)Attribute.GetCustomAttribute(od.BeginMethod, typeof(HasSideEffectsAttribute), inherit:false);
                     if(hasSideEffectsAttribute != null && hasSideEffectsAttribute.HasSideEffects == false)
                         EnsureBehavior<WebGetAttribute>(od);
@@ -71,7 +79,14 @@ namespace OpenRiaServices.DomainServices.Client
             base.ApplyClientBehavior(endpoint, clientRuntime);
         }
 
-        public static T EnsureBehavior<T>(OperationDescription operationDesc) where T : IOperationBehavior, new()
+        /// <summary>
+        /// Get the behaviour of type T applied to the <see cref="OperationDescription"/>, adding it if it
+        /// is not already present.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="operationDesc">The operation desc.</param>
+        /// <returns></returns>
+        protected static T EnsureBehavior<T>(OperationDescription operationDesc) where T : IOperationBehavior, new()
         {
             T behavior = operationDesc.Behaviors.Find<T>();
             if (behavior == null)

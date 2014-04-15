@@ -123,6 +123,15 @@
   <data name="CyclicReferenceError" xml:space="preserve">
     <value>Reference cycle detected. Entity or ComplexObject members cannot contain cyclic references.</value>
   </data>
+  <data name="DomainClientFactory_FaildToGetGenericDomainClient" xml:space="preserve">
+    <value>Faild to construct generic WebDomainClient</value>
+  </data>
+  <data name="DomainClientFactory_MissingClientWebReference" xml:space="preserve">
+    <value>You must reference the assembly 'OpenRiaServices.DomainServices.Client.Web'</value>
+  </data>
+  <data name="DomainClientFactory_ServiceContractMustBeAnInterface" xml:space="preserve">
+    <value>Service contract must be an interface</value>
+  </data>
   <data name="DomainClient_CancellationNotSupported" xml:space="preserve">
     <value>The DomainClient '{0}' does not support cancellation.</value>
   </data>
