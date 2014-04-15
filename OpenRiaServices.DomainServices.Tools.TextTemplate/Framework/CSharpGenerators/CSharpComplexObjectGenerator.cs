@@ -30,82 +30,16 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n\n");
             this.Write("\r\n");
-            this.Write("\n");
-            this.Write("\n\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
  this.Generate(); 
-            this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
 
 
-
-#region ToString Helpers
-/// <summary>
-/// Utility class to produce culture-oriented representation of an object as a string.
-/// </summary>
-public class ToStringInstanceHelper
-{
-	private System.IFormatProvider _formatProviderField  = global::System.Globalization.CultureInfo.InvariantCulture;
-	/// <summary>
-	/// Gets or sets format provider to be used by ToStringWithCulture method.
-	/// </summary>
-	public System.IFormatProvider FormatProvider
-	{
-		get
-		{
-			return this._formatProviderField ;
-		}
-		set
-		{
-			if ((value != null))
-			{
-				this._formatProviderField  = value;
-			}
-		}
-	}
-	/// <summary>
-	/// This is called from the compile/run appdomain to convert objects within an expression block to a string
-	/// </summary>
-	public string ToStringWithCulture(object objectToConvert)
-	{
-		if ((objectToConvert == null))
-		{
-			throw new global::System.ArgumentNullException("objectToConvert");
-		}
-		System.Type t = objectToConvert.GetType();
-		System.Reflection.MethodInfo method = t.GetMethod("ToString", new System.Type[] {
-					typeof(System.IFormatProvider)});
-		if ((method == null))
-		{
-			return objectToConvert.ToString();
-		}
-		else
-		{
-			return ((string)(method.Invoke(objectToConvert, new object[] {
-						this._formatProviderField })));
-		}
-	}
-}
-private ToStringInstanceHelper _toStringHelperField = new ToStringInstanceHelper();
-public ToStringInstanceHelper ToStringHelper
-{
-	get
-	{
-		return this._toStringHelperField;
-	}
-}
-#endregion
-		
 private void GenerateParameterDeclaration(IEnumerable<DomainOperationParameter> parameters, bool generateAttributes)
 {
 	DomainOperationParameter[] paramInfos = parameters.ToArray();
@@ -133,7 +67,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(paramName));
 this.Write(", ");
 
 
-		}		
+		}
 	}
 }
 

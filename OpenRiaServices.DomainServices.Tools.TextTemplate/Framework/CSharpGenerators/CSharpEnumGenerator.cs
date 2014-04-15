@@ -28,17 +28,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n\n");
             this.Write("\r\n");
-            this.Write("\n\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
+            this.Write("\r\n\r\n");
  this.Generate(); 
-            this.Write("\n\n");
+            this.Write("\r\n");
             return this.GenerationEnvironment.ToString();
         }
 	
@@ -63,7 +58,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(enumType.Namespace));
 		if (enumType.GetCustomAttributes(typeof(FlagsAttribute), false).Length > 0)
         {
 
-this.Write("\n[System.Flags]\n");
+this.Write("[System.Flags]\r\n");
 
 
 		}
@@ -93,7 +88,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetTypeName(
         if (enumMemberAttr != null)
         {
 
-this.Write("\n[System.Runtime.Serialization.EnumMember");
+this.Write("[System.Runtime.Serialization.EnumMember");
 
 
             string value = enumMemberAttr.Value;
@@ -104,7 +99,7 @@ this.Write("(Value=");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(value.ToString()));
 
-this.Write(")\n");
+this.Write(")\r\n");
 
 
             }
@@ -138,8 +133,6 @@ this.Write("]");
 				if (minMaxValues != null && !memberValue.Equals(minMaxValues[2]) && memberValue.Equals(minMaxValues[0]))
 				{
 
-this.Write("\n");
-
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 
 this.Write(" = ");
@@ -153,7 +146,7 @@ this.Write(".MinValue ");
 				else if (minMaxValues != null && memberValue.Equals(minMaxValues[1]))
 				{
 
-this.Write(" \n");
+this.Write(" \r\n");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 
@@ -168,7 +161,7 @@ this.Write(".MaxValue ");
 				else
 				{
 
-this.Write(" \n");
+this.Write(" \r\n");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(memberName));
 
@@ -195,64 +188,6 @@ this.Write(",");
 
 
 
-
-#region ToString Helpers
-/// <summary>
-/// Utility class to produce culture-oriented representation of an object as a string.
-/// </summary>
-public class ToStringInstanceHelper
-{
-	private System.IFormatProvider _formatProviderField  = global::System.Globalization.CultureInfo.InvariantCulture;
-	/// <summary>
-	/// Gets or sets format provider to be used by ToStringWithCulture method.
-	/// </summary>
-	public System.IFormatProvider FormatProvider
-	{
-		get
-		{
-			return this._formatProviderField ;
-		}
-		set
-		{
-			if ((value != null))
-			{
-				this._formatProviderField  = value;
-			}
-		}
-	}
-	/// <summary>
-	/// This is called from the compile/run appdomain to convert objects within an expression block to a string
-	/// </summary>
-	public string ToStringWithCulture(object objectToConvert)
-	{
-		if ((objectToConvert == null))
-		{
-			throw new global::System.ArgumentNullException("objectToConvert");
-		}
-		System.Type t = objectToConvert.GetType();
-		System.Reflection.MethodInfo method = t.GetMethod("ToString", new System.Type[] {
-					typeof(System.IFormatProvider)});
-		if ((method == null))
-		{
-			return objectToConvert.ToString();
-		}
-		else
-		{
-			return ((string)(method.Invoke(objectToConvert, new object[] {
-						this._formatProviderField })));
-		}
-	}
-}
-private ToStringInstanceHelper _toStringHelperField = new ToStringInstanceHelper();
-public ToStringInstanceHelper ToStringHelper
-{
-	get
-	{
-		return this._toStringHelperField;
-	}
-}
-#endregion
-		
 private void GenerateParameterDeclaration(IEnumerable<DomainOperationParameter> parameters, bool generateAttributes)
 {
 	DomainOperationParameter[] paramInfos = parameters.ToArray();
@@ -280,7 +215,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(paramName));
 this.Write(", ");
 
 
-		}		
+		}
 	}
 }
 
