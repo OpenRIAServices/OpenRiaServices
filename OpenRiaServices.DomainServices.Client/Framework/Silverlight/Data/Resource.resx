@@ -252,6 +252,9 @@
   <data name="Entity_MultipleCustomMethodInvocations" xml:space="preserve">
     <value>Only one pending custom method invocation is allowed per entity.</value>
   </data>
+  <data name="Entity_NoEntityActionWithName" xml:space="preserve">
+    <value>Can not find any entity action named '{0}'</value>
+  </data>
   <data name="Entity_Not_In_Collection" xml:space="preserve">
     <value>The specified entity is not a member of this collection</value>
   </data>
@@ -263,6 +266,12 @@
   </data>
   <data name="Entity_UncommittedChanges" xml:space="preserve">
     <value>Entity '{0}' is currently being edited and has uncommitted changes. A call to BeginEdit must be followed by a call to EndEdit or CancelEdit before changes can be submitted.</value>
+  </data>
+  <data name="Entity_UndoInvokeOnlyForInvokedActions" xml:space="preserve">
+    <value>Can only undo currently invoked actions</value>
+  </data>
+  <data name="Entity_UndoInvokeWhileSubmitting" xml:space="preserve">
+    <value>A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted.</value>
   </data>
   <data name="IsNotSupported" xml:space="preserve">
     <value>'{0}' is not supported.</value>

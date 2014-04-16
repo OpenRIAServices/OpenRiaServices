@@ -450,8 +450,9 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Undo all entity actions currently queued
+        /// Undo all currently queued entity actions
         /// </summary>
+        /// <param name="preventRaiseReadOnly">if set to <c>true</c> then PropertyChange event for IsReadOnly is never raised.</param>
         private void UndoAllEntityActions(bool preventRaiseReadOnly = false)
         {
             bool wasReadOnly = this.IsReadOnly;
@@ -1585,7 +1586,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             var customMethodInfo = MetaType.GetEntityAction(actionName);
             if (customMethodInfo == null)
-                throw new InvalidOperationException(string.Format("No custom update named {0}", actionName));
+                throw new InvalidOperationException(string.Format(Resource.Entity_NoEntityActionWithName, actionName));
 
             // record invocation on the entity, which does proper state transition and raising property changed events
             InvokeActionCore(new EntityAction(actionName, parameters), customMethodInfo);
@@ -1638,11 +1639,11 @@ namespace OpenRiaServices.DomainServices.Client
 
             // verify that the action can currently be invoked
             if (this.IsSubmitting)
-                throw new InvalidOperationException("A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted");
+                throw new InvalidOperationException(Resource.Entity_UndoInvokeWhileSubmitting);
 
             var removed = _customMethodInvocations != null && this._customMethodInvocations.Remove(action);
             if (!removed)
-                throw new ArgumentException("Can only undo currently invoked action pending to be submitted");
+                throw new ArgumentException(Resource.Entity_UndoInvokeOnlyForInvokedActions);
 
             var customUpdate = MetaType.GetEntityAction(action.Name);
             Debug.Assert(customUpdate != null, "EntityAction have valid name since it is part of EntityActions");

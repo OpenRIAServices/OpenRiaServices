@@ -725,7 +725,10 @@ namespace OpenRiaServices.DomainServices.Server
                             }
                             else if (((EntityActionAttribute)customMethodOperation.OperationAttribute).AllowMultipleInvocations == false)
                             {
-                                throw new InvalidOperationException(string.Format("Can not invoke '{0}.{1}' multiple times", operation.Entity.GetType(), action.Key));
+                                throw new InvalidOperationException(
+                                    string.Format(Resource.DomainService_MultipleEntityActionsNotAllowedFor, 
+                                                operation.Entity.GetType().Name,
+                                                action.Key));
                             }
                         }
 

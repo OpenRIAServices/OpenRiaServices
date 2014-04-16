@@ -228,6 +228,9 @@
   <data name="DomainService_InvalidType" xml:space="preserve">
     <value>The type '{0}' is not a valid DomainService type. DomainService types cannot be abstract or generic.</value>
   </data>
+  <data name="DomainService_MultipleEntityActionsNotAllowedFor" xml:space="preserve">
+    <value>Multiple invocations of entity action '{0}.{1}' is not allowed</value>
+  </data>
   <data name="DomainService_NotInitialized" xml:space="preserve">
     <value>This DomainService has not been initialized.</value>
   </data>
