@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias TextTemplate;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
@@ -54,7 +55,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location };
+                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location};
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockCodeGenerator.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
@@ -206,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location };
+                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location, typeof(TextTemplate::OpenRiaServices.DomainServices.Tools.TextTemplate.ClientCodeGenerator).Assembly.Location };
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, /*generatorName*/ null);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");

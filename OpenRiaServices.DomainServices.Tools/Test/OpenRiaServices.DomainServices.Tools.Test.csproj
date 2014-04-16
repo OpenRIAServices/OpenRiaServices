@@ -197,6 +197,11 @@
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>OpenRiaServices.DomainServices.Hosting</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj">
+      <Project>{1d3ae529-961a-47fd-834b-7893fe6ff479}</Project>
+      <Name>OpenRiaServices.DomainServices.Tools.TextTemplate</Name>
+      <Aliases>TextTemplate</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
       <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
       <Name>OpenRiaServices.Common.DomainServices.Test</Name>
