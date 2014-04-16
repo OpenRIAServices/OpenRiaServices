@@ -2280,6 +2280,56 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
         #endregion // Named Update Methods
 
+        #region MultipleInvocation support
+        [TestMethod]
+        [Asynchronous]
+        [Description("Verify that multiple invocations to the same method is performed in the same order.")]
+        public void CustomMethod_MultipleInvocations_ShouldHappenInSameOrder()
+        {
+            var ctxt = new TestDomainServices.NamedUpdates.CalculatorDomainContext
+                (new Uri(TestURIs.RootURI, "TestDomainServices-NamedUpdates-CalculatorDomainService.svc"));
+
+            LoadOperation lo = ctxt.Load(ctxt.GetEntitiesQuery(), false);
+            CalculatorValue calc = null;
+            SubmitOperation so = null;
+
+
+            EnqueueConditional(() => lo.IsComplete);
+            EnqueueCallback(delegate
+            {
+                calc = ctxt.CalculatorValues.First();
+
+                Assert.IsTrue(calc.CanAdd);
+                Assert.IsFalse(calc.IsAddInvoked);
+
+                calc.Add(2.0m);
+
+                Assert.IsTrue(calc.CanAdd, "Should be able to invoke entity action multiple times");
+                Assert.IsTrue(calc.IsAddInvoked);
+
+                calc.Multiply(3.0m);
+
+                Assert.IsTrue(calc.CanMultiply, "Should be able to invoke entity action multiple times");
+                Assert.IsTrue(calc.IsMultiplyInvoked);
+
+                calc.Add(1.0m);
+                calc.Multiply(5.0m);
+                calc.Add(2.0m);
+
+                // Submit so server calculates (((((0+2)*3)+1)*5)+2) = 37
+                so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
+            });
+            EnqueueConditional(() => so.IsComplete);
+            EnqueueCallback(delegate
+            {
+                Assert.IsFalse(so.HasError);
+
+                Assert.AreEqual(37.0m, calc.Value);
+            });
+            EnqueueTestComplete();
+        }
+        #endregion
+
         #region Helpers
         private void AssertCompletedWithoutErrors(OperationBase operation)
         {

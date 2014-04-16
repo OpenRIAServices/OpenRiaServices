@@ -14184,22 +14184,22 @@ namespace TestDomainServices.NamedUpdates
             this.OnNamedUpdateWithCommonPropertiesInvoked();
         }
     }
-    
+
     /// <summary>
     /// The 'MockEntity6' entity class.
     /// </summary>
-    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
     public sealed partial class MockEntity6 : Entity
     {
-        
+
         private int _key;
-        
+
         private string _property1;
-        
+
         private string _property2;
-        
+
         private string _property3;
-        
+
         #region Extensibility Method Definitions
 
         /// <summary>
@@ -14219,8 +14219,8 @@ namespace TestDomainServices.NamedUpdates
         partial void OnNamedUpdateWithNoEntityValidationInvoked();
 
         #endregion
-        
-        
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MockEntity6"/> class.
         /// </summary>
@@ -14228,12 +14228,12 @@ namespace TestDomainServices.NamedUpdates
         {
             this.OnCreated();
         }
-        
+
         /// <summary>
         /// Gets or sets the 'Key' value.
         /// </summary>
         [DataMember()]
-        [Editable(false, AllowInitialValue=true)]
+        [Editable(false, AllowInitialValue = true)]
         [Key()]
         [RoundtripOriginal()]
         public int Key
@@ -14254,7 +14254,7 @@ namespace TestDomainServices.NamedUpdates
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the 'Property1' value.
         /// </summary>
@@ -14278,7 +14278,7 @@ namespace TestDomainServices.NamedUpdates
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the 'Property2' value.
         /// </summary>
@@ -14302,7 +14302,7 @@ namespace TestDomainServices.NamedUpdates
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the 'Property3' value.
         /// </summary>
@@ -14326,11 +14326,11 @@ namespace TestDomainServices.NamedUpdates
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether the 'NamedUpdateWithNoEntityValidation' action has been invoked on this entity.
         /// </summary>
-        [Display(AutoGenerateField=false)]
+        [Display(AutoGenerateField = false)]
         public bool IsNamedUpdateWithNoEntityValidationInvoked
         {
             get
@@ -14338,11 +14338,11 @@ namespace TestDomainServices.NamedUpdates
                 return base.IsActionInvoked("NamedUpdateWithNoEntityValidation");
             }
         }
-        
+
         /// <summary>
         /// Gets a value indicating whether the 'NamedUpdateWithNoEntityValidation' method can be invoked on this entity.
         /// </summary>
-        [Display(AutoGenerateField=false)]
+        [Display(AutoGenerateField = false)]
         public bool CanNamedUpdateWithNoEntityValidation
         {
             get
@@ -14350,7 +14350,7 @@ namespace TestDomainServices.NamedUpdates
                 return base.CanInvokeAction("NamedUpdateWithNoEntityValidation");
             }
         }
-        
+
         /// <summary>
         /// Computes a value from the key fields that uniquely identifies this entity instance.
         /// </summary>
@@ -14359,7 +14359,7 @@ namespace TestDomainServices.NamedUpdates
         {
             return this._key;
         }
-        
+
         /// <summary>
         /// Invokes the 'NamedUpdateWithNoEntityValidation' action on this entity.
         /// </summary>
@@ -14370,6 +14370,176 @@ namespace TestDomainServices.NamedUpdates
             this.OnNamedUpdateWithNoEntityValidationInvoking(complexObject);
             base.InvokeAction("NamedUpdateWithNoEntityValidation", complexObject);
             this.OnNamedUpdateWithNoEntityValidationInvoked();
+        }
+    }
+
+    /// <summary>
+    /// The 'MockEntity6' entity class.
+    /// </summary>
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
+    public sealed partial class CalculatorValue : Entity
+    {
+        private int _key;
+
+        private decimal _value;
+
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnKeyChanging(int value);
+        partial void OnKeyChanged();
+        partial void OnValueChanging(decimal value);
+        partial void OnValueChanged();
+        partial void OnAddInvoking(decimal rhs);
+        partial void OnAddInvoked();
+        partial void OnMultiplyInvoking(decimal rhs);
+        partial void OnMultiplyInvoked();
+
+        #endregion
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockEntity6"/> class.
+        /// </summary>
+        public CalculatorValue()
+        {
+            this.OnCreated();
+        }
+
+        /// <summary>
+        /// Gets or sets the 'Key' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue = true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int Key
+        {
+            get
+            {
+                return this._key;
+            }
+            set
+            {
+                if ((this._key != value))
+                {
+                    this.OnKeyChanging(value);
+                    this.ValidateProperty("Key", value);
+                    this._key = value;
+                    this.RaisePropertyChanged("Key");
+                    this.OnKeyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the 'Property1' value.
+        /// </summary>
+        [DataMember()]
+        public decimal Value
+        {
+            get
+            {
+                return this._value;
+            }
+            set
+            {
+                if ((this._value != value))
+                {
+                    this.OnValueChanging(value);
+                    this.RaiseDataMemberChanging("Value");
+                    this.ValidateProperty("Value", value);
+                    this._value = value;
+                    this.RaiseDataMemberChanged("Value");
+                    this.OnValueChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._key;
+        }
+
+
+        /// <summary>
+        /// Gets a value indicating whether the 'Add' action has been invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool IsAddInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("Add");
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the 'Add' method can be invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool CanAdd
+        {
+            get
+            {
+                return base.CanInvokeAction("Add");
+            }
+        }
+
+        /// <summary>
+        /// Invokes the 'Add' action on this entity.
+        /// </summary>
+        /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("Add", AllowMultipleInvocations= true)]
+        public void Add(decimal rhs)
+        {
+            this.OnAddInvoking(rhs);
+            base.InvokeAction("Add", rhs);
+            this.OnAddInvoked();
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the 'Multiply' action has been invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool IsMultiplyInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("Multiply");
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the 'Multiply' method can be invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool CanMultiply
+        {
+            get
+            {
+                return base.CanInvokeAction("Multiply");
+            }
+        }
+
+        /// <summary>
+        /// Invokes the 'Multiply' action on this entity.
+        /// </summary>
+        /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        [EntityAction("Multiply", AllowMultipleInvocations = true)]
+        public void Multiply(decimal rhs)
+        {
+            this.OnMultiplyInvoking(rhs);
+            base.InvokeAction("Multiply", rhs);
+            this.OnMultiplyInvoked();
         }
     }
     
@@ -14951,6 +15121,152 @@ namespace TestDomainServices.NamedUpdates
                 this.CreateEntitySet<MockEntity4>(EntitySetOperations.Edit);
                 this.CreateEntitySet<MockEntity5>(EntitySetOperations.Edit);
                 this.CreateEntitySet<MockEntity6>(EntitySetOperations.Edit);
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// The DomainContext corresponding to the 'CalculatorDomainContext' DomainService.
+    /// </summary>
+    public sealed partial class CalculatorDomainContext : DomainContext
+    {
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+
+        #endregion
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NamedUpdate_CustomOnly"/> class.
+        /// </summary>
+        public CalculatorDomainContext() :
+            this(new WebDomainClient<ICalculatorDomainContext>(new Uri("TestDomainServices-NamedUpdates-CalculatorDomainService.svc", UriKind.Relative)))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified service URI.
+        /// </summary>
+        /// <param name="serviceUri">The NamedUpdate_CustomOnly service URI.</param>
+        public CalculatorDomainContext(Uri serviceUri) :
+            this(new WebDomainClient<ICalculatorDomainContext>(serviceUri))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified <paramref name="domainClient"/>.
+        /// </summary>
+        /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
+        public CalculatorDomainContext(DomainClient domainClient) :
+            base(domainClient)
+        {
+            this.OnCreated();
+        }
+
+        /// <summary>
+        /// Gets the set of <see cref="CalculatorValue"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
+        /// </summary>
+        public EntitySet<CalculatorValue> CalculatorValues
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<CalculatorValue>();
+            }
+        }
+
+        /// <summary>
+        /// Invokes the 'Add' method of the specified <see cref="CalculatorValue"/> entity.
+        /// </summary>
+        /// <param name="entity">The <see cref="CalculatorValue"/> entity instance.</param>
+        /// <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        public void Add(CalculatorValue entity, decimal rhs)
+        {
+            entity.Add(rhs);
+        }
+
+        /// <summary>
+        /// Invokes the 'Multiply' method of the specified <see cref="MockEntity6"/> entity.
+        /// </summary>
+        /// <param name="entity">The <see cref="CalculatorValue"/> entity instance.</param>
+        /// <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        public void Multiply(CalculatorValue entity, decimal rhs)
+        {
+            entity.Multiply(rhs);
+        }
+
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="CalculatorValue"/> entity instances using the 'GetEntities' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValue"/> entity instances.</returns>
+        public EntityQuery<CalculatorValue> GetEntitiesQuery()
+        {
+            this.ValidateMethod("GetEntitiesQuery", null);
+            return base.CreateQuery<CalculatorValue>("GetEntities", null, false, true);
+        }
+
+        /// <summary>
+        /// Creates a new EntityContainer for this DomainContext's EntitySets.
+        /// </summary>
+        /// <returns>A new container instance.</returns>
+        protected override EntityContainer CreateEntityContainer()
+        {
+            return new NamedUpdate_CalculatorEntityContainer();
+        }
+
+        /// <summary>
+        /// Service contract for the 'CalculatorDomainContext' DomainService.
+        /// </summary>
+        [ServiceContract()]
+        public interface ICalculatorDomainContext
+        {
+
+            /// <summary>
+            /// Asynchronously invokes the 'GetEntities' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [FaultContract(typeof(DomainServiceFault), Action = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesDomainServiceFault", Name = "DomainServiceFault", Namespace = "DomainServices")]
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntities", ReplyAction = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesResponse")]
+            [WebGet()]
+            IAsyncResult BeginGetEntities(AsyncCallback callback, object asyncState);
+
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetEntities'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
+            QueryResult<CalculatorValue> EndGetEntities(IAsyncResult result);
+
+            /// <summary>
+            /// Asynchronously invokes the 'SubmitChanges' operation.
+            /// </summary>
+            /// <param name="changeSet">The change-set to submit.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [FaultContract(typeof(DomainServiceFault), Action = "http://tempuri.org/NamedUpdate_CustomOnly/SubmitChangesDomainServiceFault", Name = "DomainServiceFault", Namespace = "DomainServices")]
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/NamedUpdate_CustomOnly/SubmitChanges", ReplyAction = "http://tempuri.org/NamedUpdate_CustomOnly/SubmitChangesResponse")]
+            IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
+
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
+            /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
+            IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);
+        }
+        internal sealed class NamedUpdate_CalculatorEntityContainer : EntityContainer
+        {
+            public NamedUpdate_CalculatorEntityContainer()
+            {
+                this.CreateEntitySet<CalculatorValue>(EntitySetOperations.Edit);
             }
         }
     }
