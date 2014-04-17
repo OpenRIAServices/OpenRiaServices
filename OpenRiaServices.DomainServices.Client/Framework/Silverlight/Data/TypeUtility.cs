@@ -32,6 +32,27 @@ namespace OpenRiaServices.DomainServices
             "b03f5f7f11d50a3a", // Microsoft.VisualBasic, Microsoft.CSharp, System.Configuration
             "7cec85d7bea7798e"  // Silverlight system assemblies
         };
+
+        /// <summary>
+        /// The list of assemblies that form OpenRiaServices. If OpenRiaServices is extended with
+        /// additional assemblies, or if assemblies are removed, this array must be updated accordingly.
+        /// </summary>
+        private static readonly string[] OpenRiaServicesAssemblyNames =
+        {
+            "OpenRiaServices.DomainServices.Client",
+            "OpenRiaServices.DomainServices.Client.Web",
+            "OpenRiaServices.DomainServices.EntityFramework",
+            "OpenRiaServices.DomainServices.EntityFramework.EF4",
+            "OpenRiaServices.DomainServices.Hosting",
+            "OpenRiaServices.DomainServices.Hosting.Endpoint",
+            "OpenRiaServices.DomainServices.Hosting.Local",
+            "OpenRiaServices.DomainServices.Hosting.OData",
+            "OpenRiaServices.DomainServices.LinqToSql",
+            "OpenRiaServices.DomainServices.Server",
+            "OpenRiaServices.DomainServices.Server.UnitTesting",
+            "OpenRiaServices.DomainServices.Tools",
+            "OpenRiaServices.DomainServices.Tools.TextTemplate"
+        };
 #if !WIZARD
         // list of "simple" types we will always accept for
         // serialization, inclusion from entities, etc.
@@ -439,6 +460,13 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
         internal static bool IsSystemAssembly(string assemblyFullName)
         {
+            // Return true if it is a Open Ria Services assembly
+            var assemblyName = new AssemblyName(assemblyFullName);
+            if (OpenRiaServicesAssemblyNames.Contains(assemblyName.Name))
+            {
+                return true;
+            }
+
             // parse the public key token
             int idx = assemblyFullName.IndexOf("PublicKeyToken=", StringComparison.OrdinalIgnoreCase);
             if (idx == 0)
