@@ -24,7 +24,6 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;ASPNETMVC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DocumentationFile>..\..\bin\Debug\OpenRiaServices.DomainControllers.EntityFramework.xml</DocumentationFile>
     <RunCodeAnalysis>$(CodeAnalysis)</RunCodeAnalysis>
@@ -38,7 +37,6 @@
     <DefineConstants>TRACE;ASPNETMVC;DBCONTEXT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DocumentationFile>..\..\bin\Release\OpenRiaServices.DomainControllers.EntityFramework.xml</DocumentationFile>
     <RunCodeAnalysis>$(CodeAnalysis)</RunCodeAnalysis>
@@ -52,7 +50,6 @@
     <DefineConstants>TRACE;CODE_ANALYSIS;ASPNETMVC</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <RunCodeAnalysis>$(CodeAnalysis)</RunCodeAnalysis>
