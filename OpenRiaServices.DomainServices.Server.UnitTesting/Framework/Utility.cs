@@ -65,7 +65,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
                     context.OperationName,
                     context.DomainServiceDescription.DomainServiceType));
             }
-            changeSetEntry.EntityActions = new Dictionary<string, object[]>
+            changeSetEntry.EntityActions = new EntityActionCollection
             {
                 { context.OperationName, parameterValues.Skip(1).ToArray() },
             };

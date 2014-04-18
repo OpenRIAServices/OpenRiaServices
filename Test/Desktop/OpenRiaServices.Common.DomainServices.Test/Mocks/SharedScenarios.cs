@@ -274,7 +274,7 @@ namespace SharedEntities
             // Do nothing
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateAThroughChild(EntityA entityA)
         {
             // Do nothing
@@ -308,7 +308,7 @@ namespace SharedEntities
             // Do nothing
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateAThroughParent(EntityA entityA)
         {
             // Do nothing

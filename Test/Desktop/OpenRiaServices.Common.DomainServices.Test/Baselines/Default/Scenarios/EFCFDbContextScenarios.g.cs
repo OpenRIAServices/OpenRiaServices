@@ -2049,16 +2049,12 @@ namespace CodeFirstModels
         /// <summary>
         /// Invokes the 'DiscontinueProduct' action on this entity.
         /// </summary>
+        [EntityAction("DiscontinueProduct")]
         public void DiscontinueProduct()
         {
             this.OnDiscontinueProductInvoking();
             base.InvokeAction("DiscontinueProduct");
             this.OnDiscontinueProductInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("DiscontinueProduct", "CanDiscontinueProduct", "IsDiscontinueProductInvoked");
         }
     }
     

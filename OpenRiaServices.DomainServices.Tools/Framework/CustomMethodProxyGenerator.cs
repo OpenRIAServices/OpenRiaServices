@@ -80,12 +80,6 @@ namespace OpenRiaServices.DomainServices.Tools
                 // generate guard property
                 this.GenerateGuardProperty(methodEntry.Key);
             }
-
-            if (entityCustomMethods.Count > 0)
-            {
-                // generate method that will update the guard properties
-                this.GenerateOnActionStateChanged(entityCustomMethods.Keys.OrderBy(key => key), isDerivedEntityType);
-            }
         }
 
         /// <summary>
@@ -121,7 +115,7 @@ namespace OpenRiaServices.DomainServices.Tools
             }
 
             // Propagate custom validation attributes from the DomainOperationEntry to this custom method
-            IEnumerable<Attribute> methodAttributes = customMethod.Attributes.Cast<Attribute>();
+            var methodAttributes = customMethod.Attributes.Cast<Attribute>().ToList();
             CustomAttributeGenerator.GenerateCustomAttributes(
                 this.ClientProxyGenerator,
                 this._proxyClass,
@@ -129,6 +123,16 @@ namespace OpenRiaServices.DomainServices.Tools
                 methodAttributes,
                 method.CustomAttributes,
                 method.Comments);
+
+            // Add [CustomMethod("...")] property
+            var customMethodAttribute = customMethod.OperationAttribute as EntityActionAttribute;
+            bool allowMultipleInvocations = customMethodAttribute != null && customMethodAttribute.AllowMultipleInvocations;
+            method.CustomAttributes.Add(
+                new CodeAttributeDeclaration("EntityAction",
+                    new CodeAttributeArgument(new CodePrimitiveExpression(customMethodName)),
+                    new CodeAttributeArgument("AllowMultipleInvocations", 
+                                                new CodePrimitiveExpression(allowMultipleInvocations))
+                        ));
 
             // ----------------------------------------------------------------
             // generate custom method body:
@@ -207,7 +211,7 @@ namespace OpenRiaServices.DomainServices.Tools
                                                         new CodeBaseReferenceExpression(),
                                                         "IsActionInvoked",
                                                         new CodeExpression[] { new CodeArgumentReferenceExpression("\"" + customMethodName + "\"") })));
-            invokedProperty.Name = string.Concat("Is", methodInvokedName);
+            invokedProperty.Name = GetIsInvokedPropertyName(customMethodName);
 
             // Generate <summary> doc comment
             comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_Entity_IsInvoked_Property_Summary_Comment, customMethodName);
@@ -219,13 +223,18 @@ namespace OpenRiaServices.DomainServices.Tools
             this._proxyClass.Members.Add(invokedProperty);
         }
 
+        private static string GetIsInvokedPropertyName(string customMethodName)
+        {
+            return string.Concat("Is", customMethodName, "Invoked");
+        }
+
         /// <summary>
         /// Generates a custom method guard property
         /// </summary>
         /// <param name="customMethodName">name of the custom method to generate guard property for</param>
         private void GenerateGuardProperty(string customMethodName)
         {
-            string guardName = string.Format(CultureInfo.InvariantCulture, "Can{0}", customMethodName);
+            string guardName = GetCanInvokePropertyName(customMethodName);
             this.ClientProxyGenerator.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_Generating_GuardProperty, guardName));
 
             // ----------------------------------------------------------------
@@ -259,51 +268,9 @@ namespace OpenRiaServices.DomainServices.Tools
             this._proxyClass.Members.Add(property);
         }
 
-        /// <summary>
-        /// This generates the update method for raising property notifications for the custom method guard properties
-        /// </summary>
-        /// <param name="customMethodNames">list of custom method names</param>
-        /// <param name="isDerivedEntityType"><c>true</c> means this is a derived entity type.</param>
-        private void GenerateOnActionStateChanged(IEnumerable<string> customMethodNames, bool isDerivedEntityType)
+        private static string GetCanInvokePropertyName(string customMethodName)
         {
-            this.ClientProxyGenerator.LogMessage(Resource.EntityCodeGen_Generating_GuardUpdateMethod);
-
-            // ----------------------------------------------------------------
-            // Method decl: protected override OnActionStateChanged()
-            // ----------------------------------------------------------------
-            CodeMemberMethod method = new CodeMemberMethod();
-            method.Name = "OnActionStateChanged";
-            method.Attributes = MemberAttributes.Override | MemberAttributes.Family;
-
-            // ------------------------------------------------------------------
-            // Derived entity types generate:
-            //    base.OnActionStateChanged()
-            // so their inherited custom methods are informed
-            // ------------------------------------------------------------------
-            if (isDerivedEntityType)
-            {
-                method.Statements.Add(
-                    new CodeExpressionStatement(
-                        new CodeMethodInvokeExpression(
-                            new CodeBaseReferenceExpression(), method.Name)));
-            }
-
-            // ----------------------------------------------------------------
-            // generate custom method body:
-            //    base.UpdateActionState(<name>, <CanInvoke>, <IsInvoked>);
-            // ----------------------------------------------------------------
-            foreach (string customMethodName in customMethodNames)
-            {
-                method.Statements.Add(
-                    new CodeExpressionStatement(
-                        new CodeMethodInvokeExpression(
-                            new CodeBaseReferenceExpression(), "UpdateActionState", 
-                            new CodePrimitiveExpression(customMethodName),
-                            new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, "Can{0}", customMethodName)),
-                            new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, "Is{0}Invoked", customMethodName)))));
-            }
-
-            this._proxyClass.Members.Add(method);
+            return string.Format(CultureInfo.InvariantCulture, "Can{0}", customMethodName);
         }
     }
 }

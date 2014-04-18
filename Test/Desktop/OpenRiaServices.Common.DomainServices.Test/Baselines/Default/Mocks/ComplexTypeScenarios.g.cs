@@ -458,16 +458,12 @@ namespace TestDomainServices
         /// Invokes the 'TestAutoSync' action on this entity.
         /// </summary>
         /// <param name="phone">The value to pass to the server method's 'phone' parameter.</param>
+        [EntityAction("TestAutoSync")]
         public void TestAutoSync(Phone phone)
         {
             this.OnTestAutoSyncInvoking(phone);
             base.InvokeAction("TestAutoSync", phone);
             this.OnTestAutoSyncInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("TestAutoSync", "CanTestAutoSync", "IsTestAutoSyncInvoked");
         }
     }
     
@@ -557,17 +553,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="child">The value to pass to the server method's 'child' parameter.</param>
         /// <param name="children">The value to pass to the server method's 'children' parameter.</param>
+        [EntityAction("ChooseHighestStubOrChild")]
         public void ChooseHighestStubOrChild(ComplexInheritance_Child child, ComplexInheritance_Child[] children)
         {
             this.OnChooseHighestStubOrChildInvoking(child, children);
             base.InvokeAction("ChooseHighestStubOrChild", child, children);
             this.OnChooseHighestStubOrChildInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.OnActionStateChanged();
-            base.UpdateActionState("ChooseHighestStubOrChild", "CanChooseHighestStubOrChild", "IsChooseHighestStubOrChildInvoked");
         }
     }
     

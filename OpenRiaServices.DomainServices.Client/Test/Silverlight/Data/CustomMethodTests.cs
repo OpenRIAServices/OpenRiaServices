@@ -54,15 +54,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
             Assert.AreEqual(EntityState.Unmodified, _cities[0].EntityState);
-            Assert.IsNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(0, _cities[0].EntityActions.Count());
             Assert.IsTrue(_cities[0].CanInvokeAction(_assignCityZone.Name));
 
             // verify invoke on a new entity succeeds and subsequent CanInvoke returns false
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
-            Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].CustomMethodInvocation.Name);
-            Assert.AreEqual<int>(_assignCityZone.Parameters.Count(), _cities[0].CustomMethodInvocation.Parameters.Count());
+            Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].EntityActions.Single().Name);
+            Assert.AreEqual<int>(_assignCityZone.Parameters.Count(), _cities[0].EntityActions.Single().Parameters.Count());
             Assert.IsFalse(_cities[0].CanInvokeAction(_assignCityZone.Name));
         }
 
@@ -103,7 +103,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // verify invoke on a new entity succeeds and subsequent CanInvoke for a different entity action returns false
             invocableCity.InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
             Assert.IsFalse(invocableCity.CanInvokeAction(_assignCityZone.Name)); // different entity action name
-            Assert.AreSame(_assignCityZone.Name, _cities[1].CustomMethodInvocation.Name);
+            Assert.AreSame(_assignCityZone.Name, _cities[1].EntityActions.Single().Name);
 
             // verify you get back the same entity action on GetInvocations
             Assert.AreEqual<string>(_assignCityZone.Name, invocableCity.EntityActions.Single().Name);
@@ -247,14 +247,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             City city = new City { Name = "Redmond", CountyName = "King", StateName = "WA" };
             container.GetEntitySet<City>().Add(city);
             Assert.AreEqual(EntityState.New, city.EntityState);
-            Assert.IsNull(city.CustomMethodInvocation);
+            Assert.AreEqual(0, city.EntityActions.Count());
             Assert.IsTrue(city.CanInvokeAction(_assignCityZone.Name));
 
             city.InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
-            Assert.IsNotNull(city.CustomMethodInvocation);
+            Assert.AreEqual(1, city.EntityActions.Count());
             Assert.AreEqual(EntityState.New, city.EntityState);
-            Assert.AreEqual<string>(_assignCityZone.Name, city.CustomMethodInvocation.Name);
-            Assert.AreEqual<int>(_assignCityZone.Parameters.Count(), city.CustomMethodInvocation.Parameters.Count());
+            Assert.AreEqual<string>(_assignCityZone.Name, city.EntityActions.Single().Name);
+            Assert.AreEqual<int>(_assignCityZone.Parameters.Count(), city.EntityActions.Single().Parameters.Count());
             Assert.IsFalse(city.CanInvokeAction(_assignCityZone.Name));
         }
 
@@ -271,7 +271,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 _cities[2].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
             }, Resource.Entity_InvokeOnDeletedEntity);
-            Assert.IsNull(_cities[2].CustomMethodInvocation);
+            Assert.AreEqual(0, _cities[2].EntityActions.Count());
             Assert.AreEqual(EntityState.Deleted, _cities[2].EntityState);
         }
 
@@ -291,7 +291,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // delete the entity - expect the actions to be cleared
             container.GetEntitySet<City>().Remove(city);
             Assert.AreEqual(0, city.EntityActions.Count());
-            Assert.AreEqual(null, city.CustomMethodInvocation);
             Assert.IsFalse(city.CanInvokeAction(_assignCityZone.Name));
         }
 
@@ -306,8 +305,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsTrue(_cities[1].CanInvokeAction(_assignCityZone.Name));
             Assert.IsTrue(_cities[1].EntityState == EntityState.Modified);
             _cities[1].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
-            Assert.IsNotNull(_cities[1].CustomMethodInvocation);
-            Assert.AreEqual(_assignCityZone.Name, _cities[1].CustomMethodInvocation.Name);
+            Assert.AreEqual(1, _cities[1].EntityActions.Count());
+            Assert.AreEqual(_assignCityZone.Name, _cities[1].EntityActions.Single().Name);
             Assert.AreEqual(EntityState.Modified, _cities[1].EntityState);
         }
         #endregion
@@ -320,12 +319,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
-            Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].CustomMethodInvocation.Name);
+            Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].EntityActions.Single().Name);
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
                 _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
-            }, Resource.Entity_MultipleCustomMethodInvocations);
-            Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].CustomMethodInvocation.Name);
+            }, "Method can only be invoked once.");
+            Assert.AreEqual<string>(_assignCityZone.Name, _cities[0].EntityActions.Single().Name);
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
         }
 
@@ -436,23 +435,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             List<Entity> emptyList = new List<Entity>();
             List<Entity> modifiedEntities = new List<Entity>();
 
-            // invoke domain methods on a few entities
-            container.LoadEntities(_cities);
-            _cities[0].CustomMethodInvocation = _reject;
-            _cities[1].CustomMethodInvocation = new EntityAction("");
-
-            // submit changeset with hand-crafted entities: (1) valid invocation, (2) empty OperationName, and (3) null invocation
-            modifiedEntities.Add(_cities[0]);
-            modifiedEntities.Add(_cities[1]);
-            modifiedEntities.Add(_cities[2]);
-            EntityChangeSet changeset = new EntityChangeSet(emptyList.AsReadOnly(), modifiedEntities.AsReadOnly(), emptyList.AsReadOnly());
-
-            // verify exception is thrown during Submit
-            Assert.AreEqual(EntityState.Modified, _cities[1].EntityState);
+            // verify exception is thrown when trying to invoke invalid action
             ExceptionHelper.ExpectArgumentException(delegate
             {
-                client.BeginSubmit(changeset, delegate { }, null);
-            }, Resource.DomainClient_InvocationNameCannotBeNullOrEmpty);
+                _cities[0].InvokeAction("");
+            }, string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty,"actionName"));
         }
 
         [TestMethod]
@@ -472,7 +459,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // invoke domain methods on a few entities
             container.LoadEntities(_cities);
-            _cities[1].CustomMethodInvocation = _assignCityZone;
+            _cities[1].AssignCityZone(_assignCityZone.Parameters.First().ToString());
 
             // submit changeset with hand-crafted entities: valid invocation and null invocation
             modifiedEntities.Add(_cities[0]);
@@ -521,6 +508,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // invoke domain methods on a few entities
             container.LoadEntities(_cities);
+
             _cities[0].CustomMethodInvocation = _reject;
 
             // submit changeset with hand-crafted entities (without calling Invoke)
@@ -602,10 +590,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
 
             ((System.ComponentModel.IRevertibleChangeTracking)_cities[0]).RejectChanges();
-            Assert.IsNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(0, _cities[0].EntityActions.Count());
             Assert.AreEqual(EntityState.Unmodified, _cities[0].EntityState);
 
             var invocableCity = _cities[0];
@@ -631,16 +619,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsTrue(changeset.ModifiedEntities.Count == 2);
             Assert.IsTrue(changeset.RemovedEntities.Count == 0);
 
-            Assert.AreEqual<string>(_assignCityZone.Name, changeset.ModifiedEntities[0].CustomMethodInvocation.Name);
-            Assert.AreEqual<string>(_assignCityZone.Name, changeset.ModifiedEntities[1].CustomMethodInvocation.Name);
+            Assert.AreEqual<string>(_assignCityZone.Name, changeset.ModifiedEntities[0].EntityActions.Single().Name);
+            Assert.AreEqual<string>(_assignCityZone.Name, changeset.ModifiedEntities[1].EntityActions.Single().Name);
 
             // revert one of the domain method invocations. verify invocation in changeset is updated
             ((System.ComponentModel.IRevertibleChangeTracking)_cities[0]).RejectChanges();
             changeset = container.GetChanges();
             City returned = changeset.ModifiedEntities.Single(p => p == _cities[2]) as City;
             Assert.IsNotNull(returned);
-            Assert.AreEqual<string>(_assignCityZone.Name, returned.CustomMethodInvocation.Name);
-            Assert.AreEqual<int>(_assignCityZone.Parameters.Count(), returned.CustomMethodInvocation.Parameters.Count());
+            Assert.AreEqual<string>(_assignCityZone.Name, returned.EntityActions.Single().Name);
+            Assert.AreEqual<int>(_assignCityZone.Parameters.Count(), returned.EntityActions.Single().Parameters.Count());
         }
 
         [TestMethod]
@@ -654,7 +642,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // invoke then delete the entity. Verify the ModifiedEntities are updated
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
             Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count());
 
             container.GetEntitySet<City>().Remove(_cities[0]);
@@ -672,7 +660,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // invoke then delete the entity. Verify the ModifiedEntities are updated
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
             Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count());
 
             container.GetEntitySet<City>().Detach(_cities[0]);
@@ -781,7 +769,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("CanAutoAssignCityZone"));
+                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
+                Assert.IsFalse(propChanged.Contains("CanAutoAssignCityZone"));
                 propChanged.Clear();
 
                 Assert.IsTrue(lastRootCity.CanAutoAssignCityZone);
@@ -804,13 +793,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(2, so.ChangeSet.ModifiedEntities.Count);
 
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(6, propChanged.Count);
-                Assert.IsTrue(propChanged.Contains("ZoneName"));
-                Assert.IsTrue(propChanged.Contains("ZoneID"));
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
-                Assert.IsTrue(propChanged.Contains("CanAutoAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZoneIfAuthorized"));
+                Assert.AreEqual(8, propChanged.Count);
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneName"));
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneID"));
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "CanAssignCityZone"));
+                Assert.AreEqual(1, propChanged.Count(prop => prop == "IsAssignCityZoneInvoked"));
+                Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAutoAssignCityZone"));
+                Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZoneIfAuthorized"));
 
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server
                 Assert.AreEqual(15, citiesProvider.Cities.Single<City>(c => (c.ZoneName == "Zone15")).ZoneID);
@@ -878,7 +867,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     }
                 };
 
+                Assert.IsTrue(newCity.CanAssignCityZoneIfAuthorized);
+                Assert.IsTrue(newCity.CanAutoAssignCityZone);
+
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
+
+                Assert.IsFalse(newCity.CanAssignCityZoneIfAuthorized);
+                Assert.IsFalse(newCity.CanAutoAssignCityZone);
 
                 Assert.AreEqual(3, so.ChangeSet.ModifiedEntities.Count);
                 Assert.AreEqual(1, so.ChangeSet.AddedEntities.Count);
@@ -888,15 +883,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error, string.Format("SubmitOperation.Error should be null.\r\nMessage: {0}\r\nStack Trace:\r\n{1}", so.Error != null ? so.Error.Message : string.Empty, so.Error != null ? so.Error.StackTrace : string.Empty));
+                Assert.IsTrue(newCity.CanAssignCityZoneIfAuthorized);
+                Assert.IsTrue(newCity.CanAutoAssignCityZone);
+                Assert.IsTrue(newCity.CanAssignCityZone);
 
                 // verify we got property change notifications for the new city entity (guard property should be reverted once SubmitChanges is called)
-                Assert.AreEqual(7, propChanged_addedCity.Count);
-                Assert.IsTrue(propChanged_addedCity.Contains("ZoneName"));
-                Assert.IsTrue(propChanged_addedCity.Contains("ZoneID"));
-                Assert.IsTrue(propChanged_addedCity.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged_addedCity.Contains("CanAssignCityZoneIfAuthorized"));
-                Assert.IsTrue(propChanged_addedCity.Contains("IsAssignCityZoneInvoked"));
-                Assert.IsTrue(propChanged_addedCity.Contains("CanAutoAssignCityZone"));
+                Assert.AreEqual(9, propChanged_addedCity.Count);
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneName"));
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneID"));
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "CanAssignCityZone"));
+                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "IsAssignCityZoneInvoked"));
+                // The other custom method invocations should have changed from true -> false during submit
+                // and from false -> true after submit
+                Assert.AreEqual(2, propChanged_addedCity.Count(prop => prop == "CanAssignCityZoneIfAuthorized"));
+                Assert.AreEqual(2, propChanged_addedCity.Count(prop => prop == "CanAutoAssignCityZone"));
+
 
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server
                 Assert.AreEqual(1, citiesProvider.Cities.Single<City>(c => (c.ZoneName == "Zone1" && c.CountyName == "King")).ZoneID);
@@ -908,7 +909,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(citiesProvider.Cities.Any(c => (c.ZoneName == null && c.ZoneID != 0)));
 
                 // verify that after a successful submit, DM invocations on the entities have been accepted
-                Assert.IsFalse(so.ChangeSet.ModifiedEntities.Any(p => p.CustomMethodInvocation != null));
+                Assert.IsFalse(so.ChangeSet.ModifiedEntities.Any(p => p.EntityActions.Any()));
                 EntityChangeSet changeSet = citiesProvider.EntityContainer.GetChanges();
                 Assert.IsTrue(changeSet.IsEmpty);
             });
@@ -960,7 +961,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation submitOp = null;
             LoadOperation<Zip> loadOp = null;
             EventHandler completedDelegate = (sender, args) => completed = true;
-
+            
             CityDomainContext context = new CityDomainContext(TestURIs.Cities);
             loadOp = context.Load(context.GetZipsQuery(), false);
             loadOp.Completed += completedDelegate;
@@ -982,7 +983,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Verify entity state
                 Assert.IsTrue(zip.IsReadOnly, "Expected Zip to be in a read-only state.");
                 Assert.IsTrue(zip.IsSubmitting, "Expected Zip to be in a submitting state.");
-                Assert.IsNotNull(zip.CustomMethodInvocation, "Expected Zip CustomMethodInvocation property to be non-null");
+                Assert.AreEqual(1, zip.EntityActions.Count(), "Expected Zip EntityActions property to contain a single invocation");
             });
             this.EnqueueConditional(() => completed);
             this.EnqueueCallback(() =>
@@ -996,7 +997,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Verify entity state
                 Assert.IsFalse(zip.IsReadOnly, "Zip should not be in a read-only state.");
                 Assert.IsFalse(zip.IsSubmitting, "Zip should not be in a submitting state.");
-                Assert.IsNotNull(zip.CustomMethodInvocation, "Expected Zip CustomMethodInvocation property to be non-null");
+                Assert.AreEqual(1, zip.EntityActions.Count(), "Expected Zip EntityActions property to contain a single invocation");
 
                 // Explicitly set a property
                 zip.StateName += "x";
@@ -1021,12 +1022,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             int prevZoneID = _cities[0].ZoneID;
             _cities[0].ZoneID = 777;
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
 
             // cancel editing. Domain method invocation and property updates are reverted
             editableCity.CancelEdit();
             Assert.AreEqual(prevZoneID, _cities[0].ZoneID);
-            Assert.IsNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(0, _cities[0].EntityActions.Count());
             Assert.AreEqual(EntityState.Unmodified, _cities[0].EntityState);
             Assert.IsTrue(container.GetChanges().IsEmpty);
 
@@ -1039,7 +1040,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             editableCity.CancelEdit();
             Assert.AreEqual(777, _cities[0].ZoneID);
-            Assert.IsNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(0, _cities[0].EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
 
             // now test an edit session where only a DM was invoked (no property edits)
@@ -1065,18 +1066,18 @@ namespace OpenRiaServices.DomainServices.Client.Test
             editableCity.BeginEdit();
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
 
             editableCity.EndEdit();
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
 
             // begin another session and CancelEdit immediately. Verify that previous invocation is not affected
             editableCity.BeginEdit();
             Assert.IsFalse(_cities[0].CanInvokeAction(_assignCityZone.Name));
             editableCity.CancelEdit();
             Assert.AreEqual(EntityState.Modified, _cities[0].EntityState);
-            Assert.IsNotNull(_cities[0].CustomMethodInvocation);
+            Assert.AreEqual(1, _cities[0].EntityActions.Count());
         }
         #endregion
 
@@ -1117,7 +1118,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 propChanged.Add(e.PropertyName);
             };
 
-            Assert.IsFalse(_cities[0].CanInvokeAction(null));
+            Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
 
@@ -1125,7 +1126,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(_cities[0].CanInvokeAction(null));
+                Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
             });
 
             EnqueueTestComplete();
@@ -1139,7 +1140,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             List<string> propChanged = new List<string>();
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
-            Assert.IsTrue(_cities[0].CanInvokeAction(null));
+            Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and invoke
             _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1152,7 +1153,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsFalse(_cities[0].CanInvokeAction(null));
+                Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
             });
 
             EnqueueTestComplete();
@@ -1166,7 +1167,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             List<string> propChanged = new List<string>();
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_cities);
-            Assert.IsTrue(_cities[0].CanInvokeAction(null));
+            Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and Remove
             _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1179,7 +1180,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsFalse(_cities[0].CanInvokeAction(null));
+                Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
             });
 
             EnqueueTestComplete();
@@ -1197,7 +1198,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // invoke domain method and remove the entity
             _cities[0].AssignCityZone("Zone1");
             container.GetEntitySet<City>().Remove(_cities[0]);
-            Assert.IsFalse(_cities[0].CanInvokeAction(null));
+            Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and call RejectChanges
             _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1210,7 +1211,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => propChanged.Any<string>(p => p.StartsWith("Can")));
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(_cities[0].CanInvokeAction(null));
+                Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
                 // verify RejectChanges does not cause multiple property change notifications
                 Assert.IsNotNull(propChanged.Single<string>(p => p == "CanAssignCityZone"));
@@ -2278,6 +2279,56 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueTestComplete();
         }
         #endregion // Named Update Methods
+
+        #region MultipleInvocation support
+        [TestMethod]
+        [Asynchronous]
+        [Description("Verify that multiple invocations to the same method is performed in the same order.")]
+        public void CustomMethod_MultipleInvocations_ShouldHappenInSameOrder()
+        {
+            var ctxt = new TestDomainServices.NamedUpdates.CalculatorDomainContext
+                (new Uri(TestURIs.RootURI, "TestDomainServices-NamedUpdates-CalculatorDomainService.svc"));
+
+            LoadOperation lo = ctxt.Load(ctxt.GetEntitiesQuery(), false);
+            CalculatorValue calc = null;
+            SubmitOperation so = null;
+
+
+            EnqueueConditional(() => lo.IsComplete);
+            EnqueueCallback(delegate
+            {
+                calc = ctxt.CalculatorValues.First();
+
+                Assert.IsTrue(calc.CanAdd);
+                Assert.IsFalse(calc.IsAddInvoked);
+
+                calc.Add(2.0m);
+
+                Assert.IsTrue(calc.CanAdd, "Should be able to invoke entity action multiple times");
+                Assert.IsTrue(calc.IsAddInvoked);
+
+                calc.Multiply(3.0m);
+
+                Assert.IsTrue(calc.CanMultiply, "Should be able to invoke entity action multiple times");
+                Assert.IsTrue(calc.IsMultiplyInvoked);
+
+                calc.Add(1.0m);
+                calc.Multiply(5.0m);
+                calc.Add(2.0m);
+
+                // Submit so server calculates (((((0+2)*3)+1)*5)+2) = 37
+                so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
+            });
+            EnqueueConditional(() => so.IsComplete);
+            EnqueueCallback(delegate
+            {
+                Assert.IsFalse(so.HasError);
+
+                Assert.AreEqual(37.0m, calc.Value);
+            });
+            EnqueueTestComplete();
+        }
+        #endregion
 
         #region Helpers
         private void AssertCompletedWithoutErrors(OperationBase operation)

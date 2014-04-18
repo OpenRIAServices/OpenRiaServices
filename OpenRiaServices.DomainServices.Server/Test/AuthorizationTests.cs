@@ -295,7 +295,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 ChangeSetEntry entry = new ChangeSetEntry();
                 entry.DomainOperationEntry = serviceDescription.GetCustomMethod(typeof(City), "AssignCityZoneIfAuthorized");
-                entry.EntityActions = new Dictionary<string, object[]> { { "AssignCityZoneIfAuthorized", new object[] { "SomeZone" } } };
+                entry.EntityActions = new EntityActionCollection { { "AssignCityZoneIfAuthorized", new object[] { "SomeZone" } } };
                 entry.Operation = DomainOperation.Update;
                 entry.Entity = city;
                 entries.Add(entry);
@@ -331,7 +331,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 ChangeSetEntry entry = new ChangeSetEntry();
                 entry.DomainOperationEntry = serviceDescription.GetCustomMethod(typeof(City), "AssignCityZoneIfAuthorized");
-                entry.EntityActions = new Dictionary<string, object[]> { { "AssignCityZoneIfAuthorized", new object[] { "SomeZone" } } };
+                entry.EntityActions = new EntityActionCollection { { "AssignCityZoneIfAuthorized", new object[] { "SomeZone" } } };
                 entry.Operation = DomainOperation.Update;
                 entry.Entity = city;
                 entries.Add(entry);

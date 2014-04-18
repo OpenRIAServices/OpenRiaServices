@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -19,8 +20,7 @@ namespace OpenRiaServices.DomainServices.Client
     {
         private Action _setChangedCallback;
         private EditSession _editSession;
-        private EntityAction _customMethodInvocation;
-        private EntityAction _prevCustomMethodInvocation;
+        private IList<EntityAction> _customMethodInvocations;
         private EntityConflict _conflict;
         private EntitySet _lastSet;
         private EntitySet _entitySet;
@@ -34,13 +34,14 @@ namespace OpenRiaServices.DomainServices.Client
         private bool _isInferred;
         private bool _isMerging;
         private bool _isSubmitting;
-        private bool _lastCanInvoke;
+
         private bool _trackChanges;
         private Entity _parent;
         private AssociationAttribute _parentAssociation;
         private bool _hasChildChanges;
         private Dictionary<string, ComplexObject> _trackedInstances;
         private MetaType _metaType;
+
 
         /// <summary>
         /// Protected constructor since this is an abstract class
@@ -288,7 +289,7 @@ namespace OpenRiaServices.DomainServices.Client
                     // if we were modified and the last child change has been reverted
                     // and we don't have any actual changes of our own, transition back
                     // to Unmodified
-                    if (this.CustomMethodInvocation == null && !this.HasPropertyChanges)
+                    if (!this.EntityActions.Any() && !this.HasPropertyChanges)
                     {
                         this.EntityState = EntityState.Unmodified;
                     }
@@ -350,6 +351,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
             internal set
             {
+                var previousValue = _entitySet;
                 this._entitySet = value;
                 if (value != null)
                 {
@@ -359,13 +361,28 @@ namespace OpenRiaServices.DomainServices.Client
 
                 // Perform any action state updates required as a result of
                 // attaching/detaching this entity.
-                this.UpdateActionState(this._customMethodInvocation);
+
+                // If EntitySet changes between null and not null then the CanInvokeXXX might have changed
+                // value (unless entity is deleted or submitting in which case it will always be false both before and after)
+                if ((previousValue == null && value != null) || (previousValue != null && value == null)
+                    && (EntityState != EntityState.Deleted && !this.IsSubmitting))
+                {
+                    RaiseCanInvokeChanged();
+                }
 
                 if (this._setChangedCallback != null)
                 {
                     // invoke all registered callbacks (this is a multicast delegate)
                     this._setChangedCallback();
                 }
+            }
+        }
+
+        private void RaiseCanInvokeChanged()
+        {
+            foreach (var customMethod in MetaType.GetEntityActions())
+            {
+                this.RaisePropertyChanged(customMethod.CanInvokePropertyName);
             }
         }
 
@@ -385,21 +402,37 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets or sets the custom method invocation on this entity (if any)
+        /// while bypassing lots of the validation (this is only used by the old tests)
         /// </summary>
+        [Obsolete("Use EntityActions instead")]
         internal EntityAction CustomMethodInvocation
         {
             get
             {
-                return this._customMethodInvocation;
+                if (this._customMethodInvocations == null)
+                    return null;
+                else
+                    return _customMethodInvocations.SingleOrDefault();
             }
             set
             {
-                if (this._customMethodInvocation != value)
+                if (CustomMethodInvocation != value)
                 {
                     bool wasReadOnly = this.IsReadOnly;
 
-                    EntityAction prevCustomMethodInvocation = this._customMethodInvocation;
-                    this._customMethodInvocation = value;
+                    UndoAllEntityActions(preventRaiseReadOnly: true);
+
+                    if (value != null)
+                    {
+                        // Many of the old tests uses invalid method names, construct a dummy EntityActionAttribute
+                        // if no exists
+                        var customMethod = MetaType.GetEntityAction(value.Name);
+                        if (customMethod == null)
+                            customMethod = new EntityActionAttribute(value.Name, false);
+
+                        InvokeActionCore(value, customMethod);
+                    }
+                        
 
                     if (value != null && this._entityState == EntityState.Unmodified)
                     {
@@ -412,10 +445,24 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         this.RaisePropertyChanged("IsReadOnly");
                     }
-
-                    // Perform any action state updates required
-                    this.UpdateActionState(prevCustomMethodInvocation);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Undo all currently queued entity actions
+        /// </summary>
+        /// <param name="preventRaiseReadOnly">if set to <c>true</c> then PropertyChange event for IsReadOnly is never raised.</param>
+        private void UndoAllEntityActions(bool preventRaiseReadOnly = false)
+        {
+            bool wasReadOnly = this.IsReadOnly;
+
+            while (this._customMethodInvocations != null && this._customMethodInvocations.Count > 0)
+                this.UndoAction(this._customMethodInvocations[0]);
+
+            if (IsReadOnly != wasReadOnly && !preventRaiseReadOnly)
+            {
+                RaisePropertyChanged("IsReadOnly");
             }
         }
 
@@ -472,10 +519,10 @@ namespace OpenRiaServices.DomainServices.Client
 
                 MetaType metaType = MetaType.GetMetaType(this.GetType());
 
-                foreach (MetaMember metaMember in metaType.DataMembers.Where(f=> f.IsComplex && !f.IsCollection))
+                foreach (MetaMember metaMember in metaType.DataMembers.Where(f => f.IsComplex && !f.IsCollection))
                 {
                     PropertyInfo propertyInfo = metaMember.Member;
-                    ComplexObject propertyValue = propertyInfo.GetValue(this,null) as ComplexObject;
+                    ComplexObject propertyValue = propertyInfo.GetValue(this, null) as ComplexObject;
                     if (propertyValue != null)
                     {
                         propertyValue.IsMergingState = this._isMerging;
@@ -515,7 +562,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 // if we have invoked a custom method and no errors or conflicts are present, we are read-only
                 bool hasErrors = (this.HasValidationErrors || this.EntityConflict != null);
-                return ((this._customMethodInvocation != null) && !hasErrors);
+                return (EntityActions.Any() && !hasErrors);
             }
         }
 
@@ -537,6 +584,17 @@ namespace OpenRiaServices.DomainServices.Client
                     if (wasReadOnly != this.IsReadOnly)
                     {
                         this.RaisePropertyChanged("IsReadOnly");
+                    }
+
+                    foreach (var entityAction in MetaType.GetEntityActions())
+                    {
+                        // Check if CanInvoke might have changed
+                        if (this.EntityState != EntityState.Deleted 
+                            && this.EntitySet != null)
+                        {
+                            if (entityAction.AllowMultipleInvocations || !this.IsActionInvoked(entityAction.Name))
+                                RaisePropertyChanged(entityAction.CanInvokePropertyName);
+                        }
                     }
                 }
             }
@@ -585,7 +643,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._originalValues = null;
             this._editSession = null;
             this._trackChanges = false;
-            this.CustomMethodInvocation = null;
+            UndoAllEntityActions();
             if (this._validationErrors != null)
             {
                 this._validationErrors.Clear();
@@ -686,7 +744,9 @@ namespace OpenRiaServices.DomainServices.Client
             // need to end any in progress edit session
             this._editSession = null;
 
-            this.CustomMethodInvocation = null;
+            // clear all custom method invocations
+            this.UndoAllEntityActions();
+
             if (this._validationErrors != null)
             {
                 this._validationErrors.Clear();
@@ -764,7 +824,7 @@ namespace OpenRiaServices.DomainServices.Client
             // Reseting custom method invocation needs to be outside here 
             // since invocation could be combined with other operations
             // which result in a non-Modified state
-            this.CustomMethodInvocation = null;
+            UndoAllEntityActions();
 
             // Empty out the error collections
             if (this._validationErrors != null)
@@ -784,17 +844,31 @@ namespace OpenRiaServices.DomainServices.Client
         internal void MarkDeleted()
         {
             this.EntityState = EntityState.Deleted;
+            bool wasReadOnly = this.IsReadOnly;
 
             // Delete operation overrides invocation
-            this.CustomMethodInvocation = null;
+            var previouslyInvoked = _customMethodInvocations;
+            _customMethodInvocations = null;
 
-            // Perform any action state updates required
-            this.UpdateActionState(this._customMethodInvocation);
+            foreach (var customMethodInfo in MetaType.GetEntityActions())
+            {
+                bool wasInvoked = previouslyInvoked != null 
+                    && previouslyInvoked.Any(action => action.Name == customMethodInfo.Name);
+
+                // For the current implementation, we always raise the CanInvoke change notification
+                RaisePropertyChanged(customMethodInfo.CanInvokePropertyName);
+                if (wasInvoked)
+                    RaisePropertyChanged(customMethodInfo.IsInvokedPropertyName);
+            }
+
+            if (wasReadOnly != this.IsReadOnly)
+                RaisePropertyChanged("IsReadOnly");
         }
 
         internal void UndoDelete()
         {
             Debug.Assert(EntityState == EntityState.Deleted, "Can only call UndoDelete for a Deleted entity");
+            Debug.Assert(EntitySet == null, "Should not have set EntitySet (setting EntitySet will call RaiseCanInvokeChanged)");
 
             // When undoing a delete, we need to revert back to
             // the previous modification state
@@ -806,10 +880,6 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 this.EntityState = EntityState.Unmodified;
             }
-
-            // Perform any action state updates required as a result of
-            // un-deleting this entity.
-            this.UpdateActionState(this._customMethodInvocation);
         }
 
         internal void MarkUnmodified()
@@ -984,7 +1054,9 @@ namespace OpenRiaServices.DomainServices.Client
                     // considered modfied, so we wipe out original values
                     this._originalValues = null;
 
-                    if (this.EntityState == EntityState.Modified && this.CustomMethodInvocation == null && !this.HasChildChanges)
+                    if (this.EntityState == EntityState.Modified 
+                        && (this._customMethodInvocations == null || this._customMethodInvocations.Count == 0)
+                        && !this.HasChildChanges)
                     {
                         // we've just reverted all property edits. If we're not modified for
                         // any other reason, transition to Unmodified
@@ -1154,7 +1226,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        
+
         private void OnDataMemberChanging()
         {
             EntitySet set = this.LastSet;
@@ -1351,29 +1423,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// <remarks>
         /// This method is called when the state of CanInvoke changes.
         /// </remarks>
+        [Obsolete("OnActionStateChanged is no longer used, make sure to update your version of OpenRiaServices Code Generation")]
         protected virtual void OnActionStateChanged()
         {
             // no op if not overriden
-        }
-
-        /// <summary>
-        /// Invokes the virtual OnActionStateChanged method as required.
-        /// </summary>
-        /// <param name="prevCustomMethodInvocation">The previous custom method
-        /// invocation.</param>
-        private void UpdateActionState(EntityAction prevCustomMethodInvocation)
-        {
-            if (this._lastCanInvoke == this.CanInvokeAction(null))
-            {   // if the action state hasn't changed, nothing to do
-                return;
-            }
-
-            // save off any previous invocation
-            this._prevCustomMethodInvocation = prevCustomMethodInvocation;
-
-            this.OnActionStateChanged();
-
-            this._prevCustomMethodInvocation = null;
         }
 
         /// <summary>
@@ -1386,6 +1439,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// custom method.</param>
         /// <param name="isInvokedPropertyName">The name of the "IsInvoked" property for the
         /// custom method.</param>
+        [Obsolete("UpdateActionState is no longer used, make sure to update your version of OpenRiaServices Code Generation")]
         protected void UpdateActionState(string name, string canInvokePropertyName, string isInvokedPropertyName)
         {
             if (string.IsNullOrEmpty(name))
@@ -1403,15 +1457,6 @@ namespace OpenRiaServices.DomainServices.Client
 
             // For the current implementation, we always raise the CanInvoke change notification
             this.RaisePropertyChanged(canInvokePropertyName);
-
-            // if this particular action has changed invoke state, raise
-            // the change notification
-            bool isUninvoked = this._prevCustomMethodInvocation != null && this._customMethodInvocation == null && this._prevCustomMethodInvocation.Name == name;
-            bool isInvoked = this._customMethodInvocation != null && this._prevCustomMethodInvocation == null && this._customMethodInvocation.Name == name;
-            if (isUninvoked || isInvoked)
-            {
-                this.RaisePropertyChanged(isInvokedPropertyName);
-            }
         }
 
         /// <summary>
@@ -1520,12 +1565,6 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new InvalidOperationException(Resource.Entity_InvokeWhileSubmitting);
             }
 
-            // verify that a custom method has not already been called on this entity
-            if (this.CustomMethodInvocation != null)
-            {
-                throw new InvalidOperationException(Resource.Entity_MultipleCustomMethodInvocations);
-            }
-
             // custom methods cannot be called on deleted entities
             if (this._entityState == EntityState.Deleted)
             {
@@ -1545,8 +1584,74 @@ namespace OpenRiaServices.DomainServices.Client
             // on the method itself as well as all the parameters
             ValidationUtilities.ValidateCustomUpdateMethodCall(actionName, this.CreateValidationContext(), parameters);
 
+            var customMethodInfo = MetaType.GetEntityAction(actionName);
+            if (customMethodInfo == null)
+                throw new InvalidOperationException(string.Format(Resource.Entity_NoEntityActionWithName, actionName));
+
             // record invocation on the entity, which does proper state transition and raising property changed events
-            this.CustomMethodInvocation = new EntityAction(actionName, parameters);
+            InvokeActionCore(new EntityAction(actionName, parameters), customMethodInfo);
+        }
+
+        internal void InvokeActionCore(EntityAction action, EntityActionAttribute customMethodInfo)
+        {
+            bool wasReadOnly = this.IsReadOnly;
+            bool wasInvoked = this.IsActionInvoked(action.Name);
+
+            if (wasInvoked && customMethodInfo.AllowMultipleInvocations == false)
+                throw new InvalidOperationException(Resources.MethodCanOnlyBeInvokedOnce);
+
+            if (_customMethodInvocations == null)
+                _customMethodInvocations = new List<EntityAction>();
+
+            this._customMethodInvocations.Add(action);
+
+            if (this._entityState == EntityState.Unmodified)
+            {
+                // invoking on an unmodified entity makes it modified, but invoking
+                // on an entity in any other state should not change state
+                this.EntityState = EntityState.Modified;
+            }
+
+            if (wasReadOnly != this.IsReadOnly)
+            {
+                this.RaisePropertyChanged("IsReadOnly");
+            }
+
+            // Perform any action state updates required
+
+            this.RaisePropertyChanged(customMethodInfo.CanInvokePropertyName);
+
+            if (!wasInvoked)
+                this.RaisePropertyChanged(customMethodInfo.IsInvokedPropertyName);
+        }
+
+        /// <summary>
+        /// Undoes a previously invoked action.
+        /// </summary>
+        /// <param name="action">The action to undo.</param>
+        /// <exception cref="System.ArgumentNullException">action</exception>
+        /// <exception cref="System.InvalidOperationException">A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted</exception>
+        /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions"/> </exception>
+        internal protected void UndoAction(EntityAction action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            // verify that the action can currently be invoked
+            if (this.IsSubmitting)
+                throw new InvalidOperationException(Resource.Entity_UndoInvokeWhileSubmitting);
+
+            var removed = _customMethodInvocations != null && this._customMethodInvocations.Remove(action);
+            if (!removed)
+                throw new ArgumentException(Resource.Entity_UndoInvokeOnlyForInvokedActions);
+
+            var customUpdate = MetaType.GetEntityAction(action.Name);
+            Debug.Assert(customUpdate != null, "EntityAction have valid name since it is part of EntityActions");
+            RaisePropertyChanged(customUpdate.CanInvokePropertyName);
+
+            // If no additional invocations are recorded, then raise an update
+            if (!_customMethodInvocations.Any(item => item.Name == action.Name))
+                RaisePropertyChanged(customUpdate.IsInvokedPropertyName);
         }
 
         /// <summary>
@@ -1556,12 +1661,22 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>True if the action can currently be invoked</returns>
         protected internal bool CanInvokeAction(string name)
         {
-            // custom methods cannot be invoked if there is already an outstanding invocation, 
-            // the entity is deleted, or if the entity is unattached.
-            this._lastCanInvoke = ((this._customMethodInvocation == null) &&
-                             (this.EntityState != EntityState.Deleted) &&
-                             (this.EntitySet != null) && !this.IsSubmitting);
-            return this._lastCanInvoke;
+            // custom methods cannot be invoked if the entity is deleted, or if the entity is unattached.
+            bool canInvoke = this.EntityState != EntityState.Deleted 
+                             && this.EntitySet != null
+                             && !this.IsSubmitting;
+
+            if (canInvoke)
+            {
+                // return false if method name is invalid 
+                //  or the action is already invoked and multiple invocations are not allowd
+                var customMethod = MetaType.GetEntityAction(name);
+                if (customMethod == null 
+                        || (customMethod.AllowMultipleInvocations == false && IsActionInvoked(name)))
+                    canInvoke = false;
+            }
+
+            return canInvoke;
         }
 
         /// <summary>
@@ -1576,9 +1691,9 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                if (this._customMethodInvocation != null)
+                if (this._customMethodInvocations != null)
                 {
-                    return new EntityAction[] { this._customMethodInvocation };
+                    return new ReadOnlyCollection<EntityAction>(this._customMethodInvocations);
                 }
                 else
                 {
@@ -1749,7 +1864,7 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnDeserialized(StreamingContext context)
         {
-            this._isDeserializing = false;   
+            this._isDeserializing = false;
         }
 
         /// <summary>
@@ -1790,7 +1905,7 @@ namespace OpenRiaServices.DomainServices.Client
             private Entity _entity;
             private EntityState _lastState;
             private IDictionary<string, object> _snapshot;
-            private EntityAction _customMethodInvocation;
+            private EntityAction[] _customMethodInvocations;
             private ValidationResult[] _validationErrors;
             private List<string> _modifiedProperties;
 
@@ -1798,7 +1913,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 this._entity = entity;
                 this._lastState = entity.EntityState;
-                this._customMethodInvocation = entity.CustomMethodInvocation;
+                this._customMethodInvocations = entity._customMethodInvocations != null ? entity._customMethodInvocations.ToArray() : null;
                 this._validationErrors = entity.ValidationErrors.ToArray();
                 this._modifiedProperties = new List<string>();
             }
@@ -1833,8 +1948,31 @@ namespace OpenRiaServices.DomainServices.Client
                         this._entity.ApplyState(this._snapshot);
                     }
 
-                    // revert any custom method invocation
-                    this._entity.CustomMethodInvocation = this._customMethodInvocation;
+                    // revert any added custom method invocation
+                    if (this._entity._customMethodInvocations != null)
+                    {
+                        IEnumerable<EntityAction> addedInvokations = this._entity._customMethodInvocations;
+
+                        if (this._customMethodInvocations != null)
+                            addedInvokations = addedInvokations.Where(item => !this._customMethodInvocations.Contains(item));
+
+                        foreach (var method in addedInvokations.ToList())
+                            this._entity.UndoAction(method);
+                    }
+
+                    // add any "uninvoked" methods
+                    if (this._customMethodInvocations != null)
+                    {
+                        IEnumerable<EntityAction> removedInvocations = this._customMethodInvocations;
+
+                        if (this._entity._customMethodInvocations != null)
+                            removedInvocations = removedInvocations.Where(item => !this._entity._customMethodInvocations.Contains(item));
+
+                        foreach (var method in removedInvocations.ToArray())
+                        {
+                            this._entity.InvokeActionCore(method, _entity.MetaType.GetEntityAction(method.Name));
+                        }
+                    }
                 }
 
                 // revert the validation errors

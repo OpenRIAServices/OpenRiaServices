@@ -35,4 +35,5 @@ using System.Security;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AllowPartiallyTrustedCallers]
+// TODO: review -- v4.0 security model assumes transparent, making unit tests fail to build if this is set
+// [assembly: AllowPartiallyTrustedCallers]

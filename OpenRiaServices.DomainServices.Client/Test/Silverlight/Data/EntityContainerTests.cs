@@ -4335,10 +4335,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             cities.EntityContainer.LoadEntities(new Entity[] { city });
             city.StateName = "XX";
             city.AssignCityZone("Zone42");
-            Assert.IsNotNull(city.CustomMethodInvocation);
+            Assert.AreEqual(1, city.EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, city.EntityState);
             cities.EntityContainer.LoadEntities(new Entity[] { new City() {Name="Toledo", CountyName="Lucas", StateName="OH"}}, LoadBehavior.RefreshCurrent);
-            Assert.IsNotNull(city.CustomMethodInvocation);
+            Assert.AreEqual(1, city.EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, city.EntityState);
         }
 

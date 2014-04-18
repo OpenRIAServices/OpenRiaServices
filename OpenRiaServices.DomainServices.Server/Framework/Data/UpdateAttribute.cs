@@ -13,6 +13,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Gets or sets a value indicating whether the method is a custom update operation.
         /// </summary>
+        [Obsolete("Use EntityActionAttribute to specify 'CustomMethods'")]
         public bool UsingCustomMethod { get; set; }
     }
 }

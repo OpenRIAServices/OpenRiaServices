@@ -67,7 +67,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             processCityOperation.Entity = new City { Name = "Redmond", CountyName = "King", StateName = "WA" };
             processCityOperation.DomainOperationEntry = description.GetCustomMethod(typeof(City), "ProcessCity");
             processCityOperation.Operation = DomainOperation.Update;
-            processCityOperation.EntityActions = new Dictionary<string,object[]> { {"ProcessCity", new object[] { new byte[]{ byte.MaxValue, byte.MinValue, 123} } } };
+            processCityOperation.EntityActions = new EntityActionCollection { { "ProcessCity", new object[] { new byte[] { byte.MaxValue, byte.MinValue, 123 } } } };
             changeSetEntries.Add(processCityOperation);
 
             ChangeSet changeset = new ChangeSet(changeSetEntries);
@@ -92,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             processCountyOperation.Entity = new County { Name = "King", StateName="WA" };
             processCountyOperation.DomainOperationEntry = description.GetCustomMethod(typeof(County), "ProcessCounty");
             processCountyOperation.Operation = DomainOperation.Update;
-            processCountyOperation.EntityActions = new Dictionary<string, object[]> { { "ProcessCounty", null } };
+            processCountyOperation.EntityActions = new EntityActionCollection { { "ProcessCounty", null } };
             changeSetEntries.Add(processCountyOperation);
 
             ChangeSetEntry processCityOperation = new ChangeSetEntry();
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             processCityOperation.Entity = new City { Name = "Redmond", CountyName = "King", StateName = "WA" };
             processCityOperation.DomainOperationEntry = description.GetCustomMethod(typeof(City), "ProcessCity");
             processCityOperation.Operation = DomainOperation.Update;
-            processCityOperation.EntityActions = new Dictionary<string,object[]> { { "ProcessCity", new object[] { new byte[] { 123, 1 } } } };
+            processCityOperation.EntityActions = new EntityActionCollection { { "ProcessCity", new object[] { new byte[] { 123, 1 } } } };
             changeSetEntries.Add(processCityOperation);
 
             ChangeSet changeset = new ChangeSet(changeSetEntries);

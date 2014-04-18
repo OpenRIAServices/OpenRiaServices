@@ -245,16 +245,12 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="expectedStateName">The value to pass to the server method's 'expectedStateName' parameter.</param>
         /// <param name="expectedOriginalStateName">The value to pass to the server method's 'expectedOriginalStateName' parameter.</param>
+        [EntityAction("MockCustomerCustomMethod")]
         public void MockCustomerCustomMethod(string expectedStateName, string expectedOriginalStateName)
         {
             this.OnMockCustomerCustomMethodInvoking(expectedStateName, expectedOriginalStateName);
             base.InvokeAction("MockCustomerCustomMethod", expectedStateName, expectedOriginalStateName);
             this.OnMockCustomerCustomMethodInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("MockCustomerCustomMethod", "CanMockCustomerCustomMethod", "IsMockCustomerCustomMethodInvoked");
         }
     }
     
@@ -714,16 +710,12 @@ namespace TestDomainServices
         /// <summary>
         /// Invokes the 'MockReportCustomMethod' action on this entity.
         /// </summary>
+        [EntityAction("MockReportCustomMethod")]
         public void MockReportCustomMethod()
         {
             this.OnMockReportCustomMethodInvoking();
             base.InvokeAction("MockReportCustomMethod");
             this.OnMockReportCustomMethodInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("MockReportCustomMethod", "CanMockReportCustomMethod", "IsMockReportCustomMethodInvoked");
         }
     }
     

@@ -28,15 +28,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n\n");
             this.Write("\r\n");
-            this.Write("\n\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
+            this.Write("\r\n\r\n");
  this.Generate(); 
-            this.Write("\n\n");
+            this.Write("\r\n");
             return this.GenerationEnvironment.ToString();
         }
  
@@ -44,11 +41,11 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 	{
 		string ns = this.ClientCodeGenerator.Options.ClientRootNamespace;
 
-this.Write("\nnamespace ");
+this.Write("namespace ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(ns));
 
-this.Write("\n");
+this.Write("\r\n");
 
 
 	}
@@ -59,8 +56,8 @@ this.Write("\n");
 	protected virtual void GenerateClassDeclaration()
 	{
 
-this.Write("\npublic sealed partial class WebContext : OpenRiaServices.DomainServices.Client.A" +
-        "pplicationServices.WebContextBase\n");
+this.Write("public sealed partial class WebContext : OpenRiaServices.DomainServices.Client.Ap" +
+        "plicationServices.WebContextBase\r\n");
 
 
 	}
@@ -68,7 +65,7 @@ this.Write("\npublic sealed partial class WebContext : OpenRiaServices.DomainSer
 	private void GenerateConstructor()
 	{
 
-this.Write("\npublic WebContext()\n{\t\t\t\n\tthis.OnCreated();\n}\n");
+this.Write("public WebContext()\r\n{\t\t\t\r\n\tthis.OnCreated();\r\n}\r\n");
 
 
 	}
@@ -79,7 +76,7 @@ this.Write("\npublic WebContext()\n{\t\t\t\n\tthis.OnCreated();\n}\n");
 	protected virtual void GenerateExtensibilityMethods()
 	{
 
-this.Write("\npartial void OnCreated();\n");
+this.Write("partial void OnCreated();\r\n");
 
 
 	}
@@ -90,9 +87,9 @@ this.Write("\npartial void OnCreated();\n");
 	protected virtual void GenerateProperties()
 	{
 
-this.Write("\npublic new static WebContext Current\n{\n    get\n    {\n        return ((WebContext" +
-        ")(OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Curre" +
-        "nt));\n    }\n}\n");
+this.Write("public new static WebContext Current\r\n{\r\n    get\r\n    {\r\n        return ((WebCont" +
+        "ext)(OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Cu" +
+        "rrent));\r\n    }\r\n}\r\n");
 
 
 		
@@ -105,15 +102,15 @@ this.Write("\npublic new static WebContext Current\n{\n    get\n    {\n        r
             {
 				string typeName = CodeGenUtilities.GetTypeName(genericType.GetGenericArguments()[0]);
 
-this.Write("\npublic new ");
+this.Write("public new ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(" User\n{\n\tget { return (");
+this.Write(" User\r\n{\r\n\tget { return (");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
-this.Write(")base.User; }\n}\n");
+this.Write(")base.User; }\r\n}\r\n");
 
 
 			}
@@ -122,64 +119,6 @@ this.Write(")base.User; }\n}\n");
 
 
 
-
-#region ToString Helpers
-/// <summary>
-/// Utility class to produce culture-oriented representation of an object as a string.
-/// </summary>
-public class ToStringInstanceHelper
-{
-	private System.IFormatProvider _formatProviderField  = global::System.Globalization.CultureInfo.InvariantCulture;
-	/// <summary>
-	/// Gets or sets format provider to be used by ToStringWithCulture method.
-	/// </summary>
-	public System.IFormatProvider FormatProvider
-	{
-		get
-		{
-			return this._formatProviderField ;
-		}
-		set
-		{
-			if ((value != null))
-			{
-				this._formatProviderField  = value;
-			}
-		}
-	}
-	/// <summary>
-	/// This is called from the compile/run appdomain to convert objects within an expression block to a string
-	/// </summary>
-	public string ToStringWithCulture(object objectToConvert)
-	{
-		if ((objectToConvert == null))
-		{
-			throw new global::System.ArgumentNullException("objectToConvert");
-		}
-		System.Type t = objectToConvert.GetType();
-		System.Reflection.MethodInfo method = t.GetMethod("ToString", new System.Type[] {
-					typeof(System.IFormatProvider)});
-		if ((method == null))
-		{
-			return objectToConvert.ToString();
-		}
-		else
-		{
-			return ((string)(method.Invoke(objectToConvert, new object[] {
-						this._formatProviderField })));
-		}
-	}
-}
-private ToStringInstanceHelper _toStringHelperField = new ToStringInstanceHelper();
-public ToStringInstanceHelper ToStringHelper
-{
-	get
-	{
-		return this._toStringHelperField;
-	}
-}
-#endregion
-		
 private void GenerateParameterDeclaration(IEnumerable<DomainOperationParameter> parameters, bool generateAttributes)
 {
 	DomainOperationParameter[] paramInfos = parameters.ToArray();
@@ -207,7 +146,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(paramName));
 this.Write(", ");
 
 
-		}		
+		}
 	}
 }
 

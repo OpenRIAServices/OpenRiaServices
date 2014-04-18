@@ -334,32 +334,32 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsFalse(city.IsReadOnly);
 
             // if a custom method is being invoked, the entity should be readonly
-            city.CustomMethodInvocation = new EntityAction("Test", null);
+            city.AutoAssignCityZone();
             Assert.IsTrue(city.IsReadOnly);
-            city.CustomMethodInvocation = null;
+            city.UndoAction(city.EntityActions.First());
             Assert.IsFalse(city.IsReadOnly);
 
             // if a custom method is being invoked but validation errors are present, the entity should not be readonly
-            city.CustomMethodInvocation = new EntityAction("Test", null);
+            city.AutoAssignCityZone();
             city.ValidationResultCollection.ReplaceErrors(new ValidationResult[] { new ValidationResult(string.Empty) });
             Assert.IsFalse(city.IsReadOnly);
-            city.CustomMethodInvocation = null;
+            city.UndoAction(city.EntityActions.First());
             city.ValidationErrors.Clear();
             Assert.IsFalse(city.IsReadOnly);
 
             // if a custom method is being invoked but errors are present, the entity should not be readonly
-            city.CustomMethodInvocation = new EntityAction("Test", null);
+            city.AutoAssignCityZone();
             city.ValidationResultCollection.ReplaceErrors(new ValidationResult[] { new ValidationResult(string.Empty) });
             Assert.IsFalse(city.IsReadOnly);
-            city.CustomMethodInvocation = null;
+            city.UndoAction(city.EntityActions.First());
             city.ValidationErrors.Clear();
             Assert.IsFalse(city.IsReadOnly);
 
             // if a custom method is being invoked but conflicts are present, the entity should not be readonly
-            city.CustomMethodInvocation = new EntityAction("Test", null);
+            city.AutoAssignCityZone();
             city.EntityConflict = new EntityConflict(city, null, null, true);
             Assert.IsFalse(city.IsReadOnly);
-            city.CustomMethodInvocation = null;
+            city.UndoAction(city.EntityActions.First());
             city.EntityConflict = null;
             Assert.IsFalse(city.IsReadOnly);
 
@@ -844,7 +844,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             city.ValidationErrors.Clear();
             Assert.AreEqual(2, validationErrorsChangeCount);
 
-            Assert.AreEqual(27, totalPropertyChangeNotificationCount);
+            Assert.AreEqual(23, totalPropertyChangeNotificationCount);
         }
 
         [TestMethod]

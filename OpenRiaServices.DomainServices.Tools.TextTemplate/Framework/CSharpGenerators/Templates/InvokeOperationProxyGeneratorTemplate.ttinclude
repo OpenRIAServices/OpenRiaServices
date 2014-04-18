@@ -1,12 +1,5 @@
 ﻿<#+
 
-public enum InvokeKind
-{
-	WithoutCallback, 
-	WithCallback,
-	Async
-};
-
 /// <summary>
 /// Generates invoke operations.
 /// </summary>

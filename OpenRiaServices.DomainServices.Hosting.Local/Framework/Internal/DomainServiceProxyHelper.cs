@@ -102,7 +102,8 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             changeSetEntry.HasMemberChanges = hasMemberChanges;
             if (!string.IsNullOrEmpty(operationName))
             {
-                changeSetEntry.EntityActions = new Dictionary<string, object[]> { { operationName, parameters } };
+                changeSetEntry.EntityActions = new List<Serialization.KeyValue<string, object[]>>(); 
+                changeSetEntry.EntityActions.Add(new Serialization.KeyValue<string, object[]>(operationName, parameters));
             }
 
             ChangeSet changeSet = new ChangeSet(new[] { changeSetEntry });

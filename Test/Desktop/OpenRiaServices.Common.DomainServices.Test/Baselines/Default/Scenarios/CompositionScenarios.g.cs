@@ -287,16 +287,12 @@ namespace TestDomainServices
         /// <summary>
         /// Invokes the 'CustomOp_Child' action on this entity.
         /// </summary>
+        [EntityAction("CustomOp_Child")]
         public void CustomOp_Child()
         {
             this.OnCustomOp_ChildInvoking();
             base.InvokeAction("CustomOp_Child");
             this.OnCustomOp_ChildInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("CustomOp_Child", "CanCustomOp_Child", "IsCustomOp_ChildInvoked");
         }
     }
     
@@ -1286,16 +1282,12 @@ namespace TestDomainServices
         /// <summary>
         /// Invokes the 'CustomOp_GrandChild' action on this entity.
         /// </summary>
+        [EntityAction("CustomOp_GrandChild")]
         public void CustomOp_GrandChild()
         {
             this.OnCustomOp_GrandChildInvoking();
             base.InvokeAction("CustomOp_GrandChild");
             this.OnCustomOp_GrandChildInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("CustomOp_GrandChild", "CanCustomOp_GrandChild", "IsCustomOp_GrandChildInvoked");
         }
     }
     
@@ -1528,16 +1520,12 @@ namespace TestDomainServices
         /// <summary>
         /// Invokes the 'CustomOp_GreatGrandChild' action on this entity.
         /// </summary>
+        [EntityAction("CustomOp_GreatGrandChild")]
         public void CustomOp_GreatGrandChild()
         {
             this.OnCustomOp_GreatGrandChildInvoking();
             base.InvokeAction("CustomOp_GreatGrandChild");
             this.OnCustomOp_GreatGrandChildInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("CustomOp_GreatGrandChild", "CanCustomOp_GreatGrandChild", "IsCustomOp_GreatGrandChildInvoked");
         }
     }
     
@@ -1725,16 +1713,12 @@ namespace TestDomainServices
         /// <summary>
         /// Invokes the 'CustomOp_Parent' action on this entity.
         /// </summary>
+        [EntityAction("CustomOp_Parent")]
         public void CustomOp_Parent()
         {
             this.OnCustomOp_ParentInvoking();
             base.InvokeAction("CustomOp_Parent");
             this.OnCustomOp_ParentInvoked();
-        }
-        
-        protected override void OnActionStateChanged()
-        {
-            base.UpdateActionState("CustomOp_Parent", "CanCustomOp_Parent", "IsCustomOp_ParentInvoked");
         }
     }
     

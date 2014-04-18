@@ -125,11 +125,6 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
                 this.GenerateCustomMethod(methodEntry);
                 this.GenerateCustomMethodProperties(methodEntry);
             }
-
-            if (entityCustomMethods.Count() > 0)
-            {
-                this.GenerateOnActionStateChanged(entityCustomMethods.OrderBy(e => e.Name));
-            }
         }
     }
 

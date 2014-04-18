@@ -30,21 +30,13 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n");
-            this.Write("\n\n");
-            this.Write("\n");
             this.Write("\r\n");
-            this.Write("\n");
-            this.Write("\n\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
+            this.Write("\r\n");
  this.Generate(); 
-            this.Write("\n\n");
+            this.Write("\r\n");
             return this.GenerationEnvironment.ToString();
         }
 	
@@ -61,8 +53,18 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 			domainOperationparameterList.Add(paramInfo);
 		}
 
+		var customMethodAttribute = customMethod.OperationAttribute as EntityActionAttribute;
+		bool allowMultipleInvocations = customMethodAttribute != null && customMethodAttribute.AllowMultipleInvocations;
 
-this.Write("\npublic void ");
+this.Write("[OpenRiaServices.DomainServices.Client.EntityAction(\"");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
+
+this.Write("\", AllowMultipleInvocations = ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(allowMultipleInvocations.ToString().ToLower()));
+
+this.Write(")]\r\npublic void ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
@@ -71,19 +73,19 @@ this.Write("(");
 
 this.GenerateParameterDeclaration(domainOperationparameterList, true);
 
-this.Write(")\n");
+this.Write(")\r\n");
 
 		
 		this.GenerateOpeningBrace();
 
-this.Write("\nthis.");
+this.Write("this.");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(methodInvokingName));
 
 this.Write("(");
 
  this.GenerateParametersForMethodCall(domainOperationparameterList); 
-this.Write(");\nbase.InvokeAction(\"");
+this.Write(");\r\nbase.InvokeAction(\"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
@@ -93,27 +95,27 @@ this.Write("\"");
 this.Write(", ");
 
  this.GenerateParametersForMethodCall(domainOperationparameterList); }
-this.Write(");\nthis.");
+this.Write(");\r\nthis.");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(methodInvokedName));
 
-this.Write("();\n");
+this.Write("();\r\n");
 
 		
 		this.GenerateClosingBrace();
 
-this.Write("\npartial void ");
+this.Write("partial void ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(methodInvokingName));
 
 this.Write("(");
 
  this.GenerateParameterDeclaration(domainOperationparameterList, false); 
-this.Write(");\npartial void ");
+this.Write(");\r\npartial void ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(methodInvokedName));
 
-this.Write("();\n");
+this.Write("();\r\n");
 
 
 	}
@@ -140,65 +142,29 @@ this.Write(", ");
 	private void GenerateCustomMethodProperties(DomainOperationEntry customMethod)
 	{
 
-this.Write("\n[System.ComponentModel.DataAnnotations.Display(AutoGenerateField=false)]\npublic " +
+this.Write("[System.ComponentModel.DataAnnotations.Display(AutoGenerateField=false)]\r\npublic " +
         "bool Can");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
-this.Write("\n{\n    get\n    {\n        return base.CanInvokeAction(\"");
+this.Write("\r\n{\r\n    get\r\n    {\r\n        return base.CanInvokeAction(\"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
-this.Write("\");\n    }\n}\n\n[System.ComponentModel.DataAnnotations.Display(AutoGenerateField=fal" +
-        "se)]\npublic bool Is");
+this.Write("\");\r\n    }\r\n}\r\n\r\n[System.ComponentModel.DataAnnotations.Display(AutoGenerateField" +
+        "=false)]\r\npublic bool Is");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
-this.Write("Invoked\n{\n\tget\n\t{\n\t\treturn base.IsActionInvoked(\"");
+this.Write("Invoked\r\n{\r\n\tget\r\n\t{\r\n\t\treturn base.IsActionInvoked(\"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
-this.Write("\");\n\t}\n}\n");
+this.Write("\");\r\n\t}\r\n}\r\n");
 
 
 	}
 
-	private void GenerateOnActionStateChanged(IEnumerable<DomainOperationEntry> customMethods)
-	{
-
-this.Write("\nprotected override void OnActionStateChanged()\n");
-
-
-		this.GenerateOpeningBrace();
-		if(this.IsDerivedType)
-		{
-
-this.Write("\nbase.OnActionStateChanged();\n");
-
-
-		}
-		foreach(DomainOperationEntry customMethod in customMethods)
-		{
-
-this.Write("\nbase.UpdateActionState(\"");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
-
-this.Write("\", \"Can");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
-
-this.Write("\", \"Is");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
-
-this.Write("Invoked\");\n");
-
-
-		}
-		this.GenerateClosingBrace();
-	}
-	
 	/// <summary>
 	/// Generates the GetIdentity() method on the entity.
 	/// </summary>
@@ -210,18 +176,18 @@ this.Write("Invoked\");\n");
 		if(keyNames != null && keyNames.Count() > 0)
 		{
 
-this.Write("\npublic override object GetIdentity()\n");
+this.Write("public override object GetIdentity()\r\n");
 
   
 			this.GenerateOpeningBrace();
 			if(keyNames.Count() == 1)
 			{
 
-this.Write("\nreturn this.");
+this.Write("return this.");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(keyNames[0]));
 
-this.Write(";\n");
+this.Write(";\r\n");
 
 
 			}
@@ -252,12 +218,12 @@ this.Write(" || ");
 							}
 						}	
 
-this.Write(")\n{\n\treturn null;\n}\n");
+this.Write(")\r\n{\r\n\treturn null;\r\n}\r\n");
 
 
 				}
 
-this.Write("\nreturn OpenRiaServices.DomainServices.Client.EntityKey.Create(");
+this.Write("return OpenRiaServices.DomainServices.Client.EntityKey.Create(");
 
 
 for(int i = 0; i < keyNames.Count(); i++)
@@ -277,7 +243,7 @@ this.Write(", ");
 	}
 }	
 
-this.Write(");\n");
+this.Write(");\r\n");
 
 
 				
@@ -292,8 +258,7 @@ this.Write(");\n");
 		// We simply generate code as it is, since it is not dependent on anything.
 		
 
-this.Write(@"
-string global::System.Security.Principal.IIdentity.AuthenticationType
+this.Write(@"string global::System.Security.Principal.IIdentity.AuthenticationType
 {
     get
     {
@@ -621,64 +586,6 @@ this.Write("Changed();\r\n");
 
 
 
-
-#region ToString Helpers
-/// <summary>
-/// Utility class to produce culture-oriented representation of an object as a string.
-/// </summary>
-public class ToStringInstanceHelper
-{
-	private System.IFormatProvider _formatProviderField  = global::System.Globalization.CultureInfo.InvariantCulture;
-	/// <summary>
-	/// Gets or sets format provider to be used by ToStringWithCulture method.
-	/// </summary>
-	public System.IFormatProvider FormatProvider
-	{
-		get
-		{
-			return this._formatProviderField ;
-		}
-		set
-		{
-			if ((value != null))
-			{
-				this._formatProviderField  = value;
-			}
-		}
-	}
-	/// <summary>
-	/// This is called from the compile/run appdomain to convert objects within an expression block to a string
-	/// </summary>
-	public string ToStringWithCulture(object objectToConvert)
-	{
-		if ((objectToConvert == null))
-		{
-			throw new global::System.ArgumentNullException("objectToConvert");
-		}
-		System.Type t = objectToConvert.GetType();
-		System.Reflection.MethodInfo method = t.GetMethod("ToString", new System.Type[] {
-					typeof(System.IFormatProvider)});
-		if ((method == null))
-		{
-			return objectToConvert.ToString();
-		}
-		else
-		{
-			return ((string)(method.Invoke(objectToConvert, new object[] {
-						this._formatProviderField })));
-		}
-	}
-}
-private ToStringInstanceHelper _toStringHelperField = new ToStringInstanceHelper();
-public ToStringInstanceHelper ToStringHelper
-{
-	get
-	{
-		return this._toStringHelperField;
-	}
-}
-#endregion
-		
 private void GenerateParameterDeclaration(IEnumerable<DomainOperationParameter> parameters, bool generateAttributes)
 {
 	DomainOperationParameter[] paramInfos = parameters.ToArray();
@@ -706,7 +613,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(paramName));
 this.Write(", ");
 
 
-		}		
+		}
 	}
 }
 

@@ -4929,6 +4929,40 @@ namespace TestDomainServices
         {
             public MockComplexObject4 Property1 { get; set; }
         }
+
+        [EnableClientAccess]
+        public class CalculatorDomainService : DomainService
+        {
+            [Query]
+            public IQueryable<CalculatorValue> GetEntities()
+            {
+                return new [] { new CalculatorValue() { Key = 1 }}.AsQueryable();
+            }
+
+            [EntityAction(AllowMultipleInvocations = true)]
+            public void Add(CalculatorValue value, decimal rhs)
+            {
+                value.Value += rhs;
+            }
+
+            [EntityAction(AllowMultipleInvocations = true)]
+            public void Multiply(CalculatorValue value, decimal rhs)
+            {
+                value.Value *= rhs;
+            }
+        }
+
+        [DataContract]
+        public class CalculatorValue
+        {
+            [DataMember]
+            [Key]
+            public int Key { get; set; }
+
+            [DataMember]
+            [RoundtripOriginal]
+            public decimal Value { get; set; }
+        }
     }
 
     #endregion // Named Update Methods

@@ -138,6 +138,7 @@ namespace OpenRiaServices.DomainServices.Server
             DomainServiceDescription.RegisterCustomTypeDescriptor(new AssociatedMetadataTypeTypeDescriptionProvider(type), type);
         }
 
+
         /// <summary>
         /// This method classifies an operation by setting its its operation type.
         /// </summary>
@@ -162,7 +163,10 @@ namespace OpenRiaServices.DomainServices.Server
             }
             else if (operation.Attributes[typeof(UpdateAttribute)] != null)
             {
+                // disable obsolete warning here
+#pragma warning disable 0618
                 if (((UpdateAttribute)operation.Attributes[typeof(UpdateAttribute)]).UsingCustomMethod)
+#pragma warning restore 0618
                 {
                     operationType = DomainOperation.Custom;
                 }
@@ -170,6 +174,10 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     operationType = DomainOperation.Update;
                 }
+            }
+            else if (operation.Attributes[typeof(EntityActionAttribute)] != null)
+            {
+                operationType = DomainOperation.Custom;
             }
             else if (operation.Attributes[typeof(DeleteAttribute)] != null)
             {

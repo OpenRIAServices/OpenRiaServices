@@ -127,6 +127,9 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\RoundtripOriginalAttribute.cs">
       <Link>Data\RoundtripOriginalAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\Serialization\KeyValue.cs">
+      <Link>Data\Serialization\KeyValue.cs</Link>
+    </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
       <Link>Data\TypeUtility.cs</Link>
     </Compile>
@@ -148,6 +151,7 @@
     <Compile Include="Data\CodeProcessor.cs" />
     <Compile Include="Data\ChangeSet.cs" />
     <Compile Include="Data\CompositionAttribute.cs" />
+    <Compile Include="Data\EntityActionAttribute.cs" />
     <Compile Include="Data\DomainPropertyDescriptor.cs" />
     <Compile Include="Data\DomainTypeDescriptor.cs" />
     <Compile Include="Data\DynamicMethodUtility.cs" />

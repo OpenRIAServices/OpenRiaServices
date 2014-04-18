@@ -1196,12 +1196,13 @@ namespace OpenRiaServices.DomainServices.Client
             // the user called the wrong context method on shared entity.
             foreach (Entity entity in changeSet.ModifiedEntities)
             {
-                EntityAction customMethod = entity.EntityActions.FirstOrDefault();
-
-                if (customMethod != null)
+                foreach(var customMethod in entity.EntityActions)
                 {
                     try
                     {
+                        // TODO: REVIEW and see if we should perform validation against the entity instead
+                        // ValidationUtilities.GetMethod(entity, entityAction.Name, entityAction.parameters);
+
                         // DomainContext custom methods always differ from the entity version because
                         // the first param is the entity. Ensure the entity is the first param in the list.
                         object[] parameters = new object[customMethod.Parameters.Count() + 1];

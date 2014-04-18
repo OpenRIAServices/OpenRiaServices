@@ -65,7 +65,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 // create the operation and apply any original values
                 ChangeSetEntry changeSetEntry = new ChangeSetEntry(entity, clientID++, operationType);
-                
+
                 if (entity.OriginalValues != null)
                 {
                     if (entity.MetaType.ShouldRoundtripOriginal && entity.OriginalValues != null)
@@ -82,18 +82,20 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 // add any custom method invocations
-                if (entity.CustomMethodInvocation != null)
+                var entityActions = (ICollection<EntityAction>)entity.EntityActions;
+                foreach (EntityAction customInvokation in entityActions)
                 {
-                    if (string.IsNullOrEmpty(entity.CustomMethodInvocation.Name))
+                    if (string.IsNullOrEmpty(customInvokation.Name))
                     {
                         throw new ArgumentException(Resource.DomainClient_InvocationNameCannotBeNullOrEmpty);
                     }
 
                     if (changeSetEntry.EntityActions == null)
                     {
-                        changeSetEntry.EntityActions = new Dictionary<string, object[]>();
+                        changeSetEntry.EntityActions = new List<Serialization.KeyValue<string, object[]>>();
                     }
-                    changeSetEntry.EntityActions.Add(entity.CustomMethodInvocation.Name, entity.CustomMethodInvocation.Parameters.ToArray());
+                    changeSetEntry.EntityActions.Add(
+                        new Serialization.KeyValue<string, object[]>(customInvokation.Name, customInvokation.Parameters.ToArray()));
                 }
 
                 operations.Add(changeSetEntry);
