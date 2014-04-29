@@ -2330,6 +2330,56 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
         #endregion
 
+        #region Backwards compability with 4.3.0 code generation 
+        [TestMethod]
+        [Asynchronous]
+        [Description("Verify that custom methods work with code compiled against 4.3.0.")]
+        public void CustomMethod_BackwardsCompability_430()
+        {
+            var ctxt = new TestDomainServices.NamedUpdates.CalculatorDomainContext
+                (new Uri(TestURIs.RootURI, "TestDomainServices-NamedUpdates-CalculatorDomainService.svc"));
+
+            LoadOperation lo = ctxt.Load(ctxt.GetEntitiesOldCodeGenQuery(), false);
+            CalculatorValueOldCodeGen calc = null;
+            SubmitOperation so = null;
+
+            List<string> propChanged = new List<string>();
+            EnqueueConditional(() => lo.IsComplete);
+            EnqueueCallback(delegate
+            {
+                calc = ctxt.CalculatorValuesOldCodeGen.First();
+
+                Assert.IsTrue(calc.CanAddTwice);
+                Assert.IsFalse(calc.IsAddTwiceInvoked);
+
+                calc.PropertyChanged += (sender, args) => propChanged.Add(args.PropertyName);
+
+                calc.AddTwice(2.0m);
+
+                Assert.IsFalse(calc.CanAddTwice, "Should not be able to invoke entity action multiple times");
+                Assert.IsTrue(calc.IsAddTwiceInvoked);
+
+                Assert.AreEqual(1, propChanged.Count(p => p == "CanAddTwice"), "Property changes for CanAddTwice");
+                Assert.AreEqual(1, propChanged.Count(p => p == "IsAddTwiceInvoked"), "Property changes for CanAddTwice");
+                propChanged.Clear();
+
+                // Submit so server calculates 0 + 2*2
+                so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
+            });
+            EnqueueConditional(() => so.IsComplete);
+            EnqueueCallback(delegate
+            {
+                Assert.IsFalse(so.HasError);
+
+                Assert.AreEqual(4.0m, calc.Value);
+
+                Assert.AreEqual(1, propChanged.Count(p => p == "CanAddTwice"), "Property changes for CanAddTwice");
+                Assert.AreEqual(1, propChanged.Count(p => p == "IsAddTwiceInvoked"), "Property changes for CanAddTwice");
+            });
+            EnqueueTestComplete();
+        }
+        #endregion
+
         #region Helpers
         private void AssertCompletedWithoutErrors(OperationBase operation)
         {

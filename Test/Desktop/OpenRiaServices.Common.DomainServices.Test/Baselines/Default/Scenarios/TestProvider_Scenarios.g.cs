@@ -14374,7 +14374,7 @@ namespace TestDomainServices.NamedUpdates
     }
 
     /// <summary>
-    /// The 'MockEntity6' entity class.
+    /// The 'CalculatorValue' entity class.
     /// </summary>
     [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
     public sealed partial class CalculatorValue : Entity
@@ -14497,8 +14497,8 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Invokes the 'Add' action on this entity.
         /// </summary>
-        /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        [EntityAction("Add", AllowMultipleInvocations= true)]
+        /// <param name="rhs">The RHS.</param>
+        [EntityAction("Add", AllowMultipleInvocations = true)]
         public void Add(decimal rhs)
         {
             this.OnAddInvoking(rhs);
@@ -14533,7 +14533,7 @@ namespace TestDomainServices.NamedUpdates
         /// <summary>
         /// Invokes the 'Multiply' action on this entity.
         /// </summary>
-        /// <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
+        /// <param name="rhs">The RHS.</param>
         [EntityAction("Multiply", AllowMultipleInvocations = true)]
         public void Multiply(decimal rhs)
         {
@@ -14541,6 +14541,143 @@ namespace TestDomainServices.NamedUpdates
             base.InvokeAction("Multiply", rhs);
             this.OnMultiplyInvoked();
         }
+    }
+
+    /// <summary>
+    /// The 'CalculatorValueOldCodeGen' entity class.
+    /// </summary>
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
+    public sealed partial class CalculatorValueOldCodeGen : Entity
+    {
+        private int _key;
+
+        private decimal _value;
+
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnKeyChanging(int value);
+        partial void OnKeyChanged();
+        partial void OnValueChanging(decimal value);
+        partial void OnValueChanged();
+        partial void OnAddTwiceInvoking(decimal rhs);
+        partial void OnAddTwiceInvoked();
+        #endregion
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MockEntity6"/> class.
+        /// </summary>
+        public CalculatorValueOldCodeGen()
+        {
+            this.OnCreated();
+        }
+
+        /// <summary>
+        /// Gets or sets the 'Key' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue = true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int Key
+        {
+            get
+            {
+                return this._key;
+            }
+            set
+            {
+                if ((this._key != value))
+                {
+                    this.OnKeyChanging(value);
+                    this.ValidateProperty("Key", value);
+                    this._key = value;
+                    this.RaisePropertyChanged("Key");
+                    this.OnKeyChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the 'Property1' value.
+        /// </summary>
+        [DataMember()]
+        public decimal Value
+        {
+            get
+            {
+                return this._value;
+            }
+            set
+            {
+                if ((this._value != value))
+                {
+                    this.OnValueChanging(value);
+                    this.RaiseDataMemberChanging("Value");
+                    this.ValidateProperty("Value", value);
+                    this._value = value;
+                    this.RaiseDataMemberChanged("Value");
+                    this.OnValueChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._key;
+        }
+
+
+        /// <summary>
+        /// Gets a value indicating whether the 'Add' action has been invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool IsAddTwiceInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("AddTwice");
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the 'Add' method can be invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool CanAddTwice
+        {
+            get
+            {
+                return base.CanInvokeAction("AddTwice");
+            }
+        }
+
+        /// <summary>
+        /// Invokes the 'Add' action on this entity.
+        /// </summary>
+        /// <param name="rhs">The RHS.</param>
+        public void AddTwice(decimal rhs)
+        {
+            this.OnAddTwiceInvoking(rhs);
+            base.InvokeAction("AddTwice", rhs);
+            this.OnAddTwiceInvoked();
+        }
+
+#pragma warning disable 672,618
+        protected override void OnActionStateChanged()
+        {
+            base.UpdateActionState("AddTwice", "CanAddTwice", "IsAddTwiceInvoked");
+        }
+#pragma warning restore 672,618
     }
     
     /// <summary>
@@ -15181,6 +15318,17 @@ namespace TestDomainServices.NamedUpdates
         }
 
         /// <summary>
+        /// Gets the set of <see cref="CalculatorValueOldCodeGen"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
+        /// </summary>
+        public EntitySet<CalculatorValueOldCodeGen> CalculatorValuesOldCodeGen
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<CalculatorValueOldCodeGen>();
+            }
+        }
+
+        /// <summary>
         /// Invokes the 'Add' method of the specified <see cref="CalculatorValue"/> entity.
         /// </summary>
         /// <param name="entity">The <see cref="CalculatorValue"/> entity instance.</param>
@@ -15201,6 +15349,16 @@ namespace TestDomainServices.NamedUpdates
         }
 
         /// <summary>
+        /// Invokes the 'Add' method of the specified <see cref="CalculatorValue"/> entity.
+        /// </summary>
+        /// <param name="entity">The <see cref="CalculatorValue"/> entity instance.</param>
+        /// <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        public void AddTwice(CalculatorValueOldCodeGen entity, decimal rhs)
+        {
+            entity.AddTwice(rhs);
+        }
+
+        /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="CalculatorValue"/> entity instances using the 'GetEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValue"/> entity instances.</returns>
@@ -15208,6 +15366,16 @@ namespace TestDomainServices.NamedUpdates
         {
             this.ValidateMethod("GetEntitiesQuery", null);
             return base.CreateQuery<CalculatorValue>("GetEntities", null, false, true);
+        }
+
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="CalculatorValue"/> entity instances using the 'GetEntities' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValue"/> entity instances.</returns>
+        public EntityQuery<CalculatorValueOldCodeGen> GetEntitiesOldCodeGenQuery()
+        {
+            this.ValidateMethod("GetEntitiesOldCodeGenQuery", null);
+            return base.CreateQuery<CalculatorValueOldCodeGen>("GetEntitiesOldCodeGen", null, false, true);
         }
 
         /// <summary>
@@ -15232,9 +15400,8 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [FaultContract(typeof(DomainServiceFault), Action = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesDomainServiceFault", Name = "DomainServiceFault", Namespace = "DomainServices")]
+            [HasSideEffects(false)]
             [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntities", ReplyAction = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesResponse")]
-            [WebGet()]
             IAsyncResult BeginGetEntities(AsyncCallback callback, object asyncState);
 
             /// <summary>
@@ -15243,6 +15410,24 @@ namespace TestDomainServices.NamedUpdates
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
             QueryResult<CalculatorValue> EndGetEntities(IAsyncResult result);
+
+            /// <summary>
+            /// Asynchronously invokes the 'GetEntitiesOldCodeGen' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [FaultContract(typeof(DomainServiceFault), Action = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesOldCodeGenDomainServiceFault", Name = "DomainServiceFault", Namespace = "DomainServices")]
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesOldCodeGen", ReplyAction = "http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesOldCodeGenResponse")]
+            [WebGet()]
+            IAsyncResult BeginGetEntitiesOldCodeGen(AsyncCallback callback, object asyncState);
+
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetEntitiesOldCodeGen'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetEntitiesOldCodeGen'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetEntitiesOldCodeGen' operation.</returns>
+            QueryResult<CalculatorValueOldCodeGen> EndGetEntitiesOldCodeGen(IAsyncResult result);
 
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -15267,6 +15452,7 @@ namespace TestDomainServices.NamedUpdates
             public NamedUpdate_CalculatorEntityContainer()
             {
                 this.CreateEntitySet<CalculatorValue>(EntitySetOperations.Edit);
+                this.CreateEntitySet<CalculatorValueOldCodeGen>(EntitySetOperations.Edit);
             }
         }
     }

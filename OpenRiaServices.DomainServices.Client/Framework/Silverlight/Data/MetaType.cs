@@ -39,8 +39,8 @@ namespace OpenRiaServices.DomainServices.Client
         private Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private MetaMember _versionMember;
 
-        private IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string,EntityActionAttribute>();
-        
+        private IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
+
         /// <summary>
         /// Returns the MetaType for the specified Type.
         /// </summary>
@@ -430,6 +430,32 @@ namespace OpenRiaServices.DomainServices.Client
                     Type elementType = TypeUtility.GetElementType(property.PropertyType);
                     this.CalculateAttributesRecursive(elementType, visited);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether entity actions for code using code gen before version 4.4.0
+        /// has been discovered.
+        /// </summary>
+        internal bool IsLegacyEntityActionsDiscovered { get; set; }
+
+        /// <summary>
+        /// Add's a EntityAction with the given name and property names.
+        /// This method is only used when discovering EntityActions for code which has used the code gen 
+        /// before version 4.4.0.
+        /// </summary>
+        /// <param name="name">The name of the entity action.</param>
+        /// <param name="canInvokePropertyName">Name of the can invoke property.</param>
+        /// <param name="isInvokedPropertyName">Name of the is invoked property.</param>
+        internal void TryAddLegacyEntityAction(string name, string canInvokePropertyName, string isInvokedPropertyName)
+        {
+            if (!_customUpdateMethods.ContainsKey(name))
+            {
+                _customUpdateMethods.Add(name, new EntityActionAttribute(name)
+                {
+                    CanInvokePropertyName = canInvokePropertyName,
+                    IsInvokedPropertyName = isInvokedPropertyName,
+                });
             }
         }
     }

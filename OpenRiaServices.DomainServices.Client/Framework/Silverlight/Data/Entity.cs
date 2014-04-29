@@ -98,7 +98,17 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._metaType == null)
                 {
-                    this._metaType = MetaType.GetMetaType(this.GetType());
+                    var metaType  = MetaType.GetMetaType(this.GetType());
+                    this._metaType = metaType;
+
+                    if (!metaType.IsLegacyEntityActionsDiscovered)
+                    {
+                        // Trigger entities using old code generation to call UpdateActionState for all Entity Actions
+#pragma warning disable 618
+                        this.OnActionStateChanged();
+#pragma warning restore 618
+                        metaType.IsLegacyEntityActionsDiscovered = true;
+                    }
                 }
 
                 return this._metaType;
@@ -1455,8 +1465,16 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("isInvokedPropertyName");
             }
 
-            // For the current implementation, we always raise the CanInvoke change notification
-            this.RaisePropertyChanged(canInvokePropertyName);
+            var metaType = MetaType;
+            if (!metaType.IsLegacyEntityActionsDiscovered)
+            {
+                metaType.TryAddLegacyEntityAction(name, canInvokePropertyName, isInvokedPropertyName);
+            }
+            else
+            {
+                // For the current implementation, we always raise the CanInvoke change notification
+                this.RaisePropertyChanged(canInvokePropertyName);
+            }
         }
 
         /// <summary>

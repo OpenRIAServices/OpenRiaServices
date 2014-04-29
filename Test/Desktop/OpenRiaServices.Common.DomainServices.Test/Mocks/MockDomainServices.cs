@@ -4936,7 +4936,7 @@ namespace TestDomainServices
             [Query]
             public IQueryable<CalculatorValue> GetEntities()
             {
-                return new [] { new CalculatorValue() { Key = 1 }}.AsQueryable();
+                return new[] { new CalculatorValue() { Key = 1 } }.AsQueryable();
             }
 
             [EntityAction(AllowMultipleInvocations = true)]
@@ -4950,10 +4950,36 @@ namespace TestDomainServices
             {
                 value.Value *= rhs;
             }
+
+            [Query]
+            public IQueryable<CalculatorValueOldCodeGen> GetEntitiesOldCodeGen()
+            {
+                return new[] { new CalculatorValueOldCodeGen() { Key = 1 } }.AsQueryable();
+            }
+
+#pragma warning disable 618 // Service should work with the "old" approach with [Update(UsingCustomMethod = true)]
+            [Update(UsingCustomMethod = true)]
+            public void AddTwice(CalculatorValueOldCodeGen value, decimal rhs)
+            {
+                value.Value += 2*rhs;
+            }
+#pragma warning restore 618
         }
 
         [DataContract]
         public class CalculatorValue
+        {
+            [DataMember]
+            [Key]
+            public int Key { get; set; }
+
+            [DataMember]
+            [RoundtripOriginal]
+            public decimal Value { get; set; }
+        }
+
+        [DataContract]
+        public class CalculatorValueOldCodeGen
         {
             [DataMember]
             [Key]
