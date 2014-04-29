@@ -46,27 +46,20 @@ namespace OpenRiaServices.DomainServices.Serialization
         [DataMember(IsRequired = true)]
         public TValue Value { get { return _value; } set { _value = value; } }
     }
-
-
-    //public class EntityActionCollection : List<KeyValue<string, object[]>>
-    //{
-    //    public void Add(string , object[] )
-    //    {
-    //        base.Add(new KeyValue<string,object[]>())
-    //    }
-    //}
 }
 
 namespace OpenRiaServices.DomainServices.Server
 {
     using Serialization;
 
+    /// <summary>
+    /// Collection representing number of EntityAction invocations
+    /// </summary>
     public class EntityActionCollection : List<KeyValue<string, object[]>>
     {
         /// <summary>
         /// Adds a KeyValue to the specified list.
         /// </summary>
-        /// <param name="list">The list.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         public void Add(string key, object[] value)

@@ -86,7 +86,7 @@ namespace TestDomainServices
             ThrowException();
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CityCustomMethod(Cities.City city)
         {
             ThrowException();
@@ -1637,7 +1637,7 @@ namespace TestDomainServices
         #endregion
 
         #region Domain methods testing exhaustive supported types
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void TestPrimitive(MixedType entity, Boolean b1, Byte b2, SByte sb, Int16 int16, UInt16 uint16, Int32 int32,
             UInt32 uint32, Int64 int64, UInt64 uint64, Char ch, Double d, Single s)
         {
@@ -1655,7 +1655,7 @@ namespace TestDomainServices
             entity.SingleProp = s;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         // TODO: investigate blocking serialization format issues for XElement and uncomment the params below
         public void TestPredefined(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g, Binary b, /*XElement x,*/ byte[] bArray, TestEnum en, Dictionary<string, string> dictionary, DateTimeOffset dto)
         {
@@ -1674,7 +1674,7 @@ namespace TestDomainServices
             entity.DateTimeOffsetProp = dto;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void TestNullablePrimitive(MixedType entity, Boolean? b1, Byte? b2, SByte? sb, Int16? int16, UInt16? uint16, Int32? int32,
             UInt32? uint32, Int64? int64, UInt64? uint64, Char? ch, Double? d, Single? s)
         {
@@ -1692,7 +1692,7 @@ namespace TestDomainServices
             entity.NullableSingleProp = s;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void TestNullablePredefined(MixedType entity, decimal? d, DateTime? dt, TimeSpan? ts, Guid? g, TestEnum? en, DateTimeOffset? dto)
         {
             entity.NullableDecimalProp = d;
@@ -2266,7 +2266,7 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [ThrowingUpdateMethod]
         public void UpdateThrowing(AttributeThrowingEntity toUpdate, [ThrowingUpdateMethodParameter] int throwingUpdateParam)
         {
@@ -4171,7 +4171,7 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void NamedUpdateCustomer(MockCustomer cust, string dummyString)
         {
             throw new NotImplementedException();
@@ -4286,7 +4286,7 @@ namespace TestDomainServices
             this.ChangeSet.Replace(current, serverModifiedCustomer);
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void MockCustomerCustomMethod(MockCustomer current, string expectedStateName, string expectedOriginalStateName)
         {
             // Get Original
@@ -4310,7 +4310,7 @@ namespace TestDomainServices
             current.StateName = "BB";
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void MockReportCustomMethod(MockReport current)
         {
             MockReport original = this.ChangeSet.GetOriginal(current);
@@ -4645,11 +4645,11 @@ namespace TestDomainServices
             return false;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [MockAttributeAllowOnce("Class")]
         public void EntityWithXElement_Custom_AttributeOverrides(EntityWithXElement entity) { }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [MockAttributeAllowMultiple("Class")]
         [MockAttributeAllowMultiple("Class")]
         [MockAttributeAllowMultiple("Class")]
@@ -4679,12 +4679,12 @@ namespace TestDomainServices
         [Insert]
         void EntityWithXElement_Insert(EntityWithXElement entity);
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [MockAttributeAllowOnce("Interface")]
         [MockAttributeAllowOnce_AppliedToInterfaceOnly("Interface")]
         void EntityWithXElement_Custom_AttributeOverrides(EntityWithXElement entity);
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [MockAttributeAllowMultiple("Interface")]
         [MockAttributeAllowMultiple("Interface")]
         [MockAttributeAllowMultiple("Interface")]
@@ -4706,7 +4706,7 @@ namespace TestDomainServices
                 return new[] { new MockEntity1() }.AsQueryable();
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateMethod(MockEntity1 entity, string newProperty1)
             {
                 var original = this.ChangeSet.GetOriginal<MockEntity1>(entity);
@@ -4724,7 +4724,7 @@ namespace TestDomainServices
                 return new[] { new MockEntity2() }.AsQueryable();
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateMethod(MockEntity2 entity, string newProperty1)
             {
                 var original = this.ChangeSet.GetOriginal<MockEntity2>(entity);
@@ -4822,7 +4822,7 @@ namespace TestDomainServices
                 return new[] { new MockEntity6() }.AsQueryable();
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateWithParamValidation(
                 [CustomValidation(typeof(DynamicTestValidator), "Validate")] MockEntity3 entity,
                 [CustomValidation(typeof(DynamicTestValidator), "Validate")] MockComplexObject1[] array,
@@ -4830,7 +4830,7 @@ namespace TestDomainServices
             {
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateWithTypeValidation(
                 MockEntity4 entity,
                 MockComplexObject2[] array,
@@ -4838,7 +4838,7 @@ namespace TestDomainServices
             {
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateWithPropValidation(
                 MockEntity3 entity,
                 MockComplexObject1[] array,
@@ -4846,14 +4846,14 @@ namespace TestDomainServices
             {
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateWithCommonProperties(
                 MockEntity5 entity,
                 MockComplexObject3 complexObject)
             {
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void NamedUpdateWithNoEntityValidation(
                 MockEntity6 entity,
                 MockComplexObject2 complexObject)
@@ -5435,7 +5435,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// This method is deliberately named "Name" to conflict with the 
         /// auto-generated "Name" entity property.
         /// </summary>
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void Name(Entity state)
         {
             throw new NotImplementedException();
