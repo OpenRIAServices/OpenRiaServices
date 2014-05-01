@@ -5,7 +5,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
+using System.Web.UI.WebControls;
+using System.Xml;
 
 namespace OpenRiaServices.DomainServices.Server
 {
@@ -21,10 +25,12 @@ namespace OpenRiaServices.DomainServices.Server
         private Attribute _operationAttribute;
         private AttributeCollection _attributes;
         private Type _associatedType;
+        private Type _actualReturnType;
         private Type _returnType;
         private Type _domainServiceType;
         private bool? _requiresValidation;
         private bool? _requiresAuthorization;
+        private Func<object, object> _unwrapTaskResultFunc;
 
         /// <summary>
         /// Initializes a new instance of the DomainOperationEntry class
@@ -64,7 +70,8 @@ namespace OpenRiaServices.DomainServices.Server
             }
 
             this._methodName = name;
-            this._returnType = returnType;
+            this._actualReturnType = returnType;
+            this._returnType = TypeUtility.IsTaskType(returnType) ? TypeUtility.GetTaskReturnType(returnType) : returnType;
             this._attributes = attributes;
             this._operation = operation;
             this._domainServiceType = domainServiceType;
@@ -330,6 +337,14 @@ namespace OpenRiaServices.DomainServices.Server
         }
 
         /// <summary>
+        /// Gets a value indicating whether the actual return type is a Task or Task{T}.
+        /// </summary>
+        public bool IsTaskAsync
+        {
+            get { return TypeUtility.IsTaskType(this._actualReturnType); }
+        }
+
+        /// <summary>
         /// Gets the parameters of the operation
         /// </summary>
         public ReadOnlyCollection<DomainOperationParameter> Parameters
@@ -432,6 +447,42 @@ namespace OpenRiaServices.DomainServices.Server
                 totalCount = DomainService.TotalCountUndefined;
                 return this.Invoke(domainService, parameters);
             }
+        }
+
+        internal object UnwrapTaskResult(object result)
+        {
+            if (!IsTaskAsync)
+                return result;
+
+            if (_unwrapTaskResultFunc == null)
+            {
+                if (ReturnType == typeof (void))
+                    _unwrapTaskResultFunc = UnwrapVoidResult;
+                else
+                {
+                    _unwrapTaskResultFunc = (Func<object, object>)Delegate.CreateDelegate(typeof(Func<object, object>),
+                                                    typeof(DomainOperationEntry).GetMethod("UnwrapGenericResult", BindingFlags.Static | BindingFlags.NonPublic)
+                                                    .MakeGenericMethod(this.ReturnType));
+                }
+            }
+            return _unwrapTaskResultFunc(result);
+        }
+
+        private static object UnwrapVoidResult(object result)
+        {
+            if(result == null)
+                throw new InvalidOperationException("Task method returned null");
+
+            ((Task) result).Wait();
+            return null;
+        }
+
+        private static object UnwrapGenericResult<T>(object result)
+        {
+            if(result == null)
+                throw new InvalidOperationException("Task method returned null");
+
+            return ((Task<T>) result).Result;
         }
 
         /// <summary>

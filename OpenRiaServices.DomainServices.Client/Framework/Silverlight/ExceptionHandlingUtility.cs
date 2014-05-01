@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -29,19 +30,29 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the exception is fatal, otherwise <c>false</c>.</returns>
         public static bool IsFatal(this Exception exception)
         {
-            Exception outerException = null;
-            while (exception != null)
+            return IsFatalCore(exception, outerException:  null);
+        }
+
+        private static bool IsFatalCore(Exception exception, Exception outerException)
+        {
+            if (exception == null)
+                return false;
+
+            if (IsFatalExceptionType(exception))
             {
-                if (IsFatalExceptionType(exception))
-                {
-                    Debug.Assert(outerException == null || ((outerException is TypeInitializationException) || (outerException is TargetInvocationException)), 
-                        "Fatal nested exception found");    
-                    return true;
-                }
-                outerException = exception;
-                exception = exception.InnerException;
+                Debug.Assert(outerException == null 
+                    || (outerException is TypeInitializationException) 
+                    || (outerException is TargetInvocationException)
+                    || (outerException is AggregateException),
+                    "Fatal nested exception found");
+                return true;
             }
-            return false;
+
+            var ae = exception as AggregateException;
+            if (ae != null)
+                return ae.InnerExceptions.Any(inner => IsFatalCore(inner, exception));
+            else
+                return IsFatalCore(exception.InnerException, exception);
         }
 
         private static bool IsFatalExceptionType(Exception exception)

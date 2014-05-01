@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-
+using System.Threading.Tasks;
 #if !SILVERLIGHT
 using System.Runtime.Serialization;
 #endif
@@ -76,6 +76,27 @@ namespace OpenRiaServices.DomainServices
         public static bool IsNullableType(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> if the given type is a <see cref="Task"/>
+        /// </summary>
+        /// <param name="type">The type to test</param>
+        /// <returns><c>true</c> if the given type is a Task or Task{T}</returns>
+        public static bool IsTaskType(Type type)
+        {
+            return type == typeof(Task)
+                || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>));
+        }
+
+        public static Type GetTaskReturnType(Type type)
+        {
+            if (type == typeof(Task))
+                return typeof(void);
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+                return type.GetGenericArguments()[0];
+            else
+                throw new ArgumentException("Type must be either Task, or Task<T>", "type");
         }
 
         /// <summary>

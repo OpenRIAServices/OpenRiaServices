@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Server
 {
@@ -477,6 +478,9 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 // Get all of the attributes defined on the MethodInfo
                 List<Attribute> attributes = new List<Attribute>(methodInfo.GetCustomAttributes(true).Cast<Attribute>());
+
+                // Filter out AsyncStateMachineAttribute for "async" methods
+                attributes.RemoveAll(a => a.GetType().FullName == "System.Runtime.CompilerServices.AsyncStateMachineAttribute");
 
                 // Examine interfaces on the type and try to find matching method implmentations.
                 foreach (Type interfaceType in methodInfo.DeclaringType.GetInterfaces())
