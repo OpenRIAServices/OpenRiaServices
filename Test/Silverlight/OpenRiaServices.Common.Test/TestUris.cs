@@ -48,5 +48,8 @@ public static class TestURIs
     public static readonly Uri SharedEntitiesParent = new Uri(RootURI, "SharedEntities-ExposeParentEntityDomainService.svc");
 
     public static readonly Uri ComplexTypes_TestService = new Uri(RootURI, "TestDomainServices-ComplexTypes_TestService.svc");
-    public static readonly Uri ComplexTypes_DomainService = new Uri(RootURI, "TestDomainServices-ComplexTypes_DomainService.svc");    
+    public static readonly Uri ComplexTypes_DomainService = new Uri(RootURI, "TestDomainServices-ComplexTypes_DomainService.svc");
+
+    // Server side async
+    public static readonly Uri ServerSideAsync = new Uri(RootURI, "TestDomainServices-ServerSideAsyncDomainService.svc");
 }
