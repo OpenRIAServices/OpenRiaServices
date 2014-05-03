@@ -317,7 +317,7 @@ namespace OpenRiaServices.DomainServices.Server
                     }
                     catch (TargetInvocationException tie)
                     {
-                        Exception e = DomainService.GetUnwrappedException(tie);
+                        Exception e = ExceptionHandlingUtility.GetUnwrappedException(tie);
                         if (e is ValidationException)
                         {
                             throw e;
@@ -327,7 +327,7 @@ namespace OpenRiaServices.DomainServices.Server
                     }
                     catch (AggregateException ae)
                     {
-                        Exception e = DomainService.GetUnwrappedException(ae);
+                        Exception e = ExceptionHandlingUtility.GetUnwrappedException(ae);
                         if (e is ValidationException)
                         {
                             throw e;
@@ -417,7 +417,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport = DomainService.GetUnwrappedException(e);
+                Exception exceptionToReport = ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -479,7 +479,7 @@ namespace OpenRiaServices.DomainServices.Server
                 }
                 catch (TargetInvocationException tie)
                 {
-                    Exception e = DomainService.GetUnwrappedException(tie);
+                    Exception e = ExceptionHandlingUtility.GetUnwrappedException(tie);
                     if (e is ValidationException)
                     {
                         throw e;
@@ -489,7 +489,7 @@ namespace OpenRiaServices.DomainServices.Server
                 }
                 catch (AggregateException ae)
                 {
-                    Exception e = DomainService.GetUnwrappedException(ae);
+                    Exception e = ExceptionHandlingUtility.GetUnwrappedException(ae);
                     if (e is ValidationException)
                     {
                         throw e;
@@ -515,7 +515,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport = DomainService.GetUnwrappedException(e);
+                Exception exceptionToReport = ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -589,7 +589,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport =  DomainService.GetUnwrappedException(e);
+                Exception exceptionToReport =  ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -1332,20 +1332,6 @@ namespace OpenRiaServices.DomainServices.Server
             Array.Resize(ref array, index);
 
             return array;
-        }
-
-        /// <summary>
-        /// Helper method to unwrap a TargetInvocationException or AggregateException.
-        /// </summary>
-        /// <param name="e">The exception to unwrap.</param>
-        /// <returns>the first inner exception which is neither a TargetInvocationException nor a AggregateException</returns>
-        private static Exception GetUnwrappedException(Exception e)
-        {
-            while (e.InnerException != null && (e is TargetInvocationException || e is AggregateException))
-            {
-                e = e.InnerException;
-            }
-            return e;
         }
 
         #region Nested Types

@@ -509,10 +509,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             HttpContext context = HttpContext.Current;
 
             // Unwrap any TargetInvocationExceptions to get the real exception.
-            while (e.InnerException != null && e is TargetInvocationException)
-            {
-                e = ((TargetInvocationException)e).InnerException;
-            }
+            e = ExceptionHandlingUtility.GetUnwrappedException(e);
 
             // we always send back a 200 (i.e. not re-throwing) with the actual error code in 
             // the results (except fo 404) because silverlight only supports 404/500 error code. If customErrors 

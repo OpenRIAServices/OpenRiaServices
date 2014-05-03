@@ -68,5 +68,19 @@ namespace OpenRiaServices.DomainServices
             }
             return false;
         }
+
+        /// <summary>
+        /// Helper method to unwrap a TargetInvocationException and AggregateException.
+        /// </summary>
+        /// <param name="e">The exception to unwrap.</param>
+        /// <returns>the first inner exception which is neither a TargetInvocationException nor a AggregateException</returns>
+        public static Exception GetUnwrappedException(Exception e)
+        {
+            while (e.InnerException != null && (e is TargetInvocationException || e is AggregateException))
+            {
+                e = e.InnerException;
+            }
+            return e;
+        }
     }
 }
