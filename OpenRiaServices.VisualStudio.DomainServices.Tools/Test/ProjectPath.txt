@@ -1,1 +1,0 @@
-C:\Users\blaircd\Source\Repos\openriaservices\OpenRiaServices.VisualStudio.DomainServices.Tools\Test\OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj,

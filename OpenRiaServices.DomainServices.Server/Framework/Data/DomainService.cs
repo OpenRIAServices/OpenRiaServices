@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices;
 using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
@@ -312,10 +313,21 @@ namespace OpenRiaServices.DomainServices.Server
                     try
                     {
                         result = queryDescription.Method.Invoke(this, parameters, out totalCount);
+                        result = queryDescription.Method.UnwrapTaskResult(result);
                     }
                     catch (TargetInvocationException tie)
                     {
-                        Exception e = DomainService.GetUnwrappedException(tie);
+                        Exception e = ExceptionHandlingUtility.GetUnwrappedException(tie);
+                        if (e is ValidationException)
+                        {
+                            throw e;
+                        }
+
+                        throw;
+                    }
+                    catch (AggregateException ae)
+                    {
+                        Exception e = ExceptionHandlingUtility.GetUnwrappedException(ae);
                         if (e is ValidationException)
                         {
                             throw e;
@@ -405,14 +417,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport = e;
-
-                TargetInvocationException tie = e as TargetInvocationException;
-                if (tie != null)
-                {
-                    exceptionToReport = DomainService.GetUnwrappedException(tie);
-                }
-
+                Exception exceptionToReport = ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -470,10 +475,21 @@ namespace OpenRiaServices.DomainServices.Server
                 try
                 {
                     returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
+                    returnValue = invokeDescription.Method.UnwrapTaskResult(returnValue);
                 }
                 catch (TargetInvocationException tie)
                 {
-                    Exception e = DomainService.GetUnwrappedException(tie);
+                    Exception e = ExceptionHandlingUtility.GetUnwrappedException(tie);
+                    if (e is ValidationException)
+                    {
+                        throw e;
+                    }
+
+                    throw;
+                }
+                catch (AggregateException ae)
+                {
+                    Exception e = ExceptionHandlingUtility.GetUnwrappedException(ae);
                     if (e is ValidationException)
                     {
                         throw e;
@@ -499,14 +515,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport = e;
-
-                TargetInvocationException tie = e as TargetInvocationException;
-                if (tie != null)
-                {
-                    exceptionToReport = DomainService.GetUnwrappedException(tie);
-                }
-
+                Exception exceptionToReport = ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -580,14 +589,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport = e;
-
-                TargetInvocationException tie = e as TargetInvocationException;
-                if (tie != null)
-                {
-                    exceptionToReport = DomainService.GetUnwrappedException(tie);
-                }
-
+                Exception exceptionToReport =  ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -1330,18 +1332,6 @@ namespace OpenRiaServices.DomainServices.Server
             Array.Resize(ref array, index);
 
             return array;
-        }
-
-        // Helper method to unwrap a TargetInvocationException.
-        private static Exception GetUnwrappedException(TargetInvocationException tie)
-        {
-            // Unwrap ValidationException.
-            Exception e = tie;
-            while (e.InnerException != null && e is TargetInvocationException)
-            {
-                e = e.InnerException;
-            }
-            return e;
         }
 
         #region Nested Types

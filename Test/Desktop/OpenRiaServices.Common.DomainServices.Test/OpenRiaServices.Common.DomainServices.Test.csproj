@@ -127,6 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb" />
     <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.vb" />
     <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.cs" />
     <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.vb" />
@@ -136,6 +137,9 @@
     <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.cs" />
     <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.cs" />
     <Compile Include="AdventureWorks\EF_DbCtx_Catalog.cs" />
+    <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs">
+      <SubType>Code</SubType>
+    </Content>
     <Compile Include="DataModels\AdventureWorks.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,6 +170,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind_NoFks.tt</DependentUpon>
     </Compile>
+    <Compile Include="Mocks\ServerSideAsyncDomainService.cs" />
     <Compile Include="Northwind\EFCF_Northwind.cs" />
     <Compile Include="Northwind\EFDbCtx_Northwind.cs" />
     <Compile Include="Shared\Test.shared.cs" />

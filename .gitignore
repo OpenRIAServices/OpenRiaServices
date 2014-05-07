@@ -46,6 +46,8 @@ build/
 *.pidb
 *.log
 *.scc
+*.xap
+ProjectPath.txt
 
 # Visual C++ cache files
 ipch/
@@ -150,5 +152,3 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
-Test/Website/ClientBin/System.Test.xap
-Test/WebsiteFullTrust/ClientBin/System.Test.xap
