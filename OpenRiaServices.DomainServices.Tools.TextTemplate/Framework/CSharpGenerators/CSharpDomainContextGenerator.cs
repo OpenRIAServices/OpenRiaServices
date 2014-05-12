@@ -34,7 +34,8 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         public override string TransformText()
         {
             this.Write("\r\n");
-            this.Write("\r\n");
+            this.Write("\n");
+            this.Write("\n\n");
             this.Write("\r\n");
             this.Write("\r\n");
             this.Write("\r\n\r\n");
@@ -221,7 +222,7 @@ this.Write("\t\t\r\npartial void OnCreated();\r\n");
 	protected virtual void GenerateCustomMethod(DomainOperationEntry domainMethod)
 	{
 
-this.Write("public void ");
+this.Write("\npublic void ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(domainMethod.Name));
 
@@ -255,10 +256,12 @@ this.Write(", ");
 			}
 		}
 
-this.Write(")\r\n");
+this.Write(")\n");
 
 
 		this.GenerateOpeningBrace();
+
+this.Write("\n");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfos[0].Name));
 
@@ -284,7 +287,7 @@ this.Write(", ");
 				}
 			}
 		
-this.Write(");\r\n");
+this.Write(");\n");
 
 
 		this.GenerateClosingBrace();
@@ -310,7 +313,7 @@ this.Write(");\r\n");
 		string propertyName = Naming.MakePluralName(entityType.Name);
 		string entityTypeName = CodeGenUtilities.GetTypeName(entityType);
 
-this.Write("public EntitySet<");
+this.Write("\npublic EntitySet<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
@@ -318,11 +321,11 @@ this.Write("> ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
 
-this.Write("\r\n{\r\n    get\r\n    {\r\n        return base.EntityContainer.GetEntitySet<");
+this.Write("\n{\n    get\n    {\n        return base.EntityContainer.GetEntitySet<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
-this.Write(">();\r\n    }\r\n}\r\n");
+this.Write(">();\n    }\n}\n");
 
 
 	}
@@ -358,7 +361,7 @@ this.Write(">();\r\n    }\r\n}\r\n");
 		this.GenerateAttributes(methodAttributes);
 				
 
-this.Write("public EntityQuery<");
+this.Write("\npublic EntityQuery<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetEntityQueryMethodElementReturnTypeName(domainOperationEntry)));
 
@@ -371,7 +374,7 @@ this.Write("(");
 
 	this.GenerateParameterDeclaration(domainOperationEntry.Parameters.AsEnumerable(), true);
 
-this.Write(")\r\n");
+this.Write(")\n");
 
 
 	}
@@ -387,7 +390,7 @@ this.Write(")\r\n");
 		QueryAttribute queryAttribute = (QueryAttribute)domainOperationEntry.OperationAttribute;
 		
 
-this.Write("return base.CreateQuery<");
+this.Write("\nreturn base.CreateQuery<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetEntityQueryMethodElementReturnTypeName(domainOperationEntry)));
 
@@ -407,7 +410,7 @@ this.Write(", ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetBooleanString(queryAttribute.IsComposable, true)));
 
-this.Write(");\r\n");
+this.Write(");\n");
 
 	
 	}

@@ -168,7 +168,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 // reload.  The BusinessLogicViewModel is IDisposable and controls the other AppDomain's lifetime.
                 using (BusinessLogicViewModel businessLogicViewModel = new BusinessLogicViewModel(projectDirectory, className, language, rootNamespace, assemblyName, candidateTypes, help))
                 {
-                    businessLogicViewModel.ShowDbContextWarning = foundDbContext;
+                    businessLogicViewModel.ShowDbContextWarning = false; // foundDbContext; //Removed by CDB //TODO: remove commented out section
 
                     // Intercept exceptions to report to VS UI.
                     businessLogicViewModel.ExceptionHandler = delegate(Exception ex)

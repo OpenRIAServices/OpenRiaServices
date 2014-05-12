@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.T4</id>
-    <version>4.3.0.0</version>
+    <version>4.4.0.0-Beta5</version>
     <title>Open RIA Services T4 Code Generation</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -16,7 +16,7 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices T4 OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" />
+      <dependency id="OpenRiaServices.Server" version="4.4.0.0-Beta5" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="OpenRiaServices.DomainServices.Tools" targetFramework=".NETFramework4.0" />
@@ -26,5 +26,8 @@
     <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" target="lib\net40\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" />
     <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" target="lib\net40\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" />
     <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML" target="lib\net40\OpenRiaServices.DomainServices.Tools.TextTemplate.XML" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="lib\net40\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.pdb" target="lib\net40\OpenRiaServices.DomainServices.Tools.pdb" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.XML" target="lib\net40\OpenRiaServices.DomainServices.Tools.XML" />
   </files>
 </package>

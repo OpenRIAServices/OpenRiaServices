@@ -149,6 +149,9 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.vb">
       <Link>DomainClients\Northwind_LTS.g.vb</Link>
     </Compile>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb">
+      <Link>DomainClients\ServerSideAsyncDomainService.g.vb</Link>
+    </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
       <Link>DomainClients\IncludeScenariosTestProvider.g.vb</Link>
     </Compile>

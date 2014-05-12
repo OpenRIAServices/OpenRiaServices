@@ -22,7 +22,6 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
     }

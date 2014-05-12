@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity.Spatial;
 using System.Data.Linq;
 using System.Linq;
 using System.Reflection;
@@ -164,6 +165,28 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
                 });
         }
 
+        [TestMethod]
+        [Description("Tests that a virtual writable property of a DbGeometry type works as expected")]
+        public void Surrogate_VirtualProperty_DbGeometry()
+        {
+            Type entityType = typeof(SurrogateTestEntity_VirtualProperty_DbGeometry);
+            TestVirtualProperty<DbGeometry>(
+                entityType,
+                isReadOnly: false,
+                verify: (type, property, obj) =>
+                {
+                    Assert.AreEqual(typeof(DbGeometry), property.PropertyType, "Incorrect property type.");
+                    Assert.IsNull(property.GetValue(obj, null), "Default value should be null.");
+
+                    DbGeometry value = DbGeometry.FromText("POINT(1 2)");
+                    property.SetValue(obj, value, null);
+
+                    DbGeometry returnValue = (DbGeometry)property.GetValue(obj, null);
+                    Assert.IsTrue(returnValue == value, "Value wasn't updated.");
+                });
+        }
+
+        
         private void TestVirtualProperty<T>(Type entityType, bool isReadOnly, Action<Type, PropertyInfo, object> verify)
         {
             string propertyName = "TestProperty";
@@ -498,6 +521,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
     public class SurrogateTestEntity_VirtualProperty_String : GenericEntity<int> { }
     public class SurrogateTestEntity_VirtualProperty_String_ReadOnly : GenericEntity<int> { }
     public class SurrogateTestEntity_VirtualProperty_Binary : GenericEntity<int> { }
+    public class SurrogateTestEntity_VirtualProperty_DbGeometry : GenericEntity<int> { }
     public class SurrogateTestEntity_VirtualProperty_Binary_ReadOnly : GenericEntity<int> { }
     public class SurrogateTestEntity_VirtualProperty_Nullable_Primitive : GenericEntity<int> { }
     public class SurrogateTestEntity_VirtualProperty_Nullable_Primitive_ReadOnly : GenericEntity<int> { }

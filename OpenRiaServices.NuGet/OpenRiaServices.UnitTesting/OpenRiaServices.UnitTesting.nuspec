@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.UnitTesting</id>
-    <version>4.3.0.0</version>
+    <version>4.4.0.0-Beta5</version>
     <title>Open RIA Services Unit Testing</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -16,7 +16,7 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Testing OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server"/>
+      <dependency id="OpenRiaServices.Server" version="4.4.0.0-Beta5"/>
     </dependencies>
   </metadata>
   <files>

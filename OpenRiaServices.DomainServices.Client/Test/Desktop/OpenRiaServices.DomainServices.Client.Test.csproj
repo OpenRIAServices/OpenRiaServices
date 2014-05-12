@@ -130,6 +130,9 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs">
       <Link>Data\DomainClients\MockCustomers.g.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs">
+      <Link>Data\DomainClients\ServerSideAsyncDomainService.g.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs">
       <Link>Data\DomainClients\CompositionInheritanceScenarios.g.cs</Link>
     </Compile>
@@ -243,6 +246,9 @@
     </Compile>
     <Compile Include="..\Silverlight\Data\PoxTests.cs">
       <Link>Data\PoxTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\ServerSideAsyncTests.cs">
+      <Link>Data\ServerSideAsyncTests.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\SubmitOperationExceptionTests.cs">
       <Link>Data\SubmitOperationExceptionTests.cs</Link>

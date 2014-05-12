@@ -154,7 +154,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
 
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
 
-                // Add Required attribute to metdata if the member cannot be null and it is either a reference type or a Nullable<T>
+                // Add Required attribute to metadata if the member cannot be null and it is either a reference type or a Nullable<T>
                 if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) &&
                     pd.Attributes[typeof(RequiredAttribute)] == null)
                 {

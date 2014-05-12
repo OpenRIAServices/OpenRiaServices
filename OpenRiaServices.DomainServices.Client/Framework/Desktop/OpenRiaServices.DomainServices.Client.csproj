@@ -105,6 +105,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.Data.DomainServices\Framework\EntityList.cs">
+      <Link>Data\EntityList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\OpenRiaServices.Data.DomainServices\Framework\QueryBuilder.cs">
+      <Link>Data\QueryBuilder.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
     </Compile>

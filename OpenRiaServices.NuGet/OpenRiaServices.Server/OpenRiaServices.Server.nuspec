@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Server</id>
-    <version>4.3.0.0</version>
+    <version>4.4.0.0-Beta5</version>
     <title>OpenRiaServices.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>

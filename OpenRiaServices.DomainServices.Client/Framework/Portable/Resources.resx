@@ -141,6 +141,9 @@
   <data name="MethodCanOnlyBeInvokedOnce" xml:space="preserve">
     <value>Method can only be invoked once.</value>
   </data>
+  <data name="NoESorEC" xml:space="preserve">
+    <value>EntitySet and EntityCollection are already observable and should be bound to directly.</value>
+  </data>
   <data name="OperationCancelled" xml:space="preserve">
     <value>The operation was canceled.</value>
   </data>

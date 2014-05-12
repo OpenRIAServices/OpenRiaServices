@@ -22,9 +22,8 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         /// </summary>
         public override string TransformText()
         {
-            this.Write("\n\n");
+            this.Write("\r\n");
  this.GenerateProxyClass(); 
-            this.Write("\n");
             return this.GenerationEnvironment.ToString();
         }
     }

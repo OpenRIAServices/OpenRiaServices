@@ -42,22 +42,22 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Apply contract behaviour such as [WebGet] and [FaultDescri
-        /// Implements the <see cref="M:System.ServiceModel.Description.IEndpointBehavior.ApplyClientBehavior(System.ServiceModel.Description.ServiceEndpoint,System.ServiceModel.Dispatcher.ClientRuntime)" /> method to support modification or extension of the client across an endpoint.
+        /// Apply contract behaviour such as [WebGet] and [FaultDescription] and then perform validation.
+        /// 
+        /// Confirms that the endpoint meets the requirements for the Web programming model.
         /// </summary>
-        /// <param name="endpoint">The endpoint that exposes the contract the client is to access.</param>
-        /// <param name="clientRuntime">The client to which the custom behavior is applied.</param>
-        public override void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
+        /// <param name="endpoint">The service endpoint.</param>
+        public override void Validate(ServiceEndpoint endpoint)
         {
             foreach (var od in endpoint.Contract.Operations)
             {
                 // Add FaultDescription if [FaultContractAttribute] has not already been added (by old code-generation)
-                if (od.Faults.Count == 0)
+                if (!od.Faults.Any(f => f.DetailType == typeof(DomainServiceFault)))
                 {
                     od.Faults.Add(new FaultDescription(od.Messages[0].Action + "DomainServiceFault")
                     {
                         DetailType = typeof(DomainServiceFault),
-                        Name =  typeof(DomainServiceFault).Name,
+                        Name = typeof(DomainServiceFault).Name,
                         Namespace = "DomainServices",
                     });
                 }
@@ -69,14 +69,13 @@ namespace OpenRiaServices.DomainServices.Client
                 if (od.BeginMethod != null)
                 {
                     // Add [WebGet] to methods which don't have any side effects ([WebInvoke] is default action)
-                    var hasSideEffectsAttribute = (HasSideEffectsAttribute)Attribute.GetCustomAttribute(od.BeginMethod, typeof(HasSideEffectsAttribute), inherit:false);
-                    if(hasSideEffectsAttribute != null && hasSideEffectsAttribute.HasSideEffects == false)
+                    var hasSideEffectsAttribute = (HasSideEffectsAttribute)Attribute.GetCustomAttribute(od.BeginMethod, typeof(HasSideEffectsAttribute), inherit: false);
+                    if (hasSideEffectsAttribute != null && hasSideEffectsAttribute.HasSideEffects == false)
                         EnsureBehavior<WebGetAttribute>(od);
                 }
             }
-            
 
-            base.ApplyClientBehavior(endpoint, clientRuntime);
+            base.Validate(endpoint);
         }
 
         /// <summary>

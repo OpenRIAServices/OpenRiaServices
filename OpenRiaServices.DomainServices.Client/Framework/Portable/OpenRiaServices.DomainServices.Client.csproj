@@ -57,9 +57,12 @@
     <Compile Include="ApplicationServices\LogoutResult.cs" />
     <Compile Include="ApplicationServices\SaveUserOperation.cs" />
     <Compile Include="ApplicationServices\SaveUserResult.cs" />
+    <Compile Include="Data\CollectionViewLoader.cs" />
     <Compile Include="Data\ComplexObject.cs" />
     <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
+    <Compile Include="Data\EntityList.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
+    <Compile Include="Data\GlobalSuppressions.cs" />
     <Compile Include="Data\HasSideEffectsAttribute.cs" />
     <Compile Include="Data\InvokeResult.cs" />
     <Compile Include="Data\LoadResult.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Data\EntityVisitor.cs" />
     <Compile Include="Data\InvokeArgs.cs" />
     <Compile Include="Data\MetaType.cs" />
+    <Compile Include="Data\QueryBuilder.cs" />
     <Compile Include="Data\Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
