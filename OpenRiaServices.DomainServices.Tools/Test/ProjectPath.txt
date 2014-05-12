@@ -1,1 +1,1 @@
-C:\Users\Eric\Documents\GitHub\openriaservices\OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj,Generated_Code,
+C:\Code\Repos\openriaservices\OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj,Generated_Code,
