@@ -113,10 +113,8 @@
       <Link>Data\CompositionAttribute.cs</Link>
     </Compile>
     <Compile Include="ApplicationServices\AuthenticationEventArgs.cs" />
-    <Compile Include="ApplicationServices\AuthenticationOperation.cs">
-    </Compile>
-    <Compile Include="ApplicationServices\AuthenticationResult.cs">
-    </Compile>
+    <Compile Include="ApplicationServices\AuthenticationOperation.cs" />
+    <Compile Include="ApplicationServices\AuthenticationResult.cs" />
     <Compile Include="ApplicationServices\LoadUserOperation.cs" />
     <Compile Include="ApplicationServices\LoadUserResult.cs" />
     <Compile Include="ApplicationServices\LoginOperation.cs" />
@@ -125,6 +123,8 @@
     <Compile Include="ApplicationServices\LogoutResult.cs" />
     <Compile Include="ApplicationServices\SaveUserOperation.cs" />
     <Compile Include="ApplicationServices\SaveUserResult.cs" />
+    <Compile Include="ApplicationServices\LoginParameters.cs" />
+    <Compile Include="ApplicationServices\AuthenticationService.cs" />
     <Compile Include="Data\ComplexObject.cs" />
     <Compile Include="Data\EntityActionAttribute.cs" />
     <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
@@ -201,7 +201,6 @@
     <Compile Include="Data\ValidationUtilities.cs" />
     <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
     </Compile>
-    <Compile Include="ApplicationServices\LoginParameters.cs" />
     <Compile Include="Data\TypeUtility.cs">
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -209,8 +208,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationServices\AuthenticationService.cs">
     </Compile>
     <Compile Include="WeakCollectionChangedListener.cs" />
   </ItemGroup>
