@@ -386,9 +386,9 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
 
         #endregion
 
-        #region SubmitChangeSet
+        #region Submit(ChangeSet)
         /// <summary>
-        /// Invokes all changeSet entries defined in the <see cref="ChangeSet"/>.
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
         /// </summary>
         /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
         /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
@@ -403,8 +403,9 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         }
 
         /// <summary>
-        /// Invokes all changeSet entries defined in the <see cref="ChangeSet"/>.
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
         /// </summary>
+        /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
         /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
         /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
         /// <see cref="Update{TEntity}(TEntity, TEntity)"/> and <see cref="Delete{TEntity}(TEntity, TEntity)"/>
@@ -419,8 +420,9 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         }
 
         /// <summary>
-        /// Invokes all changeSet entries defined in the <see cref="ChangeSet"/>.
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
         /// </summary>
+        /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
         /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
         /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
         /// <see cref="Update{TEntity}(TEntity, TEntity)"/> and <see cref="Delete{TEntity}(TEntity, TEntity)"/>
@@ -648,6 +650,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         /// <summary>
         /// Invokes one or several operation according to the specified <paramref name="changeSet"/>
         /// </summary>
+        /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
         /// <param name="context"><see cref="OperationContext"/> for the current operation</param>
         /// <param name="changeSet">The <see cref="ChangeSet"/> identifying the operations to invoke.</param>
         /// <param name="validationResults">The validation errors that occurred</param>
