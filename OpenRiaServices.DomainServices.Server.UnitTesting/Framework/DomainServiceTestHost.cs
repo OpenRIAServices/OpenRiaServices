@@ -386,6 +386,57 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
 
         #endregion
 
+        #region Submit(ChangeSet)
+        /// <summary>
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
+        /// </summary>
+        /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
+        /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
+        /// <see cref="Update{TEntity}(TEntity, TEntity)"/> and <see cref="Delete{TEntity}(TEntity, TEntity)"/>
+        /// </remarks>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> to execute</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public void Submit(ChangeSet changeSet)
+        {
+            OperationContext context = this.CreateOperationContext(DomainOperationType.Submit);
+            SubmitChangeSetCore(context, changeSet);
+        }
+
+        /// <summary>
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
+        /// </summary>
+        /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
+        /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
+        /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
+        /// <see cref="Update{TEntity}(TEntity, TEntity)"/> and <see cref="Delete{TEntity}(TEntity, TEntity)"/>
+        /// </remarks>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> to execute</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public bool TrySubmit(ChangeSet changeSet)
+        {
+            OperationContext context = this.CreateOperationContext(DomainOperationType.Submit);
+            IList<ValidationResult> validationErrors;
+            return TrySubmitChangeSetCore(context, changeSet, out validationErrors);
+        }
+
+        /// <summary>
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
+        /// </summary>
+        /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
+        /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
+        /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
+        /// <see cref="Update{TEntity}(TEntity, TEntity)"/> and <see cref="Delete{TEntity}(TEntity, TEntity)"/>
+        /// </remarks>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> to execute</param>
+        /// <param name="validationErrors">The validation errors that occurred</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public bool TrySubmit(ChangeSet changeSet, out IList<ValidationResult> validationErrors)
+        {
+            OperationContext context = this.CreateOperationContext(DomainOperationType.Submit);
+            return TrySubmitChangeSetCore(context, changeSet, out validationErrors);
+        }
+        #endregion
+
         #region Invoke
 
         /// <summary>
@@ -537,9 +588,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             }
             ChangeSet changeSet = Utility.CreateChangeSet(changeSetEntry);
 
-            context.DomainService.Submit(changeSet);
-
-            ErrorUtility.AssertNoChangeSetErrors(context, changeSet);
+            SubmitChangeSetCore(context, changeSet);
         }
 
         /// <summary>
@@ -582,10 +631,34 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             }
             changeSet = Utility.CreateChangeSet(changeSetEntry);
 
+            return TrySubmitChangeSetCore(context, changeSet, out validationResults);
+        }
+
+        /// <summary>
+        /// Invokes one or several operation according to the specified <paramref name="changeSet"/>
+        /// </summary>
+        /// <param name="context"><see cref="OperationContext"/> for the current operation</param>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> identifying the operations to invoke.</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        private static void SubmitChangeSetCore(OperationContext context, ChangeSet changeSet)
+        {
             context.DomainService.Submit(changeSet);
 
-            validationResults = this.GetValidationResults(changeSet);
+            ErrorUtility.AssertNoChangeSetErrors(context, changeSet);
+        }
 
+        /// <summary>
+        /// Invokes one or several operation according to the specified <paramref name="changeSet"/>
+        /// </summary>
+        /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
+        /// <param name="context"><see cref="OperationContext"/> for the current operation</param>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> identifying the operations to invoke.</param>
+        /// <param name="validationResults">The validation errors that occurred</param>
+        private static bool TrySubmitChangeSetCore(OperationContext context, ChangeSet changeSet, out IList<ValidationResult> validationResults)
+        {
+            context.DomainService.Submit(changeSet);
+
+            validationResults = GetValidationResults(changeSet);
             return !changeSet.HasError;
         }
 
@@ -658,7 +731,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         /// </summary>
         /// <param name="changeSet">The <see cref="ChangeSet"/> to get the results from</param>
         /// <returns>A list of <see cref="ValidationResult"/>s or <c>null</c></returns>
-        private IList<ValidationResult> GetValidationResults(ChangeSet changeSet)
+        private static IList<ValidationResult> GetValidationResults(ChangeSet changeSet)
         {
             if (changeSet.HasError)
             {

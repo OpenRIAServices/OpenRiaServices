@@ -568,11 +568,19 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 Type type = null;
 
+                // Get application assembly so we can start searching for web context type there
+                Assembly applicationAssembly =
+#if SILVERLIGHT
+                    Application.Current.GetType().Assembly;
+#else
+                    Assembly.GetEntryAssembly();
+#endif
+
                 if (!string.IsNullOrEmpty(this.DomainContextType))
                 {
                     // First, try to load the type by full name from the application assembly
-                    type = Application.Current.GetType().Assembly.GetType(this.DomainContextType);
 
+                    type = applicationAssembly.GetType(this.DomainContextType);
                     // If that doesn't work, allow for assembly qualified names
                     if (type == null)
                     {
@@ -585,7 +593,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     // Finally, we'll look for a domain context that has been generated from a domain 
                     // service extending AuthenticationBase<T>. Our CodeProcessor generates these 
                     // providers as extending AuthenticationDomainContextBase.
-                    foreach (Type tempType in Application.Current.GetType().Assembly.GetTypes())
+                    foreach (Type tempType in applicationAssembly.GetTypes())
                     {
                         if (typeof(AuthenticationDomainContextBase).IsAssignableFrom(tempType))
                         {

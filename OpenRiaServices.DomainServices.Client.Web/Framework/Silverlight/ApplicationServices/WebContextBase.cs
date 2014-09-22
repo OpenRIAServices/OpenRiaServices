@@ -13,9 +13,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// <remarks>
     /// This context makes services and other values available from code and xaml. When
     /// a context is created, it should be registered as a lifetime-object with
-    /// <see cref="Application.ApplicationLifetimeObjects"/>.
+    /// <see cref="Application.ApplicationLifetimeObjects"/> (Silverlight specific).
     /// </remarks>
-    public abstract class WebContextBase : INotifyPropertyChanged, IApplicationService, IApplicationLifetimeAware
+    public abstract class WebContextBase : INotifyPropertyChanged
+#if SILVERLIGHT
+        , IApplicationService, IApplicationLifetimeAware
+#endif
     {
         #region Static fields
 
@@ -120,6 +123,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 {
                     throw new InvalidOperationException(Resources.WebContext_CannotModifyAuthentication);
                 }
+#if !SILVERLIGHT
+                // Since IApplicationLifetimeAware.Started() will only be called from silverlight
+                // execute the code here instead for now
+                _started = true;
+#endif
 
                 if (this._authentication != value)
                 {
@@ -193,6 +201,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
         #endregion
 
+#if SILVERLIGHT
         #region IApplicationService Members
 
         /// <summary>
@@ -238,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         }
 
         #endregion
-
+#endif
         #region Nested Classes
 
         private class DefaultIdentity : IIdentity

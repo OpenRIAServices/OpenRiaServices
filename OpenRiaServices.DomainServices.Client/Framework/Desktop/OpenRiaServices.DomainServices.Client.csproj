@@ -117,6 +117,45 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationEventArgs.cs">
+      <Link>ApplicationServices\AuthenticationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationOperation.cs">
+      <Link>ApplicationServices\AuthenticationOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationResult.cs">
+      <Link>ApplicationServices\AuthenticationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoadUserOperation.cs">
+      <Link>ApplicationServices\LoadUserOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoadUserResult.cs">
+      <Link>ApplicationServices\LoadUserResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginOperation.cs">
+      <Link>ApplicationServices\LoginOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginResult.cs">
+      <Link>ApplicationServices\LoginResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LogoutOperation.cs">
+      <Link>ApplicationServices\LogoutOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LogoutResult.cs">
+      <Link>ApplicationServices\LogoutResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\SaveUserOperation.cs">
+      <Link>ApplicationServices\SaveUserOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\SaveUserResult.cs">
+      <Link>ApplicationServices\SaveUserResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginParameters.cs">
+      <Link>ApplicationServices\LoginParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationService.cs">
+      <Link>ApplicationServices\AuthenticationService.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\OpenRiaServices.Data.DomainServices\Framework\EntityList.cs">
       <Link>Data\EntityList.cs</Link>
     </Compile>

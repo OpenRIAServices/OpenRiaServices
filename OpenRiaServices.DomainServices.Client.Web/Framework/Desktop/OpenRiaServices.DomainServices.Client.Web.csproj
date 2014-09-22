@@ -110,6 +110,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContextBase.cs">
+      <Link>ApplicationServices\AuthenticationDomainContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthentication.cs">
+      <Link>ApplicationServices\FormsAuthentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationService.cs">
+      <Link>ApplicationServices\WebAuthenticationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebContextBase.cs">
+      <Link>ApplicationServices\WebContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WindowsAuthentication.cs">
+      <Link>ApplicationServices\WindowsAuthentication.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\AsyncResultBase.cs">
       <Link>AsyncResultBase.cs</Link>
     </Compile>
