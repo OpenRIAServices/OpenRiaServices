@@ -26,8 +26,8 @@ namespace OpenRiaServices.Common.DomainServices.Test.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=AlexAppFxSS02;Initial Catalog=AdventureWorks;Persist Security Info=Tr" +
-            "ue;User ID=dbi;Password=!Password1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\mssql2012;Initial Catalog=AdventureWorks;Persist Security Info=Tr" +
+            "ue;User ID=RiaTest;Password=TestPassword")]
         public string AdventureWorksConnectionString {
             get {
                 return ((string)(this["AdventureWorksConnectionString"]));
@@ -37,7 +37,7 @@ namespace OpenRiaServices.Common.DomainServices.Test.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=AlexAppFxSS02;Initial Catalog=Northwind;User ID=dbi;Password=!Passwor" +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\mssql2012;Initial Catalog=Northwind;User ID=dbi;Password=!Passwor" +
             "d1")]
         public string NorthwindConnectionString {
             get {

@@ -61,23 +61,23 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
                 Assert.AreEqual(5, files.Length, "Code gen should have generated this many ancillary files but instead saw:" + Environment.NewLine + generatedFiles);
 
-                string fileList = Path.Combine(outputFolder, "ClientClassLib.RiaFiles.txt");
+                string fileList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaFiles.txt");
                 Assert.IsTrue(File.Exists(fileList), "Expected code gen to have created " + fileList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
-                string refList = Path.Combine(outputFolder, "ClientClassLib.RiaClientRefs.txt");
+                string refList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaClientRefs.txt");
                 Assert.IsTrue(File.Exists(refList), "Expected code gen to have created " + refList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
-                refList = Path.Combine(outputFolder, "ClientClassLib.RiaServerRefs.txt");
+                refList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaServerRefs.txt");
                 Assert.IsTrue(File.Exists(refList), "Expected code gen to have created " + refList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
-                string sourceFileList = Path.Combine(outputFolder, "ClientClassLib.RiaSourceFiles.txt");
+                string sourceFileList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaSourceFiles.txt");
                 Assert.IsTrue(File.Exists(sourceFileList), "Expected code gen to have created " + sourceFileList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
-                string riaLinkList = Path.Combine(outputFolder, "ClientClassLib.RiaLinks.txt");
+                string riaLinkList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaLinks.txt");
                 Assert.IsTrue(File.Exists(riaLinkList), "Expected code gen to have created " + riaLinkList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 

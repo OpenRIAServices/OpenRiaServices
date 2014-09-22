@@ -16,10 +16,11 @@ using System.Security;
 [assembly: AssemblyCopyright("© Outercurve Foundation.  All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.Common.DomainServices.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
+#endif
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.

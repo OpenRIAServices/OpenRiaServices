@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Silverlight.CodeGen</id>
-        <version>4.4.0.0-Beta5</version>
+        <version>4.4.0.0-Beta2</version>
         <title>Open RIA Services Silverlight Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -16,7 +16,7 @@
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Silverlight.Core" version="4.4.0.0-Beta5" />
+        <dependency id="OpenRiaServices.Silverlight.Core" version="4.4.0.0-Beta2" />
       </dependencies>
     </metadata>
     <files>

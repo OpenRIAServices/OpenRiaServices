@@ -24,10 +24,10 @@ using System.Security;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("9e0c539b-0604-4ba6-aefc-2831d419f1a5")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Server.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
-
+#endif
 [assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 

@@ -419,7 +419,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             // We are looking for ObjectContext, DbContext or DataContext types only. So we skip Value types and interfaces for performance.
             if (!t.IsValueType && !t.IsInterface)
             {
-                isDbContext = typeof(DbContext).IsAssignableFrom(t);
+
+                isDbContext = IsDbContext(t); //typeof(DbContext).IsAssignableFrom(t);
                 if (typeof(ObjectContext).IsAssignableFrom(t) ||
                         (allowDbContext && isDbContext) ||
                         (dataContextEnabled && typeof(DataContext).IsAssignableFrom(t)))
@@ -428,6 +429,18 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 }
             }
             return false;
+        }
+        //This method checks for DbContext without directly checking the type
+        static bool IsDbContext(Type t)
+        {
+            if (t == null)
+                return false;
+            if (t.Name == "DbContext")
+                return true;
+            else
+            {
+                return IsDbContext(t.BaseType);
+            }
         }
 
         /// <summary>

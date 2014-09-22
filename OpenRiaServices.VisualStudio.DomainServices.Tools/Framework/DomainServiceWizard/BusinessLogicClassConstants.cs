@@ -118,7 +118,7 @@
         /// <summary>
         /// Effectively typeof(DbDomainService).AssemblyName
         /// </summary>
-        public const string DbDomainServiceAssemblyName = DbDomainServiceAssemblyShortName + @", Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35";
+        public const string DbDomainServiceAssemblyName = DbDomainServiceAssemblyShortName ;
 
         /// <summary>
         /// Effectively the name portion of typeof(DbDomainService).AssemblyName (i.e. without Version, Culture, etc.)

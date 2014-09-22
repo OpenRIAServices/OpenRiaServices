@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="AdventureWorks" EntityNamespace="DataTests.AdventureWorks.LTS" ContextNamespace="DataTests.AdventureWorks.LTS" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=AlexAppFxSS02;Initial Catalog=AdventureWorks;Persist Security Info=True;User ID=dbi" SettingsObjectName="OpenRiaServices.Common.DomainServices.Test.Properties.Settings" SettingsPropertyName="AdventureWorksConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\mssql2012;Initial Catalog=AdventureWorks;Persist Security Info=True;User ID=dbi" SettingsObjectName="OpenRiaServices.Common.DomainServices.Test.Properties.Settings" SettingsPropertyName="AdventureWorksConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="HumanResources.Department" Member="Departments">
     <Type Name="Department">
       <Column Name="DepartmentID" Type="System.Int16" DbType="SmallInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

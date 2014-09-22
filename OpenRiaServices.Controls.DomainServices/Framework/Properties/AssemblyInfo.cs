@@ -31,8 +31,9 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinitionAttribute("clr-namespace:OpenRiaServices.Windows.Controls;assembly=OpenRiaServices.Controls.DomainServices", "OpenRiaServices.Controls.DomainServices")]
 
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.Controls.DomainServices.Test")]
-
+#endif
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

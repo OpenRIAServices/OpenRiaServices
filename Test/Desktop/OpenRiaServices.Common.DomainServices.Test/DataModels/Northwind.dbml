@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Northwind" EntityNamespace="DataTests.Northwind.LTS" ContextNamespace="DataTests.Northwind.LTS" Class="NorthwindDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=AlexAppFxSS02;Initial Catalog=Northwind;User ID=dbi" SettingsObjectName="OpenRiaServices.Common.DomainServices.Test.Properties.Settings" SettingsPropertyName="NorthwindConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\mssql2012;Initial Catalog=Northwind;User ID=dbi" SettingsObjectName="OpenRiaServices.Common.DomainServices.Test.Properties.Settings" SettingsPropertyName="NorthwindConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Categories" Member="Categories">
     <Type Name="Category">
       <Column Name="CategoryID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

@@ -496,7 +496,7 @@ namespace TestDomainServices.DbCtx
 
         protected override DbCtxNorthwindEntities CreateDbContext()
         {
-            return new DbCtxNorthwindEntities("metadata=res://*/Northwind.NorthwindDbCtx.csdl|res://*/Northwind.NorthwindDbCtx.ssdl|res://*/Northwind.NorthwindDbCtx.msl;provider=System.Data.SqlClient;provider connection string=\"Server=AlexAppFxSS02;Initial Catalog=Northwind;Persist Security Info=True;User ID=dbi;Password=!Password1;MultipleActiveResultSets=True\"");
+            return new DbCtxNorthwindEntities("metadata=res://*/Northwind.NorthwindDbCtx.csdl|res://*/Northwind.NorthwindDbCtx.ssdl|res://*/Northwind.NorthwindDbCtx.msl;provider=System.Data.SqlClient;provider connection string=\"Server=.\\mssql2012;Initial Catalog=Northwind;Persist Security Info=True;User ID=RiaTest;Password=TestPassword;MultipleActiveResultSets=True\"");
         }
     }
 

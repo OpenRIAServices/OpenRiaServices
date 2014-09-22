@@ -26,10 +26,10 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("3b1e477b-e9e8-4806-84f3-83c6e428db0d")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Tools.TextTemplate.Test")]
-
+#endif
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

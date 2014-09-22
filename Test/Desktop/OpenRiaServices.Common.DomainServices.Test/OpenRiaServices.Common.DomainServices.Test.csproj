@@ -35,6 +35,15 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
+    <OutputPath>bin\Signed\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -127,18 +136,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\EFDbContextScenarios.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\EFDbContextScenarios.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.cs" />
+    <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFDbContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFDbContextScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="AdventureWorks\EF_DbCtx_Catalog.cs" />
     <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs">
       <SubType>Code</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="DataModels\AdventureWorks.cs">
       <AutoGen>True</AutoGen>
@@ -173,55 +201,153 @@
     <Compile Include="Mocks\ServerSideAsyncDomainService.cs" />
     <Compile Include="Northwind\EFCF_Northwind.cs" />
     <Compile Include="Northwind\EFDbCtx_Northwind.cs" />
-    <Compile Include="Shared\Test.shared.cs" />
-    <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.vb" />
-    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\SharedEntities.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\SystemNamespace.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\GlobalNamespace_NoRootNamespace.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\MultipleProviderScenarios.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\SharedEntities.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios_CodeGen.g.cs" />
-    <Content Include="Baselines\Default\Mocks\MockCustomers.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\InheritanceScenarios1.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\ConflictResolution.EntityConflicts.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\ConflictResolution.EntityConflicts.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs" />
-    <Content Include="Baselines\Default\WebContext\WebContext0.g.cs" />
-    <Content Include="Baselines\Default\WebContext\WebContext1.g.cs" />
-    <Content Include="Baselines\Default\WebContext\WebContext2.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\InterfaceInheritance.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\InterfaceInheritance.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\ConflictResolution.EntityConflicts.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\SystemNamespace.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace_NoRootNamespace.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\InheritanceScenarios1.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\MultipleProviderScenarios.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios_CodeGen.g.cs" />
-    <Content Include="Baselines\FullTypeNames\WebContext\WebContext0.g.cs" />
-    <Content Include="Baselines\FullTypeNames\WebContext\WebContext1.g.cs" />
-    <Content Include="Baselines\FullTypeNames\WebContext\WebContext2.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\CompositionScenarios.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\GlobalNamespace_NoRootNamespace.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace_NoRootNamespace.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\SystemNamespace.g.cs" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\SystemNamespace.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs" />
-    <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.vb" />
-    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" />
+    <Compile Include="Shared\Test.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\SharedEntities.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\SystemNamespace.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace_NoRootNamespace.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\MultipleProviderScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\SharedEntities.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios_CodeGen.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Mocks\MockCustomers.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\InheritanceScenarios1.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\ConflictResolution.EntityConflicts.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\ConflictResolution.EntityConflicts.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\WebContext\WebContext0.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\WebContext\WebContext1.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\WebContext\WebContext2.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\InterfaceInheritance.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\InterfaceInheritance.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\ConflictResolution.EntityConflicts.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\SystemNamespace.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace_NoRootNamespace.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\InheritanceScenarios1.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\MultipleProviderScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios_CodeGen.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext0.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext1.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext2.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\CompositionScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\GlobalNamespace_NoRootNamespace.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\GlobalNamespace_NoRootNamespace.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\SystemNamespace.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\SystemNamespace.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Cities\Cities.shared.cs" />
     <Compile Include="Cities\CityData.cs" />
     <Compile Include="Cities\CityDomainService.cs" />
@@ -310,11 +436,19 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Shared\SystemNamespace.shared.cs" />
-    <Compile Include="Shared\Global.shared.cs" />
-    <Compile Include="Shared\Mock.shared.cs" />
+    <Compile Include="Shared\SystemNamespace.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Shared\Global.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Shared\Mock.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Content Include="Cities\Cities.shared.vb" />
-    <Content Include="Shared\Test.shared.vb" />
+    <Content Include="Shared\Test.shared.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
@@ -335,38 +469,102 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Baselines\Default\Cities\Cities.g.cs" />
-    <Content Include="Baselines\Default\Cities\Cities.g.vb" />
-    <Content Include="Baselines\Default\EF\Catalog_EF.g.vb" />
-    <Content Include="Baselines\Default\EF\Northwind_EF.g.vb" />
-    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.vb" />
-    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.vb" />
-    <Content Include="Baselines\Default\EF\Catalog_EF.g.cs" />
-    <Content Include="Baselines\Default\EF\Northwind_EF.g.cs" />
-    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.cs" />
-    <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.vb" />
-    <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.cs" />
-    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.cs" />
-    <Content Include="Baselines\Default\Mocks\MockCustomers.g.vb" />
-    <Content Include="Baselines\Default\WebContext\WebContext0.g.vb" />
-    <Content Include="Baselines\Default\WebContext\WebContext1.g.vb" />
-    <Content Include="Baselines\Default\WebContext\WebContext2.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\CompositionScenarios.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios_CodeGen.g.vb" />
-    <Content Include="Baselines\Default\Scenarios\VBRootNamespaceScenarios.g.vb" />
-    <Content Include="Baselines\FullTypeNames\WebContext\WebContext0.g.vb" />
-    <Content Include="Baselines\FullTypeNames\WebContext\WebContext1.g.vb" />
-    <Content Include="Baselines\FullTypeNames\WebContext\WebContext2.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\ConflictResolution.EntityConflicts.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios_CodeGen.g.vb" />
-    <Content Include="Baselines\FullTypeNames\Scenarios\VBRootNamespaceScenarios.g.vb" />
-    <Content Include="Shared\SystemNamespace.shared.vb" />
-    <Content Include="Shared\Global.shared.vb" />
-    <Content Include="Shared\Mock.shared.vb" />
+    <Content Include="Baselines\Default\Cities\Cities.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Cities\Cities.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Catalog_EF.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Northwind_EF.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Catalog_EF.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Northwind_EF.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Mocks\MockCustomers.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\WebContext\WebContext0.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\WebContext\WebContext1.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\WebContext\WebContext2.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\CompositionScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios_CodeGen.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\VBRootNamespaceScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext0.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext1.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext2.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\ConflictResolution.EntityConflicts.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\TestProvider_Scenarios_CodeGen.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\VBRootNamespaceScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shared\SystemNamespace.shared.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shared\Global.shared.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shared\Mock.shared.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

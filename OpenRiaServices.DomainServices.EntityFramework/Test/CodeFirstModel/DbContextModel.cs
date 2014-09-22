@@ -12,7 +12,7 @@ namespace CodeFirstModels
     public partial class EFCFNorthwindEntities : DbContext
     {
         public EFCFNorthwindEntities()
-            : base("Server=AlexAppFxSS02;Initial Catalog=Northwind;Persist Security Info=True;User ID=dbi;Password=!Password1;MultipleActiveResultSets=True")
+            : base("Server=.\\mssql2012;Initial Catalog=Northwind;Persist Security Info=True;User ID=RiaTest;Password=TestPassword;MultipleActiveResultSets=True")
         {
         }
 

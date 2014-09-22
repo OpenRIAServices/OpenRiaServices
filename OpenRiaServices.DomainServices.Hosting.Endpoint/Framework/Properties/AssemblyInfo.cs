@@ -41,5 +41,6 @@ using System.Security;
 //[assembly: AssemblyFileVersion("1.0.0.14")]
 
 
-
+#if !SIGNED
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenRiaServices.DomainServices.Hosting.Local.Test")]
+#endif

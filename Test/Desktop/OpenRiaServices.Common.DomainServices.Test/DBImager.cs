@@ -245,35 +245,35 @@ namespace TestDomainServices.Testing
 
                 return DBImager.GetConnectionString(Empty_DBName, Ls, DBImager.AccessMode.Readonly);
             }
-            if (accessMode == AccessMode.New)
-            {
+            //if (accessMode == AccessMode.New)
+            //{
 
-                StringBuilder sb = new StringBuilder(@"");
-                switch (dbProvider)
-                {
-                    case "DatabaseFile":
-                        string GUID = Guid.NewGuid().ToString();
-                        string SourceMDF = GetDBFile(dbName + ".mdf");
-                        string SourceLDF = GetDBFile(dbName + "_log.ldf");
-                        string DestMDF = Path.Combine(Directory.GetCurrentDirectory(), dbName + GUID + ".mdf");
+            //    StringBuilder sb = new StringBuilder(@"");
+            //    switch (dbProvider)
+            //    {
+            //        case "DatabaseFile":
+            //            string GUID = Guid.NewGuid().ToString();
+            //            string SourceMDF = GetDBFile(dbName + ".mdf");
+            //            string SourceLDF = GetDBFile(dbName + "_log.ldf");
+            //            string DestMDF = Path.Combine(Directory.GetCurrentDirectory(), dbName + GUID + ".mdf");
 
-                        // If file is not exist, copy it to the local folder
-                        if (!File.Exists(DestMDF))
-                        {
-                            File.Copy(SourceMDF, DestMDF);
-                            File.SetAttributes(DestMDF, FileAttributes.Normal);
-                            File.Copy(SourceLDF, Path.Combine(Directory.GetCurrentDirectory(), dbName + GUID + "_log.ldf"));
-                            File.SetAttributes(Path.Combine(Directory.GetCurrentDirectory(), dbName + GUID + "_log.ldf"), FileAttributes.Normal);
-                        }
+            //            // If file is not exist, copy it to the local folder
+            //            if (!File.Exists(DestMDF))
+            //            {
+            //                File.Copy(SourceMDF, DestMDF);
+            //                File.SetAttributes(DestMDF, FileAttributes.Normal);
+            //                File.Copy(SourceLDF, Path.Combine(Directory.GetCurrentDirectory(), dbName + GUID + "_log.ldf"));
+            //                File.SetAttributes(Path.Combine(Directory.GetCurrentDirectory(), dbName + GUID + "_log.ldf"), FileAttributes.Normal);
+            //            }
 
-                        return GetConnectionStringForDatabaseFile(DestMDF);
-                    default:
-                        return CreateDB(dbName, Ls);
-                }
+            //            return GetConnectionStringForDatabaseFile(DestMDF);
+            //        default:
+            //            return CreateDB(dbName, Ls);
+            //    }
 
 
-            }
-            if (accessMode == AccessMode.NewNoCreate)
+            //}
+            if (accessMode == AccessMode.NewNoCreate || accessMode == AccessMode.New)
             {
 
                 StringBuilder sb = new StringBuilder(@"");
@@ -421,12 +421,12 @@ namespace TestDomainServices.Testing
 
         private static string GetAdminConnectionString(string dbName, List<DictionaryEntry> Ls)
         {
-            return "Server=" + GetServerLocation(Ls) + ";Database=" + dbName + ";User=dbi;Password=!Password1";
+            return "Server=" + GetServerLocation(Ls) + ";Database=" + dbName + ";User=RiaTest;Password=TestPassword";
         }
 
         private static string GetAdminConnectionString(string dbName, TestDatabaseProviderInfo provider)
         {
-            return "Server=" + provider.Location + ";Database=" + dbName + ";User=dbi;Password=!Password1";
+            return "Server=" + provider.Location + ";Database=" + dbName + ";User=RiaTest;Password=TestPassword";
         }
 
         /// <summary>
@@ -649,8 +649,8 @@ namespace TestDomainServices.Testing
         public static readonly TestDatabaseProviderInfo SQL2005 = new TestDatabaseProviderInfo
         {
             Name = "SQL2005",
-            Location = @"AlexAppFxSS02",
-            Credentials = @"User=dbi;Password=!Password1",
+            Location = @".\mssql2012",
+            Credentials = @"User=RiaTest;Password=TestPassword",
             DataFilePath = @"D:\Data\"
         };
 

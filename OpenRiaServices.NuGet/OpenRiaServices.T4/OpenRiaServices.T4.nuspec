@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.T4</id>
-    <version>4.4.0.0-Beta5</version>
+    <version>4.4.0.0-Beta3</version>
     <title>Open RIA Services T4 Code Generation</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -16,7 +16,7 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices T4 OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="4.4.0.0-Beta5" />
+      <dependency id="OpenRiaServices.Server" version="4.4.0.0-Beta3" />
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="OpenRiaServices.DomainServices.Tools" targetFramework=".NETFramework4.0" />

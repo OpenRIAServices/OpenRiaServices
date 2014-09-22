@@ -27,10 +27,10 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-
+#if !SIGNED
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Test")]
 [assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.Client.Web.Test")]
-
+#endif
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
