@@ -102,7 +102,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 }
                 if (!String.IsNullOrEmpty(sca.Namespace))
                 {
-                    serviceDesc.Name = sca.Namespace;
+                    serviceDesc.Namespace = sca.Namespace;
                 }
             }
 
