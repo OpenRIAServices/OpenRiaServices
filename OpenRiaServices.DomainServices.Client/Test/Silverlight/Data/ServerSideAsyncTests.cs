@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             const string message = "client";
             const string expected = "Hello client";
 
-            var invokeOp = ctx.GreetTaskAsync(message);
+            var invokeOp = ctx.Greet(message);
 
             this.EnqueueConditional(() => invokeOp.IsComplete);
             this.EnqueueCallback(() =>
@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             const int number = 42;
 
-            var invokeOp = ctx.AddOneTaskAsync(number);
+            var invokeOp = ctx.AddOne(number);
 
             this.EnqueueConditional(() => invokeOp.IsComplete);
             this.EnqueueCallback(() =>
@@ -60,7 +60,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             const int number = 42;
 
             // Check non-null return value
-            var invokeOp = ctx.AddNullableOneTaskAsync(number);
+            var invokeOp = ctx.AddNullableOne(number);
             this.EnqueueConditional(() => invokeOp.IsComplete);
             this.EnqueueCallback(() =>
             {
@@ -69,7 +69,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // Check null return value
-            var invokeNullOp = ctx.AddNullableOneTaskAsync(null);
+            var invokeNullOp = ctx.AddNullableOne(null);
             this.EnqueueConditional(() => invokeNullOp.IsComplete);
             this.EnqueueCallback(() =>
             {
@@ -97,16 +97,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 var actualDelay = (DateTime.Now - start);
 
                 Assert.IsNull(invokeOp.Error);
+                Assert.IsTrue(actualDelay >= minExpectedDelay, "Delay was less than expected");
 
                 // Server store the last delay the last thing it does so we shold only get
                 // it if we actually waited for the Task to complete
                 var getDelayOp = ctx.GetLastDelay();
-                this.EnqueueConditional(() => getDelayOp.IsCanceled);
+                this.EnqueueConditional(() => getDelayOp.IsComplete);
                 this.EnqueueCallback(() =>
                 {
-                    Assert.IsNull(invokeOp.Error);
-                    Assert.AreEqual(delay, invokeOp.Value, "Server should have had time to set the actual delay");
-                    Assert.IsTrue(actualDelay >= minExpectedDelay, "Delay was less than expected");
+                    Assert.IsNull(getDelayOp.Error);
+                    Assert.AreEqual(delay, getDelayOp.Value, "Server should have had time to set the actual delay");
                 });
                 this.EnqueueTestComplete();
             });
@@ -115,11 +115,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Server side query returning Task<IEnumerable<T>>")]
-        public void Query()
+        public void Query_TaskAsync()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             var normalQuery = ctx.GetRangeQuery();
-            var asyncQuery = ctx.GetQueryableRangeTaskAsyncQuery();
+            var asyncQuery = ctx.GetQueryableRangeQuery();
 
             var normalLoad = ctx.Load(normalQuery);
             var asyncLoad = ctx.LoadAsync(asyncQuery);
@@ -140,17 +140,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Server side query returning Task<T>")]
-        public void Query_Single()
+        public void Query_TaskAsync_Single()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             const int expectedId = 4;
-            var query = ctx.GetRangeByIdTaskAsyncQuery(expectedId);
+            var query = ctx.GetRangeByIdQuery(expectedId);
 
             var load = ctx.LoadAsync(query);
             this.EnqueueConditional(() => load.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                Assert.AreEqual(null, load.Exception, "Load failed");
+                Assert.IsNull(load.Exception, "Load failed");
 
                 Assert.AreEqual(1, load.Result.Count, "Only 1 entity should have been loaded");
                 Assert.AreEqual(expectedId, load.Result.First().Id);
@@ -161,13 +161,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that filtering is applied to server side query returning Task<IEnumerable<T>>")]
-        public void Query_WithFilter()
+        public void Query_TaskAsync_WithFilter()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             const int expectedId = 3;
             Expression<Func<RangeItem, bool>> filter = (RangeItem item) => item.Id == expectedId;
             var normalQuery = ctx.GetRangeQuery().Where(filter);
-            var asyncQuery = ctx.GetQueryableRangeTaskAsyncQuery().Where(filter);
+            var asyncQuery = ctx.GetQueryableRangeQuery().Where(filter);
 
             normalQuery.IncludeTotalCount = true;
             asyncQuery.IncludeTotalCount = true;
@@ -198,14 +198,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that exceptions thrown directly from Task async methods are propagated")]
-        public void Query_WithException_First()
+        public void Query_TaskAsync_WithException_First()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             var exceptionFirstQuery = ctx.GetQueryableRangeWithExceptionFirstQuery();
             const int expectedErrorCode = 23;
             const string expectedMessage = "GetQueryableRangeWithExceptionFirst";
 
-            var load = ctx.Load(exceptionFirstQuery);
+            var load = ctx.Load(exceptionFirstQuery, throwOnError:false);
             this.EnqueueConditional(() => load.IsComplete);
             this.EnqueueCallback(() =>
             {
@@ -221,18 +221,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that exceptions returned in Task from Task async methods are propagated")]
-        public void Query_WithException_InTask()
+        public void Query_TaskAsync_WithException_InTask()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             var exceptionFirstQuery = ctx.GetQueryableRangeWithExceptionTaskQuery();
             const int expectedErrorCode = 24;
             string expectedMessage = "GetQueryableRangeWithExceptionTask";
             
-            var load = ctx.Load(exceptionFirstQuery, (res) =>
-            {
-                Assert.IsNotNull(res.Error, "Exception is null");
-                res.MarkErrorAsHandled();
-            }, null);
+            var load = ctx.Load(exceptionFirstQuery, throwOnError: false);
             this.EnqueueConditional(() => load.IsComplete);
             this.EnqueueCallback(() =>
             {
@@ -248,7 +244,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that exceptions thrown directly from Task async methods are propagated")]
-        public void Query_Single_WithException_First()
+        public void Query_TaskAsync_Single_WithException_First()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             var exceptionFirstQuery = ctx.GetRangeByIdWithExceptionFirstQuery(2);
@@ -271,7 +267,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that exceptions returned in Task from Task async methods are propagated")]
-        public void Query_Single_WithException_InTask()
+        public void Query_TaskAsync_Single_WithException_InTask()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             var exceptionFirstQuery = ctx.GetRangeByIdWithExceptionTaskQuery(2);
@@ -294,7 +290,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that exceptions thrown directly from Task async methods are propagated")]
-        public void Invoke_WithException_First()
+        public void Invoke_TaskAsyncWithException_First()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             const int expectedErrorCode = 23;
@@ -316,13 +312,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Test that exceptions returned in Task from Task async methods are propagated")]
-        public void Invoke_WithException_InTask()
+        public void Invoke_TaskAsyncWithException_InTask()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             const int expectedErrorCode = 24;
             const string expectedMessage = "InvokeWithExceptionTask";
 
-            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3);
+            var invoke = ctx.InvokeWithException(delay:3);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {

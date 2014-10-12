@@ -69,9 +69,11 @@ namespace OpenRiaServices.DomainServices.Server
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntryType, Enum.GetName(typeof(DomainOperation), operation)));
             }
 
-            this._methodName = name;
+            bool isTaskType = TypeUtility.IsTaskType(returnType);
+
+            this._methodName = isTaskType ? RemoveAsyncFromName(name) : name;
             this._actualReturnType = returnType;
-            this._returnType = TypeUtility.IsTaskType(returnType) ? TypeUtility.GetTaskReturnType(returnType) : returnType;
+            this._returnType = isTaskType ? TypeUtility.GetTaskReturnType(returnType) : returnType;
             this._attributes = attributes;
             this._operation = operation;
             this._domainServiceType = domainServiceType;
@@ -88,6 +90,20 @@ namespace OpenRiaServices.DomainServices.Server
                 }
             }
             this._effectiveParameters = effectiveParameters.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Removes any trailing "Async" from the specific name.
+        /// </summary>
+        /// <param name="name">A name.</param>
+        /// <returns>name, but without "Async" at the end</returns>
+        private static string RemoveAsyncFromName(string name)
+        {
+            const string async = "Async";
+            if (name.EndsWith(async) && name.Length > async.Length)
+                return name.Substring(0, name.Length - async.Length);
+            else
+                return name;
         }
 
         /// <summary>

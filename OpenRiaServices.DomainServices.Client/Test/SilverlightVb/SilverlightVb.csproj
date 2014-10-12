@@ -140,6 +140,9 @@
     <Compile Include="..\Silverlight\Data\OperationErrorTest.cs">
       <Link>OperationErrorTest.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\ServerSideAsyncTests.cs">
+      <Link>OpenRiaServices.DomainServices.Client\Data\ServerSideAsyncTests.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
