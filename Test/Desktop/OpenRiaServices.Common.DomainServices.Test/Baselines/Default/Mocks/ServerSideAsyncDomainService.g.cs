@@ -174,13 +174,13 @@ namespace TestDomainServices
         }
 
         /// <summary>
-        /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetQueryableRangeTaskAsync' query.
+        /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetQueryableRange' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem"/> entity instances.</returns>
-        public EntityQuery<RangeItem> GetQueryableRangeTaskAsyncQuery()
+        public EntityQuery<RangeItem> GetQueryableRangeQuery()
         {
-            this.ValidateMethod("GetQueryableRangeTaskAsyncQuery", null);
-            return base.CreateQuery<RangeItem>("GetQueryableRangeTaskAsync", null, false, true);
+            this.ValidateMethod("GetQueryableRangeQuery", null);
+            return base.CreateQuery<RangeItem>("GetQueryableRange", null, false, true);
         }
 
         /// <summary>
@@ -214,16 +214,16 @@ namespace TestDomainServices
         }
 
         /// <summary>
-        /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetRangeByIdTaskAsync' query.
+        /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetRangeById' query.
         /// </summary>
         /// <param name="id">The value for the 'id' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem"/> entity instances.</returns>
-        public EntityQuery<RangeItem> GetRangeByIdTaskAsyncQuery(int id)
+        public EntityQuery<RangeItem> GetRangeByIdQuery(int id)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", id);
-            this.ValidateMethod("GetRangeByIdTaskAsyncQuery", parameters);
-            return base.CreateQuery<RangeItem>("GetRangeByIdTaskAsync", parameters, false, false);
+            this.ValidateMethod("GetRangeByIdQuery", parameters);
+            return base.CreateQuery<RangeItem>("GetRangeById", parameters, false, false);
         }
 
         /// <summary>
@@ -253,87 +253,87 @@ namespace TestDomainServices
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'AddNullableOneTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         /// </summary>
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<Nullable<int>> AddNullableOneTaskAsync(Nullable<int> number, Action<InvokeOperation<Nullable<int>>> callback, object userState)
+        public InvokeOperation<Nullable<int>> AddNullableOne(Nullable<int> number, Action<InvokeOperation<Nullable<int>>> callback, object userState)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
-            this.ValidateMethod("AddNullableOneTaskAsync", parameters);
-            return this.InvokeOperation<Nullable<int>>("AddNullableOneTaskAsync", typeof(Nullable<int>), parameters, true, callback, userState);
+            this.ValidateMethod("AddNullableOne", parameters);
+            return this.InvokeOperation<Nullable<int>>("AddNullableOne", typeof(Nullable<int>), parameters, true, callback, userState);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'AddNullableOneTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         /// </summary>
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<Nullable<int>> AddNullableOneTaskAsync(Nullable<int> number)
+        public InvokeOperation<Nullable<int>> AddNullableOne(Nullable<int> number)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
-            this.ValidateMethod("AddNullableOneTaskAsync", parameters);
-            return this.InvokeOperation<Nullable<int>>("AddNullableOneTaskAsync", typeof(Nullable<int>), parameters, true, null, null);
+            this.ValidateMethod("AddNullableOne", parameters);
+            return this.InvokeOperation<Nullable<int>>("AddNullableOne", typeof(Nullable<int>), parameters, true, null, null);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'AddNullableOneTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         /// </summary>
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<Nullable<int>>> AddNullableOneTaskAsyncAsync(Nullable<int> number, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<InvokeResult<Nullable<int>>> AddNullableOneAsync(Nullable<int> number, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
-            this.ValidateMethod("AddNullableOneTaskAsync", parameters);
-            return this.InvokeOperationAsync<Nullable<int>>("AddNullableOneTaskAsync", parameters, true, cancellationToken);
+            this.ValidateMethod("AddNullableOne", parameters);
+            return this.InvokeOperationAsync<Nullable<int>>("AddNullableOne", parameters, true, cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'AddOneTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'AddOne' method of the DomainService.
         /// </summary>
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<int> AddOneTaskAsync(int number, Action<InvokeOperation<int>> callback, object userState)
+        public InvokeOperation<int> AddOne(int number, Action<InvokeOperation<int>> callback, object userState)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
-            this.ValidateMethod("AddOneTaskAsync", parameters);
-            return this.InvokeOperation<int>("AddOneTaskAsync", typeof(int), parameters, true, callback, userState);
+            this.ValidateMethod("AddOne", parameters);
+            return this.InvokeOperation<int>("AddOne", typeof(int), parameters, true, callback, userState);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'AddOneTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'AddOne' method of the DomainService.
         /// </summary>
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<int> AddOneTaskAsync(int number)
+        public InvokeOperation<int> AddOne(int number)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
-            this.ValidateMethod("AddOneTaskAsync", parameters);
-            return this.InvokeOperation<int>("AddOneTaskAsync", typeof(int), parameters, true, null, null);
+            this.ValidateMethod("AddOne", parameters);
+            return this.InvokeOperation<int>("AddOne", typeof(int), parameters, true, null, null);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'AddOneTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'AddOne' method of the DomainService.
         /// </summary>
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<int>> AddOneTaskAsyncAsync(int number, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<InvokeResult<int>> AddOneAsync(int number, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
-            this.ValidateMethod("AddOneTaskAsync", parameters);
-            return this.InvokeOperationAsync<int>("AddOneTaskAsync", parameters, true, cancellationToken);
+            this.ValidateMethod("AddOne", parameters);
+            return this.InvokeOperationAsync<int>("AddOne", parameters, true, cancellationToken);
         }
 
         /// <summary>
@@ -370,45 +370,45 @@ namespace TestDomainServices
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'GreetTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'Greet' method of the DomainService.
         /// </summary>
         /// <param name="client">The value for the 'client' parameter of this action.</param>
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<string> GreetTaskAsync(string client, Action<InvokeOperation<string>> callback, object userState)
+        public InvokeOperation<string> Greet(string client, Action<InvokeOperation<string>> callback, object userState)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("client", client);
-            this.ValidateMethod("GreetTaskAsync", parameters);
-            return this.InvokeOperation<string>("GreetTaskAsync", typeof(string), parameters, true, callback, userState);
+            this.ValidateMethod("Greet", parameters);
+            return this.InvokeOperation<string>("Greet", typeof(string), parameters, true, callback, userState);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'GreetTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'Greet' method of the DomainService.
         /// </summary>
         /// <param name="client">The value for the 'client' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<string> GreetTaskAsync(string client)
+        public InvokeOperation<string> Greet(string client)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("client", client);
-            this.ValidateMethod("GreetTaskAsync", parameters);
-            return this.InvokeOperation<string>("GreetTaskAsync", typeof(string), parameters, true, null, null);
+            this.ValidateMethod("Greet", parameters);
+            return this.InvokeOperation<string>("Greet", typeof(string), parameters, true, null, null);
         }
 
         /// <summary>
-        /// Asynchronously invokes the 'GreetTaskAsync' method of the DomainService.
+        /// Asynchronously invokes the 'Greet' method of the DomainService.
         /// </summary>
         /// <param name="client">The value for the 'client' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<string>> GreetTaskAsyncAsync(string client, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<InvokeResult<string>> GreetAsync(string client, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("client", client);
-            this.ValidateMethod("GreetTaskAsync", parameters);
-            return this.InvokeOperationAsync<string>("GreetTaskAsync", parameters, true, cancellationToken);
+            this.ValidateMethod("Greet", parameters);
+            return this.InvokeOperationAsync<string>("Greet", parameters, true, cancellationToken);
         }
 
         /// <summary>
@@ -478,7 +478,7 @@ namespace TestDomainServices
         /// <param name="delay">The value for the 'delay' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult> InvokeWithExceptionTaskAsync(int delay, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<InvokeResult> InvokeWithException(int delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("delay", delay);
@@ -545,40 +545,40 @@ namespace TestDomainServices
         {
 
             /// <summary>
-            /// Asynchronously invokes the 'AddNullableOneTaskAsync' operation.
+            /// Asynchronously invokes the 'AddNullableOne' operation.
             /// </summary>
             /// <param name="number">The value for the 'number' parameter of this action.</param>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneTaskAsync", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneTaskAsyncResponse")]
-            IAsyncResult BeginAddNullableOneTaskAsync(Nullable<int> number, AsyncCallback callback, object asyncState);
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/AddNullableOne", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneResponse")]
+            IAsyncResult BeginAddNullableOne(Nullable<int> number, AsyncCallback callback, object asyncState);
 
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginAddNullableOneTaskAsync'.
+            /// Completes the asynchronous operation begun by 'BeginAddNullableOne'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginAddNullableOneTaskAsync'.</param>
-            /// <returns>The 'Nullable`1' returned from the 'AddNullableOneTaskAsync' operation.</returns>
-            Nullable<int> EndAddNullableOneTaskAsync(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginAddNullableOne'.</param>
+            /// <returns>The 'Nullable`1' returned from the 'AddNullableOne' operation.</returns>
+            Nullable<int> EndAddNullableOne(IAsyncResult result);
 
             /// <summary>
-            /// Asynchronously invokes the 'AddOneTaskAsync' operation.
+            /// Asynchronously invokes the 'AddOne' operation.
             /// </summary>
             /// <param name="number">The value for the 'number' parameter of this action.</param>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/AddOneTaskAsync", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/AddOneTaskAsyncResponse")]
-            IAsyncResult BeginAddOneTaskAsync(int number, AsyncCallback callback, object asyncState);
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/AddOne", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/AddOneResponse")]
+            IAsyncResult BeginAddOne(int number, AsyncCallback callback, object asyncState);
 
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginAddOneTaskAsync'.
+            /// Completes the asynchronous operation begun by 'BeginAddOne'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginAddOneTaskAsync'.</param>
-            /// <returns>The 'Int32' returned from the 'AddOneTaskAsync' operation.</returns>
-            int EndAddOneTaskAsync(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginAddOne'.</param>
+            /// <returns>The 'Int32' returned from the 'AddOne' operation.</returns>
+            int EndAddOne(IAsyncResult result);
 
             /// <summary>
             /// Asynchronously invokes the 'GetLastDelay' operation.
@@ -598,22 +598,22 @@ namespace TestDomainServices
             TimeSpan EndGetLastDelay(IAsyncResult result);
 
             /// <summary>
-            /// Asynchronously invokes the 'GetQueryableRangeTaskAsync' operation.
+            /// Asynchronously invokes the 'GetQueryableRange' operation.
             /// </summary>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeTaskAsync", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeTaskAsyncRespons" +
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRange", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeRespons" +
                 "e")]
-            IAsyncResult BeginGetQueryableRangeTaskAsync(AsyncCallback callback, object asyncState);
+            IAsyncResult BeginGetQueryableRange(AsyncCallback callback, object asyncState);
 
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetQueryableRangeTaskAsync'.
+            /// Completes the asynchronous operation begun by 'BeginGetQueryableRange'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetQueryableRangeTaskAsync'.</param>
-            /// <returns>The 'QueryResult' returned from the 'GetQueryableRangeTaskAsync' operation.</returns>
-            QueryResult<RangeItem> EndGetQueryableRangeTaskAsync(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginGetQueryableRange'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetQueryableRange' operation.</returns>
+            QueryResult<RangeItem> EndGetQueryableRange(IAsyncResult result);
 
             /// <summary>
             /// Asynchronously invokes the 'GetQueryableRangeWithExceptionFirst' operation.
@@ -671,22 +671,22 @@ namespace TestDomainServices
             QueryResult<RangeItem> EndGetRange(IAsyncResult result);
 
             /// <summary>
-            /// Asynchronously invokes the 'GetRangeByIdTaskAsync' operation.
+            /// Asynchronously invokes the 'GetRangeById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdTaskAsync", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdTaskAsyncResponse")]
-            IAsyncResult BeginGetRangeByIdTaskAsync(int id, AsyncCallback callback, object asyncState);
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetRangeById", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdResponse")]
+            IAsyncResult BeginGetRangeById(int id, AsyncCallback callback, object asyncState);
 
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetRangeByIdTaskAsync'.
+            /// Completes the asynchronous operation begun by 'BeginGetRangeById'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetRangeByIdTaskAsync'.</param>
-            /// <returns>The 'QueryResult' returned from the 'GetRangeByIdTaskAsync' operation.</returns>
-            QueryResult<RangeItem> EndGetRangeByIdTaskAsync(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginGetRangeById'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetRangeById' operation.</returns>
+            QueryResult<RangeItem> EndGetRangeById(IAsyncResult result);
 
             /// <summary>
             /// Asynchronously invokes the 'GetRangeByIdWithExceptionFirst' operation.
@@ -727,22 +727,22 @@ namespace TestDomainServices
             QueryResult<RangeItem> EndGetRangeByIdWithExceptionTask(IAsyncResult result);
 
             /// <summary>
-            /// Asynchronously invokes the 'GreetTaskAsync' operation.
+            /// Asynchronously invokes the 'Greet' operation.
             /// </summary>
             /// <param name="client">The value for the 'client' parameter of this action.</param>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GreetTaskAsync", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GreetTaskAsyncResponse")]
-            IAsyncResult BeginGreetTaskAsync(string client, AsyncCallback callback, object asyncState);
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/Greet", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GreetResponse")]
+            IAsyncResult BeginGreet(string client, AsyncCallback callback, object asyncState);
 
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGreetTaskAsync'.
+            /// Completes the asynchronous operation begun by 'BeginGreet'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGreetTaskAsync'.</param>
-            /// <returns>The 'String' returned from the 'GreetTaskAsync' operation.</returns>
-            string EndGreetTaskAsync(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginGreet'.</param>
+            /// <returns>The 'String' returned from the 'Greet' operation.</returns>
+            string EndGreet(IAsyncResult result);
 
             /// <summary>
             /// Asynchronously invokes the 'InvokeWithExceptionFirst' operation.

@@ -54,7 +54,7 @@ namespace TestDomainServices
         /// Query returing a queryable range in a task
         /// </summary>
         /// <returns></returns>
-        public Task<IQueryable<RangeItem>> GetQueryableRangeTaskAsync()
+        public Task<IQueryable<RangeItem>> GetQueryableRangeAsync()
         {
             return Delay(1)
                .ContinueWith(_ =>
@@ -89,7 +89,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Task<RangeItem> GetRangeByIdTaskAsync(int id)
+        public Task<RangeItem> GetRangeByIdAsync(int id)
         {
             return Delay(1)
                 .ContinueWith(_ =>
@@ -154,7 +154,19 @@ namespace TestDomainServices
         /// <remarks>
         /// Tests invoke returning Task{reference type}
         /// </remarks>
-        public Task<string> GreetTaskAsync(string client)
+        public Task<string> GreetAsync(string client)
+        {
+            return Delay(1)
+                .ContinueWith(t => string.Format("Hello {0}", client));
+        }
+
+        /// <summary>
+        /// Adds one to the number sent by client.
+        /// </summary>
+        /// <remarks>
+        /// Tests invoke returning Task{reference type}
+        /// </remarks>
+        public Task<string> GreetWithoutAsyncInName(string client)
         {
             return Delay(1)
                 .ContinueWith(t => string.Format("Hello {0}", client));
@@ -166,7 +178,7 @@ namespace TestDomainServices
         /// <remarks>
         /// Tests invoke returning Task{value type}
         /// </remarks>
-        public Task<int> AddOneTaskAsync(int number)
+        public Task<int> AddOneAsync(int number)
         {
             return Delay(1)
                 .ContinueWith(t => number + 1);
@@ -180,12 +192,11 @@ namespace TestDomainServices
         /// <remarks>
         /// Tests invoke returning Task{Nullable{T}}
         /// </remarks>
-        public Task<int?> AddNullableOneTaskAsync(int? number)
+        public Task<int?> AddNullableOneAsync(int? number)
         {
             return Delay(1)
                 .ContinueWith(t => number + 1);
         }
-
 
         /// <summary>
         /// Invoke throwing exception directly

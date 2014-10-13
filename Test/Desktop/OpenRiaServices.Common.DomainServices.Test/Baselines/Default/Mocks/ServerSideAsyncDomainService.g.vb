@@ -179,12 +179,12 @@ Namespace TestDomainServices
         End Property
 
         ''' <summary>
-        ''' Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetQueryableRangeTaskAsync' query.
+        ''' Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetQueryableRange' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem"/> entity instances.</returns>
-        Public Function GetQueryableRangeTaskAsyncQuery() As EntityQuery(Of RangeItem)
-            Me.ValidateMethod("GetQueryableRangeTaskAsyncQuery", Nothing)
-            Return MyBase.CreateQuery(Of RangeItem)("GetQueryableRangeTaskAsync", Nothing, False, True)
+        Public Function GetQueryableRangeQuery() As EntityQuery(Of RangeItem)
+            Me.ValidateMethod("GetQueryableRangeQuery", Nothing)
+            Return MyBase.CreateQuery(Of RangeItem)("GetQueryableRange", Nothing, False, True)
         End Function
 
         ''' <summary>
@@ -215,15 +215,15 @@ Namespace TestDomainServices
         End Function
 
         ''' <summary>
-        ''' Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetRangeByIdTaskAsync' query.
+        ''' Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetRangeById' query.
         ''' </summary>
         ''' <param name="id">The value for the 'id' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem"/> entity instances.</returns>
-        Public Function GetRangeByIdTaskAsyncQuery(ByVal id As Integer) As EntityQuery(Of RangeItem)
+        Public Function GetRangeByIdQuery(ByVal id As Integer) As EntityQuery(Of RangeItem)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("id", id)
-            Me.ValidateMethod("GetRangeByIdTaskAsyncQuery", parameters)
-            Return MyBase.CreateQuery(Of RangeItem)("GetRangeByIdTaskAsync", parameters, False, False)
+            Me.ValidateMethod("GetRangeByIdQuery", parameters)
+            Return MyBase.CreateQuery(Of RangeItem)("GetRangeById", parameters, False, False)
         End Function
 
         ''' <summary>
@@ -251,81 +251,81 @@ Namespace TestDomainServices
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'AddNullableOneTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function AddNullableOneTaskAsync(ByVal number As Nullable(Of Integer), ByVal callback As Action(Of InvokeOperation(Of Nullable(Of Integer))), ByVal userState As Object) As InvokeOperation(Of Nullable(Of Integer))
+        Public Overloads Function AddNullableOne(ByVal number As Nullable(Of Integer), ByVal callback As Action(Of InvokeOperation(Of Nullable(Of Integer))), ByVal userState As Object) As InvokeOperation(Of Nullable(Of Integer))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
-            Me.ValidateMethod("AddNullableOneTaskAsync", parameters)
-            Return Me.InvokeOperation(Of Nullable(Of Integer))("AddNullableOneTaskAsync", GetType(Nullable(Of Integer)), parameters, True, callback, userState)
+            Me.ValidateMethod("AddNullableOne", parameters)
+            Return Me.InvokeOperation(Of Nullable(Of Integer))("AddNullableOne", GetType(Nullable(Of Integer)), parameters, True, callback, userState)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'AddNullableOneTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function AddNullableOneTaskAsync(ByVal number As Nullable(Of Integer)) As InvokeOperation(Of Nullable(Of Integer))
+        Public Overloads Function AddNullableOne(ByVal number As Nullable(Of Integer)) As InvokeOperation(Of Nullable(Of Integer))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
-            Me.ValidateMethod("AddNullableOneTaskAsync", parameters)
-            Return Me.InvokeOperation(Of Nullable(Of Integer))("AddNullableOneTaskAsync", GetType(Nullable(Of Integer)), parameters, True, Nothing, Nothing)
+            Me.ValidateMethod("AddNullableOne", parameters)
+            Return Me.InvokeOperation(Of Nullable(Of Integer))("AddNullableOne", GetType(Nullable(Of Integer)), parameters, True, Nothing, Nothing)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'AddNullableOneTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function AddNullableOneTaskAsyncAsync(ByVal number As Nullable(Of Integer), Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of Nullable(Of Integer)))
+        Public Function AddNullableOneAsync(ByVal number As Nullable(Of Integer), Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of Nullable(Of Integer)))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
-            Me.ValidateMethod("AddNullableOneTaskAsync", parameters)
-            Return Me.InvokeOperationAsync(Of Nullable(Of Integer))("AddNullableOneTaskAsync", parameters, True, cancellationToken)
+            Me.ValidateMethod("AddNullableOne", parameters)
+            Return Me.InvokeOperationAsync(Of Nullable(Of Integer))("AddNullableOne", parameters, True, cancellationToken)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'AddOneTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'AddOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function AddOneTaskAsync(ByVal number As Integer, ByVal callback As Action(Of InvokeOperation(Of Integer)), ByVal userState As Object) As InvokeOperation(Of Integer)
+        Public Overloads Function AddOne(ByVal number As Integer, ByVal callback As Action(Of InvokeOperation(Of Integer)), ByVal userState As Object) As InvokeOperation(Of Integer)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
-            Me.ValidateMethod("AddOneTaskAsync", parameters)
-            Return Me.InvokeOperation(Of Integer)("AddOneTaskAsync", GetType(Integer), parameters, True, callback, userState)
+            Me.ValidateMethod("AddOne", parameters)
+            Return Me.InvokeOperation(Of Integer)("AddOne", GetType(Integer), parameters, True, callback, userState)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'AddOneTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'AddOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function AddOneTaskAsync(ByVal number As Integer) As InvokeOperation(Of Integer)
+        Public Overloads Function AddOne(ByVal number As Integer) As InvokeOperation(Of Integer)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
-            Me.ValidateMethod("AddOneTaskAsync", parameters)
-            Return Me.InvokeOperation(Of Integer)("AddOneTaskAsync", GetType(Integer), parameters, True, Nothing, Nothing)
+            Me.ValidateMethod("AddOne", parameters)
+            Return Me.InvokeOperation(Of Integer)("AddOne", GetType(Integer), parameters, True, Nothing, Nothing)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'AddOneTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'AddOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function AddOneTaskAsyncAsync(ByVal number As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of Integer))
+        Public Function AddOneAsync(ByVal number As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of Integer))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
-            Me.ValidateMethod("AddOneTaskAsync", parameters)
-            Return Me.InvokeOperationAsync(Of Integer)("AddOneTaskAsync", parameters, True, cancellationToken)
+            Me.ValidateMethod("AddOne", parameters)
+            Return Me.InvokeOperationAsync(Of Integer)("AddOne", parameters, True, cancellationToken)
         End Function
 
         ''' <summary>
@@ -359,42 +359,42 @@ Namespace TestDomainServices
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'GreetTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'Greet' method of the DomainService.
         ''' </summary>
         ''' <param name="client">The value for the 'client' parameter of this action.</param>
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GreetTaskAsync(ByVal client As String, ByVal callback As Action(Of InvokeOperation(Of String)), ByVal userState As Object) As InvokeOperation(Of String)
+        Public Overloads Function Greet(ByVal client As String, ByVal callback As Action(Of InvokeOperation(Of String)), ByVal userState As Object) As InvokeOperation(Of String)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("client", client)
-            Me.ValidateMethod("GreetTaskAsync", parameters)
-            Return Me.InvokeOperation(Of String)("GreetTaskAsync", GetType(String), parameters, True, callback, userState)
+            Me.ValidateMethod("Greet", parameters)
+            Return Me.InvokeOperation(Of String)("Greet", GetType(String), parameters, True, callback, userState)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'GreetTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'Greet' method of the DomainService.
         ''' </summary>
         ''' <param name="client">The value for the 'client' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GreetTaskAsync(ByVal client As String) As InvokeOperation(Of String)
+        Public Overloads Function Greet(ByVal client As String) As InvokeOperation(Of String)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("client", client)
-            Me.ValidateMethod("GreetTaskAsync", parameters)
-            Return Me.InvokeOperation(Of String)("GreetTaskAsync", GetType(String), parameters, True, Nothing, Nothing)
+            Me.ValidateMethod("Greet", parameters)
+            Return Me.InvokeOperation(Of String)("Greet", GetType(String), parameters, True, Nothing, Nothing)
         End Function
 
         ''' <summary>
-        ''' Asynchronously invokes the 'GreetTaskAsync' method of the DomainService.
+        ''' Asynchronously invokes the 'Greet' method of the DomainService.
         ''' </summary>
         ''' <param name="client">The value for the 'client' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function GreetTaskAsyncAsync(ByVal client As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of String))
+        Public Function GreetAsync(ByVal client As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of String))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("client", client)
-            Me.ValidateMethod("GreetTaskAsync", parameters)
-            Return Me.InvokeOperationAsync(Of String)("GreetTaskAsync", parameters, True, cancellationToken)
+            Me.ValidateMethod("Greet", parameters)
+            Return Me.InvokeOperationAsync(Of String)("Greet", parameters, True, cancellationToken)
         End Function
 
         ''' <summary>
@@ -459,7 +459,7 @@ Namespace TestDomainServices
         ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function InvokeWithExceptionTaskAsync(ByVal delay As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult)
+        Public Function InvokeWithException(ByVal delay As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("delay", delay)
             Me.ValidateMethod("InvokeWithExceptionTask", parameters)
@@ -520,40 +520,40 @@ Namespace TestDomainServices
         Public Interface IServerSideAsyncDomainServiceContract
 
             ''' <summary>
-            ''' Asynchronously invokes the 'AddNullableOneTaskAsync' operation.
+            ''' Asynchronously invokes the 'AddNullableOne' operation.
             ''' </summary>
             ''' <param name="number">The value for the 'number' parameter of this action.</param>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneTaskAsync", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneTaskAsyncResponse")> _
-            Function BeginAddNullableOneTaskAsync(ByVal number As Nullable(Of Integer), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOne", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneResponse")> _
+            Function BeginAddNullableOne(ByVal number As Nullable(Of Integer), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginAddNullableOneTaskAsync'.
+            ''' Completes the asynchronous operation begun by 'BeginAddNullableOne'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginAddNullableOneTaskAsync'.</param>
-            ''' <returns>The 'Nullable`1' returned from the 'AddNullableOneTaskAsync' operation.</returns>
-            Function EndAddNullableOneTaskAsync(ByVal result As IAsyncResult) As Nullable(Of Integer)
+            ''' <param name="result">The IAsyncResult returned from 'BeginAddNullableOne'.</param>
+            ''' <returns>The 'Nullable`1' returned from the 'AddNullableOne' operation.</returns>
+            Function EndAddNullableOne(ByVal result As IAsyncResult) As Nullable(Of Integer)
 
             ''' <summary>
-            ''' Asynchronously invokes the 'AddOneTaskAsync' operation.
+            ''' Asynchronously invokes the 'AddOne' operation.
             ''' </summary>
             ''' <param name="number">The value for the 'number' parameter of this action.</param>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddOneTaskAsync", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddOneTaskAsyncResponse")> _
-            Function BeginAddOneTaskAsync(ByVal number As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddOne", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddOneResponse")> _
+            Function BeginAddOne(ByVal number As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginAddOneTaskAsync'.
+            ''' Completes the asynchronous operation begun by 'BeginAddOne'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginAddOneTaskAsync'.</param>
-            ''' <returns>The 'Int32' returned from the 'AddOneTaskAsync' operation.</returns>
-            Function EndAddOneTaskAsync(ByVal result As IAsyncResult) As Integer
+            ''' <param name="result">The IAsyncResult returned from 'BeginAddOne'.</param>
+            ''' <returns>The 'Int32' returned from the 'AddOne' operation.</returns>
+            Function EndAddOne(ByVal result As IAsyncResult) As Integer
 
             ''' <summary>
             ''' Asynchronously invokes the 'GetLastDelay' operation.
@@ -573,22 +573,22 @@ Namespace TestDomainServices
             Function EndGetLastDelay(ByVal result As IAsyncResult) As TimeSpan
 
             ''' <summary>
-            ''' Asynchronously invokes the 'GetQueryableRangeTaskAsync' operation.
+            ''' Asynchronously invokes the 'GetQueryableRange' operation.
             ''' </summary>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeTaskAsync", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeTaskAsyncRespons" & _
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRange", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeRespons" & _
                 "e")> _
-            Function BeginGetQueryableRangeTaskAsync(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            Function BeginGetQueryableRange(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetQueryableRangeTaskAsync'.
+            ''' Completes the asynchronous operation begun by 'BeginGetQueryableRange'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetQueryableRangeTaskAsync'.</param>
-            ''' <returns>The 'QueryResult' returned from the 'GetQueryableRangeTaskAsync' operation.</returns>
-            Function EndGetQueryableRangeTaskAsync(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetQueryableRange'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetQueryableRange' operation.</returns>
+            Function EndGetQueryableRange(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
 
             ''' <summary>
             ''' Asynchronously invokes the 'GetQueryableRangeWithExceptionFirst' operation.
@@ -646,22 +646,22 @@ Namespace TestDomainServices
             Function EndGetRange(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
 
             ''' <summary>
-            ''' Asynchronously invokes the 'GetRangeByIdTaskAsync' operation.
+            ''' Asynchronously invokes the 'GetRangeById' operation.
             ''' </summary>
             ''' <param name="id">The value for the 'id' parameter of this action.</param>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdTaskAsync", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdTaskAsyncResponse")> _
-            Function BeginGetRangeByIdTaskAsync(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeById", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdResponse")> _
+            Function BeginGetRangeById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetRangeByIdTaskAsync'.
+            ''' Completes the asynchronous operation begun by 'BeginGetRangeById'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetRangeByIdTaskAsync'.</param>
-            ''' <returns>The 'QueryResult' returned from the 'GetRangeByIdTaskAsync' operation.</returns>
-            Function EndGetRangeByIdTaskAsync(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetRangeById'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetRangeById' operation.</returns>
+            Function EndGetRangeById(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
 
             ''' <summary>
             ''' Asynchronously invokes the 'GetRangeByIdWithExceptionFirst' operation.
@@ -702,22 +702,22 @@ Namespace TestDomainServices
             Function EndGetRangeByIdWithExceptionTask(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
 
             ''' <summary>
-            ''' Asynchronously invokes the 'GreetTaskAsync' operation.
+            ''' Asynchronously invokes the 'Greet' operation.
             ''' </summary>
             ''' <param name="client">The value for the 'client' parameter of this action.</param>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GreetTaskAsync", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GreetTaskAsyncResponse")> _
-            Function BeginGreetTaskAsync(ByVal client As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/Greet", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GreetResponse")> _
+            Function BeginGreet(ByVal client As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGreetTaskAsync'.
+            ''' Completes the asynchronous operation begun by 'BeginGreet'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGreetTaskAsync'.</param>
-            ''' <returns>The 'String' returned from the 'GreetTaskAsync' operation.</returns>
-            Function EndGreetTaskAsync(ByVal result As IAsyncResult) As String
+            ''' <param name="result">The IAsyncResult returned from 'BeginGreet'.</param>
+            ''' <returns>The 'String' returned from the 'Greet' operation.</returns>
+            Function EndGreet(ByVal result As IAsyncResult) As String
 
             ''' <summary>
             ''' Asynchronously invokes the 'InvokeWithExceptionFirst' operation.

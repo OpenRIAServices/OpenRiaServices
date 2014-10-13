@@ -1,1 +1,0 @@
-C:\Code\Repos\openriaservices\OpenRiaServices.DomainServices.Hosting.Local\Test\OpenRiaServices.DomainServices.Hosting.Local.Test.csproj,Generated_Code,
