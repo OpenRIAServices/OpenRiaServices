@@ -36,8 +36,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             projectPath = Path.GetFullPath(projectPath);
 
             Engine engine = new Engine();
-            Project project = new Project(engine);
-            project.Load(projectPath);
+            var project = LoadProject(projectPath, engine);
 
             // Ask to be told of generated outputs
             IDictionary targetOutputs = new Dictionary<object, object>();
@@ -84,8 +83,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             projectPath = Path.GetFullPath(projectPath);
 
             Engine engine = new Engine();
-            Project project = new Project(engine);
-            project.Load(projectPath);
+            var project = LoadProject(projectPath, engine);
 
             string outputPath = project.GetEvaluatedProperty("OutputPath");
             string assemblyName = project.GetEvaluatedProperty("AssemblyName");
@@ -101,6 +99,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
         }
 
+        private static Project LoadProject(string projectPath, Engine engine)
+        {
+            var project = new Project(engine);
+            project.Load(projectPath);
+#if SIGNED
+            project.SetProperty("Configuration", "Signed");
+#elif DEBUG
+            project.SetProperty("Configuration", "Debug");
+#else
+            project.SetProperty("Configuration", "Release");
+#endif
+            return project;
+        }
+
         /// <summary>
         /// Gets the source files used by the given project
         /// </summary>
@@ -112,8 +124,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             projectPath = Path.GetFullPath(projectPath);
 
             Engine engine = new Engine();
-            Project project = new Project(engine);
-            project.Load(projectPath);
+            var project = LoadProject(projectPath, engine);
 
             ErrorLogger logger = new ErrorLogger();
             engine.RegisterLogger(logger);

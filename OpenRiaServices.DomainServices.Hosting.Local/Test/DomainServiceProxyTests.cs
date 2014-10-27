@@ -32,6 +32,8 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         public void TestInitialize()
         {
             this.OperationInvokedArgs = null;
+            // Make sure exceptions are formatted as en-US
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
 
             List<MockEntity> entities = new List<MockEntity>();
             for (int i = 0; i < 25; ++i)
