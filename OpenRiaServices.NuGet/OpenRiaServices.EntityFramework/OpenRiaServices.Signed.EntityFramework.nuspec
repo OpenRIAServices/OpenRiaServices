@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.Signed.EntityFramework</id>
+    <version>4.4.0.0</version>
+    <title>Open RIA Services support for Entity Framework 6+ - Signed</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      OpenRiaServices.EntityFramework provides the DbDomainService and LinqToEntities classes which can be used to create Domain Service classes for use with a DbContext or ObjectContext from the EntityFramework package.
+
+      This package supports versions of EntityFramework starting with EF 6.0.1
+    </description>
+    <summary>Open RIA Services - Signed Entity Framework 6 support with DbDomainService and LinqToEntitiesDomainService</summary>
+    <releaseNotes />
+    <copyright>2013 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
+    <dependencies>
+      <dependency id="EntityFramework" version="6.0.1" />
+      <dependency id="OpenRiaServices.Signed.Server" version="4.4.0.0"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\bin\Signed\v4.0\Desktop\OpenRiaServices.DomainServices.EntityFramework.dll" target="lib\net40\OpenRiaServices.DomainServices.EntityFramework.dll" />
+    <file src="..\..\bin\Signed\v4.0\Desktop\OpenRiaServices.DomainServices.EntityFramework.pdb" target="lib\net40\OpenRiaServices.DomainServices.EntityFramework.pdb" />
+    <file src="..\..\bin\Signed\v4.0\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml" target="lib\net40\OpenRiaServices.DomainServices.EntityFramework.xml" />
+    <file src="..\..\bin\Signed\v4.5\Desktop\OpenRiaServices.DomainServices.EntityFramework.dll" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.dll" />
+    <file src="..\..\bin\Signed\v4.5\Desktop\OpenRiaServices.DomainServices.EntityFramework.pdb" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.pdb" />
+    <file src="..\..\bin\Signed\v4.5\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.xml" />
+  </files>
+</package>

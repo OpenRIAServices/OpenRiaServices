@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.Signed.Client.Core</id>
+    <version>4.4.0.0</version>
+    <title>Open RIA Services Client - Signed</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      OpenRiaServices.Signed.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your Silverlight projects.
+    </description>
+    <summary>Open RIA Services - signed client assemblies and references.</summary>
+    <releaseNotes />
+    <copyright>2013 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices Signed</tags>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations"/>
+      <frameworkAssembly assemblyName="System.ServiceModel"/>
+      <frameworkAssembly assemblyName="System.ServiceModel.Web.Extensions" targetFramework="Silverlight5.0" />
+      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="Silverlight5.0" />
+      <frameworkAssembly assemblyName="System.ServiceModel.Web.Extensions" targetFramework="net40" />
+      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="net40" />      
+    </frameworkAssemblies>
+    <references>
+    <group targetFramework="Silverlight5.0">
+                <reference file="OpenRiaServices.DomainServices.Client.dll" />
+                <reference file="OpenRiaServices.DomainServices.Client.Web.dll" />
+            </group>
+            <group>
+                <reference file="OpenRiaServices.DomainServices.Client.dll" />
+            </group>
+    </references>
+  </metadata>
+  <files>
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.dll" target="lib\sl50\OpenRiaServices.DomainServices.Client.dll" />
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.pdb" target="lib\sl50\OpenRiaServices.DomainServices.Client.pdb" />
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.Web.dll" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.dll" />
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.pdb" />
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.xml" />
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.xml" target="lib\sl50\OpenRiaServices.DomainServices.Client.xml" />
+    <file src="..\..\bin\Signed\Silverlight\OpenRiaServices.DomainServices.Client.xml" target="lib\sl50\OpenRiaServices.DomainServices.Client.xml" />    
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.dll" target="lib\net40\OpenRiaServices.DomainServices.Client.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.pdb" target="lib\net40\OpenRiaServices.DomainServices.Client.pdb" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.Web.dll" target="lib\net40\OpenRiaServices.DomainServices.Client.Web.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\net40\OpenRiaServices.DomainServices.Client.Web.pdb" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\net40\OpenRiaServices.DomainServices.Client.Web.xml" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.xml" target="lib\net40\OpenRiaServices.DomainServices.Client.xml" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Client.xml" target="lib\net40\OpenRiaServices.DomainServices.Client.xml" />
+    <file src="..\..\bin\Signed\Portable\OpenRiaServices.DomainServices.Client.dll" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.dll" />
+    <file src="..\..\bin\Signed\Portable\OpenRiaServices.DomainServices.Client.pdb" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.pdb" />
+    <file src="..\..\bin\Signed\Portable\OpenRiaServices.DomainServices.Client.xml" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.xml" />
+    <file src="..\..\bin\Signed\Portable\OpenRiaServices.DomainServices.Client.xml" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.xml" />
+  </files>
+</package>

@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
-    <id>OpenRiaServices.Server</id>
+    <id>OpenRiaServices.Signed.Server</id>
     <version>4.4.0.0</version>
-    <title>OpenRiaServices.Server</title>
+    <title>OpenRiaServices.Signed.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
     <projectUrl>http://www.openriaservices.net</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      OpenRiaServices.Server provides the OpenRiaServices.DomainServices.Hosting and OpenRiaServices.DomainServices.Server assemblies.
+      OpenRiaServices.Signed.Server provides the OpenRiaServices.DomainServices.Hosting and OpenRiaServices.DomainServices.Server assemblies.
 
       The web.config.transform adds the necessary configSections, HTTP modules, and system.serviceModel elements to make your Domain Services available at runtime.
 
@@ -25,7 +25,7 @@
     <releaseNotes />
     <copyright>2013 Outercurve Foundation</copyright>
     <language>en-US</language>
-    <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
+    <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices signed</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework=".NETFramework4.0" />
     </frameworkAssemblies>
@@ -33,9 +33,9 @@
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
-    <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="tools\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.dll" target="lib\OpenRiaServices.DomainServices.Hosting.dll" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Server.dll" target="lib\OpenRiaServices.DomainServices.Server.dll" />
+    <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Signed.Server.targets" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="tools\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.dll" target="lib\OpenRiaServices.DomainServices.Hosting.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="lib\OpenRiaServices.DomainServices.Server.dll" />
   </files>
 </package>

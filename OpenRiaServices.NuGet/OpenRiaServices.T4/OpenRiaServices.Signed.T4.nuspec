@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.Signed.T4</id>
+    <version>4.4.0.0</version>
+    <title>Open RIA Services T4 Code Generation - Signed</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>OpenRiaServices.Signed.T4 provides the CSharpClientCodeGenerator class, as well as many supporting classes, which can be used to override the existing code generation pattern for RIA Services.</description>
+    <summary>Open RIA Services Toolkit - T4 Code Generation</summary>
+    <releaseNotes />
+    <copyright>2013 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices T4 OpenRiaServices Signed</tags>
+    <dependencies>
+      <dependency id="OpenRiaServices.Signed.Server" version="4.4.0.0" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="OpenRiaServices.DomainServices.Tools" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
+  </metadata>
+  <files>
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" target="lib\net40\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" target="lib\net40\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML" target="lib\net40\OpenRiaServices.DomainServices.Tools.TextTemplate.XML" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="lib\net40\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.pdb" target="lib\net40\OpenRiaServices.DomainServices.Tools.pdb" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.XML" target="lib\net40\OpenRiaServices.DomainServices.Tools.XML" />
+  </files>
+</package>

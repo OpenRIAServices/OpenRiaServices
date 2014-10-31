@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>OpenRiaServices.Silverlight</id>
+        <id>OpenRiaServices.Signed.Silverlight</id>
         <version>4.4.0.0</version>
         <title>Open RIA Services Silverlight Client, Code Generator, and MVVM Support</title>
         <authors>Outercurve RIA Services</authors>
@@ -9,16 +9,16 @@
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.Silverlight is the full Silverlight client in a single package.</description>
-        <summary>Open RIA Services - Full Silverlight client</summary>
+        <description>OpenRiaServices.Signed.Silverlight is the signed full Silverlight client in a single package.</description>
+        <summary>Open RIA Services - Full Silverlight client - Signed</summary>
         <releaseNotes />
         <copyright>2013 Outercurve Foundation</copyright>
         <language>en-US</language>
-        <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
+        <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices Signed</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Silverlight.Core" version="4.4.0.0"/>
-        <dependency id="OpenRiaServices.ViewModel" version="4.4.0.0"/>
-        <dependency id="OpenRiaServices.Silverlight.CodeGen" version="4.4.0.0"/>
+        <dependency id="OpenRiaServices.Signed.Silverlight.Core" version="4.4.0.0"/>
+        <dependency id="OpenRiaServices.Signed.ViewModel" version="4.4.0.0"/>
+        <dependency id="OpenRiaServices.Signed.Silverlight.CodeGen" version="4.4.0.0"/>
       </dependencies>      
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="Silverlight5.0" />

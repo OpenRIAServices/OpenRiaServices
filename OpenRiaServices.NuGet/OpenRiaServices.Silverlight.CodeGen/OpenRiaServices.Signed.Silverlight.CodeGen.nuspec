@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
-        <id>OpenRiaServices.Silverlight.CodeGen</id>
+        <id>OpenRiaServices.Signed.Silverlight.CodeGen</id>
         <version>4.4.0.0</version>
-        <title>Open RIA Services Silverlight Code Generator</title>
+        <title>Open RIA Services Silverlight Code Generator - Signed</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.Silverlight.CodeGen provides the MsBuild Tasks to generate the proxy.</description>
+        <description>OpenRiaServices.Signed.Silverlight.CodeGen provides the signed MsBuild Tasks to generate the proxy.</description>
         <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
         <releaseNotes />
         <copyright>2013 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Silverlight.Core" version="4.4.0.0" />
+        <dependency id="OpenRiaServices.Signed.Silverlight.Core" version="4.4.0.0" />
       </dependencies>
     </metadata>
     <files>
-        <file src="build\OpenRiaServices.Silverlight.CodeGen.targets" target="build\OpenRiaServices.Silverlight.CodeGen.targets"/>
-        <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
-        <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
+        <file src="build\OpenRiaServices.Silverlight.CodeGen.targets" target="build\OpenRiaServices.Signed.Silverlight.CodeGen.targets"/>
+        <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
+        <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
 </package>

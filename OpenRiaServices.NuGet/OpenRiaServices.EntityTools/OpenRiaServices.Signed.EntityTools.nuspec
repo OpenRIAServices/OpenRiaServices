@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.Signed.EntityTools</id>
+    <version>4.4.0.0</version>
+    <title>Open RIA Services Entity Tools - Signed</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <projectUrl>http://www.openriaservices.net/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Open RIA Services Contrib - Entity Tools</description>
+    <summary>Open RIA Services Toolkit - Extensions methods to allow direct manipulation of the Entity</summary>
+    <releaseNotes>These tools were directly copied from RiaServicesContrib.EntityTools and are provided primarily for backwards compatiblity. The IExtendedEntity interface was removed as the same functionality is now built into Open Ria Services.</releaseNotes>
+    <copyright>2013 Outercurve Foundation</copyright>
+    <language />
+    <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices signed</tags>
+    <dependencies>
+      <dependency id="OpenRiaServices.Signed.Silverlight.Core" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="OpenRiaServices.EntityTools" targetFramework="Silverlight5.0" />
+    </frameworkAssemblies>
+  </metadata>
+</package>
