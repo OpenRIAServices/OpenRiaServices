@@ -22,15 +22,19 @@ namespace OpenRiaServices.DomainServices
 {
     internal static class TypeUtility
     {
+        internal const string OpenRiaServicesPublicKeyToken = "2e0b7ccb1ae5b4c8";
+        internal static readonly byte[] OpenRiaServicesPublicKeyTokenBytes = PublicKeyTokenToBytes(OpenRiaServicesPublicKeyToken);
+
         /// <summary>
         /// List of public key tokens used for System assemblies
         /// </summary>
         private static string[] systemAssemblyPublicKeyTokens =
         {
             "b77a5c561934e089", // mscorlib, System, System.ComponentModel.Composition, and System.Core
-            "31bf3856ad364e35", // OpenRiaServices.DomainServices.*, System.ComponentModel.DataAnnotations
+            "31bf3856ad364e35", // System.ComponentModel.DataAnnotations
             "b03f5f7f11d50a3a", // Microsoft.VisualBasic, Microsoft.CSharp, System.Configuration
-            "7cec85d7bea7798e"  // Silverlight system assemblies
+            "7cec85d7bea7798e",  // Silverlight system assemblies
+            OpenRiaServicesPublicKeyToken, // OpenRiaServices.DomainServices.
         };
 
         /// <summary>
@@ -53,6 +57,20 @@ namespace OpenRiaServices.DomainServices
             "OpenRiaServices.DomainServices.Tools",
             "OpenRiaServices.DomainServices.Tools.TextTemplate"
         };
+
+        private static byte[] PublicKeyTokenToBytes(string publicKeyToken)
+        {
+            if(publicKeyToken == null || publicKeyToken.Length != 16)
+                return new byte[0];
+            else
+            {
+                var bytes = new byte[8];
+                for (int i = 0; i < bytes.Length; ++i)
+                    bytes[i] = Convert.ToByte(publicKeyToken.Substring(2 * i, 2), fromBase: 16);
+                return bytes;
+            }
+        }
+
 #if !WIZARD
         // list of "simple" types we will always accept for
         // serialization, inclusion from entities, etc.
@@ -468,6 +486,44 @@ namespace OpenRiaServices.DomainServices
         internal static bool IsSystemAssembly(this AssemblyName assemblyName)
         {
             return IsSystemAssembly(assemblyName.FullName);
+        }
+
+        /// <summary>
+        /// Performs a check against an <see cref="AssemblyName"/> to determine if it's a known
+        /// Open Ria assembly.
+        /// </summary>
+        /// <param name="assemblyName">The assembly name to check.</param>
+        /// <returns><c>true</c> if the assembly is known to be a Open Ria assembly, otherwise <c>false</c>.</returns>
+        internal static bool IsOpenRiaAssembly(this AssemblyName assemblyName)
+        {
+            // Return true if it is a Open Ria Services assembly
+            if (OpenRiaServicesAssemblyNames.Contains(assemblyName.Name))
+            {
+                return true;
+            }
+
+            // parse the public key token
+            int idx = assemblyName.FullName.IndexOf("PublicKeyToken=", StringComparison.OrdinalIgnoreCase);
+            if (idx == 0)
+            {
+                return false;
+            }
+            string publicKeyToken = assemblyName.FullName.Substring(idx + 15);
+            return OpenRiaServicesPublicKeyToken == publicKeyToken;
+        }
+
+        /// <summary>
+        /// Check against an <see cref="AssemblyName"/> to determine if signed to create a strong name
+        /// (it has public key token != null)
+        /// </summary>
+        /// <remarks>
+        ///  This should not be confuse with assemblies signed with a certificate (authenticode signed).
+        /// </remarks>
+        /// <param name="assemblyName">The assembly name to check.</param>
+        /// <returns><c>true</c> if the assembly is strongly named (signed), otherwise <c>false</c>.</returns>
+        internal static bool IsSigned(this AssemblyName assemblyName)
+        {
+            return assemblyName.GetPublicKeyToken().Length > 0;
         }
 
         /// <summary>

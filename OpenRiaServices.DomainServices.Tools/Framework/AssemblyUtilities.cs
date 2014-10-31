@@ -28,6 +28,16 @@ namespace OpenRiaServices.DomainServices.Tools
             {
                 // Keep a dictionary of assembly names and assemblies. It is used in the AssemblyResolve event handler.
                 assemblyNames[assembly.FullName] = assembly;
+
+                // If the assembly is a signed Open Ria assembly, then also add an entry
+                // so that it is used in places where the of unsigned version of the assembly is requested
+                var assemblyName = assembly.GetName();
+                if(assemblyName.IsOpenRiaAssembly() && assemblyName.IsSigned())
+                {
+                    var unsignedName = new AssemblyName(assemblyName.FullName);
+                    unsignedName.SetPublicKeyToken(new byte[0]);
+                    assemblyNames[unsignedName.FullName] = assembly;
+                }
             }
             loadedAssemblyNames = assemblyNames;
 
