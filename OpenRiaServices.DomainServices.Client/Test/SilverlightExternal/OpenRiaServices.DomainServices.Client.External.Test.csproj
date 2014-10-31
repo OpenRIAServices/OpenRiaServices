@@ -65,9 +65,7 @@
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
-    <SignAssembly>false</SignAssembly>
-    <DelaySign>true</DelaySign>
-    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+      <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 

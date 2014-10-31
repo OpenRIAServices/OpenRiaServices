@@ -3,12 +3,6 @@
   <PropertyGroup>
     <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>OpenRiaServices.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -48,9 +42,11 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;SILVERLIGHT;SIGNED</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <AssemblyOriginatorKeyFile>..\..\..\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="OpenRiaServices.snk" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>

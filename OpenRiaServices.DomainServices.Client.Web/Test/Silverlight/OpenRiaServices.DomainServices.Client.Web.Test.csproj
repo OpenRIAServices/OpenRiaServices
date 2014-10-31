@@ -69,9 +69,7 @@
     <SilverlightApplication>false</SilverlightApplication>
     <SupportedCultures>
     </SupportedCultures>
-    <SignAssembly>false</SignAssembly>
-    <DelaySign>true</DelaySign>
-    <ValidateXaml>true</ValidateXaml>
+      <ValidateXaml>true</ValidateXaml>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
