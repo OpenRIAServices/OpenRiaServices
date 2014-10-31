@@ -50,7 +50,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
     <OutputPath>..\..\bin\Signed\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;SIGNED</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>1591</NoWarn>
     <DebugType>pdbonly</DebugType>

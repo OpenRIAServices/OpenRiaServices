@@ -1070,7 +1070,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 if (File.Exists(refFileName))
                 {
                     string refFilePath = RiaClientFilesTask.GetPathRelativeToProjectDirectory(refFileName, projectDir);
-                    sb.Append(refFilePath + "," + string.Format(CultureInfo.InvariantCulture, "{0}", File.GetLastWriteTime(refFilePath)) + ";");
+                    sb.Append(refFilePath + "," + string.Format(CultureInfo.InvariantCulture, "{0}", File.GetLastWriteTime(refFileName)) + ";");
                 }
             }
             string outputFileLines = sb.ToString();

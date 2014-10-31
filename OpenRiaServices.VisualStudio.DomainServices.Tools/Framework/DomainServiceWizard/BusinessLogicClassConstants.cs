@@ -49,6 +49,7 @@
         public static readonly string[] LinqToEntitiesDbImports = 
         { 
             "System.Data",
+            "System.Data.Entity",
             "System.Data.Entity.Infrastructure",
             "OpenRiaServices.DomainServices.EntityFramework"
         };

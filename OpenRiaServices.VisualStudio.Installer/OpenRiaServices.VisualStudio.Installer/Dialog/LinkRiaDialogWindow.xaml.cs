@@ -53,11 +53,17 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             }
             // if this is null
             var selectedItem = this.Projects.Items.OfType<ComboBoxItem>().FirstOrDefault(i => i.DataContext == _linker.LinkedProject);
-
             this.Projects.SelectedItem = selectedItem ?? noneComboBoxItem;
+            this.DisableFastUpToDateCheckBox.IsChecked = this._linker.DisableFastUpToDateCheck;
+            this.Projects.SelectionChanged += new SelectionChangedEventHandler(this.Projects_SelectionChanged);
 
 
         }
+        private void Projects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.DisableFastUpToDateCheckBox.IsChecked = true;
+        }
+
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -70,6 +76,10 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             {
                 var selectedProject = itemAsComboBoxItem.DataContext as Project;
                 _linker.LinkedProject = selectedProject;
+            }
+            if (this._linker.DisableFastUpToDateCheck != this.DisableFastUpToDateCheckBox.IsChecked)
+            {
+                this._linker.DisableFastUpToDateCheck = this.DisableFastUpToDateCheckBox.IsChecked;
             }
 
             _project.Save();

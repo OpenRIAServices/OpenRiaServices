@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT;RIASERVICES</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Silverlight\System.Windows.Controls.DomainServices.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Silverlight\OpenRiaServices.Controls.DomainServices.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <NoStdLib>true</NoStdLib>
     <DebugType>pdbonly</DebugType>
@@ -55,7 +55,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
     <OutputPath>bin\Signed\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT;RIASERVICES;SIGNED</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Signed\Silverlight\OpenRiaServices.Controls.DomainServices.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoStdLib>true</NoStdLib>
     <DebugType>pdbonly</DebugType>
@@ -83,7 +83,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>false</ThrowErrorsInValidation>
     <OutputPath>..\..\bin\$(Configuration)\Silverlight\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Silverlight\System.Windows.Controls.DomainServices.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Silverlight\OpenRiaServices.Controls.DomainServices.XML</DocumentationFile>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <WarningLevel>4</WarningLevel>
@@ -223,7 +223,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="System.Windows.Controls.DomainServices.extmap.xml" />
+    <Content Include="OpenRiaServices.Controls.DomainServices.extmap.xml" />
   </ItemGroup>
   <Import Project="..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />

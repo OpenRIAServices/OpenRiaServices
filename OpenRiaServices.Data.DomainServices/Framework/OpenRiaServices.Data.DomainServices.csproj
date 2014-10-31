@@ -51,7 +51,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
     <OutputPath>bin\Signed\</OutputPath>
     <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Signed\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -80,7 +80,7 @@
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <OutputPath>..\..\bin\$(Configuration)\Silverlight\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Silverlight\Microsoft.Windows.Data.DomainServices.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Silverlight\OpenRiaServices.Data.DomainServices.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

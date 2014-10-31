@@ -7,7 +7,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\DebugNet40\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\DebugNet40\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -27,7 +27,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\ReleaseNet40\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\ReleaseNet40\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet40\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet40\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
     <OutputPath>..\..\bin\Signed\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;SIGNED</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -70,7 +70,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.XML</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
