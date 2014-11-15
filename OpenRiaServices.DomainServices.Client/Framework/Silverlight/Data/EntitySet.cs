@@ -1341,15 +1341,28 @@ namespace OpenRiaServices.DomainServices.Client
         {
             ((IList<TEntity>)List).CopyTo(array, arrayIndex);
         }
+
         bool ICollection<TEntity>.Contains(TEntity item)
         {
-            return ((IList<TEntity>)List).Contains(item);
+            return base.Contains(item);
         }
+
         bool ICollection<TEntity>.Remove(TEntity item)
         {
-            Remove(item);
-            // Ordinary remove throws on error, so if it did not then we can return true
-            return true;
+            try
+            {
+                // Ordinary remove throws on error, so if it did not then we can return true
+                Remove(item);
+                return true;
+            }
+            catch (InvalidOperationException ioe)
+            {
+                // If the entiy was not part of the set return false
+                if (ioe.Message == Resource.EntitySet_EntityNotInSet)
+                    return false;
+                else
+                    throw;
+            }
         }
         #endregion
 

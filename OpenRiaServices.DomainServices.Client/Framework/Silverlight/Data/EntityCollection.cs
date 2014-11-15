@@ -961,7 +961,14 @@ namespace OpenRiaServices.DomainServices.Client
         #endregion
 
         #region ICollection<TEntity> Members
-        bool ICollection<TEntity>.IsReadOnly { get { return false; } }
+        bool ICollection<TEntity>.IsReadOnly
+        {
+            get
+            {
+                // Modifications are not allowed when the entity set source is external.
+                return IsSourceExternal;
+            }
+        }
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
             this.Load();
@@ -974,9 +981,9 @@ namespace OpenRiaServices.DomainServices.Client
         }
         bool ICollection<TEntity>.Remove(TEntity item)
         {
+            int idx = Entities.IndexOf(item);
             Remove(item);
-            // Ordinary remove throws on error, so if it did not then we can return true
-            return true;
+            return idx != -1;
         }
         /// <summary>
         /// Removes all items.
