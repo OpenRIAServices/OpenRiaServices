@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// Represents a collection of associated Entities.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
-    public sealed class EntityCollection<TEntity> : IEntityCollection, IEnumerable<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged, ICollectionViewFactory where TEntity : Entity
+    public sealed class EntityCollection<TEntity> : IEntityCollection, ICollection<TEntity>, IEnumerable<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged, ICollectionViewFactory where TEntity : Entity
     {
         private Action<TEntity> _attachAction;
         private Action<TEntity> _detachAction;
@@ -958,6 +958,42 @@ namespace OpenRiaServices.DomainServices.Client
             #endregion
         }
 
+        #endregion
+
+        #region ICollection<TEntity> Members
+        bool ICollection<TEntity>.IsReadOnly
+        {
+            get
+            {
+                // Modifications are not allowed when the entity set source is external.
+                return IsSourceExternal;
+            }
+        }
+        void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
+        {
+            this.Load();
+            this.Entities.CopyTo(array, arrayIndex);
+        }
+        bool ICollection<TEntity>.Contains(TEntity item)
+        {
+            this.Load();
+            return this.Entities.Contains(item);
+        }
+        bool ICollection<TEntity>.Remove(TEntity item)
+        {
+            int idx = Entities.IndexOf(item);
+            Remove(item);
+            return idx != -1;
+        }
+        /// <summary>
+        /// Removes all items.
+        /// </summary>
+        void ICollection<TEntity>.Clear()
+        {
+            this.Load();
+            foreach(var item in this.Entities.ToList())
+                Remove(item);
+        }
         #endregion
     }
 
