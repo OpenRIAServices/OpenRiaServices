@@ -56,13 +56,7 @@
                        TextWrapping="Wrap" Text="{x:Static tools:Resources.BusinessLogicClass_AvailableContexts_Text}" />
             <ComboBox Margin="5" Name="ContextComboBox" ItemsSource="{Binding Path=ContextViewModels, Mode=OneWay}" DisplayMemberPath="Name" SelectionChanged="ContextComboBox_SelectionChanged"
                       AutomationProperties.Name="{x:Static tools:Resources.BusinessLogicClass_AvailableContexts_Text}"/>
-            <TextBlock Margin="5" TextWrapping="Wrap" Visibility="{Binding Path=ShowDbContextWarning, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Run Text="{x:Static tools:Resources.BusinessLogicClass_AvailableContexts_DbContextWarning}" />
-                <LineBreak />
-                <Hyperlink Click="Hyperlink_Click" ToolTip="{x:Static tools:Resources.BusinessLogicClass_AvailableContexts_DbContextUrl}">
-                    <Run Text="{x:Static tools:Resources.BusinessLogicClass_AvailableContexts_KnowledgeBase}" />
-                </Hyperlink>
-            </TextBlock>
+            <TextBlock Margin="5" TextWrapping="Wrap" Text="If no entities are shown you may need to build the project first or install an additional NuGet package such as OpenRiaServices.EntityFramework." />
         </StackPanel>
 
         <ListView Grid.Row="2" Margin="5" Name="EntityListView" ItemsSource="{Binding Path=CurrentContextViewModel.Entities}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ListViewItemStyle}"
