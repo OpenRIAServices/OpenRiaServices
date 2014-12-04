@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -418,6 +419,14 @@ namespace OpenRiaServices.DomainServices.Tools
             if (this._isRoundtripType)
             {
                 propertyAttributes.RemoveAll(attr => attr.GetType() == typeof(RoundtripOriginalAttribute));
+            }
+
+            // Here we check for database generated fields. In that case we strip any RequiredAttribute from the property.
+            if (
+                propertyAttributes.OfType<DatabaseGeneratedAttribute>()
+                    .Any(dga => dga.DatabaseGeneratedOption != DatabaseGeneratedOption.None))
+            {
+                propertyAttributes.RemoveAll(attr => attr.GetType() == typeof (RequiredAttribute));
             }
 
             // Here, we check for the presence of a complex type. If it exists we need to add a DisplayAttribute
