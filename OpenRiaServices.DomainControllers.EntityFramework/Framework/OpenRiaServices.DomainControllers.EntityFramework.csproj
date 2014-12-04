@@ -145,7 +145,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainControllers.Server\Framework\OpenRiaServices.DomainControllers.Server.csproj">
       <Project>{ACE91549-D86E-4EB6-8C2A-5FF51386BB68}</Project>
-      <Name>Microsoft.Web.Http.Data</Name>
+      <Name>OpenRiaServices.DomainControllers.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
