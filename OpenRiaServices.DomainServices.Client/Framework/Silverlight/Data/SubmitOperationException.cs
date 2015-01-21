@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace OpenRiaServices.DomainServices.Client
     public class SubmitOperationException : DomainOperationException
     {
         private readonly EntityChangeSet _changeSet;
+        private readonly ReadOnlyCollection<Entity> _entitiesInError;
 
         /// <summary>
         /// Constructor that accepts a localized exception message and status
@@ -25,7 +27,6 @@ namespace OpenRiaServices.DomainServices.Client
         public SubmitOperationException(EntityChangeSet changeSet, string message, OperationErrorStatus status)
             : this(changeSet, message, /*innerException*/ null, status, /*errorCode*/ 0, /*stackTrace*/ null)
         {
-            _changeSet = changeSet;
         }
 
         /// <summary>
@@ -37,7 +38,6 @@ namespace OpenRiaServices.DomainServices.Client
         public SubmitOperationException(EntityChangeSet changeSet, string message, Exception innerException)
             : this(changeSet, message, innerException, /*status*/ OperationErrorStatus.ServerError, /*errorCode*/ 0, /*stackTrace*/ null)
         {
-            _changeSet = changeSet;
         }
 
         /// <summary>
@@ -49,7 +49,6 @@ namespace OpenRiaServices.DomainServices.Client
         internal SubmitOperationException(EntityChangeSet changeSet, string message, DomainOperationException exception)
             : this(changeSet, message, exception.InnerException, exception.Status, exception.ErrorCode, exception.StackTrace)
         {
-            _changeSet = changeSet;
         }
 
         /// <summary>
@@ -65,6 +64,9 @@ namespace OpenRiaServices.DomainServices.Client
             : base(message, innerException, status, errorCode, stackTrace, GetValidationResults(changeSet))
         {
             _changeSet = changeSet;
+            _entitiesInError = new ReadOnlyCollection<Entity>(changeSet
+                                                                .Where(p => p.EntityConflict != null || p.HasValidationErrors)
+                                                                .ToList());
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return _changeSet.Where(p => p.EntityConflict != null || p.HasValidationErrors);
+                return _entitiesInError; 
             }
         }
 

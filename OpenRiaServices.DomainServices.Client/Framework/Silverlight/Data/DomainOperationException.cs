@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -163,7 +164,8 @@ namespace OpenRiaServices.DomainServices.Client
             this._data.Status = status;
             this._data.StackTrace = stackTrace;
             this._data.ErrorCode = errorCode;
-            this._data.ValidationResults = validationErrors;
+            // Iterate the enumerable now in order to capture the validation errors at the moment the exception is created
+            this._data.ValidationResults = new ReadOnlyCollection<ValidationResult>(validationErrors.ToList());
             
 #if !SILVERLIGHT
             // TODO: uncomment when CLR fixes 851783
