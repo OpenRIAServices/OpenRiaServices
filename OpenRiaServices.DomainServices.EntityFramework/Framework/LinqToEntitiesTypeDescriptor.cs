@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif
+using System.ComponentModel.DataAnnotations.Schema;
 #if DBCONTEXT
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects.DataClasses;
@@ -165,10 +166,10 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                 }
                 
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
-
-                // Add Required attribute to metdata if the member cannot be null and it is either a reference type or a Nullable<T>
-                if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) &&
-                    pd.Attributes[typeof(RequiredAttribute)] == null)
+                
+                // Add Required attribute to metadata if the member cannot be null and it is either a reference type or a Nullable<T>
+                if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) && pd.Attributes.OfType<DatabaseGeneratedAttribute>().Any(dga=>dga.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
+                    && pd.Attributes[typeof(RequiredAttribute)] == null)
                 {
                     attributes.Add(new RequiredAttribute());
                 }

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -422,9 +421,7 @@ namespace OpenRiaServices.DomainServices.Tools
             }
 
             // Here we check for database generated fields. In that case we strip any RequiredAttribute from the property.
-            if (
-                propertyAttributes.OfType<DatabaseGeneratedAttribute>()
-                    .Any(dga => dga.DatabaseGeneratedOption != DatabaseGeneratedOption.None))
+            if (propertyAttributes.Any(a=>a.GetType().Name == "DatabaseGeneratedAttribute"))
             {
                 propertyAttributes.RemoveAll(attr => attr.GetType() == typeof (RequiredAttribute));
             }

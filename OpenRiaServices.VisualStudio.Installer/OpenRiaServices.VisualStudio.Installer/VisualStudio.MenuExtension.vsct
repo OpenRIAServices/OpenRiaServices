@@ -59,7 +59,7 @@
         <Parent guid="guidVisualStudio_MenuExtensionCmdSet" id="cmdidLinkOpenRiaServicesProject" />
           <CommandFlag>DynamicVisibility</CommandFlag>
           <Strings>
-          <ButtonText>Link Open RIA Services Project</ButtonText>
+          <ButtonText>Manage Open RIA Services Project Link</ButtonText>
         </Strings>
       </Button>
      

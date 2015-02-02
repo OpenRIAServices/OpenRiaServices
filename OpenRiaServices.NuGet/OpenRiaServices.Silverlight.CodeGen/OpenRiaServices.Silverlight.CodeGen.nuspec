@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Silverlight.CodeGen</id>
-        <version>4.4.0.0</version>
+        <version>4.4.0.1</version>
         <title>Open RIA Services Silverlight Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>

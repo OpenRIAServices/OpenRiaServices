@@ -105,11 +105,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\CSharp\Web\1033\Authentication Domain Service.zip">
+    <Content Include="ItemTemplates\CSharp\Web\1033\AuthenticationDomainService.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ItemTemplates\VisualBasic\Web\1033\Authentication Domain Service.zip">
+    <Content Include="ItemTemplates\VisualBasic\Web\1033\AuthenticationDomainService.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -125,27 +125,27 @@
     <Content Include="Packages\microsoft.aspnet.providers.core.1.1.0.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\CSharp\Web\1033\Domain Service Class.zip">
+    <Content Include="ItemTemplates\CSharp\Web\1033\DomainServiceClass.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ItemTemplates\VisualBasic\Web\1033\Domain Service Class.zip">
+    <Content Include="ItemTemplates\VisualBasic\Web\1033\DomainServiceClass.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\Open RIA Services Class Library.zip">
+    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\OpenRIAServicesClassLibrary.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\Silverlight Business Application.zip">
+    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\SilverlightBusinessApplication.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\Open RIA Services Class Library.zip">
+    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\OpenRIAServicesClassLibrary.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\Silverlight Business Application.zip">
+    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\SilverlightBusinessApplication.zip">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -154,34 +154,34 @@
       <SubType>Designer</SubType>
     </VSCTCompile>
     <Resource Include="Resources\Package.ico" />
-    <Content Include="ItemTemplates\CSharp\Web\1033\Authentication Domain Service - Signed.zip">
+    <Content Include="ItemTemplates\CSharp\Web\1033\AuthenticationDomainServiceS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\CSharp\Web\1033\Domain Service Class - Signed.zip">
+    <Content Include="ItemTemplates\CSharp\Web\1033\DomainServiceClassS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\VisualBasic\Web\1033\Authentication Domain Service - Signed.zip">
+    <Content Include="ItemTemplates\VisualBasic\Web\1033\AuthenticationDomainServiceS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\VisualBasic\Web\1033\Domain Service Class - Signed.zip">
+    <Content Include="ItemTemplates\VisualBasic\Web\1033\DomainServiceClassS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="key.snk" />
     <None Include="packages.config" />
-    <Content Include="Packages\OpenRiaServices.Server.4.4.0.0.nupkg">
+    <Content Include="Packages\OpenRiaServices.Server.4.4.0.1.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Packages\OpenRiaServices.Signed.Server.4.4.0.0.nupkg">
+    <Content Include="Packages\OpenRiaServices.Signed.Server.4.4.0.1.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Packages\OpenRiaServices.Signed.Silverlight.4.4.0.0.nupkg">
+    <Content Include="Packages\OpenRiaServices.Signed.Silverlight.4.4.0.1.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Packages\OpenRiaServices.Signed.Silverlight.CodeGen.4.4.0.0.nupkg">
+    <Content Include="Packages\OpenRiaServices.Signed.Silverlight.CodeGen.4.4.0.1.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Packages\OpenRiaServices.Signed.Silverlight.Core.4.4.0.0.nupkg">
@@ -190,10 +190,10 @@
     <Content Include="Packages\OpenRiaServices.Signed.ViewModel.4.4.0.0.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Packages\OpenRiaServices.Silverlight.4.4.0.0.nupkg">
+    <Content Include="Packages\OpenRiaServices.Silverlight.4.4.0.1.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Packages\OpenRiaServices.Silverlight.CodeGen.4.4.0.0.nupkg">
+    <Content Include="Packages\OpenRiaServices.Silverlight.CodeGen.4.4.0.1.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Packages\OpenRiaServices.Silverlight.Core.4.4.0.0.nupkg">
@@ -202,19 +202,19 @@
     <Content Include="Packages\OpenRiaServices.ViewModel.4.4.0.0.nupkg">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\Open RIA Services Class Library - Signed.zip">
+    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\OpenRIAServicesClassLibraryS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\Silverlight Business Application - Signed.zip">
+    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\SilverlightBusinessApplicationS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\Open RIA Services Class Library - Signed.zip">
+    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\OpenRIAServicesClassLibraryS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\Silverlight Business Application - Signed.zip">
+    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\SilverlightBusinessApplicationS.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

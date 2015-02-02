@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="83014b5f-3f89-4eff-a7fa-b5ec62657247" Version="1.3.2.0" Language="en-US" Publisher="Outercurve Foundation" />
+    <Identity Id="83014b5f-3f89-4eff-a7fa-b5ec62657247" Version="1.3.2.2" Language="en-US" Publisher="Outercurve Foundation" />
     <DisplayName>Open RIA Services</DisplayName>
     <Description xml:space="preserve">Open RIA Services Tooling and Templates</Description>
     <MoreInfo>http://www.openriaservices.net</MoreInfo>
@@ -21,22 +21,22 @@
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Server" Path="|OpenRiaServices.DomainServices.Server|" AssemblyName="|OpenRiaServices.DomainServices.Server;AssemblyName|" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.dll" AssemblyName="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.SqlServer.dll" AssemblyName="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\Web\1033\Authentication Domain Service.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\Web\1033\Domain Service Class.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\VisualBasic\Web\1033\Authentication Domain Service.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\VisualBasic\Web\1033\Domain Service Class.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\Web\1033\Authentication Domain Service - Signed.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\CSharp\Web\1033\Domain Service Class - Signed.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\VisualBasic\Web\1033\Authentication Domain Service - Signed.zip" />
-    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="ItemTemplates\VisualBasic\Web\1033\Domain Service Class.zip - Signed" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\1033\Silverlight Business Application.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\1033\Open RIA Services Class Library.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\1033\Silverlight Business Application.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\1033\Open RIA Services Class Library.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\1033\Silverlight Business Application - Signed.zip.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\CSharp\Silverlight\1033\Open RIA Services Class Library - Signed.zip.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\1033\Silverlight Business Application - Signed.zip.zip" />
-    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\VisualBasic\Silverlight\1033\Open RIA Services Class Library - Signed.zip.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\CS\Web\1033\Authentication Domain Service.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\CS\Web\1033\Domain Service Class.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Authentication Domain Service.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Domain Service Class.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\CS\Web\1033\Authentication Domain Service - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\CS\Web\1033\Domain Service Class - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Authentication Domain Service - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Domain Service Class - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Silverlight Business Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Open RIA Services Class Library.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Silverlight Business Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Open RIA Services Class Library.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Silverlight Business Application - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Open RIA Services Class Library - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Silverlight Business Application - Signed.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Open RIA Services Class Library - Signed.zip" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
   </Assets>
 </PackageManifest>
