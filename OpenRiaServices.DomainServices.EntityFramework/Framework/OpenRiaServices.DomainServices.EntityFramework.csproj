@@ -57,6 +57,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ChildBuild>True</ChildBuild>
+    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <OutputPath>bin\Signed\</OutputPath>
     <DefineConstants>TRACE;SERVERFX;DBCONTEXT;NET40;NET40;SIGNED</DefineConstants>
     <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
