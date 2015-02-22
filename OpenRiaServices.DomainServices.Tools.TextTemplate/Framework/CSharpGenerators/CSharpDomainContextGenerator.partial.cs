@@ -121,7 +121,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
             }
 
             if (invokeKind == InvokeKind.Async)
-                returnTypeString = string.Format("Task<{0}>", returnTypeString);
+                returnTypeString = string.Format("System.Threading.Tasks.Task<{0}>", returnTypeString);
             return returnTypeString;
         }
 

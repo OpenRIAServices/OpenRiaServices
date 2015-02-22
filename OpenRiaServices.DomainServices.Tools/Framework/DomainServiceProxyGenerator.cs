@@ -626,11 +626,8 @@ namespace OpenRiaServices.DomainServices.Tools
             }
 
             // Generate [HasSideEffects(...)]. 
-            beginMethod.CustomAttributes.Add(new CodeAttributeDeclaration("OpenRiaServices.DomainServices.Client.HasSideEffects",
+            beginMethod.CustomAttributes.Add(new CodeAttributeDeclaration(CodeGenUtilities.GetTypeReference(TypeConstants.HasSideEffectsFullName, contractInterface.UserData["Namespace"] as string, false),
                                                                             new CodeAttributeArgument(new CodePrimitiveExpression(hasSideEffects))));
-            
-
-
 
             // Generate <summary> doc comment for the End method
             comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_DomainContext_ServiceContract_End_Method_Summary_Comment, beginMethod.Name);

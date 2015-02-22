@@ -118,8 +118,7 @@ namespace OpenRiaServices.DomainServices.Tools
             // InvokeResults are wrapped in task (always)
             if (invokeKind == InvokeKind.Async)
             {
-                //invokeOperationType.Options |= CodeTypeReferenceOptions.GenericTypeParameter;                
-                invokeOperationType = new CodeTypeReference(typeof(Task).Name, invokeOperationType);
+                invokeOperationType = new CodeTypeReference(typeof(Task).FullName, invokeOperationType);
             }
 
 
@@ -292,22 +291,29 @@ namespace OpenRiaServices.DomainServices.Tools
                     invokeParams.Add(new CodePrimitiveExpression(null));
                     break;
                 case InvokeKind.Async:
-                    var cancellationTokenParmeter = new CodeParameterDeclarationExpression(CodeGenUtilities.GetTypeReference(typeof (CancellationToken), this.ClientProxyGenerator,this._proxyClass), "cancellationToken");
+                    var cancellationTokenType = CodeGenUtilities.GetTypeReference(typeof (CancellationToken), this.ClientProxyGenerator,this._proxyClass);
+                    var cancellationTokenParmeter = new CodeParameterDeclarationExpression(cancellationTokenType, "cancellationToken");
 
                     // For C# add "  = default(CancellationToken)"
                     // For VB add "Optional" ByVal .... = Nothing
                     // otherwise fall back to adding [Optional] attribute, this is the same as adding "= default(CancellationToken)"
                     if (ClientProxyGenerator.IsCSharp)
-                        cancellationTokenParmeter.Name = cancellationTokenParmeter.Name + " = default(CancellationToken)";
+                    {
+                        cancellationTokenParmeter.Name = string.Format("{0} = default({1})", cancellationTokenParmeter.Name, cancellationTokenType.BaseType);
+                    }
                     else if (ClientProxyGenerator.IsVB) // VB
                     {
                         // Set an invalid field direction in order to have VB Code gen from generating 
                         cancellationTokenParmeter.Direction = (FieldDirection)0xff;
                         cancellationTokenParmeter.Name = "Optional ByVal " + cancellationTokenParmeter.Name;
-                        cancellationTokenParmeter.Type = new CodeTypeReference(typeof (CancellationToken).Name + " = Nothing");
+                        cancellationTokenParmeter.Type = new CodeTypeReference(cancellationTokenType.BaseType + " = Nothing");
                     }
                     else
-                        cancellationTokenParmeter.CustomAttributes.Add(new CodeAttributeDeclaration(new CodeTypeReference(typeof(OptionalAttribute))));
+                    {
+                        // Add [Optional] attribute
+                        cancellationTokenParmeter.CustomAttributes.Add(new CodeAttributeDeclaration(
+                            CodeGenUtilities.GetTypeReference(typeof(OptionalAttribute), this.ClientProxyGenerator, this._proxyClass)));
+                    }
 
                     method.Parameters.Add(cancellationTokenParmeter);
                     invokeParams.Add(new CodeVariableReferenceExpression("cancellationToken"));

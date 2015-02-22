@@ -34,8 +34,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
         public override string TransformText()
         {
             this.Write("\r\n");
-            this.Write("\n");
-            this.Write("\n\n");
+            this.Write("\r\n");
             this.Write("\r\n");
             this.Write("\r\n");
             this.Write("\r\n\r\n");
@@ -222,7 +221,7 @@ this.Write("\t\t\r\npartial void OnCreated();\r\n");
 	protected virtual void GenerateCustomMethod(DomainOperationEntry domainMethod)
 	{
 
-this.Write("\npublic void ");
+this.Write("public void ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(domainMethod.Name));
 
@@ -256,12 +255,10 @@ this.Write(", ");
 			}
 		}
 
-this.Write(")\n");
+this.Write(")\r\n");
 
 
 		this.GenerateOpeningBrace();
-
-this.Write("\n");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(paramInfos[0].Name));
 
@@ -287,7 +284,7 @@ this.Write(", ");
 				}
 			}
 		
-this.Write(");\n");
+this.Write(");\r\n");
 
 
 		this.GenerateClosingBrace();
@@ -313,7 +310,7 @@ this.Write(");\n");
 		string propertyName = Naming.MakePluralName(entityType.Name);
 		string entityTypeName = CodeGenUtilities.GetTypeName(entityType);
 
-this.Write("\npublic EntitySet<");
+this.Write("public EntitySet<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
@@ -321,11 +318,11 @@ this.Write("> ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(propertyName));
 
-this.Write("\n{\n    get\n    {\n        return base.EntityContainer.GetEntitySet<");
+this.Write("\r\n{\r\n    get\r\n    {\r\n        return base.EntityContainer.GetEntitySet<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(entityTypeName));
 
-this.Write(">();\n    }\n}\n");
+this.Write(">();\r\n    }\r\n}\r\n");
 
 
 	}
@@ -361,7 +358,7 @@ this.Write(">();\n    }\n}\n");
 		this.GenerateAttributes(methodAttributes);
 				
 
-this.Write("\npublic EntityQuery<");
+this.Write("public EntityQuery<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetEntityQueryMethodElementReturnTypeName(domainOperationEntry)));
 
@@ -374,7 +371,7 @@ this.Write("(");
 
 	this.GenerateParameterDeclaration(domainOperationEntry.Parameters.AsEnumerable(), true);
 
-this.Write(")\n");
+this.Write(")\r\n");
 
 
 	}
@@ -390,7 +387,7 @@ this.Write(")\n");
 		QueryAttribute queryAttribute = (QueryAttribute)domainOperationEntry.OperationAttribute;
 		
 
-this.Write("\nreturn base.CreateQuery<");
+this.Write("return base.CreateQuery<");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.GetEntityQueryMethodElementReturnTypeName(domainOperationEntry)));
 
@@ -410,7 +407,7 @@ this.Write(", ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetBooleanString(queryAttribute.IsComposable, true)));
 
-this.Write(");\n");
+this.Write(");\r\n");
 
 	
 	}
@@ -694,7 +691,7 @@ this.Write("\r\n");
 	private void GenerateContractMethod(DomainOperationEntry operation)
 	{
 
-this.Write("[HasSideEffects(");
+this.Write("[OpenRiaServices.DomainServices.Client.HasSideEffects(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower()));
 
