@@ -9,19 +9,15 @@
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.Signed.Silverlight is the signed full Silverlight client in a single package.</description>
+        <description>Note: This is just an alias for the new OpenRiaServices.Signed.Client package in order to make upgrading easy.
+OpenRiaServices.Signed.Silverlight is the signed full Silverlight client in a single package.</description>
         <summary>Open RIA Services - Full Silverlight client - Signed</summary>
         <releaseNotes />
         <copyright>2013 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices Signed</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Signed.Silverlight.Core" version="4.4.0.0"/>
-        <dependency id="OpenRiaServices.Signed.ViewModel" version="4.4.0.0"/>
-        <dependency id="OpenRiaServices.Signed.Silverlight.CodeGen" version="4.4.0.1"/>
+        <dependency id="OpenRiaServices.Signed.Client" version="4.4.0.0"/>
       </dependencies>      
-        <frameworkAssemblies>
-            <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="Silverlight5.0" />
-        </frameworkAssemblies>
     </metadata>
 </package>

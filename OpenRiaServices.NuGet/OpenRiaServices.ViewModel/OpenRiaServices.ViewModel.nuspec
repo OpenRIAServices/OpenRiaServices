@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.ViewModel</id>
-    <version>4.4.0.0</version>
+    <version>4.4.0.1</version>
     <title>Open RIA Services ViewModel Extensions</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -16,11 +16,8 @@
     <language />
     <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Silverlight.Core" version="4.4.0.0"/>
+      <dependency id="OpenRiaServices.Client.Core" version="4.4.0.0"/>
     </dependencies>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="OpenRiaServices.DomainServices.Client" targetFramework="Silverlight5.0" />
-    </frameworkAssemblies>
   </metadata>
   <files>
     <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Data.DomainServices.dll" target="lib\sl50\OpenRiaServices.Data.DomainServices.dll" />

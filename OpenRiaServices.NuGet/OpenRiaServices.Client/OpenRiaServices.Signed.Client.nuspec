@@ -15,9 +15,14 @@
         <copyright>2013 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices</tags>
-      <dependencies>
-        <dependency id="OpenRiaServices.Signed.Client.Core" version="4.4.0.0"/>
-        <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.4.0.0"/>
-      </dependencies>      
+        <dependencies>
+            <group>
+                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.4.0.0"/>
+                <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.4.0.0"/>
+            </group>
+            <group targetFramework="sl50">
+                <dependency id="OpenRiaServices.Signed.ViewModel" version="4.4.0.0"/>
+            </group>
+        </dependencies>
     </metadata>
 </package>
