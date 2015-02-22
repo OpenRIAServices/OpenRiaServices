@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Client.CodeGen</id>
-        <version>4.4.0.1</version>
+        <version>4.4.0.3</version>
         <title>Open RIA Services Client Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -20,7 +20,7 @@
       </dependencies>
     </metadata>
     <files>
-        <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.CodeGen.targets"/>
+        <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
