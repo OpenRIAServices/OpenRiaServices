@@ -9,19 +9,17 @@
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.CodeGen provides the MsBuild Tasks to generate the proxy.</description>
+        <description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy when using signed assemblies on the server.</description>
         <summary>Open RIA Services - Signed Code generation client assemblies and targets.</summary>
         <releaseNotes />
-        <copyright>2013 Outercurve Foundation</copyright>
+        <copyright>2015 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices CodeGen Signed</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Signed.Client.Core" version="4.4.0.0" />
       </dependencies>
     </metadata>
     <files>
         <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.Signed.Client.CodeGen.targets"/>
-        <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
         <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
 </package>

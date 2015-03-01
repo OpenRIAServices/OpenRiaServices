@@ -9,19 +9,19 @@
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.CodeGen provides the MsBuild Tasks to generate the proxy.</description>
+        <description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. 
+        If the signed T4 template is used on the server then you need to use OpenRiaServices.Signed.Client.CodeGen instead.</description>
         <summary>Open RIA Services - Code generation client assemblies and targets.</summary>
-        <releaseNotes />
-        <copyright>2013 Outercurve Foundation</copyright>
+        <releaseNotes> 4.4.0.3: Fix code generation when OpenRiaClientUseFullTypeNames is true or server uses signed assemblies (except signed T4 Text Template)
+        </releaseNotes>
+        <copyright>2015 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices CodeGen</tags>
       <dependencies>
-        <dependency id="OpenRiaServices.Client.Core" version="4.4.0.0" />
       </dependencies>
     </metadata>
     <files>
         <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
-        <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
         <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
 </package>

@@ -28,6 +28,7 @@ namespace OpenRiaServices.DomainServices.Tools
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
         private ComposablePartCatalog _partCatalog;
+        private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.DomainServices.Server.dll";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
@@ -54,12 +55,63 @@ namespace OpenRiaServices.DomainServices.Tools
             Debug.Assert(parameters != null, "parameters cannot be null");
             Debug.Assert(loggingService != null, "loggingService cannot be null");
 
-            AppDomainUtilities.ConfigureAppDomain(options);
-
-            using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
+            try
             {
-                CodeGenerationHost host = new CodeGenerationHost(loggingService, sharedCodeService);
-                return this.GenerateCode(host, options, parameters.ServerAssemblies, codeGeneratorName);
+                AppDomainUtilities.ConfigureAppDomain(options);
+                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+
+                using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
+                {
+                    CodeGenerationHost host = new CodeGenerationHost(loggingService, sharedCodeService);
+                    return this.GenerateCode(host, options, parameters.ServerAssemblies, codeGeneratorName);
+                }
+            }
+            catch (Exception ex)
+            {
+                loggingService.LogError("Encountered fatal error when Generating Code (ClientCodeGenerationDispatcher.GenerateCode)");
+                loggingService.LogException(ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Tries to loads the OpenRiaServices.DomainServices.Server assembly from the server projects references.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="loggingService">The logging service.</param>
+        private static void LoadOpenRiaServicesServerAssembly(SharedCodeServiceParameters parameters, ILoggingService loggingService)
+        {
+            // Try to load the OpenRiaServices.DomainServies.Server assembly using the one used by the server project
+            // This way we can be sure that codegen works with both signed and unsigned server assembly while
+            // making sure that only a single version is loaded
+            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(OpenRiaServices_DomainServices_Server_Assembly));
+            if (serverAssemblyPath != null)
+            {
+                var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
+                if (serverAssembly != null)
+                {
+                    // Since this assembly (OpenRiaServices.DomainServices.Tools) requires the Server assembly to be loaded
+                    // before the final call to AssemblyUtilities.SetAssemblyResolver (when the DomainServiceCatalog is instanciated)
+                    // we need to setup our assembly resolver with the server assembly in case the server version is signed
+                    // but this version is unsigned
+#if SIGNED
+                    if (!serverAssembly.GetName().IsSigned())
+                    {
+                        loggingService.LogWarning("You are usigned the signed code generation but the server assemblies are unsigned, consider using the unsigned code generation package instead since code generation might fail.");
+                    }
+#else
+                    AssemblyUtilities.SetAssemblyResolver(new[] { serverAssembly });
+#endif
+                }
+                else
+                {
+                    loggingService.LogError(string.Format("Failed to load the {0} assembly using the path {1}", OpenRiaServices_DomainServices_Server_Assembly, serverAssemblyPath));
+                }
+
+            }
+            else
+            {
+                loggingService.LogError(string.Format("The server project does not contain a reference to {0}", OpenRiaServices_DomainServices_Server_Assembly));
             }
         }
 
