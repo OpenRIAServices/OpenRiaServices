@@ -68,7 +68,20 @@ namespace OpenRiaServices.DomainServices.Tools
             }
             catch (Exception ex)
             {
-                loggingService.LogError("Encountered fatal error when Generating Code (ClientCodeGenerationDispatcher.GenerateCode)");
+                // Fatal exceptions are never swallowed or processed
+                if (ex.IsFatal())
+                {
+                    throw;
+                }
+
+                // Any exception from the code generator is caught and reported, otherwise it will
+                // hit the MSBuild backstop and report failure of the custom build task.
+                // It is acceptable to report this exception and "ignore" it because we
+                // are running in a separate AppDomain which will be torn down immediately
+                // after our return.
+                loggingService.LogError(string.Format(CultureInfo.CurrentCulture,
+                                                Resource.ClientCodeGenDispatecher_Threw_Exception_Before_Generate,
+                                                ex.Message));
                 loggingService.LogException(ex);
                 return null;
             }
@@ -84,7 +97,8 @@ namespace OpenRiaServices.DomainServices.Tools
             // Try to load the OpenRiaServices.DomainServies.Server assembly using the one used by the server project
             // This way we can be sure that codegen works with both signed and unsigned server assembly while
             // making sure that only a single version is loaded
-            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(OpenRiaServices_DomainServices_Server_Assembly));
+            var filename = OpenRiaServices_DomainServices_Server_Assembly;
+            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
             if (serverAssemblyPath != null)
             {
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
@@ -97,7 +111,7 @@ namespace OpenRiaServices.DomainServices.Tools
 #if SIGNED
                     if (!serverAssembly.GetName().IsSigned())
                     {
-                        loggingService.LogWarning("You are usigned the signed code generation but the server assemblies are unsigned, consider using the unsigned code generation package instead since code generation might fail.");
+                        loggingService.LogWarning(Resource.ClientCodeGen_SignedTools_UnsignedServer);
                     }
 #else
                     AssemblyUtilities.SetAssemblyResolver(new[] { serverAssembly });
@@ -105,13 +119,14 @@ namespace OpenRiaServices.DomainServices.Tools
                 }
                 else
                 {
-                    loggingService.LogError(string.Format("Failed to load the {0} assembly using the path {1}", OpenRiaServices_DomainServices_Server_Assembly, serverAssemblyPath));
+                    loggingService.LogError(string.Format(CultureInfo.CurrentCulture,
+                        Resource.ClientCodeGen_Failed_Loading_OpenRiaServices_Assembly, filename, serverAssemblyPath));
                 }
 
             }
             else
             {
-                loggingService.LogError(string.Format("The server project does not contain a reference to {0}", OpenRiaServices_DomainServices_Server_Assembly));
+                loggingService.LogError(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Missing_OpenRiaServices_Reference, filename));
             }
         }
 

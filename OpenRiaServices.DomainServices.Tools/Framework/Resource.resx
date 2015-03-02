@@ -638,4 +638,16 @@ Gets a user representing the authenticated identity.
   <data name="CodeGen_DomainContext_Invoke_Method_CancellationToken_Parameter_Comment" xml:space="preserve">
     <value>A cancellation token that can be used to cancel the work</value>
   </data>
+  <data name="ClientCodeGenDispatecher_Threw_Exception_Before_Generate" xml:space="preserve">
+    <value>Unexpected exception thrown before code gen could be started, this indicates a serious error which might be caused by missing or corrupt assemblies.</value>
+  </data>
+  <data name="ClientCodeGen_Failed_Loading_OpenRiaServices_Assembly" xml:space="preserve">
+    <value>Failed to load the {0} assembly using the path {1}, code generation might fail. Is the server project missing a reference to OpenRiaServices?</value>
+  </data>
+  <data name="ClientCodeGen_Missing_OpenRiaServices_Reference" xml:space="preserve">
+    <value>The server project does not contain a reference to {0}, code generation might fail. Is the server project missing a reference to OpenRiaServices?</value>
+  </data>
+  <data name="ClientCodeGen_SignedTools_UnsignedServer" xml:space="preserve">
+    <value>You are usigned the signed code generation but the server assemblies are unsigned, consider using the unsigned code generation package instead since code generation might fail.</value>
+  </data>
 </root>
