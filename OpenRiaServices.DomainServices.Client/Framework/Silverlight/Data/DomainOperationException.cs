@@ -165,7 +165,8 @@ namespace OpenRiaServices.DomainServices.Client
             this._data.StackTrace = stackTrace;
             this._data.ErrorCode = errorCode;
             // Iterate the enumerable now in order to capture the validation errors at the moment the exception is created
-            this._data.ValidationResults = new ReadOnlyCollection<ValidationResult>(validationErrors.ToList());
+            if (validationErrors != null)
+                this._data.ValidationResults = new ReadOnlyCollection<ValidationResult>(validationErrors.ToList());
             
 #if !SILVERLIGHT
             // TODO: uncomment when CLR fixes 851783
