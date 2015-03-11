@@ -128,7 +128,9 @@ namespace OpenRiaServices.DomainServices.Tools
             var customMethodAttribute = customMethod.OperationAttribute as EntityActionAttribute;
             bool allowMultipleInvocations = customMethodAttribute != null && customMethodAttribute.AllowMultipleInvocations;
             method.CustomAttributes.Add(
-                new CodeAttributeDeclaration("EntityAction",
+                
+                new CodeAttributeDeclaration(
+                    CodeGenUtilities.GetTypeReference(TypeConstants.EntityActionAttributeFullName, (string)this._proxyClass.UserData["Namespace"], false),
                     new CodeAttributeArgument(new CodePrimitiveExpression(customMethodName)),
                     new CodeAttributeArgument("AllowMultipleInvocations", 
                                                 new CodePrimitiveExpression(allowMultipleInvocations))
