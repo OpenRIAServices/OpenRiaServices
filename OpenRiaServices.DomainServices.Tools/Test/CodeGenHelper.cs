@@ -25,7 +25,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             get
             {
-                return 4.0m;
+                return 5.0m;
             }
         }
 

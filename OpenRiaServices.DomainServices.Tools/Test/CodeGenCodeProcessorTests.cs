@@ -132,7 +132,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                                                 Resource.ClientCodeGen_DomainService_CodeProcessor_ExceptionCaught,
                                                 typeof(CodeProcessor_Throws),
                                                 typeof(TestProvider_Throws),
-                                                "The method or operation is not implemented."));
+                                                (new NotImplementedException()).Message));
         }
 
         /// <summary>

@@ -228,14 +228,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 string refProject1Contents = string.Format(@"
 <Project ToolsVersion=""4.0"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
   <PropertyGroup>
-    <LinkedServerProject>{0}</LinkedServerProject>
+    <LinkedOpenRiaServerProject>{0}</LinkedOpenRiaServerProject>
   </PropertyGroup>
 </Project>", serverProject1);
 
                 string refProject2Contents = string.Format(@"
 <Project ToolsVersion=""4.0"" DefaultTargets=""Build"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
   <PropertyGroup>
-    <LinkedServerProject>{0}</LinkedServerProject>
+    <LinkedOpenRiaServerProject>{0}</LinkedOpenRiaServerProject>
   </PropertyGroup>
 </Project>", serverProject2);
 

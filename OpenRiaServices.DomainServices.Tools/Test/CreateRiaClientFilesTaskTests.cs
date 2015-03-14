@@ -344,9 +344,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, expectedServer2NamedSharedFiles);
 
                 // ---------------------------------------------
-                // RiaFiles.txt should have been generated
+                // OpenRiaFiles.txt should have been generated
                 // ---------------------------------------------
-                string fileList = Path.Combine(outputFolder, "ClientClassLib.RiaFiles.txt");
+                string fileList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaFiles.txt");
                 Assert.IsTrue(File.Exists(fileList), "Expected code gen to have created " + fileList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
@@ -362,7 +362,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // ---------------------------------------------
                 // Client and server reference lists should have been generated
                 // ---------------------------------------------
-                string refList = Path.Combine(outputFolder, "ClientClassLib.RiaClientRefs.txt");
+                string refList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaClientRefs.txt");
                 Assert.IsTrue(File.Exists(refList), "Expected code gen to have created " + refList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
@@ -374,7 +374,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 Assert.IsTrue(refListContents.Contains("DataAnnotations.dll"), "Expected to see DataAnnotations in client ref list but saw " + refListContents);
 
                 // Repeat for server references
-                refList = Path.Combine(outputFolder, "ClientClassLib.RiaServerRefs.txt");
+                refList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaServerRefs.txt");
                 Assert.IsTrue(File.Exists(refList), "Expected code gen to have created " + refList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 
@@ -771,7 +771,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 string outputFolder = task.OutputPath;
                 Assert.IsTrue(Directory.Exists(outputFolder), "Expected task to have created " + outputFolder);
 
-                string clientRefList = Path.Combine(outputFolder, "ClientClassLib.RiaClientRefs.txt");
+                string clientRefList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaClientRefs.txt");
                 Assert.IsTrue(File.Exists(clientRefList), "Expected code gen to have created " + clientRefList);
 
                 // Delete our client reference file -- thus it is forced to regen
@@ -779,7 +779,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 Assert.IsFalse(File.Exists(clientRefList), "Failed to delete file");
 
                 // Repeat for server references
-                string serverRefList = Path.Combine(outputFolder, "ClientClassLib.RiaServerRefs.txt");
+                string serverRefList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaServerRefs.txt");
                 Assert.IsTrue(File.Exists(serverRefList), "Expected code gen to have created " + serverRefList);
                 File.Delete(serverRefList);
                 Assert.IsFalse(File.Exists(serverRefList), "Failed to delete file");

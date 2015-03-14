@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     internal class CompilerHelper
     {
         // The version of Silverlight we use in registry keys below
-        private const string SLVER = "v4.0";
+        private const string SLVER = "v5.0";
 
         /// <summary>
         /// Invokes CSC to build the given files against the given set of references
