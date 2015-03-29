@@ -189,7 +189,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityActionAttributeFullName = "OpenRiaServices.DomainServices.Client.EntityActionAttribute";
+        public const string EntityActionAttributeFullName = "OpenRiaServices.DomainServices.Client.EntityAction";
 
         // TODO: Enable when WebContextGenerator.cs supports Forms Authentication.  
         ///// <summary>
