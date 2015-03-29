@@ -129,38 +129,33 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         public static ArgumentException ExpectArgumentException(GenericDelegate del, string exceptionMessage, string paramName)
         {
-            return ExpectArgumentException(del, exceptionMessage + "\r\nParameter name: " + paramName);
-        }
-
-        public static ArgumentException ExpectArgumentExceptionNullOrEmpty(GenericDelegate del, string paramName)
-        {
-            return ExpectArgumentException(del, "Value cannot be null or empty.\r\nParameter name: " + paramName);
+            ArgumentException e = ExpectExceptionHelper<ArgumentException>(del);
+            var expectedException = new ArgumentException(exceptionMessage, paramName);
+            Assert.AreEqual(expectedException.Message, e.Message);
+            return e;
         }
 
         public static ArgumentNullException ExpectArgumentNullExceptionStandard(GenericDelegate del, string paramName)
         {
             ArgumentNullException e = ExpectExceptionHelper<ArgumentNullException>(del);
-            Assert.AreEqual("Value cannot be null.\r\nParameter name: " + paramName, e.Message);
+            var expectedException = new ArgumentNullException(paramName);
+            Assert.AreEqual(expectedException.Message, e.Message);
+#if !SILVERLIGHT
+            Assert.AreEqual(paramName, e.ParamName, "Incorrect exception parameter name.");
+#endif
             return e;
         }
 
         public static ArgumentNullException ExpectArgumentNullException(GenericDelegate del, string paramName)
         {
-            ArgumentNullException e = ExpectExceptionHelper<ArgumentNullException>(del);
-#if !SILVERLIGHT
-            Assert.AreEqual(paramName, e.ParamName, "Incorrect exception parameter name.");
-#endif
-            return e;
+            return ExpectArgumentNullExceptionStandard(del, paramName);
         }
-
 
         public static ArgumentNullException ExpectArgumentNullException(GenericDelegate del, string exceptionMessage, string paramName)
         {
             ArgumentNullException e = ExpectExceptionHelper<ArgumentNullException>(del);
-#if !SILVERLIGHT
-            Assert.AreEqual(paramName, e.ParamName, "Incorrect exception parameter name.");
-#endif
-            Assert.AreEqual(exceptionMessage + Environment.NewLine + "Parameter name: " + paramName, e.Message);
+            var expectedException = new ArgumentNullException(paramName, exceptionMessage);
+            Assert.AreEqual(expectedException.Message, e.Message);
             return e;
         }
 
