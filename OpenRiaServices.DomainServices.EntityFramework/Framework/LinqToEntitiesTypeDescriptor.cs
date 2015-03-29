@@ -168,7 +168,9 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
                 
                 // Add Required attribute to metadata if the member cannot be null and it is either a reference type or a Nullable<T>
-                if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) && pd.Attributes.OfType<DatabaseGeneratedAttribute>().Any(dga=>dga.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
+                // unless it is a database generated field
+                if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) 
+                    && !pd.Attributes.OfType<DatabaseGeneratedAttribute>().Any(dga=>dga.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
                     && pd.Attributes[typeof(RequiredAttribute)] == null)
                 {
                     attributes.Add(new RequiredAttribute());
