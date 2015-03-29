@@ -2495,7 +2495,6 @@ namespace TestDomainServices.EF
     using OpenRiaServices.DomainServices;
     using OpenRiaServices.DomainServices.Client;
     using OpenRiaServices.DomainServices.Client.ApplicationServices;
-    using AdventureWorksModel;
     
     
     /// <summary>
