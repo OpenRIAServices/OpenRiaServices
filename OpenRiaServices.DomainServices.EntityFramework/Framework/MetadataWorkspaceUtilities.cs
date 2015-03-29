@@ -103,12 +103,20 @@ namespace System.Data.Mapping
                     if (edmItemCollection.TryGetEntityContainer(currentType.Name, out container))
                     {
                         StoreItemCollection store = new StoreItemCollection(workspaceInfo.Ssdl);
+#if DBCONTEXT // This actually means EF6+
+                        MetadataWorkspace workspace = new MetadataWorkspace(
+                        () => edmItemCollection,
+                        () => store,
+                        () => new StorageMappingItemCollection(edmItemCollection, store, workspaceInfo.Msl),
+                        () => new ObjectItemCollection());
+#else // EF4
                         StorageMappingItemCollection mapping = new StorageMappingItemCollection(edmItemCollection, store, workspaceInfo.Msl);
                         MetadataWorkspace workspace = new MetadataWorkspace();
                         workspace.RegisterItemCollection(edmItemCollection);
                         workspace.RegisterItemCollection(store);
                         workspace.RegisterItemCollection(mapping);
                         workspace.RegisterItemCollection(new ObjectItemCollection());
+#endif
                         return workspace;
                     }
 
