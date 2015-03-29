@@ -9,11 +9,10 @@
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Note: This is just an alias for the new OpenRiaServices.Client.CodeGen package in order to make upgrading easy.
-OpenRiaServices.Silverlight.CodeGen provides the MsBuild Tasks to generate the proxy.</description>
+        <description>Note: This is just an alias for the new OpenRiaServices.Client.CodeGen package in order to make upgrading easy.</description>
         <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
-        <releaseNotes />
-        <copyright>2013 Outercurve Foundation</copyright>
+        <releaseNotes>4.4.0.3 - Uses OpenRiaServices.Client.CodeGen which is the new name</releaseNotes>
+        <copyright>2015 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
       <dependencies>
