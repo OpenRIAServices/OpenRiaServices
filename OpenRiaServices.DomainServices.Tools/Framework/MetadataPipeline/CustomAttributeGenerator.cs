@@ -641,7 +641,10 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>True if the attribute should be blocked.</returns>
         private static bool IsAttributeBlocked(Type attributeType)
         {
-            return blockList.Contains(attributeType);
+            return blockList.Contains(attributeType)
+                // __DynamicallyInvokableAttribute might be added at compile time, don't propagate them
+                || attributeType.FullName == "__DynamicallyInvokableAttribute"
+                ;
         }
 
         /// <summary>
