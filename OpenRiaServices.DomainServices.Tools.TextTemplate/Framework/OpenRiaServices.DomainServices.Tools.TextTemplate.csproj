@@ -254,6 +254,11 @@
       <DependentUpon>ClientCodeGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="ClientCodeGenerator.partial.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="TextTemplateResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -266,12 +271,6 @@
       <DependentUpon>WebContextGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="WebContextGenerator.partial.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-      <Link>Resource.Designer.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="CodeGeneratorTextTemplate.tt">
@@ -342,11 +341,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Resource.resx">
-      <LogicalName>OpenRiaServices.DomainServices.Tools.Resource.resources</LogicalName>
+    <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <Link>Resource.resx</Link>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="TextTemplateResource.resx">

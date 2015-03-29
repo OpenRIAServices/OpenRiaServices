@@ -423,9 +423,9 @@ Change its project file to set DebugType to 'full' or 'pdbonly' if you intend to
 If a generator with this name exists elsewhere, add a reference to its assembly to the
 '{2}' project.
 Otherwise, manually edit the '{3}' project
-to add a &lt;RiaClientCodeGeneratorName&gt; property to name a valid generator.
+to add a &lt;OpenRiaClientCodeGeneratorName&gt; property to name a valid generator.
 To specify the default generator add this property:
-  &lt;RiaClientCodeGeneratorName&gt;{4}&lt;/RiaClientCodeGeneratorName&gt;
+  &lt;OpenRiaClientCodeGeneratorName&gt;{4}&lt;/OpenRiaClientCodeGeneratorName&gt;
 </value>
   </data>
   <data name="CommentOnCreated" xml:space="preserve">
@@ -525,7 +525,7 @@ The default code generator will be used.</value>
   </data>
   <data name="Multiple_Custom_Code_Generators" xml:space="preserve">
     <value>Multiple custom code generators are available for {0}:
-{1}Please set the RiaClientCodeGeneratorName property in the client project to select which of these you wish to use.
+{1}Please set the OpenRiaClientCodeGeneratorName property in the client project to select which of these you wish to use.
 </value>
   </data>
   <data name="Multiple_Custom_Code_Generators_Using_Default" xml:space="preserve">
@@ -533,9 +533,9 @@ The default code generator will be used.</value>
 {1}The default generator will be used because none was specified.
 To specify one manually edit the '{2}' project
 and add a property like this:
-  &lt;RiaClientCodeGeneratorName&gt;{3}&lt;/RiaClientCodeGeneratorName&gt;
+  &lt;OpenRiaClientCodeGeneratorName&gt;{3}&lt;/OpenRiaClientCodeGeneratorName&gt;
 To specify the default generator add this property:
-  &lt;RiaClientCodeGeneratorName&gt;{4}&lt;/RiaClientCodeGeneratorName&gt;</value>
+  &lt;OpenRiaClientCodeGeneratorName&gt;{4}&lt;/OpenRiaClientCodeGeneratorName&gt;</value>
   </data>
   <data name="Multiple_Named_Code_Generators" xml:space="preserve">
     <value>Multiple code generators named '{0}' are available for '{1}':
@@ -543,7 +543,7 @@ To specify the default generator add this property:
 modify them to have unique names,
 or manually edit the '{4}' project
 to add a property that fully qualifies one, like this:
-    &lt;RiaClientCodeGeneratorName&gt;{5}&lt;/RiaClientCodeGeneratorName&gt;</value>
+    &lt;OpenRiaClientCodeGeneratorName&gt;{5}&lt;/OpenRiaClientCodeGeneratorName&gt;</value>
   </data>
   <data name="Null_Language_Property" xml:space="preserve">
     <value>The 'ClientProxyCodeGenerationOptions.Language' property cannot be null or empty.</value>
@@ -567,15 +567,15 @@ to add a property that fully qualifies one, like this:
     <value>Extensibility Method Definitions</value>
   </data>
   <data name="RIA_Link_Present" xml:space="preserve">
-    <value>A WCF RIA Services Link exists between project '{0}' and project '{1}'.</value>
+    <value>A Open Ria Services Link exists between project '{0}' and project '{1}'.</value>
   </data>
   <data name="RIA_Link_Prevents_Copy" xml:space="preserve">
-    <value>Shared files will not be copied from '{0}' due to an existing WCF RIA Services Link from '{1}'.</value>
+    <value>Shared files will not be copied from '{0}' due to an existing Open Ria Services Link from '{1}'.</value>
   </data>
   <data name="Server_Project_File_Does_Not_Exist" xml:space="preserve">
-    <value>The Silverlight project '{0}' has a WCF RIA Services Link to the project '{1}' which does not exist.
+    <value>The Silverlight project '{0}' has a Open Ria Services Link to the project '{1}' which does not exist.
 Did you rename or move that project?
-Please modify the Project Properties of '{0}' and set the WCF RIA Services Link to point to a valid project.</value>
+Please modify the Project Properties of '{0}' and set the Open Ria Services Link to point to a valid project.</value>
   </data>
   <data name="SharedCodeServiceParameters_Parameter_Null" xml:space="preserve">
     <value>SharedCodeServiceParameters.{0} cannot be null.</value>
@@ -634,5 +634,20 @@ Gets a user representing the authenticated identity.
   </data>
   <data name="ClientCodeGen_ComplexTypesCannotBeShared_Reference" xml:space="preserve">
     <value>The Complex Type '{0}' already exists in another assembly. Complex Types cannot be defined in multiple assemblies.</value>
+  </data>
+  <data name="CodeGen_DomainContext_Invoke_Method_CancellationToken_Parameter_Comment" xml:space="preserve">
+    <value>A cancellation token that can be used to cancel the work</value>
+  </data>
+  <data name="ClientCodeGenDispatecher_Threw_Exception_Before_Generate" xml:space="preserve">
+    <value>Unexpected exception thrown before code gen could be started, this indicates a serious error which might be caused by missing or corrupt assemblies.</value>
+  </data>
+  <data name="ClientCodeGen_Failed_Loading_OpenRiaServices_Assembly" xml:space="preserve">
+    <value>Failed to load the {0} assembly using the path {1}, code generation might fail. Is the server project missing a reference to OpenRiaServices?</value>
+  </data>
+  <data name="ClientCodeGen_Missing_OpenRiaServices_Reference" xml:space="preserve">
+    <value>The server project does not contain a reference to {0}, code generation might fail. Is the server project missing a reference to OpenRiaServices?</value>
+  </data>
+  <data name="ClientCodeGen_SignedTools_UnsignedServer" xml:space="preserve">
+    <value>You are usigned the signed code generation but the server assemblies are unsigned, consider using the unsigned code generation package instead since code generation might fail.</value>
   </data>
 </root>
