@@ -388,7 +388,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // ---------------------------------------------
                 // RiaSourceFiles.txt should have been generated
                 // ---------------------------------------------
-                string sourceFileList = Path.Combine(outputFolder, "ClientClassLib.RiaSourceFiles.txt");
+                string sourceFileList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaSourceFiles.txt");
                 Assert.IsTrue(File.Exists(sourceFileList), "Expected code gen to have created " + sourceFileList + " but saw:" +
                     Environment.NewLine + generatedFiles);
                 string sourceFileListContents = string.Empty;
@@ -403,7 +403,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // ---------------------------------------------
                 // RiaLinks.txt should have been generated
                 // ---------------------------------------------
-                string riaLinkList = Path.Combine(outputFolder, "ClientClassLib.RiaLinks.txt");
+                string riaLinkList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaLinks.txt");
                 Assert.IsTrue(File.Exists(riaLinkList), "Expected code gen to have created " + riaLinkList + " but saw:" +
                     Environment.NewLine + generatedFiles);
 

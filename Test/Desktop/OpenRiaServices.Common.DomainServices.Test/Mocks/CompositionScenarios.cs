@@ -647,7 +647,7 @@ namespace TestDomainServices
         /// Verify that a "named update" method results in the expected
         /// child operations being permitted during codegen
         /// </summary>
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomParentUpdate(Parent parent)
         {
         }
@@ -674,7 +674,7 @@ namespace TestDomainServices
             return null;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomParentUpdate(SelfReferencingComposition sr)
         {
         }

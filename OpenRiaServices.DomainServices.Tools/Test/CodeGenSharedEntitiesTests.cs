@@ -239,8 +239,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 "OnChangeA2Invoking",
                 "OnChangeA1Invoked",
                 "OnChangeA2Invoked",
-                "base.UpdateActionState(\"ChangeA1\", \"CanChangeA1\", \"IsChangeA1Invoked\");",
-                "base.UpdateActionState(\"ChangeA2\", \"CanChangeA2\", \"IsChangeA2Invoked\");",
                 "IsChangeA1Invoked",
                 "IsChangeA2Invoked",
                 "CanChangeA1",

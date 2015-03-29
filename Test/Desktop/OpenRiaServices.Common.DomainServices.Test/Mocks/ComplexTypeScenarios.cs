@@ -30,7 +30,7 @@ namespace TestDomainServices
             }
         }
 
-        [Update(UsingCustomMethod=true)]
+        [EntityAction]
         public void TestAutoSync(ComplexType_Parent parent, Phone phone)
         {
             // update a nested simple member
@@ -136,7 +136,7 @@ namespace TestDomainServices
 
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateHomeAddress(ComplexType_Parent parent, Address newAddress)
         {
 

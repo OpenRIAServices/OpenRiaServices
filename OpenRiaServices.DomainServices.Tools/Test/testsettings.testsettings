@@ -1,0 +1,6 @@
+<TestSettings name="Local" id="00ebe0c6-7b64-49c0-80a5-09796270f111" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Description>These are default test settings for a local test run.</Description>
+  <Deployment>
+    <DeploymentItem filename="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines" outputDirectory=""/>
+  </Deployment>
+</TestSettings>

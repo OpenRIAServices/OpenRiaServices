@@ -706,7 +706,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string diffMessage = string.Empty;
 
             // Compose the abs path to where the test file got deployed by MSTest
-            string referenceFileName = TestHelper.GetTestFileName(codeGenOptions.RelativeDeployDir, codeGenOptions.BaseReferenceFileName + extension);
+            string referenceFileName = TestHelper.GetTestFileName(codeGenOptions.RelativeTestDir, codeGenOptions.BaseReferenceFileName + extension);
 
             Assert.IsTrue(File.Exists(referenceFileName), "Cannot find reference file " + referenceFileName);
             string generatedCode = string.Empty;
@@ -717,7 +717,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 ClientRootNamespace = codeGenOptions.RootNamespace,
                 ClientProjectPath = "MockProject.proj",
                 IsApplicationContextGenerationEnabled = codeGenOptions.GenerateApplicationContexts,
-                UseFullTypeNames = codeGenOptions.UseFullTypeNames
+                UseFullTypeNames = codeGenOptions.UseFullTypeNames,
+                ClientProjectTargetPlatform =  TargetPlatform.Silverlight
             };
 
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(codeGenOptions.Logger, codeGenOptions.SharedCodeService);

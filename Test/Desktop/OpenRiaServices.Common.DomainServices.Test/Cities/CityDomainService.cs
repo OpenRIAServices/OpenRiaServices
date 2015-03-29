@@ -195,6 +195,7 @@ namespace Cities
         }
         #endregion
 
+#pragma warning disable 618 // Service should work with the "old" approach with [Update(UsingCustomMethod = true)]
         #region Domain Methods
         [Update(UsingCustomMethod = true)]
         [CustomValidation(typeof(CityMethodValidator), "ValidateMethod")]
@@ -344,8 +345,7 @@ namespace Cities
             city.EditHistory = "touch=" + touchString;
         }
         #endregion //Derived CUD/Custom/Service methods
-
-
+#pragma warning restore 618
     }
 
     /// <summary>
