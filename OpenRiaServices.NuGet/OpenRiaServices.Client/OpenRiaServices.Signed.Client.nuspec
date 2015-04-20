@@ -2,26 +2,28 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Signed.Client</id>
-        <version>4.4.0.0</version>
+        <version>4.4.0.4</version>
         <title>Open RIA Services Signed Client, Code Generator, and MVVM Support</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
         <projectUrl>http://www.openriaservices.net</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.Signed Client is the full Portable client in a single package.</description>
+        <description>OpenRiaServices.Signed.Client is the full signed OpenRiaServices client for wpf/silverlight and portable libraries in a single package.</description>
         <summary>Open RIA Services - Full client - Signed Version</summary>
         <releaseNotes />
-        <copyright>2013 Outercurve Foundation</copyright>
+        <copyright>2015 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices</tags>
         <dependencies>
             <group>
-                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.4.0.0"/>
-                <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.4.0.0"/>
+                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.4.0.3"/>
+                <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.4.0.3"/>
             </group>
             <group targetFramework="sl50">
-                <dependency id="OpenRiaServices.Signed.ViewModel" version="4.4.0.0"/>
+                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.4.0.3"/>
+                <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.4.0.3"/>
+                <dependency id="OpenRiaServices.Signed.ViewModel" version="4.4.0.3"/>
             </group>
         </dependencies>
     </metadata>

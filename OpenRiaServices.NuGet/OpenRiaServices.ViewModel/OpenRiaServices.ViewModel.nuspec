@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.ViewModel</id>
-    <version>4.4.0.1</version>
+    <version>4.4.0.3</version>
     <title>Open RIA Services ViewModel Extensions</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -12,7 +12,7 @@
     <description>Open RIA Services Toolkit - Silverlight ViewModel (MVVM) features</description>
     <summary>Open RIA Services Toolkit - Silverlight ViewModel (MVVM) features</summary>
     <releaseNotes />
-    <copyright>2013 Outercurve Foundation</copyright>
+    <copyright>2015 Outercurve Foundation</copyright>
     <language />
     <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices</tags>
     <dependencies>
