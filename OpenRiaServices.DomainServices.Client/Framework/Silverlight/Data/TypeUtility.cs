@@ -550,9 +550,16 @@ namespace OpenRiaServices.DomainServices
             {
                 return false;
             }
-            string publicKeyToken = assemblyFullName.Substring(idx + 15);
 
-            return systemAssemblyPublicKeyTokens.Any(p => p.Equals(publicKeyToken, StringComparison.OrdinalIgnoreCase));
+            try
+            {
+               string publicKeyToken = assemblyFullName.Substring(idx + 15, 16);
+               return systemAssemblyPublicKeyTokens.Any(p => p.Equals(publicKeyToken, StringComparison.OrdinalIgnoreCase));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+               return false;
+            }
         }
     }
 }

@@ -201,7 +201,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 // request to recursively load its references.
                 if (!loadedAssemblies.TryGetValue(name.FullName, out referenceAssembly))
                 {
-                    referenceAssembly = AssemblyUtilities.ReflectionOnlyLoad(name, assemblySearchPaths, logger);
+                    referenceAssembly = AssemblyUtilities.ReflectionOnlyLoad(name, assemblySearchPaths, loadedAssemblies, logger);
 
                     // Note: we always put the result into our cache, even for failure.
                     // This prevents us from attempting to load it multiple times
@@ -229,11 +229,12 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         /// <param name="assemblyName">The name of the assembly to load.</param>
         /// <param name="assemblySearchPaths">Optional list of folders to search for assembly references.</param>
+        /// <param name="loadedAssemblies">Dictionary to track already loaded assemblies.</param>
         /// <param name="logger">The optional logger to use to report known load failures.</param>
         /// <returns>The loaded <see cref="Assembly"/> if successful, null if it could not be loaded for a known reason
         /// (and a warning message will have been logged).
         /// </returns>
-        internal static Assembly ReflectionOnlyLoad(AssemblyName assemblyName, IEnumerable<string> assemblySearchPaths, ILogger logger)
+        internal static Assembly ReflectionOnlyLoad(AssemblyName assemblyName, IEnumerable<string> assemblySearchPaths, IDictionary<string, Assembly> loadedAssemblies, ILogger logger)
         {
             System.Diagnostics.Debug.Assert(assemblyName != null, "assemblyName is required");
 
@@ -266,6 +267,15 @@ namespace OpenRiaServices.DomainServices.Tools
             if (assembly == null && assemblySearchPaths != null)
             {
                 assembly = ReflectionOnlyLoadFromSearchPaths(assemblyName, assemblySearchPaths);
+            }
+
+            // If the assembly is still not loaded, try once again against loaded assemblies, this can 
+            // happen for system PCL which are not in search paths but may be of a different version 
+            // than the actual assembly used at runtime. 
+            // Most have the Retargetable flag set, but a pair distributed via Microsoft.BCL* nuget packages are missing this
+            if(assembly == null && assemblyName.Flags.HasFlag(AssemblyNameFlags.Retargetable)) 
+            {
+                assembly = loadedAssemblies.Values.FirstOrDefault(a => a.GetName().Name == assemblyName.Name);
             }
 
             // If we failed, log a warning with the original load failure
