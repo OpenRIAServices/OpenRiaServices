@@ -363,6 +363,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly),
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate),
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation),
+                typeof(TestDomainServices.NamedUpdates.CalculatorDomainService),
             };
             string[] sharedFiles = new string[]
             {
@@ -398,6 +399,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly),
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate),
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation),
+                typeof(TestDomainServices.NamedUpdates.CalculatorDomainService),
             };
             string[] sharedFiles = new string[]
             {

@@ -13648,6 +13648,506 @@ namespace TestDomainServices.NamedUpdates
     
     
     /// <summary>
+    /// The DomainContext corresponding to the 'CalculatorDomainService' DomainService.
+    /// </summary>
+    public sealed partial class CalculatorDomainContext : global::OpenRiaServices.DomainServices.Client.DomainContext
+    {
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorDomainContext"/> class.
+        /// </summary>
+        public CalculatorDomainContext() : 
+                this(new global::System.Uri("TestDomainServices-NamedUpdates-CalculatorDomainService.svc", global::System.UriKind.Relative))
+        {
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified service URI.
+        /// </summary>
+        /// <param name="serviceUri">The CalculatorDomainService service URI.</param>
+        public CalculatorDomainContext(global::System.Uri serviceUri) : 
+                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.NamedUpdates.CalculatorDomainContext.ICalculatorDomainServiceContract), serviceUri, false))
+        {
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified <paramref name="domainClient"/>.
+        /// </summary>
+        /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
+        public CalculatorDomainContext(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+                base(domainClient)
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets the set of <see cref="CalculatorValue"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
+        /// </summary>
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.CalculatorValue> CalculatorValues
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<global::TestDomainServices.NamedUpdates.CalculatorValue>();
+            }
+        }
+        
+        /// <summary>
+        /// Gets the set of <see cref="CalculatorValueOldCodeGen"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
+        /// </summary>
+        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen> CalculatorValueOldCodeGens
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen>();
+            }
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="CalculatorValue"/> entity instances using the 'GetEntities' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValue"/> entity instances.</returns>
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.CalculatorValue> GetEntitiesQuery()
+        {
+            this.ValidateMethod("GetEntitiesQuery", null);
+            return base.CreateQuery<global::TestDomainServices.NamedUpdates.CalculatorValue>("GetEntities", null, false, true);
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="CalculatorValueOldCodeGen"/> entity instances using the 'GetEntitiesOldCodeGen' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValueOldCodeGen"/> entity instances.</returns>
+        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen> GetEntitiesOldCodeGenQuery()
+        {
+            this.ValidateMethod("GetEntitiesOldCodeGenQuery", null);
+            return base.CreateQuery<global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen>("GetEntitiesOldCodeGen", null, false, true);
+        }
+        
+        /// <summary>
+        /// Invokes the 'Add' method of the specified <see cref="CalculatorValue"/> entity.
+        /// </summary>
+        /// <param name="value">The <see cref="CalculatorValue"/> entity instance.</param>
+        /// <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        public void Add(global::TestDomainServices.NamedUpdates.CalculatorValue value, decimal rhs)
+        {
+            value.Add(rhs);
+        }
+        
+        /// <summary>
+        /// Invokes the 'Multiply' method of the specified <see cref="CalculatorValue"/> entity.
+        /// </summary>
+        /// <param name="value">The <see cref="CalculatorValue"/> entity instance.</param>
+        /// <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        public void Multiply(global::TestDomainServices.NamedUpdates.CalculatorValue value, decimal rhs)
+        {
+            value.Multiply(rhs);
+        }
+        
+        /// <summary>
+        /// Invokes the 'AddTwice' method of the specified <see cref="CalculatorValueOldCodeGen"/> entity.
+        /// </summary>
+        /// <param name="value">The <see cref="CalculatorValueOldCodeGen"/> entity instance.</param>
+        /// <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        public void AddTwice(global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen value, decimal rhs)
+        {
+            value.AddTwice(rhs);
+        }
+        
+        /// <summary>
+        /// Creates a new EntityContainer for this DomainContext's EntitySets.
+        /// </summary>
+        /// <returns>A new container instance.</returns>
+        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        {
+            return new global::TestDomainServices.NamedUpdates.CalculatorDomainContext.CalculatorDomainContextEntityContainer();
+        }
+        
+        /// <summary>
+        /// Service contract for the 'CalculatorDomainService' DomainService.
+        /// </summary>
+        [global::System.ServiceModel.ServiceContractAttribute()]
+        [global::System.ServiceModel.ServiceKnownTypeAttribute(typeof(decimal))]
+        public interface ICalculatorDomainServiceContract
+        {
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetEntities' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/CalculatorDomainService/GetEntities", ReplyAction="http://tempuri.org/CalculatorDomainService/GetEntitiesResponse")]
+            global::System.IAsyncResult BeginGetEntities(global::System.AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetEntities'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.CalculatorValue> EndGetEntities(global::System.IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetEntitiesOldCodeGen' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/CalculatorDomainService/GetEntitiesOldCodeGen", ReplyAction="http://tempuri.org/CalculatorDomainService/GetEntitiesOldCodeGenResponse")]
+            global::System.IAsyncResult BeginGetEntitiesOldCodeGen(global::System.AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetEntitiesOldCodeGen'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetEntitiesOldCodeGen'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetEntitiesOldCodeGen' operation.</returns>
+            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen> EndGetEntitiesOldCodeGen(global::System.IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'SubmitChanges' operation.
+            /// </summary>
+            /// <param name="changeSet">The change-set to submit.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/CalculatorDomainService/SubmitChanges", ReplyAction="http://tempuri.org/CalculatorDomainService/SubmitChangesResponse")]
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
+            /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+        }
+        
+        internal sealed class CalculatorDomainContextEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        {
+            
+            public CalculatorDomainContextEntityContainer()
+            {
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.CalculatorValue>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// The 'CalculatorValue' entity class.
+    /// </summary>
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
+    public sealed partial class CalculatorValue : global::OpenRiaServices.DomainServices.Client.Entity
+    {
+        
+        private int _key;
+        
+        private decimal _value;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnKeyChanging(int value);
+        partial void OnKeyChanged();
+        partial void OnValueChanging(decimal value);
+        partial void OnValueChanged();
+        partial void OnAddInvoking(decimal rhs);
+        partial void OnAddInvoked();
+        partial void OnMultiplyInvoking(decimal rhs);
+        partial void OnMultiplyInvoked();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorValue"/> class.
+        /// </summary>
+        public CalculatorValue()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Key' value.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
+        [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int Key
+        {
+            get
+            {
+                return this._key;
+            }
+            set
+            {
+                if ((this._key != value))
+                {
+                    this.OnKeyChanging(value);
+                    this.ValidateProperty("Key", value);
+                    this._key = value;
+                    this.RaisePropertyChanged("Key");
+                    this.OnKeyChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Value' value.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Value
+        {
+            get
+            {
+                return this._value;
+            }
+            set
+            {
+                if ((this._value != value))
+                {
+                    this.OnValueChanging(value);
+                    this.RaiseDataMemberChanging("Value");
+                    this.ValidateProperty("Value", value);
+                    this._value = value;
+                    this.RaiseDataMemberChanged("Value");
+                    this.OnValueChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether the 'Add' action has been invoked on this entity.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.DisplayAttribute(AutoGenerateField=false)]
+        public bool IsAddInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("Add");
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether the 'Add' method can be invoked on this entity.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.DisplayAttribute(AutoGenerateField=false)]
+        public bool CanAdd
+        {
+            get
+            {
+                return base.CanInvokeAction("Add");
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether the 'Multiply' action has been invoked on this entity.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.DisplayAttribute(AutoGenerateField=false)]
+        public bool IsMultiplyInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("Multiply");
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether the 'Multiply' method can be invoked on this entity.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.DisplayAttribute(AutoGenerateField=false)]
+        public bool CanMultiply
+        {
+            get
+            {
+                return base.CanInvokeAction("Multiply");
+            }
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._key;
+        }
+        
+        /// <summary>
+        /// Invokes the 'Add' action on this entity.
+        /// </summary>
+        /// <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
+        [global::OpenRiaServices.DomainServices.Client.EntityAction("Add", AllowMultipleInvocations=true)]
+        public void Add(decimal rhs)
+        {
+            this.OnAddInvoking(rhs);
+            base.InvokeAction("Add", rhs);
+            this.OnAddInvoked();
+        }
+        
+        /// <summary>
+        /// Invokes the 'Multiply' action on this entity.
+        /// </summary>
+        /// <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
+        [global::OpenRiaServices.DomainServices.Client.EntityAction("Multiply", AllowMultipleInvocations=true)]
+        public void Multiply(decimal rhs)
+        {
+            this.OnMultiplyInvoking(rhs);
+            base.InvokeAction("Multiply", rhs);
+            this.OnMultiplyInvoked();
+        }
+    }
+    
+    /// <summary>
+    /// The 'CalculatorValueOldCodeGen' entity class.
+    /// </summary>
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]
+    public sealed partial class CalculatorValueOldCodeGen : global::OpenRiaServices.DomainServices.Client.Entity
+    {
+        
+        private int _key;
+        
+        private decimal _value;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnKeyChanging(int value);
+        partial void OnKeyChanged();
+        partial void OnValueChanging(decimal value);
+        partial void OnValueChanged();
+        partial void OnAddTwiceInvoking(decimal rhs);
+        partial void OnAddTwiceInvoked();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorValueOldCodeGen"/> class.
+        /// </summary>
+        public CalculatorValueOldCodeGen()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Key' value.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
+        [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public int Key
+        {
+            get
+            {
+                return this._key;
+            }
+            set
+            {
+                if ((this._key != value))
+                {
+                    this.OnKeyChanging(value);
+                    this.ValidateProperty("Key", value);
+                    this._key = value;
+                    this.RaisePropertyChanged("Key");
+                    this.OnKeyChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Value' value.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
+        [global::System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Value
+        {
+            get
+            {
+                return this._value;
+            }
+            set
+            {
+                if ((this._value != value))
+                {
+                    this.OnValueChanging(value);
+                    this.RaiseDataMemberChanging("Value");
+                    this.ValidateProperty("Value", value);
+                    this._value = value;
+                    this.RaiseDataMemberChanged("Value");
+                    this.OnValueChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether the 'AddTwice' action has been invoked on this entity.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.DisplayAttribute(AutoGenerateField=false)]
+        public bool IsAddTwiceInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("AddTwice");
+            }
+        }
+        
+        /// <summary>
+        /// Gets a value indicating whether the 'AddTwice' method can be invoked on this entity.
+        /// </summary>
+        [global::System.ComponentModel.DataAnnotations.DisplayAttribute(AutoGenerateField=false)]
+        public bool CanAddTwice
+        {
+            get
+            {
+                return base.CanInvokeAction("AddTwice");
+            }
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._key;
+        }
+        
+        /// <summary>
+        /// Invokes the 'AddTwice' action on this entity.
+        /// </summary>
+        /// <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
+        [global::OpenRiaServices.DomainServices.Client.EntityAction("AddTwice", AllowMultipleInvocations=false)]
+        public void AddTwice(decimal rhs)
+        {
+            this.OnAddTwiceInvoking(rhs);
+            base.InvokeAction("AddTwice", rhs);
+            this.OnAddTwiceInvoked();
+        }
+    }
+    
+    /// <summary>
     /// The 'MockComplexObject1' class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")]

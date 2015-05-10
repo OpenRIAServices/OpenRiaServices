@@ -12919,6 +12919,480 @@ End Namespace
 Namespace TestDomainServices.NamedUpdates
     
     ''' <summary>
+    ''' The DomainContext corresponding to the 'CalculatorDomainService' DomainService.
+    ''' </summary>
+    Partial Public NotInheritable Class CalculatorDomainContext
+        Inherits DomainContext
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="CalculatorDomainContext"/> class.
+        ''' </summary>
+        Public Sub New()
+            Me.New(New Uri("TestDomainServices-NamedUpdates-CalculatorDomainService.svc", UriKind.Relative))
+        End Sub
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified service URI.
+        ''' </summary>
+        ''' <param name="serviceUri">The CalculatorDomainService service URI.</param>
+        Public Sub New(ByVal serviceUri As Uri)
+            Me.New(DomainContext.CreateDomainClient(GetType(ICalculatorDomainServiceContract), serviceUri, false))
+        End Sub
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified <paramref name="domainClient"/>.
+        ''' </summary>
+        ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
+        Public Sub New(ByVal domainClient As DomainClient)
+            MyBase.New(domainClient)
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets the set of <see cref="CalculatorValue"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
+        ''' </summary>
+        Public ReadOnly Property CalculatorValues() As EntitySet(Of CalculatorValue)
+            Get
+                Return MyBase.EntityContainer.GetEntitySet(Of CalculatorValue)
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Gets the set of <see cref="CalculatorValueOldCodeGen"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
+        ''' </summary>
+        Public ReadOnly Property CalculatorValueOldCodeGens() As EntitySet(Of CalculatorValueOldCodeGen)
+            Get
+                Return MyBase.EntityContainer.GetEntitySet(Of CalculatorValueOldCodeGen)
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="CalculatorValue"/> entity instances using the 'GetEntities' query.
+        ''' </summary>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValue"/> entity instances.</returns>
+        Public Function GetEntitiesQuery() As EntityQuery(Of CalculatorValue)
+            Me.ValidateMethod("GetEntitiesQuery", Nothing)
+            Return MyBase.CreateQuery(Of CalculatorValue)("GetEntities", Nothing, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="CalculatorValueOldCodeGen"/> entity instances using the 'GetEntitiesOldCodeGen' query.
+        ''' </summary>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValueOldCodeGen"/> entity instances.</returns>
+        Public Function GetEntitiesOldCodeGenQuery() As EntityQuery(Of CalculatorValueOldCodeGen)
+            Me.ValidateMethod("GetEntitiesOldCodeGenQuery", Nothing)
+            Return MyBase.CreateQuery(Of CalculatorValueOldCodeGen)("GetEntitiesOldCodeGen", Nothing, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Invokes the 'Add' method of the specified <see cref="CalculatorValue"/> entity.
+        ''' </summary>
+        ''' <param name="value">The <see cref="CalculatorValue"/> entity instance.</param>
+        ''' <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        Public Sub Add(ByVal value As CalculatorValue, ByVal rhs As Decimal)
+            value.Add(rhs)
+        End Sub
+        
+        ''' <summary>
+        ''' Invokes the 'Multiply' method of the specified <see cref="CalculatorValue"/> entity.
+        ''' </summary>
+        ''' <param name="value">The <see cref="CalculatorValue"/> entity instance.</param>
+        ''' <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        Public Sub Multiply(ByVal value As CalculatorValue, ByVal rhs As Decimal)
+            value.Multiply(rhs)
+        End Sub
+        
+        ''' <summary>
+        ''' Invokes the 'AddTwice' method of the specified <see cref="CalculatorValueOldCodeGen"/> entity.
+        ''' </summary>
+        ''' <param name="value">The <see cref="CalculatorValueOldCodeGen"/> entity instance.</param>
+        ''' <param name="rhs">The value for the 'rhs' parameter for this action.</param>
+        Public Sub AddTwice(ByVal value As CalculatorValueOldCodeGen, ByVal rhs As Decimal)
+            value.AddTwice(rhs)
+        End Sub
+        
+        ''' <summary>
+        ''' Creates a new EntityContainer for this DomainContext's EntitySets.
+        ''' </summary>
+        ''' <returns>A new container instance.</returns>
+        Protected Overrides Function CreateEntityContainer() As EntityContainer
+            Return New CalculatorDomainContextEntityContainer()
+        End Function
+        
+        ''' <summary>
+        ''' Service contract for the 'CalculatorDomainService' DomainService.
+        ''' </summary>
+        <ServiceContract(),  _
+         ServiceKnownType(GetType(Decimal))>  _
+        Public Interface ICalculatorDomainServiceContract
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetEntities' operation.
+            ''' </summary>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false),  _
+             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/CalculatorDomainService/GetEntities", ReplyAction:="http://tempuri.org/CalculatorDomainService/GetEntitiesResponse")>  _
+            Function BeginGetEntities(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetEntities'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
+            Function EndGetEntities(ByVal result As IAsyncResult) As QueryResult(Of CalculatorValue)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetEntitiesOldCodeGen' operation.
+            ''' </summary>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false),  _
+             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/CalculatorDomainService/GetEntitiesOldCodeGen", ReplyAction:="http://tempuri.org/CalculatorDomainService/GetEntitiesOldCodeGenResponse")>  _
+            Function BeginGetEntitiesOldCodeGen(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetEntitiesOldCodeGen'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetEntitiesOldCodeGen'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetEntitiesOldCodeGen' operation.</returns>
+            Function EndGetEntitiesOldCodeGen(ByVal result As IAsyncResult) As QueryResult(Of CalculatorValueOldCodeGen)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'SubmitChanges' operation.
+            ''' </summary>
+            ''' <param name="changeSet">The change-set to submit.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/CalculatorDomainService/SubmitChanges", ReplyAction:="http://tempuri.org/CalculatorDomainService/SubmitChangesResponse")>  _
+            Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
+            ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
+            Function EndSubmitChanges(ByVal result As IAsyncResult) As IEnumerable(Of ChangeSetEntry)
+        End Interface
+        
+        Friend NotInheritable Class CalculatorDomainContextEntityContainer
+            Inherits EntityContainer
+            
+            Public Sub New()
+                MyBase.New
+                Me.CreateEntitySet(Of CalculatorValue)(EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of CalculatorValueOldCodeGen)(EntitySetOperations.Edit)
+            End Sub
+        End Class
+    End Class
+    
+    ''' <summary>
+    ''' The 'CalculatorValue' entity class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
+    Partial Public NotInheritable Class CalculatorValue
+        Inherits Entity
+        
+        Private _key As Integer
+        
+        Private _value As Decimal
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnKeyChanging(ByVal value As Integer)
+        End Sub
+        Private Partial Sub OnKeyChanged()
+        End Sub
+        Private Partial Sub OnValueChanging(ByVal value As Decimal)
+        End Sub
+        Private Partial Sub OnValueChanged()
+        End Sub
+        Private Partial Sub OnAddInvoking(ByVal rhs As Decimal)
+        End Sub
+        Private Partial Sub OnAddInvoked()
+        End Sub
+        Private Partial Sub OnMultiplyInvoking(ByVal rhs As Decimal)
+        End Sub
+        Private Partial Sub OnMultiplyInvoked()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="CalculatorValue"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'Key' value.
+        ''' </summary>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
+        Public Property Key() As Integer
+            Get
+                Return Me._key
+            End Get
+            Set
+                If ((Me._key = value)  _
+                            = false) Then
+                    Me.OnKeyChanging(value)
+                    Me.ValidateProperty("Key", value)
+                    Me._key = value
+                    Me.RaisePropertyChanged("Key")
+                    Me.OnKeyChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'Value' value.
+        ''' </summary>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
+        Public Property Value() As Decimal
+            Get
+                Return Me._value
+            End Get
+            Set
+                If ((Me._value = value)  _
+                            = false) Then
+                    Me.OnValueChanging(value)
+                    Me.RaiseDataMemberChanging("Value")
+                    Me.ValidateProperty("Value", value)
+                    Me._value = value
+                    Me.RaiseDataMemberChanged("Value")
+                    Me.OnValueChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets a value indicating whether the 'Add' action has been invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=false)>  _
+        Public ReadOnly Property IsAddInvoked() As Boolean
+            Get
+                Return MyBase.IsActionInvoked("Add")
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Gets a value indicating whether the 'Add' method can be invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=false)>  _
+        Public ReadOnly Property CanAdd() As Boolean
+            Get
+                Return MyBase.CanInvokeAction("Add")
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Gets a value indicating whether the 'Multiply' action has been invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=false)>  _
+        Public ReadOnly Property IsMultiplyInvoked() As Boolean
+            Get
+                Return MyBase.IsActionInvoked("Multiply")
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Gets a value indicating whether the 'Multiply' method can be invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=false)>  _
+        Public ReadOnly Property CanMultiply() As Boolean
+            Get
+                Return MyBase.CanInvokeAction("Multiply")
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Computes a value from the key fields that uniquely identifies this entity instance.
+        ''' </summary>
+        ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
+        Public Overrides Function GetIdentity() As Object
+            Return Me._key
+        End Function
+        
+        ''' <summary>
+        ''' Invokes the 'Add' action on this entity.
+        ''' </summary>
+        ''' <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
+        <EntityAction("Add", AllowMultipleInvocations:=true)>  _
+        Public Sub Add(ByVal rhs As Decimal)
+            Me.OnAddInvoking(rhs)
+            MyBase.InvokeAction("Add", rhs)
+            Me.OnAddInvoked
+        End Sub
+        
+        ''' <summary>
+        ''' Invokes the 'Multiply' action on this entity.
+        ''' </summary>
+        ''' <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
+        <EntityAction("Multiply", AllowMultipleInvocations:=true)>  _
+        Public Sub Multiply(ByVal rhs As Decimal)
+            Me.OnMultiplyInvoking(rhs)
+            MyBase.InvokeAction("Multiply", rhs)
+            Me.OnMultiplyInvoked
+        End Sub
+    End Class
+    
+    ''' <summary>
+    ''' The 'CalculatorValueOldCodeGen' entity class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
+    Partial Public NotInheritable Class CalculatorValueOldCodeGen
+        Inherits Entity
+        
+        Private _key As Integer
+        
+        Private _value As Decimal
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnKeyChanging(ByVal value As Integer)
+        End Sub
+        Private Partial Sub OnKeyChanged()
+        End Sub
+        Private Partial Sub OnValueChanging(ByVal value As Decimal)
+        End Sub
+        Private Partial Sub OnValueChanged()
+        End Sub
+        Private Partial Sub OnAddTwiceInvoking(ByVal rhs As Decimal)
+        End Sub
+        Private Partial Sub OnAddTwiceInvoked()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="CalculatorValueOldCodeGen"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'Key' value.
+        ''' </summary>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
+        Public Property Key() As Integer
+            Get
+                Return Me._key
+            End Get
+            Set
+                If ((Me._key = value)  _
+                            = false) Then
+                    Me.OnKeyChanging(value)
+                    Me.ValidateProperty("Key", value)
+                    Me._key = value
+                    Me.RaisePropertyChanged("Key")
+                    Me.OnKeyChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'Value' value.
+        ''' </summary>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
+        Public Property Value() As Decimal
+            Get
+                Return Me._value
+            End Get
+            Set
+                If ((Me._value = value)  _
+                            = false) Then
+                    Me.OnValueChanging(value)
+                    Me.RaiseDataMemberChanging("Value")
+                    Me.ValidateProperty("Value", value)
+                    Me._value = value
+                    Me.RaiseDataMemberChanged("Value")
+                    Me.OnValueChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets a value indicating whether the 'AddTwice' action has been invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=false)>  _
+        Public ReadOnly Property IsAddTwiceInvoked() As Boolean
+            Get
+                Return MyBase.IsActionInvoked("AddTwice")
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Gets a value indicating whether the 'AddTwice' method can be invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=false)>  _
+        Public ReadOnly Property CanAddTwice() As Boolean
+            Get
+                Return MyBase.CanInvokeAction("AddTwice")
+            End Get
+        End Property
+        
+        ''' <summary>
+        ''' Computes a value from the key fields that uniquely identifies this entity instance.
+        ''' </summary>
+        ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
+        Public Overrides Function GetIdentity() As Object
+            Return Me._key
+        End Function
+        
+        ''' <summary>
+        ''' Invokes the 'AddTwice' action on this entity.
+        ''' </summary>
+        ''' <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
+        <EntityAction("AddTwice", AllowMultipleInvocations:=false)>  _
+        Public Sub AddTwice(ByVal rhs As Decimal)
+            Me.OnAddTwiceInvoking(rhs)
+            MyBase.InvokeAction("AddTwice", rhs)
+            Me.OnAddTwiceInvoked
+        End Sub
+    End Class
+    
+    ''' <summary>
     ''' The 'MockComplexObject1' class.
     ''' </summary>
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
