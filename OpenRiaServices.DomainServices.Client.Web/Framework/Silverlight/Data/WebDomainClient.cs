@@ -641,7 +641,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            return new InvokeCompletedResult(returnValue, validationErrors ?? new ValidationResult[0]);
+            return new InvokeCompletedResult(returnValue, validationErrors ?? Enumerable.Empty<ValidationResult>());
         }
 
         /// <summary>
