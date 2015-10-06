@@ -42,6 +42,10 @@ namespace OpenRiaServices.DomainServices.Client
         private Dictionary<string, ComplexObject> _trackedInstances;
         private MetaType _metaType;
 
+        /// <summary>
+        /// "EntityState"
+        /// </summary>
+        internal const string EntityStatePropertyName = "EntityState";
 
         /// <summary>
         /// Protected constructor since this is an abstract class
@@ -248,7 +252,7 @@ namespace OpenRiaServices.DomainServices.Client
                     bool hasChangesChanged = (this._entityState == EntityState.Modified && value == EntityState.Unmodified)
                                              || (this._entityState == EntityState.Unmodified && value == EntityState.Modified);
                     this._entityState = value;
-                    this.RaisePropertyChanged("EntityState");
+                    this.RaisePropertyChanged(EntityStatePropertyName);
 
                     // track or untrack this Entity as required
                     EntitySet entitySet = this.LastSet;
@@ -463,12 +467,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// Undo all currently queued entity actions
         /// </summary>
         /// <param name="preventRaiseReadOnly">if set to <c>true</c> then PropertyChange event for IsReadOnly is never raised.</param>
-        private void UndoAllEntityActions(bool preventRaiseReadOnly = false)
+        /// <param name="throwIfSubmitting">if set to <c>true</c> then an exception is raised if the entity is beeing modified during a submit operation.</param>
+        private void UndoAllEntityActions(bool preventRaiseReadOnly = false, bool throwIfSubmitting = true)
         {
             bool wasReadOnly = this.IsReadOnly;
 
             while (this._customMethodInvocations != null && this._customMethodInvocations.Count > 0)
-                this.UndoAction(this._customMethodInvocations[0]);
+                this.UndoAction(this._customMethodInvocations[0], throwIfSubmitting);
 
             if (IsReadOnly != wasReadOnly && !preventRaiseReadOnly)
             {
@@ -653,7 +658,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._originalValues = null;
             this._editSession = null;
             this._trackChanges = false;
-            UndoAllEntityActions();
+            UndoAllEntityActions(throwIfSubmitting: true);
             if (this._validationErrors != null)
             {
                 this._validationErrors.Clear();
@@ -723,8 +728,8 @@ namespace OpenRiaServices.DomainServices.Client
                     if (this.IsEditing)
                     {
                         // only update if we're editing, in which case the updates
-                        // have been deferred
-                        entitySet.UpdateRelatedAssociations(this, "EntityState");
+                        // have been deferred, and they were not triggered when EntityState changed
+                        entitySet.UpdateRelatedAssociations(this, EntityStatePropertyName);
                     }
                 }
                 this.StartTracking();
@@ -755,7 +760,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._editSession = null;
 
             // clear all custom method invocations
-            this.UndoAllEntityActions();
+            this.UndoAllEntityActions(throwIfSubmitting: false);
 
             if (this._validationErrors != null)
             {
@@ -1039,7 +1044,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// entity as opposed to an arbitrary set (possibly subset) of values.
         /// Change tracking is suspended for the entity during the merge.
         /// </summary>
-        /// <param name="otherEntity">The entity to merge into the current instance</param>
+        /// <param name="otherState">The property values to merge into the current instance</param>
         /// <param name="loadBehavior">The load behavior to use</param>
         internal void Merge(IDictionary<string, object> otherState, LoadBehavior loadBehavior)
         {
@@ -1652,11 +1657,25 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions"/> </exception>
         internal protected void UndoAction(EntityAction action)
         {
+            UndoAction(action, throwIfSubmitting: true);
+        }
+
+
+      /// <summary>
+      /// Undoes a previously invoked action.
+      /// </summary>
+      /// <param name="action">The action to undo.</param>
+      /// <param name="throwIfSubmitting">if set to <c>true</c> then InvalidOperationException is thrown if the entity is beeing submitted.</param>
+      /// <exception cref="System.ArgumentNullException">action</exception>
+      /// <exception cref="System.InvalidOperationException">A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted</exception>
+      /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions" /></exception>
+      private void UndoAction(EntityAction action, bool throwIfSubmitting)
+        {
             if (action == null)
                 throw new ArgumentNullException("action");
 
             // verify that the action can currently be invoked
-            if (this.IsSubmitting)
+            if (throwIfSubmitting && this.IsSubmitting)
                 throw new InvalidOperationException(Resource.Entity_UndoInvokeWhileSubmitting);
 
             var removed = _customMethodInvocations != null && this._customMethodInvocations.Remove(action);

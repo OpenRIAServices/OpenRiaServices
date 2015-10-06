@@ -844,11 +844,6 @@ namespace OpenRiaServices.DomainServices.Client
 
             try
             {
-                foreach (Entity entity in submitOperation.ChangeSet)
-                {
-                    entity.IsSubmitting = false;
-                }
-
                 if (submitOperation.IsCanceled)
                 {
                     return;
@@ -871,6 +866,10 @@ namespace OpenRiaServices.DomainServices.Client
             }
             finally
             {
+                foreach (Entity entity in submitOperation.ChangeSet)
+                {
+                    entity.IsSubmitting = false;
+                }
                 this.IsSubmitting = false;
             }
 

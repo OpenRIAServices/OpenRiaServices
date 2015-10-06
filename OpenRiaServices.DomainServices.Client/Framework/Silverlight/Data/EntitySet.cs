@@ -275,8 +275,14 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Notifies any registered association update callbacks that the specified property
-        /// has changed.
+        /// has changed. This notifies all associations pointing <c>to</c> the entity.
         /// </summary>
+        /// <remarks>
+        /// This seems to only be used to update references pointing to the entity in questions, 
+        /// The <see cref="EntityCollection{TEntity}.ParentEntityPropertyChanged(object, PropertyChangedEventArgs)"/>
+        /// and <see cref="EntityRef{TEntity}.ParentEntityPropertyChanged(object, PropertyChangedEventArgs)"/>
+        /// seems to be used to handle updates to associations going <c>from</c> the entity.
+        /// </remarks>
         /// <param name="entity">The entity that was updated.</param>
         /// <param name="propertyName">The name of the property that was changed.</param>
         internal void UpdateRelatedAssociations(Entity entity, string propertyName)

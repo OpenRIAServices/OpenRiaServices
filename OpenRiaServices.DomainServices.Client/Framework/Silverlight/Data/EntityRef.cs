@@ -333,7 +333,12 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (typedEntity != null && (this._hasLoadedEntity || this._hasAssignedEntity))
             {
-                if (this._entity != typedEntity && this._parent.EntityState != EntityState.New && this.Filter(typedEntity))
+                // We allow the parent entity to be New during the AcceptChanges phase of a submit (AcceptChanges called on the other entity)
+                // of a successfull Submit operation, in which case we know that it will soon be unmodified.
+                // Without this exception we will fail to raise property changed for the member property if the other entities changes are accepted first
+                if (this._entity != typedEntity 
+                    && (this._parent.EntityState != EntityState.New  || (this._parent.IsSubmitting && entity.IsSubmitting && entity.EntityState == EntityState.Unmodified))
+                    && this.Filter(typedEntity))
                 {
                     // Set the entity. When setting, we use the stronger Filter to
                     // filter out New entities.
