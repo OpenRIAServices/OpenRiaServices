@@ -132,6 +132,9 @@
   <data name="DomainClientFactory_ServiceContractMustBeAnInterface" xml:space="preserve">
     <value>Service contract must be an interface</value>
   </data>
+  <data name="DomainClientFactory_UnableToCreateAbsoluteUri" xml:space="preserve">
+    <value>Could not use ServerBaseUri and the serviceUri to create an absolute Uri.</value>
+  </data>
   <data name="DomainClient_CancellationNotSupported" xml:space="preserve">
     <value>The DomainClient '{0}' does not support cancellation.</value>
   </data>
