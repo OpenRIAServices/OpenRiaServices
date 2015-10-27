@@ -2347,7 +2347,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
-                calc = ctxt.CalculatorValuesOldCodeGen.First();
+                calc = ctxt.CalculatorValueOldCodeGens.First();
 
                 Assert.IsTrue(calc.CanAddTwice);
                 Assert.IsFalse(calc.IsAddTwiceInvoked);
