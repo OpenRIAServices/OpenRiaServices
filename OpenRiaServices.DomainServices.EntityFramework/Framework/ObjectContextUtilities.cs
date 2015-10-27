@@ -81,7 +81,7 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             // This 2-step process is necessary when the types CLR namespace does not match Edm namespace.
             // Look at the EdmEntityTypeAttribute on the generated entity classes to see this Edm namespace.
             StructuralType structuralType = null;
-            if (edmType != null && 
+            if (edmType != null &&
                 (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType || edmType.BuiltInTypeKind == BuiltInTypeKind.ComplexType))
             {
                 workspace.TryGetEdmSpaceType((StructuralType)edmType, out structuralType);
@@ -167,7 +167,7 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             return md;
         }
 
-        public static ObjectStateEntry AttachAsModifiedInternal<T>(T current, T original, ObjectContext objectContext)
+        public static ObjectStateEntry AttachAsModifiedInternal(object current, object original, ObjectContext objectContext)
         {
             ObjectStateEntry stateEntry = objectContext.ObjectStateManager.GetObjectStateEntry(current);
             stateEntry.ApplyOriginalValues(original);
@@ -175,8 +175,9 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             // For any members that don't have RoundtripOriginal applied, EF can't determine modification
             // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
             // mark such members as modified.
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
-            AttributeCollection attributes = TypeDescriptor.GetAttributes(typeof(T));
+            Type entityType = current.GetType();
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(entityType);
+            AttributeCollection attributes = TypeDescriptor.GetAttributes(entityType);
             bool isRoundtripType = attributes[typeof(RoundtripOriginalAttribute)] != null;
             foreach (var fieldMetadata in stateEntry.CurrentValues.DataRecordInfo.FieldMetadata)
             {
@@ -189,7 +190,6 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
                     stateEntry.SetModifiedProperty(memberName);
                 }
             }
-
             return stateEntry;
         }
     }

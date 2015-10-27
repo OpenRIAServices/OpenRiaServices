@@ -47,7 +47,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                 objectSet.Context.ObjectStateManager.ChangeObjectState(current, EntityState.Modified);
             }
 
-            ObjectStateEntry stateEntry = ObjectContextUtilities.AttachAsModifiedInternal<T>(current, original, objectSet.Context);
+            ObjectStateEntry stateEntry = ObjectContextUtilities.AttachAsModifiedInternal(current, original, objectSet.Context);
 
             if (stateEntry.State != EntityState.Modified)
             {
