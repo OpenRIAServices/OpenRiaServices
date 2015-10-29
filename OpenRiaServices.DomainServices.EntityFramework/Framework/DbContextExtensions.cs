@@ -52,7 +52,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
             }
 
             ObjectContext objectContext = (dbContext as IObjectContextAdapter).ObjectContext;
-            ObjectStateEntry stateEntry = ObjectContextUtilities.AttachAsModifiedInternal<T>(current, original, objectContext);            
+            ObjectStateEntry stateEntry = ObjectContextUtilities.AttachAsModifiedInternal(current, original, objectContext);            
 
             if (stateEntry.State != EntityState.Modified)
             {
