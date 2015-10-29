@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Server</id>
-    <version>4.4.0.1</version>
+    <version>4.4.1.0</version>
     <title>OpenRiaServices.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -22,8 +22,8 @@
       Some users have experienced duplicate web.config entries getting created as a result of installing this package.  To resolve this issue, simply eliminate one of the duplicate entries -- they vary only by character case.
     </description>
     <summary>Open RIA Services - Server-side assemblies, configuration, and build targets.</summary>
-    <releaseNotes />
-    <copyright>2013 Outercurve Foundation</copyright>
+    <releaseNotes>4.4.1.0: Support for .NET 4.6</releaseNotes>
+    <copyright>2015 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
     <frameworkAssemblies>

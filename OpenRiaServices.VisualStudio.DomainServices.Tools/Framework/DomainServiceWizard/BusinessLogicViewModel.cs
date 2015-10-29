@@ -5,8 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Web;
 using System.Web.Compilation;
 using System.Web.Hosting;
+using System.Windows;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
@@ -344,8 +346,17 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (this._businessLogicModel == null)
                 {
                     // Note: this is IDisposable and we control its lifespan and dispose in Dispose() method
-                    this._businessLogicModel =  (IBusinessLogicModel)ClientBuildManager.CreateObject(typeof(BusinessLogicModel), false);
-
+                    try
+                    {
+                        this._businessLogicModel =
+                            (IBusinessLogicModel) ClientBuildManager.CreateObject(typeof (BusinessLogicModel), false);
+                    }
+                    catch (HttpException ex)
+                    {
+                        MessageBox.Show(
+                            "Visual Studio returned an HttpException. This may indicate that you are missing the httpRuntime is missing from the web.config. For more details, go to http://bit.ly/1jeC1LT");
+                        throw;
+                    }
                     HashSet<string> assemblyNames = new HashSet<string>();
                     HashSet<string> referenceAssemblyNames = new HashSet<string>();
                     List<string> candidateTypeNames = new List<string>();

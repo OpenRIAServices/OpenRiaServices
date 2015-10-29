@@ -33,7 +33,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         {
             if (!project.IsSolutionFolder())
             {
-                yield break;
+                yield return project;
             }
 
             var containerProjects = new Queue<Project>();

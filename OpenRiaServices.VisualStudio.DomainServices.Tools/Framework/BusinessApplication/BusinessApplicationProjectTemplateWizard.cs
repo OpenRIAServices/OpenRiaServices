@@ -8,7 +8,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TemplateWizard;
-using Microsoft.VisualStudio.Web.Silverlight;
+//using Microsoft.VisualStudio.Web.Silverlight;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
@@ -138,14 +138,14 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         if (result == 0)
                         {
 
-                            // Cast the server one to a silverlight project consumer
-                            IVsSilverlightProjectConsumer spc = webHierarchy as IVsSilverlightProjectConsumer;
+                            //// Cast the server one to a silverlight project consumer
+                            //IVsSilverlightProjectConsumer spc = webHierarchy as IVsSilverlightProjectConsumer;
 
-                            // Create the Silverlight link 
-                            spc.LinkToSilverlightProject("ClientBin", // destination folder 
-                                        true, //enable silverlight debugging 
-                                        false, //use cfg specific folders
-                                        silverlightHierarchy as IVsSilverlightProject);
+                            //// Create the Silverlight link 
+                            //spc.LinkToSilverlightProject("ClientBin", // destination folder 
+                            //            true, //enable silverlight debugging 
+                            //            false, //use cfg specific folders
+                            //            silverlightHierarchy as IVsSilverlightProject);
                         }
                     }
                 }

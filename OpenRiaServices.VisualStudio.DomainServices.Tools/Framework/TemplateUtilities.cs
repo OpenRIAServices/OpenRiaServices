@@ -25,6 +25,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 #elif VS12
         private const string SilverlightDesignerKeyName = @"Software\Microsoft\VisualStudio\12.0\DesignerPlatforms\Silverlight";
         public const decimal DefaultSilverlightVersion = 5.0m;
+#elif VS14
+        private const string SilverlightDesignerKeyName = @"Software\Microsoft\VisualStudio\14.0\DesignerPlatforms\Silverlight";
+        public const decimal DefaultSilverlightVersion = 5.0m;
 #else
 #error OpenRiaServices.VisualStudio.DomainServices.Tools must target either Visual Studio Version 10.0 or 11.0 or 12.0
 #endif

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Client.CodeGen</id>
-        <version>4.4.0.3</version>
+        <version>4.4.1.0</version>
         <title>Open RIA Services Client Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -12,7 +12,7 @@
         <description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. 
         If the signed T4 template is used on the server then you need to use OpenRiaServices.Signed.Client.CodeGen instead.</description>
         <summary>Open RIA Services - Code generation client assemblies and targets.</summary>
-        <releaseNotes> 4.4.0.3: Fix code generation when OpenRiaClientUseFullTypeNames is true or server uses signed assemblies (except signed T4 Text Template)
+        <releaseNotes> 4.4.1.0: Support for .NET Framework 4.6
         </releaseNotes>
         <copyright>2015 Outercurve Foundation</copyright>
         <language>en-US</language>
