@@ -30,6 +30,10 @@ namespace OpenRiaServices.Common.Test
         [SecuritySafeCritical]
         public static void ExecuteInMediumTrust(Action action)
         {
+#if !SIGNED
+            Assert.Inconclusive("Cannot test this with unsigned assembly");
+#endif
+
             SandBoxer.ExecuteInMediumTrust(action.Method, null);
         }
 

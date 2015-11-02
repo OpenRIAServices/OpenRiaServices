@@ -123,11 +123,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 {
                     throw new InvalidOperationException(Resources.WebContext_CannotModifyAuthentication);
                 }
-#if !SILVERLIGHT
-                // Since IApplicationLifetimeAware.Started() will only be called from silverlight
-                // execute the code here instead for now
-                _started = true;
-#endif
 
                 if (this._authentication != value)
                 {

@@ -132,6 +132,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// Direct test of the query pipeline
         /// </summary>
         [TestMethod]
+        [TestCategory("DatabaseTest")]
         public void DomainService_DirectQuery()
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
@@ -332,6 +333,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
 
         [TestMethod]
+        [TestCategory("DatabaseTest")]
         public void TestDomainService_QueryDirect()
         {
             TestDomainServices.LTS.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.LTS.Catalog>(DomainOperationType.Query);
@@ -400,8 +402,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
             Assert.IsFalse(soap.Contains("SafetyStockLevel"));
         }
 
-        [Ignore]
         [TestMethod]
+        [Ignore]
         public void TestDataService_LTS_Query_MultipleThreads()
         {
             const int numberOfThreads = 10;

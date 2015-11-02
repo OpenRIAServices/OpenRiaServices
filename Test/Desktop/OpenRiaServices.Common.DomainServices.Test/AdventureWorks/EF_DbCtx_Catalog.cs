@@ -15,7 +15,7 @@ namespace TestDomainServices.DbCtx
         protected override DbCtxAdventureWorksEntities CreateDbContext()
         {
 
-            string connectionString = "metadata=res://*/AdventureWorks.AdventureWorksDbCtx.csdl|res://*/AdventureWorks.AdventureWorksDbCtx.ssdl|res://*/AdventureWorks.AdventureWorksDbCtx.msl;provider=System.Data.SqlClient;provider connection string=\"Server=.\\mssql2012;Initial Catalog=AdventureWorks;User ID=RiaTest;Password=TestPassword;Persist Security Info=True;MultipleActiveResultSets=True\"";
+            string connectionString = "metadata=res://*/AdventureWorks.AdventureWorksDbCtx.csdl|res://*/AdventureWorks.AdventureWorksDbCtx.ssdl|res://*/AdventureWorks.AdventureWorksDbCtx.msl;provider=System.Data.SqlClient;provider connection string=\"Server=(localdb)\\MSSQLLocalDB;Initial Catalog=AdventureWorks;Integrated Security=True;MultipleActiveResultSets=True\"";
             return new DbCtxAdventureWorksEntities(connectionString);
         }
 

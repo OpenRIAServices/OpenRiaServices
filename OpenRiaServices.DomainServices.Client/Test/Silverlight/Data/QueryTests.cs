@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// This is the hard-coded constant for the number of purchase orders
         /// in the read-only database used for these tests.
         /// </summary>
-        private const int PurchaseOrderCountInDatabase = 4000;
+        private const int PurchaseOrderCountInDatabase = 4012;
 
         public QueryTests()
             : base(TestURIs.LTS_Catalog, ProviderType.LTS)

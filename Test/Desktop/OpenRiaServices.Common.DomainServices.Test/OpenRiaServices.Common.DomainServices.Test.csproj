@@ -98,6 +98,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -176,6 +177,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\AdventureWorks.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks.dbml</DependentUpon>
     </Compile>
     <Compile Include="DataModels\Northwind.cs">
       <AutoGen>True</AutoGen>
@@ -385,11 +391,6 @@
     </Compile>
     <Compile Include="Cities\RequiresUserForStateAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="DataModels\AdventureWorks.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorks.dbml</DependentUpon>
     </Compile>
     <Compile Include="DataModels\AdventureWorks1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -617,8 +618,8 @@
     </None>
     <None Include="DataModels\AdventureWorks.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>AdventureWorks.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>AdventureWorks.designer.cs</LastGenOutput>
     </None>
     <EntityDeploy Include="DataModels\AdventureWorks.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

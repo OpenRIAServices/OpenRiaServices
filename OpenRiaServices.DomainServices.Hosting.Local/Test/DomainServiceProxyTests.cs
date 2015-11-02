@@ -668,7 +668,6 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 
         #region MediumTrust Tests
 
-#if !CODECOV
 
         [TestMethod]
         [Ignore]
@@ -686,8 +685,6 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
             var proxy = DomainServiceProxy.Create<IMockDomainServiceContract, MockDomainService>(new MockDomainServiceContext(DomainOperationType.Query));
             var results = proxy.GetEntities();
         }
-
-#endif // !CODECOV
 
         #endregion // MediumTrust Tests
 
