@@ -14,6 +14,25 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </remarks>
     internal class ValidationCustomAttributeBuilder : StandardCustomAttributeBuilder
     {
+        private object _matchTimeoutInMillisecondsDefault;
+
+        /// <summary>
+        /// Get the default value of <see cref="RegularExpressionAttribute"/>.MatchTimeoutInMilliseconds.
+        /// The property was introduced in .Net 4.6.1 but we can se it with reflection from older versions.
+        /// </summary>
+        private object MatchTimeoutInMillisecondsDefault
+        {
+            get
+            {
+                if (_matchTimeoutInMillisecondsDefault == null)
+                {
+                    var property = typeof(RegularExpressionAttribute).GetProperty("MatchTimeoutInMilliseconds");
+                    _matchTimeoutInMillisecondsDefault = (property != null) ? property.GetValue(new RegularExpressionAttribute(".*"), null) : new object();
+                }
+                return _matchTimeoutInMillisecondsDefault;
+            }
+        }
+
         /// <summary>
         /// Returns a representative <see cref="AttributeDeclaration"/> for a given <see cref="Attribute"/> instance.
         /// </summary>
@@ -80,6 +99,27 @@ namespace OpenRiaServices.DomainServices.Tools
                     attributeDeclaration.RequiredProperties.Add(resourceProperty);
                 }
             }
+        }
+
+        /// <summary>
+        /// Override the MapProperty to skip generation of <see cref="RegularExpressionAttribute"/>.MatchTimeoutInMilliseconds
+        /// unless it is explicitly set. 
+        /// </summary>
+        /// <param name="propertyInfo">The getter property to consider.</param>
+        /// <param name="attribute">The current attribute instance we are considering.</param>
+        /// <returns>The name of the property we should use as the setter or null to suppress codegen.</returns>
+        protected override string MapProperty(PropertyInfo propertyInfo, Attribute attribute)
+        {
+            var regexValidator = attribute as RegularExpressionAttribute;
+            if (propertyInfo.DeclaringType == typeof(RegularExpressionAttribute) && propertyInfo.Name == "MatchTimeoutInMilliseconds")
+            {
+                // MatchTimeoutInMilliseconds was introduced in .Net 4.6.1 with default value -1 / 2000 depending on compatibility switch
+                // Don't generate the property for the default value
+                object actualValue = propertyInfo.GetValue(attribute, null);
+                if (object.Equals(actualValue, MatchTimeoutInMillisecondsDefault))
+                    return null;
+            }
+            return base.MapProperty(propertyInfo, attribute);
         }
     }
 }
