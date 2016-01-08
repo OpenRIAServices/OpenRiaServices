@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Server</id>
-    <version>4.4.1.0</version>
+    <version>4.4.1.1</version>
     <title>OpenRiaServices.Signed.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -22,8 +22,10 @@
       Some users have experienced duplicate web.config entries getting created as a result of installing this package.  To resolve this issue, simply eliminate one of the duplicate entries -- they vary only by character case.
     </description>
     <summary>Open RIA Services - Server-side assemblies, configuration, and build targets.</summary>
-    <releaseNotes>Support for .NET 4.6</releaseNotes>
-    <copyright>2015 Outercurve Foundation</copyright>
+    <releaseNotes>4.4.1.0: Support for .NET 4.6
+4.4.1.1 Fix ValidateDomainServicesTask build step failure
+</releaseNotes>
+    <copyright>2016 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices signed</tags>
     <frameworkAssemblies>
@@ -34,7 +36,9 @@
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Signed.Server.targets" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="tools\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.dll" target="build\OpenRiaServices.DomainServices.Hosting.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll" />
     <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.dll" target="lib\OpenRiaServices.DomainServices.Hosting.dll" />
     <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="lib\OpenRiaServices.DomainServices.Server.dll" />
   </files>
