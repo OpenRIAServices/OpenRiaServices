@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.T4</id>
-    <version>4.4.0.3</version>
+    <version>4.4.1.1</version>
     <title>Open RIA Services T4 Code Generation - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.T4 provides the CSharpClientCodeGenerator class, as well as many supporting classes, which can be used to override the existing code generation pattern for RIA Services.</description>
     <summary>Open RIA Services Toolkit - T4 Code Generation</summary>
-    <releaseNotes />
+    <releaseNotes>4.4.1.1: Support for .NET Framework 4.6.1</releaseNotes>
     <copyright>2015 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices T4 OpenRiaServices Signed</tags>
