@@ -173,6 +173,12 @@
     <Compile Include="..\Silverlight\Data\ComplexObject.cs">
       <Link>Data\ComplexObject.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\DefaultDomainClientFactory.cs">
+      <Link>Data\DefaultDomainClientFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\DomainClientFactory.cs">
+      <Link>Data\DomainClientFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\EntityActionAttribute.cs">
       <Link>Data\EntityActionAttribute.cs</Link>
     </Compile>
@@ -217,6 +223,9 @@
     </Compile>
     <Compile Include="..\Silverlight\Data\EntitySetOperations.cs">
       <Link>Data\EntitySetOperations.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\IDomainClientFactory.cs">
+      <Link>Data\IDomainClientFactory.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\MergeAttribute.cs">
       <Link>Data\MergeAttribute.cs</Link>

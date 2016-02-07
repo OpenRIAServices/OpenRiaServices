@@ -150,6 +150,9 @@
     <Compile Include="..\Silverlight\Data\Behaviors\WebDomainClientWebHttpBehavior.cs">
       <Link>Data\Behaviors\WebDomainClientWebHttpBehavior.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\WebDomainClientFactory.cs">
+      <Link>Data\WebDomainClientFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>

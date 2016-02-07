@@ -28,7 +28,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -50,6 +50,18 @@
   <ItemGroup>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\DefaultDomainClientFactory.cs">
+      <Link>DefaultDomainClientFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\DomainClientFactory.cs">
+      <Link>DomainClientFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\DomainContext.cs">
+      <Link>Data\DomainContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\IDomainClientFactory.cs">
+      <Link>IDomainClientFactory.cs</Link>
     </Compile>
     <Compile Include="ApplicationServices\AuthenticationEventArgs.cs" />
     <Compile Include="ApplicationServices\AuthenticationOperation.cs">
@@ -110,8 +122,6 @@
     <Compile Include="Data\InvokeOperation.cs">
     </Compile>
     <Compile Include="Data\DomainClient.cs" />
-    <Compile Include="Data\DomainContext.cs">
-    </Compile>
     <Compile Include="Data\DomainOperationException.cs" />
     <Compile Include="Data\SubmitOperationException.cs" />
     <Compile Include="Data\DomainIdentifierAttribute.cs" />

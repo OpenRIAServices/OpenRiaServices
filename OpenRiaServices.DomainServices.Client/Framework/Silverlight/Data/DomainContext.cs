@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenRiaServices.DomainServices.Client.Data;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -35,6 +36,7 @@ namespace OpenRiaServices.DomainServices.Client
         private bool _isSubmitting;
         private Dictionary<string, bool> requiresValidationMap = new Dictionary<string, bool>();
         private object _syncRoot = new object();
+        private static IDomainClientFactory s_domainClientFactory;
 
         /// <summary>
         /// Protected constructor
@@ -63,29 +65,31 @@ namespace OpenRiaServices.DomainServices.Client
         ///  fall back to a "DefaultDomainClientFactory" with the same behaviour as in this function.
         /// </remarks>
         /// <returns>A domain client which can be used to access the service which the serviceContract reference</returns>
-        /// <exception cref="System.ArgumentNullException">serviceContract or serviceUri is null </exception>
-        /// <exception cref="System.ArgumentException">service contract must be an interface;serviceContract</exception>
-        /// <exception cref="System.InvalidOperationException">Faild to construct generic WebDomainClient</exception>
         protected static DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool usesHttps)
         {
-            if(serviceContract == null)
-                throw new ArgumentNullException("serviceContract");
-            if(serviceUri == null)
-                throw new ArgumentNullException("serviceUri");
-            if (!serviceContract.IsInterface)
-                throw new ArgumentException(Resource.DomainClientFactory_ServiceContractMustBeAnInterface, "serviceContract");
+            return DomainClientFactory.CreateDomainClient(serviceContract, serviceUri, usesHttps);
+        }
 
-            var webDomainClientName = "OpenRiaServices.DomainServices.Client.WebDomainClient`1, "
-                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
-            var webDomainClientType = Type.GetType(webDomainClientName);
-            if (webDomainClientType == null)
-                throw new InvalidOperationException(Resource.DomainClientFactory_MissingClientWebReference);
-
-            var domainClientType = webDomainClientType.MakeGenericType(serviceContract);
-            if (domainClientType == null)
-                throw new InvalidOperationException(Resource.DomainClientFactory_FaildToGetGenericDomainClient);
-
-            return (DomainClient)Activator.CreateInstance(domainClientType, serviceUri, usesHttps);
+        /// <summary>
+        /// Gets or sets the <see cref="IDomainClientFactory"/> used to create <see cref="DomainClient"/> instances.
+        /// </summary>
+        /// <value>
+        /// The domain client factory.
+        /// </value>
+        /// <exception cref="System.ArgumentNullException">if trying to set the property to null</exception>
+        public static IDomainClientFactory DomainClientFactory
+        {
+            get
+            {
+                // We don't perform syncronization here, but it is ok since in worst case we might end up creating two different instances of the _domainClientFactory
+                return s_domainClientFactory ?? (s_domainClientFactory = CreateDomainClientFactory());
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException();
+                s_domainClientFactory = value;
+            }
         }
 
         /// <summary>
@@ -1215,10 +1219,15 @@ namespace OpenRiaServices.DomainServices.Client
                         // Validate the method exists.
                         ValidationUtilities.GetMethod(this, customMethod.Name, parameters);
                     }
+#if PORTABLE
+                    catch (MissingMemberException innerException)
+#else
                     catch (MissingMethodException innerException)
+#endif
                     {
                         throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_NamedUpdateMethodDoesNotExist, customMethod.Name, entity.GetType(), this.GetType()), innerException);
                     }
+
                 }
             }
 
@@ -1242,6 +1251,26 @@ namespace OpenRiaServices.DomainServices.Client
                 this.requiresValidationMap[methodName] = requiresValidation;
             }
             return requiresValidation;
+        }
+
+        /// <summary>
+        /// Creates a domain client factory to use, in case the user has not set the <see cref="DomainClientFactory"/> property.
+        /// </summary>
+        /// <returns>A WebDomainClientFactory if found otherwise a <see cref="DefaultDomainClientFactory"/></returns>
+        private static IDomainClientFactory CreateDomainClientFactory()
+        {
+            // 1; Check if any known DomainClientFactory can be found
+
+            // Check for DomainClient in OpenRiaServices.DomainServices.Client.Web assembly
+            var typeName = "OpenRiaServices.DomainServices.Client.WebDomainClientFactory, "
+                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+            var webDomainClientFactoryType = Type.GetType(typeName);
+            if (webDomainClientFactoryType != null)
+                return (IDomainClientFactory)Activator.CreateInstance(webDomainClientFactoryType);
+
+            // Fallback to default implementation, this should only ever happening if the user is using a
+            // an up-to-date version if the client library but an old version of the Client.Web assembly
+            return new DefaultDomainClientFactory();
         }
     }
 }

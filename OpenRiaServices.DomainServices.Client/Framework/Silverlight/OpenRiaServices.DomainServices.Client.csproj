@@ -138,9 +138,12 @@
     <Compile Include="ApplicationServices\LoginParameters.cs" />
     <Compile Include="ApplicationServices\AuthenticationService.cs" />
     <Compile Include="Data\ComplexObject.cs" />
+    <Compile Include="Data\DomainClientFactory.cs" />
+    <Compile Include="Data\DefaultDomainClientFactory.cs" />
     <Compile Include="Data\EntityActionAttribute.cs" />
     <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
+    <Compile Include="Data\IDomainClientFactory.cs" />
     <Compile Include="Data\MergeAttribute.cs" />
     <Compile Include="Data\LoadResult.cs" />
     <Compile Include="Data\ObjectStateUtility.cs" />
@@ -237,9 +240,6 @@
       <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="OpenRiaServices.DomainServices.Client.extmap.xml" />
   </ItemGroup>
   <Import Project="..\..\..\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />
