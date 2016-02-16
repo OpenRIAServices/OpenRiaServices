@@ -139,6 +139,7 @@
     <Compile Include="ApplicationServices\SaveUserResult.cs" />
     <Compile Include="ApplicationServices\LoginParameters.cs" />
     <Compile Include="ApplicationServices\AuthenticationService.cs" />
+    <Compile Include="Data\ComplexObject.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\ComplexObject.cs" />
     <Compile Include="Data\DomainClientFactory.cs" />
     <Compile Include="Data\DefaultDomainClientFactory.cs" />

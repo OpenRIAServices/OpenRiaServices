@@ -3,6 +3,7 @@
   <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
   <PropertyGroup>
     <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
@@ -13,6 +14,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +25,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
@@ -33,6 +36,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
@@ -43,6 +47,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
     <OutputPath>..\..\bin\Signed\</OutputPath>
@@ -54,6 +59,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <AssemblyOriginatorKeyFile>..\..\..\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <PropertyGroup>
@@ -66,7 +72,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.DomainServices.Client</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\..\bin\$(Configuration)\Desktop\</OutputPath>
     <DocumentationFile>..\..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Client.XML</DocumentationFile>
@@ -79,12 +85,14 @@
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DocumentationFile>..\..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>..\..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
@@ -173,11 +181,17 @@
     <Compile Include="..\Silverlight\Data\ComplexObject.cs">
       <Link>Data\ComplexObject.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\ComplexObject.INotifyDataErrorInfo.cs">
+      <Link>Data\ComplexObject.INotifyDataErrorInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\DefaultDomainClientFactory.cs">
       <Link>Data\DefaultDomainClientFactory.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\DomainClientFactory.cs">
       <Link>Data\DomainClientFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\Entity.INotifyDataErrorInfo.cs">
+      <Link>Data\Entity.INotifyDataErrorInfo.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\EntityActionAttribute.cs">
       <Link>Data\EntityActionAttribute.cs</Link>
