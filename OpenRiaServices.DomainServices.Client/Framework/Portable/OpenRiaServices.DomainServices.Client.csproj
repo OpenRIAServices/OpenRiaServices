@@ -51,6 +51,12 @@
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\ComplexObject.cs">
+      <Link>Data\ComplexObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\ComplexObject.INotifyDataErrorInfo.cs">
+      <Link>Data\ComplexObject.INotifyDataErrorInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\DefaultDomainClientFactory.cs">
       <Link>DefaultDomainClientFactory.cs</Link>
     </Compile>
@@ -60,8 +66,14 @@
     <Compile Include="..\Silverlight\Data\DomainContext.cs">
       <Link>Data\DomainContext.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\Entity.INotifyDataErrorInfo.cs">
+      <Link>Data\Entity.INotifyDataErrorInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\IDomainClientFactory.cs">
       <Link>IDomainClientFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\HasSideEffectsAttribute.cs">
+      <Link>HasSideEffectsAttribute.cs</Link>
     </Compile>
     <Compile Include="ApplicationServices\AuthenticationEventArgs.cs" />
     <Compile Include="ApplicationServices\AuthenticationOperation.cs">
@@ -77,12 +89,9 @@
     <Compile Include="ApplicationServices\SaveUserOperation.cs" />
     <Compile Include="ApplicationServices\SaveUserResult.cs" />
     <Compile Include="Data\CollectionViewLoader.cs" />
-    <Compile Include="Data\ComplexObject.cs" />
-    <Compile Include="Data\Entity.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\EntityList.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
     <Compile Include="Data\GlobalSuppressions.cs" />
-    <Compile Include="Data\HasSideEffectsAttribute.cs" />
     <Compile Include="Data\InvokeResult.cs" />
     <Compile Include="Data\LoadResult.cs" />
     <Compile Include="Data\ObjectStateUtility.cs" />
