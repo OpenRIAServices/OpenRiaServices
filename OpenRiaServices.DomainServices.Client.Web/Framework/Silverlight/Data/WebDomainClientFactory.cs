@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// </summary>
         public WebDomainClientFactory()
         {
-            _createInstanceMethod = this.GetType().GetMethod("CreateInstance", System.Reflection.BindingFlags.NonPublic);
+            _createInstanceMethod = this.GetType().GetMethod("CreateInstance", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         /// <summary>
