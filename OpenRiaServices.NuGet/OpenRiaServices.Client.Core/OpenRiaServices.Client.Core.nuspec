@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Client.Core</id>
-    <version>4.5.0-beta1</version>
+    <version>4.5.0-beta2</version>
     <title>Open RIA Services Client</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -13,7 +13,11 @@
       OpenRiaServices.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects.
     </description>
     <summary>Open RIA Services - client assemblies and references.</summary>
-    <releaseNotes>4.5.0-beta1: Added DomainClientFactory</releaseNotes>
+    <releaseNotes>4.5.0-beta2: Fix beta1 bug (NRE in WebDomainClientFactory.CreateDomainClientCore)
+* require .Net 4.5 for client libraries
+* Extend client API for non Silverlight platforms
+
+4.5.0-beta1: Added DomainClientFactory</releaseNotes>
     <copyright>2015 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
@@ -40,11 +44,11 @@
     <file src="..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\sl50\OpenRiaServices.DomainServices.Client.Web.xml" />
 
     <!-- Desktop binaries -->
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.dll" target="lib\net40\OpenRiaServices.DomainServices.Client.dll" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.pdb" target="lib\net40\OpenRiaServices.DomainServices.Client.pdb" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.xml" target="lib\net40\OpenRiaServices.DomainServices.Client.xml" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.Web.dll" target="lib\net40\OpenRiaServices.DomainServices.Client.Web.dll" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\net40\OpenRiaServices.DomainServices.Client.Web.pdb" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\net40\OpenRiaServices.DomainServices.Client.Web.xml" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.dll" target="lib\net45\OpenRiaServices.DomainServices.Client.dll" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.pdb" target="lib\net45\OpenRiaServices.DomainServices.Client.pdb" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.xml" target="lib\net45\OpenRiaServices.DomainServices.Client.xml" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.Web.dll" target="lib\net45\OpenRiaServices.DomainServices.Client.Web.dll" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\net45\OpenRiaServices.DomainServices.Client.Web.pdb" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\net45\OpenRiaServices.DomainServices.Client.Web.xml" />
   </files>
 </package>
