@@ -97,9 +97,7 @@
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">

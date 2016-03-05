@@ -159,6 +159,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainContr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Silverlight.ComboBoxExtensions", "OpenRiaServices.Silverlight.ComboBoxExtensions\Framework\Silverlight\OpenRiaServices.Silverlight.ComboBoxExtensions.csproj", "{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web.Test", "OpenRiaServices.DomainServices.Client.Web\Test\Desktop\OpenRiaServices.DomainServices.Client.Web.Test.csproj", "{FDE752B0-6A65-4457-8CDC-4D347B51E67C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodeAnalysis|Any CPU = CodeAnalysis|Any CPU
@@ -1099,6 +1101,24 @@ Global
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.ReleaseNet40|Any CPU.Build.0 = Release|Any CPU
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.CodeAnalysis|Any CPU.ActiveCfg = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.CodeAnalysis|Any CPU.Build.0 = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.CodeCov|Any CPU.ActiveCfg = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.CodeCov|Any CPU.Build.0 = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.DebugNet40|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.DebugNet40|Any CPU.Build.0 = Debug|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.MyGet|Any CPU.ActiveCfg = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.MyGet|Any CPU.Build.0 = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.MyGet40|Any CPU.ActiveCfg = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.MyGet40|Any CPU.Build.0 = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.ReleaseNet40|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.ReleaseNet40|Any CPU.Build.0 = Release|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Signed|Any CPU.Build.0 = Signed|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1167,6 +1187,7 @@ Global
 		{ACE91549-D86E-4EB6-8C2A-5FF51386BB68} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
+		{FDE752B0-6A65-4457-8CDC-4D347B51E67C} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Desktop.vsmdi
