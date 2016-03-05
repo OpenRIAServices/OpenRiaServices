@@ -1,4 +1,4 @@
-﻿<#@  template language="C#" #>
+﻿<#@ template language="C#" linePragmas="false" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections.Generic" #>
@@ -13,7 +13,7 @@
 <#@ include file="Entity.ttinclude" #>
 <#@ include file="EntityProperty.ttinclude" #>
 <#@ include file="CustomAttribute.ttinclude" #>
-// <#= T4DomainServiceClientProxyGenerator.GeneratedBoilerPlate #>
+// <#= T4DomainServiceClientCodeGenerator.GeneratedBoilerPlate #>
 <# this.GenerateAllDomainServiceDescriptionClasses(this.DomainServiceDescriptions); #>
 <#+
 
