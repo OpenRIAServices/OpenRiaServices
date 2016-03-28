@@ -129,6 +129,20 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!--
     ================================================================
+    Open Ria Services Link is present
+      Add LinkedOpenRiaServerProject as Project Reference to ensure that
+      it always get compiled before code generation.
+    ================================================================
+    -->
+  <ItemGroup Condition="'$(LinkedOpenRiaServerProject)' != '' and '$(SilverlightVersion)' == '' ">
+    <ProjectReference Include="$(LinkedOpenRiaServerProject)" Condition="'$(SilverlightVersion)' == '' ">
+      <Name>OpenRiaServices Server Project Link</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!--
+    ================================================================
     Open Ria Services Link is absent but residual generated files remain
       CoreCompile and Clean will both execute OpenRiaClientClean
       to delete obsolete generated files.
