@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Reflection;
 
 namespace OpenRiaServices.DomainServices.Client.Web
@@ -15,7 +16,14 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// </summary>
         public WebDomainClientFactory()
         {
-             _createInstanceMethod = typeof(WebDomainClientFactory).GetMethod("CreateInstance", BindingFlags.NonPublic | BindingFlags.Instance);
+            _createInstanceMethod = typeof(WebDomainClientFactory).GetMethod("CreateInstance", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // Silverlight uses the browser's cookies by default, in which case we should not manage cookies manually
+#if SILVERLIGHT
+            CookieContainer = null;
+#else
+            CookieContainer = new CookieContainer();
+#endif
         }
 
         /// <summary>
@@ -45,7 +53,15 @@ namespace OpenRiaServices.DomainServices.Client.Web
         private WebDomainClient<TContract> CreateInstance<TContract>(Uri serviceUri, bool requiresSecureEndpoint)
              where TContract : class
         {
-            return new WebDomainClient<TContract>(serviceUri, requiresSecureEndpoint);
+            return new WebDomainClient<TContract>(serviceUri, requiresSecureEndpoint, this);
         }
+
+        /// <summary>
+        /// Cookie container to shared by all created <see cref="DomainClient"/>s.
+        /// If value is <c>null</c> then cookies will not be managed.
+        /// This is required when using Forms Authentication (except for Silverlight) and is 
+        /// therefore enabled by default.
+        /// </summary>
+        public CookieContainer CookieContainer { get; set; }
     }
 }

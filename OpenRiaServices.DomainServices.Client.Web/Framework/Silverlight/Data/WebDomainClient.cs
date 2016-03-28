@@ -36,6 +36,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
 
         private ChannelFactory<TContract> _channelFactory;
+        private Web.WebDomainClientFactory _webDomainClientFactory;
         private readonly bool _usesHttps;
         private IEnumerable<Type> _knownTypes;
         private Uri _serviceUri;
@@ -49,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// is null.
         /// </exception>
         public WebDomainClient(Uri serviceUri)
-            : this(serviceUri, /* usesHttps */ false, /* channelFactory */ null)
+            : this(serviceUri, /* usesHttps */ false, (ChannelFactory<TContract>)null)
         {
         }
 
@@ -67,7 +68,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
         public WebDomainClient(Uri serviceUri, bool usesHttps)
-            : this(serviceUri, usesHttps, /* channelFactory */ null)
+            : this(serviceUri, usesHttps, (ChannelFactory<TContract>)null)
         {
         }
 
@@ -86,6 +87,26 @@ namespace OpenRiaServices.DomainServices.Client
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
         public WebDomainClient(Uri serviceUri, bool usesHttps, ChannelFactory<TContract> channelFactory)
+         : this(serviceUri, usesHttps, (Web.WebDomainClientFactory)null)
+        {
+            this._channelFactory = channelFactory;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebDomainClient&lt;TContract&gt;"/> class.
+        /// </summary>
+        /// <param name="serviceUri">The domain service Uri</param>
+        /// <param name="usesHttps">A value indicating whether the client should contact
+        /// the service using an HTTP or HTTPS scheme.
+        /// </param>
+        /// <param name="domainClientFactory">The domain client factory that creates channels to communicate with the server.</param>
+        /// <exception cref="ArgumentNullException"> is thrown if <paramref name="serviceUri"/>
+        /// is null.
+        /// </exception>
+        /// <exception cref="ArgumentException"> is thrown if <paramref name="serviceUri"/>
+        /// is absolute and <paramref name="usesHttps"/> is true.
+        /// </exception>
+        public WebDomainClient(Uri serviceUri, bool usesHttps, Web.WebDomainClientFactory domainClientFactory)
         {
             if (serviceUri == null)
             {
@@ -102,7 +123,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._serviceUri = serviceUri;
             this._usesHttps = usesHttps;
-            this._channelFactory = channelFactory;
+            _webDomainClientFactory = domainClientFactory;
 
 #if SILVERLIGHT
             // The domain client should not be initialized at design time
@@ -148,6 +169,14 @@ namespace OpenRiaServices.DomainServices.Client
             get
             {
                 return this._usesHttps;
+            }
+        }
+
+        private Web.WebDomainClientFactory WebDomainClientFactory
+        {
+            get
+            {
+                return _webDomainClientFactory ?? (_webDomainClientFactory = new Web.WebDomainClientFactory());
             }
         }
 
@@ -237,7 +266,9 @@ namespace OpenRiaServices.DomainServices.Client
 
             try
             {
-                TransportBindingElement transport;
+                var cookieContainer = this.WebDomainClientFactory.CookieContainer;
+                HttpTransportBindingElement transport;
+
                 if (this._serviceUri.Scheme == Uri.UriSchemeHttps)
                 {
                     transport = new HttpsTransportBindingElement();
@@ -252,6 +283,8 @@ namespace OpenRiaServices.DomainServices.Client
                 // By default, use "REST" w/ binary encoding.
                 PoxBinaryMessageEncodingBindingElement encoder = new PoxBinaryMessageEncodingBindingElement();
 #if !SILVERLIGHT
+                // The default for these changed to Int32.MaxValue in .Net 4.5 
+                // We should be able to replace this with encoder.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
                 encoder.ReaderQuotas.MaxArrayLength = WebDomainClient<TContract>.MaxArrayLength;
                 encoder.ReaderQuotas.MaxBytesPerRead = WebDomainClient<TContract>.MaxBytesPerRead;
                 encoder.ReaderQuotas.MaxDepth = WebDomainClient<TContract>.MaxDepth;
@@ -261,12 +294,28 @@ namespace OpenRiaServices.DomainServices.Client
                 
                 this._serviceUri = new Uri(this._serviceUri.OriginalString + "/binary", UriKind.Absolute);
 
-                Binding binding = new CustomBinding(encoder, transport);
+                var binding = new CustomBinding(encoder, transport);
                 factory = new ChannelFactory<TContract>(binding, new EndpointAddress(this._serviceUri));
                 factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
                 {
                     DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
                 });
+
+                if (cookieContainer != null)
+                {
+#if SILVERLIGHT
+                    binding.Elements.Insert(0, new HttpCookieContainerBindingElement());
+#else
+                    transport.AllowCookies = true;
+#endif
+                    // Force initialization of the channel factory so we can setup cookie management
+                    factory.Open();
+
+                    var cookieManager = factory.GetProperty<IHttpCookieContainerManager>();
+                    if (cookieManager == null)
+                        throw new PlatformNotSupportedException(".GetProperty<IHttpCookieContainerManager>() is null");
+                    cookieManager.CookieContainer = cookieContainer;
+                }
 
 #if DEBUG
                 if (Debugger.IsAttached)
