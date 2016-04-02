@@ -17,6 +17,14 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
   <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CleanOpenRiaClientFilesTask"
              AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" />
 
+
+  <PropertyGroup>
+
+    <!-- Use SilverlightApplication if present, otherwise check if we are building an exe -->
+    <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(SilverlightApplication)' != '' ">$(SilverlightApplication)</OpenRiaGenerateApplicationContext>
+    <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(OutputType)'=='exe' ">true</OpenRiaGenerateApplicationContext>
+  </PropertyGroup>
+  
   <!--
     ============================================================
     OpenRiaClientCodeGen
@@ -325,7 +333,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
        OutputPath="$(IntermediateOutputPath)"
        Language="$(Language)"
        ContinueOnError="false"
-       IsClientApplication="$(SilverlightApplication)"
+       IsClientApplication="$(OpenRiaGenerateApplicationContext)"
        UseFullTypeNames="$(OpenRiaClientUseFullTypeNames)"
        ClientAssemblySearchPaths="@(OpenRiaClientCodeGenClientAssemblySearchPath)"
        CodeGeneratorName="$(OpenRiaClientCodeGeneratorName)">
@@ -349,10 +357,6 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!-- Import the WCF targets for proxy generation if it exists -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets"
-          Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
-
-  <!-- Import the Visual Studio WCF RIA Services package targets file if it exists -->
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets"
-          Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets')"/>
+          Condition="'$(SilverlightVersion)' != '' and Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
 
 </Project>
