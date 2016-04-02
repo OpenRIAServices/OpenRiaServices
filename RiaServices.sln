@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -156,8 +156,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainControllers.Server", "OpenRiaServices.DomainControllers.Server\Framework\OpenRiaServices.DomainControllers.Server.csproj", "{ACE91549-D86E-4EB6-8C2A-5FF51386BB68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainControllers.EntityFramework", "OpenRiaServices.DomainControllers.EntityFramework\Framework\OpenRiaServices.DomainControllers.EntityFramework.csproj", "{653F3946-541C-42D3-BBC1-CE89B392BDA9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.Spatial", "OpenRiaServices.DomainServices.Tools.Spatial\Framework\OpenRiaServices.DomainServices.Tools.Spatial.csproj", "{4931021E-81A7-4131-9AA2-37F58013859D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Silverlight.ComboBoxExtensions", "OpenRiaServices.Silverlight.ComboBoxExtensions\Framework\Silverlight\OpenRiaServices.Silverlight.ComboBoxExtensions.csproj", "{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}"
 EndProject
@@ -1083,23 +1081,6 @@ Global
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9}.ReleaseNet40|Any CPU.Build.0 = Release|Any CPU
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.CodeAnalysis|Any CPU.ActiveCfg = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.CodeAnalysis|Any CPU.Build.0 = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.CodeCov|Any CPU.ActiveCfg = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.CodeCov|Any CPU.Build.0 = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.DebugNet40|Any CPU.ActiveCfg = Debug|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.DebugNet40|Any CPU.Build.0 = Debug|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.MyGet|Any CPU.ActiveCfg = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.MyGet|Any CPU.Build.0 = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.MyGet40|Any CPU.ActiveCfg = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.MyGet40|Any CPU.Build.0 = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.ReleaseNet40|Any CPU.ActiveCfg = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.ReleaseNet40|Any CPU.Build.0 = Release|Any CPU
-		{4931021E-81A7-4131-9AA2-37F58013859D}.Signed|Any CPU.ActiveCfg = Debug|Any CPU
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.CodeAnalysis|Any CPU.ActiveCfg = Signed|Any CPU
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.CodeAnalysis|Any CPU.Build.0 = Signed|Any CPU
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.CodeCov|Any CPU.ActiveCfg = Signed|Any CPU
@@ -1185,7 +1166,6 @@ Global
 		{9CFB422B-2995-4813-831C-2BDC013B68BF} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{ACE91549-D86E-4EB6-8C2A-5FF51386BB68} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{4931021E-81A7-4131-9AA2-37F58013859D} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
