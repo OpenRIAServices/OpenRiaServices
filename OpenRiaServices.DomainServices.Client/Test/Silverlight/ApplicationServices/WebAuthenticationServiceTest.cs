@@ -1,4 +1,7 @@
-﻿using System;
+﻿extern alias SSmDsClient;
+extern alias SSmDsWeb;
+
+using System;
 using System.Security.Principal;
 using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.Silverlight.Testing;
@@ -10,13 +13,20 @@ using UserType = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
+#if SILVERLIGHT
+    using Resource = SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource;
+#else
+    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+#endif
+
+
     /// <summary>
     /// Tests <see cref="WebAuthenticationService"/> members.
     /// </summary>
     [TestClass]
     public class WebAuthenticationServiceTest : UnitTestBase
     {
-        #region Mock
+#region Mock
 
         private class MockWebAuthenticationService : WebAuthenticationService
         {
@@ -86,7 +96,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             }
         }
 
-        #endregion
+#endregion
 
         private const int Delay = 200;
         private const string ErrorMessage = "There was an error";
@@ -217,7 +227,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         }
 
         // Asynchronous, Cancel, Error, Synchronous
-        #region Async
+#region Async
 
         [TestMethod]
         [Asynchronous]
@@ -360,9 +370,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             });
         }
 
-        #endregion
+#endregion
 
-        #region Cancel
+#region Cancel
 
         [TestMethod]
         [Asynchronous]
@@ -454,9 +464,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             });
         }
 
-        #endregion
+#endregion
 
-        #region Error
+#region Error
 
         [TestMethod]
         [Asynchronous]
@@ -536,9 +546,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             });
         }
 
-        #endregion
+#endregion
 
-        #region Templates
+#region Templates
 
         private delegate IAsyncResult InvokeCallback(AuthenticationDomainContext mock, MockWebAuthenticationService service, AsyncCallback callback, object state);
         private delegate void TestCallback(AuthenticationDomainContext mock, MockWebAuthenticationService service, IAsyncResult asyncResult);
@@ -682,6 +692,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             this.EnqueueTestComplete();
         }
 
-        #endregion
+#endregion
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿extern alias SSmDsClient;
+extern alias SSmDsWeb;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +12,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
+#if SILVERLIGHT
+    using AsyncResultBase = SSmDsWeb::OpenRiaServices.DomainServices.Client.AsyncResultBase;
+#else
+    using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
+#endif
+
     public class AuthenticationDomainClient : DomainClient
     {
         public enum UserType { None, LoggedIn, LoggedOut, Loaded, Saved }

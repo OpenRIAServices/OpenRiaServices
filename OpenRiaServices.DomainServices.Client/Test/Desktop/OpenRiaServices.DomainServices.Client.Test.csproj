@@ -98,29 +98,15 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.ServiceModel.Web">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
@@ -179,6 +165,9 @@
       <Link>Data\DomainClients\TestProvider_Scenarios.g.cs</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext1.g.cs">
+      <Link>Data\DomainClients\WebContext1.g.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs">
       <Link>Data\DomainClients\Cities.shared.cs</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -194,6 +183,27 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs">
       <Link>Data\DomainClients\Test.shared.cs</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainClient.cs">
+      <Link>ApplicationServices\AuthenticationDomainClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContext.cs">
+      <Link>ApplicationServices\AuthenticationDomainContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationServiceTest.cs">
+      <Link>ApplicationServices\AuthenticationServiceTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthenticationTest.cs">
+      <Link>ApplicationServices\FormsAuthenticationTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginParametersTest.cs">
+      <Link>ApplicationServices\LoginParametersTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationServiceTest.cs">
+      <Link>ApplicationServices\WebAuthenticationServiceTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebContextBaseTest.cs">
+      <Link>ApplicationServices\WebContextBaseTest.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\AssociationInheritanceTests.cs">
       <Link>Data\AssociationInheritanceTests.cs</Link>
@@ -416,6 +426,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

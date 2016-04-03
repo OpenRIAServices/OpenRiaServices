@@ -163,11 +163,6 @@
     <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' " />
     <Compile Include="Data\Behaviors\MessageUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ApplicationServices\AuthenticationDomainContextBase.cs" />
-    <Compile Include="ApplicationServices\FormsAuthentication.cs" />
-    <Compile Include="ApplicationServices\WebAuthenticationService.cs" />
-    <Compile Include="ApplicationServices\WebContextBase.cs" />
-    <Compile Include="ApplicationServices\WindowsAuthentication.cs" />
     <Compile Include="Data\DomainServiceFault.cs" />
     <Compile Include="Data\ServiceQueryPart.cs" />
     <Compile Include="Data\WebDomainClientAsyncResult.cs" />
@@ -179,6 +174,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TypeForwarding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OpenRiaServices.DomainServices.Client.Web.extmap.xml" />

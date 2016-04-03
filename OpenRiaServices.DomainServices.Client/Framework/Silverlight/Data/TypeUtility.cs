@@ -86,6 +86,66 @@ namespace OpenRiaServices.DomainServices
             typeof(Uri)
         };
 
+        
+        private static bool IsGenericType(Type type)
+        {
+#if REFLECTION_V2
+            return type.GetTypeInfo().IsGenericType;
+#else
+            return type.IsGenericType;
+#endif
+        }
+
+        private static Type GetBaseType(Type type)
+        {
+#if REFLECTION_V2
+            return type.GetTypeInfo().BaseType;
+#else
+            return type.BaseType;
+#endif
+        }
+
+        private static bool IsEnum(Type type)
+        {
+#if REFLECTION_V2
+            return type.GetTypeInfo().IsEnum;
+#else
+            return type.IsEnum;
+#endif
+        }
+
+        private static bool IsInterface(Type type)
+        {
+#if REFLECTION_V2
+            return type.GetTypeInfo().IsInterface;
+#else
+            return type.IsInterface;
+#endif
+        }
+
+        private static bool IsPrimitive(Type type)
+        {
+#if REFLECTION_V2
+            return type.GetTypeInfo().IsPrimitive;
+#else
+            return type.IsPrimitive;
+#endif
+        }
+
+#if PORTABLE
+        private static Type[] s_emptyTypes = new Type[0];
+        public static Type[] EmptyTypes
+        {
+            get 
+            {
+                return s_emptyTypes;
+            }
+        }
+#else
+        public static Type[] EmptyTypes { get { return Type.EmptyTypes; } }
+#endif
+
+
         /// <summary>
         /// Returns <c>true</c> if the given type is a <see cref="Nullable"/>
         /// </summary>
@@ -170,7 +230,7 @@ namespace OpenRiaServices.DomainServices
         {
             if (type.IsArray ||
                (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>)) ||
-               (typeof(IList).IsAssignableFrom(type) && type.GetConstructor(Type.EmptyTypes) != null))
+               (typeof(IList).IsAssignableFrom(type) && type.GetConstructor(TypeUtility.EmptyTypes) != null))
             {
                 return true;
             }
@@ -466,6 +526,7 @@ namespace OpenRiaServices.DomainServices
             return null;
         }
 #endif
+
         /// <summary>
         /// Performs a check against an assembly to determine if it's a known
         /// System assembly.
@@ -504,7 +565,7 @@ namespace OpenRiaServices.DomainServices
 
             // parse the public key token
             int idx = assemblyName.FullName.IndexOf("PublicKeyToken=", StringComparison.OrdinalIgnoreCase);
-            if (idx == 0)
+            if (idx == -1)
             {
                 return false;
             }

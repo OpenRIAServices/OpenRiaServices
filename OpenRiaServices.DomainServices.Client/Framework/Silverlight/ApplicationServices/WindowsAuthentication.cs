@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <param name="state">The parameter is not used.</param>
         /// <returns>The result.</returns>
         /// <exception cref="NotSupportedException"> is always thrown.</exception>
-        protected override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+        protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
         {
             throw new NotSupportedException(Resources.ApplicationServices_WANoLogin);
         }
@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <param name="state">The parameter is not used.</param>
         /// <returns>The result.</returns>
         /// <exception cref="NotSupportedException"> is always thrown.</exception>
-        protected override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+        protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
         {
             throw new NotSupportedException(Resources.ApplicationServices_WANoLogout);
         }

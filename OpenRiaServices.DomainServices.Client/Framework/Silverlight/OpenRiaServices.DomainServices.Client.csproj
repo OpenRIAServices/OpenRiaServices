@@ -126,9 +126,11 @@
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
     </Compile>
+    <Compile Include="ApplicationServices\AuthenticationDomainContextBase.cs" />
     <Compile Include="ApplicationServices\AuthenticationEventArgs.cs" />
     <Compile Include="ApplicationServices\AuthenticationOperation.cs" />
     <Compile Include="ApplicationServices\AuthenticationResult.cs" />
+    <Compile Include="ApplicationServices\FormsAuthentication.cs" />
     <Compile Include="ApplicationServices\LoadUserOperation.cs" />
     <Compile Include="ApplicationServices\LoadUserResult.cs" />
     <Compile Include="ApplicationServices\LoginOperation.cs" />
@@ -139,6 +141,9 @@
     <Compile Include="ApplicationServices\SaveUserResult.cs" />
     <Compile Include="ApplicationServices\LoginParameters.cs" />
     <Compile Include="ApplicationServices\AuthenticationService.cs" />
+    <Compile Include="ApplicationServices\WebAuthenticationService.cs" />
+    <Compile Include="ApplicationServices\WebContextBase.cs" />
+    <Compile Include="ApplicationServices\WindowsAuthentication.cs" />
     <Compile Include="Data\ComplexObject.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\ComplexObject.cs" />
     <Compile Include="Data\DomainClientFactory.cs" />

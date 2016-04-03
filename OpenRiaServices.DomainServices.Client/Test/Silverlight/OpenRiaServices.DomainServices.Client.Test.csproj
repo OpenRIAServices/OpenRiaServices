@@ -69,7 +69,7 @@
     <SilverlightApplication>false</SilverlightApplication>
     <SupportedCultures>
     </SupportedCultures>
-      <ValidateXaml>true</ValidateXaml>
+    <ValidateXaml>true</ValidateXaml>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
@@ -185,8 +185,14 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs">
       <Link>Data\DomainContexts\Test.shared.cs</Link>
     </Compile>
+    <Compile Include="ApplicationServices\AuthenticationDomainClient.cs" />
+    <Compile Include="ApplicationServices\AuthenticationDomainContext.cs" />
+    <Compile Include="ApplicationServices\FormsAuthenticationTest.cs" />
     <Compile Include="ApplicationServices\LoginParametersTest.cs" />
     <Compile Include="ApplicationServices\AuthenticationServiceTest.cs" />
+    <Compile Include="ApplicationServices\WebAuthenticationServiceTest.cs" />
+    <Compile Include="ApplicationServices\WebContextBaseTest.cs" />
+    <Compile Include="ApplicationServices\WindowsAuthenticationTest.cs" />
     <Compile Include="Data\AssociationInheritanceTests.cs" />
     <Compile Include="Data\AssociationTests.cs" />
     <Compile Include="Data\ChangeSetTests.cs" />

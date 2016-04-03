@@ -69,7 +69,7 @@
     <SilverlightApplication>false</SilverlightApplication>
     <SupportedCultures>
     </SupportedCultures>
-      <ValidateXaml>true</ValidateXaml>
+    <ValidateXaml>true</ValidateXaml>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
@@ -128,18 +128,13 @@
     <Compile Include="..\..\..\test\desktop\OpenRiaServices.Common.DomainServices.Test\baselines\default\webcontext\WebContext1.g.cs">
       <Link>Data\DomainContexts\WebContext1.g.cs</Link>
     </Compile>
-    <Compile Include="ApplicationServices\AuthenticationDomainClient.cs" />
-    <Compile Include="ApplicationServices\AuthenticationDomainContext.cs" />
-    <Compile Include="ApplicationServices\FormsAuthenticationTest.cs" />
-    <Compile Include="ApplicationServices\WebAuthenticationServiceTest.cs" />
-    <Compile Include="ApplicationServices\WebContextBaseTest.cs" />
-    <Compile Include="ApplicationServices\WindowsAuthenticationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
       <Name>OpenRiaServices.DomainServices.Client</Name>
+      <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>
@@ -148,10 +143,14 @@
     <ProjectReference Include="..\..\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
       <Name>OpenRiaServices.DomainServices.Client.Web</Name>
+      <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ApplicationServices\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

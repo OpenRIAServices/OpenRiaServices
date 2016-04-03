@@ -124,6 +124,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContextBase.cs">
+      <Link>ApplicationServices\AuthenticationDomainContextBase.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\ApplicationServices\AuthenticationEventArgs.cs">
       <Link>ApplicationServices\AuthenticationEventArgs.cs</Link>
     </Compile>
@@ -132,6 +135,9 @@
     </Compile>
     <Compile Include="..\Silverlight\ApplicationServices\AuthenticationResult.cs">
       <Link>ApplicationServices\AuthenticationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthentication.cs">
+      <Link>ApplicationServices\FormsAuthentication.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\ApplicationServices\LoadUserOperation.cs">
       <Link>ApplicationServices\LoadUserOperation.cs</Link>
@@ -171,6 +177,15 @@
     </Compile>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationService.cs">
+      <Link>ApplicationServices\WebAuthenticationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebContextBase.cs">
+      <Link>ApplicationServices\WebContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WindowsAuthentication.cs">
+      <Link>ApplicationServices\WindowsAuthentication.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\AsyncResultBase.cs">
       <Link>AsyncResultBase.cs</Link>

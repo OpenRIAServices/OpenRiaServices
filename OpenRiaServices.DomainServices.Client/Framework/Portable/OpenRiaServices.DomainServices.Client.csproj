@@ -51,6 +51,60 @@
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContextBase.cs">
+      <Link>ApplicationServices\AuthenticationDomainContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationEventArgs.cs">
+      <Link>ApplicationServices\AuthenticationEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationOperation.cs">
+      <Link>ApplicationServices\AuthenticationOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationResult.cs">
+      <Link>ApplicationServices\AuthenticationResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationService.cs">
+      <Link>ApplicationServices\AuthenticationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthentication.cs">
+      <Link>ApplicationServices\FormsAuthentication.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoadUserOperation.cs">
+      <Link>ApplicationServices\LoadUserOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoadUserResult.cs">
+      <Link>ApplicationServices\LoadUserResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginOperation.cs">
+      <Link>ApplicationServices\LoginOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginParameters.cs">
+      <Link>ApplicationServices\LoginParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LoginResult.cs">
+      <Link>ApplicationServices\LoginResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LogoutOperation.cs">
+      <Link>ApplicationServices\LogoutOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\LogoutResult.cs">
+      <Link>ApplicationServices\LogoutResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\SaveUserOperation.cs">
+      <Link>ApplicationServices\SaveUserOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\SaveUserResult.cs">
+      <Link>ApplicationServices\SaveUserResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationService.cs">
+      <Link>ApplicationServices\WebAuthenticationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WebContextBase.cs">
+      <Link>ApplicationServices\WebContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\ApplicationServices\WindowsAuthentication.cs">
+      <Link>ApplicationServices\WindowsAuthentication.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\ComplexObject.cs">
       <Link>Data\ComplexObject.cs</Link>
     </Compile>
@@ -72,22 +126,18 @@
     <Compile Include="..\Silverlight\Data\IDomainClientFactory.cs">
       <Link>IDomainClientFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\TypeUtility.cs">
+      <Link>Data\TypeUtility.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\HasSideEffectsAttribute.cs">
       <Link>HasSideEffectsAttribute.cs</Link>
     </Compile>
-    <Compile Include="ApplicationServices\AuthenticationEventArgs.cs" />
-    <Compile Include="ApplicationServices\AuthenticationOperation.cs">
+    <Compile Include="..\Silverlight\Resources.Designer.cs">
+      <Link>Resources.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationServices\AuthenticationResult.cs">
-    </Compile>
-    <Compile Include="ApplicationServices\LoadUserOperation.cs" />
-    <Compile Include="ApplicationServices\LoadUserResult.cs" />
-    <Compile Include="ApplicationServices\LoginOperation.cs" />
-    <Compile Include="ApplicationServices\LoginResult.cs" />
-    <Compile Include="ApplicationServices\LogoutOperation.cs" />
-    <Compile Include="ApplicationServices\LogoutResult.cs" />
-    <Compile Include="ApplicationServices\SaveUserOperation.cs" />
-    <Compile Include="ApplicationServices\SaveUserResult.cs" />
     <Compile Include="Data\CollectionViewLoader.cs" />
     <Compile Include="Data\EntityList.cs" />
     <Compile Include="Data\EntityQueryable.cs" />
@@ -160,27 +210,15 @@
     <Compile Include="Data\SubmitCompletedResult.cs" />
     <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' ">
     </Compile>
-    <Compile Include="ApplicationServices\LoginParameters.cs" />
-    <Compile Include="Data\TypeUtility.cs">
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationServices\AuthenticationService.cs">
-    </Compile>
     <Compile Include="WeakCollectionChangedListener.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
+    <EmbeddedResource Include="..\Silverlight\Resources.resx">
+      <Link>Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>

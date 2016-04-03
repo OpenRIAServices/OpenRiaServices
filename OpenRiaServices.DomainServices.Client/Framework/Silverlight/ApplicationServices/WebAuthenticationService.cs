@@ -101,7 +101,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <remarks>
         /// This implementation always returns <c>true</c>.
         /// </remarks>
-        protected override bool SupportsCancellation
+        protected internal override bool SupportsCancellation
         {
             get { return true; }
         }
@@ -129,13 +129,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
             if (user == null)
             {
-                ConstructorInfo userConstructor = this.DomainContext.UserType.GetConstructor(Type.EmptyTypes);
+                ConstructorInfo userConstructor = this.DomainContext.UserType.GetConstructor(TypeUtility.EmptyTypes);
 
                 if (userConstructor != null)
                 {
                     try
                     {
-                        user = (IPrincipal)userConstructor.Invoke(Type.EmptyTypes);
+                        user = (IPrincipal)userConstructor.Invoke(TypeUtility.EmptyTypes);
                     }
                     catch (TargetInvocationException tie)
                     {
@@ -167,7 +167,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+        protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
         {
             this.Initialize();
 
@@ -215,7 +215,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginLogin"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override void CancelLogin(IAsyncResult asyncResult)
+        protected internal override void CancelLogin(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
             if (result.InnerOperation.CanCancel)
@@ -235,7 +235,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginLogin"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override LoginResult EndLogin(IAsyncResult asyncResult)
+        protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
 
@@ -259,7 +259,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+        protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
         {
             this.Initialize();
 
@@ -270,9 +270,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 query = (EntityQuery)this.DomainContext.GetType().GetMethod(
                     WebAuthenticationService.LogoutQueryName,
-                    Type.EmptyTypes).Invoke(
+                    TypeUtility.EmptyTypes).Invoke(
                     this.DomainContext,
-                    Type.EmptyTypes);
+                    TypeUtility.EmptyTypes);
             }
             catch (TargetInvocationException tie)
             {
@@ -302,7 +302,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginLogout"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override void CancelLogout(IAsyncResult asyncResult)
+        protected internal override void CancelLogout(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
             if (result.InnerOperation.CanCancel)
@@ -322,7 +322,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginLogout"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override LogoutResult EndLogout(IAsyncResult asyncResult)
+        protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
 
@@ -350,7 +350,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+        protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
         {
             this.Initialize();
 
@@ -361,9 +361,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 query = (EntityQuery)this.DomainContext.GetType().GetMethod(
                     WebAuthenticationService.LoadUserQueryName,
-                    Type.EmptyTypes).Invoke(
+                    TypeUtility.EmptyTypes).Invoke(
                     this.DomainContext,
-                    Type.EmptyTypes);
+                    TypeUtility.EmptyTypes);
             }
             catch (TargetInvocationException tie)
             {
@@ -393,7 +393,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginLoadUser"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override void CancelLoadUser(IAsyncResult asyncResult)
+        protected internal override void CancelLoadUser(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
             if (result.InnerOperation.CanCancel)
@@ -413,7 +413,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginLoadUser"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
+        protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
 
@@ -443,7 +443,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
+        protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
         {
             this.Initialize();
 
@@ -470,7 +470,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginSaveUser"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override void CancelSaveUser(IAsyncResult asyncResult)
+        protected internal override void CancelSaveUser(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
             if (result.InnerOperation.CanCancel)
@@ -490,7 +490,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// was not returned from <see cref="BeginSaveUser"/> or the asynchronous call has already been
         /// concluded with a previous call to cancel or end.
         /// </exception>
-        protected override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
+        protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
         {
             WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
 
@@ -566,51 +566,28 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (this._domainContext == null)
             {
-                Type type = null;
-
                 // Get application assembly so we can start searching for web context type there
                 Assembly applicationAssembly =
-#if SILVERLIGHT
+#if PORTABLE
+                    // just return an assembly, internal will probably be wrong but 
+                    // as long as internal is non null we will try to load domain context by name
+                    Assembly.GetCallingAssembly();
+#elif SILVERLIGHT 
                     Application.Current.GetType().Assembly;
 #else
                     Assembly.GetEntryAssembly();
 #endif
 
-                if (!string.IsNullOrEmpty(this.DomainContextType))
-                {
-                    // First, try to load the type by full name from the application assembly
-
-                    type = applicationAssembly.GetType(this.DomainContextType);
-                    // If that doesn't work, allow for assembly qualified names
-                    if (type == null)
-                    {
-                        type = Type.GetType(this.DomainContextType);
-                    }
-                }
-
-                if (type == null)
-                {
-                    // Finally, we'll look for a domain context that has been generated from a domain 
-                    // service extending AuthenticationBase<T>. Our CodeProcessor generates these 
-                    // providers as extending AuthenticationDomainContextBase.
-                    foreach (Type tempType in applicationAssembly.GetTypes())
-                    {
-                        if (typeof(AuthenticationDomainContextBase).IsAssignableFrom(tempType))
-                        {
-                            type = tempType;
-                            break;
-                        }
-                    }
-                }
+                Type type = FindDomainContextType(applicationAssembly);
 
                 if ((type != null) && typeof(AuthenticationDomainContextBase).IsAssignableFrom(type))
                 {
-                    ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+                    ConstructorInfo constructor = type.GetConstructor(TypeUtility.EmptyTypes);
                     if (constructor != null)
                     {
                         try
                         {
-                            this._domainContext = constructor.Invoke(Type.EmptyTypes) as AuthenticationDomainContextBase;
+                            this._domainContext = constructor.Invoke(TypeUtility.EmptyTypes) as AuthenticationDomainContextBase;
                         }
                         catch (TargetInvocationException tie)
                         {
@@ -628,6 +605,49 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new InvalidOperationException(Resources.ApplicationServices_CannotInitializeDomainContext);
             }
+        }
+
+        /// <summary>
+        /// Search for at AuthenticationDomainContextBase implementation in the specified assembly.
+        /// First it tries baased on name using <see cref="DomainContextType"/>, then find the first 
+        /// imeplementation deriving from AuthenticationDomainContextBase.
+        /// </summary>
+        /// <param name="applicationAssembly"></param>
+        /// <returns>
+        ///  A type which inherits <see cref="AuthenticationDomainContextBase"/> or <c>null</c>
+        ///  if no type could be found.
+        /// </returns>
+        private Type FindDomainContextType(Assembly applicationAssembly)
+        {
+            Type type = null;
+            if (!string.IsNullOrEmpty(this.DomainContextType))
+            {
+                // First, try to load the type by full name from the application assembly
+
+                type = applicationAssembly.GetType(this.DomainContextType);
+                // If that doesn't work, allow for assembly qualified names
+                if (type == null)
+                {
+                    type = Type.GetType(this.DomainContextType);
+                }
+            }
+
+            if (type == null)
+            {
+                // Finally, we'll look for a domain context that has been generated from a domain 
+                // service extending AuthenticationBase<T>. Our CodeProcessor generates these 
+                // providers as extending AuthenticationDomainContextBase.
+                foreach (Type tempType in applicationAssembly.GetTypes())
+                {
+                    if (typeof(AuthenticationDomainContextBase).IsAssignableFrom(tempType))
+                    {
+                        type = tempType;
+                        break;
+                    }
+                }
+            }
+
+            return type;
         }
 
         /// <summary>

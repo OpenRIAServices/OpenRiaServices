@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// <see cref="Application.ApplicationLifetimeObjects"/> (Silverlight specific).
     /// </remarks>
     public abstract class WebContextBase : INotifyPropertyChanged
-#if SILVERLIGHT
+#if SILVERLIGHT && !PORTABLE
         , IApplicationService, IApplicationLifetimeAware
 #endif
     {
@@ -201,7 +201,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
         #endregion
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !PORTABLE
         #region IApplicationService Members
 
         /// <summary>
@@ -290,42 +290,42 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 return new DefaultPrincipal();
             }
 
-            protected override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override LoginResult EndLogin(IAsyncResult asyncResult)
+            protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+            protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override LogoutResult EndLogout(IAsyncResult asyncResult)
+            protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+            protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
+            protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
+            protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
+            protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
