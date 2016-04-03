@@ -142,8 +142,8 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       it always get compiled before code generation.
     ================================================================
     -->
-  <ItemGroup Condition="'$(LinkedOpenRiaServerProject)' != '' and '$(SilverlightVersion)' == '' ">
-    <ProjectReference Include="$(LinkedOpenRiaServerProject)" Condition="'$(SilverlightVersion)' == '' ">
+  <ItemGroup Condition="'$(LinkedOpenRiaServerProject)' != '' and '$(TargetFrameworkIdentifier)' != 'Silverlight' ">
+    <ProjectReference Include="$(LinkedOpenRiaServerProject)" Condition="'$(TargetFrameworkIdentifier)' != 'Silverlight' ">
       <Name>OpenRiaServices Server Project Link</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
