@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Client.Core</id>
-    <version>4.5.0-beta2</version>
+    <version>4.5.0-beta3</version>
     <title>Open RIA Services Client</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -13,7 +13,15 @@
       OpenRiaServices.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects.
     </description>
     <summary>Open RIA Services - client assemblies and references.</summary>
-    <releaseNotes>4.5.0-beta2: Fix beta1 bug (NRE in WebDomainClientFactory.CreateDomainClientCore)
+    <releaseNotes>4.5.0:
+For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
+
+4.5.0-beta3: 
+* Desktop client now support Cookies by default (which means Forms authentication just works)
+** Can be controlled via WebDomainClientFactory.CookieContainer
+* WebDomainClientFactory can now be overridden
+
+4.5.0-beta2: Fix beta1 bug (NRE in WebDomainClientFactory.CreateDomainClientCore)
 * require .Net 4.5 for client libraries
 * Extend client API for non Silverlight platforms
 
