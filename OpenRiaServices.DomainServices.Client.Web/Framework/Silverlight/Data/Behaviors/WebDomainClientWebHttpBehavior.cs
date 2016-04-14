@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
@@ -16,6 +17,11 @@ namespace OpenRiaServices.DomainServices.Client
 {
     internal class WebDomainClientWebHttpBehavior : WebHttpBehavior
     {
+        /// <summary>
+        /// Message insepctor to use if it is set to a non-<c>null</c> value.
+        /// </summary>
+        public IClientMessageInspector MessageInspector { get; internal set; }
+
         public WebDomainClientWebHttpBehavior()
             : base()
         {
@@ -39,6 +45,14 @@ namespace OpenRiaServices.DomainServices.Client
             // The wrapping formatter is meant format just query requests. We cannot tell the
             // difference at build time, just at run time.
             return new WebHttpQueryClientMessageFormatter(formatter);
+        }
+
+        public override void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
+        {
+            if (MessageInspector != null)
+                clientRuntime.MessageInspectors.Add(MessageInspector);
+
+            base.ApplyClientBehavior(endpoint, clientRuntime);
         }
 
         /// <summary>

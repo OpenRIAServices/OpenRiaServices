@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Dispatcher;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
@@ -9,7 +12,8 @@ namespace OpenRiaServices.DomainServices.Client.Web
     /// </summary>
     public class WebDomainClientFactory : DomainClientFactory
     {
-        readonly MethodInfo _createInstanceMethod;
+        private readonly MethodInfo _createInstanceMethod;
+        private CookieContainer _cookieContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebDomainClientFactory" /> class.
@@ -62,6 +66,60 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// This is required when using Forms Authentication (except for Silverlight) and is 
         /// therefore enabled by default.
         /// </summary>
-        public CookieContainer CookieContainer { get; set; }
+        public CookieContainer CookieContainer
+        {
+            get { return _cookieContainer; }
+            set
+            {
+                _cookieContainer = value;
+                SharedCookieMessageInspector = (value != null) ? new SharedCookieMessageInspector(value) : null;
+            }
+        }
+
+        /// <summary>
+        /// When <see cref="CookieContainer"/> is set to a non-<c>null</c> value then
+        /// this inspector is used by 
+        /// <see cref="WebDomainClientWebHttpBehavior.ApplyClientBehavior(System.ServiceModel.Description.ServiceEndpoint, ClientRuntime)"/>
+        /// </summary>
+        internal IClientMessageInspector SharedCookieMessageInspector { get; private set; }
+    }
+
+    /// <summary>
+    /// Helper class which ensures that we use the CookieContainer for each request
+    /// based upon Kyle McClellan's blog post
+    /// https://blogs.msdn.microsoft.com/kylemc/2010/05/14/ria-services-authentication-out-of-browser/
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// We should try to make this a one time initialization instead
+    /// using 
+    ///  either a IChannelInitializer (not availible in Silverlight)
+    /// or 
+    ///  by initializing the ChannelFactory by "opening" it so we can use 
+    ///  channelFactory.GetProperty{IHttpCookieContainerManager}().CookieContainer = ..
+    ///  in CreateChannelFactory function. (which requires some refactoring if we
+    ///  are still to allow customization of the ChannelFactory).
+    /// </remarks>
+    class SharedCookieMessageInspector : IClientMessageInspector
+    {
+        public CookieContainer _cookieContainer { get; set; }
+
+        public SharedCookieMessageInspector(CookieContainer cookieContainer)
+        {
+            _cookieContainer = cookieContainer;
+        }
+
+        public void AfterReceiveReply(ref Message reply, object correlationState)
+        {
+            // do nothing
+        }
+
+        public object BeforeSendRequest(ref Message request, IClientChannel channel)
+        {
+            // make sure the channel uses the shared cookie container
+            channel.GetProperty<IHttpCookieContainerManager>().CookieContainer =
+                this._cookieContainer;
+            return null;
+        }
     }
 }

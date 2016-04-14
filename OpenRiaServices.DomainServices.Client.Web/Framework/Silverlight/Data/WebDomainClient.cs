@@ -266,7 +266,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             try
             {
-                var cookieContainer = this.WebDomainClientFactory.CookieContainer;
+                var cookieInspector = this.WebDomainClientFactory.SharedCookieMessageInspector;
                 HttpTransportBindingElement transport;
 
                 if (this._serviceUri.Scheme == Uri.UriSchemeHttps)
@@ -291,30 +291,24 @@ namespace OpenRiaServices.DomainServices.Client
                 encoder.ReaderQuotas.MaxNameTableCharCount = WebDomainClient<TContract>.MaxNameTableCharCount;
                 encoder.ReaderQuotas.MaxStringContentLength = WebDomainClient<TContract>.MaxStringContentLength;
 #endif
-                
+
                 this._serviceUri = new Uri(this._serviceUri.OriginalString + "/binary", UriKind.Absolute);
 
                 var binding = new CustomBinding(encoder, transport);
                 factory = new ChannelFactory<TContract>(binding, new EndpointAddress(this._serviceUri));
                 factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
                 {
-                    DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
+                    DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped,
+                    MessageInspector = cookieInspector,
                 });
 
-                if (cookieContainer != null)
+                if (cookieInspector != null)
                 {
 #if SILVERLIGHT
                     binding.Elements.Insert(0, new HttpCookieContainerBindingElement());
 #else
                     transport.AllowCookies = true;
 #endif
-                    // Force initialization of the channel factory so we can setup cookie management
-                    factory.Open();
-
-                    var cookieManager = factory.GetProperty<IHttpCookieContainerManager>();
-                    if (cookieManager == null)
-                        throw new PlatformNotSupportedException(".GetProperty<IHttpCookieContainerManager>() is null");
-                    cookieManager.CookieContainer = cookieContainer;
                 }
 
 #if DEBUG
@@ -362,7 +356,7 @@ namespace OpenRiaServices.DomainServices.Client
             WebDomainClientAsyncResult<TContract> wcfAsyncResult = WebDomainClientAsyncResult<TContract>.CreateQueryResult(this, channel, endQueryMethod, callback, userState);
 
             // Pass async operation related parameters.
-            realParameters[parameterInfos.Length - 2] = new AsyncCallback(delegate(IAsyncResult asyncResponseResult)
+            realParameters[parameterInfos.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
             {
                 wcfAsyncResult.InnerAsyncResult = asyncResponseResult;
                 wcfAsyncResult.Complete();
@@ -498,7 +492,7 @@ namespace OpenRiaServices.DomainServices.Client
             TContract channel = this.ChannelFactory.CreateChannel();
             WebDomainClientAsyncResult<TContract> wcfAsyncResult = WebDomainClientAsyncResult<TContract>.CreateSubmitResult(this, channel, endSubmitMethod, changeSet, submitOperations.ToList(), callback, userState);
 
-            object[] parameters = 
+            object[] parameters =
             {
                 submitOperations,
                 new AsyncCallback(delegate(IAsyncResult asyncResponseResult)
@@ -607,7 +601,7 @@ namespace OpenRiaServices.DomainServices.Client
             WebDomainClientAsyncResult<TContract> wcfAsyncResult = WebDomainClientAsyncResult<TContract>.CreateInvokeResult(this, channel, endInvokeMethod, invokeArgs, callback, userState);
 
             // Pass async operation related parameters.
-            realParameters[parameterInfos.Length - 2] = new AsyncCallback(delegate(IAsyncResult asyncResponseResult)
+            realParameters[parameterInfos.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
             {
                 wcfAsyncResult.InnerAsyncResult = asyncResponseResult;
                 wcfAsyncResult.Complete();
