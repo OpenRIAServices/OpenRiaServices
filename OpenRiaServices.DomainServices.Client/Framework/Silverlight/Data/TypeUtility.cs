@@ -607,7 +607,7 @@ namespace OpenRiaServices.DomainServices
 
             // parse the public key token
             int idx = assemblyFullName.IndexOf("PublicKeyToken=", StringComparison.OrdinalIgnoreCase);
-            if (idx == 0)
+            if (idx == -1)
             {
                 return false;
             }
