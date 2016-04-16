@@ -237,7 +237,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 StateName = "WA"
             };
 
-#if SILVERLIGHT
             INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)zip;
 
             List<string> actualErrors = new List<string>();
@@ -256,19 +255,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Verify that we have the expected validation error for the property
             IEnumerable<ValidationResult> results = zip.ValidationErrors.Where(e => e.MemberNames.Contains("City"));
             Assert.AreEqual<int>(1, results.Count(), "Expected a single error for the property");
-#else
-            // try to set to an invalid City - expect exception
-            ValidationException expectedException = null;
-            try
-            {
-                zip.City = invalidCity;
-            }
-            catch (ValidationException e)
-            {
-                expectedException = e;
-            }
-            Assert.IsNotNull(expectedException);
-#endif
 
             // set to a valid City - expect success
             City validCity = new City
@@ -387,7 +373,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Begin the edit transaction
             editableCity.BeginEdit();
 
-#if SILVERLIGHT
             string expectedMember = "Name";
 
             // End the edit transaction, which performs property and entity-level validation
@@ -396,12 +381,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual<int>(1, city.ValidationErrors.Single().MemberNames.Count(), "MemberNames count after EndEdit");
             Assert.AreEqual<string>(expectedMember, city.ValidationErrors.Single().MemberNames.Single(), "Member name after EndEdit");
             Assert.AreEqual<string>(expectedError, city.ValidationErrors.Single().ErrorMessage, "ErrorMessage after EndEdit");
-#else
-            ExceptionHelper.ExpectException<ValidationException>(delegate
-            {
-                ((IEditableObject)city).EndEdit();
-            }, expectedError);
-#endif
         }
 
         [TestMethod]
@@ -421,24 +400,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Begin the edit transaction
             editableCity.BeginEdit();
 
-#if SILVERLIGHT
             // End the edit transaction, which performs property and entity-level validation
             editableCity.EndEdit();
             Assert.AreEqual<int>(1, city.ValidationErrors.Count, "After EndEdit");
             Assert.AreEqual<int>(1, city.ValidationErrors.Single().MemberNames.Count(), "MemberNames count after EndEdit");
             Assert.AreEqual<string>(expectedMember, city.ValidationErrors.Single().MemberNames.Single(), "Member name after EndEdit");
             Assert.AreEqual<string>(expectedError, city.ValidationErrors.Single().ErrorMessage, "ErrorMessage after EndEdit");
-#else
-            ExceptionHelper.ExpectException<ValidationException>(delegate
-            {
-                ((IEditableObject)city).EndEdit();
-            }, expectedError);
-#endif
         }
 
         [TestMethod]
         [WorkItem(852215)]
-        [TestDescription("On the desktop, we throw a ValidationException for an invalid entity during EndEdit; in Silverlight, we commit the edit, populate the errors, and raise events")]
+        [TestDescription("for an invalid entity during EndEdit we commit the edit, populate the errors, and raise events")]
         public void Entity_EndEditValidatesEntity()
         {
             TestEntity invalidEntity = new TestEntity();
@@ -447,8 +419,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             invalidEntity.ID2 = "1";
 
             string expectedError = "TestEntity is not valid.";
-
-#if SILVERLIGHT
             INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)invalidEntity;
 
             // Track what errors existed for the property name at the time of each event
@@ -470,16 +440,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Clear out the errors for the next stage of the test
             actualErrors.Clear();
-#else
-            ExceptionHelper.ExpectException<ValidationException>(delegate
-            {
-                ((IEditableObject)invalidEntity).EndEdit();
-            }, expectedError);
-
-            ((IEditableObject)invalidEntity).CancelEdit();
-            Assert.IsNull(invalidEntity.ID1);
-            Assert.IsNull(invalidEntity.ID2);
-#endif
 
             TestEntity validEntity = new TestEntity();
             ((IEditableObject)validEntity).BeginEdit();
@@ -489,9 +449,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual("1", validEntity.ID1);
             Assert.AreEqual("2", validEntity.ID2);
 
-#if SILVERLIGHT
             Assert.AreEqual<int>(0, actualErrors.Count, "There should not have been any errors during the valid EndEdit()");
-#endif
         }
 
         [TestMethod]
@@ -938,25 +896,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [WorkItem(720495)]
         public void Entity_RejectChanges_ParentAssociationRestored()
         {
-            bool loaded = false;
             List<Employee> employeeList = new List<Employee>();
             ConfigurableEntityContainer container = new ConfigurableEntityContainer();
             container.CreateSet<Employee>(EntitySetOperations.All);
             ConfigurableDomainContext catalog = new ConfigurableDomainContext(new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog), container);
 
-            Action<LoadOperation<Employee>> action = (lo) =>
-            {
-                if (lo.HasError)
-                {
-                    lo.MarkErrorAsHandled();
-                }
-                loaded = true;
-            };
-            catalog.Load(catalog.GetEntityQuery<Employee>("GetEmployees"), action, null);
-
-            this.EnqueueConditional(() => loaded);
+            var load = catalog.Load(catalog.GetEntityQuery<Employee>("GetEmployees"), throwOnError:false);
+            this.EnqueueConditional(() => load.IsComplete);
             this.EnqueueCallback(() =>
             {
+                Assert.AreEqual(null, load.Error);
+
                 Employee parent, child;
                 parent = container.GetEntitySet<Employee>().OrderByDescending(e => e.Reports.Count).First();
 

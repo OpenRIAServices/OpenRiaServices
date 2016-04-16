@@ -1403,8 +1403,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         private void Verify_ComplexType_Validation(ComplexType_Parent p)
-        {
-#if SILVERLIGHT
+        { 
             List<string> entityErrors = new List<string>();
             ((INotifyDataErrorInfo)p).ErrorsChanged += (s, e) =>
             {
@@ -1454,13 +1453,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(0, p.ValidationErrors.Count);
             Assert.AreEqual(0, p.ContactInfo.ValidationErrors.Count);
             Assert.AreEqual(0, p.ContactInfo.HomeAddress.ValidationErrors.Count);
-
-#else
-            ExceptionHelper.ExpectValidationException(delegate()
-            {
-                p.ContactInfo.HomeAddress.State = "Invalid";
-            }, "The field State must be a string with a maximum length of 2.", typeof(StringLengthAttribute), "Invalid");
-#endif
         }
 
         [TestMethod]
@@ -2084,7 +2076,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
     }
 
-#if SILVERLIGHT
     /// <summary>
     /// This class contains Silverlight only ComplexType tests.
     /// </summary>
@@ -2215,7 +2206,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(0, p.ContactInfo.ValidationErrors.Count);
         }
     }
-#endif
 
     public class C1 : INotifyPropertyChanged
     {

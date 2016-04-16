@@ -86,7 +86,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             MockEntity entity = new MockEntity();
 
-#if SILVERLIGHT
             INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)entity;
 
             List<string> actualErrors = new List<string>();
@@ -106,12 +105,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<ValidationResult> results = entity.ValidationErrors.Where(e => e.MemberNames.Contains("ReadWriteProperty"));
             Assert.AreEqual<int>(1, results.Count(), "Expected a single error for the property");
             Assert.AreEqual<string>("The ReadWriteProperty field is required.", results.Single().ErrorMessage, "ErrorMessage from the result");
-#else
-            ExceptionHelper.ExpectValidationException(delegate()
-            {
-                entity.ReadWriteProperty = null;
-            }, "The ReadWriteProperty field is required.", typeof(RequiredAttribute), null);
-#endif
         }
 
         [TestMethod]
@@ -119,7 +112,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void Entity_Validation_Property_Fail_StringLength_Exceeded_Throws()
         {
             MockEntity entity = new MockEntity();
-#if SILVERLIGHT
             INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)entity;
 
             List<string> actualErrors = new List<string>();
@@ -140,13 +132,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<ValidationResult> results = entity.ValidationErrors.Where(e => e.MemberNames.Contains("ReadWriteProperty"));
             Assert.AreEqual<int>(1, results.Count(), "Expected a single error for the property");
             Assert.AreEqual<string>("The field ReadWriteProperty must be a string with a maximum length of 10.", results.Single().ErrorMessage, "ErrorMessage from the result");
-#else
-            ExceptionHelper.ExpectValidationException(delegate()
-            {
-                entity.ReadWriteProperty = "LongerThan10Characters";
-            }, "The field ReadWriteProperty must be a string with a maximum length of 10.", typeof(StringLengthAttribute), "LongerThan10Characters");
-#endif
         }
+
         #endregion Property tests
 
         #region Object tests
@@ -348,7 +335,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         #endregion
 
-#if SILVERLIGHT
         #region INotifyDataErrorInfo Tests
 
         [TestMethod]
@@ -794,7 +780,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         #endregion
-#endif
 
         [TestMethod]
         [Description("ValidationUtilities disambiguates based on parameter types")]

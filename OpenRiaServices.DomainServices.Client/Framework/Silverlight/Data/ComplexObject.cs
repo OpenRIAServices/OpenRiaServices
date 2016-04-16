@@ -388,7 +388,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-#if SILVERLIGHT
         /// <summary>
         /// Validate whether the specified value is valid for the specified property
         /// of the current ComplexObject.
@@ -404,24 +403,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="propertyName"/> is <c>null</c> or empty.</exception>
         /// <exception cref="InvalidOperationException"> is thrown if this property is marked with <see cref="EditableAttribute"/> 
         /// configured to prevent editing.</exception>
-#else
-        /// <summary>
-        /// Validate whether the specified value is valid for the specified property
-        /// of the current ComplexObject.
-        /// </summary>
-        /// <remarks>
-        /// This method evaluates all the <see cref="ValidationAttribute"/>s associated with the specified property
-        /// and throws a <see cref="ValidationException"/> for the first <see cref="ValidationAttribute"/> that signals
-        /// a validation error.  It also verifies the property is not read-only.
-        /// <para>All validation logic is bypassed if this instance is currently being deserialized.</para>
-        /// </remarks>
-        /// <param name="propertyName">The name of the property to validate.  This name cannot be <c>null</c> or empty.</param>
-        /// <param name="value">The value to test. It may be <c>null</c> if <c>null</c> is valid for the given property.</param>
-        /// <exception cref="ArgumentNullException"> is thrown if <paramref name="propertyName"/> is <c>null</c> or empty.</exception>
-        /// <exception cref="ValidationException"> is thrown if this value is not valid for the specified property.</exception>
-        /// <exception cref="InvalidOperationException"> is thrown if this property is marked with <see cref="EditableAttribute"/> 
-        /// configured to prevent editing.</exception>
-#endif
         protected void ValidateProperty(string propertyName, object value)
         {
             if (string.IsNullOrEmpty(propertyName))
@@ -480,7 +461,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-#if SILVERLIGHT
         /// <summary>
         /// Validate whether the specified property value is valid for the specified <see cref="ValidationContext"/>.
         /// </summary>
@@ -498,27 +478,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// </param>
         /// <param name="value">The value to test. It may be <c>null</c> if <c>null</c> is valid for the given property.</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="validationContext"/> is <c>null</c>.</exception>
-#else
-        /// <summary>
-        /// Validate whether the specified property value is valid for the specified <see cref="ValidationContext"/>.
-        /// </summary>
-        /// <remarks>
-        /// This method evaluates all the <see cref="ValidationAttribute"/>s associated with the property
-        /// indicated as the <see cref="ValidationContext.MemberName"/>, and throws a
-        /// <see cref="ValidationException"/> for the first <see cref="ValidationAttribute"/> that signals
-        /// a validation error.
-        /// </remarks>
-        /// <param name="validationContext">
-        /// The <see cref="ValidationContext"/> representing the validation to be performed.
-        /// <para>
-        /// <see cref="ValidationContext"/>.<see cref="ValidationContext.MemberName"/> must indicate
-        /// the name of the property to validate.
-        /// </para>
-        /// </param>
-        /// <param name="value">The value to test. It may be <c>null</c> if <c>null</c> is valid for the given property.</param>
-        /// <exception cref="ValidationException"> is thrown if this value is not valid for the specified property.</exception>
-        /// <exception cref="ArgumentNullException"> is thrown if <paramref name="validationContext"/> is null</exception>
-#endif
         protected virtual void ValidateProperty(ValidationContext validationContext, object value)
         {
             if (validationContext == null)
@@ -526,16 +485,11 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("validationContext");
             }
 
-#if SILVERLIGHT
             List<ValidationResult> validationResults = new List<ValidationResult>();
             Validator.TryValidateProperty(value, validationContext, validationResults);
 
             // Process the validation the errors for this property
             this.OnMemberValidationChanged(validationContext.MemberName, validationResults);
-#else
-            Validator.ValidateProperty(value, validationContext);
-            this.OnMemberValidationChanged(validationContext.MemberName, Enumerable.Empty<ValidationResult>());
-#endif
         }
 
         /// <summary>
@@ -712,7 +666,9 @@ namespace OpenRiaServices.DomainServices.Client
                 return;
             }
 
-#if SILVERLIGHT
+            // TODO : Check if this old comment is still true and if this is something we should manage
+            // " The desktop version of the framework doesn't currently do deep validation."
+
             // Validate the instance itself (cross-field validation happens here)
             List<ValidationResult> validationResults = new List<ValidationResult>();
             ValidationUtilities.TryValidateObject(this, this.CreateValidationContext(), validationResults);
@@ -720,12 +676,7 @@ namespace OpenRiaServices.DomainServices.Client
             // Replace all errors for this instance and notify our parent
             ValidationUtilities.ApplyValidationErrors(this, validationResults);
             this.NotifyParentMemberValidationChanged(null, validationResults);
-#else
-            // Validate the instance itself (cross-field validation happens here)
-            // TODO : The desktop version of the framework doesn't currently do
-            // deep validation.
-            Validator.ValidateObject(this, this.CreateValidationContext(), /*validateAllProperties*/ true);
-#endif
+
             this._editSession = null;
         }
         #endregion
@@ -876,13 +827,10 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 this._complexObject.RaisePropertyChanged("HasValidationErrors");
             }
-
-#if SILVERLIGHT
             protected override void OnPropertyErrorsChanged(string propertyName)
             {
                 this._complexObject.RaiseValidationErrorsChanged(propertyName);
             }
-#endif
         }
         #endregion
     }

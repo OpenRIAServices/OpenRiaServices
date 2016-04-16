@@ -245,7 +245,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueTestComplete();
         }
 
-#if SILVERLIGHT
         [TestMethod]
         [WorkItem(854187)]
         [Asynchronous]
@@ -365,7 +364,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             this.EnqueueTestComplete();
         }
-#endif
 
         private void BeginLoadCityData(Action<LoadOperation<City>> callback, object userState)
         {
