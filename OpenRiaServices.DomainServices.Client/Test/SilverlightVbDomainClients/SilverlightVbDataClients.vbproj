@@ -45,6 +45,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <NoStdLib>true</NoStdLib>
+    <MyType>Empty</MyType>
     <NoConfig>true</NoConfig>
     <Optimize>true</Optimize>
     <OutputPath>Bin\Release</OutputPath>
@@ -115,6 +116,7 @@
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <NoStdLib>true</NoStdLib>
+    <MyType>Empty</MyType>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
