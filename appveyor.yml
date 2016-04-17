@@ -1,0 +1,14 @@
+version: 1.0.{build}
+configuration:
+- Release
+- Signed
+platform: Any CPU
+before_build:
+- cmd: nuget restore RiaServices.sln
+build:
+  project: RiaServices.sln
+  parallel: true
+  verbosity: minimal
+artifacts:
+- path: '\bin\'
+test: off
