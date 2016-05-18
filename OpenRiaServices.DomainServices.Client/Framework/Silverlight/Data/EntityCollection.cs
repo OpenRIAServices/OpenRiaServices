@@ -25,6 +25,7 @@ namespace OpenRiaServices.DomainServices.Client
         private EntitySet _sourceSet;
         private Func<TEntity, bool> _entityPredicate;
         private List<TEntity> _entities;
+        private HashSet<TEntity> _entitiesHashSet;
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
         private PropertyChangedEventHandler _propertyChangedEventHandler;
         private TEntity _attachingEntity;
@@ -144,6 +145,25 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
+        /// Gets the internal <see cref="HashSet{T}"/> of entities, creating it if it is null.
+        /// </summary>
+        /// <remarks>
+        /// This property has been created because of performance reasons. Invoking Contains method on <see cref="Entities"/> can take significant amount of time
+        /// if there are large number of entities.
+        /// </remarks>
+        private HashSet<TEntity> EntitiesHashSet
+        {
+            get
+            {
+                if (this._entitiesHashSet == null)
+                {
+                    this._entitiesHashSet = new HashSet<TEntity>();
+                }
+                return this._entitiesHashSet;
+            }
+        }
+
+        /// <summary>
         /// Gets the current count of entities in this collection
         /// </summary>
         public int Count
@@ -208,7 +228,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.Attach(entity);
 
-            if (!this.Entities.Contains(entity))
+            if (!this.EntitiesHashSet.Contains(entity))
             {
                 bool addedToSet = false;
                 if (this.SourceSet != null)
@@ -232,7 +252,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
                 // above can cause a dynamic add to this EntityCollection behind the scenes
-                if (!addedToSet || !this.Entities.Contains(entity))
+                if (!addedToSet || !this.EntitiesHashSet.Contains(entity))
                 {
                     this.AddEntity(entity);
                     this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1));
@@ -285,7 +305,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (idx != -1)
             {
-                if (this.Entities.Remove(entity))
+                if (this.RemoveEntity(entity))
                 {
                     // If the entity was removed, raise a collection changed notification. Note that the Detach call above might
                     // have caused a dynamic removal behind the scenes resulting in the entity no longer being in the collection,
@@ -325,14 +345,23 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="entity">The <see cref="Entity"/>to add.</param>
         private void AddEntity(TEntity entity)
         {
-            Debug.Assert(!this.Entities.Contains(entity), "Entity is already in this collection!");
+            Debug.Assert(!this.EntitiesHashSet.Contains(entity), "Entity is already in this collection!");
 
             this.Entities.Add(entity);
+            this.EntitiesHashSet.Add(entity);
 
             if (this._isComposition)
             {
                 entity.SetParent(this._parent, this._assocAttribute);
             }
+        }
+
+        private bool RemoveEntity(TEntity entity)
+        {
+            var isRemoved = this.Entities.Remove(entity);
+            var isRemovedInHashSet = this.EntitiesHashSet.Remove(entity);
+            Debug.Assert(isRemoved == isRemovedInHashSet, "The entity should be present in both Entities and EntitiesHashSet", "Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet);
+            return isRemoved;
         }
 
         /// <summary>
@@ -392,7 +421,7 @@ namespace OpenRiaServices.DomainServices.Client
             EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
             foreach (TEntity entity in set.OfType<TEntity>().Where(this.Filter))
             {
-                if (!this.Entities.Contains(entity))
+                if (!this.EntitiesHashSet.Contains(entity))
                 {
                     this.AddEntity(entity);
                 }
@@ -568,7 +597,7 @@ namespace OpenRiaServices.DomainServices.Client
             TEntity typedEntity = entity as TEntity;
             if (typedEntity != null && this._entitiesLoaded)
             {
-                bool containsEntity = this.Entities.Contains(typedEntity);
+                bool containsEntity = this.EntitiesHashSet.Contains(typedEntity);
 
                 // We allow the parent entity to be New during the AcceptChanges phase of a submit (AcceptChanges called on the other entity)
                 // of a successfull Submit operation, in which case we know that it will soon be unmodified.
@@ -588,7 +617,7 @@ namespace OpenRiaServices.DomainServices.Client
                     // Here we use the predicate directly, since even if the entity is New if it
                     // no longer matches it should be removed.
                     int idx = this.Entities.IndexOf(typedEntity);
-                    this.Entities.Remove(typedEntity);
+                    this.RemoveEntity(typedEntity);
                     this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, entity, idx));
                 }
             }
@@ -614,7 +643,7 @@ namespace OpenRiaServices.DomainServices.Client
                     foreach (TEntity newEntity in newEntities)
                     {
                         newStartingIdx = this.Entities.Count;
-                        if (!this.Entities.Contains(newEntity))
+                        if (!this.EntitiesHashSet.Contains(newEntity))
                         {
                             this.AddEntity(newEntity);
                             affectedEntities.Add(newEntity);
@@ -635,13 +664,13 @@ namespace OpenRiaServices.DomainServices.Client
             else if (args.Action == NotifyCollectionChangedAction.Remove)
             {
                 // if the entity is in our cached collection, remove it
-                TEntity[] entitiesToRemove = args.OldItems.OfType<TEntity>().Where(p => this.Entities.Contains(p)).ToArray();
+                TEntity[] entitiesToRemove = args.OldItems.OfType<TEntity>().Where(p => this.EntitiesHashSet.Contains(p)).ToArray();
                 if (entitiesToRemove.Length > 0)
                 {
                     int oldStartingIdx = this.Entities.IndexOf(entitiesToRemove[0]);
                     foreach (TEntity removedEntity in entitiesToRemove)
                     {
-                        this.Entities.Remove(removedEntity);
+                        this.RemoveEntity(removedEntity);
                     }
 
 #if SILVERLIGHT
@@ -705,12 +734,13 @@ namespace OpenRiaServices.DomainServices.Client
         {
             IEnumerable<TEntity> loadedEntities = this.Entities;
             this._entities = this.Entities.Where(p => p.EntityState == EntityState.New).ToList();
+            this._entitiesHashSet = new HashSet<TEntity>(this._entities);
             this._entitiesLoaded = false;
 
             if (this.EntityRemoved != null)
             {
                 // for each removed entity, we need to raise a notification
-                foreach (TEntity entity in loadedEntities.Where(p => !this._entities.Contains(p)))
+                foreach (TEntity entity in loadedEntities.Where(p => !this._entitiesHashSet.Contains(p)))
                 {
                     this.EntityRemoved(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
                 }
@@ -982,7 +1012,7 @@ namespace OpenRiaServices.DomainServices.Client
         bool ICollection<TEntity>.Contains(TEntity item)
         {
             this.Load();
-            return this.Entities.Contains(item);
+            return this.EntitiesHashSet.Contains(item);
         }
         bool ICollection<TEntity>.Remove(TEntity item)
         {
