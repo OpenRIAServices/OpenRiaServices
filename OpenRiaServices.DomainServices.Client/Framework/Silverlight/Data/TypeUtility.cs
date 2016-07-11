@@ -23,7 +23,6 @@ namespace OpenRiaServices.DomainServices
     internal static class TypeUtility
     {
         internal const string OpenRiaServicesPublicKeyToken = "2e0b7ccb1ae5b4c8";
-        internal static readonly byte[] OpenRiaServicesPublicKeyTokenBytes = PublicKeyTokenToBytes(OpenRiaServicesPublicKeyToken);
 
         /// <summary>
         /// List of public key tokens used for System assemblies
@@ -41,7 +40,8 @@ namespace OpenRiaServices.DomainServices
         /// The list of assemblies that form OpenRiaServices. If OpenRiaServices is extended with
         /// additional assemblies, or if assemblies are removed, this array must be updated accordingly.
         /// </summary>
-        private static readonly string[] OpenRiaServicesAssemblyNames =
+        private static readonly HashSet<string> OpenRiaServicesAssemblyNames =
+        new HashSet<string>(StringComparer.Ordinal)
         {
             "OpenRiaServices.DomainServices.Client",
             "OpenRiaServices.DomainServices.Client.Web",
@@ -57,19 +57,6 @@ namespace OpenRiaServices.DomainServices
             "OpenRiaServices.DomainServices.Tools",
             "OpenRiaServices.DomainServices.Tools.TextTemplate"
         };
-
-        private static byte[] PublicKeyTokenToBytes(string publicKeyToken)
-        {
-            if(publicKeyToken == null || publicKeyToken.Length != 16)
-                return new byte[0];
-            else
-            {
-                var bytes = new byte[8];
-                for (int i = 0; i < bytes.Length; ++i)
-                    bytes[i] = Convert.ToByte(publicKeyToken.Substring(2 * i, 2), fromBase: 16);
-                return bytes;
-            }
-        }
 
 #if !WIZARD
         // list of "simple" types we will always accept for
@@ -569,8 +556,7 @@ namespace OpenRiaServices.DomainServices
             {
                 return false;
             }
-            string publicKeyToken = assemblyName.FullName.Substring(idx + 15);
-            return OpenRiaServicesPublicKeyToken == publicKeyToken;
+            return string.CompareOrdinal(OpenRiaServicesPublicKeyToken, 0, assemblyName.FullName, idx + 15, OpenRiaServicesPublicKeyToken.Length) == 0;
         }
 
         /// <summary>
@@ -598,29 +584,30 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
         internal static bool IsSystemAssembly(string assemblyFullName)
         {
-            // Return true if it is a Open Ria Services assembly
-            var assemblyName = new AssemblyName(assemblyFullName);
-            if (OpenRiaServicesAssemblyNames.Contains(assemblyName.Name))
-            {
-                return true;
-            }
-
             // parse the public key token
             int idx = assemblyFullName.IndexOf("PublicKeyToken=", StringComparison.OrdinalIgnoreCase);
-            if (idx == -1)
-            {
-                return false;
-            }
+            int publicKeyIndex = idx + 15;
 
-            try
+            // If the assembly has a public key, then it must be once of the system public keys or it 
+            // is not a system assembly. 
+            if (idx != -1)
             {
-               string publicKeyToken = assemblyFullName.Substring(idx + 15, 16);
-               return systemAssemblyPublicKeyTokens.Any(p => p.Equals(publicKeyToken, StringComparison.OrdinalIgnoreCase));
+                // Se if it matches any of the system keys
+                foreach (var systemKey in systemAssemblyPublicKeyTokens)
+                {
+                    if (string.CompareOrdinal(systemKey, 0, assemblyFullName, publicKeyIndex, systemKey.Length) == 0)
+                        return true;
+                }
+
+                // OpenRiaServices assemblies can have null as key (in which case we treat it as no key and compare by name)
+                // any other key indicates that this is not a system assembly, since if they have a key it should be the system key
+                if (string.CompareOrdinal("null", 0, assemblyFullName, publicKeyIndex, 4) != 0)
+                    return false;
             }
-            catch (ArgumentOutOfRangeException)
-            {
-               return false;
-            }
+            
+            // Return true if it is a Open Ria Services assembly
+            var assemblyName = new AssemblyName(assemblyFullName);
+            return OpenRiaServicesAssemblyNames.Contains(assemblyName.Name);
         }
     }
 }
