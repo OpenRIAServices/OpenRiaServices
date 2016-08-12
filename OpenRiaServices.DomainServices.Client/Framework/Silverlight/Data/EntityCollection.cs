@@ -8,7 +8,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+
+#if HAS_COLLECTIONVIEW
 using System.Windows.Data;
+#endif
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -16,7 +19,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// Represents a collection of associated Entities.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
-    public sealed class EntityCollection<TEntity> : IEntityCollection, ICollection<TEntity>, IEnumerable<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged, ICollectionViewFactory where TEntity : Entity
+    public sealed class EntityCollection<TEntity> : IEntityCollection, ICollection<TEntity>, IEnumerable<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged
+#if HAS_COLLECTIONVIEW
+        ,ICollectionViewFactory 
+#endif
+        where TEntity : Entity
     {
         private Action<TEntity> _attachAction;
         private Action<TEntity> _detachAction;
@@ -106,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._detachAction = detachAction;
         }
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         /// <summary>
         /// Returns an enumerator for this collection
@@ -117,7 +124,7 @@ namespace OpenRiaServices.DomainServices.Client
             return this.GetEnumerator();
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> is added to this collection
@@ -360,7 +367,12 @@ namespace OpenRiaServices.DomainServices.Client
         {
             var isRemoved = this.Entities.Remove(entity);
             var isRemovedInHashSet = this.EntitiesHashSet.Remove(entity);
-            Debug.Assert(isRemoved == isRemovedInHashSet, "The entity should be present in both Entities and EntitiesHashSet", "Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet);
+            Debug.Assert(isRemoved == isRemovedInHashSet
+                , "The entity should be present in both Entities and EntitiesHashSet"
+#if !PORTABLE
+                ,"Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet
+#endif
+            );
             return isRemoved;
         }
 
@@ -462,7 +474,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        #region IEnumerable<TEntity> Members
+#region IEnumerable<TEntity> Members
 
         /// <summary>
         /// Returns an enumerator for this collection
@@ -479,9 +491,9 @@ namespace OpenRiaServices.DomainServices.Client
             return this.Entities.ToList().GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region INotifyCollectionChanged Members
+#region INotifyCollectionChanged Members
 
         /// <summary>
         /// Event raised whenever the contents of the collection changes
@@ -498,7 +510,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        #region INotifyPropertyChanged Members
+#region INotifyPropertyChanged Members
         /// <summary>
         /// Event raised whenever a property on this collection changes
         /// </summary>
@@ -514,7 +526,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Called whenever the parent entity's <see cref="EntitySet"/> membership changes,
@@ -748,9 +760,9 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
-        #endregion
+#endregion
 
-        #region IEntityCollection Members
+#region IEntityCollection Members
         AssociationAttribute IEntityCollection.Association
         {
             get
@@ -784,10 +796,10 @@ namespace OpenRiaServices.DomainServices.Client
         {
             this.Remove((TEntity)entity);
         }
-        #endregion
+#endregion
 
-        #region ICollectionViewFactory
-
+#region ICollectionViewFactory
+#if HAS_COLLECTIONVIEW
         /// <summary>
         /// Returns a custom view for specialized sorting, filtering, grouping, and currency.
         /// </summary>
@@ -825,9 +837,9 @@ namespace OpenRiaServices.DomainServices.Client
                     WeakCollectionChangedListener.CreateIfNecessary(this._source, this);
             }
 
-            #region IList
+#region IList
 
-            public int Add(object value)
+        public int Add(object value)
             {
                 T entity = value as T;
                 if (entity == null)
@@ -961,9 +973,9 @@ namespace OpenRiaServices.DomainServices.Client
                 get { return this._source; }
             }
 
-            #endregion
+#endregion
 
-            #region INotifyCollectionChanged
+#region INotifyCollectionChanged
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -981,21 +993,21 @@ namespace OpenRiaServices.DomainServices.Client
                 this.OnCollectionChanged(e);
             }
 
-            #endregion
+#endregion
 
-            #region ICollectionChangedListener
+#region ICollectionChangedListener
 
             void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
             {
                 this.OnSourceCollectionChanged(sender, e);
             }
 
-            #endregion
+#endregion
         }
+#endif
+#endregion
 
-        #endregion
-
-        #region ICollection<TEntity> Members
+#region ICollection<TEntity> Members
         bool ICollection<TEntity>.IsReadOnly
         {
             get
@@ -1029,7 +1041,7 @@ namespace OpenRiaServices.DomainServices.Client
             foreach(var item in this.Entities.ToList())
                 Remove(item);
         }
-        #endregion
+#endregion
     }
 
     /// <summary>

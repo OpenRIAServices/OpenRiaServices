@@ -63,8 +63,9 @@ namespace OpenRiaServices.DomainServices.Client
         {
             _customUpdateMethods = (from method in type.GetMethods(MemberBindingFlags)
                                     let attributes = method.GetCustomAttributes(typeof(EntityActionAttribute), false)
-                                    where attributes.Length == 1
-                                    select (EntityActionAttribute)attributes[0]
+                                    let attribute = (EntityActionAttribute)attributes.FirstOrDefault()
+                                    where attribute != null
+                                    select attribute
                                    ).ToDictionary(cua => cua.Name, cua => cua);
 
             IEnumerable<PropertyInfo> properties = type.GetProperties(MemberBindingFlags).Where(p => p.GetIndexParameters().Length == 0).OrderBy(p => p.Name);
@@ -91,29 +92,29 @@ namespace OpenRiaServices.DomainServices.Client
 
                 if (property.GetGetMethod() != null)
                 {
-                    metaMember.RequiresValidation = property.GetCustomAttributes(typeof(ValidationAttribute), true).Length > 0;
+                    metaMember.RequiresValidation = TypeUtility.IsAttributeDefined(property, typeof(ValidationAttribute), true);
                 }
 
-                if (property.GetCustomAttributes(typeof(AssociationAttribute), false).Length > 0)
+                if (TypeUtility.IsAttributeDefined(property, typeof(AssociationAttribute), false))
                 {
                     metaMember.IsAssociationMember = true;
                 }
 
-                bool isKeyMember = property.GetCustomAttributes(typeof(KeyAttribute), false).Length > 0;
+                bool isKeyMember = TypeUtility.IsAttributeDefined(property, typeof(KeyAttribute), false);
                 if (isKeyMember)
                 {
                     metaMember.IsKeyMember = true;
                 }
 
-                if (property.GetCustomAttributes(typeof(CompositionAttribute), false).Length > 0)
+                if (TypeUtility.IsAttributeDefined(property, typeof(CompositionAttribute), false))
                 {
                     this._hasComposition = true;
                 }
 
                 if (MetaType.IsRoundtripMember(metaMember))
                 {
-                    if (property.GetCustomAttributes(typeof(TimestampAttribute), false).Length != 0 &&
-                        property.GetCustomAttributes(typeof(ConcurrencyCheckAttribute), false).Length != 0)
+                    if (TypeUtility.IsAttributeDefined(property, typeof(TimestampAttribute), false) &&
+                        TypeUtility.IsAttributeDefined(property, typeof(ConcurrencyCheckAttribute), false))
                     {
                         // Look for a concurrency version member. There should be only one
                         // (DomainService validation ensures this).
@@ -204,17 +205,17 @@ namespace OpenRiaServices.DomainServices.Client
 
         private static bool IsRoundtripMember(MetaMember metaMember)
         {
-            bool isRoundtripEntity = metaMember.Member.DeclaringType.GetCustomAttributes(typeof(RoundtripOriginalAttribute), true).Length > 0;
+            bool isRoundtripEntity = TypeUtility.IsAttributeDefined(metaMember.Member.DeclaringType, typeof(RoundtripOriginalAttribute), true);
 
             return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
-                       (isRoundtripEntity || metaMember.Member.GetCustomAttributes(typeof(RoundtripOriginalAttribute), false).Length != 0);
+                       (isRoundtripEntity || TypeUtility.IsAttributeDefined(metaMember.Member, typeof(RoundtripOriginalAttribute), false));
         }
 
         private static bool IsMergeableMember(MetaMember metaMember)
         {
             return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
-                   (metaMember.Member.GetCustomAttributes(typeof (MergeAttribute), true).Length == 0 ||
-                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof (MergeAttribute), true).GetValue(0)).IsMergeable);
+                   (TypeUtility.IsAttributeDefined(metaMember.Member, typeof(MergeAttribute), true) == false ||
+                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof (MergeAttribute), true).First()).IsMergeable);
         }
 
 
@@ -412,7 +413,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (!this._requiresValidation)
             {
-                this._requiresValidation = type.GetCustomAttributes(typeof(ValidationAttribute), true).Length > 0;
+                this._requiresValidation = TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true);
             }
 
             // visit all data members
@@ -421,7 +422,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (!this._requiresValidation)
                 {
-                    this._requiresValidation = property.GetCustomAttributes(typeof(ValidationAttribute), true).Length > 0;
+                    this._requiresValidation = TypeUtility.IsAttributeDefined(property, typeof(ValidationAttribute), true);
                 }
 
                 // for complex members we must drill in recursively

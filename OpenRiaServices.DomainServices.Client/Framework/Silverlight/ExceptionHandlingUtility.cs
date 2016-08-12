@@ -57,12 +57,19 @@ namespace OpenRiaServices.DomainServices
 
         private static bool IsFatalExceptionType(Exception exception)
         {
-            if ((exception is ThreadAbortException) ||
-#if SILVERLIGHT
-                (exception is OutOfMemoryException))
-#else
-                ((exception is OutOfMemoryException) && !(exception is InsufficientMemoryException)))
+            if (
+#if !PORTABLE && !NETSTANDARD
+                (exception is System.Threading.ThreadAbortException) ||
 #endif
+
+#if SILVERLIGHT
+                (exception is OutOfMemoryException)
+#elif SERVERFX
+                ((exception is OutOfMemoryException) && !(exception is System.InsufficientMemoryException))
+#else
+                ((exception is OutOfMemoryException) && !(exception.GetType().FullName.Equals("System.InsufficientMemoryException", StringComparison.Ordinal)))
+#endif
+               )
             {
                 return true;
             }

@@ -36,7 +36,15 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("instance");
             }
 
+#if !PORTABLE
             ValidationContext context = new ValidationContext(instance, parentContext, parentContext != null ? parentContext.Items : null);
+#else
+            ValidationContext context = new ValidationContext(instance, parentContext?.Items);
+            if (parentContext != null)
+            {
+                context.InitializeServiceProvider(type => parentContext.GetService(type));
+            }
+#endif
             return context;
         }
 
@@ -61,13 +69,21 @@ namespace OpenRiaServices.DomainServices.Client
                 int parameterLength = (parameters == null) ? 0 : parameters.Length;
                 if (parameterLength == 0)
                 {
+#if !PORTABLE
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound_ZeroParams, instanceType, methodName));
+#else
+                    throw new MissingMemberException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound_ZeroParams, instanceType, methodName));
+#endif
                 }
                 else
                 {
                     // convert parameter types into a string of this format e.g. ('string', null, 'int')
                     string[] parameterTypes = parameters.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
+#if !PORTABLE
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
+#else
+                    throw new MissingMemberException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
+#endif
                 }
             }
 
@@ -90,7 +106,8 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (parameters[i] == null)
                 {
-                    if (!TypeUtility.IsNullableType(parameterTypes[i]) && parameterTypes[i].IsValueType)
+                    if (!TypeUtility.IsNullableType(parameterTypes[i])
+                        && TypeUtility.IsValueType(parameterTypes[i]))
                     {
                         return false;
                     }
@@ -697,11 +714,21 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Gets the DisplayAttribute that applies to a method, parameter, property, etc.
+        /// Gets the DisplayAttribute that applies to a parameter.
         /// </summary>
-        /// <param name="member">A <see cref="ICustomAttributeProvider"/> member to query for <see cref="DisplayAttribute"/>s.</param>
+        /// <param name="member">A <see cref="ParameterInfo"/> member to query for <see cref="DisplayAttribute"/>s.</param>
         /// <returns>A <see cref="DisplayAttribute"/> found or <c>null</c> if none is found</returns>
-        private static DisplayAttribute GetDisplayAttribute(ICustomAttributeProvider member)
+        private static DisplayAttribute GetDisplayAttribute(ParameterInfo member)
+        {
+            return member.GetCustomAttributes(typeof(DisplayAttribute), true).SingleOrDefault() as DisplayAttribute;
+        }
+
+        /// <summary>
+        /// Gets the DisplayAttribute that applies to a method.
+        /// </summary>
+        /// <param name="member">A <see cref="MethodInfo"/> member to query for <see cref="DisplayAttribute"/>s.</param>
+        /// <returns>A <see cref="DisplayAttribute"/> found or <c>null</c> if none is found</returns>
+        private static DisplayAttribute GetDisplayAttribute(MethodInfo member)
         {
             return member.GetCustomAttributes(typeof(DisplayAttribute), true).SingleOrDefault() as DisplayAttribute;
         }

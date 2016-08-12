@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         {
             // Look for the WebDomainClient in an assembly with the same version and with same signing key as this assembly
             var webDomainClientName = "OpenRiaServices.DomainServices.Client.WebDomainClient`1, "
-                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+                                    + TypeUtility.GetAssembly(typeof(DomainClient)).FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
             _webDomainClientType = Type.GetType(webDomainClientName);
         }
 

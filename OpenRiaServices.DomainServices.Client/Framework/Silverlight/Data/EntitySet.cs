@@ -9,7 +9,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+
+#if HAS_COLLECTIONVIEW
 using System.Windows.Data;
+#endif
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -916,23 +919,23 @@ namespace OpenRiaServices.DomainServices.Client
             this.RaisePropertyChanged("Count");
         }
 
-        #region IEnumerable Members
+#region IEnumerable Members
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
-        #endregion
+#endregion
 
-        #region ICollection Members
+#region ICollection Members
         bool ICollection.IsSynchronized { get { return false; } }
         object ICollection.SyncRoot { get { return _list.SyncRoot; } }
         void ICollection.CopyTo(Array array, int index)
         {
             this._list.CopyTo(array, index);
         }
-        #endregion
+#endregion
 
-        #region INotifyCollectionChanged Members
+#region INotifyCollectionChanged Members
 
         /// <summary>
         /// Event raised when the collection has changed, or the collection is reset.
@@ -949,18 +952,18 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        #endregion
+#endregion
 
-        #region IRevertibleChangeTracking Members
+#region IRevertibleChangeTracking Members
 
         void IRevertibleChangeTracking.RejectChanges()
         {
             this.RejectChanges();
         }
 
-        #endregion
+#endregion
 
-        #region IChangeTracking Members
+#region IChangeTracking Members
 
         bool IChangeTracking.IsChanged
         {
@@ -975,9 +978,9 @@ namespace OpenRiaServices.DomainServices.Client
             this.AcceptChanges();
         }
 
-        #endregion
+#endregion
 
-        #region INotifyPropertyChanged Members
+#region INotifyPropertyChanged Members
         /// <summary>
         /// Event raised when a property has changed.
         /// </summary>
@@ -1014,7 +1017,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Visitor used to traverse all associations in a graph and infer
@@ -1212,7 +1215,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// Represents a collection of <see cref="Entity"/> instances, providing change tracking and other services.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> this set will contain</typeparam>
-    public sealed class EntitySet<TEntity> : EntitySet, IEnumerable<TEntity>, ICollection<TEntity>, ICollectionViewFactory where TEntity : Entity
+    public sealed class EntitySet<TEntity> : EntitySet, IEnumerable<TEntity>, ICollection<TEntity>
+#if HAS_COLLECTIONVIEW
+        , ICollectionViewFactory 
+#endif
+        where TEntity : Entity
     {
         /// <summary>
         /// Initializes a new instance of the EntitySet class
@@ -1237,7 +1244,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created entity instance.</returns>
         protected override Entity CreateEntity()
         {
-            if (typeof(TEntity).IsAbstract)
+            if (TypeUtility.IsAbstract(typeof(TEntity)))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resources.Cannot_Create_Abstract_Entity, typeof(TEntity)));
             }
@@ -1335,14 +1342,14 @@ namespace OpenRiaServices.DomainServices.Client
             base.OnCollectionChanged(action, affectedObject, index);
         }
 
-        #region IEnumerable<TEntity> Members
+#region IEnumerable<TEntity> Members
         IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator()
         {
             return this.GetEnumerator();
         }
-        #endregion
+#endregion
 
-        #region ICollection<TEntity> Members
+#region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
             ((IList<TEntity>)List).CopyTo(array, arrayIndex);
@@ -1370,10 +1377,10 @@ namespace OpenRiaServices.DomainServices.Client
                     throw;
             }
         }
-        #endregion
+#endregion
 
-        #region ICollectionViewFactory
-
+#region ICollectionViewFactory
+#if HAS_COLLECTIONVIEW
         /// <summary>
         /// Returns a custom view for specialized sorting, filtering, grouping, and currency.
         /// </summary>
@@ -1406,7 +1413,7 @@ namespace OpenRiaServices.DomainServices.Client
                     WeakCollectionChangedListener.CreateIfNecessary(this._source, this);
             }
 
-            #region IList
+#region IList
 
             public int Add(object value)
             {
@@ -1521,9 +1528,9 @@ namespace OpenRiaServices.DomainServices.Client
                 get { return this._source; }
             }
 
-            #endregion
+#endregion
 
-            #region INotifyCollectionChanged
+#region INotifyCollectionChanged
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -1541,18 +1548,18 @@ namespace OpenRiaServices.DomainServices.Client
                 this.OnCollectionChanged(e);
             }
 
-            #endregion
+#endregion
 
-            #region ICollectionChangedListener
+#region ICollectionChangedListener
 
             void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
             {
                 this.OnSourceCollectionChanged(sender, e);
             }
 
-            #endregion
+#endregion
         }
-
-        #endregion
+#endif
+#endregion
     }
 }

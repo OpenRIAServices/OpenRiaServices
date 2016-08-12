@@ -468,7 +468,8 @@ namespace OpenRiaServices.DomainServices.Client
             protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
             {
                 // look for any invalid updates made to composed children
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Length == 1 && entityCollection.HasValues)
+                if (entityCollection.HasValues && 
+                    TypeUtility.IsAttributeDefined(propertyInfo, typeof(CompositionAttribute), false))
                 {
                     AssociationAttribute assoc = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
                     foreach (Entity childEntity in entityCollection.Entities)
@@ -489,7 +490,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 // look for any invalid updates made to composed children
-                if (entity != null && propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Length == 1)
+                if (entity != null && TypeUtility.IsAttributeDefined(propertyInfo, typeof(CompositionAttribute), false))
                 {
                     AssociationAttribute assoc = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
                     CheckInvalidChildUpdates(entity, assoc);

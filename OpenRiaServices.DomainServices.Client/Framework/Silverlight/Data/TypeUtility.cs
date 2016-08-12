@@ -13,7 +13,6 @@ using System.Runtime.Serialization;
 
 #if SERVERFX
 using OpenRiaServices.DomainServices.Server;
-
 #else
 using OpenRiaServices.DomainServices.Client;
 #endif
@@ -74,7 +73,7 @@ namespace OpenRiaServices.DomainServices
 #if !WIZARD
         // list of "simple" types we will always accept for
         // serialization, inclusion from entities, etc.
-        // Primitive types are not here -- test for them via Type.IsPrimitive
+        // Primitive types are not here -- test for them via ReflectionUtility.IsPrimitive(type)
         private static HashSet<Type> predefinedTypes = new HashSet<Type>
         {
             typeof(string),
@@ -86,49 +85,130 @@ namespace OpenRiaServices.DomainServices
             typeof(Uri)
         };
 
-        
-        private static bool IsGenericType(Type type)
+#region FRAMEWORK_INDEPENDENT_REFLECTION
+#if REFLECTION_V2
+        public static IEnumerable<Attribute> GetCustomAttributes(this Type type, bool inherit)
+        {
+            return type.GetTypeInfo().GetCustomAttributes(inherit);
+        }
+
+        public static IEnumerable<Attribute> GetCustomAttributes(this Type type, Type attributeType, bool inherit)
+        {
+            return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit);
+        }
+#endif
+
+#if REFLECTION_V2
+        public static TypeInfo GetTypeInfo(Type type)
+        {
+            return type.GetTypeInfo();
+        }
+#else
+        public static Type GetTypeInfo(this Type type)
+        {
+            return type;
+        }
+#endif
+
+        public static bool IsGenericType(Type type)
+        {
+            return GetTypeInfo(type).IsGenericType;
+        }
+
+        public static Type GetBaseType(Type type)
+        {
+            return GetTypeInfo(type).BaseType;
+        }
+
+        public static bool IsEnum(Type type)
+        {
+            return GetTypeInfo(type).IsEnum;
+        }
+
+        public static bool IsInterface(Type type)
+        {
+            return GetTypeInfo(type).IsInterface;
+        }
+
+        public static bool IsPrimitive(Type type)
+        {
+            return GetTypeInfo(type).IsPrimitive;
+        }
+
+        public static bool IsAbstract(Type type)
+        {
+            return GetTypeInfo(type).IsAbstract;
+        }
+
+        public static bool IsValueType(Type type)
+        {
+            return GetTypeInfo(type).IsValueType;
+        }
+
+        public static Assembly GetAssembly(Type type)
+        {
+            return GetTypeInfo(type).Assembly;
+        }
+
+        public static bool IsAssignableFrom(this Type type, Type c)
+        {
+            return GetTypeInfo(type).IsAssignableFrom(GetTypeInfo(c));
+        }
+
+        /// <summary>
+        /// Determines if a specific attribute is defined on a property.
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="attributeType">the type of attribute to look for</param>
+        /// <param name="inherit"></param>
+        /// <returns><c>true</c> if the attribute is defined, otherwise <c>false</c></returns>
+        public static bool IsAttributeDefined(PropertyInfo property, Type attributeType, bool inherit)
         {
 #if REFLECTION_V2
-            return type.GetTypeInfo().IsGenericType;
+            return property.GetCustomAttributes(attributeType, inherit).Any();
 #else
-            return type.IsGenericType;
+            return property.IsDefined(attributeType, inherit);
 #endif
         }
 
-        private static Type GetBaseType(Type type)
+        /// <summary>
+        /// Determines if a specific attribute is defined for a type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="attributeType">the type of attribute to look for</param>
+        /// <param name="inherit"></param>
+        /// <returns><c>true</c> if the attribute is defined, otherwise <c>false</c></returns>
+        public static bool IsAttributeDefined(Type type, Type attributeType, bool inherit)
         {
 #if REFLECTION_V2
-            return type.GetTypeInfo().BaseType;
+            return type.GetCustomAttributes(attributeType, inherit).Any();
 #else
-            return type.BaseType;
+            return type.IsDefined(attributeType, inherit);
 #endif
         }
+    
+        #endregion
 
-        private static bool IsEnum(Type type)
+        public static bool GetSingleAttributeOrNull(PropertyInfo property, Type attributeType, bool inherit)
         {
-#if REFLECTION_V2
-            return type.GetTypeInfo().IsEnum;
-#else
-            return type.IsEnum;
-#endif
-        }
+            var properties = property.GetCustomAttributes(attributeType, inherit);
 
-        private static bool IsInterface(Type type)
-        {
 #if REFLECTION_V2
-            return type.GetTypeInfo().IsInterface;
-#else
-            return type.IsInterface;
-#endif
-        }
+            using (var enumerator = properties.GetEnumerator())
+            {
+                // Check for first item
+                if (!enumerator.MoveNext())
+                    return false;
+                var attribute = enumerator.Current;
 
-        private static bool IsPrimitive(Type type)
-        {
-#if REFLECTION_V2
-            return type.GetTypeInfo().IsPrimitive;
+                // Check for second item
+                if (enumerator.MoveNext())
+                    return false;
+                else
+                    return true;
+            }
 #else
-            return type.IsPrimitive;
+            return properties.Length == 1;
 #endif
         }
 
@@ -153,7 +233,7 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the given type is a nullable type</returns>
         public static bool IsNullableType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         /// <summary>
@@ -164,14 +244,14 @@ namespace OpenRiaServices.DomainServices
         public static bool IsTaskType(Type type)
         {
             return type == typeof(Task)
-                || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>));
+                || (IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(Task<>));
         }
 
         public static Type GetTaskReturnType(Type type)
         {
             if (type == typeof(Task))
                 return typeof(void);
-            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            else if (IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(Task<>))
                 return type.GetGenericArguments()[0];
             else
                 throw new ArgumentException("Type must be either Task, or Task<T>", "type");
@@ -229,8 +309,8 @@ namespace OpenRiaServices.DomainServices
         public static bool IsSupportedCollectionType(Type type)
         {
             if (type.IsArray ||
-               (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>)) ||
-               (typeof(IList).IsAssignableFrom(type) && type.GetConstructor(TypeUtility.EmptyTypes) != null))
+               (IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(IEnumerable<>)) ||
+               (typeof(IList).IsAssignableFrom(type) && type.GetConstructor(EmptyTypes) != null))
             {
                 return true;
             }
@@ -268,12 +348,12 @@ namespace OpenRiaServices.DomainServices
             type = GetNonNullableType(type);
 
             // primitive types (except IntPtr and UIntPtr) are supported
-            if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
+            if (IsPrimitive(type) && type != typeof(IntPtr) && type != typeof(UIntPtr))
             {
                 return true;
             }
 
-            if (type.IsEnum)
+            if (IsEnum(type))
             {
                 return true;
             }
@@ -290,7 +370,7 @@ namespace OpenRiaServices.DomainServices
 
             // We test XElement by Type Name so our client framework assembly can avoid
             // taking an assembly reference to System.Xml.Linq
-            if (string.Compare(type.FullName, "System.Xml.Linq.XElement", StringComparison.Ordinal) == 0)
+            if (string.Equals(type.FullName, "System.Xml.Linq.XElement", StringComparison.Ordinal))
             {
                 return true;
             }
@@ -313,7 +393,7 @@ namespace OpenRiaServices.DomainServices
                 return false;
             }
 #else
-            if (!type.IsVisible || type.IsGenericType || type.IsAbstract)
+            if (!type.IsVisible || TypeUtility.IsGenericType(type) || IsAbstract(type))
             {
                 return false;
             }
@@ -454,12 +534,12 @@ namespace OpenRiaServices.DomainServices
 
             while (genericType != null)
             {
-                if (genericTypeDefinition.IsInterface)
+                if (IsInterface(genericTypeDefinition))
                 {
                     bool interfaceMatched = false;
                     foreach (Type interfaceType in genericType.GetInterfaces().Concat(new[] { derivedType }))
                     {
-                        if (interfaceType.IsGenericType &&
+                        if (IsGenericType(interfaceType)  &&
                             genericTypeDefinition == interfaceType.GetGenericTypeDefinition())
                         {
                             interfaceMatched = true;
@@ -474,13 +554,13 @@ namespace OpenRiaServices.DomainServices
                 }
                 else
                 {
-                    if (genericType.IsGenericType &&
+                    if (IsGenericType(genericType) &&
                         genericTypeDefinition == genericType.GetGenericTypeDefinition())
                     {
                         break;
                     }
                 }
-                genericType = genericType.BaseType;
+                genericType = GetBaseType(genericType);
             }
 
             return genericType != null;
@@ -496,7 +576,7 @@ namespace OpenRiaServices.DomainServices
             {
                 return typeof(IEnumerable<>).MakeGenericType(seqType.GetElementType());
             }
-            if (seqType.IsGenericType)
+            if (IsGenericType(seqType))
             {
                 foreach (Type arg in seqType.GetGenericArguments())
                 {
@@ -519,20 +599,20 @@ namespace OpenRiaServices.DomainServices
                     }
                 }
             }
-            if (seqType.BaseType != null && seqType.BaseType != typeof(object))
+            if (GetBaseType(seqType) != null && GetBaseType(seqType) != typeof(object))
             {
-                return FindIEnumerable(seqType.BaseType);
+                return FindIEnumerable(GetBaseType(seqType));
             }
             return null;
         }
 #endif
 
-        /// <summary>
-        /// Performs a check against an assembly to determine if it's a known
-        /// System assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly to check.</param>
-        /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
+            /// <summary>
+            /// Performs a check against an assembly to determine if it's a known
+            /// System assembly.
+            /// </summary>
+            /// <param name="assembly">The assembly to check.</param>
+            /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
         internal static bool IsSystemAssembly(this Assembly assembly)
         {
             return IsSystemAssembly(assembly.FullName);

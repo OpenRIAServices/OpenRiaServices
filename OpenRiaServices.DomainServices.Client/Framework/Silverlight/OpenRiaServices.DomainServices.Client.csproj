@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
     <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;SIGNED</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;SIGNED;HAS_COLLECTIONVIEW</DefineConstants>
     <DocumentationFile>..\..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoStdLib>true</NoStdLib>
@@ -92,21 +92,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;HAS_COLLECTIONVIEW</DefineConstants>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <DocumentationFile>..\..\..\bin\Debug\Silverlight\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;HAS_COLLECTIONVIEW</DefineConstants>
     <DocumentationFile>..\..\..\bin\Release\Silverlight\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;CODECOV</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;CODECOV;HAS_COLLECTIONVIEW</DefineConstants>
     <IsSilverlight>true</IsSilverlight>
     <DocumentationFile>..\..\..\bin\CodeCov\Silverlight\OpenRiaServices.DomainServices.Client.xml</DocumentationFile>
   </PropertyGroup>
@@ -215,7 +215,8 @@
     <Compile Include="Data\ValidationResultInfo.cs" />
     <Compile Include="Data\OperationErrorStatus.cs" />
     <Compile Include="Data\QueryCompletedResult.cs" />
-    <Compile Include="Data\Resource.Designer.cs">
+    <Compile Include="PortabilityExtensions.cs" />
+    <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
@@ -242,7 +243,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\Resource.resx">
+    <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
