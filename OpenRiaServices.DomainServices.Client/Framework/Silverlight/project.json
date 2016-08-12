@@ -1,0 +1,130 @@
+{
+    "name": "OpenRiaServices.DomainServices.Client",
+    "version": "4.0.0-*",
+    "configurations": {
+        "Release": {
+            "buildOptions": { "optimize": true }
+        },
+        "Debug": {},
+        "Signed": {
+            "buildOptions": {
+                "optimize": true,
+                "keyFile": "../../../snk/OpenRiaServices.snk",
+                "define": ["SIGNED"]
+            }
+        }
+    },
+
+    "frameworks": {
+        //"netstandard1.1": {
+        //    "dependencies": {
+        //        "NETStandard.Library": "1.6.0",
+        //        "System.ComponentModel.Annotations": "4.1.0",
+        //        "System.ComponentModel.Primitives": "4.1.0",
+        //        "System.Linq": "4.1.0",
+        //        "System.Linq.Queryable": "4.0.1",
+        //        "System.Security.Principal": "4.0.1",
+        //        "System.Runtime": "4.1.0",
+        //        "System.Runtime.Serialization.Primitives": "4.1.1"
+        //    },
+        //    "buildOptions": {
+        //        "nowarn": [ "CS0618" ],
+        //        "define": [ "NETSTANDARD", "REFLECTION_V2", "SILVERLIGHT", "PORTABLE" ]
+        //    }
+        //},
+        "netstandard1.3": {
+            "dependencies": {
+                "NETStandard.Library": "1.6.0",
+                "System.ComponentModel.Annotations": "4.1.0",
+                "System.ComponentModel.Primitives": "4.1.0",
+                "System.Linq.Queryable": "4.0.1",
+                "System.Reflection.TypeExtensions": "4.1.0",
+                "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
+                "System.Runtime.Serialization.Primitives": "4.1.1",
+                "System.Security.Principal": "4.0.1"
+            },
+            "buildOptions": {
+                "nowarn": [ "CS0618" ],
+                "define": [ "NETSTANDARD", "REFLECTION_V2" ]
+            }
+        },
+        "net45": {
+            "buildOptions": {
+                "define": [ "HAS_COLLECTIONVIEW" ]
+            },
+            "dependencies": {},
+            "frameworkAssemblies": {
+                "PresentationFramework": "4.0.0.0",
+                "System.ComponentModel.DataAnnotations": "4.0.0.0",
+                "System.Data.Linq": "4.0.0.0",
+                "System.Runtime.Serialization": "4.0.0.0",
+                "WindowsBase": "4.0.0.0"
+            }
+        },
+        "Silverlight,Version=v5.0": {
+            "buildOptions": {
+                "additionalArguments": [ "\"/r:C:\\Program Files (x86)\\Microsoft SDKs\\Silverlight\\v5.0\\Libraries\\Client\\System.ComponentModel.DataAnnotations.dll\"" ],
+                "define": [ "SILVERLIGHT", "HAS_COLLECTIONVIEW" ]
+            },
+            "frameworkAssemblies": {
+                "mscorlib": "",
+                "System": "",
+                "System.Core": "",
+                "System.Runtime.Serialization": "",
+                "System.Windows": ""
+            }
+        },
+        ".NETPortable,Version=4.0,Profile=Profile47": {
+            "buildOptions": { "define": [ "PORTABLE", "PORTABLE47", "SILVERLIGHT" ] },
+            "frameworkAssemblies": {
+                "mscorlib": "",
+                "System": "",
+                "System.ComponentModel.DataAnnotations": "",
+                "System.Core": "",
+                "System.Runtime.Serialization": "",
+                "System.Windows": ""
+            }
+        }
+        //".NETPortable,Version=4.0,Profile=Profile255": {
+        //    "buildOptions": { "define": [ "PORTABLE", "PORTABLE111", "SILVERLIGHT" ] },
+        //    "frameworkAssemblies": {
+        //        "mscorlib": "",
+        //        "System": "",
+        //        "System.Collections": "",
+        //        "System.ComponentModel": "",
+        //        "System.ComponentModel.EventBasedAsync": "",
+        //        "System.Core": "",
+        //        "System.Diagnostics.Debug": "",
+        //        "System.Diagnostics.Tools": "",
+        //        "System.Globalization": "",
+        //        "System.Linq": "",
+        //        "System.Linq.Expressions": "",
+        //        "System.Linq.Queryable": "",
+        //        "System.ObjectModel": "",
+        //        "System.Reflection": "",
+        //        "System.Reflection.Extensions": "",
+        //        "System.Reflection.Primitives": "",
+        //        "System.Resources.ResourceManager": "",
+        //        "System.Runtime": "",
+        //        "System.Runtime.Extensions": "",
+        //        "System.Runtime.Serialization": "",
+        //        "System.Runtime.Serialization.Primitives": "",
+        //        "System.Security.Principal": "",
+        //        "System.ServiceModel.Web": "",
+        //        "System.Threading": "",
+        //        "System.Threading.Tasks": "",
+        //        "System.Windows": ""
+        //    }
+        //}
+    },
+    "buildOptions": {
+        "compile": {
+            "includeFiles": [
+                "..\\..\\..\\OpenRiaServices.DomainServices.Server\\Framework\\Data\\CompositionAttribute.cs",
+                "..\\..\\..\\OpenRiaServices.Data.DomainServices\\Framework\\EntityList.cs",
+                "..\\..\\..\\OpenRiaServices.Data.DomainServices\\Framework\\QueryBuilder.cs"
+            ]
+        },
+        //"embed": { "include": [ "**/*.resx" ] }
+    }
+}

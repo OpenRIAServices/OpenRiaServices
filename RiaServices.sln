@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -160,6 +160,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Silverlight.ComboBoxExtensions", "OpenRiaServices.Silverlight.ComboBoxExtensions\Framework\Silverlight\OpenRiaServices.Silverlight.ComboBoxExtensions.csproj", "{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web.Test", "OpenRiaServices.DomainServices.Client.Web\Test\Desktop\OpenRiaServices.DomainServices.Client.Web.Test.csproj", "{FDE752B0-6A65-4457-8CDC-4D347B51E67C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Netstandard", "Netstandard", "{20D333D2-D0A4-4D28-BB27-494A8AE297E3}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.xproj", "{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1119,6 +1123,24 @@ Global
 		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.ReleaseNet40|Any CPU.Build.0 = Release|Any CPU
 		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.CodeAnalysis|Any CPU.ActiveCfg = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.CodeAnalysis|Any CPU.Build.0 = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.CodeCov|Any CPU.ActiveCfg = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.CodeCov|Any CPU.Build.0 = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.DebugNet40|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.DebugNet40|Any CPU.Build.0 = Debug|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.MyGet|Any CPU.ActiveCfg = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.MyGet|Any CPU.Build.0 = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.MyGet40|Any CPU.ActiveCfg = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.MyGet40|Any CPU.Build.0 = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.ReleaseNet40|Any CPU.ActiveCfg = Release|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.ReleaseNet40|Any CPU.Build.0 = Release|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Signed|Any CPU.Build.0 = Signed|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1188,6 +1210,8 @@ Global
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
 		{FDE752B0-6A65-4457-8CDC-4D347B51E67C} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
+		{20D333D2-D0A4-4D28-BB27-494A8AE297E3} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
+		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64} = {20D333D2-D0A4-4D28-BB27-494A8AE297E3}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Desktop.vsmdi

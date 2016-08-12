@@ -572,7 +572,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     // just return an assembly, internal will probably be wrong but 
                     // as long as internal is non null we will try to load domain context by name
                     Assembly.GetCallingAssembly();
-#elif SILVERLIGHT 
+#elif NETSTANDARD1_3
+                    TypeUtility.GetAssembly(typeof(DomainContext));
+#elif SILVERLIGHT
                     Application.Current.GetType().Assembly;
 #else
                     Assembly.GetEntryAssembly();
