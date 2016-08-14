@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             DomainIdentifierAttribute attr = new DomainIdentifierAttribute("aName");
             Assert.AreEqual("aName", attr.Name);
-#if !SILVERLIGHT
+#if SERVERFX
             Assert.IsNull(attr.CodeProcessor);
 #endif
         }
@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual("otherName", attr.Name);
         }
 
-#if !SILVERLIGHT
+#if SERVERFX
         [TestMethod]
         [Description("DomainIdentifier CodeProcessor property is settable.")]
         public void DomainIdentifier_CodeProcessor_Property_Settable()

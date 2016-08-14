@@ -168,6 +168,7 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Project>{6428863A-11FE-48EA-AE51-B2BA5DD29E57}</Project>
       <Name>OpenRiaServices.DomainServices.Client.Web</Name>
+      <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
       <Project>{03788A27-145D-4282-8FDC-C336A3BBC471}</Project>

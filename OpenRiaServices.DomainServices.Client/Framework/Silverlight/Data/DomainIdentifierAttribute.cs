@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices
         /// </summary>
         public bool IsApplicationService { get; set; }
 
-#if SERVERFX
+#if !SILVERLIGHT && !PORTABLE
         /// <summary>
         /// Gets or sets the <see cref="CodeProcessor"/> type
         /// </summary>
@@ -79,6 +79,6 @@ namespace OpenRiaServices.DomainServices
                 return this;
             }
         }
-#endif //SERVERFX
+#endif //!SILVERLIGHT && !PORTABLE
     }
 }

@@ -1,6 +1,7 @@
 ﻿extern alias DomainServices;
 extern alias DomainServicesTests;
 extern alias WebRia;
+extern alias SSmDsWeb;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +15,7 @@ using TestDomainServices.LTS;
 using VbExpressions;
 using DomainServiceDescription = DomainServices::OpenRiaServices.DomainServices.Server.DomainServiceDescription;
 using NorthwindDomainService = DomainServicesTests::TestDomainServices.LTS.Northwind;
+using LinqResource = SSmDsWeb::OpenRiaServices.DomainServices.Client.Resources;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
 
 namespace OpenRiaServices.DomainServices.Client.Test
@@ -478,7 +480,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_NestedQueriesNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_NestedQueriesNotSupported, expectedException.Message);
         }
 
         [TestMethod]
@@ -513,7 +515,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_MethodNotAccessible, "LocalMethod", typeof(QuerySerializationTests)), expectedException.Message);
+            Assert.AreEqual(string.Format(LinqResource.QuerySerialization_MethodNotAccessible, "LocalMethod", typeof(QuerySerializationTests)), expectedException.Message);
 
             // test an unsupported static method
             expectedException = null;
@@ -526,7 +528,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_MethodNotAccessible, "LocalStaticMethod", typeof(QuerySerializationTests)), expectedException.Message);
+            Assert.AreEqual(string.Format(LinqResource.QuerySerialization_MethodNotAccessible, "LocalStaticMethod", typeof(QuerySerializationTests)), expectedException.Message);
         }
 
         [TestMethod]
@@ -630,7 +632,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedType, typeof(PurchaseOrder).GetType()), expectedException.Message);
+            Assert.AreEqual(string.Format(LinqResource.QuerySerialization_UnsupportedType, typeof(PurchaseOrder).GetType()), expectedException.Message);
 
             // while the Type can't be passed, verify that we can't use unsupported methods either
             try
@@ -683,7 +685,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise AND not supported
             expectedException = null;
@@ -696,7 +698,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise OR not supported
             expectedException = null;
@@ -709,7 +711,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise XOR not supported
             expectedException = null;
@@ -722,7 +724,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise Left Shift not supported
             expectedException = null;
@@ -735,7 +737,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
 
             // Bitwise Right Shift not supported
             expectedException = null;
@@ -748,7 +750,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_BitwiseOperatorsNotSupported, expectedException.Message);
         }
 
         [TestMethod]
@@ -828,7 +830,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_NewExpressionsNotSupported, expectedException.Message);
+            Assert.AreEqual(LinqResource.QuerySerialization_NewExpressionsNotSupported, expectedException.Message);
         }
         //CDB commented out until compilable
         ///// <summary>
@@ -878,7 +880,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 expectedException = e;
             }
-            Assert.AreEqual(string.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedQueryOperator, "Reverse"), expectedException.Message);
+            Assert.AreEqual(string.Format(LinqResource.QuerySerialization_UnsupportedQueryOperator, "Reverse"), expectedException.Message);
             expectedException = null;
         }
 
@@ -1057,7 +1059,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             catch (NotSupportedException e)
             {
                 expectedException = e;
-                Assert.AreEqual(String.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_ProjectionsNotSupported), e.Message);
+                Assert.AreEqual(String.Format(LinqResource.QuerySerialization_ProjectionsNotSupported), e.Message);
             }
             Assert.IsNotNull(expectedException);
 
@@ -1071,7 +1073,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             catch (NotSupportedException e)
             {
                 expectedException = e;
-                Assert.AreEqual(String.Format(OpenRiaServices.DomainServices.Client.Services.Resource.QuerySerialization_UnsupportedQueryOperator, "SelectMany"), e.Message);
+                Assert.AreEqual(String.Format(LinqResource.QuerySerialization_UnsupportedQueryOperator, "SelectMany"), e.Message);
             }
             Assert.IsNotNull(expectedException);
         }
