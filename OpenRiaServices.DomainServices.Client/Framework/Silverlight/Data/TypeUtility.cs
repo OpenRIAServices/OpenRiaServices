@@ -99,9 +99,9 @@ namespace OpenRiaServices.DomainServices
 #endif
 
 #if REFLECTION_V2
-        public static TypeInfo GetTypeInfo(Type type)
+        public static TypeInfo GetTypeInfo(this Type type)
         {
-            return type.GetTypeInfo();
+            return IntrospectionExtensions.GetTypeInfo(type);
         }
 #else
         public static Type GetTypeInfo(this Type type)

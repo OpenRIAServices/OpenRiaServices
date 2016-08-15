@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices
         /// </summary>
         public bool IsApplicationService { get; set; }
 
-#if !SILVERLIGHT && !PORTABLE
+#if SERVERFX
         /// <summary>
         /// Gets or sets the <see cref="CodeProcessor"/> type
         /// </summary>
@@ -68,7 +68,9 @@ namespace OpenRiaServices.DomainServices
             get;
             set;
         }
+#endif
 
+#if !SILVERLIGHT && !PORTABLE && !NETSTANDARD
         /// <summary>
         /// Gets a unique identifier for this DomainIdentifierAttribute.
         /// </summary>
@@ -79,6 +81,6 @@ namespace OpenRiaServices.DomainServices
                 return this;
             }
         }
-#endif //!SILVERLIGHT && !PORTABLE
+#endif //!SILVERLIGHT && !PORTABLE && !NETSTANDARD
     }
 }
