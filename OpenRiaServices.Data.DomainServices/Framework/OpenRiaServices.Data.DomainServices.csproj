@@ -120,16 +120,15 @@
     <Compile Include="CollectionViewWrapper.cs" />
     <Compile Include="DomainCollectionView.cs" />
     <Compile Include="DomainCollectionViewLoader.cs" />
-    <Compile Include="EntityList.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PagedCollectionViewBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryBuilder.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TypeForwarders.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">

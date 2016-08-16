@@ -167,6 +167,8 @@
     <Compile Include="ExceptionHandlingUtility.cs" />
     <Compile Include="Data\BinaryTypeUtility.cs" />
     <Compile Include="HasSideEffectsAttribute.cs" />
+    <Compile Include="OpenRiaServices.Data.DomainServices\EntityList.cs" />
+    <Compile Include="OpenRiaServices.Data.DomainServices\QueryBuilder.cs" />
     <Compile Include="OperationBase.cs">
     </Compile>
     <Compile Include="AsyncResultBase.cs" />

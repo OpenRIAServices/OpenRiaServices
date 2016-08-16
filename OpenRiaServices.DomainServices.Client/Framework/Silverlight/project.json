@@ -82,9 +82,7 @@
     "buildOptions": {
         "compile": {
             "includeFiles": [
-                "..\\..\\..\\OpenRiaServices.DomainServices.Server\\Framework\\Data\\CompositionAttribute.cs",
-                "..\\..\\..\\OpenRiaServices.Data.DomainServices\\Framework\\EntityList.cs",
-                "..\\..\\..\\OpenRiaServices.Data.DomainServices\\Framework\\QueryBuilder.cs"
+                "..\\..\\..\\OpenRiaServices.DomainServices.Server\\Framework\\Data\\CompositionAttribute.cs"
             ]
         }
         //, "embed": { "include": [ "**/*.resx" ] }

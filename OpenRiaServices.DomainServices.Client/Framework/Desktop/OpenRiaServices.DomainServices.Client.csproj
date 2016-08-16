@@ -170,10 +170,10 @@
       <Link>ApplicationServices\AuthenticationService.cs</Link>
     </Compile>
     <Compile Include="..\..\..\OpenRiaServices.Data.DomainServices\Framework\EntityList.cs">
-      <Link>Data\EntityList.cs</Link>
+      <Link>OpenRiaServices.Data.DomainServices\EntityList.cs</Link>
     </Compile>
     <Compile Include="..\..\..\OpenRiaServices.Data.DomainServices\Framework\QueryBuilder.cs">
-      <Link>Data\QueryBuilder.cs</Link>
+      <Link>OpenRiaServices.Data.DomainServices\QueryBuilder.cs</Link>
     </Compile>
     <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs">
       <Link>Data\CompositionAttribute.cs</Link>
@@ -400,7 +400,7 @@
       <Link>Resource.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Silverlight\Resources.resx">
-	  <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
       <Link>Resources.resx</Link>

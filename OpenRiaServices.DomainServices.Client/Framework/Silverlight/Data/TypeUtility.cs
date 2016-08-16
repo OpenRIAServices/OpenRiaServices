@@ -456,7 +456,7 @@ namespace OpenRiaServices.DomainServices
         /// or <see cref="Nullable"/>, this method returns the element
         /// type of the generic parameter
         /// </remarks>
-        /// <param name="type"><see cref="Type"/> to examine.</param>
+        /// <param name="type"><see cref="T:System.Type"/> to examine.</param>
         /// <returns>The underlying element type starting from the given type</returns>
         public static Type GetElementType(Type type)
         {
