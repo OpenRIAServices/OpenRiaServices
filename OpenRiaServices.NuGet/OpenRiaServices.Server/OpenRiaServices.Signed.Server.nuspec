@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Server</id>
-    <version>4.4.1.2</version>
+    <version>4.5.0-rc1</version>
     <title>OpenRiaServices.Signed.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -22,7 +22,11 @@
       Some users have experienced duplicate web.config entries getting created as a result of installing this package.  To resolve this issue, simply eliminate one of the duplicate entries -- they vary only by character case.
     </description>
     <summary>Open RIA Services - Server-side assemblies, configuration, and build targets.</summary>
-    <releaseNotes>4.4.1.0: Support for .NET 4.6
+    <releaseNotes>4.5.0:
+For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
+
+4.5.0-rc1 Improved startup performance
+4.4.1.0: Support for .NET 4.6
 4.4.1.1 Attempt to fix ValidateDomainServicesTask build step failure
 4.4.1.2 Fix ValidateDomainServicesTask build step failure</releaseNotes>
     <copyright>2016 Outercurve Foundation</copyright>

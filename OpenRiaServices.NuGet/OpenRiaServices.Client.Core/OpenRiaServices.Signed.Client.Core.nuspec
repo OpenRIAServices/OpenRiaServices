@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Client.Core</id>
-    <version>4.5.0-beta3</version>
+    <version>4.5.0-rc1</version>
     <title>Open RIA Services Client - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -15,8 +15,17 @@
     <summary>Open RIA Services - signed client assemblies and references.</summary>
     <releaseNotes>4.5.0:
 For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
+      
+4.5.0-rc1:
+* Improved performance for large EntityCollections
+* Improved nuget behaviour for other targets than silverlight and desktop .net
+* Updated portable library to have the same implementation as non portable builds
+* Added netstandard 1.3 build (experimental)
+see https://docs.microsoft.com/sv-se/dotnet/articles/standard/library for netstandard information
+* AssemblyVersion updated to 4.0.0.0 for silverlight and portable build
+** Silverlight support automat assembly redirection to higher versions so manual redirection should not be required for any target platform
 
-4.5.0-beta3: 
+4.5.0-beta3:
 * Desktop client now support Cookies by default (which means Forms authentication just works)
 ** Can be controlled via WebDomainClientFactory.CookieContainer
 * WebDomainClientFactory can now be overridden
@@ -26,18 +35,22 @@ For detailed release notes see https://openriaservices.codeplex.com/releases/vie
 * Extend client API for non Silverlight platforms
 
 4.5.0-beta1: Added DomainClientFactory</releaseNotes>
-    <copyright>2015 Outercurve Foundation</copyright>
+    <copyright>2016 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices Signed</tags>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" />
-      <frameworkAssembly assemblyName="System.Runtime.Serialization" />
-      <frameworkAssembly assemblyName="System.ServiceModel" />
-      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="sl50, net40" />
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="sl50, net45" />
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl50, net45" />
+      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="sl50, net45" />
+      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="sl50, net45" />
       <frameworkAssembly assemblyName="System.ServiceModel.Web.Extensions" targetFramework="sl50" />
     </frameworkAssemblies>
   </metadata>
   <files>
+    <!-- netstandard binaries -->
+    <file src="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\bin\Signed\netstandard1.3\OpenRiaServices.DomainServices.Client.dll" target="lib\netstandard1.3\OpenRiaServices.DomainServices.Client.dll" />
+    <file src="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\bin\Signed\netstandard1.3\OpenRiaServices.DomainServices.Client.pdb" target="lib\netstandard1.3\OpenRiaServices.DomainServices.Client.pdb" />
+
     <!-- Portable binaries -->
     <file src="..\..\bin\Signed\Portable\OpenRiaServices.DomainServices.Client.dll" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.dll" />
     <file src="..\..\bin\Signed\Portable\OpenRiaServices.DomainServices.Client.pdb" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.pdb" />

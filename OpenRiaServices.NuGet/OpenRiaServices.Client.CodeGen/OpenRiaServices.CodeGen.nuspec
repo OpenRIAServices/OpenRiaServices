@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Client.CodeGen</id>
-        <version>4.5.0-beta3</version>
+        <version>4.5.0-rc1</version>
         <title>Open RIA Services Client Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -12,7 +12,10 @@
         <description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. 
         If the signed T4 template is used on the server then you need to use OpenRiaServices.Signed.Client.CodeGen instead.</description>
         <summary>Open RIA Services - Code generation client assemblies and targets.</summary>
-        <releaseNotes>4.5.0-beta3:
+        <releaseNotes>4.5.0-rc1:
+ * Faster type discovery should result in faster code gen for som scenarios
+
+4.5.0-beta3:
  * Ensure web project is built before client
  * Automatically generate WebContext for .exe projects
  * Use msbuild property OpenRiaGenerateApplicationContext to control webcontext generation instead of SilverlightApplication
