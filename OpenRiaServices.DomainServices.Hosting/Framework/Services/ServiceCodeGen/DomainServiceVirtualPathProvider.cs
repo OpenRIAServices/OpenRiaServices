@@ -227,13 +227,8 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return false;
             }
 
-            if (isDomainService)
-            {
-                domainServiceEntry = new KeyValuePair<string, Type>(fileName, domainServiceType);
-                return true;
-            }
-
-            return false;
+            domainServiceEntry = new KeyValuePair<string, Type>(fileName, domainServiceType);
+            return true;
         }
 
         // Checks whether the request to the specified path should be rewritten to the location where we 
@@ -271,13 +266,8 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return false;
             }
 
-            if (isDomainService)
-            {
-                domainServiceEntry = new KeyValuePair<string, Type>(fileName, domainServiceType);
-                return true;
-            }
-
-            return false;
+            domainServiceEntry = new KeyValuePair<string, Type>(fileName, domainServiceType);
+            return true;
         }
 
         /// <summary>

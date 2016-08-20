@@ -127,6 +127,12 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Conflicts, OperationErrorStatus.Conflicts);
             }
+            else
+            {
+                // This can never happen, all paths here supply either 
+                // ValidationFailed or Conflicts
+                throw new ArgumentException("Unsupported OperationErrorStatus","errorStatus");
+            }
 
             base.Complete(error);
         }

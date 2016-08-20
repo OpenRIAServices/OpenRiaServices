@@ -322,7 +322,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
             catch
             {
-                ((IDisposable)factory).Dispose();
+                ((IDisposable)factory)?.Dispose();
                 throw;
             }
 

@@ -140,6 +140,9 @@ namespace System.Linq.Dynamic
                 }
 
                 PropertyDescriptor pd = TypeDescriptor.GetProperties(m.Member.DeclaringType)[m.Member.Name];
+                if (pd == null)
+                    return false;
+
                 IncludeAttribute includeAtt = (IncludeAttribute)pd.Attributes[typeof(IncludeAttribute)];
                 return (includeAtt != null && includeAtt.IsProjection);
             }
