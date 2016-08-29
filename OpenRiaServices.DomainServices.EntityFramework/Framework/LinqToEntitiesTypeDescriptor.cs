@@ -140,20 +140,27 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                 }
 
                 // Check if the member is DB generated and add the DatabaseGeneratedAttribute to it if not already present.                
-                if (pd.Attributes[typeof(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute)] == null)
+                bool databaseGenerated = false;
+                if (pd.Attributes[typeof(DatabaseGeneratedAttribute)] == null)
                 {
                     MetadataProperty md = ObjectContextUtilities.GetStoreGeneratedPattern(member);
                     if (md != null)
                     {
                         if ((string)md.Value == "Computed")
                         {
-                            attributes.Add(new System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Computed));
+                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
+                            databaseGenerated = true;
                         }
                         else if ((string)md.Value == "Identity")
                         {
-                            attributes.Add(new System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedAttribute(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity));
+                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity));
+                            databaseGenerated = true;
                         }
                     }
+                }
+                else
+                {
+                    databaseGenerated = ((DatabaseGeneratedAttribute)pd.Attributes[typeof(DatabaseGeneratedAttribute)]).DatabaseGeneratedOption != DatabaseGeneratedOption.None;
                 }
 
                 // Add implicit ConcurrencyCheck attribute to metadata if ConcurrencyMode is anything other than ConcurrencyMode.None
@@ -165,17 +172,16 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     inferRoundtripOriginalAttribute = true;
                 }
                 
-                bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
-                
                 // Add Required attribute to metadata if the member cannot be null and it is either a reference type or a Nullable<T>
                 // unless it is a database generated field
                 if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) 
-                    && !pd.Attributes.OfType<DatabaseGeneratedAttribute>().Any(dga=>dga.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
+                    && !databaseGenerated
                     && pd.Attributes[typeof(RequiredAttribute)] == null)
                 {
                     attributes.Add(new RequiredAttribute());
                 }
 
+                bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
                 if (isStringType &&
                     pd.Attributes[typeof(StringLengthAttribute)] == null)
                 {
