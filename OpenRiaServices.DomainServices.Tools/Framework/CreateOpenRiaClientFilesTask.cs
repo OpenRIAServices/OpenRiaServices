@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Tools
         private ProjectSourceFileCache _serverProjectSourceFileCache;
         private LinkedServerProjectCache _linkedServerProjectCache;
         private IEnumerable<string> _clientAssemblyPathsNormalized;
-        private IEnumerable<string> _clientReferenceAssembliesNormalized;
+        private HashSet<string> _clientReferenceAssembliesNormalized;
         private IEnumerable<string> _linkedFilesNormalized;
         private Dictionary<string, IList<string>> _sharedFilesByProject;
 
@@ -273,7 +273,7 @@ namespace OpenRiaServices.DomainServices.Tools
 
                     // Intersect them and remove duplicates.  This permits links to flow in either direction or for
                     // multiple projects to refer to the same files.
-                    this._linkedFilesNormalized = clientFiles.Intersect(serverFiles, StringComparer.OrdinalIgnoreCase);
+                    this._linkedFilesNormalized = clientFiles.Intersect(serverFiles, StringComparer.OrdinalIgnoreCase).ToArray();
                 }
 
                 return this._linkedFilesNormalized;
@@ -283,7 +283,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <summary>
         /// Gets the set of client reference assemblies, with relative paths expanded to full paths.
         /// </summary>
-        internal IEnumerable<string> ClientReferenceAssembliesNormalized
+        internal ISet<string> ClientReferenceAssembliesNormalized
         {
             get
             {
@@ -293,7 +293,7 @@ namespace OpenRiaServices.DomainServices.Tools
                     IEnumerable<string> currentRefs = this.NormalizedTaskItems(this.ClientReferenceAssemblies, this.ClientProjectDirectory);
 
                     // Remove duplicates and non-existant files
-                    this._clientReferenceAssembliesNormalized = currentRefs.Distinct(StringComparer.OrdinalIgnoreCase).Where(f => File.Exists(f)).ToArray();
+                    this._clientReferenceAssembliesNormalized = new HashSet<string>(currentRefs.Where(f => File.Exists(f)), StringComparer.OrdinalIgnoreCase);
                 }
                 return this._clientReferenceAssembliesNormalized;
             }
@@ -329,7 +329,8 @@ namespace OpenRiaServices.DomainServices.Tools
                     // If the user did not specify anything, use the default Silverlight paths
                     this._clientAssemblyPathsNormalized = (taskItems == null)
                                                             ? new string[0]
-                                                            : this.NormalizedTaskItems(taskItems, this.ClientProjectDirectory);
+                                                            : this.NormalizedTaskItems(taskItems, this.ClientProjectDirectory)
+                                                                .ToArray();
                 }
                 return this._clientAssemblyPathsNormalized;
             }
@@ -617,9 +618,6 @@ namespace OpenRiaServices.DomainServices.Tools
             IEnumerable<string> assemblies = this.GetServerAssemblies();
             IEnumerable<string> references = this.GetReferenceAssemblies();
 
-            // We will load all input and reference assemblies
-            IEnumerable<string> assembliesToLoad = assemblies.Concat(references);
-
             // It is a failure if any of the reference assemblies are missing
             if (!this.EnsureAssembliesExist(references))
             {
@@ -641,6 +639,9 @@ namespace OpenRiaServices.DomainServices.Tools
 
             // Make it an absolute path and append the language-specific extension
             string generatedFileName = Path.Combine(this.GeneratedCodePath, this.GenerateProxyFileName(assemblyFile));
+
+            // We will load all input and reference assemblies
+            var assembliesToLoad = new HashSet<string>(assemblies.Concat(references), StringComparer.OrdinalIgnoreCase);
 
             // We maintain cached lists of references we used in prior builds.
             // Determine whether our current inputs are different from the last build that generated code.
@@ -895,7 +896,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <param name="references">The set of references we have currently.</param>
         /// <param name="projectDir">The directory containing the project.</param>
         /// <returns><c>true</c> means the current references are different from the set we last used for code generation.</returns>
-        private bool HaveReferencesChanged(string fileName, IEnumerable<string> references, string projectDir)
+        private bool HaveReferencesChanged(string fileName, ICollection<string> references, string projectDir)
         {
             // First time or after project clean always says "yes"
             if (!File.Exists(fileName))
@@ -909,7 +910,7 @@ namespace OpenRiaServices.DomainServices.Tools
             // Look for any references that got dropped.  Grounds for saying "it changed"
             foreach (string reference in priorRefs.Keys)
             {
-                if (!references.Contains(reference, StringComparer.OrdinalIgnoreCase))
+                if (!references.Contains(reference))
                 {
                     return true;
                 }

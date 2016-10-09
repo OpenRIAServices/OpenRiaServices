@@ -102,7 +102,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 assemblies.Add(assembly);
             }
 
-            manifest.Assemblies = assemblies.ToArray();
+            manifest.Assemblies = assemblies.ToDictionary(x => x.Name);
             return manifest;
         }
 
@@ -123,7 +123,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 PublicKeyTokenBytes = assemblyName.GetPublicKeyToken()
             };
 
-            return new FrameworkManifest() { Assemblies = assemblies.ToArray() };
+            return new FrameworkManifest() { Assemblies = assemblies.ToDictionary(x => x.Name) };
         }
 
         private static AssemblyName TrGetAssemblyName(string dll)
@@ -158,17 +158,14 @@ namespace OpenRiaServices.DomainServices.Tools
             // If the requested assembly is a System assembly and it's an older version
             // than the framework manifest has, then we'll need to resolve to its newer version
             bool isOldVersion = requestedAssembly.Version.CompareTo(frameworkManifest.SystemVersion) < 0;
-
             if (isOldVersion && requestedAssembly.IsSystemAssembly())
             {
                 // Now we need to see if the requested assembly is part of the framework manifest (as opposed to an SDK assembly)
-                var silverlightAssembly = (from assembly in frameworkManifest.Assemblies
-                                           where assembly.Name == requestedAssembly.Name
-                                           select assembly).SingleOrDefault();
-
+                FrameworkManifestEntry silverlightAssembly;
+               
                 // If the assembly is part of the framework manifest, then we need to "redirect" its resolution
                 // to the current framework version.
-                if (silverlightAssembly != null)
+                if (frameworkManifest.Assemblies.TryGetValue(requestedAssembly.Name, out silverlightAssembly))
                 {
                     // Find the Silverlight framework assembly from the already-loaded assemblies
                     var matches = from assembly in AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies()
@@ -201,10 +198,10 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         internal class FrameworkManifest : MarshalByRefObject
         {
-            private FrameworkManifestEntry[] _assemblies;
+            private  Dictionary<string, FrameworkManifestEntry> _assemblies;
 
             internal Version SystemVersion { get; private set; }
-            internal FrameworkManifestEntry[] Assemblies
+            internal Dictionary<string, FrameworkManifestEntry> Assemblies
             {
                 get
                 {
@@ -213,7 +210,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 set
                 {
                     this._assemblies = value;
-                    this.SystemVersion = (from assembly in this._assemblies
+                    this.SystemVersion = (from assembly in this._assemblies.Values
                                           where assembly.Name == "System"
                                           select assembly.Version).SingleOrDefault();
                 }

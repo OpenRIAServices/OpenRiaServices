@@ -27,6 +27,7 @@ namespace OpenRiaServices.DomainServices.Tools
         private string _historyFilePath;
         private ILogger _logger;
         private Dictionary<string, IEnumerable<string>> _sourceFilesByProject;
+        private List<string> _allFiles;
         private ProjectFileReader _projectFileReader;
         private bool _isFileCacheCurrent;
 
@@ -184,12 +185,17 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>The collection of full paths to all known source files.</returns>
         internal IEnumerable<string> GetSourceFilesInAllProjects()
         {
-            List<string> files = new List<string>();
-            foreach (string projectPath in this.GetAllKnownProjects())
+            if (_allFiles == null)
             {
-                files.AddRange(this.GetSourceFilesInProject(projectPath));
+                List<string> files = new List<string>();
+                foreach (string projectPath in this.GetAllKnownProjects())
+                {
+                    files.AddRange(this.GetSourceFilesInProject(projectPath));
+                }
+                _allFiles = files;    
             }
-            return files;
+            
+            return _allFiles;
         }
 
         /// <summary>
