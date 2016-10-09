@@ -156,14 +156,14 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <param name="typeNames">The collection of type names.  It can be null.</param>
         /// <returns>The collection of types in the shared assemblies.
         /// A <c>null</c> means one or more types in the list were not shared.</returns>
-        internal Type[] GetSharedTypes(IEnumerable<string> typeNames)
+        private Type[] GetSharedTypes(IEnumerable<string> typeNames)
         {
             List<Type> types = new List<Type>();
             if (typeNames != null)
             {
                 foreach (string typeName in typeNames)
                 {
-                    Type type = this.FindSharedType(typeName);
+                    Type type = this.GetSharedType(typeName);
                     if (type == null)
                     {
                         return null;
@@ -199,27 +199,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         }
 
         /// <summary>
-        /// Returns the <see cref="PropertyInfo"/> of the property from the set of
-        /// shared assemblies.
-        /// </summary>
-        /// <param name="typeName">The fully qualified type name declaring the property.</param>
-        /// <param name="propertyName">The name of the property.</param>
-        /// <returns>The <see cref="PropertyInfo"/> if it exists in set of shared assemblies, otherwise <c>null</c>.</returns>
-        internal PropertyInfo GetSharedProperty(string typeName, string propertyName)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(typeName), "typeName cannot be null");
-            Debug.Assert(!string.IsNullOrEmpty(propertyName), "propertyName cannot be null");
-
-            PropertyInfo sharedProperty = null;
-            Type sharedType = this.GetSharedType(typeName);
-            if (sharedType != null)
-            {
-                sharedProperty = sharedType.GetProperty(propertyName);
-            }
-            return sharedProperty;
-        }
-
-        /// <summary>
         /// Returns the <see cref="Type"/> from the set of shared assemblies of the given name.
         /// </summary>
         /// <param name="typeName">The fully qualified type name.</param>
@@ -229,22 +208,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             Type sharedType = this._sharedTypeByName.GetOrAdd(typeName, n =>
             {
                 return this.FindSharedType(n);
-            });
-            return sharedType;
-        }
-
-        /// <summary>
-        /// Locates and returns the type in the set of known assemblies
-        /// that is equivalent to the given type.  The result is cached
-        /// for higher performance on subsequent requests.
-        /// </summary>
-        /// <param name="type">The type to use for comparison</param>
-        /// <returns>The equivalent type from the known assemblies, or null if not found</returns>
-        internal Type GetSharedType(Type type)
-        {
-            Type sharedType = this._sharedTypeByName.GetOrAdd(type.FullName, n =>
-            {
-                return this.FindSharedType(type);
             });
             return sharedType;
         }
@@ -266,17 +229,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         }
 
         /// <summary>
-        /// Helper to determine whether two types are equivalent.
-        /// </summary>
-        /// <param name="type1">The first type to compare.</param>
-        /// <param name="type2">The second type</param>
-        /// <returns><c>true</c> means the types are equivalent.</returns>
-        private static bool IsSameType(Type type1, Type type2)
-        {
-            return type1.FullName.Equals(type2.FullName, StringComparison.Ordinal);
-        }
-
-        /// <summary>
         /// Searches the shared assemblies for a type of the given name.
         /// </summary>
         /// <param name="typeName">The fully-qualified type name.</param>
@@ -286,32 +238,25 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             Type type = Type.GetType(typeName, /*throwOnError*/ false);
             if (type != null)
             {
-                return this.FindSharedType(type);
+                Type result = FindSharedTypeInAssemblies(type.FullName);
+                if (result != null)
+                    return result;
+
+                // TODO: review
+                // If we could not find the type, but it lives in mscorlib,
+                // we treat it specially because we cannot load mscorlib to tell.
+                return EquivalentMsCorlibType(type);
             }
 
-            foreach (Assembly assembly in this.Assemblies)
-            {
-                // Utility autorecovers and logs known common exceptions
-                IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(assembly, this._logger);
-
-                foreach (Type searchType in types)
-                {
-                    if (string.Equals(typeName, searchType.FullName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return searchType;
-                    }
-                }
-            }
-            return null;
+            return FindSharedTypeInAssemblies(typeName);
         }
 
         /// <summary>
         /// Locates and returns the type in the set of known assemblies
         /// that is equivalent to the given type.
         /// </summary>
-        /// <param name="type">The type to use for comparison</param>
-        /// <returns>The equivalent type from the known assemblies, or null if not found</returns>
-        private Type FindSharedType(Type type)
+        /// <param name="typeFullName">FullName of the type to search for</param>        
+        private Type FindSharedTypeInAssemblies(string typeFullName)
         {
             foreach (Assembly assembly in this.Assemblies)
             {
@@ -320,17 +265,14 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
                 foreach (Type searchType in types)
                 {
-                    if (IsSameType(type, searchType))
+                    if (string.Equals(typeFullName, searchType.FullName, StringComparison.Ordinal))
                     {
                         return searchType;
                     }
                 }
             }
 
-            // TODO: review
-            // If we could not find the type, but it lives in mscorlib,
-            // we treat it specially because we cannot load mscorlib to tell.
-            return EquivalentMsCorlibType(type);
+            return null;
         }
 
         /// <summary>
