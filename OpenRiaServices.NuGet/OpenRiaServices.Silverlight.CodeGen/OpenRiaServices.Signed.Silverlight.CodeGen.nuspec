@@ -2,23 +2,29 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Signed.Silverlight.CodeGen</id>
-        <version>4.4.0.3</version>
+        <version>4.5.0</version>
         <title>Open RIA Services Silverlight Code Generator - Signed</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
         <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-        <projectUrl>http://www.openriaservices.net</projectUrl>
+        <projectUrl>http://openriaservices.codeplex.com</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Note: This is just an alias for the new OpenRiaServices.Signed.Client.CodeGen package in order to make upgrading easy.</description>
+        <description>Code generation for silverlight targets, other target platforms should use OpenRiaServices.Client.CodeGen.</description>
         <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
-        <releaseNotes>4.4.0.3 - Uses OpenRiaServices.Signed.Client.CodeGen which is the new name</releaseNotes>
-        <copyright>2015 Outercurve Foundation</copyright>
+        <releaseNotes>
+          4.5.0 - Silverlight specific version of OpenRiaServices.Client.CodeGen
+* Use msbuild property OpenRiaGenerateApplicationContext to control webcontext generation instead of SilverlightApplication
+        </releaseNotes>
+        <copyright>2016 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
-      <dependencies>
-        <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.4.0.3" />
-      </dependencies>
+        <dependencies>
+            <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.0" />
+        </dependencies>
     </metadata>
     <files>
+      <file src="build\OpenRiaServices.Silverlight.CodeGen.targets" target="build\OpenRiaServices.Signed.Silverlight.CodeGen.targets"/>
+      <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
+      <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
 </package>

@@ -12,7 +12,7 @@
     <description>Open RIA Services Contrib - Entity Tools</description>
     <summary>Open RIA Services Toolkit - Extensions methods to allow direct manipulation of the Entity</summary>
     <releaseNotes>These tools were directly copied from RiaServicesContrib.EntityTools and are provided primarily for backwards compatiblity. The IExtendedEntity interface was removed as the same functionality is now built into Open Ria Services.</releaseNotes>
-    <copyright>2013 Outercurve Foundation</copyright>
+    <copyright>2016 Outercurve Foundation</copyright>
     <language />
     <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices</tags>
     <dependencies>

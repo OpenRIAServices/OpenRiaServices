@@ -2,26 +2,26 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.UnitTesting</id>
-    <version>4.4.0.0</version>
+    <version>4.5.0</version>
     <title>Open RIA Services Unit Testing - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.UnitTesting provides a DomainServiceTestHost that can be used to unit test your Domain Services.</description>
     <summary>Open RIA Services - Domain Service Unit Test Host</summary>
     <releaseNotes />
-    <copyright>2013 Outercurve Foundation</copyright>
+    <copyright>2016 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Testing OpenRiaServices Signed</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Signed.Server" version="4.4.0.0"/>
+      <dependency id="OpenRiaServices.Signed.Server" version="4.5.0"/>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.UnitTesting.dll" target="lib\net40\OpenRiaServices.DomainServices.Server.UnitTesting.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" target="lib\net40\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.UnitTesting.xml" target="lib\net40\OpenRiaServices.DomainServices.Server.UnitTesting.xml" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.UnitTesting.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.UnitTesting.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" target="lib\net45\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.UnitTesting.xml" target="lib\net45\OpenRiaServices.DomainServices.Server.UnitTesting.xml" />
   </files>
 </package>

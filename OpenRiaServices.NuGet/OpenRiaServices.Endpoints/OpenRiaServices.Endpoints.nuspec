@@ -2,12 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Endpoints</id>
-    <version>4.4.0.1</version>
+    <version>4.5.0</version>
     <title>Open RIA Services SOAP and JSON Endpoints</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       OpenRiaServices.Endpoints provides the OpenRiaServices.DomainServices.Hosting.Endpoint assembly, which serves the SOAP and JSON endpoints for Domain Services.
@@ -16,18 +16,18 @@
     </description>
     <summary>Open RIA Services - SOAP and JSON Endpoints for web development</summary>
     <releaseNotes />
-    <copyright>2013 Outercurve Foundation</copyright>
+    <copyright>2016 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices SOAP JSON OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="4.4.0.0" />
+      <dependency id="OpenRiaServices.Server" version="4.5.0" />
     </dependencies>
 
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" target="lib\net40\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" target="lib\net40\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" target="lib\net40\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" />
+    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" />
   </files>
 </package>

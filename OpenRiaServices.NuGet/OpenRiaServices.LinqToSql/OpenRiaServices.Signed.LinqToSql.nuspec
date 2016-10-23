@@ -2,17 +2,17 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.LinqToSql</id>
-    <version>4.4.0.0</version>
+    <version>4.5.0</version>
     <title>Open RIA Services for Linq to Sql (DataContext) - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://www.openriaservices.net</projectUrl>
+    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.LinqToSql provides the LinqToSqlDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DataContext class from Linq to Sql.</description>
     <summary>Open RIA Services - Linq to Sql (DataContext) support with LinqToSqlDomainService.</summary>
     <releaseNotes />
-    <copyright>2013 Outercurve Foundation</copyright>
+    <copyright>2016 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices LinqToSql OpenRIAServices signed</tags>
     <frameworkAssemblies>
@@ -20,8 +20,8 @@
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.dll" target="lib\net40\OpenRiaServices.DomainServices.LinqToSql.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.pdb" target="lib\net40\OpenRiaServices.DomainServices.LinqToSql.pdb" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.xml" target="lib\net40\OpenRiaServices.DomainServices.LinqToSql.xml" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.dll" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.dll" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.pdb" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.pdb" />
+    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.xml" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.xml" />
   </files>
 </package>
