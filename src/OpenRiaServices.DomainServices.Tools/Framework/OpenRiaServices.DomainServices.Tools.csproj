@@ -52,4 +52,7 @@
   <ItemGroup>
     <Content Include="Pdb\ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.0" />
+  </ItemGroup>
 </Project>

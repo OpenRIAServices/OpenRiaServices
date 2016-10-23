@@ -83,6 +83,49 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         }
 
+        [Description("SharedAssemblies service locates shared properties between projects")]
+        [TestMethod]
+        public void SharedAssemblies_Properties()
+        {
+            string projectPath = null;
+            string outputPath = null;
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
+            string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
+            List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
+
+            ConsoleLogger logger = new ConsoleLogger();
+            var sa = new SharedAssemblies(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
+
+            string sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ClientAndServerValue));
+            Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
+            Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+
+            sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ServerAndClientValue));
+            Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
+            Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+
+            sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.TheValue));
+            Assert.IsNull(sharedTypeLocation, "Expected TestEntity.TheValue type to not be shared");
+
+            // We should detect properties from derived types
+            sharedTypeLocation = GetSharedPropertyLocation(sa, "ServerClassLib.TestDomainSharedContext", "ValidationContext");
+            Assert.IsNotNull(sharedTypeLocation, "Expected to detect properties from base classes (DomainContext.ValidationContext)");
+            StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
+
+            // We should not detect internal properties
+            sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ValidationErrors");
+            Assert.IsNotNull(sharedTypeLocation, "Should detect properties in other assemblies");
+            StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
+
+            sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ParentAssociation");
+            Assert.IsNull(sharedTypeLocation, "Expected to not detect internal properties");
+
+            sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "IsMergingState");
+            Assert.IsNull(sharedTypeLocation, "Expected to not detect protected internal properties");
+
+            TestHelper.AssertNoErrorsOrWarnings(logger);
+        }
+
         [DeploymentItem("ProjectPath.txt")]
         [Description("SharedAssemblies matches mscorlib types and methods")]
         [WorkItem(723391)]  // XElement entry below is regression for this
@@ -192,6 +235,18 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
             string message = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, errorMessage);
             TestHelper.AssertContainsMessages(logger, message);
+        }
+
+
+        private static string GetSharedPropertyLocation(ISharedAssemblies sa, Type type, string propertyName)
+        {
+            return GetSharedPropertyLocation(sa, type.FullName, propertyName);
+        }
+
+        private static string GetSharedPropertyLocation(ISharedAssemblies sa, string fullName, string propertyName)
+        {
+            var key = CodeMemberKey.CreatePropertyKey(fullName, propertyName);
+            return sa.GetSharedAssemblyPath(key);
         }
     }
 

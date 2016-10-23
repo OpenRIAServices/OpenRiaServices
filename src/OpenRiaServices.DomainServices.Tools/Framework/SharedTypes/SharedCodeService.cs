@@ -19,8 +19,8 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     {
         private SourceFileLocationService _locationService;
         private readonly SharedSourceFiles _sharedSourceFiles;
-        private readonly SharedAssemblies _sharedAssemblies;
-        private FilenameMap _filenameMap = new FilenameMap();
+        private readonly ISharedAssemblies _sharedAssemblies;
+        private readonly FilenameMap _filenameMap = new FilenameMap();
 
         // We maintain a cache so we never lookup any code element more than once.
         // The cache is keyed by SharedCodeKey, which describes the code element and serves as a unique key for it.
@@ -48,18 +48,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
             this._locationService = new SourceFileLocationService(factories, this._filenameMap);
             this._sharedSourceFiles = new SharedSourceFiles(this._locationService, this._filenameMap, parameters.SharedSourceFiles);
-            this._sharedAssemblies = new SharedAssemblies(parameters.ClientAssemblies, parameters.ClientAssemblyPathsNormalized, loggingService);
-        }
-
-        /// <summary>
-        /// Gets the instances managing the shared assemblies
-        /// </summary>
-        private SharedAssemblies SharedAssemblies
-        {
-            get
-            {
-                return this._sharedAssemblies;
-            }
+            this._sharedAssemblies = new SharedAssembliesManaged(parameters.ClientAssemblies, parameters.ClientAssemblyPathsNormalized, loggingService);
         }
 
         /// <summary>
@@ -82,7 +71,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         {
             return this._cachedDescriptions.GetOrAdd(key, k =>
             {
-                string sharedAssemblyLocation = this.SharedAssemblies.GetSharedAssemblyPath(key);
+                string sharedAssemblyLocation = this._sharedAssemblies.GetSharedAssemblyPath(key);
                 if (sharedAssemblyLocation != null)
                 {
                     return new SharedCodeDescription(CodeMemberShareKind.SharedByReference, new[] { this._filenameMap.AddOrGet(sharedAssemblyLocation) });
@@ -108,7 +97,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 this._locationService.Dispose();
                 this._locationService = null;
             }
-            this._filenameMap = null;
         }
 
         #endregion

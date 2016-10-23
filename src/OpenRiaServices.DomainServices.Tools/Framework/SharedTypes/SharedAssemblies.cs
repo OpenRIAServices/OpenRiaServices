@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// and allow clients to ask whether types or methods are
     /// in that set.
     /// </summary>
-    internal class SharedAssemblies
+    internal class SharedAssemblies : ISharedAssemblies
     {
         private readonly List<string> _assemblyFileNames;
         private List<Assembly> _assemblies;
@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// </summary>
         /// <param name="key">The description of the code element.</param>
         /// <returns>The location of the assembly that contains it or <c>null</c> if it is not in a shared assembly.</returns>
-        internal string GetSharedAssemblyPath(CodeMemberKey key)
+        public string GetSharedAssemblyPath(CodeMemberKey key)
         {
             Debug.Assert(key != null, "key cannot be null");
             string location = null;

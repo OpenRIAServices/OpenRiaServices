@@ -406,6 +406,29 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         /// <summary>
+        /// Asserts if any of the given messages are not present in the loggers set of information messages
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="errorStrings"></param>
+        public static void AssertHasInfoThatStartsWith(ConsoleLogger logger, params string[] messageStrings)
+        {
+            foreach (string message in messageStrings)
+            {
+                bool foundIt = false;
+
+                foreach (string msg in logger.InfoMessages)
+                {
+                    if (msg.StartsWith(msg))
+                    {
+                        foundIt = true;
+                        break;
+                    }
+                }
+                Assert.IsTrue(foundIt, ("Expected to see message\r\n  <" + message + ">" + " but instead saw\r\n  " + MessagesAsString(logger.InfoMessages)));
+            }
+        }
+
+        /// <summary>
         /// Asserts if any of the given error messages are not present in the loggers set of errors
         /// </summary>
         /// <param name="logger"></param>
