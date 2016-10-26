@@ -124,12 +124,6 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\AssociationInfo.cs">
       <Link>AssociationInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
-      <Link>DatabaseGeneratedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedOption.cs">
-      <Link>DatabaseGeneratedOption.cs</Link>
-    </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\LinqToEntitiesTypeDescriptionContext.cs">
       <Link>LinqToEntitiesTypeDescriptionContext.cs</Link>
     </Compile>

@@ -109,12 +109,6 @@
     <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedAttribute.cs">
-      <Link>DatabaseGeneratedAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\DatabaseGeneratedOption.cs">
-      <Link>DatabaseGeneratedOption.cs</Link>
-    </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs">
       <Link>MetadataPropertyDescriptorWrapper.cs</Link>
     </Compile>

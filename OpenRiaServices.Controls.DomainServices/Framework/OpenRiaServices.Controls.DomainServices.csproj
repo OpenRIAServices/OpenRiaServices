@@ -111,12 +111,16 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="system" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Data" />
+    <Reference Include="System.Windows.Data">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
@@ -218,6 +222,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
       <Name>OpenRiaServices.DomainServices.Client</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

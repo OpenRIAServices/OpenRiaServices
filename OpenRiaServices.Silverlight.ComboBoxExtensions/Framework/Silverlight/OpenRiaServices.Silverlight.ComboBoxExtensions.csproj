@@ -86,6 +86,7 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj">
       <Project>{b15b8171-0edc-4d96-a126-e086e4f3ea2c}</Project>
       <Name>OpenRiaServices.DomainServices.Client</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

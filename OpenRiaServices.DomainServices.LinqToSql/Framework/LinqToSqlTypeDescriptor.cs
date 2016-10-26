@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         /// Constructor that takes the metadata context, a metadata type and a parent custom type descriptor
         /// </summary>
         /// <param name="typeDescriptionContext">The <see cref="LinqToSqlTypeDescriptionContext"/> context.</param>
-        /// <param name="metaType">The <see cref="MetaType"/> type.</param>
+        /// <param name="metaType">The <see cref="T:System.Data.Linq.Mapping.MetaType"/> type.</param>
         /// <param name="parent">The parent custom type descriptor.</param>
         public LinqToSqlTypeDescriptor(LinqToSqlTypeDescriptionContext typeDescriptionContext, MetaType metaType, ICustomTypeDescriptor parent)
             : base(parent)

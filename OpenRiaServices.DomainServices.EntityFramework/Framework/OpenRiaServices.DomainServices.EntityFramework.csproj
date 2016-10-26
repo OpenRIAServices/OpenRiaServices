@@ -4,77 +4,9 @@
   <PropertyGroup>
     <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ChildBuild>True</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ChildBuild>True</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ChildBuild>True</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <ChildBuild>True</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ChildBuild>False</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;DBCONTEXT;NET40;NET40;SIGNED</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ChildBuild>False</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
@@ -84,52 +16,36 @@
     <RootNamespace>OpenRiaServices.DomainServices.EntityFramework</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.EntityFramework</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <OutputPath>..\..\bin\$(Configuration)\$(TargetFrameworkVersion)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.XML</DocumentationFile>
+    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
     <WarningLevel>4</WarningLevel>
     <ErrorReport>prompt</ErrorReport>
+    <DefineConstants>TRACE;SERVERFX;DBCONTEXT;NET45;$(Configuration)</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ChildBuild>False</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ChildBuild>False</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVERFX;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ChildBuild>True</ChildBuild>
-    <Framework>$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</Framework>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.EntityFramework.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);$(Framework)</DefineConstants>
-  </PropertyGroup>
+  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\$(Framework)\EntityFramework.dll</HintPath>
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\$(Framework)\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib" />
@@ -145,8 +61,6 @@
       <Link>ExceptionHandlingUtility.cs</Link>
     </Compile>
     <Compile Include="AssociationInfo.cs" />
-    <Compile Include="DatabaseGeneratedAttribute.cs" />
-    <Compile Include="DatabaseGeneratedOption.cs" />
     <Compile Include="DbResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -207,10 +121,4 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
-  <Target Name="AfterBuild" Condition=" '$(ChildBuild)' == 'True' ">
-    <!-- Build NET40 -->
-    <MSBuild Condition=" '$(TargetFrameworkVersion)' != 'v4.0' " Projects="$(MSBuildProjectFile)" ToolsVersion="4.0" Properties="TargetFrameworkVersion=v4.0; ChildBuild=False" RunEachTargetSeparately="true" />
-    <!-- Build NET45 -->
-    <MSBuild Condition=" '$(TargetFrameworkVersion)' != 'v4.5' " Projects="$(MSBuildProjectFile)" ToolsVersion="4.0" Properties="TargetFrameworkVersion=v4.5; ChildBuild=False" RunEachTargetSeparately="true" />
-  </Target>
 </Project>
