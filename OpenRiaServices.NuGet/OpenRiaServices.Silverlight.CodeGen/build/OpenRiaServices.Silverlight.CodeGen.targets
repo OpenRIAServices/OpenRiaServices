@@ -137,20 +137,6 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!--
     ================================================================
-    Open Ria Services Link is present
-      Add LinkedOpenRiaServerProject as Project Reference to ensure that
-      it always get compiled before code generation.
-    ================================================================
-    -->
-  <ItemGroup Condition="'$(LinkedOpenRiaServerProject)' != '' and '$(TargetFrameworkIdentifier)' != 'Silverlight' and '$(TargetFrameworkIdentifier)' != ''">
-    <ProjectReference Include="$(LinkedOpenRiaServerProject)" Condition="'$(TargetFrameworkIdentifier)' != 'Silverlight' and '$(TargetFrameworkIdentifier)' != ''">
-      <Name>OpenRiaServices Server Project Link</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-
-  <!--
-    ================================================================
     Open Ria Services Link is absent but residual generated files remain
       CoreCompile and Clean will both execute OpenRiaClientClean
       to delete obsolete generated files.
@@ -288,10 +274,10 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     -->
   <Target Name="CreateOpenRiaClientFiles">
 
-    <!-- Advice Silverlight users to use Silverlight package instead-->
+    <!-- Advice non-Silverlight users to use Client package instead-->
     <Warning 
-       Text="You are using OpenRiaServices Client CodeGen package in a Silverlight project please uninstall and use corresponding OpenRiaServices Silverlight CodeGen instead."
-       Condition="'$(TargetFrameworkIdentifier)' == 'Silverlight' " />
+       Text="You are using OpenRiaServices Silverlight CodeGen package in a non Silverlight project please uninstall and use corresponding OpenRiaServices Client CodeGen instead."
+       Condition="'$(TargetFrameworkIdentifier)' != 'Silverlight' and '$(TargetFrameworkIdentifier)' != '' " />
 
     <!--
     ================================================================
@@ -362,6 +348,10 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <!-- Import the WCF targets for proxy generation if it exists -->
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets"
-          Condition="'$(SilverlightVersion)' != '' and Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
+          Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
+
+  <!-- Import the Visual Studio WCF RIA Services package targets file if it exists -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets"
+          Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Ria.Client.VisualStudio.targets')"/>
 
 </Project>
