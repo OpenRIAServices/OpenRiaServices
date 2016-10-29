@@ -159,6 +159,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Data\WcfDomainClientFactory.cs" />
     <Compile Include="Data\WebDomainClientFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' " />
     <Compile Include="Data\Behaviors\MessageUtility.cs" />

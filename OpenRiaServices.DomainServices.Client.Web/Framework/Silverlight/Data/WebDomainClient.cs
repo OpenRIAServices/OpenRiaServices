@@ -9,6 +9,7 @@ using System.ServiceModel;
 using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
+using OpenRiaServices.DomainServices.Client.Web;
 
 #if SILVERLIGHT
 using System.Windows;
@@ -25,18 +26,8 @@ namespace OpenRiaServices.DomainServices.Client
         internal const string QueryPropertyName = "DomainServiceQuery";
         internal const string IncludeTotalCountPropertyName = "DomainServiceIncludeTotalCount";
 
-        private const int MaxReceivedMessageSize = int.MaxValue;
-#if !SILVERLIGHT
-        // These are only settable on the desktop. In Silverlight the max is already used by default.
-        private const int MaxArrayLength = int.MaxValue;
-        private const int MaxBytesPerRead = int.MaxValue;
-        private const int MaxDepth = int.MaxValue;
-        private const int MaxNameTableCharCount = int.MaxValue;
-        private const int MaxStringContentLength = int.MaxValue;
-#endif
-
         private ChannelFactory<TContract> _channelFactory;
-        private Web.WebDomainClientFactory _webDomainClientFactory;
+        private WcfDomainClientFactory _webDomainClientFactory;
         private readonly bool _usesHttps;
         private IEnumerable<Type> _knownTypes;
         private Uri _serviceUri;
@@ -87,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
         public WebDomainClient(Uri serviceUri, bool usesHttps, ChannelFactory<TContract> channelFactory)
-         : this(serviceUri, usesHttps, (Web.WebDomainClientFactory)null)
+         : this(serviceUri, usesHttps, (WcfDomainClientFactory)null)
         {
             this._channelFactory = channelFactory;
         }
@@ -106,7 +97,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="ArgumentException"> is thrown if <paramref name="serviceUri"/>
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
-        public WebDomainClient(Uri serviceUri, bool usesHttps, Web.WebDomainClientFactory domainClientFactory)
+        public WebDomainClient(Uri serviceUri, bool usesHttps, WcfDomainClientFactory domainClientFactory)
         {
             if (serviceUri == null)
             {
@@ -146,7 +137,8 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._serviceUri;
+                // Should this bug be preserved?
+                return this._channelFactory?.Endpoint.Address.Uri ?? this._serviceUri;
             }
         }
 
@@ -172,11 +164,15 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        private Web.WebDomainClientFactory WebDomainClientFactory
+        /// <summary>
+        /// Gets the <see cref="WcfDomainClientFactory"/> used to create this instance, with fallback to
+        /// a new <see cref="WebDomainClientFactory"/> in case it was created manually without using a DomainClientFactory.
+        /// </summary>
+        private WcfDomainClientFactory WebDomainClientFactory
         {
             get
             {
-                return _webDomainClientFactory ?? (_webDomainClientFactory = new Web.WebDomainClientFactory());
+                return _webDomainClientFactory ?? (_webDomainClientFactory = new WebDomainClientFactory());
             }
         }
 
@@ -223,7 +219,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
                 if (this._channelFactory == null)
                 {
-                    this._channelFactory = this.CreateDefaultChannelFactory();
+                    this._channelFactory = WebDomainClientFactory.CreateChannelFactory<TContract>(_serviceUri, _usesHttps);
                 }
 
                 if (!this._initializedFactory)
@@ -255,79 +251,6 @@ namespace OpenRiaServices.DomainServices.Client
             this.ComposeAbsoluteServiceUri();
         }
 #endif
-
-        /// <summary>
-        /// Creates a default channel factory.
-        /// </summary>
-        /// <returns>The channel used to communicate with the server.</returns>
-        private ChannelFactory<TContract> CreateDefaultChannelFactory()
-        {
-            ChannelFactory<TContract> factory = null;
-
-            try
-            {
-                var cookieInspector = this.WebDomainClientFactory.SharedCookieMessageInspector;
-                HttpTransportBindingElement transport;
-
-                if (this._serviceUri.Scheme == Uri.UriSchemeHttps)
-                {
-                    transport = new HttpsTransportBindingElement();
-                }
-                else
-                {
-                    transport = new HttpTransportBindingElement();
-                }
-                transport.ManualAddressing = true;
-                transport.MaxReceivedMessageSize = WebDomainClient<TContract>.MaxReceivedMessageSize;
-
-                // By default, use "REST" w/ binary encoding.
-                PoxBinaryMessageEncodingBindingElement encoder = new PoxBinaryMessageEncodingBindingElement();
-#if !SILVERLIGHT
-                // The default for these changed to Int32.MaxValue in .Net 4.5 
-                // We should be able to replace this with encoder.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
-                encoder.ReaderQuotas.MaxArrayLength = WebDomainClient<TContract>.MaxArrayLength;
-                encoder.ReaderQuotas.MaxBytesPerRead = WebDomainClient<TContract>.MaxBytesPerRead;
-                encoder.ReaderQuotas.MaxDepth = WebDomainClient<TContract>.MaxDepth;
-                encoder.ReaderQuotas.MaxNameTableCharCount = WebDomainClient<TContract>.MaxNameTableCharCount;
-                encoder.ReaderQuotas.MaxStringContentLength = WebDomainClient<TContract>.MaxStringContentLength;
-#endif
-
-                this._serviceUri = new Uri(this._serviceUri.OriginalString + "/binary", UriKind.Absolute);
-
-                var binding = new CustomBinding(encoder, transport);
-                factory = new ChannelFactory<TContract>(binding, new EndpointAddress(this._serviceUri));
-                factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
-                {
-                    DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped,
-                    MessageInspector = cookieInspector,
-                });
-
-                if (cookieInspector != null)
-                {
-#if SILVERLIGHT
-                    binding.Elements.Insert(0, new HttpCookieContainerBindingElement());
-#else
-                    transport.AllowCookies = true;
-#endif
-                }
-
-#if DEBUG
-                if (Debugger.IsAttached)
-                {
-                    // in debug mode set the timeout to a higher number to
-                    // facilitate debugging
-                    factory.Endpoint.Binding.OpenTimeout = TimeSpan.FromMinutes(5);
-                }
-#endif
-            }
-            catch
-            {
-                ((IDisposable)factory)?.Dispose();
-                throw;
-            }
-
-            return factory;
-        }
 
         /// <summary>
         /// Method called by the framework to begin an asynchronous query operation

@@ -72,6 +72,9 @@
     <Compile Include="..\Silverlight\Data\Behaviors\WebDomainClientWebHttpBehavior.cs">
       <Link>Data\Behaviors\WebDomainClientWebHttpBehavior.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\WcfDomainClientFactory.cs">
+      <Link>Data\WcfDomainClientFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\WebDomainClientFactory.cs">
       <Link>Data\WebDomainClientFactory.cs</Link>
     </Compile>
@@ -130,6 +133,7 @@
       <Name>OpenRiaServices.DomainServices.Client</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
 </Project>
