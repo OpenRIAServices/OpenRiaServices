@@ -63,6 +63,11 @@ namespace OpenRiaServices.DomainServices.Hosting
                 if (headerPosition > -1)
                 {
                     XmlDictionaryReader reader = request.Headers.GetReaderAtHeader(headerPosition);
+
+                    // Advance to contents, ReadServiceQuery expect to be on the QueryOption
+                    if (reader.IsStartElement(QueryPropertyName))
+                        reader.Read();
+
                     ServiceQuery serviceQuery = MessageUtility.ReadServiceQuery(reader);
                     request.Properties[QueryPropertyName] = serviceQuery;
                 }
