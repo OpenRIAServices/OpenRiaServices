@@ -19,15 +19,15 @@ namespace OpenRiaServices.DomainServices.Server
     public abstract class DomainOperationEntry
     {
         private DomainOperation _operation;
-        private ReadOnlyCollection<DomainOperationParameter> _effectiveParameters;
-        private bool _hasOutCountParameter;
-        private string _methodName;
+        private readonly ReadOnlyCollection<DomainOperationParameter> _effectiveParameters;
+        private readonly bool _hasOutCountParameter;
+        private readonly string _methodName;
         private Attribute _operationAttribute;
         private AttributeCollection _attributes;
         private Type _associatedType;
-        private Type _actualReturnType;
-        private Type _returnType;
-        private Type _domainServiceType;
+        private readonly Type _actualReturnType;
+        private readonly Type _returnType;
+        private readonly Type _domainServiceType;
         private bool? _requiresValidation;
         private bool? _requiresAuthorization;
         private Func<object, object> _unwrapTaskResultFunc;
@@ -99,9 +99,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// <returns>name, but without "Async" at the end</returns>
         private static string RemoveAsyncFromName(string name)
         {
-            const string async = "Async";
-            if (name.EndsWith(async) && name.Length > async.Length)
-                return name.Substring(0, name.Length - async.Length);
+            const string asyncPostfix = "Async";
+            if (name.EndsWith(asyncPostfix) && name.Length > asyncPostfix.Length)
+                return name.Substring(0, name.Length - asyncPostfix.Length);
             else
                 return name;
         }
@@ -493,6 +493,7 @@ namespace OpenRiaServices.DomainServices.Server
             return null;
         }
 
+#pragma warning disable S1144 // Unused private types or members should be removed, this is used by reflection
         private static object UnwrapGenericResult<T>(object result)
         {
             if(result == null)
@@ -500,6 +501,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             return ((Task<T>) result).Result;
         }
+#pragma warning restore S1144 // Unused private types or members should be removed
 
         /// <summary>
         /// Returns a textual description of the <see cref="DomainOperationEntry"/>.

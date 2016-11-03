@@ -110,7 +110,6 @@ namespace OpenRiaServices.DomainServices.Tools
         /// <returns>The name of the property we should use as the setter or null to suppress codegen.</returns>
         protected override string MapProperty(PropertyInfo propertyInfo, Attribute attribute)
         {
-            var regexValidator = attribute as RegularExpressionAttribute;
             if (propertyInfo.DeclaringType == typeof(RegularExpressionAttribute) && propertyInfo.Name == "MatchTimeoutInMilliseconds")
             {
                 // MatchTimeoutInMilliseconds was introduced in .Net 4.6.1 with default value -1 / 2000 depending on compatibility switch

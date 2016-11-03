@@ -178,7 +178,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
                 CodeMemberShareKind typeShareKind = this.GetTypeShareKind(t);
                 if ((typeShareKind & CodeMemberShareKind.SharedByReference) != 0)
                 {
-                    this.CodeGenerationHost.LogError(string.Format(CultureInfo.CurrentCulture, "Type already shared", t));
+                    this.CodeGenerationHost.LogError(string.Format(CultureInfo.CurrentCulture, "Type '{0}' already shared", t));
                     continue;
                 }
                 generatedEntities.Add(t);
@@ -197,7 +197,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
                 CodeMemberShareKind typeShareKind = this.GetTypeShareKind(t);
                 if ((typeShareKind & CodeMemberShareKind.SharedByReference) != 0)
                 {
-                    this.CodeGenerationHost.LogError(string.Format(CultureInfo.CurrentCulture, "Type already shared", t));
+                    this.CodeGenerationHost.LogError(string.Format(CultureInfo.CurrentCulture, "Type '{0}' already shared", t));
                     continue;
                 }
                 generatedComplexObjects.Add(t);

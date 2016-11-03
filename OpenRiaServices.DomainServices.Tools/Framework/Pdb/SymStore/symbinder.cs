@@ -210,7 +210,8 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
                 }
                 Marshal.ThrowExceptionForHR(hr);
             }
-            finally {
+            finally
+            {
                 if (uImporter != IntPtr.Zero)
                     Marshal.Release(uImporter);
             }
