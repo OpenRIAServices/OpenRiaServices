@@ -211,7 +211,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private class ErrorLogger : Microsoft.Build.Framework.ILogger
         {
-            List<string> _errors = new List<string>();
+            readonly List<string> _errors = new List<string>();
 
             public void Initialize(IEventSource eventSource)
             {

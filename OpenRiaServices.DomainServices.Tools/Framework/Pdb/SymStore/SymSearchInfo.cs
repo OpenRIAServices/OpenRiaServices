@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
 
     internal class SymSymbolSearchInfo : ISymbolSearchInfo
     {
-        ISymUnmanagedSymbolSearchInfo m_target;
+        readonly ISymUnmanagedSymbolSearchInfo m_target;
 
         public SymSymbolSearchInfo(ISymUnmanagedSymbolSearchInfo target)
         {

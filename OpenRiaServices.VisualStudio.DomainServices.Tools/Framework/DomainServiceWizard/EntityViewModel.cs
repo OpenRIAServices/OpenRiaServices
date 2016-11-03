@@ -14,8 +14,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </remarks>
     public class EntityViewModel : INotifyPropertyChanged
     {
-        private ContextViewModel _contextViewModel;
-        private IEntityData _entityData;
+        private readonly ContextViewModel _contextViewModel;
+        private readonly IEntityData _entityData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityViewModel"/> class.

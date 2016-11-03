@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Private reference to the <see cref="CodeDomProvider"/> used during <see cref="DomainService"/> code generation.
         /// </summary>
-        private CodeDomProvider _codeDomProvider;
+        private readonly CodeDomProvider _codeDomProvider;
 
         /// <summary>
         /// Default constructor.

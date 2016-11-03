@@ -149,8 +149,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         internal class UnmodifiedOperationAdder : EntityVisitor
         {
-            private Dictionary<object, bool> _visited = new Dictionary<object, bool>();
-            private List<ChangeSetEntry> _changeSetEntries;
+            private readonly Dictionary<object, bool> _visited = new Dictionary<object, bool>();
+            private readonly List<ChangeSetEntry> _changeSetEntries;
             private int _id;
             private bool _isChild;
 
@@ -251,9 +251,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         internal class AssociationMapBuilder : EntityVisitor
         {
-            private Dictionary<Entity, int> _entityIdMap;
+            private readonly Dictionary<Entity, int> _entityIdMap;
             private ChangeSetEntry _currentChangeSetEntry;
-            private List<ChangeSetEntry> _changeSetEntries;
+            private readonly List<ChangeSetEntry> _changeSetEntries;
 
             /// <summary>
             /// Build the association maps for the specified change set entries.

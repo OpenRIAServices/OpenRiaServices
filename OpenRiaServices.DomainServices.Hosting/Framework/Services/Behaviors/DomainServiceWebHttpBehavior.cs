@@ -141,8 +141,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         private class WebHttpQueryDispatchMessageFormatter : IDispatchMessageFormatter
         {
-            private IDispatchMessageFormatter _innerDispatchMessageFormatter;
-            private bool _queryHasSideEffects;
+            private readonly IDispatchMessageFormatter _innerDispatchMessageFormatter;
+            private readonly bool _queryHasSideEffects;
 
             public WebHttpQueryDispatchMessageFormatter(IDispatchMessageFormatter innerDispatchMessageFormatter, bool queryHasSideEffects)
             {
@@ -213,7 +213,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         // NOTE: We should sync this with the .NET v.next implementation once that's there.
         private class WebHttpErrorHandler : IErrorHandler
         {
-            private WebContentFormat format;
+            private readonly WebContentFormat format;
 
             public WebHttpErrorHandler(WebMessageFormat format)
             {

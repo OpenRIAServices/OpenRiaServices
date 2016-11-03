@@ -6,7 +6,7 @@ namespace Website.SilverlightHost
 {
     public class RiaTestHarness : UnitTestHarness
     {
-        private Func<ITestMethod, bool> _includeTest;
+        private readonly Func<ITestMethod, bool> _includeTest;
 
         public RiaTestHarness(Func<ITestMethod, bool> includeTest)
         {

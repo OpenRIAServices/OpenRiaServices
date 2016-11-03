@@ -371,8 +371,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         public class Mock_DomainServiceDescriptionProvider : DomainServiceDescriptionProvider
         {
-            private Type _domainServiceType;
-            private DomainServiceDescriptionProvider _descriptionProvider;
+            private readonly Type _domainServiceType;
+            private readonly DomainServiceDescriptionProvider _descriptionProvider;
 
             public Mock_DomainServiceDescriptionProvider(Type domainServiceType, DomainServiceDescriptionProvider parent) 
                 : base(domainServiceType, parent)

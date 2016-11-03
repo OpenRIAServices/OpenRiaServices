@@ -1106,7 +1106,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
-        private string TestColor = "Yellow";
+        private readonly string TestColor = "Yellow";
 
         /// <summary>
         /// This method is used from the TestQuery_LocalReferences test, to ensure

@@ -576,8 +576,8 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 
     public class MockTypeDescriptionProvider : TypeDescriptionProvider
     {
-        private Func<PropertyDescriptor> _createProperty;
-        private ICustomTypeDescriptor _parent;
+        private readonly Func<PropertyDescriptor> _createProperty;
+        private readonly ICustomTypeDescriptor _parent;
 
         public MockTypeDescriptionProvider(Func<PropertyDescriptor> createProperty)
         {
@@ -597,8 +597,8 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 
         private class MockTypeDescriptor : CustomTypeDescriptor
         {
-            private Type _objectType;
-            private Func<PropertyDescriptor> _createProperty;
+            private readonly Type _objectType;
+            private readonly Func<PropertyDescriptor> _createProperty;
 
             public MockTypeDescriptor(Type objectType, ICustomTypeDescriptor parent, Func<PropertyDescriptor> createProperty)
                 : base(parent)
@@ -618,10 +618,10 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 
     public class MockPropertyDescriptor<T> : PropertyDescriptor
     {
-        private string _name;
-        private Type _declaringType;
-        private Func<object, T> _getter;
-        private Action<object, T> _setter;
+        private readonly string _name;
+        private readonly Type _declaringType;
+        private readonly Func<object, T> _getter;
+        private readonly Action<object, T> _setter;
 
         public MockPropertyDescriptor(string name, Type declaringType, Func<object, T> getter, Action<object, T> setter)
             : base(name, new Attribute[0])

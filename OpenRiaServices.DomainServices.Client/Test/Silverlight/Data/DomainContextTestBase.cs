@@ -26,8 +26,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
     /// <typeparam name="T">Type of the DomainContext</typeparam>
     public abstract class DomainContextTestBase<T> : UnitTestBase where T : DomainContext
     {
-        private Uri serviceUri;
-        private ProviderType providerType;
+        private readonly Uri serviceUri;
+        private readonly ProviderType providerType;
         private T ctxt;
         private LoadOperation loadOperation;
         private SubmitOperation submitOperation;

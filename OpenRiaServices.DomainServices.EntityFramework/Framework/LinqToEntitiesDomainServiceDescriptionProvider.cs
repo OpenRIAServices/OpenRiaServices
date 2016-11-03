@@ -16,8 +16,8 @@ namespace OpenRiaServices.DomainServices.EntityFramework
     internal class LinqToEntitiesDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {
         private static Dictionary<Type, LinqToEntitiesTypeDescriptionContext> tdpContextMap = new Dictionary<Type, LinqToEntitiesTypeDescriptionContext>();
-        private LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
-        private Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
+        private readonly LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
+        private readonly Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
 
         public LinqToEntitiesDomainServiceDescriptionProvider(Type domainServiceType, Type contextType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)

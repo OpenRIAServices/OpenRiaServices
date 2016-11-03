@@ -5,7 +5,7 @@ namespace OpenRiaServices.DomainServices.Server.Data
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class MergeAttribute : Attribute
     {
-        private bool _isMergeable;
+        private readonly bool _isMergeable;
 
         /// <summary>
         /// Default constructor

@@ -587,9 +587,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
     internal class TestValidationResultCollection : ValidationResultCollection
     {
-        private Action _collectionChanged;
-        private Action _hasErrorsChanged;
-        private Action<string> _propertyErrorsChanged;
+        private readonly Action _collectionChanged;
+        private readonly Action _hasErrorsChanged;
+        private readonly Action<string> _propertyErrorsChanged;
 
         public TestValidationResultCollection(Action collectionChangedCallback, Action hasErrorsChangedCallback, Action<string> propertyErrorsChangedCallback)
             : base(null)

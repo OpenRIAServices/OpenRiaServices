@@ -21,8 +21,8 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public abstract class EntitySet : IEnumerable, ICollection, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
-        private Dictionary<AssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new Dictionary<AssociationAttribute, Action<Entity>>();
-        private Type _entityType;
+        private readonly Dictionary<AssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new Dictionary<AssociationAttribute, Action<Entity>>();
+        private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
         private IList _list;
@@ -1025,10 +1025,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private class AddAttachInferrer : EntityVisitor
         {
-            private Dictionary<Entity, bool> _visited = new Dictionary<Entity, bool>();
-            private EntityContainer _container;
+            private readonly Dictionary<Entity, bool> _visited = new Dictionary<Entity, bool>();
+            private readonly EntityContainer _container;
             private bool _isTopLevel = true;
-            private Action<EntitySet, Entity> _action;
+            private readonly Action<EntitySet, Entity> _action;
 
             public static void Infer(EntityContainer container, Entity entity, Action<EntitySet, Entity> action)
             {

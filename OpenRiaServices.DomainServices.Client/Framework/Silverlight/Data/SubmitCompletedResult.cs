@@ -10,8 +10,8 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public class SubmitCompletedResult
     {
-        private EntityChangeSet _changeSet;
-        private ReadOnlyCollection<ChangeSetEntry> _operationResults;
+        private readonly EntityChangeSet _changeSet;
+        private readonly ReadOnlyCollection<ChangeSetEntry> _operationResults;
 
         /// <summary>
         /// Initializes a new instance of the SubmitCompletedResult class

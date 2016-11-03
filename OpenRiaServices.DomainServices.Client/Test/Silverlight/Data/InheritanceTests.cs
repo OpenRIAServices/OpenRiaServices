@@ -21,16 +21,16 @@ namespace OpenRiaServices.DomainServices.Client.Data.Test
     public class InheritanceTests : UnitTestBase
     {
         // entity actions that don't exist on CityDomainContext
-        private EntityAction _approve = new EntityAction("Approve");
-        private EntityAction _reject = new EntityAction("Reject", "order not correctly filled out");
+        private readonly EntityAction _approve = new EntityAction("Approve");
+        private readonly EntityAction _reject = new EntityAction("Reject", "order not correctly filled out");
 
         // entity actions that actually exist on CityDomainContext
-        private EntityAction _assignCityZone = new EntityAction("AssignCityZone", "Zone1");
-        private EntityAction _autoAssignCityZone = new EntityAction("AutoAssignCityZone");
-        private EntityAction _reassignZip = new EntityAction("ReassignZip", 100, true);
+        private readonly EntityAction _assignCityZone = new EntityAction("AssignCityZone", "Zone1");
+        private readonly EntityAction _autoAssignCityZone = new EntityAction("AutoAssignCityZone");
+        private readonly EntityAction _reassignZip = new EntityAction("ReassignZip", 100, true);
 
         // entity actions that exist only for CityWityInfo entities
-        private EntityAction _setCityInfo = new EntityAction("SetCityInfo", "someInfo");
+        private readonly EntityAction _setCityInfo = new EntityAction("SetCityInfo", "someInfo");
 
         private List<City> _cities;
         private List<CityWithInfo> _citiesWithInfo;

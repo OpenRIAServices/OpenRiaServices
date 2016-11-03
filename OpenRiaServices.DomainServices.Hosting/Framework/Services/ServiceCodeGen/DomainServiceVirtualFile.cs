@@ -7,7 +7,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 {
     internal sealed class DomainServiceVirtualFile : VirtualFile
     {
-        private Type domainServiceType;
+        private readonly Type domainServiceType;
 
         public DomainServiceVirtualFile(Type domainServiceType, string virtualPath)
             : base(virtualPath)

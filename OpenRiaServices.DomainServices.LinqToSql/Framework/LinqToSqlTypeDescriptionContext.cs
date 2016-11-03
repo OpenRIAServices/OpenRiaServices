@@ -13,8 +13,8 @@ namespace OpenRiaServices.DomainServices.LinqToSql
     /// </summary>
     internal class LinqToSqlTypeDescriptionContext : TypeDescriptionContextBase
     {
-        private MetaModel _model;
-        private Dictionary<MetaAssociation, string> _associationNameMap = new Dictionary<MetaAssociation, string>();
+        private readonly MetaModel _model;
+        private readonly Dictionary<MetaAssociation, string> _associationNameMap = new Dictionary<MetaAssociation, string>();
 
         /// <summary>
         /// Constructor that creates a metadata context for the specified LINQ To SQL domain service type

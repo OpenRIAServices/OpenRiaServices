@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     {
         #region Member fields
 
-        private Action<SaveUserOperation> _completeAction;
+        private readonly Action<SaveUserOperation> _completeAction;
 
         #endregion
 

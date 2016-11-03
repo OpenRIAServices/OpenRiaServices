@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainControllers.Server
     /// </summary>
     public sealed class ChangeSet
     {
-        private IEnumerable<ChangeSetEntry> _changeSetEntries;
+        private readonly IEnumerable<ChangeSetEntry> _changeSetEntries;
 
         /// <summary>
         /// Initializes a new instance of the ChangeSet class

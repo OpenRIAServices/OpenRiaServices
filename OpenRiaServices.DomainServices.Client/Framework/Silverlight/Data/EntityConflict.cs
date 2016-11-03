@@ -11,11 +11,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public sealed class EntityConflict
     {
-        private bool _isDeleted;
-        private Entity _currentEntity;
+        private readonly bool _isDeleted;
+        private readonly Entity _currentEntity;
         private Entity _originalEntity;
-        private Entity _storeEntity;
-        private ReadOnlyCollection<string> _propertyNames;
+        private readonly Entity _storeEntity;
+        private readonly ReadOnlyCollection<string> _propertyNames;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityConflict"/> class.

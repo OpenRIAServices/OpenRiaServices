@@ -17,8 +17,8 @@ namespace OpenRiaServices.DomainServices.Server
     public sealed class ChangeSet
     {
         private Dictionary<object, object> _entitiesToReplace;
-        private IEnumerable<ChangeSetEntry> _changeSetEntries;
-        private Dictionary<object, ChangeOperation> _entityStatusMap;
+        private readonly IEnumerable<ChangeSetEntry> _changeSetEntries;
+        private readonly Dictionary<object, ChangeOperation> _entityStatusMap;
         private Dictionary<object, List<AssociatedEntityInfo>> _associatedStoreEntities;
         private Dictionary<object, Dictionary<PropertyDescriptor, IEnumerable<ChangeSetEntry>>> _associatedChangesMap;
 
@@ -733,8 +733,8 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         private class AssociatedEntityInfo
         {
-            private object _clientEntity;
-            private Action _entityTransform;
+            private readonly object _clientEntity;
+            private readonly Action _entityTransform;
 
             /// <summary>
             /// Default constructor.

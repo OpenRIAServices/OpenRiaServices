@@ -21,12 +21,12 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <summary>
         /// Base URI of the end point.
         /// </summary>
-        Uri baseUri;
+        readonly Uri baseUri;
 
         /// <summary>
         /// Mapping between resource set names and their corresponding query operations.
         /// </summary>
-        Dictionary<string, string> serviceRootQueryOperations;
+        readonly Dictionary<string, string> serviceRootQueryOperations;
 
         /// <summary>Constructs the operation selector for runtime.</summary>
         /// <param name="endpoint">End point.</param>
@@ -83,13 +83,10 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
 
             string identifier = null;
 
-            if (segments.Length > 0)
+            if (segments.Length > 0 && UriUtils.ExtractSegmentIdentifier(segments[0], out identifier))
             {
-                if (UriUtils.ExtractSegmentIdentifier(segments[0], out identifier))
-                {
-                    // Disallow selection of entries within response sets.
-                    DomainDataServiceOperationSelector.DisallowEntrySelection(identifier, segments[0]); 
-                }
+                // Disallow selection of entries within response sets.
+                DomainDataServiceOperationSelector.DisallowEntrySelection(identifier, segments[0]); 
             }
 
             // Service description or metadata request.

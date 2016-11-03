@@ -1698,7 +1698,7 @@ namespace OpenRiaServices.Controls.DomainServices.Test
             public bool ExceptionExpected { get; set; }
         }
 
-        private TestCase[] _testCases = new TestCase[]
+        private readonly TestCase[] _testCases = new TestCase[]
         {
             new TestCase("Int32F", FilterOperator.IsEqualTo, null, true),
             new TestCase("Int32F", FilterOperator.IsEqualTo, 1, false),

@@ -962,7 +962,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
     public class ConfigurableDomainContext : DomainContext
     {
-        private EntityContainer _entityContainer;
+        private readonly EntityContainer _entityContainer;
 
         public ConfigurableDomainContext(DomainClient client, EntityContainer entityContainer)
             : base(client)

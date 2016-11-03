@@ -229,7 +229,7 @@
 
         private class StaticValueRestorer : IDisposable
         {
-            private Dictionary<MemberInfo, object> membersToRestore = new Dictionary<MemberInfo, object>();
+            private readonly Dictionary<MemberInfo, object> membersToRestore = new Dictionary<MemberInfo, object>();
 
             internal StaticValueRestorer(params MemberInfo[] memberInfos)
             {

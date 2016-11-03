@@ -51,7 +51,7 @@
         /// <summary>
         /// Private accessor for an ObservableCollection containing group descriptions
         /// </summary>
-        private ObservableCollection<GroupDescription> _groupBy = new ObservableCollection<GroupDescription>();
+        private readonly ObservableCollection<GroupDescription> _groupBy = new ObservableCollection<GroupDescription>();
 
         /// <summary>
         /// Indicates whether the list of items (after applying the sort and filters, if any) 
@@ -62,7 +62,7 @@
         /// <summary>
         /// Private accessor for the owning ICollectionView
         /// </summary>
-        private ICollectionView _view;
+        private readonly ICollectionView _view;
 
         #endregion Private Fields
 

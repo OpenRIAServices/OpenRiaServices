@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainControllers.Server
     /// </summary>
     internal sealed class SubmitProxyActionDescriptor : ReflectedHttpActionDescriptor
     {
-        private UpdateActionDescriptor _updateAction;
+        private readonly UpdateActionDescriptor _updateAction;
 
         public SubmitProxyActionDescriptor(UpdateActionDescriptor updateAction)
             : base(updateAction.ControllerDescriptor, updateAction.ControllerDescriptor.ControllerType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.Public))

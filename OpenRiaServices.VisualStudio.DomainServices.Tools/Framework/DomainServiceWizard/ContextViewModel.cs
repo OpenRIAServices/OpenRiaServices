@@ -23,8 +23,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </remarks>
     public class ContextViewModel : INotifyPropertyChanged
     {
-        private IBusinessLogicModel _businessLogicModel;
-        private IContextData _contextData;
+        private readonly IBusinessLogicModel _businessLogicModel;
+        private readonly IContextData _contextData;
         private List<EntityViewModel> _entities;
 
         /// <summary>

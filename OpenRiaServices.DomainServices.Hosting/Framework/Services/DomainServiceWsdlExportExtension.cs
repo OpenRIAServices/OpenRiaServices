@@ -6,7 +6,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 {
     internal sealed class DomainServiceWsdlExportExtension : IContractBehavior, IWsdlExportExtension
     {
-        private DomainServiceSerializationSurrogate surrogate;
+        private readonly DomainServiceSerializationSurrogate surrogate;
 
         public DomainServiceWsdlExportExtension(DomainServiceSerializationSurrogate surrogate)
         {

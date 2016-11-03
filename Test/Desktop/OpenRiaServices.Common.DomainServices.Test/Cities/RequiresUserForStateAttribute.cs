@@ -13,7 +13,7 @@ namespace Cities
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public sealed class RequiresUserForStateAttribute : RequiresUserAttribute
     {
-        private string _stateName;
+        private readonly string _stateName;
 
         public RequiresUserForStateAttribute(string userName, string stateName) : base(userName)
         {

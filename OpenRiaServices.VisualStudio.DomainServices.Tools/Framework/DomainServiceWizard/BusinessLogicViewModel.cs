@@ -21,18 +21,18 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </remarks>
     public class BusinessLogicViewModel : INotifyPropertyChanged, IDisposable
     {
-        private string _projectDirectory;
+        private readonly string _projectDirectory;
         private string _className;
-        private string _language;
-        private string _rootNamespace;
-        private string _assemblyName;
+        private readonly string _language;
+        private readonly string _rootNamespace;
+        private readonly string _assemblyName;
         private List<ContextViewModel> _contextViewModels;
         private ContextViewModel _currentContextViewModel;
         private bool _generateMetadataClasses;
         private ClientBuildManager _clientBuildManager;
         private IBusinessLogicModel _businessLogicModel;
-        private List<Type> _contextTypes;
-        private IVsHelp _help;
+        private readonly List<Type> _contextTypes;
+        private readonly IVsHelp _help;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BusinessLogicViewModel"/> class.

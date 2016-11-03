@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private class SubtreeEvaluator : ExpressionVisitor
         {
-            private Dictionary<Expression, bool> _candidates;
+            private readonly Dictionary<Expression, bool> _candidates;
 
             internal SubtreeEvaluator(Dictionary<Expression, bool> candidates)
             {
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Client
         private class Nominator : ExpressionVisitor
         {
             private Dictionary<Expression, bool> _candidates;
-            private Func<Expression, bool> _funcCanBeEvaluated;
+            private readonly Func<Expression, bool> _funcCanBeEvaluated;
             private bool _cannotBeEvaluated;
 
             internal Nominator(Func<Expression, bool> funcCanBeEvaluated)

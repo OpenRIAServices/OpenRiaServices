@@ -1890,12 +1890,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private class EditSession
         {
-            private Entity _entity;
-            private EntityState _lastState;
+            private readonly Entity _entity;
+            private readonly EntityState _lastState;
             private IDictionary<string, object> _snapshot;
-            private EntityAction[] _customMethodInvocations;
-            private ValidationResult[] _validationErrors;
-            private List<string> _modifiedProperties;
+            private readonly EntityAction[] _customMethodInvocations;
+            private readonly ValidationResult[] _validationErrors;
+            private readonly List<string> _modifiedProperties;
 
             private EditSession(Entity entity)
             {
@@ -2005,7 +2005,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private class EntityValidationResultCollection : ValidationResultCollection
         {
-            private Entity _entity;
+            private readonly Entity _entity;
 
             public EntityValidationResultCollection(Entity entity)
                 : base(entity)

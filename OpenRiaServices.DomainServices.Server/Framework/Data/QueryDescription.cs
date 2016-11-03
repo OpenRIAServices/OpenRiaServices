@@ -10,10 +10,10 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     public sealed class QueryDescription
     {
-        private DomainOperationEntry _domainOperationEntry;
+        private readonly DomainOperationEntry _domainOperationEntry;
         private object[] _parameterValues;
-        private IQueryable _query;
-        private bool _includeTotalCount;
+        private readonly IQueryable _query;
+        private readonly bool _includeTotalCount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryDescription"/> class with the specified

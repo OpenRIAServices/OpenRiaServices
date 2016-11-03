@@ -13,11 +13,11 @@ namespace OpenRiaServices.DomainServices.Server.Test.Utilities
     [System.Security.SecuritySafeCritical]
     public sealed class ConsoleLogger : ILoggingService
     {
-        private List<string> _errorMsgs = new List<string>();
-        private List<string> _warningMsgs = new List<string>();
-        private List<string> _infoMsgs = new List<string>();
-        private List<LogPacket> _errorPackets = new List<LogPacket>();
-        private List<LogPacket> _warningPackets = new List<LogPacket>();
+        private readonly List<string> _errorMsgs = new List<string>();
+        private readonly List<string> _warningMsgs = new List<string>();
+        private readonly List<string> _infoMsgs = new List<string>();
+        private readonly List<LogPacket> _errorPackets = new List<LogPacket>();
+        private readonly List<LogPacket> _warningPackets = new List<LogPacket>();
 
         /// <summary>
         /// Gets a value indicating whether any errors were logged.

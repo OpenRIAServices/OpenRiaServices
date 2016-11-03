@@ -29,17 +29,17 @@ namespace OpenRiaServices.DomainServices.Client
         [ThreadStatic]
         private static Dictionary<Type, MetaType> _metaTypes;
 
-        private bool _isComplex;
-        private bool _hasComplexMembers;
+        private readonly bool _isComplex;
+        private readonly bool _hasComplexMembers;
         private bool _requiresValidation;
-        private bool _hasComposition;
-        private bool _shouldRoundtripOriginal;
-        private Type _type;
-        private IEnumerable<Type> _childTypes = new List<Type>();
-        private Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
-        private MetaMember _versionMember;
+        private readonly bool _hasComposition;
+        private readonly bool _shouldRoundtripOriginal;
+        private readonly Type _type;
+        private readonly IEnumerable<Type> _childTypes = new List<Type>();
+        private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
+        private readonly MetaMember _versionMember;
 
-        private IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
+        private readonly IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
 
         /// <summary>
         /// Returns the MetaType for the specified Type.

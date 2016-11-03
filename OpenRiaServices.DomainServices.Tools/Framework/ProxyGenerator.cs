@@ -5,7 +5,7 @@
     /// </summary>
     internal abstract class ProxyGenerator
     {
-        private CodeDomClientCodeGenerator _proxyGenerator;
+        private readonly CodeDomClientCodeGenerator _proxyGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProxyGenerator"/> class.

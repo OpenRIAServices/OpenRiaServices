@@ -34,13 +34,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             typeof(CompositionAttribute)
         };
 
-        private HashSet<Type> _sharedTypes;
-        private HashSet<CodeMemberKey> _sharedMethods = new HashSet<CodeMemberKey>();
-        private HashSet<string> _sharedFiles;
-        private HashSet<Type> _unknowableTypes = new HashSet<Type>();
-        private HashSet<Type> _unsharedTypes = new HashSet<Type>();
+        private readonly HashSet<Type> _sharedTypes;
+        private readonly HashSet<CodeMemberKey> _sharedMethods = new HashSet<CodeMemberKey>();
+        private readonly HashSet<string> _sharedFiles;
+        private readonly HashSet<Type> _unknowableTypes = new HashSet<Type>();
+        private readonly HashSet<Type> _unsharedTypes = new HashSet<Type>();
 
-        private SourceFileLocationService _pdbSourceFileLocationService;
+        private readonly SourceFileLocationService _pdbSourceFileLocationService;
 
         public MockSharedCodeService(IEnumerable<Type> sharedTypes, IEnumerable<MethodBase> sharedMethods, IEnumerable<string> sharedFiles)
         {

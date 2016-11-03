@@ -13,14 +13,14 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public abstract class EntityQuery
     {
-        private string _queryName;
-        private Type _entityType;
-        private IDictionary<string, object> _parameters;
-        private bool _hasSideEffects;
-        private bool _isComposable;
+        private readonly string _queryName;
+        private readonly Type _entityType;
+        private readonly IDictionary<string, object> _parameters;
+        private readonly bool _hasSideEffects;
+        private readonly bool _isComposable;
         private bool _includeTotalCount;
         private IQueryable _query;
-        private DomainClient _domainClient;
+        private readonly DomainClient _domainClient;
 
         /// <summary>
         /// Initializes a new instance of the EntityQuery class

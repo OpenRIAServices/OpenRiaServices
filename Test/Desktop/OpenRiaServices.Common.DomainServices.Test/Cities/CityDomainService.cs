@@ -43,7 +43,7 @@ namespace Cities
     [EnableClientAccess]
     public class CityDomainService : BaseDomainService
     {
-        private CityData _cityData = new CityData();
+        private readonly CityData _cityData = new CityData();
 
         // maintain list of deleted cities
         // this list is static because each query creates new domain service instance

@@ -29,8 +29,8 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         internal class TypeMetadata
         {
-            private List<string> key = new List<string>();
-            private List<TypePropertyMetadata> properties = new List<TypePropertyMetadata>();
+            private readonly List<string> key = new List<string>();
+            private readonly List<TypePropertyMetadata> properties = new List<TypePropertyMetadata>();
 
             public string Name { get; private set; }
             public string TypeName { get; private set; }
@@ -197,7 +197,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         internal class TypePropertyMetadata
         {
-            private List<TypePropertyValidationRuleMetadata> validationRules = new List<TypePropertyValidationRuleMetadata>();
+            private readonly List<TypePropertyValidationRuleMetadata> validationRules = new List<TypePropertyValidationRuleMetadata>();
 
             public string Name { get; private set; }
             public string TypeName { get; private set; }
@@ -314,8 +314,8 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         internal class TypePropertyAssociationMetadata
         {
-            private List<string> thisKeyMembers = new List<string>();
-            private List<string> otherKeyMembers = new List<string>();
+            private readonly List<string> thisKeyMembers = new List<string>();
+            private readonly List<string> otherKeyMembers = new List<string>();
 
             public string Name { get; private set; }
             public bool IsForeignKey { get; private set; }
@@ -372,7 +372,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             public object Value1 { get; private set; }
             public object Value2 { get; private set; }
             public string ErrorMessageString { get; private set; }
-            private string type;
+            private readonly string type;
 
             public TypePropertyValidationRuleMetadata(RequiredAttribute attribute)
                 : this((ValidationAttribute)attribute)

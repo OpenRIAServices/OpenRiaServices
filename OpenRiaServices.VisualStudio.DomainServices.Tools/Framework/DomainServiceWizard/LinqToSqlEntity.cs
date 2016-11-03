@@ -10,7 +10,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     public class LinqToSqlEntity : BusinessLogicEntity
     {
         private string _tablePropertyName;
-        private bool _hasTimestampMember;
+        private readonly bool _hasTimestampMember;
 
         /// <summary>
         /// Creates a new instance

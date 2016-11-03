@@ -15,11 +15,11 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// </summary>
     internal class SharedAssemblies
     {
-        private List<string> _assemblyFileNames;
+        private readonly List<string> _assemblyFileNames;
         private List<Assembly> _assemblies;
-        private IEnumerable<string> _assemblySearchPaths;
-        private ConcurrentDictionary<string, Type> _sharedTypeByName = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
-        private ILogger _logger;
+        private readonly IEnumerable<string> _assemblySearchPaths;
+        private readonly ConcurrentDictionary<string, Type> _sharedTypeByName = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Creates a new instance of this type.

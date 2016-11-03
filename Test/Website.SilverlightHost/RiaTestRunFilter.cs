@@ -10,7 +10,7 @@ namespace Website.SilverlightHost
 {
     public class RiaTestRunFilter : TestRunFilter
     {
-        private Func<ITestMethod, bool> _includeTest;
+        private readonly Func<ITestMethod, bool> _includeTest;
 
         public RiaTestRunFilter(UnitTestSettings settings, UnitTestHarness harness, Func<ITestMethod, bool> includeTest)
             : base(settings, harness)

@@ -11,10 +11,10 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public class QueryCompletedResult
     {
-        private ReadOnlyCollection<Entity> _entities;
-        private ReadOnlyCollection<Entity> _includedEntities;
-        private int _totalCount;
-        private ReadOnlyCollection<ValidationResult> _validationErrors;
+        private readonly ReadOnlyCollection<Entity> _entities;
+        private readonly ReadOnlyCollection<Entity> _includedEntities;
+        private readonly int _totalCount;
+        private readonly ReadOnlyCollection<ValidationResult> _validationErrors;
 
         /// <summary>
         /// Initializes a new instance of the QueryCompletedResult class

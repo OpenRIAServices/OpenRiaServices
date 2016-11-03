@@ -328,7 +328,7 @@ namespace TestDomainServices
 
     public class Association_C
     {
-        private List<Association_B> _bs = new List<Association_B>();
+        private readonly List<Association_B> _bs = new List<Association_B>();
 
         [Key]
         public int ID { get; set; }

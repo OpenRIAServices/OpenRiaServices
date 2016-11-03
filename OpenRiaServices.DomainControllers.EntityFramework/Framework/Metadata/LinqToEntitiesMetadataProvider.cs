@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
         private static ConcurrentDictionary<Type, LinqToEntitiesTypeDescriptionContext> _tdpContextMap = new ConcurrentDictionary<Type, LinqToEntitiesTypeDescriptionContext>();
         private readonly LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
         private readonly bool _isDbContext;
-        private Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
+        private readonly Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
 
         public LinqToEntitiesMetadataProvider(Type contextType, MetadataProvider parent, bool isDbContext)
             : base(parent)

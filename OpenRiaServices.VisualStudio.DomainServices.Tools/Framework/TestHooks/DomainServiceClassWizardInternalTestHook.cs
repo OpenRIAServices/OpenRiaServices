@@ -26,7 +26,7 @@
         public class InternalTestHook
         {
             //Reference to the outer 'parent' wizard
-            private DomainServiceClassWizard _wizard;
+            private readonly DomainServiceClassWizard _wizard;
 
             public InternalTestHook(DomainServiceClassWizard wizard)
             {

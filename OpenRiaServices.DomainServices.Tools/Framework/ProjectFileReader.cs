@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal class ProjectFileReader : IDisposable
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
 #if NET40
         private ProjectCollection _projectCollection = new ProjectCollection();

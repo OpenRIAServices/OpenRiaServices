@@ -11,9 +11,9 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public sealed class SubmitOperation : OperationBase
     {
-        private EntityChangeSet _changeSet;
-        private Action<SubmitOperation> _cancelAction;
-        private Action<SubmitOperation> _completeAction;
+        private readonly EntityChangeSet _changeSet;
+        private readonly Action<SubmitOperation> _cancelAction;
+        private readonly Action<SubmitOperation> _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubmitOperation"/> class.

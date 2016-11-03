@@ -287,7 +287,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             /// <summary>
             /// Gets the <see cref="HttpContextBase"/>.
             /// </summary>
-            private HttpContextBase _httpContextBase;
+            private readonly HttpContextBase _httpContextBase;
 
             /// <summary>
             /// Creates a new <see cref="HttpContextBaseServiceProvider"/> using the provided 

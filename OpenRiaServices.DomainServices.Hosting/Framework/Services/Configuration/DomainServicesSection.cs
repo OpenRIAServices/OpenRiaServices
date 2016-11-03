@@ -8,7 +8,7 @@ namespace OpenRiaServices.DomainServices.Hosting
     /// </summary>
     public class DomainServicesSection : ConfigurationSection
     {
-        private ConfigurationProperty propEndpoints;
+        private readonly ConfigurationProperty propEndpoints;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServicesSection"/> class.

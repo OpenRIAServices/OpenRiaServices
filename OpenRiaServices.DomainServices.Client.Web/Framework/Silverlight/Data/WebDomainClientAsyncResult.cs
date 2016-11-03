@@ -11,7 +11,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TContract">The contract type.</typeparam>
     internal sealed class WebDomainClientAsyncResult<TContract> : DomainClientAsyncResult where TContract : class
     {
-        private IEnumerable<ChangeSetEntry> _changeSetEntries;
+        private readonly IEnumerable<ChangeSetEntry> _changeSetEntries;
         private readonly TContract _channel;
         private readonly MethodInfo _endOperationMethod;
 

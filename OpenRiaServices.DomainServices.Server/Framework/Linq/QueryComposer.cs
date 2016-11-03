@@ -113,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             private class Visitor : ExpressionVisitor
             {
-                private Expression _root;
+                private readonly Expression _root;
 
                 public Visitor(Expression root)
                 {

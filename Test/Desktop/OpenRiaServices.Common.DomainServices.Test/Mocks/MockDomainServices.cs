@@ -26,7 +26,7 @@ namespace TestDomainServices
 
     public class OnErrorDomainService : DomainService
     {
-        private Cities.CityData _cityData = new Cities.CityData();
+        private readonly Cities.CityData _cityData = new Cities.CityData();
 
         public string ReplaceExceptionMessage
         {
@@ -560,8 +560,8 @@ namespace TestDomainServices
 
     public class InheritanceTestData
     {
-        private List<InheritanceC> cs = new List<InheritanceC>();
-        private List<InheritanceE> es = new List<InheritanceE>();
+        private readonly List<InheritanceC> cs = new List<InheritanceC>();
+        private readonly List<InheritanceE> es = new List<InheritanceE>();
 
         public InheritanceTestData()
         {
@@ -599,7 +599,7 @@ namespace TestDomainServices
     [EnableClientAccess]
     public class TestProvider_Inheritance1 : DomainService
     {
-        InheritanceTestData data = new InheritanceTestData();
+        readonly InheritanceTestData data = new InheritanceTestData();
 
         [Query]
         public IEnumerable<InheritanceC> GetCs()
@@ -930,8 +930,8 @@ namespace TestDomainServices
     public partial class TestProvider_Scenarios : DomainService
     {
         private static int s_counter = 0;
-        private MixedTypeData _data = new MixedTypeData();
-        private MixedTypeData _dataSuperset = new MixedTypeData(true);
+        private readonly MixedTypeData _data = new MixedTypeData();
+        private readonly MixedTypeData _dataSuperset = new MixedTypeData(true);
 
         private string query = string.Empty;
 
@@ -2954,9 +2954,9 @@ namespace TestDomainServices
     [DataContract]
     public class A
     {
-        private string readOnlyData_NoSetter;
+        private readonly string readOnlyData_NoSetter;
         private string readOnlyData_WithSetter;
-        private string readOnlyData_NoReadOnlyAttribute;
+        private readonly string readOnlyData_NoReadOnlyAttribute;
         private int excludedMember = 42;
 
         public A()
@@ -3487,7 +3487,7 @@ namespace TestDomainServices
     [EnableClientAccess]
     public class IncludeScenariosTestProvider : DomainService
     {
-        private List<IncludesA> testAs = new List<IncludesA>();
+        private readonly List<IncludesA> testAs = new List<IncludesA>();
 
         public IncludeScenariosTestProvider()
         {
@@ -3743,7 +3743,7 @@ namespace TestDomainServices
     // helper class that fully instantiates a few MixedTypes
     public class MixedTypeData
     {
-        private MixedType[] _values;
+        private readonly MixedType[] _values;
 
         public MixedTypeData()
         {
@@ -4237,8 +4237,8 @@ namespace TestDomainServices
     [DomainServiceDescriptionProvider(typeof(MockDomainServiceDescriptionProvider))]
     public class MockCustomerDomainService : DomainService
     {
-        List<MockCustomer> customers;
-        List<MockReport> reports = new List<MockReport>();
+        readonly List<MockCustomer> customers;
+        readonly List<MockReport> reports = new List<MockReport>();
 
         public MockCustomerDomainService()
         {
@@ -4414,8 +4414,8 @@ namespace TestDomainServices
 
                 private class MockReportPropertyDescriptor : PropertyDescriptor
                 {
-                    PropertyDescriptor _source;
-                    PropertyDescriptor _target;
+                    readonly PropertyDescriptor _source;
+                    readonly PropertyDescriptor _target;
 
                     public MockReportPropertyDescriptor(string propertyName, PropertyDescriptor source, PropertyDescriptor target, string dataMemberName)
                         : base(propertyName, MockReportPropertyDescriptor.GetAttributes(target.Attributes, dataMemberName))

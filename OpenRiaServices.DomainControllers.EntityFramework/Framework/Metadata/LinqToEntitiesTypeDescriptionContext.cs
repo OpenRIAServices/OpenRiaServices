@@ -17,7 +17,7 @@ namespace OpenRiaServices.DomainControllers.EntityFramework.Metadata
     {
         private readonly Type _contextType;
         private readonly bool _isDbContext;
-        private ConcurrentDictionary<string, AssociationInfo> _associationMap = new ConcurrentDictionary<string, AssociationInfo>();
+        private readonly ConcurrentDictionary<string, AssociationInfo> _associationMap = new ConcurrentDictionary<string, AssociationInfo>();
         private MetadataWorkspace _metadataWorkspace;
 
         /// <summary>

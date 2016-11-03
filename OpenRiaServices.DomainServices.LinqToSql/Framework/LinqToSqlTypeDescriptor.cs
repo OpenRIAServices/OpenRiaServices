@@ -15,9 +15,9 @@ namespace OpenRiaServices.DomainServices.LinqToSql
     /// </summary>
     internal class LinqToSqlTypeDescriptor : TypeDescriptorBase
     {
-        private LinqToSqlTypeDescriptionContext _typeDescriptionContext;
-        private MetaType _metaType;
-        private bool _keyIsEditable;
+        private readonly LinqToSqlTypeDescriptionContext _typeDescriptionContext;
+        private readonly MetaType _metaType;
+        private readonly bool _keyIsEditable;
 
         /// <summary>
         /// Constructor that takes the metadata context, a metadata type and a parent custom type descriptor

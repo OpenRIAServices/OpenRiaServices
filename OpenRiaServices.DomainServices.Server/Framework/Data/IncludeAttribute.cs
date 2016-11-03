@@ -15,8 +15,8 @@ namespace OpenRiaServices.DomainServices.Server
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
     public sealed class IncludeAttribute : Attribute
     {
-        private string _path;
-        private string _memberName;
+        private readonly string _path;
+        private readonly string _memberName;
 
         /// <summary>
         /// Default constructor

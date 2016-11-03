@@ -19,8 +19,8 @@ namespace OpenRiaServices.DomainServices.EntityFramework
     /// </summary>
     internal class LinqToEntitiesTypeDescriptionContext : TypeDescriptionContextBase
     {
-        private Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
-        private Type _contextType;
+        private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
+        private readonly Type _contextType;
         private MetadataWorkspace _metadataWorkspace;
 
         /// <summary>

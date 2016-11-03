@@ -27,7 +27,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     public class LocalDBUtil : IDisposable
     {
         private IServiceProvider _serviceProvider;
-        private string _webConfigPath;
+        private readonly string _webConfigPath;
 
         //------------------------------------------------------------------------------
         // Create the instance using a managed service provider
@@ -529,7 +529,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 
         private class ConfigConnection : DBConnection
         {
-            private ConnectionStringSettings _connectionStringSettings;
+            private readonly ConnectionStringSettings _connectionStringSettings;
 
 
             //------------------------------------------------------------------------------

@@ -15,8 +15,8 @@
     /// </summary>
     internal class PdbSourceFileProviderFactory : ISourceFileProviderFactory
     {
-        private ILogger _logger;
-        private string _symbolSearchPath;
+        private readonly ILogger _logger;
+        private readonly string _symbolSearchPath;
 
         /// <summary>
         /// Creates a new instance.
@@ -45,9 +45,9 @@
         /// </summary>
         internal class PdbSourceFileProvider : ISourceFileProvider, IDisposable
         {
-            private ILogger _logger;
-            private string _symbolSearchPath;
-            private Dictionary<Assembly, ISymbolReader> _symbolReadersByType = new Dictionary<Assembly, ISymbolReader>();
+            private readonly ILogger _logger;
+            private readonly string _symbolSearchPath;
+            private readonly Dictionary<Assembly, ISymbolReader> _symbolReadersByType = new Dictionary<Assembly, ISymbolReader>();
 
             internal PdbSourceFileProvider(string symbolSearchPath, ILogger logger)
             {

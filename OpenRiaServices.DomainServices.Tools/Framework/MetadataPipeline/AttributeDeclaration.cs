@@ -9,10 +9,10 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal sealed class AttributeDeclaration
     {
-        private Type _attributeType;
+        private readonly Type _attributeType;
         private List<object> _constructorArguments;
         private Dictionary<string, object> _namedParameters;
-        private List<string> _errors;
+        private readonly List<string> _errors;
         private List<Type> _requiredTypes;
         private List<PropertyInfo> _requiredProperties;
         private List<MethodInfo> _requiredMethods;

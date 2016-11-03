@@ -16,8 +16,8 @@ namespace OpenRiaServices.Controls.DomainServices.Test
         private bool _isEnabled;
         private TimeSpan _interval;
         private EventHandler _handler;
-        private IList<TimeSpan> _intervalList = new List<TimeSpan>();
-        private IList<TimeSpan> _expectedIntervalList = new List<TimeSpan>();
+        private readonly IList<TimeSpan> _intervalList = new List<TimeSpan>();
+        private readonly IList<TimeSpan> _expectedIntervalList = new List<TimeSpan>();
 
         #region DomainDataSource.ITimer
 

@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
     /// </summary>
     public abstract class MetadataProvider
     {
-        private MetadataProvider _parentProvider;
+        private readonly MetadataProvider _parentProvider;
         private Func<Type, bool> _isEntityTypeFunc;
 
         /// <summary>

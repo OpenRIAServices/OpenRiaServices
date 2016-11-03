@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Client
     public sealed class DomainException : Exception
     {
 #if !SERVERFX
-        private string stackTrace;
+        private readonly string stackTrace;
 #endif
 
         /// <summary>

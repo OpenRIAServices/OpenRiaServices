@@ -5,7 +5,7 @@ namespace OpenRiaServices.DomainServices.Server
 {
     internal class MetadataPropertyDescriptorWrapper : PropertyDescriptor
     {
-        private PropertyDescriptor _descriptor;
+        private readonly PropertyDescriptor _descriptor;
 
         public MetadataPropertyDescriptorWrapper(PropertyDescriptor descriptor, Attribute[] attrs)
             : base(descriptor, attrs)

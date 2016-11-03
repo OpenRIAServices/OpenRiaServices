@@ -8,7 +8,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 {
     internal abstract class DomainOperationInvoker : IOperationInvoker
     {
-        private DomainOperationType operationType;
+        private readonly DomainOperationType operationType;
 
         public DomainOperationInvoker(DomainOperationType operationType)
         {

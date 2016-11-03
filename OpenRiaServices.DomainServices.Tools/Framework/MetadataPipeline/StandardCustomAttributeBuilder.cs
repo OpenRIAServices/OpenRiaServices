@@ -456,8 +456,8 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         internal class PropertyMap
         {
-            private PropertyInfo _getter;
-            private PropertyInfo _setter;
+            private readonly PropertyInfo _getter;
+            private readonly PropertyInfo _setter;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="PropertyMap"/> class.

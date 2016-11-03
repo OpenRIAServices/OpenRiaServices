@@ -17,21 +17,21 @@ namespace OpenRiaServices.DomainServices.Tools
     internal class NotificationMethodGenerator
     {
         // dictionary of the form: Dic[Created, CodeInvokeExpression for 'this.OnCreated()']
-        private Dictionary<string, CodeMethodInvokeExpression> methodInvokeExpressions = new Dictionary<string, CodeMethodInvokeExpression>();
+        private readonly Dictionary<string, CodeMethodInvokeExpression> methodInvokeExpressions = new Dictionary<string, CodeMethodInvokeExpression>();
 
         // dictionary of the form: Dic[Created, CodeSnippetTypeMember for 'partial void OnCreated();'
-        private Dictionary<string, CodeSnippetTypeMember> partialMethodSnippets = new Dictionary<string, CodeSnippetTypeMember>();
+        private readonly Dictionary<string, CodeSnippetTypeMember> partialMethodSnippets = new Dictionary<string, CodeSnippetTypeMember>();
 
         private const string IndentString = "    "; // 4 spaces
-        private string indent = string.Empty;
+        private readonly string indent = string.Empty;
 
-        private string createdBaseName = "Created";
+        private readonly string createdBaseName = "Created";
 
-        private bool isCSharp;
+        private readonly bool isCSharp;
 
         private const IndentationLevel DefaultIndentLevel = IndentationLevel.Namespace;
 
-        private CodeDomClientCodeGenerator proxyGenerator;
+        private readonly CodeDomClientCodeGenerator proxyGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationMethodGenerator"/> class.

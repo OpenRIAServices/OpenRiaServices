@@ -16,7 +16,7 @@
         /// <summary>
         /// Factory for creating data services on top of a domain service.
         /// </summary>
-        private DomainDataServiceFactory serviceFactory;
+        private readonly DomainDataServiceFactory serviceFactory;
 
         /// <summary>
         /// Constructs an instance of message formatter for the domain data service end point.

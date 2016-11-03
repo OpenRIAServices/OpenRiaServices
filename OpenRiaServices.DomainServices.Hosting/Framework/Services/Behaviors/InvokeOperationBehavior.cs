@@ -11,7 +11,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 {
     internal class InvokeOperationBehavior : IOperationBehavior
     {
-        private DomainOperationEntry operation;
+        private readonly DomainOperationEntry operation;
 
         public InvokeOperationBehavior(DomainOperationEntry operation)
         {
@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         private class OperationInvoker : DomainOperationInvoker
         {
-            private DomainOperationEntry operation;
+            private readonly DomainOperationEntry operation;
 
             public OperationInvoker(DomainOperationEntry operation)
                 : base(DomainOperationType.Invoke)

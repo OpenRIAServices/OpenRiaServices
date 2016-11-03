@@ -16,11 +16,11 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// </remarks>
     internal class VirtualType : Type
     {
-        private string _name;
-        private string _namespaceName;
-        private Assembly _assembly;
-        private Type _baseType;
-        private List<MemberInfo> _declaredMembers = new List<MemberInfo>();
+        private readonly string _name;
+        private readonly string _namespaceName;
+        private readonly Assembly _assembly;
+        private readonly Type _baseType;
+        private readonly List<MemberInfo> _declaredMembers = new List<MemberInfo>();
 
         /// <summary>
         /// Creates a new instance.

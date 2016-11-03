@@ -55,7 +55,7 @@ namespace System.Linq.Dynamic
         /// </summary>
         private class PostProcessor : ExpressionVisitor
         {
-            private DomainServiceDescription domainServiceDescription;
+            private readonly DomainServiceDescription domainServiceDescription;
             private bool isInProjection;
 
             private PostProcessor(DomainServiceDescription domainServiceDescription)

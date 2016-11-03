@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// The roles to which the current user must belong before the specified <see cref="DomainOperationEntry"/> may be invoked.
         /// </summary>
-        private ReadOnlyCollection<string> _roles;
+        private readonly ReadOnlyCollection<string> _roles;
 
         /// <summary>
         /// Initializes a new instance of the RequiresRoleAttribute class

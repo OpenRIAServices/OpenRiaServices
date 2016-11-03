@@ -17,7 +17,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     internal abstract class DomainDataServiceOperationInvoker : IOperationInvoker
     {
         /// <summary>Operation type.</summary>
-        private DomainOperationType operationType;
+        private readonly DomainOperationType operationType;
 
         /// <summary>Constructs an invoker instance.</summary>
         /// <param name="operationType">Operation type.</param>

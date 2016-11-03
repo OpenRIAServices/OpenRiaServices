@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     internal class DomainDataServiceProvider : IDataServiceMetadataProvider, IDataServiceQueryProvider
     {
         /// <summary>Metadata information.</summary>
-        private DomainDataServiceMetadata metadata;
+        private readonly DomainDataServiceMetadata metadata;
 
         /// <summary>Constructs the data service provider object.</summary>
         /// <param name="domainServiceDataServiceMetadata">Metadata information for the current instance.</param>

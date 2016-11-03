@@ -17,7 +17,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     internal class PoxBinaryMessageEncodingBindingElement : MessageEncodingBindingElement
     {
-        private XmlDictionaryReaderQuotas _readerQuotas;
+        private readonly XmlDictionaryReaderQuotas _readerQuotas;
 
         public PoxBinaryMessageEncodingBindingElement()
         {
@@ -123,7 +123,7 @@ namespace OpenRiaServices.DomainServices.Client
         private class PoxBinaryMessageEncoderFactory : MessageEncoderFactory
         {
             private PoxBinaryMessageEncoder _encoder;
-            private XmlDictionaryReaderQuotas _readerQuotas;
+            private readonly XmlDictionaryReaderQuotas _readerQuotas;
 
             public PoxBinaryMessageEncoderFactory(XmlDictionaryReaderQuotas readerQuotas)
             {
@@ -161,8 +161,8 @@ namespace OpenRiaServices.DomainServices.Client
             private const string Fault = "Fault";
             private const string Namespace = "http://schemas.microsoft.com/ws/2005/05/envelope/none";
             private const string PoxBinaryContentType = "application/msbin1";
-            private MessageVersion _messageVersion;
-            private XmlDictionaryReaderQuotas _readerQuotas;
+            private readonly MessageVersion _messageVersion;
+            private readonly XmlDictionaryReaderQuotas _readerQuotas;
 
             public PoxBinaryMessageEncoder(MessageVersion messageVersion, XmlDictionaryReaderQuotas readerQuotas)
             {
@@ -313,10 +313,10 @@ namespace OpenRiaServices.DomainServices.Client
             /// MessageVersion.None only).</remarks>
             private class PoxBinaryBufferedMessage : Message
             {
-                private PoxBinaryBufferedMessageData _data;
-                private MessageHeaders _headers;
-                private bool _isFault;
-                private MessageProperties _properties;
+                private readonly PoxBinaryBufferedMessageData _data;
+                private readonly MessageHeaders _headers;
+                private readonly bool _isFault;
+                private readonly MessageProperties _properties;
                 private XmlDictionaryReader _reader;
 
                 /// <summary>
@@ -550,10 +550,10 @@ namespace OpenRiaServices.DomainServices.Client
                 /// </summary>
                 private class PoxBinaryBufferedMessageBuffer : MessageBuffer
                 {
-                    private PoxBinaryBufferedMessageData _data;
-                    private MessageHeaders _headers;
+                    private readonly PoxBinaryBufferedMessageData _data;
+                    private readonly MessageHeaders _headers;
                     private bool isClosed;
-                    private MessageProperties _properties;
+                    private readonly MessageProperties _properties;
 
                     /// <summary>
                     /// Constructs a <see cref="PoxBinaryBufferedMessageBuffer"/>
@@ -707,7 +707,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
 #if !SILVERLIGHT
                 private BufferManager _bufferManager;
-                private OnXmlDictionaryReaderClose _onReaderClose;
+                private readonly OnXmlDictionaryReaderClose _onReaderClose;
                 private int _refCount;
 
                 /// <summary>

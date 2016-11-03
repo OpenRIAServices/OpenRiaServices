@@ -21,13 +21,13 @@ namespace OpenRiaServices.DomainServices.Server
     {
         private static ConcurrentDictionary<Type, MetaType> _metaTypes = new ConcurrentDictionary<Type, MetaType>();
 
-        private Dictionary<PropertyDescriptor, IncludeAttribute[]> _projectionMemberMap = new Dictionary<PropertyDescriptor, IncludeAttribute[]>();
+        private readonly Dictionary<PropertyDescriptor, IncludeAttribute[]> _projectionMemberMap = new Dictionary<PropertyDescriptor, IncludeAttribute[]>();
         private bool _requiresValidation;
-        private PropertyDescriptorCollection _includedAssociations;
-        private bool _hasComposition;
-        private bool _isComplex;
-        private Type _type;
-        private Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
+        private readonly PropertyDescriptorCollection _includedAssociations;
+        private readonly bool _hasComposition;
+        private readonly bool _isComplex;
+        private readonly Type _type;
+        private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
 
         /// <summary>
         /// Returns the MetaType for the specified Type.

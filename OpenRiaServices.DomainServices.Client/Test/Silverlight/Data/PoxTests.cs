@@ -16,11 +16,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private PoxBufferManager _bufferManager;
         private DisposableProperty _property;
         private MessageEncoder _encoder;
-        private string _simpleMessageAction = "simpleAction";
-        private Uri _simpleMessageTo = new Uri("http://simple/To");
+        private readonly string _simpleMessageAction = "simpleAction";
+        private readonly Uri _simpleMessageTo = new Uri("http://simple/To");
         private byte[] _simpleMessageArray;
-        private string _simpleMessagePropertyIndex = "simpleProperty";
-        private string _simpleMessageString = "<simple>\"msg\"</simple>";
+        private readonly string _simpleMessagePropertyIndex = "simpleProperty";
+        private readonly string _simpleMessageString = "<simple>\"msg\"</simple>";
 
         [TestInitialize]
         public void Initialize()
@@ -373,7 +373,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         private class PoxBufferManager : BufferManager
         {
-            private HashSet<byte[]> _buffers;
+            private readonly HashSet<byte[]> _buffers;
 
             public PoxBufferManager()
             {

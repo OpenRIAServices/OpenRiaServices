@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         public static long createCount = 0;
 
-        private Func<MemberInfo, string> _func;
+        private readonly Func<MemberInfo, string> _func;
 
         public MockSourceFileProviderFactory(Func<MemberInfo, string> func)
         {
@@ -107,7 +107,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     // and yields the file name to return as the declaring file
     internal class MockSourceFileProvider : ISourceFileProvider
     {
-        private Func<MemberInfo, string> _func;
+        private readonly Func<MemberInfo, string> _func;
 
         public MockSourceFileProvider(Func<MemberInfo, string> func)
         {

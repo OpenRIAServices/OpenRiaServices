@@ -25,7 +25,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         // F/P/M/C
         [RequiresAuthentication]
         [RequiresRoleAttribute("role")]
-        private int field = 1;
+        private readonly int field = 1;
 
         // F/P
         [Composition]

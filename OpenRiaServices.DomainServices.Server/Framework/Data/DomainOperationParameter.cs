@@ -9,10 +9,10 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     public sealed class DomainOperationParameter
     {
-        private string _name;
-        private Type _parameterType;
-        private AttributeCollection _attributes;
-        private bool _isOut;
+        private readonly string _name;
+        private readonly Type _parameterType;
+        private readonly AttributeCollection _attributes;
+        private readonly bool _isOut;
 
         /// <summary>
         /// Initializes a new instance of the DomainOperationParameter class

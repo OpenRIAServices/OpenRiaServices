@@ -18,13 +18,13 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     internal class SharedCodeService : ISharedCodeService, IDisposable
     {
         private SourceFileLocationService _locationService;
-        private SharedSourceFiles _sharedSourceFiles;
-        private SharedAssemblies _sharedAssemblies;
+        private readonly SharedSourceFiles _sharedSourceFiles;
+        private readonly SharedAssemblies _sharedAssemblies;
         private FilenameMap _filenameMap = new FilenameMap();
 
         // We maintain a cache so we never lookup any code element more than once.
         // The cache is keyed by SharedCodeKey, which describes the code element and serves as a unique key for it.
-        private ConcurrentDictionary<CodeMemberKey, SharedCodeDescription> _cachedDescriptions = new ConcurrentDictionary<CodeMemberKey, SharedCodeDescription>();
+        private readonly ConcurrentDictionary<CodeMemberKey, SharedCodeDescription> _cachedDescriptions = new ConcurrentDictionary<CodeMemberKey, SharedCodeDescription>();
 
         internal SharedCodeService(SharedCodeServiceParameters parameters, ILoggingService loggingService)
         {
@@ -166,8 +166,8 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// </summary>
         internal class SharedCodeDescription
         {
-            private CodeMemberShareKind _shareKind;
-            private int[] _sharedFileIds;
+            private readonly CodeMemberShareKind _shareKind;
+            private readonly int[] _sharedFileIds;
             public SharedCodeDescription(CodeMemberShareKind shareKind, int[] sharedFileIds)
             {
                 this._shareKind = shareKind;

@@ -8,7 +8,7 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     internal class DomainPropertyDescriptor : PropertyDescriptor
     {
-        private PropertyDescriptor _base;
+        private readonly PropertyDescriptor _base;
 
         public DomainPropertyDescriptor(PropertyDescriptor pd, Attribute[] attribs)
             : base(pd, attribs)

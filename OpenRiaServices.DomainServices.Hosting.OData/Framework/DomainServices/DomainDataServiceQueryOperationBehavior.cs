@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     internal class DomainDataServiceQueryOperationBehavior<TEntity> : IOperationBehavior
     {
         /// <summary>Operation to which the behavior is applied.</summary>
-        private DomainOperationEntry operation;
+        private readonly DomainOperationEntry operation;
 
         /// <summary>Constructs a new instance of the behavior.</summary>
         /// <param name="operation">Operation to which the behavior is applied.</param>
@@ -68,7 +68,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         private class DomainDataServiceQueryOperationInvoker : DomainDataServiceOperationInvoker
         {
             /// <summary>Operation to be invoked on the DomainService.</summary>
-            private DomainOperationEntry operation;
+            private readonly DomainOperationEntry operation;
 
             /// <summary>Create a new instance.</summary>
             /// <param name="operation">Operation to be invoked by this invoker.</param>

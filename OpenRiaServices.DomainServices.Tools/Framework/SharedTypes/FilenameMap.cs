@@ -20,10 +20,10 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         internal const int NotAFile = 0;
 
         // keyed by (case insensitive) file name, returns an internal ID
-        private ConcurrentDictionary<string, int> _idsByFile = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, int> _idsByFile = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
         // keyed by ID, returns the file name
-        private Dictionary<int, string> _filesById = new Dictionary<int, string>();
+        private readonly Dictionary<int, string> _filesById = new Dictionary<int, string>();
 
         // -1 so first interlocked increment becomes NotAFile
         private int _currentId = -1;

@@ -22,7 +22,7 @@ namespace OpenRiaServices.Controls
         /// <summary>
         /// Represents the MoveToPage callback to use when invoking a <see cref="MoveToPage"/> operation.
         /// </summary>
-        private Func<int, bool> _moveToPageCallback;
+        private readonly Func<int, bool> _moveToPageCallback;
 
         /// <summary>
         /// Represents the minimum number of items known to be in the source collection.

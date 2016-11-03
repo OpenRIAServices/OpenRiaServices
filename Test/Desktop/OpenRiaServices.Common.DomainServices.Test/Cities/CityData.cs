@@ -18,12 +18,12 @@ namespace Cities
     /// </remarks>
     public partial class CityData
     {
-        private List<State> _states;
-        private List<County> _counties;
-        private List<City> _cities;
-        private List<Zip> _zips;
-        private List<ZipWithInfo> _zipsWithInfo;
-        private List<CityWithInfo> _citiesWithInfo;
+        private readonly List<State> _states;
+        private readonly List<County> _counties;
+        private readonly List<City> _cities;
+        private readonly List<Zip> _zips;
+        private readonly List<ZipWithInfo> _zipsWithInfo;
+        private readonly List<CityWithInfo> _citiesWithInfo;
 
         public CityData() {
             _states = new List<State>()

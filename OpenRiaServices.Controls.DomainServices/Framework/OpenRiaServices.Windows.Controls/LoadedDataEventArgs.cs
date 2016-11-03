@@ -16,9 +16,9 @@ namespace OpenRiaServices.Controls
 
         private bool _isErrorHandled;
 
-        private ReadOnlyCollection<Entity> _entities;
-        private ReadOnlyCollection<Entity> _allEntities;
-        private int _totalEntityCount;
+        private readonly ReadOnlyCollection<Entity> _entities;
+        private readonly ReadOnlyCollection<Entity> _allEntities;
+        private readonly int _totalEntityCount;
 
         #endregion
 

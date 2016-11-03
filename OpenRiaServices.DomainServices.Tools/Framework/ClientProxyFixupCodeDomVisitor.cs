@@ -11,8 +11,8 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal sealed class ClientProxyFixupCodeDomVisitor : CodeDomVisitor
     {
-        private ClientCodeGenerationOptions _options;
-        private bool _isCSharp;
+        private readonly ClientCodeGenerationOptions _options;
+        private readonly bool _isCSharp;
 
         /// <summary>
         /// Default constructor accepting the current <see cref="ClientCodeGenerationOptions"/> context.

@@ -9,7 +9,7 @@
     internal class DomainDataServiceFactory
     {
         /// <summary>DomainService metadata object corresponding to domain service description.</summary>
-        private DomainDataServiceMetadata domainDataServiceMetadata;
+        private readonly DomainDataServiceMetadata domainDataServiceMetadata;
 
         /// <summary>Constructs factory for creating data services using the given domain service description.</summary>
         /// <param name="metadata">Data Service metadata object corresponding to domain service description.</param>

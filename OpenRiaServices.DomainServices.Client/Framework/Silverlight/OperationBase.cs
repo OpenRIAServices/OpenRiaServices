@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainServices.Client
         private Exception _error;
         private bool _canceled;
         private bool _completed;
-        private object _userState;
+        private readonly object _userState;
         private PropertyChangedEventHandler _propChangedHandler;
         private EventHandler _completedEventHandler;
         private bool _isErrorHandled;

@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     #region Test Classes
     public class TestOperation : OperationBase
     {
-        private Action<TestOperation> _completeAction;
+        private readonly Action<TestOperation> _completeAction;
 
         public TestOperation(Action<TestOperation> completeAction, object userState)
             : base(userState)

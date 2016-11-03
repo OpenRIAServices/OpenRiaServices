@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 {
     internal class QueryOperationBehavior<TEntity> : IOperationBehavior, IQueryOperationSettings
     {
-        private DomainOperationEntry _operation;
+        private readonly DomainOperationEntry _operation;
 
         public QueryOperationBehavior(DomainOperationEntry operation)
         {
@@ -56,7 +56,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             private static readonly object syncRoot = new object();
             private static OutputCacheProfileCollection cacheProfiles;
 
-            private DomainOperationEntry operation;
+            private readonly DomainOperationEntry operation;
 
             public QueryOperationInvoker(DomainOperationEntry operation)
                 : base(DomainOperationType.Query)
@@ -345,7 +345,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             /// </summary>
             private class SlidingExpirationValidator
             {
-                private int _duration;
+                private readonly int _duration;
                 private DateTime _lastAccessed;
 
                 public SlidingExpirationValidator(int duration)

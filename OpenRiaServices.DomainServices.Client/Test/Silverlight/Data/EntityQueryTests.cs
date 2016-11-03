@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     [TestClass]
     public class EntityQueryTests
     {
-        private DomainClient _testClient = new Cities.CityDomainContext(TestURIs.Cities).DomainClient;
+        private readonly DomainClient _testClient = new Cities.CityDomainContext(TestURIs.Cities).DomainClient;
 
         /// <summary>
         /// Verify that an EntityQuery can only be passed to the Load method of the context

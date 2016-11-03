@@ -14,8 +14,8 @@ namespace NorthwindPOCOModel
     /// </summary>
     public class NorthwindEntities : ObjectContext
     {
-        private ObjectSet<Category> _categories;
-        private ObjectSet<Product> _products;
+        private readonly ObjectSet<Category> _categories;
+        private readonly ObjectSet<Product> _products;
 
         public NorthwindEntities(string connectionString) 
             : base(connectionString)

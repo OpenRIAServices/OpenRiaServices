@@ -114,10 +114,10 @@ namespace OpenRiaServices.Controls
 
         #region Member Fields
 
-        private IEnumerable _source;
-        private CollectionViewDelegates _delegates;
+        private readonly IEnumerable _source;
+        private readonly CollectionViewDelegates _delegates;
         private CultureInfo _culture;
-        private Type _entityType;
+        private readonly Type _entityType;
 
         private object _currentItem;
         private int _currentPosition = -1;
@@ -137,7 +137,7 @@ namespace OpenRiaServices.Controls
         /// <summary>
         /// Private accessor for the monitor we use to prevent recursion
         /// </summary>
-        private SimpleMonitor _currentChangedMonitor = new SimpleMonitor();
+        private readonly SimpleMonitor _currentChangedMonitor = new SimpleMonitor();
 
         /// <summary>
         /// Private field to indicate if there is a pending <see cref="CurrentChanged"/> event,
@@ -145,7 +145,7 @@ namespace OpenRiaServices.Controls
         /// that a <see cref="CurrentChanged"/> event needs to be raised.
         /// </summary>
         private bool _isCurrentChangedEventPending = false;
-        private object _currentChangedEventPendingLock = new object();
+        private readonly object _currentChangedEventPendingLock = new object();
 
         /// <summary>
         /// The number of defers that have been nested.

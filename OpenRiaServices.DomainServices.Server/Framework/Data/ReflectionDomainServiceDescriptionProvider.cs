@@ -400,7 +400,7 @@ namespace OpenRiaServices.DomainServices.Server
         internal class ReflectionDomainOperationEntry : DomainOperationEntry
         {
             private bool _isInferred;
-            private Func<DomainService, object[], object> _method;
+            private readonly Func<DomainService, object[], object> _method;
 
             /// <summary>
             /// Creates an instance of a <see cref="ReflectionDomainOperationEntry"/>.

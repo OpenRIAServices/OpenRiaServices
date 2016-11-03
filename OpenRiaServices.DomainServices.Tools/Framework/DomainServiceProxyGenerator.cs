@@ -24,8 +24,8 @@ namespace OpenRiaServices.DomainServices.Tools
         private const string DefaultReplyActionSchema = "http://tempuri.org/{0}/{1}Response";
         private const string DefaultFaultActionSchema = "http://tempuri.org/{0}/{1}{2}";
 
-        private DomainServiceDescription _domainServiceDescription;
-        private IDictionary<Type, CodeTypeDeclaration> _typeMapping;
+        private readonly DomainServiceDescription _domainServiceDescription;
+        private readonly IDictionary<Type, CodeTypeDeclaration> _typeMapping;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceProxyGenerator"/> class.
@@ -479,8 +479,8 @@ namespace OpenRiaServices.DomainServices.Tools
 
             // Generate submit method if we have CUD operations.
             if (this._domainServiceDescription.DomainOperationEntries
-                .Where(op => (op.Operation == DomainOperation.Delete || op.Operation == DomainOperation.Insert 
-                            || op.Operation == DomainOperation.Update || op.Operation == DomainOperation.Custom)).Any())
+                .Any(op => (op.Operation == DomainOperation.Delete || op.Operation == DomainOperation.Insert 
+                            || op.Operation == DomainOperation.Update || op.Operation == DomainOperation.Custom)))
             {
                 this.GenerateContractSubmitChangesMethod(contractInterface);
             }

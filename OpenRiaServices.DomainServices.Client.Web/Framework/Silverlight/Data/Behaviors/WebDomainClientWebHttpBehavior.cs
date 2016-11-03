@@ -121,7 +121,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// For cross-browser compatibility support, the maximum supported URI length is 2083 characters.
         /// </summary>
         internal const int MaximumUriLength = 2083;
-        private IClientMessageFormatter _innerFormatter;
+        private readonly IClientMessageFormatter _innerFormatter;
 
         public WebHttpQueryClientMessageFormatter(IClientMessageFormatter innerFormatter)
         {

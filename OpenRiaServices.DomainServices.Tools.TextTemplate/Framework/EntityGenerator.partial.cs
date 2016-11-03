@@ -453,8 +453,8 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 
         private class DomainServiceDescriptionAggregate
         {
-            private HashSet<Type> _complexTypes;
-            private HashSet<Type> _entityTypes;
+            private readonly HashSet<Type> _complexTypes;
+            private readonly HashSet<Type> _entityTypes;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="DomainServiceDescriptionAggregate"/> class.

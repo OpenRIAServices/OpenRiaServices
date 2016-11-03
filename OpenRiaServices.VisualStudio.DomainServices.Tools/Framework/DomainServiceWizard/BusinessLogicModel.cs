@@ -23,7 +23,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     {
         private IBusinessLogicData _businessLogicData;
         private List<IBusinessLogicContext> _contexts;
-        private Action<string> _logger;
+        private readonly Action<string> _logger;
 
         /// <summary>
         /// Creates a new uninitialized instance of the <see cref="BusinessLogicModel"/> class.

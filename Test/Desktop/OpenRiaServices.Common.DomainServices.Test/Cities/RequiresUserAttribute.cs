@@ -11,7 +11,7 @@ namespace Cities
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class RequiresUserAttribute : AuthorizationAttribute
     {
-        private string _userName;
+        private readonly string _userName;
         public RequiresUserAttribute(string userName)
         {
             this._userName = userName;

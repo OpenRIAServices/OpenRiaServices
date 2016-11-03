@@ -787,8 +787,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// </summary>
         internal class CodeGenValidationOptions
         {
-            private List<Type> _sharedTypes = new List<Type>();
-            private List<MethodBase> _sharedMethods = new List<MethodBase>();
+            private readonly List<Type> _sharedTypes = new List<Type>();
+            private readonly List<MethodBase> _sharedMethods = new List<MethodBase>();
             public bool FailOnDiff { get; set; }
             public string RelativeTestDir { get; set; }
             public string RelativeDeployDir { get; set; }

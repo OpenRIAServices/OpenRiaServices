@@ -21,8 +21,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         private CodeCompileUnit _compileUnit = new CodeCompileUnit();
         private CodeGeneratorOptions _options = new CodeGeneratorOptions();
         private Dictionary<string, CodeNamespace> _namespaces = new Dictionary<string, CodeNamespace>();
-        private List<string> _references = new List<string>();
-        private string _rootNamespace;
+        private readonly List<string> _references = new List<string>();
+        private readonly string _rootNamespace;
 
         /// <summary>
         /// Creates a new instance

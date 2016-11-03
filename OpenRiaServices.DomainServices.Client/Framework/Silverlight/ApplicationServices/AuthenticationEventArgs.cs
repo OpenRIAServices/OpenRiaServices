@@ -10,7 +10,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     {
         #region Member fields
 
-        private IPrincipal _user;
+        private readonly IPrincipal _user;
 
         #endregion
 

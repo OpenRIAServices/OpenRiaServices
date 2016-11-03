@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     /// </summary>
     public class TestDatabase : IDisposable
     {
-        private string databaseName;
+        private readonly string databaseName;
         private bool isInitialized;
         private bool isInitializing;
 

@@ -196,7 +196,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
     /// </summary>
     internal class DomainControllerPropertyDescriptor : PropertyDescriptor
     {
-        private PropertyDescriptor _base;
+        private readonly PropertyDescriptor _base;
 
         public DomainControllerPropertyDescriptor(PropertyDescriptor pd, Attribute[] attribs)
             : base(pd, attribs)

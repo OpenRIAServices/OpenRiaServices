@@ -169,13 +169,13 @@ namespace OpenRiaServices.Controls
         /// <summary>
         /// Private accessor for the entity list behind this view.
         /// </summary>
-        private IEnumerable _source;
+        private readonly IEnumerable _source;
 
         /// <summary>
         /// The callback action to invoked when a <see cref="Refresh"/> is triggered,
         /// either directly or through a <see cref="DeferRefresh"/> disposal.
         /// </summary>
-        private Action _refreshCallback;
+        private readonly Action _refreshCallback;
 
         /// <summary>
         /// Private accessor for the <see cref="SortDescriptions"/> collection.
@@ -2358,9 +2358,9 @@ namespace OpenRiaServices.Controls
                 }
             }
 
-            private SortPropertyInfo[] _fields;
-            private ObservableCollection<GroupDescription> _groupFields;
-            private SortDescriptionCollection _sortFields;
+            private readonly SortPropertyInfo[] _fields;
+            private readonly ObservableCollection<GroupDescription> _groupFields;
+            private readonly SortDescriptionCollection _sortFields;
 
             #endregion
         }

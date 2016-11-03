@@ -21,8 +21,8 @@ namespace OpenRiaServices.DomainServices.Tools
         private string _serverProjectDirectory;
         private string _serverOutputPath;
         private string _serverRootNamespace;
-        private List<ITaskItem> _generatedFiles = new List<ITaskItem>();
-        private List<ITaskItem> _copiedFiles = new List<ITaskItem>();
+        private readonly List<ITaskItem> _generatedFiles = new List<ITaskItem>();
+        private readonly List<ITaskItem> _copiedFiles = new List<ITaskItem>();
         private ProjectFileReader _projectFileReader;
         private ProjectSourceFileCache _serverProjectSourceFileCache;
         private LinkedServerProjectCache _linkedServerProjectCache;
@@ -1408,7 +1408,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         internal class CrossAppDomainLogger : MarshalByRefObject, ILoggingService
         {
-            private ILoggingService baseLogger;
+            private readonly ILoggingService baseLogger;
 
             public CrossAppDomainLogger(ILoggingService underlyingLogger)
             {

@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Hosting
     {
         private static readonly HashSet<string> _allowedSchemes = new HashSet<string>() { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
         private static readonly HashSet<string> _allowedSecureSchemes = new HashSet<string>() { Uri.UriSchemeHttps };
-        private DomainServiceDescription _domainServiceDescription;
+        private readonly DomainServiceDescription _domainServiceDescription;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceHost"/> class with

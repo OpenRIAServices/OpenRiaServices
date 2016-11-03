@@ -16,9 +16,9 @@ namespace OpenRiaServices.DomainServices.Server
     {
         private static ConcurrentDictionary<Type, Dictionary<PropertyDescriptor, IncludeAttribute[]>> _includeMaps = new ConcurrentDictionary<Type, Dictionary<PropertyDescriptor, IncludeAttribute[]>>();
         private PropertyDescriptorCollection _properties;
-        private Type _entityType;
-        private HashSet<string> _foreignKeyMembers;
-        private bool _keyIsEditable;
+        private readonly Type _entityType;
+        private readonly HashSet<string> _foreignKeyMembers;
+        private readonly bool _keyIsEditable;
 
         public DomainTypeDescriptor(Type entityType, ICustomTypeDescriptor parent, bool keyIsEditable, HashSet<string> foreignKeyMembers)
             : base(parent)

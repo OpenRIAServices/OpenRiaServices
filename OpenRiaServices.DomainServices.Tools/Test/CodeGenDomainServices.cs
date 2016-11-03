@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     [TestClass]
     public class CodeGenDomainServices
     {
-        private ConsoleLogger _logger;
+        private readonly ConsoleLogger _logger;
         public CodeGenDomainServices()
         {
             _logger = new ConsoleLogger();

@@ -50,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
     //// <include file='doc\SymDocument.uex' path='docs/doc[@for="SymDocument"]/*' />
     internal class SymbolDocument : ISymbolDocument
     {
-        ISymUnmanagedDocument m_unmanagedDocument;
+        readonly ISymUnmanagedDocument m_unmanagedDocument;
         
         internal SymbolDocument(ISymUnmanagedDocument document)
         {

@@ -838,8 +838,8 @@ namespace System.Threading.Tasks
     internal abstract class CatchInfoBase<TTask>
         where TTask : Task
     {
-        private Exception _exception;
-        private TTask _task;
+        private readonly Exception _exception;
+        private readonly TTask _task;
 
         protected CatchInfoBase(TTask task)
         {

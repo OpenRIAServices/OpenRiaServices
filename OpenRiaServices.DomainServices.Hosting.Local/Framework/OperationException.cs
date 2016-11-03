@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
         // To comply with the CLR 4.0 safe serialization contract, we maintain
         // a private state member which is not serialized implicitly.
         // [NonSerialized] -- TODO: uncomment when CLR fixes 851783
-        private OperationExceptionData _data = new OperationExceptionData();
+        private readonly OperationExceptionData _data = new OperationExceptionData();
 
         // This is the state object that is explicitly serialized and
         // deserialized to use the new CLR 4.0 safe serialization feature.

@@ -149,7 +149,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
             private class XmlWriterStream : Stream
             {
                 /// <summary>Target writer.</summary>
-                private XmlDictionaryWriter innerWriter;
+                private readonly XmlDictionaryWriter innerWriter;
 
                 /// <summary>Initializes a new <see cref="XmlWriterStream"/> instance.</summary>
                 /// <param name="xmlWriter">Target writer.</param>
@@ -277,7 +277,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
             private static Encoding defaultEncoding = new UTF8Encoding(false, true);
 
             /// <summary>Exception to serialize.</summary>
-            private Exception _exception;
+            private readonly Exception _exception;
             
             #endregion
 

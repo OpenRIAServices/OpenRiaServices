@@ -345,7 +345,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     /// </summary>
     public class CitiesMockDomainClient : DomainClient
     {
-        private Cities.CityData citiesData = new Cities.CityData();
+        private readonly Cities.CityData citiesData = new Cities.CityData();
 
         protected override IAsyncResult BeginQueryCore(EntityQuery query, AsyncCallback callback, object userState)
         {

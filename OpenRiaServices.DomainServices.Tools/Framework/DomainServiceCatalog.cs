@@ -16,10 +16,10 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal class DomainServiceCatalog
     {
-        private HashSet<string> _assembliesToLoad;
+        private readonly HashSet<string> _assembliesToLoad;
         private Dictionary<Assembly, bool> _loadedAssemblies;
-        private List<DomainServiceDescription> _domainServiceDescriptions = new List<DomainServiceDescription>();
-        private ILogger _logger;
+        private readonly List<DomainServiceDescription> _domainServiceDescriptions = new List<DomainServiceDescription>();
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceCatalog"/> class with the specified input and reference assemblies

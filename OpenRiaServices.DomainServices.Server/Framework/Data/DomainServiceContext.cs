@@ -12,9 +12,9 @@ namespace OpenRiaServices.DomainServices.Server
     public class DomainServiceContext : IServiceProvider
     {
         private DomainOperationEntry _operation;
-        private DomainOperationType _operationType;
+        private readonly DomainOperationType _operationType;
         private IServiceContainer _serviceContainer;
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Initializes a new instance of the DomainServiceContext class
@@ -150,8 +150,8 @@ namespace OpenRiaServices.DomainServices.Server
             #region Member Fields
 
             private readonly object _lock = new object();
-            private IServiceContainer _parentContainer;
-            private Dictionary<Type, object> _services = new Dictionary<Type, object>();
+            private readonly IServiceContainer _parentContainer;
+            private readonly Dictionary<Type, object> _services = new Dictionary<Type, object>();
 
             #endregion
 

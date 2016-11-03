@@ -160,7 +160,7 @@ namespace OpenRiaServices.Controls.DomainServices.Test
 
         private class MockCollectionViewFactory : ICollectionViewFactory
         {
-            private Func<ICollectionView> _createViewCallback;
+            private readonly Func<ICollectionView> _createViewCallback;
 
             public MockCollectionViewFactory(Func<ICollectionView> createViewCallback)
             {

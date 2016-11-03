@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
 
     internal class SymVariable : ISymbolVariable
     {
-        ISymUnmanagedVariable m_unmanagedVariable;
+        readonly ISymUnmanagedVariable m_unmanagedVariable;
 
         internal SymVariable(ISymUnmanagedVariable variable)
         {

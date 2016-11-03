@@ -7,8 +7,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 {
     class MockBuildEngine : IBuildEngine
     {
-        private Engine _realEngine = new Engine();
-        private ConsoleLogger _consoleLogger = new ConsoleLogger();
+        private readonly Engine _realEngine = new Engine();
+        private readonly ConsoleLogger _consoleLogger = new ConsoleLogger();
 
         public ConsoleLogger ConsoleLogger
         {

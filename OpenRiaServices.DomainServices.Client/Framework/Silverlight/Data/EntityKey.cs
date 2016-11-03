@@ -151,7 +151,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="T">The Type of the key member</typeparam>
     internal class EntityKey<T> : EntityKey, IEquatable<EntityKey<T>>
     {
-        private T _v;
+        private readonly T _v;
 
         /// <summary>
         /// Constructs a key
@@ -221,8 +221,8 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="T2">The Type of the second part of the key</typeparam>
     internal class EntityKey<T1, T2> : EntityKey, IEquatable<EntityKey<T1, T2>>
     {
-        private T1 _v1;
-        private T2 _v2;
+        private readonly T1 _v1;
+        private readonly T2 _v2;
 
         /// <summary>
         /// Constructs a key

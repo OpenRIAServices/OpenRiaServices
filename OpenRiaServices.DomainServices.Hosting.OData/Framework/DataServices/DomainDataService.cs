@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <summary>
         /// Domain data service IDataServiceProvider implementations.
         /// </summary>
-        private DomainDataServiceProvider provider;
+        private readonly DomainDataServiceProvider provider;
 
         /// <summary>
         /// Creates a new domain data service instance.

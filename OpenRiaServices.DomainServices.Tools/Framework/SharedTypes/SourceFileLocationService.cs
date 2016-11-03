@@ -22,16 +22,16 @@
     internal class SourceFileLocationService : ISourceFileLocationService, IDisposable
     {
         private ISourceFileProvider[] _providers;
-        private FilenameMap _filenameMap;
+        private readonly FilenameMap _filenameMap;
 
         // Keyed by MemberInfo, returns an ID that can return a file name from this._filesById.
         // Note that we have a single large cache of all MemberInfo's independent of the types
         // that discover them, so we ask at most once where the file is for any given member.
-        private Dictionary<MemberInfo, int> _fileIdsByMemberInfo = new Dictionary<MemberInfo, int>();
+        private readonly Dictionary<MemberInfo, int> _fileIdsByMemberInfo = new Dictionary<MemberInfo, int>();
 
         // Keyed by type, returns the set of member infos belonging to that type, including those declared
         // by a base type.
-        private Dictionary<Type, IEnumerable<MemberInfo>> _memberInfosByType = new Dictionary<Type, IEnumerable<MemberInfo>>();
+        private readonly Dictionary<Type, IEnumerable<MemberInfo>> _memberInfosByType = new Dictionary<Type, IEnumerable<MemberInfo>>();
 
         /// <summary>
         /// Initializes a new <see cref="SourceFileLocationService"/> instance.

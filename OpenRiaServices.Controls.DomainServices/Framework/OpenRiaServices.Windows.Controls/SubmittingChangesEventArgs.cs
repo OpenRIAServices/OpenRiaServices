@@ -9,7 +9,7 @@ namespace OpenRiaServices.Controls
     /// </summary>
     public sealed class SubmittingChangesEventArgs : CancelEventArgs
     {
-        private EntityChangeSet _changeSet;
+        private readonly EntityChangeSet _changeSet;
 
         /// <summary>
         /// Public constructor

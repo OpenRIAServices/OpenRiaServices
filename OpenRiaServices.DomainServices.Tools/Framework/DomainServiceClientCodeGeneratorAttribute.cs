@@ -16,8 +16,8 @@ namespace OpenRiaServices.DomainServices.Tools
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class DomainServiceClientCodeGeneratorAttribute : ExportAttribute, ICodeGeneratorMetadata
     {
-        private string _generatorName;
-        private string _language;
+        private readonly string _generatorName;
+        private readonly string _language;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceClientCodeGeneratorAttribute"/> class

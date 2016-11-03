@@ -10,9 +10,9 @@ namespace OpenRiaServices.DomainServices.Hosting
 {
     internal class DomainServiceSerializationSurrogate : IDataContractSurrogate
     {
-        private DomainServiceDescription description;
-        private Dictionary<Type, Tuple<Type, Func<object, object>>> exposedTypeToSurrogateMap;
-        private HashSet<Type> surrogateTypes;
+        private readonly DomainServiceDescription description;
+        private readonly Dictionary<Type, Tuple<Type, Func<object, object>>> exposedTypeToSurrogateMap;
+        private readonly HashSet<Type> surrogateTypes;
 
         /// <summary>
         /// Default constructor.

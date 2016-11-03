@@ -17,8 +17,8 @@ namespace TestDomainServices
     [EnableClientAccess]
     public partial class CompositionInheritanceScenarios : DomainService
     {
-        private HashSet<ChangeSetEntry> _invokedOperations = new HashSet<ChangeSetEntry>();
-        private List<string> invokedCustomMethods = new List<string>();
+        private readonly HashSet<ChangeSetEntry> _invokedOperations = new HashSet<ChangeSetEntry>();
+        private readonly List<string> invokedCustomMethods = new List<string>();
 
         public IQueryable<CI_Parent> GetParents()
         {

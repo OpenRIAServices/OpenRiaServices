@@ -11,11 +11,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public class InvokeOperation : OperationBase
     {
-        private string _operationName;
+        private readonly string _operationName;
         private IDictionary<string, object> _parameters;
         private IEnumerable<ValidationResult> _validationErrors;
-        private Action<InvokeOperation> _cancelAction;
-        private Action<InvokeOperation> _completeAction;
+        private readonly Action<InvokeOperation> _cancelAction;
+        private readonly Action<InvokeOperation> _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the InvokeOperation class
@@ -246,8 +246,8 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TValue">The Type of the invoke return value.</typeparam>
     public sealed class InvokeOperation<TValue> : InvokeOperation
     {
-        private Action<InvokeOperation<TValue>> _cancelAction;
-        private Action<InvokeOperation<TValue>> _completeAction;
+        private readonly Action<InvokeOperation<TValue>> _cancelAction;
+        private readonly Action<InvokeOperation<TValue>> _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvokeOperation"/> class.

@@ -10,7 +10,7 @@ namespace OpenRiaServices.DomainServices.Server
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class DomainServiceDescriptionProviderAttribute : Attribute
     {
-        private Type _domainServiceDescriptionProviderType;
+        private readonly Type _domainServiceDescriptionProviderType;
 
         /// <summary>
         /// Initializes a new instance of the DomainServiceDescriptionProviderAttribute class

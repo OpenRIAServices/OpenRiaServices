@@ -11,8 +11,8 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public class InvokeCompletedResult
     {
-        private object _returnValue;
-        private ReadOnlyCollection<ValidationResult> _validationErrors;
+        private readonly object _returnValue;
+        private readonly ReadOnlyCollection<ValidationResult> _validationErrors;
 
         /// <summary>
         /// Initializes a new instance of the InvokeCompletedResult class

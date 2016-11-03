@@ -176,7 +176,7 @@ namespace OpenRiaServices.DomainServices.Tools
         private class TaskLoggingHelperLoggingService : MarshalByRefObject, ILoggingService
         {
             private bool _hasLoggedErrors;
-            private TaskLoggingHelper _log;
+            private readonly TaskLoggingHelper _log;
 
             public TaskLoggingHelperLoggingService(TaskLoggingHelper log)
             {

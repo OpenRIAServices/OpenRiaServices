@@ -16,15 +16,15 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TEntity">The type of the associated <see cref="Entity"/></typeparam>
     public sealed class EntityRef<TEntity> : IEntityRef where TEntity : Entity
     {
-        private AssociationAttribute _assocAttribute;
-        private Entity _parent;
+        private readonly AssociationAttribute _assocAttribute;
+        private readonly Entity _parent;
         private EntitySet _sourceSet;
-        private Func<TEntity, bool> _entityPredicate;
+        private readonly Func<TEntity, bool> _entityPredicate;
         private TEntity _entity;
         private bool _hasAssignedEntity;
-        private string _memberName;
+        private readonly string _memberName;
         private bool _hasLoadedEntity;
-        private bool _isComposition;
+        private readonly bool _isComposition;
 
         /// <summary>
         /// Initializes a new instance of the EntityRef class

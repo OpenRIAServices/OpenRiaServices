@@ -20,8 +20,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 {
     internal class MockCodeGenerationHost : ICodeGenerationHost
     {
-        private ILoggingService _loggingService;
-        private ISharedCodeService _sharedCodeService;
+        private readonly ILoggingService _loggingService;
+        private readonly ISharedCodeService _sharedCodeService;
 
         public MockCodeGenerationHost() : this(null, null)
         {

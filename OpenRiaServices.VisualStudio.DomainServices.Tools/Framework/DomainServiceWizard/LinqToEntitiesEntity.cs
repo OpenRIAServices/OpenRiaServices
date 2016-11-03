@@ -14,9 +14,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     public class LinqToEntitiesEntity : BusinessLogicEntity
     {
         private string _defaultObjectSetName;
-        private bool _hasTimestampMember;
-        private EntityType _entityType;
-        private bool _isDbContext;
+        private readonly bool _hasTimestampMember;
+        private readonly EntityType _entityType;
+        private readonly bool _isDbContext;
 
         /// <summary>
         /// Creates a new instance
@@ -27,7 +27,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public LinqToEntitiesEntity(LinqToEntitiesContextBase context, EntityType entityType, Type type)
             : base(context, entityType.Name, type)
         {
-            this._hasTimestampMember = entityType.Members.Where(p => ObjectContextUtilities.IsConcurrencyTimestamp(p)).Count() == 1;
+            this._hasTimestampMember = entityType.Members.Count(p => ObjectContextUtilities.IsConcurrencyTimestamp(p)) == 1;
             this._entityType = entityType;
             this._isDbContext = context is LinqToEntitiesDbContext;
         }

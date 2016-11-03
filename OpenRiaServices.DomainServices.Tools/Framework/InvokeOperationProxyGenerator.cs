@@ -18,8 +18,8 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal class InvokeOperationProxyGenerator : ProxyGenerator
     {
-        private CodeTypeDeclaration _proxyClass;
-        private DomainServiceDescription _domainServiceDescription;
+        private readonly CodeTypeDeclaration _proxyClass;
+        private readonly DomainServiceDescription _domainServiceDescription;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvokeOperationProxyGenerator"/> class.

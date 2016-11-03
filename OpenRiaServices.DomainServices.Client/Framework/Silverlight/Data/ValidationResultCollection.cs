@@ -15,11 +15,11 @@ namespace OpenRiaServices.DomainServices.Client
     {
         #region Member Fields
 
-        private List<ValidationResult> _results;
+        private readonly List<ValidationResult> _results;
         private bool _hasErrors;
         private IEnumerable<string> _propertiesInError;
-        private object _parent;
-        private MetaType _parentMetaType;
+        private readonly object _parent;
+        private readonly MetaType _parentMetaType;
 
         #endregion Member Fields
 

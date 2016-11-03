@@ -21,8 +21,8 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal abstract class DataContractProxyGenerator : ProxyGenerator
     {
-        private bool _isRoundtripType;
-        private IDictionary<Type, CodeTypeDeclaration> _typeMapping;
+        private readonly bool _isRoundtripType;
+        private readonly IDictionary<Type, CodeTypeDeclaration> _typeMapping;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractProxyGenerator"/> class.

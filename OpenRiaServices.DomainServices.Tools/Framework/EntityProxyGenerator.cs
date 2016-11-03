@@ -19,12 +19,12 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal sealed class EntityProxyGenerator : DataContractProxyGenerator
     {
-        private DomainServiceDescriptionAggregate _domainServiceDescriptionAggregate;
-        private ICollection<DomainServiceDescription> _allDomainServiceDescriptions;
+        private readonly DomainServiceDescriptionAggregate _domainServiceDescriptionAggregate;
+        private readonly ICollection<DomainServiceDescription> _allDomainServiceDescriptions;
 
         private bool _generateGetIdentity;
-        List<PropertyDescriptor> _keyProperties;
-        private Type _visibleBaseType;
+        readonly List<PropertyDescriptor> _keyProperties;
+        private readonly Type _visibleBaseType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityProxyGenerator"/> class.
@@ -1214,8 +1214,8 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         private class DomainServiceDescriptionAggregate
         {
-            private HashSet<Type> _complexTypes;
-            private HashSet<Type> _entityTypes;
+            private readonly HashSet<Type> _complexTypes;
+            private readonly HashSet<Type> _entityTypes;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="DomainServiceDescriptionAggregate"/> class.

@@ -16,7 +16,7 @@ namespace OpenRiaServices.Controls
     {
         #region Member Fields
 
-        private IDictionary<IEnumerable, IList> _localCollections = new Dictionary<IEnumerable, IList>();
+        private readonly IDictionary<IEnumerable, IList> _localCollections = new Dictionary<IEnumerable, IList>();
         private Func<object, INotifyPropertyChanged> _asINotifyPropertyChangedFunc;
 
         #endregion

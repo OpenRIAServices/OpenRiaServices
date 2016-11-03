@@ -15,8 +15,8 @@ namespace OpenRiaServices.DomainServices.Server
     /// </remarks>
     public abstract class DomainServiceDescriptionProvider
     {
-        private Type _domainServiceType;
-        private DomainServiceDescriptionProvider _parentDescriptionProvider;
+        private readonly Type _domainServiceType;
+        private readonly DomainServiceDescriptionProvider _parentDescriptionProvider;
         private Func<Type, bool> _isEntityTypeFunc;
 
         /// <summary>

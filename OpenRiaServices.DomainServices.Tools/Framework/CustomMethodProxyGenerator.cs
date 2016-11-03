@@ -13,10 +13,10 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal class CustomMethodProxyGenerator : ProxyGenerator
     {
-        private Type _entityType;
-        private ICollection<DomainServiceDescription> _domainServiceDescriptions;
-        private CodeTypeDeclaration _proxyClass;
-        private NotificationMethodGenerator _notificationMethodGen;
+        private readonly Type _entityType;
+        private readonly ICollection<DomainServiceDescription> _domainServiceDescriptions;
+        private readonly CodeTypeDeclaration _proxyClass;
+        private readonly NotificationMethodGenerator _notificationMethodGen;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomMethodProxyGenerator"/> class.

@@ -23,12 +23,12 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </remarks>
     internal class ProjectSourceFileCache
     {
-        private string _rootProjectPath;
-        private string _historyFilePath;
-        private ILogger _logger;
+        private readonly string _rootProjectPath;
+        private readonly string _historyFilePath;
+        private readonly ILogger _logger;
         private Dictionary<string, IEnumerable<string>> _sourceFilesByProject;
         private List<string> _allFiles;
-        private ProjectFileReader _projectFileReader;
+        private readonly ProjectFileReader _projectFileReader;
         private bool _isFileCacheCurrent;
 
         /// <summary>

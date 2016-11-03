@@ -13,7 +13,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     // See ClientProxyCodeDomVisitor class for details.
     internal sealed class DomainServiceFixupCodeDomVisitor : CodeDomVisitor
     {
-        private CodeGenContext _context;
+        private readonly CodeGenContext _context;
 
         /// <summary>
         /// Default constructor accepting the current <see cref="CodeGenContext"/> context.

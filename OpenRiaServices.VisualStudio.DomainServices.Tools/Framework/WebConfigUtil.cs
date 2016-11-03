@@ -33,7 +33,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         // Boolean.FalseString cannot be used for boolean attribute values.  It is the wrong case.
         private const string FalseAttributeValue = "false";
 
-        private System.Configuration.Configuration _configuration;
+        private readonly System.Configuration.Configuration _configuration;
 
         /// <summary>
         /// Creates a new instance.

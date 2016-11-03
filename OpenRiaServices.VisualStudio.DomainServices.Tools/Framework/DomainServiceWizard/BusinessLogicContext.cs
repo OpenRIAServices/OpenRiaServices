@@ -26,8 +26,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         // Key into CodeTypeDeclaration.UserData to dictionary of generated helper methods
         private const string UserDataHelperMethods = "HelperMethods";
 
-        private string _name;
-        private Type _contextType;
+        private readonly string _name;
+        private readonly Type _contextType;
         private List<IBusinessLogicEntity> _entities;
         private IContextData _contextData;
         private static int uniqueContextID = 0;

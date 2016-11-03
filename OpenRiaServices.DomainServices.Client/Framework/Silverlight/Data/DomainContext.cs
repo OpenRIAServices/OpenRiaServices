@@ -29,13 +29,13 @@ namespace OpenRiaServices.DomainServices.Client
                 .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
 
         private int _activeLoadCount;
-        private DomainClient _domainClient;
+        private readonly DomainClient _domainClient;
         private EntityContainer _entityContainer;
-        private SynchronizationContext _syncContext;
+        private readonly SynchronizationContext _syncContext;
         private ValidationContext _validationContext;
         private bool _isSubmitting;
-        private Dictionary<string, bool> requiresValidationMap = new Dictionary<string, bool>();
-        private object _syncRoot = new object();
+        private readonly Dictionary<string, bool> requiresValidationMap = new Dictionary<string, bool>();
+        private readonly object _syncRoot = new object();
         private static IDomainClientFactory s_domainClientFactory;
 
         /// <summary>

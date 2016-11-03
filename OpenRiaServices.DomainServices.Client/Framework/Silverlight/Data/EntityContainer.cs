@@ -14,11 +14,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public abstract class EntityContainer : IRevertibleChangeTracking, INotifyPropertyChanged
     {
-        private IDictionary<Type, EntitySet> _entitySets;
-        private IDictionary<Type, EntitySet> _referencedEntitySets;
-        private IDictionary<string, Type> _entityTypeMap;
+        private readonly IDictionary<Type, EntitySet> _entitySets;
+        private readonly IDictionary<Type, EntitySet> _referencedEntitySets;
+        private readonly IDictionary<string, Type> _entityTypeMap;
         private int _dirtySetCount;
-        private IDictionary<Type, Type> _entityRootTypes;
+        private readonly IDictionary<Type, Type> _entityRootTypes;
         private ValidationContext _validationContext;
 
         /// <summary>

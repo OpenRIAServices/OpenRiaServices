@@ -30,8 +30,8 @@ namespace OpenRiaServices.Controls.DomainServices.Test
 
         private bool _isPagingOperationPending;
         private int _itemCount;
-        private List<Entity> _localList = new List<Entity>();
-        private Func<int, bool> _moveToPage;
+        private readonly List<Entity> _localList = new List<Entity>();
+        private readonly Func<int, bool> _moveToPage;
         private int _pageIndex;
         private int _pageSize;
         private int _totalItemCount;

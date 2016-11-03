@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     {
         #region Member fields
 
-        private Action<LoginOperation> _completeAction;
+        private readonly Action<LoginOperation> _completeAction;
         private readonly LoginParameters _loginParameters;
 
         #endregion

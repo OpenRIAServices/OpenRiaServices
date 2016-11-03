@@ -17,10 +17,10 @@ namespace OpenRiaServices.DomainServices.Tools
         // The name of the MSBuild property for RIA Links
         private const string LinkedServerProjectPropertyName = "LinkedOpenRiaServerProject";
 
-        private string _rootProjectPath;
-        private string _historyFilePath;
-        private ILogger _logger;
-        private ProjectFileReader _projectFileReader;
+        private readonly string _rootProjectPath;
+        private readonly string _historyFilePath;
+        private readonly ILogger _logger;
+        private readonly ProjectFileReader _projectFileReader;
         private Dictionary<string, string> _linkedServerProjectsByProject;
         private bool _isFileCacheCurrent;
 

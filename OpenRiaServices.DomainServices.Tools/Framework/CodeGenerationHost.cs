@@ -16,8 +16,8 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal class CodeGenerationHost : ICodeGenerationHost
     {
-        private ILoggingService _loggingService;
-        private ISharedCodeService _sharedCodeService;
+        private readonly ILoggingService _loggingService;
+        private readonly ISharedCodeService _sharedCodeService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CodeGenerationHost"/> class.

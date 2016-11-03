@@ -29,7 +29,7 @@
         protected Type serviceType;
 
         /// <summary>Headers used in this request.</summary>
-        private Dictionary<string, string> requestHeaders;
+        private readonly Dictionary<string, string> requestHeaders;
 
         #endregion Fields.
 

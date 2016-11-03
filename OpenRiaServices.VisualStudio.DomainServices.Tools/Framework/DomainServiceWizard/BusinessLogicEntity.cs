@@ -13,10 +13,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </remarks>
     public class BusinessLogicEntity : IBusinessLogicEntity
     {
-        private IBusinessLogicContext _businessLogicContext;
+        private readonly IBusinessLogicContext _businessLogicContext;
         private IEntityData _entityData;
-        private string _name;
-        private Type _type;
+        private readonly string _name;
+        private readonly Type _type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BusinessLogicEntity"/> class.

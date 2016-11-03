@@ -44,9 +44,9 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         private class ServiceMetadataQueryOperationMessageFormatter : IDispatchMessageFormatter
         {
-            IDispatchMessageFormatter innerFormatter;
-            DomainOperationType operationType;
-            Type entityType;
+            readonly IDispatchMessageFormatter innerFormatter;
+            readonly DomainOperationType operationType;
+            readonly Type entityType;
 
             public ServiceMetadataQueryOperationMessageFormatter(IDispatchMessageFormatter innerFormatter, DomainOperationType operationType, Type entityType)
             {
@@ -79,8 +79,8 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         private class ServiceMetadataBodyWriter : BodyWriter
         {
-            Message originalMessage;
-            string entityTypeName;
+            readonly Message originalMessage;
+            readonly string entityTypeName;
 
             public ServiceMetadataBodyWriter(Message originalMessage, Type entityType)
                 : base(false)

@@ -9,8 +9,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </summary>
     public class GeneratedCode : MarshalByRefObject, IGeneratedCode
     {
-        private string _sourceCode;
-        private IEnumerable<string> _references;
+        private readonly string _sourceCode;
+        private readonly IEnumerable<string> _references;
 
         /// <summary>
         /// Initializes a new empty instance of the <see cref="GeneratedCode"/> class.

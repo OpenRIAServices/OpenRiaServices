@@ -1250,7 +1250,7 @@ namespace OpenRiaServices.Controls.DomainServices.Test
 
         public class AppendOnlyCollection<T> : IEnumerable<T> where T : Entity
         {
-            private Collection<T> _collection;
+            private readonly Collection<T> _collection;
 
             public AppendOnlyCollection()
             {
@@ -1328,9 +1328,9 @@ namespace OpenRiaServices.Controls.DomainServices.Test
 
         public class MockEntity : Entity, IEditableObject
         {
-            private Action _beginEditCallback;
-            private Action _cancelEditCallback;
-            private Action _endEditCallback;
+            private readonly Action _beginEditCallback;
+            private readonly Action _cancelEditCallback;
+            private readonly Action _endEditCallback;
 
             public int BeginEditCalls
             {

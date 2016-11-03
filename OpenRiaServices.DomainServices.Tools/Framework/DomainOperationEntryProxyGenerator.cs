@@ -15,8 +15,8 @@ namespace OpenRiaServices.DomainServices.Tools
     {
         private const string QuerySuffix = "Query";
 
-        private CodeTypeDeclaration _proxyClass;
-        private DomainServiceDescription _domainServiceDescription;
+        private readonly CodeTypeDeclaration _proxyClass;
+        private readonly DomainServiceDescription _domainServiceDescription;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainOperationEntryProxyGenerator"/> class.

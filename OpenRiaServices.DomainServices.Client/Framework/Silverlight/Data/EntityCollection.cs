@@ -25,12 +25,12 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         where TEntity : Entity
     {
-        private Action<TEntity> _attachAction;
-        private Action<TEntity> _detachAction;
-        private AssociationAttribute _assocAttribute;
-        private Entity _parent;
+        private readonly Action<TEntity> _attachAction;
+        private readonly Action<TEntity> _detachAction;
+        private readonly AssociationAttribute _assocAttribute;
+        private readonly Entity _parent;
         private EntitySet _sourceSet;
-        private Func<TEntity, bool> _entityPredicate;
+        private readonly Func<TEntity, bool> _entityPredicate;
         private List<TEntity> _entities;
         private HashSet<TEntity> _entitiesHashSet;
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
@@ -39,7 +39,7 @@ namespace OpenRiaServices.DomainServices.Client
         private TEntity _detachingEntity;
         private bool _entitiesLoaded;
         private bool _entitiesAdded;
-        private bool _isComposition;
+        private readonly bool _isComposition;
 
         /// <summary>
         /// Initializes a new instance of the EntityCollection class

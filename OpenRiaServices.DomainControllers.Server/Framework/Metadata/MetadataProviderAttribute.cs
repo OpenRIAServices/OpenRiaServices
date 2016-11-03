@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainControllers.Server.Metadata
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class MetadataProviderAttribute : Attribute
     {
-        private Type _providerType;
+        private readonly Type _providerType;
 
         /// <summary>
         /// Initializes a new instance of the MetadataProviderAttribute class

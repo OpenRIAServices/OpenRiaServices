@@ -28,9 +28,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [TestClass]
     public class DomainServiceTests
     {
-        private DomainServiceDescription _domainServiceDescription;
-        private DomainService _domainService;
-        private CityData _cityData;
+        private readonly DomainServiceDescription _domainServiceDescription;
+        private readonly DomainService _domainService;
+        private readonly CityData _cityData;
 
         public DomainServiceTests()
         {
@@ -1492,7 +1492,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     /// </summary>
     public class DSDPA : DomainServiceDescriptionProvider
     {
-        private DomainServiceDescriptionProvider parentProvider;
+        private readonly DomainServiceDescriptionProvider parentProvider;
 
         public DSDPA(Type domainServiceType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)
@@ -1549,7 +1549,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     /// </summary>
     public class DSDPB : DomainServiceDescriptionProvider
     {
-        private DomainServiceDescriptionProvider parentProvider;
+        private readonly DomainServiceDescriptionProvider parentProvider;
 
         public DSDPB(Type domainServiceType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)
@@ -1600,7 +1600,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
     public class MetadataPropertyDescriptorWrapper : PropertyDescriptor
     {
-        private PropertyDescriptor _descriptor;
+        private readonly PropertyDescriptor _descriptor;
         public MetadataPropertyDescriptorWrapper(PropertyDescriptor descriptor, Attribute[] attrs)
             : base(descriptor, attrs)
         {
@@ -1688,7 +1688,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     /// </summary>
     public class PocoDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {
-        private DomainServiceDescriptionProvider parentProvider;
+        private readonly DomainServiceDescriptionProvider parentProvider;
 
         public PocoDomainServiceDescriptionProvider(Type domainServiceType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)
@@ -1978,7 +1978,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class ErrorTestDomainService : DomainService
     {
-        private CityData cities = new CityData();
+        private readonly CityData cities = new CityData();
 
         public IEnumerable<City> GetCities()
         {
@@ -2082,7 +2082,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
     public class MockDataService : IServiceProvider
     {
-        private IPrincipal user;
+        private readonly IPrincipal user;
 
         public MockDataService(IPrincipal user)
         {
@@ -2105,8 +2105,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
     public class MockUser : IPrincipal, IIdentity
     {
-        private IEnumerable<string> roles;
-        private string name;
+        private readonly IEnumerable<string> roles;
+        private readonly string name;
         private bool isAuthenticated;
 
         public MockUser(string name)
@@ -2306,7 +2306,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
     public class DomainService_AssociatedEntities : DomainService
     {
-        private IEnumerable<DataStoreCustomer> customers =
+        private readonly IEnumerable<DataStoreCustomer> customers =
             new[] 
             {
                 new DataStoreCustomer() { ID = 1, FirstName = "First1", LastName = "Last1", Message = "Value1" },

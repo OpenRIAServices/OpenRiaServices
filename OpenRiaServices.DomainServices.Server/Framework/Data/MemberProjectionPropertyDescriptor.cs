@@ -13,8 +13,8 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     internal class MemberProjectionPropertyDescriptor : PropertyDescriptor
     {
-        private PropertyDescriptor _sourceProperty;
-        private string[] _path;
+        private readonly PropertyDescriptor _sourceProperty;
+        private readonly string[] _path;
         private PropertyDescriptor _targetProperty;
 
         // Only allow these attributes to be propagated from the target property

@@ -687,9 +687,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private class EditSession
         {
-            private ComplexObject _instance;
+            private readonly ComplexObject _instance;
             private IDictionary<string, object> _snapshot;
-            private ValidationResult[] _validationErrors;
+            private readonly ValidationResult[] _validationErrors;
 
             private EditSession(ComplexObject instance)
             {
@@ -744,7 +744,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private class ComplexObjectValidationResultCollection : ValidationResultCollection
         {
-            private ComplexObject _complexObject;
+            private readonly ComplexObject _complexObject;
 
             public ComplexObjectValidationResultCollection(ComplexObject complexObject)
                 : base(complexObject)

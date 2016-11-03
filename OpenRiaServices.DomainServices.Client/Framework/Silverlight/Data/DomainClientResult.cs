@@ -11,11 +11,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public sealed class DomainClientResult
     {
-        private int _totalEntityCount;
-        private ReadOnlyCollection<Entity> _entities;
-        private ReadOnlyCollection<Entity> _allEntities;
-        private object _returnValue;
-        private IEnumerable<ValidationResult> _validationErrors;
+        private readonly int _totalEntityCount;
+        private readonly ReadOnlyCollection<Entity> _entities;
+        private readonly ReadOnlyCollection<Entity> _allEntities;
+        private readonly object _returnValue;
+        private readonly IEnumerable<ValidationResult> _validationErrors;
 
         private DomainClientResult()
         {

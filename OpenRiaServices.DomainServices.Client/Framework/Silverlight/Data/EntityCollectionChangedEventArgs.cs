@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TEntity">The <see cref="Entity"/> type</typeparam>
     public class EntityCollectionChangedEventArgs<TEntity> : EventArgs
     {
-        private TEntity _entity;
+        private readonly TEntity _entity;
 
         /// <summary>
         /// Initializes a new instance of the EntityCollectionChangedEventArgs class

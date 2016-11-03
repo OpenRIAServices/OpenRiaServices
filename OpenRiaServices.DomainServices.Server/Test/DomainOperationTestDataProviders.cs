@@ -52,7 +52,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_DupNameAcrossProviders1 : DomainService
     {
-        private CityData _cityData = new CityData();
+        private readonly CityData _cityData = new CityData();
 
         [Query]
         public IQueryable<City> GetCities()

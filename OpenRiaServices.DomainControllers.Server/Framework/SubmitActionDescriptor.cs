@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainControllers.Server
     internal sealed class SubmitActionDescriptor : ReflectedHttpActionDescriptor
     {
         private const string ChangeSetParameterName = "changeSet";
-        private Collection<HttpParameterDescriptor> _parameters;
+        private readonly Collection<HttpParameterDescriptor> _parameters;
 
         public SubmitActionDescriptor(HttpControllerDescriptor controllerDescriptor, Type controllerType)
             : base(controllerDescriptor, controllerType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.Public))

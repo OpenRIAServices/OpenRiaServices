@@ -17,10 +17,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 {
     internal class AssemblyGenerator : IDisposable
     {
-        private string _relativeTestDir;
-        private bool _isCSharp;
+        private readonly string _relativeTestDir;
+        private readonly bool _isCSharp;
         private string _outputAssemblyName;
-        private IEnumerable<Type> _domainServiceTypes;
+        private readonly IEnumerable<Type> _domainServiceTypes;
         private DomainServiceCatalog _domainServiceCatalog;
         private MockBuildEngine _mockBuildEngine;
         private MockSharedCodeService _mockSharedCodeService;
@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private Type[] _generatedTypes;
         private string _userCode;
         private string _userCodeFile;
-        private  bool _useFullTypeNames;
+        private readonly bool _useFullTypeNames;
 
 
         public AssemblyGenerator(string relativeTestDir, bool isCSharp, IEnumerable<Type> domainServiceTypes) :

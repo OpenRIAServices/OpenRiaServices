@@ -26,11 +26,11 @@ namespace OpenRiaServices.DomainServices.EntityFramework
     /// </summary>
     internal class LinqToEntitiesTypeDescriptor : TypeDescriptorBase
     {
-        private LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
-        private StructuralType _edmType;
-        private EdmMember _timestampMember;
-        private HashSet<EdmMember> _foreignKeyMembers;
-        private bool _keyIsEditable;
+        private readonly LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
+        private readonly StructuralType _edmType;
+        private readonly EdmMember _timestampMember;
+        private readonly HashSet<EdmMember> _foreignKeyMembers;
+        private readonly bool _keyIsEditable;
 
         /// <summary>
         /// Constructor taking a metadata context, an structural type, and a parent custom type descriptor

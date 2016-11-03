@@ -9,8 +9,8 @@ namespace OpenRiaServices.Controls.DomainServices.Test
     {
         #region Member Fields
 
-        private Action<EntityQuery, LoadBehavior, object> _loadCallback;
-        private Action<object> _submitChangesCallback;
+        private readonly Action<EntityQuery, LoadBehavior, object> _loadCallback;
+        private readonly Action<object> _submitChangesCallback;
 
         #endregion Member Fields
 
@@ -92,9 +92,10 @@ namespace OpenRiaServices.Controls.DomainServices.Test
 
     public class MockContext<T> : MockContext where T : Entity, new()
     {
+        readonly
         #region Member Fields
 
-        EntitySetOperations _operationsSupported = EntitySetOperations.All;
+                EntitySetOperations _operationsSupported = EntitySetOperations.All;
 
         #endregion Member Fields
 

@@ -17,13 +17,13 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         // Sentinel value that indicates a member is not part of a shared file
         internal const int NotShared = FilenameMap.NotAFile;
 
-        private ISourceFileLocationService _sourceFileLocationService;
-        private FilenameMap _filenameMap;
-        private bool _anySharedFiles;
+        private readonly ISourceFileLocationService _sourceFileLocationService;
+        private readonly FilenameMap _filenameMap;
+        private readonly bool _anySharedFiles;
 
         // Keyed by file ID, contains only the ID's of files were told to consider shared.
         // This cache is not modified after it has been initialized and is for performance only.
-        private HashSet<int> _sharedFileIds = new HashSet<int>();
+        private readonly HashSet<int> _sharedFileIds = new HashSet<int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SharedSourceFiles"/> class.

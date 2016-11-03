@@ -8,10 +8,10 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public sealed class InvokeArgs
     {
-        private string _operationName;
-        private Type _returnType;
-        private IDictionary<string, object> _parameters;
-        private bool _hasSideEffects;
+        private readonly string _operationName;
+        private readonly Type _returnType;
+        private readonly IDictionary<string, object> _parameters;
+        private readonly bool _hasSideEffects;
 
         /// <summary>
         /// Initializes a new instance of the InvokeArgs class

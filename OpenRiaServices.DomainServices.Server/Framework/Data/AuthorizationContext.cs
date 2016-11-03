@@ -38,7 +38,7 @@ namespace System.ComponentModel.DataAnnotations
         private string _operation;
         private string _operationType;
         private Dictionary<object, object> _items;
-        private IServiceProvider _parentServiceProvider;
+        private readonly IServiceProvider _parentServiceProvider;
         private ServiceContainer _serviceContainer;
 
         /// <summary>

@@ -36,9 +36,9 @@
         private static PropertyInfo lineProperty;
         private static PropertyInfo columnProperty;
 
-        private string _fileName;
-        private int _line;
-        private int _column;
+        private readonly string _fileName;
+        private readonly int _line;
+        private readonly int _column;
 
         /// <summary>
         /// Initializes a new <see cref="SourceInfo"/> instance.

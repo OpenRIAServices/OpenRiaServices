@@ -17,7 +17,7 @@ namespace OpenRiaServices.DomainServices.Tools
     /// </summary>
     internal class ComplexTypeProxyGenerator : DataContractProxyGenerator
     {
-        DomainServiceDescription _domainServiceDescription;
+        readonly DomainServiceDescription _domainServiceDescription;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComplexTypeProxyGenerator"/> class.

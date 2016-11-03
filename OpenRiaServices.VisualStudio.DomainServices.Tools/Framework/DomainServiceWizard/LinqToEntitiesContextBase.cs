@@ -11,7 +11,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     public abstract class LinqToEntitiesContextBase : BusinessLogicContext
     {
         private Dictionary<ComplexType, Type> _complexTypes;
-        private HashSet<Type> _visitedComplexTypes = new HashSet<Type>();
+        private readonly HashSet<Type> _visitedComplexTypes = new HashSet<Type>();
 
         public Dictionary<ComplexType, Type> ComplexTypes
         {

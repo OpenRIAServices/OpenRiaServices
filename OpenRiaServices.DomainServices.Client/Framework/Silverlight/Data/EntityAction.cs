@@ -7,7 +7,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public class EntityAction
     {
-        private List<object> _parameters;
+        private readonly List<object> _parameters;
 
         /// <summary>
         /// Initializes a new instance of the EntityAction class

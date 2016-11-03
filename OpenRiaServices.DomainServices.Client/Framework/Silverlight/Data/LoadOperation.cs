@@ -13,13 +13,13 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public abstract class LoadOperation : OperationBase
     {
-        private ObservableCollection<Entity> _entitiesCollection = new ObservableCollection<Entity>();
+        private readonly ObservableCollection<Entity> _entitiesCollection = new ObservableCollection<Entity>();
         private ReadOnlyObservableCollection<Entity> _entities;
-        private ObservableCollection<Entity> _allEntitiesCollection = new ObservableCollection<Entity>();
+        private readonly ObservableCollection<Entity> _allEntitiesCollection = new ObservableCollection<Entity>();
         private ReadOnlyObservableCollection<Entity> _allEntities;
         private IEnumerable<ValidationResult> _validationErrors;
-        private LoadBehavior _loadBehavior;
-        private EntityQuery _query;
+        private readonly LoadBehavior _loadBehavior;
+        private readonly EntityQuery _query;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadOperation"/> class.
@@ -305,10 +305,10 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TEntity">The entity Type being loaded.</typeparam>
     public sealed class LoadOperation<TEntity> : LoadOperation where TEntity : Entity
     {
-        private ObservableCollection<TEntity> _entitiesCollection = new ObservableCollection<TEntity>();
+        private readonly ObservableCollection<TEntity> _entitiesCollection = new ObservableCollection<TEntity>();
         private ReadOnlyObservableCollection<TEntity> _entities;
-        private Action<LoadOperation<TEntity>> _cancelAction;
-        private Action<LoadOperation<TEntity>> _completeAction;
+        private readonly Action<LoadOperation<TEntity>> _cancelAction;
+        private readonly Action<LoadOperation<TEntity>> _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadOperation"/> class.

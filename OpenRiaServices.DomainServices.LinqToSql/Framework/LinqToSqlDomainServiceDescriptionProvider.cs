@@ -9,8 +9,8 @@ namespace OpenRiaServices.DomainServices.LinqToSql
     internal class LinqToSqlDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {
         private static Dictionary<Type, LinqToSqlTypeDescriptionContext> tdpContextMap = new Dictionary<Type, LinqToSqlTypeDescriptionContext>();
-        private LinqToSqlTypeDescriptionContext _typeDescriptionContext;
-        private Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
+        private readonly LinqToSqlTypeDescriptionContext _typeDescriptionContext;
+        private readonly Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
 
         public LinqToSqlDomainServiceDescriptionProvider(Type domainServiceType, Type dataContextType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)

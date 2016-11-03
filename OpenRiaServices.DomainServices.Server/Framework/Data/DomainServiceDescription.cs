@@ -21,21 +21,21 @@ namespace OpenRiaServices.DomainServices.Server
     {
         private static readonly ConcurrentDictionary<Type, DomainServiceDescription> domainServiceMap = new ConcurrentDictionary<Type, DomainServiceDescription>();
         private static ConcurrentDictionary<Type, HashSet<Type>> typeDescriptionProviderMap = new ConcurrentDictionary<Type, HashSet<Type>>();
-        private Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>> _submitMethods = new Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>>();
-        private Dictionary<Type, Dictionary<string, DomainOperationEntry>> _customMethods = new Dictionary<Type, Dictionary<string, DomainOperationEntry>>();
-        private Dictionary<string, DomainOperationEntry> _queryMethods = new Dictionary<string, DomainOperationEntry>(StringComparer.OrdinalIgnoreCase);
-        private Dictionary<string, DomainOperationEntry> _invokeOperations = new Dictionary<string, DomainOperationEntry>();
-        private Dictionary<Type, List<PropertyDescriptor>> _compositionMap = new Dictionary<Type, List<PropertyDescriptor>>();
-        private HashSet<Type> _complexTypes = new HashSet<Type>();
-        private HashSet<Type> _entityTypes = new HashSet<Type>();
+        private readonly Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>> _submitMethods = new Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>>();
+        private readonly Dictionary<Type, Dictionary<string, DomainOperationEntry>> _customMethods = new Dictionary<Type, Dictionary<string, DomainOperationEntry>>();
+        private readonly Dictionary<string, DomainOperationEntry> _queryMethods = new Dictionary<string, DomainOperationEntry>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, DomainOperationEntry> _invokeOperations = new Dictionary<string, DomainOperationEntry>();
+        private readonly Dictionary<Type, List<PropertyDescriptor>> _compositionMap = new Dictionary<Type, List<PropertyDescriptor>>();
+        private readonly HashSet<Type> _complexTypes = new HashSet<Type>();
+        private readonly HashSet<Type> _entityTypes = new HashSet<Type>();
         private HashSet<Type> _rootEntityTypes;
         private Dictionary<Type, HashSet<Type>> _entityKnownTypes;
-        private Type _domainServiceType;
+        private readonly Type _domainServiceType;
         private bool _isInitializing;
         private bool _isInitialized;
         private AttributeCollection _attributes;
-        private List<DomainOperationEntry> _operationEntries = new List<DomainOperationEntry>();
-        private ConcurrentDictionary<Type, Type> _exposedTypeMap = new ConcurrentDictionary<Type, Type>();
+        private readonly List<DomainOperationEntry> _operationEntries = new List<DomainOperationEntry>();
+        private readonly ConcurrentDictionary<Type, Type> _exposedTypeMap = new ConcurrentDictionary<Type, Type>();
         private DomainServiceDescriptionProvider _descriptionProvider;
 
         /// <summary>
@@ -970,14 +970,14 @@ namespace OpenRiaServices.DomainServices.Server
                 ValidateComplexType(complexType);
 
                 // We disallow inheritance of complex types from complex types.
-                Type childComplexType = this.ComplexTypes.Where(ct => (ct != complexType) && complexType.IsAssignableFrom(ct)).FirstOrDefault();
+                Type childComplexType = this.ComplexTypes.FirstOrDefault(ct => (ct != complexType) && complexType.IsAssignableFrom(ct));
                 if (childComplexType != null)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_Inheritance, this.DomainServiceType, childComplexType, complexType));
                 }
 
                 // We disallow inheritance of entities from complex types.
-                Type childEntityType = this.EntityTypes.Where(e => complexType.IsAssignableFrom(e)).FirstOrDefault();
+                Type childEntityType = this.EntityTypes.FirstOrDefault(e => complexType.IsAssignableFrom(e));
                 if (childEntityType != null)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_EntityInheritance, this.DomainServiceType, childEntityType, complexType));
@@ -992,7 +992,7 @@ namespace OpenRiaServices.DomainServices.Server
         internal static void ValidateComplexType(Type complexType)
         {
             // KnownTypeAttribute indicates a type may be its derived type. Since we do not support complex type inheritance, disallow this.
-            if (KnownTypeUtilities.ImportKnownTypes(complexType, /* inherit */ false).Where(t => complexType.IsAssignableFrom(t)).Any())
+            if (KnownTypeUtilities.ImportKnownTypes(complexType, /* inherit */ false).Any(t => complexType.IsAssignableFrom(t)))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_KnownTypes, complexType.Name));
             } 

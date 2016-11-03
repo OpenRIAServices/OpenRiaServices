@@ -8,7 +8,7 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     public sealed class InvokeDescription
     {
-        private DomainOperationEntry _domainOperationEntry;
+        private readonly DomainOperationEntry _domainOperationEntry;
         private object[] _parameterValues;
 
         /// <summary>

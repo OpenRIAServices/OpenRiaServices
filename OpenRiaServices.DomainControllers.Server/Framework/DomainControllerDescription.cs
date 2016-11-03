@@ -23,9 +23,9 @@ namespace OpenRiaServices.DomainControllers.Server
         private static readonly string[] _deletePrefixes = { "Delete", "Remove" };
         private static readonly string[] _insertPrefixes = { "Insert", "Add", "Create" };
         private static readonly string[] _updatePrefixes = { "Update", "Change", "Modify" };
-        private Type _DomainControllerType;
-        private ReadOnlyCollection<Type> _entityTypes;
-        private List<UpdateActionDescriptor> _updateActions;
+        private readonly Type _DomainControllerType;
+        private readonly ReadOnlyCollection<Type> _entityTypes;
+        private readonly List<UpdateActionDescriptor> _updateActions;
 
         internal DomainControllerDescription(Type DomainControllerType, IEnumerable<Type> entityTypes, List<UpdateActionDescriptor> actions)
         {

@@ -604,7 +604,7 @@ namespace System.ComponentModel.DataAnnotations
     // Attribute we will declare as "unknowable" or "unshared" in tests above
     public class Mock_CG_Attr_Gen_TestAttribute : Attribute
     {
-        private Type _type;
+        private readonly Type _type;
         public Mock_CG_Attr_Gen_TestAttribute(Type type)
         {
             this._type = type;
