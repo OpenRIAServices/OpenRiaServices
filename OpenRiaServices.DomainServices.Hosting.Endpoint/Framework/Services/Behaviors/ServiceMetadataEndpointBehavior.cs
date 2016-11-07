@@ -13,10 +13,12 @@ namespace OpenRiaServices.DomainServices.Hosting
     {
         public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
         {
+            // Method intentionally left empty.
         }
 
         public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
         {
+            // Method intentionally left empty.
         }
 
         public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
@@ -40,6 +42,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         public void Validate(ServiceEndpoint endpoint)
         {
+            // Method intentionally left empty.
         }
 
         private class ServiceMetadataQueryOperationMessageFormatter : IDispatchMessageFormatter

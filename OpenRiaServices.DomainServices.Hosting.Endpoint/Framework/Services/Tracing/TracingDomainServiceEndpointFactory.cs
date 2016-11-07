@@ -87,10 +87,12 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
             {
+                // Method intentionally left empty.
             }
 
             public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
             {
+                // Method intentionally left empty.
             }
 
             public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
@@ -109,6 +111,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             public void Validate(ServiceEndpoint endpoint)
             {
+                // Method intentionally left empty.
             }
 
             public InstanceContext GetExistingInstanceContext(Message message, IContextChannel channel)
@@ -118,6 +121,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             public void InitializeInstanceContext(InstanceContext instanceContext, Message message, IContextChannel channel)
             {
+                // Method intentionally left empty.
             }
 
             public bool IsIdle(InstanceContext instanceContext)
@@ -127,6 +131,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             public void NotifyIdle(InstanceContextIdleCallback callback, InstanceContext instanceContext)
             {
+                // Method intentionally left empty.
             }
 
             public object GetInstance(InstanceContext instanceContext, Message message)
@@ -141,6 +146,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             public void ReleaseInstance(InstanceContext instanceContext, object instance)
             {
+                // Method intentionally left empty.
             }
         }
     }

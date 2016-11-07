@@ -22,6 +22,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="bindingParameters">The objects that binding elements require to support the behavior.</param>
         public void AddBindingParameters(ServiceEndpoint endpoint, BindingParameterCollection bindingParameters)
         {
+            // Method intentionally left empty.
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="clientRuntime">The client runtime to be customized.</param>
         public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
         {
+            // Method intentionally left empty.
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="endpoint">The endpoint to validate.</param>
         public void Validate(ServiceEndpoint endpoint)
         {
+            // Method intentionally left empty.
         }
 
         private class SoapQueryInspector : IDispatchMessageInspector
@@ -77,6 +80,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             public void BeforeSendReply(ref Message reply, object correlationState)
             {
+                // Method intentionally left empty.
             }
         }
     }
