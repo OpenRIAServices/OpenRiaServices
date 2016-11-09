@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.EntityFramework</id>
-    <version>4.5.0</version>
+    <version>4.5.0-rc2</version>
     <title>Open RIA Services support for Entity Framework 6+ - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -21,7 +21,7 @@
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
     <dependencies>
       <dependency id="EntityFramework" version="6.0.1" />
-      <dependency id="OpenRiaServices.Signed.Server" version="4.5.0"/>
+      <dependency id="OpenRiaServices.Signed.Server" version="4.5.0-rc2"/>
     </dependencies>
   </metadata>
   <files>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.LinqToSql</id>
-    <version>4.5.0</version>
+    <version>4.5.0-rc2</version>
     <title>Open RIA Services for Linq to Sql (DataContext) - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
