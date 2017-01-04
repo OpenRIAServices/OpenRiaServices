@@ -146,6 +146,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     <ProjectReference Include="$(LinkedOpenRiaServerProject)" Condition="'$(TargetFrameworkIdentifier)' != 'Silverlight' and '$(TargetFrameworkIdentifier)' != ''">
       <Name>OpenRiaServices Server Project Link</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
 
