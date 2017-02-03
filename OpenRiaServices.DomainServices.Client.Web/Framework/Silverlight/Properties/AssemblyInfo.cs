@@ -43,6 +43,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("2.0.5.0")]
+[assembly: AssemblyVersion("4.0.0.0")]
 // AssemblyFileVersion attribute is generated automatically by a custom MSBuild task inside AutomaticAssemblyVersion.targets
 //[assembly: AssemblyFileVersion("1.0.0.14")]
