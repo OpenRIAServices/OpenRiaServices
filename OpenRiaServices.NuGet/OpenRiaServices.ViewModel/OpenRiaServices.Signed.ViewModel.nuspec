@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.ViewModel</id>
-    <version>4.5.0-rc2</version>
+    <version>4.5.0</version>
     <title>Open RIA Services ViewModel Extensions - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -11,13 +11,13 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Open RIA Services Toolkit - Silverlight ViewModel (MVVM) features</description>
     <summary>Open RIA Services Toolkit - Signed Silverlight ViewModel (MVVM) features</summary>
-    <releaseNotes>4.5.0-rc2:
+    <releaseNotes>4.5.0:
 For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745</releaseNotes>
     <copyright>2016 Outercurve Foundation</copyright>
     <language />
     <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices Signed</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.0-rc2"/>
+      <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.0"/>
     </dependencies>
   </metadata>
   <files>

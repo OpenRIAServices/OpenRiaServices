@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.OData</id>
-    <version>4.5.0-rc2</version>
+    <version>4.5.0</version>
     <title>Open RIA Services OData Endpoint - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -22,7 +22,7 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices SOAP JSON OpenRiaServices signed</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Signed.Server" version="4.5.0-rc2"/>
+      <dependency id="OpenRiaServices.Signed.Server" version="4.5.0"/>
     </dependencies>
 
   </metadata>
