@@ -5,9 +5,14 @@
 *.suo
 *.user
 *.sln.docstates
+.vs/
+project.lock.json
+
+# Coverity
+cov-int/
+cov-int.zip
 
 # Build results
-
 [Dd]ebug/
 [Rr]elease/
 x64/
@@ -47,6 +52,7 @@ build/
 *.log
 *.scc
 *.xap
+
 ProjectPath.txt
 activeconnections.txt
 
