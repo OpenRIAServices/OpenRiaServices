@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Client.Core</id>
-    <version>4.5.0</version>
+    <version>4.5.0.1</version>
     <title>Open RIA Services Client - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -13,9 +13,12 @@
       OpenRiaServices.Signed.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects.
     </description>
     <summary>Open RIA Services - signed client assemblies and references.</summary>
-    <releaseNotes>4.5.0:
+    <releaseNotes>4.5.0.1
+* Metadata only update to remove incorrect frameworkAssembly for silverlight
+
+4.5.0:
 For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
-      
+
 4.5.0-rc1:
 * Improved performance for large EntityCollections
 * Improved nuget behaviour for other targets than silverlight and desktop .net
@@ -43,7 +46,6 @@ see https://docs.microsoft.com/sv-se/dotnet/articles/standard/library for netsta
       <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl50, net45" />
       <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="sl50, net45" />
       <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="sl50, net45" />
-      <frameworkAssembly assemblyName="System.ServiceModel.Web.Extensions" targetFramework="sl50" />
     </frameworkAssemblies>
   </metadata>
   <files>
