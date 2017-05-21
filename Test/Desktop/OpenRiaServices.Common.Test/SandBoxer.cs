@@ -60,6 +60,10 @@ namespace OpenRiaServices.Common.Test
         [SecuritySafeCritical]
         public static void ExecuteInMediumTrust(MethodInfo methodInfo, object parameter)
         {
+#if !SIGNED
+            Assert.Inconclusive("Medium trust is only valid for signed builds");
+#endif
+
             Type type = methodInfo.DeclaringType;
 
             // Instance methods are not supported because in common use, caller is in full trust

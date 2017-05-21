@@ -240,6 +240,10 @@
                     }
                 }
             }
+            else if (request.Method == "POST")
+            {
+                request.ContentLength = 0;
+            }
 
             try
             {

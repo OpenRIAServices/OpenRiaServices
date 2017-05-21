@@ -75,9 +75,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // This property is in shared code (via link) and should not have been generated
                 CodeGenHelper.AssertNotGenerated(generatedCode, "public int ServerAndClientValue");
 
-                // The automatic property in shared code should have been generated because
-                // the PDB would lack any info to know it was shared strictly at the source level
-                CodeGenHelper.AssertGenerated(generatedCode, "public string AutomaticProperty");
+                // The automatic property in shared code should not have been generated
+                CodeGenHelper.AssertNotGenerated(generatedCode, "public string AutomaticProperty");
 
                 // The server-only IsValid method should have emitted a comment warning it is not shared
                 CodeGenHelper.AssertGenerated(generatedCode, "// [CustomValidationAttribute(typeof(ServerClassLib.TestValidatorServer), \"IsValid\")]");

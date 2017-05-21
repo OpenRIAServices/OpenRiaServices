@@ -1,16 +1,15 @@
-﻿namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
-{
-    #region Namespaces
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Data.Test.Astoria;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    #endregion
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Test.Astoria;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Net;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
+{
     /// <summary>
     /// Provides a helper class for tests that rely on a local web
     /// server.
@@ -27,6 +26,8 @@
         /// <summary>Path to which files will be written to.</summary>
         private static string targetPhysicalPath;
 
+        private static bool IsIISexpress => string.Equals(process?.ProcessName, "iisexpress", StringComparison.OrdinalIgnoreCase);
+
         /// <summary>Performs cleanup and ensures that there are no active web servers.</summary>
         public static void Cleanup()
         {
@@ -34,12 +35,22 @@
             {
                 // The local web server does not respond to CloseMainWindow.
                 Trace.WriteLine("Closing web server process...");
+
                 if (!process.HasExited)
                 {
                     try
                     {
-                        process.Kill();
-                        process.WaitForExit(60 * 1000); // wait 60 secs.
+                        if (IsIISexpress)
+                        {
+                            process.StandardInput.WriteLine("Q");
+                            process.WaitForExit(1 * 1000); // wait 1 secs.
+                        }
+
+                        if (!process.HasExited)
+                        {
+                            process.Kill();
+                            process.WaitForExit(60 * 1000); // wait 60 secs.
+                        }
                     }
                     catch (InvalidOperationException)
                     {
@@ -91,7 +102,7 @@
         public static string SetupServiceFiles(string serviceFileName, Type serviceType)
         {
             Dictionary<string, string> connections = new Dictionary<string, string>();
-            
+
             connections.Add("NorthwindEntities", ConfigurationManager.ConnectionStrings["NorthwindEntities"].ConnectionString);
 
             return SetupServiceFiles(serviceFileName, serviceType, connections);
@@ -233,10 +244,10 @@
             string serviceContents =
                 "<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"OpenRiaServices.DomainServices.Hosting.DomainServiceHostFactory, OpenRiaServices.DomainServices.Hosting\" Service=\"" + serviceType.FullName.Replace('+', '.') + "\" %>\r\n";
 
-                //DomainDataServiceTest.TheDataService\" %>\r\n" +
-                //"namespace DomainDataServiceTest\r\n" +
-                //"{\r\n";
-                //serviceContents +="    public class TheDataService : " + serviceType.FullName.Replace('+', '.') + "\r\n{}\r\n}\r\n";
+            //DomainDataServiceTest.TheDataService\" %>\r\n" +
+            //"namespace DomainDataServiceTest\r\n" +
+            //"{\r\n";
+            //serviceContents +="    public class TheDataService : " + serviceType.FullName.Replace('+', '.') + "\r\n{}\r\n}\r\n";
 
             File.WriteAllText(Path.Combine(physicalPath, serviceFileName), serviceContents);
 
@@ -299,8 +310,35 @@
 
                 Trace.WriteLine("Starting web server:  \"" + serverPath + "\" " + arguments);
 
-                process = Process.Start(serverPath, arguments);
-                process.WaitForInputIdle();
+                if (Path.GetFileNameWithoutExtension(serverPath) == "iisexpress")
+                {
+                    var startInfo = new ProcessStartInfo();
+                    startInfo.FileName = serverPath;
+                    startInfo.Arguments = arguments;
+                    startInfo.RedirectStandardInput = true;
+                    startInfo.RedirectStandardOutput = true;
+                    startInfo.UseShellExecute = false;
+                    startInfo.CreateNoWindow = true;
+
+                    process = Process.Start(startInfo);
+
+                    // Wait for IIS start start
+                    string str;
+                    while ((str = process.StandardOutput.ReadLine()) != null)
+                    {
+                        if (str.Contains("IIS Express is running")
+                            || str.Contains("'Q'"))
+                            return;
+                    }
+
+                    throw new Exception("Failed to start IIS express");
+                }
+                else
+                {
+                    process = Process.Start(serverPath, arguments);
+                    process.WaitForInputIdle();
+                }
+
             }
         }
 
@@ -310,13 +348,20 @@
         /// <returns>The path to a local WebDev.WebServer.exe file.</returns>
         private static string FindWebServerPath()
         {
-            string path = System.Environment.ExpandEnvironmentVariables(@"%programfiles%\Common Files\microsoft shared\DevServer\10.0\WebDev.WebServer40.exe");
-            if (!File.Exists(path))
+            string[] searchPaths = new[]
             {
-                throw new InvalidOperationException("Unable to find web server at " + path + ".");
+                @"%programfiles%\Common Files\microsoft shared\DevServer\10.0\WebDev.WebServer40.exe",
+                @"%programfiles%\IIS Express\iisexpress.exe",
+            };
+
+            foreach (var candidate in searchPaths)
+            {
+                string path = System.Environment.ExpandEnvironmentVariables(candidate);
+                if (File.Exists(path))
+                    return path;
             }
 
-            return path;
+            throw new InvalidOperationException("Unable to find web server in ano of\n" + string.Join("\n", searchPaths));
         }
     }
 }
