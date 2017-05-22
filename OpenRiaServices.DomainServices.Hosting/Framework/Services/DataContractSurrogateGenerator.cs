@@ -674,6 +674,9 @@ namespace OpenRiaServices.DomainServices.Hosting
             string name = string.Format(CultureInfo.InvariantCulture, "DataContractSurrogates_{0}", Guid.NewGuid().ToString());
             assemName.Name = name;
 
+            // The following code seems have been part of the original WCF Ria Services.
+            // Using it in signed build might enable medium trust support but, I haven't tested it
+#if MEDIUM_TRUST
             // If the AppDomain is running in full trust, then put SecurityCriticalAttribute on the dynamic assembly 
             // such that our surrogates can call into entity types that are critical (which is the default for 
             // applications running in full trust).
@@ -692,12 +695,25 @@ namespace OpenRiaServices.DomainServices.Hosting
                         new object[0]);
             }
 
+            AssemblyBuilder assemblyBuilder = myDomain.DefineDynamicAssembly(
+                assemName,
+                AssemblyBuilderAccess.Run,
+                new CustomAttributeBuilder[] 
+                {
+                    securityAttribute,
+                    new CustomAttributeBuilder(
+                        typeof(SecurityRulesAttribute).GetConstructor(new Type[] { typeof(SecurityRuleSet) }),
+                        new object[] { SecurityRuleSet.Level2 })
+                },
+                SecurityContextSource.CurrentAppDomain);
+#else
             // Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
             // and permits the assembly builder to inherit the security permissions of the
             // app domain. - CDB Removed, Medium trust support removed
             AssemblyBuilder assemblyBuilder = myDomain.DefineDynamicAssembly(
                 assemName,
                 AssemblyBuilderAccess.Run);
+#endif
 
             return assemblyBuilder.DefineDynamicModule(name);
         }

@@ -1772,7 +1772,7 @@ namespace OpenRiaServices.DomainServices.Server
                         }
 
                         // validate the entity Type
-                        if (entityType == null || !description._entityTypes.Contains(entityType))
+                        if (entityType != null || !description._entityTypes.Contains(entityType))
                         {
                             string errorMessage;
                             if (!IsValidEntityType(entityType, out errorMessage))

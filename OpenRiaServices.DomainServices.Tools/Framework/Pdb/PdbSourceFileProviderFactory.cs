@@ -101,6 +101,8 @@
                 if (methodSymbol != null)
                 {
                     int count = methodSymbol.SequencePointCount;
+                    if (count == 0)
+                        return null;
 
                     // Get the sequence points from the symbol store. 
                     // We could cache these arrays and reuse them.
@@ -112,11 +114,7 @@
                     int[] endRow = new int[count];
                     methodSymbol.GetSequencePoints(offsets, docs, startRow, startColumn, endRow, endColumn);
 
-                    foreach (ISymbolDocument doc in docs)
-                    {
-                        string file = doc.URL.ToString();
-                        return file;
-                    }
+                    return docs[0].URL.ToString();
                 }
                 return null;
             }

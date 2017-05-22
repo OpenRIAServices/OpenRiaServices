@@ -25,7 +25,7 @@ namespace OpenRiaServices.Silverlight.ComboBoxExtensions
         #region Mode
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static DependencyProperty ModeProperty =
+        public static readonly DependencyProperty ModeProperty =
             DependencyProperty.RegisterAttached(
                 "Mode",
                 typeof(ComboBoxMode),

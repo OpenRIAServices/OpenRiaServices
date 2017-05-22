@@ -558,7 +558,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// </exception>
         private T GetUserCore(IPrincipal principal)
         {
-            T user = default(T);
+            T user;
 
             if (principal.Identity.IsAuthenticated)
             {

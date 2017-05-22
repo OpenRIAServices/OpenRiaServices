@@ -356,10 +356,7 @@ namespace OpenRiaServices.DomainServices.Tools
             }
 
             // If we found a builder type, instantiate it now.  We'll reuse it
-            if (cabType != null)
-            {
-                cab = Activator.CreateInstance(cabType) as ICustomAttributeBuilder;
-            }
+            cab = Activator.CreateInstance(cabType) as ICustomAttributeBuilder;
 
             // Don't cache null builders, because we may be re-using this cache for a next code-gen 
             // run where we may have a different set of shared types.

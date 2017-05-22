@@ -127,6 +127,20 @@ namespace OpenRiaServices.DomainServices.Client
             return this.Message.GetHashCode();
         }
 
+        /// <summary>
+        /// Test the current instance against the specified instance for equality
+        /// </summary>
+        /// <param name="obj">other instance to test against</param>
+        /// <returns>True if the instances are equal, false otherwise</returns>
+        public override bool Equals(object obj)
+        {
+            var other = obj as ValidationResultInfo;
+            if (other == null)
+                return false;
+
+            return Equals(other);
+        }
+
         #region IEquatable<ValidationResultInfo> Members
 
         /// <summary>
@@ -134,7 +148,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="other">The ValidationResultInfo to compare to</param>
         /// <returns>True if the instances are equal, false otherwise</returns>
-        bool IEquatable<ValidationResultInfo>.Equals(ValidationResultInfo other)
+        public bool Equals(ValidationResultInfo other)
         {
             if (object.ReferenceEquals(this, other))
             {

@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             List<KeyValuePair<string, int>> keyPairIndicies = new List<KeyValuePair<string, int>>();
             foreach (string queryPart in queryParts.Distinct())
             {
-                int idx = -1;
+                int idx;
                 int endIdx = 0;
                 while (((idx = decodedQueryString.IndexOf(queryPart, endIdx, StringComparison.Ordinal)) != -1) &&
                         (endIdx < decodedQueryString.Length - 1))

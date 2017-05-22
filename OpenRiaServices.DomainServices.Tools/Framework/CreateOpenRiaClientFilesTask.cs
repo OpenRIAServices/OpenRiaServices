@@ -668,7 +668,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 // file has been touched since we last analyzed our server references, it is an indication
                 // the user modified the generated file.  So force a code gen and
                 // force a rewrite of the server reference file to short circuit this same code next build.
-                if (!needToGenerate && fileExists && File.Exists(this.ServerReferenceListPath()))
+                if (!needToGenerate && File.Exists(this.ServerReferenceListPath()))
                 {
                     if (File.GetLastWriteTime(generatedFileName) > File.GetLastWriteTime(this.ServerReferenceListPath()))
                     {

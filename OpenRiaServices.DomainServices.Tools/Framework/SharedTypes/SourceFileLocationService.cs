@@ -93,7 +93,7 @@
             // In either case, this memberInfo should be in the cache after the call.
             this.GetMembersForType(memberInfo.DeclaringType);
             string fileName = null;
-            int id = -1;
+            int id;
 
             // We expect this test to succeed always, because the code above should have loaded all members
             if (this._fileIdsByMemberInfo.TryGetValue(memberInfo, out id))

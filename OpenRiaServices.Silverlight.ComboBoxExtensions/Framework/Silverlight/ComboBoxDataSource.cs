@@ -12,7 +12,7 @@ namespace OpenRiaServices.Silverlight.ComboBoxExtensions
     public class ComboBoxDataSource : Control
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static DependencyProperty DataProperty =
+        public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register(
                 "Data",
                 typeof(IEnumerable),
@@ -20,7 +20,7 @@ namespace OpenRiaServices.Silverlight.ComboBoxExtensions
                 new PropertyMetadata(null, ComboBoxDataSource.DataPropertyChanged));
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static DependencyProperty DomainContextProperty = 
+        public static readonly DependencyProperty DomainContextProperty = 
             DependencyProperty.Register(
                 "DomainContext",
                 typeof(DomainContext),
@@ -28,14 +28,14 @@ namespace OpenRiaServices.Silverlight.ComboBoxExtensions
                 new PropertyMetadata(null, ComboBoxDataSource.DomainContextPropertyChanged));
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static DependencyProperty OperationNameProperty = 
+        public static readonly DependencyProperty OperationNameProperty = 
             DependencyProperty.Register(
                 "OperationName",
                 typeof(string),
                 typeof(ComboBoxDataSource),
                 new PropertyMetadata(null, ComboBoxDataSource.OperationNamePropertyChanged));
 
-        private static DependencyProperty ParametersProperty =
+        private static readonly DependencyProperty ParametersProperty =
             DependencyProperty.Register(
                 "Parameters",
                 typeof(ParameterCollection),
@@ -43,7 +43,7 @@ namespace OpenRiaServices.Silverlight.ComboBoxExtensions
                 null);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static DependencyProperty IsLoadingProperty =
+        public static readonly DependencyProperty IsLoadingProperty =
             DependencyProperty.Register(
                 "IsLoading",
                 typeof(bool),
@@ -132,46 +132,45 @@ namespace OpenRiaServices.Silverlight.ComboBoxExtensions
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "EntityQuery"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "InvokeOperation")]
         public void Refresh()
         {
-            if ((this.DomainContext != null) & !string.IsNullOrEmpty(this.OperationName))
+            if (this.DomainContext == null || string.IsNullOrEmpty(this.OperationName))
+                return;
+
+            Type domainContextType = this.DomainContext.GetType();
+            MethodInfo operationInfo = domainContextType.GetMethods().FirstOrDefault(
+                m => (m.Name == this.OperationName) && (m.GetParameters().Count() == this.Parameters.Count));
+            if (operationInfo == null)
             {
-                Type domainContextType = this.DomainContext.GetType();
-                MethodInfo operationInfo = domainContextType.GetMethods().Where(
-                    m => (m.Name == this.OperationName) && (m.GetParameters().Count() == this.Parameters.Count)).FirstOrDefault();
-                if (operationInfo == null)
+                System.Diagnostics.Debug.WriteLine(
+                    "Could not find a method named " + this.OperationName +
+                    " with the specified parameters (" + string.Join(",", this.Parameters.Select(p => p.ParameterName)) + ").");
+                return;
+            }
+
+            if (typeof(EntityQuery).IsAssignableFrom(operationInfo.ReturnType))
+            {
+                // Query
+                if (!DesignerProperties.IsInDesignTool)
                 {
-                    System.Diagnostics.Debug.WriteLine(
-                        "Could not find a method named " + this.OperationName +
-                        " with the specified parameters (" + string.Join(",", this.Parameters.Select(p => p.ParameterName)) + ").");
+                    EntityQuery query = (EntityQuery)operationInfo.Invoke(this.DomainContext, this.Parameters.Select(p => p.Value).ToArray());
+                    this.Operation = this.DomainContext.Load(query, LoadBehavior.KeepCurrent, this.OnLoadCompleted, null);
                 }
-                else
+            }
+            else if (typeof(InvokeOperation).IsAssignableFrom(operationInfo.ReturnType))
+            {
+                // Invoke
+                if (!operationInfo.ReturnType.IsGenericType || !typeof(IEnumerable).IsAssignableFrom(operationInfo.ReturnType.GetGenericArguments()[0]))
                 {
-                    if (typeof(EntityQuery).IsAssignableFrom(operationInfo.ReturnType))
-                    {
-                        // Query
-                        if (!DesignerProperties.IsInDesignTool)
-                        {
-                            EntityQuery query = (EntityQuery)operationInfo.Invoke(this.DomainContext, this.Parameters.Select(p => p.Value).ToArray());
-                            this.Operation = this.DomainContext.Load(query, LoadBehavior.KeepCurrent, this.OnLoadCompleted, null);
-                        }
-                    }
-                    else if (typeof(InvokeOperation).IsAssignableFrom(operationInfo.ReturnType))
-                    {
-                        // Invoke
-                        if (!operationInfo.ReturnType.IsGenericType || !typeof(IEnumerable).IsAssignableFrom(operationInfo.ReturnType.GetGenericArguments()[0]))
-                        {
-                            throw new NotImplementedException("Support non-enumerable InvokeOperation return types is not implemented.");
-                        }
-                        if (!DesignerProperties.IsInDesignTool)
-                        {
-                            this.Operation = (InvokeOperation)operationInfo.Invoke(this.DomainContext, this.Parameters.Select(p => p.Value).ToArray());
-                            this.Operation.Completed += this.OnInvokeCompleted;
-                        }
-                    }
-                    else
-                    {
-                        throw new NotImplementedException("Support for return types other than EntityQuery and InvokeOperation is not implemented.");
-                    }
+                    throw new NotImplementedException("Support non-enumerable InvokeOperation return types is not implemented.");
                 }
+                if (!DesignerProperties.IsInDesignTool)
+                {
+                    this.Operation = (InvokeOperation)operationInfo.Invoke(this.DomainContext, this.Parameters.Select(p => p.Value).ToArray());
+                    this.Operation.Completed += this.OnInvokeCompleted;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException("Support for return types other than EntityQuery and InvokeOperation is not implemented.");
             }
         }
 

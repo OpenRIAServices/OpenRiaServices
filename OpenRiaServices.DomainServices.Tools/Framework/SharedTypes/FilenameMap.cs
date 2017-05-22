@@ -54,9 +54,10 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 {
                     fileName = string.Empty;
                 }
-                int id = FilenameMap.NotAFile;
+                int id;
                 if (!this._idsByFile.TryGetValue(fileName, out id))
                 {
+                    id = FilenameMap.NotAFile;
                     Debug.Fail("Invalid FileLocationCache filename: ", fileName);
                 }
                 return id;

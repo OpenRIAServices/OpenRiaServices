@@ -105,7 +105,7 @@ namespace System.Linq.Dynamic
         public static Type GetFuncType(params Type[] typeArgs)
         {
             if (typeArgs == null || typeArgs.Length < 1 || typeArgs.Length > 5)
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(typeArgs));
             return funcTypes[typeArgs.Length - 1].MakeGenericType(typeArgs);
         }
     }
@@ -319,7 +319,7 @@ namespace System.Linq.Dynamic
         const string keywordIt = "it";
         const string keywordIif = "iif";
 
-        static Dictionary<string, object> keywords;
+        static readonly Dictionary<string, object> keywords = CreateKeywords();
 
         Dictionary<string, object> symbols;
         Dictionary<Expression, string> literals;
@@ -335,8 +335,7 @@ namespace System.Linq.Dynamic
         {
             if (expression == null)
                 throw new ArgumentNullException("expression");
-            if (keywords == null)
-                keywords = CreateKeywords();
+
             this.queryResolver = queryResolver;
             symbols = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             literals = new Dictionary<Expression, string>();
