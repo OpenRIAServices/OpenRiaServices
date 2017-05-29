@@ -206,7 +206,7 @@ namespace OpenRiaServices.DomainServices.Client
                 ServiceQueryPart holdPart = this._currPart;
                 StringBuilder holdPartBuilder = this._currPartBuilder;
 
-                string methodName = m.Method.Name.ToLower(CultureInfo.InvariantCulture);
+                string methodName = CultureInfo.InvariantCulture.TextInfo.ToLower(m.Method.Name);
                 if (IsSequenceOperatorCall(m))
                 {
                     if (methodName == "where" || methodName == "orderby" || methodName == "orderbydescending" || methodName == "skip"
