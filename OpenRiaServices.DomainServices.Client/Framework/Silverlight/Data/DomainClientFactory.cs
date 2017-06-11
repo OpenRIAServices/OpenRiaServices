@@ -40,9 +40,9 @@ namespace OpenRiaServices.DomainServices.Client
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException("value");
-                else if (!value.IsAbsoluteUri)
-                    throw new ArgumentException("value", "ServiceBaseUri must be absolute");
+                    throw new ArgumentNullException(nameof(value));
+                if (!value.IsAbsoluteUri)
+                    throw new ArgumentException("ServiceBaseUri must be absolute", nameof(value));
 
                 _serverBaseUri = value;
             }
@@ -51,8 +51,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Entry point for creating a a new <see cref="DomainClient" /> instance.
         /// 
-        /// Arguments are validated and the <paramref name="serviceUri"/> is transformed if neccessary based on <see cref="ServerBaseUri"/> and <paramref name="requiresSecureEndpoint"/>
-        /// The actual creation is defeered to the <see cref="CreateDomainClientCore(Type, Uri, bool)"/> method.
+        /// Arguments are validated and the <paramref name="serviceUri"/> is transformed if necessary based on <see cref="ServerBaseUri"/> and <paramref name="requiresSecureEndpoint"/>
+        /// The actual creation is deferred to the <see cref="CreateDomainClientCore(Type, Uri, bool)"/> method.
         /// </summary>
         /// <param name="serviceContract">The service contract (not null).</param>
         /// <param name="serviceUri">The service URI (not null).</param>
@@ -63,9 +63,9 @@ namespace OpenRiaServices.DomainServices.Client
         public DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
         {
             if (serviceContract == null)
-                throw new ArgumentNullException("serviceContract");
+                throw new ArgumentNullException(nameof(serviceContract));
             if (serviceUri == null)
-                throw new ArgumentNullException("serviceUri");
+                throw new ArgumentNullException(nameof(serviceUri));
             if (!TypeUtility.IsInterface(serviceContract))
                 throw new ArgumentException(Resource.DomainClientFactory_ServiceContractMustBeAnInterface, "serviceContract");
 
@@ -75,22 +75,18 @@ namespace OpenRiaServices.DomainServices.Client
                 serviceUri = ComposeAbsoluteUri(serviceUri);
             }
 
-            // handle secure endpoint
-            if (requiresSecureEndpoint)
+            // We want to replace a http scheme (everything before the ':' in a Uri) with https.
+            // Doing this via UriBuilder loses the OriginalString. Unfortunately, this leads
+            // the builder to include the original port in the output which is not what we want.
+            // To stay as close to the original Uri as we can, we'll just do some simple string
+            // replacement.
+            //
+            // Desired output: http://my.domain/mySite.aspx -> https://my.domain/mySite.aspx
+            // Builder output: http://my.domain/mySite.aspx -> https://my.domain:80/mySite.aspx
+            //   The actual port is probably 443, but including it increases the cross-domain complexity.
+            if (requiresSecureEndpoint && serviceUri.OriginalString.StartsWith("http:", StringComparison.OrdinalIgnoreCase))
             {
-                // We want to replace a http scheme (everything before the ':' in a Uri) with https.
-                // Doing this via UriBuilder loses the OriginalString. Unfortunately, this leads
-                // the builder to include the original port in the output which is not what we want.
-                // To stay as close to the original Uri as we can, we'll just do some simple string
-                // replacement.
-                //
-                // Desired output: http://my.domain/mySite.aspx -> https://my.domain/mySite.aspx
-                // Builder output: http://my.domain/mySite.aspx -> https://my.domain:80/mySite.aspx
-                //   The actual port is probably 443, but including it increases the cross-domain complexity.
-                if (serviceUri.OriginalString.StartsWith("http:", StringComparison.OrdinalIgnoreCase))
-                {
-                    serviceUri = new Uri("https:" + serviceUri.OriginalString.Substring(5 /*("http:").Length*/));
-                }
+                serviceUri = new Uri("https:" + serviceUri.OriginalString.Substring(5 /*("http:").Length*/));
             }
 
             return CreateDomainClientCore(serviceContract, serviceUri, requiresSecureEndpoint);
@@ -103,7 +99,18 @@ namespace OpenRiaServices.DomainServices.Client
         protected virtual Uri ComposeAbsoluteUri(Uri serviceUri)
         {
             if (ServerBaseUri == null)
-                throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClientFactory_UnableToCreateAbsoluteUri);
+            {
+#if SILVERLIGHT && !PORTABLE
+                // WPF: if ((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue))
+                if (System.ComponentModel.DesignerProperties.IsInDesignTool)
+                {
+                    return serviceUri;
+                }
+#endif
+
+                throw new InvalidOperationException(Resource.DomainClientFactory_UnableToCreateAbsoluteUri);
+            }
+                
 
             return new Uri(ServerBaseUri, serviceUri);
         }
