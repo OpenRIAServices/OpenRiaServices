@@ -15,6 +15,7 @@
     <summary>Open RIA Services - client assemblies and references.</summary>
     <releaseNotes>4.5.0.1
 * Metadata only update to remove incorrect frameworkAssembly for silverlight
+* Fix silverlight designer behaviour (Issue #99)
 
 4.5.0:
 For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
@@ -41,6 +42,21 @@ see https://docs.microsoft.com/sv-se/dotnet/articles/standard/library for netsta
     <copyright>2016 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETPortable4.0-Profile47" />
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.0" />
+        <dependency id="System.ComponentModel.Annotations" version="4.3.0" />
+        <dependency id="System.ComponentModel.Primitives" version="4.3.0" />
+        <dependency id="System.Linq.Queryable" version="4.3.0" />
+        <dependency id="System.Reflection.TypeExtensions" version="4.3.0" />
+        <dependency id="System.Runtime.Serialization.Formatters" version="4.3.0" />
+        <dependency id="System.Runtime.Serialization.Primitives" version="4.3.0" />
+        <dependency id="System.Security.Principal" version="4.3.0" />
+      </group>
+      <group targetFramework="Silverlight5.0" />
+    </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="sl50, net45" />
       <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl50, net45" />

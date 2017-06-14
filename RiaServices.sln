@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53F7B128-2A99-4C85-B990-18CCE502EDCC}"
 	ProjectSection(SolutionItems) = preProject
 		Desktop.vsmdi = Desktop.vsmdi
+		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contrib", "Contrib", "{9FBE785E-A32B-454B-82BB-147D2F0B7FFF}"

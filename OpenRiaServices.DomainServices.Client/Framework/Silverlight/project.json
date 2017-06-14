@@ -1,5 +1,7 @@
 {
     "name": "OpenRiaServices.DomainServices.Client",
+    "authors": [ "Outercurve RIA Services" ],
+    "description": "OpenRiaServices.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects.",
     "version": "4.0.0-*",
     "packOptions": {
         "summary": "Open RIA Services - client assemblies and references.",
@@ -19,7 +21,7 @@
             "buildOptions": {
                 "optimize": true,
                 "keyFile": "../../../snk/OpenRiaServices.snk",
-                "define": ["SIGNED"]
+                "define": [ "SIGNED" ]
             }
         }
     },
@@ -28,13 +30,13 @@
         "netstandard1.3": {
             "dependencies": {
                 "NETStandard.Library": "1.6.0",
-                "System.ComponentModel.Annotations": "4.1.0",
-                "System.ComponentModel.Primitives": "4.1.0",
-                "System.Linq.Queryable": "4.0.1",
-                "System.Reflection.TypeExtensions": "4.1.0",
-                "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
-                "System.Runtime.Serialization.Primitives": "4.1.1",
-                "System.Security.Principal": "4.0.1"
+                "System.ComponentModel.Annotations": "4.3.0",
+                "System.ComponentModel.Primitives": "4.3.0",
+                "System.Linq.Queryable": "4.3.0",
+                "System.Reflection.TypeExtensions": "4.3.0",
+                "System.Runtime.Serialization.Formatters": "4.3.0",
+                "System.Runtime.Serialization.Primitives": "4.3.0",
+                "System.Security.Principal": "4.3.0"
             },
             "buildOptions": {
                 "nowarn": [ "CS0618" ],
