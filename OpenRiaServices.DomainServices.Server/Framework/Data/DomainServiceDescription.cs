@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Server
     public sealed class DomainServiceDescription
     {
         private static readonly ConcurrentDictionary<Type, DomainServiceDescription> domainServiceMap = new ConcurrentDictionary<Type, DomainServiceDescription>();
-        private static ConcurrentDictionary<Type, HashSet<Type>> typeDescriptionProviderMap = new ConcurrentDictionary<Type, HashSet<Type>>();
+        private static readonly ConcurrentDictionary<Type, HashSet<Type>> typeDescriptionProviderMap = new ConcurrentDictionary<Type, HashSet<Type>>();
         private readonly Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>> _submitMethods = new Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>>();
         private readonly Dictionary<Type, Dictionary<string, DomainOperationEntry>> _customMethods = new Dictionary<Type, Dictionary<string, DomainOperationEntry>>();
         private readonly Dictionary<string, DomainOperationEntry> _queryMethods = new Dictionary<string, DomainOperationEntry>(StringComparer.OrdinalIgnoreCase);
@@ -104,11 +104,7 @@ namespace OpenRiaServices.DomainServices.Server
             get
             {
                 this.EnsureInitialized();
-
-                foreach (Type complexType in this._complexTypes)
-                {
-                    yield return complexType;
-                }
+                return _complexTypes;
             }
         }
 
@@ -131,11 +127,7 @@ namespace OpenRiaServices.DomainServices.Server
             get
             {
                 this.EnsureInitialized();
-
-                foreach (Type entityType in this._entityTypes)
-                {
-                    yield return entityType;
-                }
+                return _entityTypes;
             }
         }
 
@@ -150,19 +142,8 @@ namespace OpenRiaServices.DomainServices.Server
         {
             get
             {
-                if (this._rootEntityTypes == null)
-                {
-                    this._rootEntityTypes = new HashSet<Type>();
-                    foreach (Type entityType in this.EntityTypes)
-                    {
-                        if (entityType == this.GetRootEntityType(entityType))
-                        {
-                            this._rootEntityTypes.Add(entityType);
-                        }
-                    }
-                }
                 // Return snapshot
-                return this._rootEntityTypes.ToArray();
+                return this.GetOrCreateRootEntityTypes().ToArray();
             }
         }
 
@@ -173,11 +154,6 @@ namespace OpenRiaServices.DomainServices.Server
         {
             get
             {
-                if (!this._isInitialized)
-                {
-                    return this._operationEntries.AsReadOnly();
-                }
-
                 return this._operationEntries.AsReadOnly();
             }
         }
@@ -451,10 +427,12 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 throw new ArgumentNullException("entityType");
             }
+
+            EnsureInitialized();
             Type rootType = null;
             while (entityType != null)
             {
-                if (this.EntityTypes.Contains(entityType))
+                if (_entityTypes.Contains(entityType))
                 {
                     rootType = entityType;
                 }
@@ -483,10 +461,11 @@ namespace OpenRiaServices.DomainServices.Server
                 throw new ArgumentNullException("entityType");
             }
 
+            EnsureInitialized();
             Type baseType = entityType.BaseType;
             while (baseType != null)
             {
-                if (this.EntityTypes.Contains(baseType))
+                if (_entityTypes.Contains(baseType))
                 {
                     break;
                 }
@@ -927,7 +906,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             // first add the type itself if it is complex
             this._complexTypes.Add(complexType);
- 
+
             // now recursively enumerate all members looking for complex types
             foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(complexType))
             {
@@ -950,7 +929,7 @@ namespace OpenRiaServices.DomainServices.Server
             // provider to determine whether the type is an entity. This is important,
             // because even if a particular type isn't exposed by the service as an entity
             // type, we don't want to interpret it as a complex type.
-            bool isEntity = this._entityTypes.Contains(type) || 
+            bool isEntity = this._entityTypes.Contains(type) ||
                 (this._descriptionProvider != null && this._descriptionProvider.LookupIsEntityType(type));
             if (!isEntity && TypeUtility.IsComplexType(type))
             {
@@ -995,7 +974,7 @@ namespace OpenRiaServices.DomainServices.Server
             if (KnownTypeUtilities.ImportKnownTypes(complexType, /* inherit */ false).Any(t => complexType.IsAssignableFrom(t)))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_KnownTypes, complexType.Name));
-            } 
+            }
 
             MetaType metaType = MetaType.GetMetaType(complexType);
             foreach (MetaMember metaMember in metaType.DataMembers)
@@ -1057,7 +1036,7 @@ namespace OpenRiaServices.DomainServices.Server
             this._entityKnownTypes = null;
 
             this.RegisterCustomTypeDescriptors(entityType);
- 
+
             // visit all properties and do any required validation or initialization processing
             foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(entityType))
             {
@@ -1928,7 +1907,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <exception cref="InvalidOperationException">if any derived entity exposes a domain operation not also on the root.</exception>
         private void ValidateDerivedDomainOperations()
         {
-            HashSet<Type> rootEntityTypes = new HashSet<Type>(this.RootEntityTypes);
+            HashSet<Type> rootEntityTypes = GetOrCreateRootEntityTypes();
             IEnumerable<Type> derivedEntityTypes = this.EntityTypes.Where(t => !rootEntityTypes.Contains(t));
             DomainOperation[] allDomainOperations = new DomainOperation[] { DomainOperation.Insert, DomainOperation.Update, DomainOperation.Delete };
 
@@ -2076,6 +2055,25 @@ namespace OpenRiaServices.DomainServices.Server
         {
             System.Diagnostics.Debug.Assert(entityType != null, "GetEntityDerivedTypes(null) not allowed");
             return this.EntityTypes.Where(et => et != entityType && entityType.IsAssignableFrom(et));
+        }
+
+        /// <summary>
+        /// Gets all the root entity types exposed by the <see cref="DomainService"/>
+        /// </summary>
+        private HashSet<Type> GetOrCreateRootEntityTypes()
+        {
+            if (this._rootEntityTypes == null)
+            {
+                this._rootEntityTypes = new HashSet<Type>();
+                foreach (Type entityType in this.EntityTypes)
+                {
+                    if (entityType == this.GetRootEntityType(entityType))
+                    {
+                        this._rootEntityTypes.Add(entityType);
+                    }
+                }
+            }
+            return this._rootEntityTypes;
         }
     }
 }

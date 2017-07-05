@@ -109,6 +109,9 @@ namespace OpenRiaServices.DomainServices.Hosting
             IEnumerable<Assembly> assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>();
             foreach (Assembly assembly in assemblies)
             {
+                if (!TypeUtility.CanContainDomainServiceImplementations(assembly))
+                    continue;
+
                 Type[] exportedTypes = null;
                 try
                 {

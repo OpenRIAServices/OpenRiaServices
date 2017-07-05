@@ -204,6 +204,7 @@ namespace OpenRiaServices.DomainServices.Tools
             foreach (KeyValuePair<Assembly, bool> pair in this._loadedAssemblies)
             {
                 // Performance optimization: standard Microsoft assemblies are excluded from this search
+                // and assembly must reference OpenRiaServices.DomainServices.Server
                 if (pair.Value)
                 {
                     // Utility autorecovers and logs for common exceptions
@@ -258,7 +259,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService
-                    this._loadedAssemblies[assembly] = !assembly.IsSystemAssembly();
+                    this._loadedAssemblies[assembly] = TypeUtility.CanContainDomainServiceImplementations(assembly);
                 }
             }
 

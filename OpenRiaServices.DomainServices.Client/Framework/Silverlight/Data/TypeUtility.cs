@@ -639,6 +639,23 @@ namespace OpenRiaServices.DomainServices
             return string.CompareOrdinal(OpenRiaServicesPublicKeyToken, 0, assemblyName.FullName, idx + 15, OpenRiaServicesPublicKeyToken.Length) == 0;
         }
 
+#if SERVERFX
+        /// <summary>
+        /// Performs a quick check to determine if an assembly can contain DomainService implementations
+        /// by checking that the assembly 
+        /// 1. References the OpenRiaServices.DomainServices.Server assembly (even classes inheriting 
+        /// indirectly must reference the assembly to compile) 
+        /// 2. Exludes system assemblies (including OpenRiaServices framework assemblies).
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        internal static bool CanContainDomainServiceImplementations(Assembly assembly)
+        {
+            return !assembly.IsSystemAssembly() 
+                    && assembly.GetReferencedAssemblies()
+                        .Any(reference => string.Equals(reference.Name, "OpenRiaServices.DomainServices.Server", StringComparison.OrdinalIgnoreCase));
+        }
+#endif
         /// <summary>
         /// Check against an <see cref="AssemblyName"/> to determine if signed to create a strong name
         /// (it has public key token != null)
