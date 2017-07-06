@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Server</id>
-    <version>4.5.0</version>
+    <version>4.5.1</version>
     <title>OpenRiaServices.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -15,14 +15,13 @@
       The web.config.transform adds the necessary configSections, HTTP modules, and system.serviceModel elements to make your Domain Services available at runtime.
 
       The package also includes a targets file and tools assembly that provides build-time validation of your DomainService classes.
-
-      This package can be used instead of going through the Add New Domain Service wizard to prime your ASP.NET web application with the configuration necessary to utilize WCF RIA Services on the Server.
-
-      KNOWN ISSUE
-      Some users have experienced duplicate web.config entries getting created as a result of installing this package.  To resolve this issue, simply eliminate one of the duplicate entries -- they vary only by character case.
     </description>
     <summary>Open RIA Services - Server-side assemblies, configuration, and build targets.</summary>
-    <releaseNotes>4.5.0:
+    <releaseNotes>4.5.1:
+* Improved startup performance
+* Improved performance for first request
+	
+4.5.0:
 For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
 
 4.5.0-rc1 Improved startup performance
