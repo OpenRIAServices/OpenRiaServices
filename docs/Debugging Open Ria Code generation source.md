@@ -23,12 +23,11 @@ You can always place a Debug.Assert or similar to allow you to start debugging a
 
 The following steps was suggested to by the roslyn team when trying to find out why some people had problem with IntelliSense in VS 2015 (https://github.com/dotnet/roslyn/issues/4893).
 
-"
-You can see the results of the design time build to confirm that it's a similar exception by:
-# Starting a Developer Command Prompt
-# Deleting the .vs directory beside your project
-# Running  set TraceDesignTime=true  
-# Running  devenv  
-# Opening your project
-# Navigating to your temp directory and looking at the  <guid>designtime.log  files for the one that runs the "Compile" target.
-"
+
+    You can see the results of the design time build to confirm that it's a similar exception by:
+    1. Starting a Developer Command Prompt
+    2. Deleting the .vs directory beside your project
+    3. Running  set TraceDesignTime=true  
+    4. Running  devenv  
+    5. Opening your project
+    6. Navigating to your temp directory and looking at the  <guid>designtime.log  files for the one that runs the "Compile" target.
