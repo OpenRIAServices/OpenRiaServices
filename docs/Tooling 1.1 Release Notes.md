@@ -1,0 +1,5 @@
+The RIA Services linker has moved on Open RIA Services from the Silverlight tab of the project properties to its own right click menu on the Project itself. It is also available from the Project menu in the menu bar of Visual Studio. Otherwise, everything should work exactly as it did with WCF RIA Services.
+
+The DomainService wizard requires a separate installation to work as an interface file needs to be installed in the GAC and that cannot be installed from a VSIX.. The installer can be found at [https://openriaservices.codeplex.com/releases/view/116623](https://openriaservices.codeplex.com/releases/view/116623). The interface file should need to be updated very rarely if at all.
+
+The NuGet packages included with the tools are very early versions of Open RIA Services that are close to the original WCF RIA Services code in functionality. You can use the NuGet package manager to update to current versions of Open RIA Services.
