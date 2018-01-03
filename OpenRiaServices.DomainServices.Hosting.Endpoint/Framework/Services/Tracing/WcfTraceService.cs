@@ -68,7 +68,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
         }
 
-        static Stream CreateTraceXml()
+        internal static Stream CreateTraceXml()
         {
             MemoryStream result = null;
             MemoryStream ms = null;
@@ -99,7 +99,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             return result;
         }
 
-        static SyndicationFeed CreateTraceSyndicationFeed()
+        internal static SyndicationFeed CreateTraceSyndicationFeed()
         {
             IEnumerable<SyndicationItem> items = from entry in InMemoryTraceListener.GetEntries()
                                                  select CreateTraceSyndicationItem(entry);
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             return feed;
         }
 
-        static SyndicationItem CreateTraceSyndicationItem(XElement entry)
+        internal static SyndicationItem CreateTraceSyndicationItem(XElement entry)
         {
             SyndicationItem result = new SyndicationItem();
             XElement traceRecord = entry.Descendants().First(e => e.Name.LocalName == "TraceRecord");
@@ -122,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             return result;
         }
 
-        static Stream CreateTraceHtml()
+        internal static Stream CreateTraceHtml()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(string.Format(CultureInfo.InvariantCulture, "<html><head><title>{0}</title></head><body style=\"font-family: sans-serif\"><h1>{0}</h1>", Resx.WCFTraceFeedTitle));

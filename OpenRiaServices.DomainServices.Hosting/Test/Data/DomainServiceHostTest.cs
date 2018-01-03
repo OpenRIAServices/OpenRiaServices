@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-#if !CODECOV
+#if SIGNED
         [TestMethod]
         [Description("Verifies the SilverlightFaultBehavior can be created in partial trust")]
         public void DomainServiceHost_MediumTrust_SilverlightFaultBehavior()
