@@ -322,7 +322,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
 
                     process = Process.Start(startInfo);
 
-                    // Wait for IIS start start
+                    // Wait for IIS start
                     string str;
                     while ((str = process.StandardOutput.ReadLine()) != null)
                     {

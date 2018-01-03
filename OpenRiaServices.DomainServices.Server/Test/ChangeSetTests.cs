@@ -121,7 +121,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 currentAssociatedChildren.Add(operation.Id);
             }
 
-            // add a 2 new children children
+            // add a 2 new children
             List<Child> newChildren = new List<Child> { new Child(), new Child() };
             foreach (Child c in newChildren)
             {

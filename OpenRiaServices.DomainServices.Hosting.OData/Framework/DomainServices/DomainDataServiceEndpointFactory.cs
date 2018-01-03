@@ -170,7 +170,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 operationDesc.Behaviors.Add(behavior);
             }
 
-            // Add standard web behaviors behaviors.
+            // Add standard web behaviors.
             if ((operation.Operation == DomainOperation.Query && ((QueryAttribute)operation.OperationAttribute).HasSideEffects) ||
                 (operation.Operation == DomainOperation.Invoke && ((InvokeAttribute)operation.OperationAttribute).HasSideEffects))
             {

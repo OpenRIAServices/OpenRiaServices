@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         //
         // Using PreserveSig and manually handling error cases provides a big performance win.
         // Far fewer exceptions will be thrown and caught.
-        // Exceptions should be reserved for truely "exceptional" cases.
+        // Exceptions should be reserved for truly "exceptional" cases.
         [PreserveSig]
         int GetReaderForFile(IntPtr importer,
                                   [MarshalAs(UnmanagedType.LPWStr)] String filename,

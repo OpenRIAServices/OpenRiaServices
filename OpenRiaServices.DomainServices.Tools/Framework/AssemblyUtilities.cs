@@ -389,7 +389,7 @@ namespace OpenRiaServices.DomainServices.Tools
                     {
                         logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Type_Error, assembly.FullName, ex.Message));
                     }
-                    return new Type[0];
+                    return TypeUtility.EmptyTypes;
                 }
 
                 // This particular exception may have loaded at least some types.  Capture what we can.

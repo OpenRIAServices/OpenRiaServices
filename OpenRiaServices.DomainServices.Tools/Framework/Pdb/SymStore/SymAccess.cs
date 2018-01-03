@@ -61,7 +61,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
 
         /*
          * Implementation which allows customization of the SymbolBinder to use.
-         * searchPath is a simicolon-delimited list of paths on which to search for pathModule.
+         * searchPath is a semicolon-delimited list of paths on which to search for pathModule.
          * If searchPath is null, pathModule must be a full path to the assembly.
          */
         internal static ISymbolReader GetReaderForFile(SymbolFormat symFormat, string pathModule, string searchPath)

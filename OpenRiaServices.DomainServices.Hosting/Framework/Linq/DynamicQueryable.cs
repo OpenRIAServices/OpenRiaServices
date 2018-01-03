@@ -456,7 +456,7 @@ namespace System.Linq.Dynamic
         // Either we place it here after conditional operators (called LogicalAnd here) and before comparison
         // * Or we place it after multiplicative but before primary function
         // * Or we treat it as a function and treat it as primary function
-        // Either way it will always work with the OpenRiaServices client since it will add paranthesis, so it should not be much of an issue
+        // Either way it will always work with the OpenRiaServices client since it will add parenthesis, so it should not be much of an issue
         Expression ParseHasOperator()
         {
             Expression left = ParseComparison();

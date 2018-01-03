@@ -327,7 +327,7 @@ namespace OpenRiaServices.DomainServices.Tools
             Attribute defaultAttributeInstance = null;
 
             // If have default ctor, simply create a new instance of the attribute and read out its values
-            ConstructorInfo constructorInfo = attributeType.GetConstructor(new Type[0]);
+            ConstructorInfo constructorInfo = attributeType.GetConstructor(TypeUtility.EmptyTypes);
             bool haveDefaultCtor = constructorInfo != null && constructorInfo.IsPublic;
             if (haveDefaultCtor && !attributeType.IsAbstract)
             {

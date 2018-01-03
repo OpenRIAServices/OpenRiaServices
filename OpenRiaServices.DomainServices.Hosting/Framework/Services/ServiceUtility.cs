@@ -260,7 +260,7 @@ namespace OpenRiaServices.DomainServices.Hosting
        /// UriTemplate for "GET" methods for a given query operation.
        /// </summary>
        /// <param name="operation">the query operation for which to get the UriTemplate</param>
-       /// <returns>the default default UriTemplate for "GET" methods in case no UriTemplate is specified</returns>
+       /// <returns>the default UriTemplate for "GET" methods in case no UriTemplate is specified</returns>
        private static string GetDefaultQueryUriTemplate(DomainOperationEntry operation)
        {
           StringBuilder stringBuilder = new StringBuilder(operation.Name);

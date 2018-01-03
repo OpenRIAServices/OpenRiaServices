@@ -204,7 +204,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 Debug.Assert(this.KeyKind == CodeMemberKeyKind.MethodKey, "this key is not a method key");
                 Type[] types = (this.ParameterTypeNames != null)
                         ? this.ParameterTypeNames.Select<string, Type>(s => Type.GetType(s, /*throwOnError*/ false)).ToArray()
-                        : new Type[0];
+                        : Type.EmptyTypes;
                 // Any type load failures force a null return which signals a problem.
                 // A parameterless method returns an empty array
                 return types.Any(t => t == null) ? null : types;

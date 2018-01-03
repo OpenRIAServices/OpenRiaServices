@@ -57,6 +57,22 @@ namespace OpenRiaServices.DomainServices
             "OpenRiaServices.DomainServices.Tools.TextTemplate"
         };
 
+        /// <summary>
+        /// Represents an empty array of type <see href="System.Type" />
+        /// </summary>
+#if PORTABLE
+        public static Type[] EmptyTypes
+        {
+            get 
+            {
+                return s_emptyTypes;
+            }
+        }
+        private static Type[] s_emptyTypes = new Type[0];
+#else
+        public static Type[] EmptyTypes { get { return Type.EmptyTypes; } }
+#endif
+
 #if !WIZARD
         // list of "simple" types we will always accept for
         // serialization, inclusion from entities, etc.
@@ -72,7 +88,7 @@ namespace OpenRiaServices.DomainServices
             typeof(Uri)
         };
 
-#region FRAMEWORK_INDEPENDENT_REFLECTION
+        #region FRAMEWORK_INDEPENDENT_REFLECTION
 #if REFLECTION_V2
         public static IEnumerable<Attribute> GetCustomAttributes(this Type type, bool inherit)
         {
@@ -199,20 +215,6 @@ namespace OpenRiaServices.DomainServices
 #endif
         }
 
-#if PORTABLE
-        private static Type[] s_emptyTypes = new Type[0];
-        public static Type[] EmptyTypes
-        {
-            get 
-            {
-                return s_emptyTypes;
-            }
-        }
-#else
-        public static Type[] EmptyTypes { get { return Type.EmptyTypes; } }
-#endif
-
-
         /// <summary>
         /// Returns <c>true</c> if the given type is a <see cref="Nullable"/>
         /// </summary>
@@ -292,7 +294,7 @@ namespace OpenRiaServices.DomainServices
         /// Type itself, not whether the element Type is supported.
         /// </summary>
         /// <param name="type">The type to test</param>
-        /// <returns><c>true</c> if the type is a suppored collection Type.</returns>
+        /// <returns><c>true</c> if the type is a supported collection Type.</returns>
         public static bool IsSupportedCollectionType(Type type)
         {
             if (type.IsArray ||
@@ -594,12 +596,12 @@ namespace OpenRiaServices.DomainServices
         }
 #endif
 
-            /// <summary>
-            /// Performs a check against an assembly to determine if it's a known
-            /// System assembly.
-            /// </summary>
-            /// <param name="assembly">The assembly to check.</param>
-            /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
+        /// <summary>
+        /// Performs a check against an assembly to determine if it's a known
+        /// System assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly to check.</param>
+        /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
         internal static bool IsSystemAssembly(this Assembly assembly)
         {
             return IsSystemAssembly(assembly.FullName);
@@ -645,13 +647,13 @@ namespace OpenRiaServices.DomainServices
         /// by checking that the assembly 
         /// 1. References the OpenRiaServices.DomainServices.Server assembly (even classes inheriting 
         /// indirectly must reference the assembly to compile) 
-        /// 2. Exludes system assemblies (including OpenRiaServices framework assemblies).
+        /// 2. Excludes system assemblies (including OpenRiaServices framework assemblies).
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
         internal static bool CanContainDomainServiceImplementations(Assembly assembly)
         {
-            return !assembly.IsSystemAssembly() 
+            return !assembly.IsSystemAssembly()
                     && assembly.GetReferencedAssemblies()
                         .Any(reference => string.Equals(reference.Name, "OpenRiaServices.DomainServices.Server", StringComparison.OrdinalIgnoreCase));
         }
@@ -701,7 +703,7 @@ namespace OpenRiaServices.DomainServices
                 if (string.CompareOrdinal("null", 0, assemblyFullName, publicKeyIndex, 4) != 0)
                     return false;
             }
-            
+
             // Return true if it is a Open Ria Services assembly
             var assemblyName = new AssemblyName(assemblyFullName);
             return OpenRiaServicesAssemblyNames.Contains(assemblyName.Name);

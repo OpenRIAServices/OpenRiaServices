@@ -265,25 +265,22 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             CodeParameterDeclarationExpressionCollection parameters = null;
 
-            if (paramDeclsArgs == "" || paramDeclsArgs != "null")
+            if (paramDeclsArgs != "null")
             {
                 parameters = new CodeParameterDeclarationExpressionCollection();
 
-                if (paramDeclsArgs != "null")
+                string[] paramDecls = paramDeclsArgs.Split(new char[] { ';' });
+                foreach (string paramDecl in paramDecls)
                 {
-                    string[] paramDecls = paramDeclsArgs.Split(new char[] { ';' });
-                    foreach (string paramDecl in paramDecls)
+                    if (paramDecl != "")
                     {
-                        if (paramDecl != "")
-                        {
-                            string[] args = paramDecl.Split(new char[] { ',' });
-                            Assert.AreEqual(args.Length, 2, "Params definition file not in the correct format!");
-                            CodeParameterDeclarationExpression codeParam = new CodeParameterDeclarationExpression(args[0], args[1]);
-                            parameters.Add(codeParam);
-                        }
-                        // else  Note: setting an empty CodeParamDeclExp creates a 'void' param (we don't do this for code gen)
-                        // codeParam = new CodeParameterDeclarationExpression();
+                        string[] args = paramDecl.Split(new char[] { ',' });
+                        Assert.AreEqual(args.Length, 2, "Params definition file not in the correct format!");
+                        CodeParameterDeclarationExpression codeParam = new CodeParameterDeclarationExpression(args[0], args[1]);
+                        parameters.Add(codeParam);
                     }
+                    // else  Note: setting an empty CodeParamDeclExp creates a 'void' param (we don't do this for code gen)
+                    // codeParam = new CodeParameterDeclarationExpression();
                 }
             }
 

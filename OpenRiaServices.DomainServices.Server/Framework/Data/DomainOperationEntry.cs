@@ -477,7 +477,7 @@ namespace OpenRiaServices.DomainServices.Server
                 else
                 {
                     _unwrapTaskResultFunc = (Func<object, object>)Delegate.CreateDelegate(typeof(Func<object, object>),
-                                                    typeof(DomainOperationEntry).GetMethod("UnwrapGenericResult", BindingFlags.Static | BindingFlags.NonPublic)
+                                                    typeof(DomainOperationEntry).GetMethod(nameof(UnwrapGenericResult), BindingFlags.Static | BindingFlags.NonPublic)
                                                     .MakeGenericMethod(this.ReturnType));
                 }
             }

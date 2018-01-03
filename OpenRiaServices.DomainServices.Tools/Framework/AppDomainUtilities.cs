@@ -45,18 +45,6 @@ namespace OpenRiaServices.DomainServices.Tools
         }
 
         /// <summary>
-        /// Determine if a specific framework directory is a silverlight framework directory by looking for 
-        /// the "slr.dll.managed_manifest" which is only present for Silverlight.
-        /// </summary>
-        /// <param name="frameworkDirectory">The directory possibly containing the Silverlight framework manifest.</param>
-        /// <returns><C>true</C> if the directory is a silverlight framework directory; otherwise <c>false</c></returns>
-        private static bool IsSilverlightDirectory(string frameworkDirectory)
-        {
-            return File.Exists(Path.Combine(frameworkDirectory, SilverlightManifestFilename));
-
-        }
-
-        /// <summary>
         /// Gets the list of Silverlight assemblies found in the manifest within the specified
         /// Silverlight framework directory.
         /// </summary>

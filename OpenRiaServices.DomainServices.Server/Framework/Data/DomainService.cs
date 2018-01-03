@@ -25,8 +25,8 @@ namespace OpenRiaServices.DomainServices.Server
         private const int TotalCountEqualsResultSetCount = -2;
 
         private static IDomainServiceFactory domainServiceFactory;
-        private static MethodInfo countMethod = typeof(DomainService).GetMethod("Count", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static MethodInfo enumerateMethod = typeof(DomainService).GetMethod("Enumerate", BindingFlags.NonPublic | BindingFlags.Static);
+        private static MethodInfo countMethod = typeof(DomainService).GetMethod(nameof(DomainService.Count), BindingFlags.NonPublic | BindingFlags.Instance);
+        private static MethodInfo enumerateMethod = typeof(DomainService).GetMethod(nameof(DomainService.Enumerate), BindingFlags.NonPublic | BindingFlags.Static);
         private static ConcurrentDictionary<Type, Func<IEnumerable, int, IEnumerable>> enumerateMethodMap = new ConcurrentDictionary<Type, Func<IEnumerable, int, IEnumerable>>();
 
         private ChangeSet _changeSet;

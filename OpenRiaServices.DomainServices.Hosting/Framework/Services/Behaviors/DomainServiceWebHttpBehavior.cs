@@ -38,7 +38,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         }
 
         /// <summary>
-        /// Modifies the request dispatch formatter to read query paramters from the message body.
+        /// Modifies the request dispatch formatter to read query parameters from the message body.
         /// </summary>
         /// <param name="operationDescription">The specified operation description.</param>
         /// <param name="endpoint">The specified endpoint.</param>
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     // We found a match, however, we must ensure that the match is exact. For example,
                     // The string "$take=1" will be found twice in query string "?$take=10&$orderby=Name&$take=1",
                     // but the first match should be discarded. Therefore, before adding the match, we ensure
-                    // the next character is EOS or the param seperator '&'.
+                    // the next character is EOS or the param separator '&'.
                     endIdx = idx + queryPart.Length - 1;
                     if ((endIdx == decodedQueryString.Length - 1) ||
                         (endIdx < decodedQueryString.Length - 1 && (decodedQueryString[endIdx + 1] == '&')))

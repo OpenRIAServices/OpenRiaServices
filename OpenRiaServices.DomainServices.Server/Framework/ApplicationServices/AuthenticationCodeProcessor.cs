@@ -72,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 entityTypeDeclaration.BaseTypes.Add(principalInterfaceTypeReference);
 
                 ////
-                //// private string IIdentitiy.AuthenticationType
+                //// private string IIdentity.AuthenticationType
                 ////
                 CodeMemberProperty authenticationTypeProperty = new CodeMemberProperty()
                 {

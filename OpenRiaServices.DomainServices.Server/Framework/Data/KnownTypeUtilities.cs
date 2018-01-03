@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// </remarks>
         /// <param name="type">The type to examine for <see cref="KnownTypeAttribute"/>s</param>
         /// <param name="inherit"><c>true</c> to allow inheritance of <see cref="KnownTypeAttribute"/> from the base.</param>
-        /// <returns>The distinct set of types fould via the <see cref="KnownTypeAttribute"/>s</returns>
+        /// <returns>The distinct set of types found via the <see cref="KnownTypeAttribute"/>s</returns>
         internal static IEnumerable<Type> ImportKnownTypes(Type type, bool inherit)
         {
             IDictionary<Type, Type> knownTypes = new Dictionary<Type, Type>();
