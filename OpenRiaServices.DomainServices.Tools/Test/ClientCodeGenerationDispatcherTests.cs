@@ -533,7 +533,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [Description("ClientCodeGenerationDispatcher logs an warning and survives a TypeLoadException creating MEF")]
         [TestMethod]
-        [DeploymentItem(@"Test\Desktop\TypeLoadExceptionProject\bin\debug\TypeLoadExceptionProject.dll")]
+        [DeploymentItem(@"TypeLoadExceptionProject.dll")]
         public void ClientCodeGenerationDispatcher_Error_TypeLoadException()
         {
             ConsoleLogger logger = new ConsoleLogger();

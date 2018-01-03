@@ -306,7 +306,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Tests ProjectSourceFileCache loads files for project")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SSFC")]
+        [DeploymentItem(@"ProjectPath.txt", "SSFC")]
         public void ProjectSourceFileCache_Loads_Real_Project()
         {
             string projectPath = null;

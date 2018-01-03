@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service locates shared types between projects")]
         [TestMethod]
         public void SharedAssemblies_Types()
@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.AssertNoErrorsOrWarnings(logger);
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service locates shared methods between projects")]
         [TestMethod]
         public void SharedAssemblies_Methods()
@@ -83,7 +83,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies matches mscorlib types and methods")]
         [WorkItem(723391)]  // XElement entry below is regression for this
         [TestMethod]
@@ -137,7 +137,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
 
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service logs an info message for nonexistent assembly file")]
         [TestMethod]
         public void SharedAssemblies_Logs_Message_NonExistent_Assembly()
@@ -161,7 +161,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.AssertContainsMessages(logger, message);
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SAT")]
+        [DeploymentItem(@"ProjectPath.txt", "SAT")]
         [Description("SharedAssemblies service logs an info message for bad image format assembly file")]
         [TestMethod]
         public void SharedAssemblies_Logs_Message_BadImageFormat_Assembly()

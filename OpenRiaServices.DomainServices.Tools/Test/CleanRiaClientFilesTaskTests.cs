@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CLRCF1")]
+        [DeploymentItem(@"ProjectPath.txt", "CLRCF1")]
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CleanRiaClientFiles_Deletes_Generated_Files()

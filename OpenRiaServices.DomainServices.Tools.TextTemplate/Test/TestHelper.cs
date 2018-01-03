@@ -151,7 +151,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 foreach (CustomAttributeData attr1 in attributes1)
                 {
                     CustomAttributeData attr2 = attributes2.First(a => a.ToString() == attr1.ToString());
-                    Assert.IsNotNull(attr2);
+                    Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
                     Assert.AreEqual(attr1.ConstructorArguments.Count(), attr2.ConstructorArguments.Count());
                     Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
                 }
@@ -166,7 +166,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 foreach (PropertyInfo prop1 in properties1)
                 {
                     PropertyInfo prop2 = properties2.First(p => p.Name == prop1.Name);
-                    Assert.IsNotNull(prop2);
+                    Assert.IsNotNull(prop2, $"Could not find a property matching '{prop1.Name}' in t4 codegen generated assembly");
                     Assert.IsTrue(AreTypesEqual(prop1.PropertyType, prop2.PropertyType));
                     TestHelper.VerifyAttributesEquality(prop1.GetCustomAttributesData(), prop2.GetCustomAttributesData());
                 }
@@ -181,7 +181,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 foreach (MethodInfo method1 in methods1)
                 {
                     MethodInfo method2 = GetMatchingMethod(methods2, method1);
-                    Assert.IsNotNull(method2);
+                    Assert.IsNotNull(method2, $"Could not find a method matching '{method1}' in t4 codegen generated assembly");
                     TestHelper.VerifyAttributesEquality(method1.GetCustomAttributesData(), method2.GetCustomAttributesData());
                 }
             }

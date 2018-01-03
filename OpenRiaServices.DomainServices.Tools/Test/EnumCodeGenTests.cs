@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("Entity property returning enum type generates enum in C#")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_CS")]
         public void Enum_Gen_Basic_CSharp()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_CS", /*isCSharp*/ true, /*useFullTypeNames*/ false, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -39,7 +39,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in C# with full type names")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_CS_FULL")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_CS_FULL")]
         public void Enum_Gen_Basic_CSharp_Full()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_CS_FULL", /*isCSharp*/ true, /*useFullTypeNames*/ true, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -50,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in VB")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_VB")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_VB")]
         public void Enum_Gen_Basic_VB()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_VB", /*isCSharp*/ false, /*useFullTypeNames*/ false, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -61,7 +61,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in VB with full type names")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_VB_FULL")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_VB_FULL")]
         public void Enum_Gen_Basic_VB_Full()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_VB_FULL", /*isCSharp*/ false, /*useFullTypeNames*/ true, new Type[] { typeof(Enum_Basic_DomainService) }))
@@ -72,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("If an entity has DataContract applied only enum properties with DataMember are generated")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_DataContract()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM", true, false, new Type[] { typeof(Enum_DataContract_DomainService) }))
@@ -237,7 +237,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity exposing property with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Warn_System_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -261,7 +261,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity exposing property with nested enum type is illegal")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Warn_Nested_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -283,7 +283,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing query with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Query()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -307,7 +307,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing invoke with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Invoke()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -331,7 +331,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing named update with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Named()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -355,7 +355,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing query with enum containing custom attributes that throw logs a warning")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_ENUM_THROW")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_THROW")]
         public void Enum_Gen_Warning_Throwing_CustomAttribute_Query()
         {
             foreach (bool isCSharp in new bool[] { true, false })

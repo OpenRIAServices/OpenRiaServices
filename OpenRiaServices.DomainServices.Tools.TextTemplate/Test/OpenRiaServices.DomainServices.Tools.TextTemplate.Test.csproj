@@ -139,6 +139,9 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Utilities\ConsoleLogger.cs">
       <Link>ConsoleLogger.cs</Link>
     </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Utilities\TestInitializer.cs">
+      <Link>Utilities\TestInitializer.cs</Link>
+    </Compile>
     <Compile Include="MockDomainService2.cs" />
     <Compile Include="T4AssemblyGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -183,6 +186,12 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt">
+      <Link>ProjectPath.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
