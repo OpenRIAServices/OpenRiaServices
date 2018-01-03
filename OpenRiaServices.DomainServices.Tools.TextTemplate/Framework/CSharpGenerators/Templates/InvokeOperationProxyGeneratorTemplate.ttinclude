@@ -64,6 +64,16 @@ public <#= invokeOperationReturnTypeName #> <#= name #>(
 Action<<#= invokeOperationReturnTypeName #>> callback, object userState
 <#+
 	}
+	else if(invokeKind == InvokeKind.Async)
+	{
+		if(domainOperationEntry.Parameters.Count() > 0)
+		{
+			#>, <#+
+		}
+#>
+System.Threading.CancellationToken cancellationToken = default (System.Threading.CancellationToken)
+<#+
+	}
 #>)
 <#+
 }
@@ -84,7 +94,7 @@ private void GenerateInvokeMethodReturn(DomainOperationEntry domainOperationEntr
 		returnTypeNameString = (domainOperationEntry.ReturnType == typeof(void)) ? string.Empty : string.Format("<{0}>", returnTypeNameString);
 #>
 return this.InvokeOperationAsync<#= returnTypeNameString #>("<#= domainOperationEntry.Name #>", <#= parameterDictionaryString #>, 
-<#= CodeGenUtilities.GetBooleanString(invokeAttribute.HasSideEffects, true) #>);
+<#= CodeGenUtilities.GetBooleanString(invokeAttribute.HasSideEffects, true) #>, cancellationToken);
 <#+
 	}
 	else

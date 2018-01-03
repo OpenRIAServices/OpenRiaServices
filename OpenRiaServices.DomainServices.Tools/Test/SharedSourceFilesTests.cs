@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SFT")]
+        [DeploymentItem(@"ProjectPath.txt", "SFT")]
         [Description("SharedSourceFiles locates shared types between projects")]
         [TestMethod]
         public void SharedSourceFiles_Types()
@@ -57,7 +57,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "SFT")]
+        [DeploymentItem(@"ProjectPath.txt", "SFT")]
         [Description("SharedSourceFiles locates shared methods between projects")]
         [TestMethod]
         public void SharedSourceFiles_Methods()

@@ -106,7 +106,8 @@ this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\t\t\r\npublic ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
-this.Write("(Uri serviceUri) : \r\n\tthis(DomainContext.CreateDomainClient(typeof(");
+this.Write("(Uri serviceUri) : \r\n\tthis(OpenRiaServices.DomainServices.Client.DomainContext.Cr" +
+        "eateDomainClient(typeof(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
 
@@ -501,6 +502,21 @@ this.Write("> callback, object userState\r\n");
 
 
 	}
+	else if(invokeKind == InvokeKind.Async)
+	{
+		if(domainOperationEntry.Parameters.Count() > 0)
+		{
+			
+this.Write(", ");
+
+
+		}
+
+this.Write("System.Threading.CancellationToken cancellationToken = default (System.Threading." +
+        "CancellationToken)\r\n");
+
+
+	}
 
 this.Write(")\r\n");
 
@@ -538,7 +554,7 @@ this.Write(", \r\n");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetBooleanString(invokeAttribute.HasSideEffects, true)));
 
-this.Write(");\r\n");
+this.Write(", cancellationToken);\r\n");
 
 
 	}
