@@ -62,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS1")]
+        [DeploymentItem(@"ProjectPath.txt", "STS1")]
         [Description("SharedCodeService locates shared types between projects")]
         [TestMethod]
         public void SharedCodeService_Types()
@@ -103,7 +103,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS2")]
+        [DeploymentItem(@"ProjectPath.txt", "STS2")]
         [Description("SharedCodeService locates shared properties between projects")]
         [TestMethod]
         public void SharedCodeService_Properties()
@@ -125,7 +125,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS4")]
+        [DeploymentItem(@"ProjectPath.txt", "STS4")]
         [Description("SharedCodeService locates shared methods between projects")]
         [TestMethod]
         public void SharedCodeService_Methods()
@@ -154,7 +154,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STS5")]
+        [DeploymentItem(@"ProjectPath.txt", "STS5")]
         [Description("SharedCodeService locates shared ctors between projects")]
         [TestMethod]
         public void SharedCodeService_Ctors()

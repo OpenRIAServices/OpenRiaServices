@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for C#, short type names")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_TR_CS")]
         public void TypeReference_Common_Types_CS()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ false, "CG_TR_CS");
@@ -29,7 +29,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for C#, full type names")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_CS_Full")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_TR_CS_Full")]
         public void TypeReference_Common_Types_CS_FullTypeNames()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ true, "CG_TR_CS_Full");
@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for VB, short type names")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_VB")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_TR_VB")]
         public void TypeReference_Common_Types_VB()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ false, "CG_TR_VB");
@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for VB, full type names")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_TR_VB_Full")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_TR_VB_Full")]
         public void TypeReference_Common_Types_VB_FullTypeNames()
         {
             this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ true, "CG_TR_VB_Full");

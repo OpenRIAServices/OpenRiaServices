@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
     public class T4CodeTests
     {
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Basic_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenBasicTest()
         {
             string testName = "T4CG_Basic_CS";
@@ -34,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Basic_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenTest_Inheritance()
         {
             string testName = "T4CG_Basic_CS";
@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
 
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Basic_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenBasicTest2()
         {
             string testName = "T4CG_Basic_CS";
@@ -74,7 +74,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Basic_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenBasicTest3()
         {
             string testName = "T4CG_Basic_CS";
@@ -92,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Basic_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenTest_SharedEntities()
         {
             string testName = "T4CG_Basic_CS";
@@ -113,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Northwind_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Northwind_CS")]
         public void T4CodeGenTest_Northwind()
         {
             string testName = "T4CG_Northwind_CS";
@@ -129,7 +129,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_ComplexType_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_ComplexType_CS")]
         public void T4CodeGenTest_ComplexTypes()
         {
             string testName = "T4CG_ComplexType_CS";
@@ -148,7 +148,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Conflicts_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Conflicts_CS")]
         public void T4CodeGenTest_ConflictTypes()
         {
             string testName = "T4CG_Conflicts_CS";
@@ -167,7 +167,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_Composition_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_Composition_CS")]
         public void T4CodeGenTest_CompositionTypes()
         {
             string testName = "T4CG_Composition_CS";
@@ -185,7 +185,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_VariableNames_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_VariableNames_CS")]
         public void T4CodeGenTest_VariableNames()
         {
             string testName = "T4CG_VariableNames_CS";
@@ -202,7 +202,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_VBCodeGenError_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_VBCodeGenError_CS")]
         public void T4CodeGenTest_VBCodeGenError()
         {
             string testName = "T4CG_VBCodeGenError_CS";
@@ -231,7 +231,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "T4CG_VBCodeGenTest_VB")]
+        [DeploymentItem(@"ProjectPath.txt", "T4CG_VBCodeGenTest_VB")]
         public void T4CodeGenTest_VBCodeGenTest()
         {
             Type[] domainServiceTypes = new Type[] {};

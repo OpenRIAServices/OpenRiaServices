@@ -442,7 +442,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Checks which constructor gets selected for an attribute when the actual default value is passed as parameter")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CUST_ATTR_CS")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CUST_ATTR_CS")]
         public void CodeGen_CustomAttrGen_CtrSelectorTest()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_CUST_ATTR_CS", /*isCSharp*/ true, /*useFullTypeNames*/ false, new Type[] { typeof(DummyDomainService) }))

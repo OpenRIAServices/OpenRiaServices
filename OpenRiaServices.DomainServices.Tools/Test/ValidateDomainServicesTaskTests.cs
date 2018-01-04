@@ -8,7 +8,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     [TestClass]
     public class ValidateDomainServicesTaskTests
     {
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "VDST1")]
+        [DeploymentItem(@"ProjectPath.txt", "VDST1")]
         [Description("ValidateDomainServicesTask runs succesfully for a well-formed DomainService")]
         [TestMethod]
         public void ValidateDomainServicesTaskRunsSuccessfully()

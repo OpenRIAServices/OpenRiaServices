@@ -9,8 +9,6 @@ using System.Text;
 
 namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 {
-    
-    
     /// <summary>
     ///This is a test class for WcfTraceServiceTest and is intended
     ///to contain all WcfTraceServiceTest Unit Tests
@@ -19,60 +17,11 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
     public class WcfTraceServiceTest
     {
 
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
-        #region Additional test attributes
-        // 
-        //You can use the following additional attributes as you write your tests:
-        //
-        //Use ClassInitialize to run code before running the first test in the class
-        //[ClassInitialize()]
-        //public static void MyClassInitialize(TestContext testContext)
-        //{
-        //}
-        //
-        //Use ClassCleanup to run code after all tests in a class have run
-        //[ClassCleanup()]
-        //public static void MyClassCleanup()
-        //{
-        //}
-        //
-        //Use TestInitialize to run code before running each test
-        //[TestInitialize()]
-        //public void MyTestInitialize()
-        //{
-        //}
-        //
-        //Use TestCleanup to run code after each test has run
-        //[TestCleanup()]
-        //public void MyTestCleanup()
-        //{
-        //}
-        //
-        #endregion
-
         [TestMethod()]
         [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationFeedTest()
         {
-            SyndicationFeed actual = WcfTraceService_Accessor.CreateTraceSyndicationFeed();
+            SyndicationFeed actual = WcfTraceService.CreateTraceSyndicationFeed();
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Title.Text == "WCF RIA Service Traces");
         }
@@ -81,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceXmlTest()
         {
-            Stream actual = WcfTraceService_Accessor.CreateTraceXml();
+            Stream actual = WcfTraceService.CreateTraceXml();
             Assert.IsNotNull(actual);
             XElement root = XElement.Load(actual);
             Assert.IsTrue(root.Name.LocalName == "Traces");
@@ -91,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceHtmlTest()
         {
-            Stream actual = WcfTraceService_Accessor.CreateTraceHtml();
+            Stream actual = WcfTraceService.CreateTraceHtml();
             Assert.IsNotNull(actual);
             MemoryStream ms = new MemoryStream();
             actual.CopyTo(ms);
@@ -104,7 +53,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationItemTest()
         {
-            SyndicationItem actual = WcfTraceService_Accessor.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
+            SyndicationItem actual = WcfTraceService.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Title.Text == "Information: Security Impersonation succeeded at the server.");
             Assert.IsTrue(actual.PublishDate == new DateTimeOffset(634052379151696992, TimeSpan.Zero));
@@ -121,7 +70,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         public void InstanceTest()
         {
             WcfTraceService actual;
-            actual = WcfTraceService_Accessor.Instance;
+            actual = WcfTraceService.Instance;
             Assert.IsNotNull(actual);
         }
     }

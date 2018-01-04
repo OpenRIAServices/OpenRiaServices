@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
+        [DeploymentItem(@"ProjectPath.txt", "STT")]
         [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types")]
         [TestMethod]
         public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties()
@@ -99,7 +99,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "STT")]
+        [DeploymentItem(@"ProjectPath.txt", "STT")]
         [Description("CreateOpenRiaClientFilesTask produces error when detecting existing generated entity")]
         [TestMethod]
         public void SharedTypes_CodeGen_Errors_On_Existing_Generated_Entity()

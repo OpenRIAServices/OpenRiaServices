@@ -23,9 +23,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             _logger = new ConsoleLogger();
         }
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks", "CG_Scenarios_Complex")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Complex")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs")]
+        [DeploymentItem(@"Baselines\Default\Mocks", "CG_Scenarios_Complex")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Complex")]
+        [DeploymentItem(@"Shared\Test.shared.cs")]
         [TestMethod]
         public void TestClientCodegen_ComplexTypeScenarios()
         {
@@ -51,9 +51,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs")]
+        [DeploymentItem(@"Baselines\Default\Mocks", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
+        [DeploymentItem(@"Shared\Test.shared.cs")]
         [TestMethod]
         public void TestClientCodegen_ComplexTypeScenarios_RootNs_FullTypeNames()
         {
@@ -74,8 +74,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Comp")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Comp")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Comp")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Comp")]
         [TestMethod]
         public void TestClientCodegen_CompositionScenarios()
         {
@@ -91,8 +91,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_CI")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_CI")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_CI")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_CI")]
         [TestMethod]
         public void TestClientCodegen_CompositionInheritanceScenarios()
         {
@@ -117,8 +117,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", new Type[] { typeof(InvalidAssociationScenarios) }, error);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_MP")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_MP")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_MP")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_MP")]
         [TestMethod]
         public void TestClientCodegen_MultipleDomainServices()
         {
@@ -130,8 +130,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     typeof(TestDomainServices.EF.Northwind), typeof(TestDomainServices.LTS.Northwind)}, "C#", sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_MultipleDomainServices_FullTypes()
         {
@@ -142,8 +142,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 new Type[] { typeof(TestDomainServices.EF.Northwind), typeof(TestDomainServices.LTS.Northwind) }, "C#", sharedFiles, true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_EFDbContext")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFDbContext")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFDbContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFDbContext")]
         [TestMethod]
         public void TestClientCodegen_EFDbCtxDomainServices()
         {
@@ -154,8 +154,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.DbCtx.Northwind), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFDbContext_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFDbContext_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_EFDbCtxDomainServices_FullTypes()
         {
@@ -166,8 +166,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.DbCtx.Northwind), sharedFiles, true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
         [TestMethod]
         public void TestClientCodegen_EFCFDomainServices()
         {
@@ -178,8 +178,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                typeof(TestDomainServices.EFCF.Northwind), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFCFDbContext_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_EFCFDbContext_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFCFDbContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCFDbContext_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_EFCFDomainServices_FullTypes()
         {
@@ -190,8 +190,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.EFCF.Northwind), sharedFiles, true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_LTSNW")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_LTSNW")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_LTSNW")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_LTSNW")]
         [TestMethod]
         public void TestClientCodegen_LTSNorthwindScenarios()
         {
@@ -202,8 +202,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(DataTests.Scenarios.LTS.Northwind.LTS_NorthwindScenarios), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_EF_Inheritance")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_EF_Inheritance")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_EF_Inheritance")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_EF_Inheritance")]
         [TestMethod]
         [Description("Validates baseline of simple inheritance model using LTS model")]
         public void TestClientCodegen_EF_Inheritance()
@@ -215,8 +215,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(DataTests.Inheritance.EF.EF_Inheritance_DomainService), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_LTS_Inheritance")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_LTS_Inheritance")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_LTS_Inheritance")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_LTS_Inheritance")]
         [TestMethod]
         [Description("Validates baseline of simple inheritance model using LTS model")]
         public void TestClientCodegen_LTS_Inheritance()
@@ -228,8 +228,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(DataTests.Inheritance.LTS.LTS_Inheritance_DomainService), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Include")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Include")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Include")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Include")]
         [TestMethod]
         public void TestClientCodegen_IncludeScenarios()
         {
@@ -240,8 +240,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.IncludeScenariosTestProvider), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Inherit")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Inherit")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Inherit")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Inherit")]
         [TestMethod]
         public void TestClientCodegen_InheritanceScenarios()
         {
@@ -257,8 +257,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.TestProvider_Inheritance1), "C#", new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_Inherit_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Inherit_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_Inherit_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Inherit_FullTypes")]
         [TestMethod]
         public void TestClientCodegen_InheritanceScenarios_FullTypes()
         {
@@ -274,10 +274,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.TestProvider_Inheritance1), "C#", new string[0], true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_INTF")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_INTF")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_INTF")]
+        [DeploymentItem(@"Shared\Mock.shared.cs")]
+        [DeploymentItem(@"Shared\Mock.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_INTF")]
         [TestMethod]
         public void TestClientCodegen_InterfaceInheritanceScenarios()
         {
@@ -294,8 +294,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_Secure")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_Secure")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Secure")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Secure")]
         [TestMethod]
         public void TestClientCodegen_RequiresSecureEndpointScenarios()
         {
@@ -304,10 +304,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.TestService_RequiresSecureEndpoint), "C#", new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios")]
+        [DeploymentItem(@"Shared\Mock.shared.cs")]
+        [DeploymentItem(@"Shared\Mock.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios")]
         [TestMethod]
         public void TestClientCodegen_Scenarios_CodeGen()
         {
@@ -326,10 +326,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_1")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_1")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_1")]
+        [DeploymentItem(@"Shared\Mock.shared.cs")]
+        [DeploymentItem(@"Shared\Mock.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_FullTypes_1")]
         [TestMethod]
         public void TestClientCodegen_Scenarios_CodeGen_FullTypes()
         {
@@ -348,12 +348,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_1")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_1")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_1")]
+        [DeploymentItem(@"Shared\Mock.shared.cs")]
+        [DeploymentItem(@"Shared\Mock.shared.vb")]
+        [DeploymentItem(@"Shared\Test.shared.cs")]
+        [DeploymentItem(@"Shared\Test.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_1")]
         [TestMethod]
         public void TestClientCodegen_Scenarios()
         {
@@ -384,12 +384,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_2")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.vb")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_2")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_2")]
+        [DeploymentItem(@"Shared\Mock.shared.cs")]
+        [DeploymentItem(@"Shared\Mock.shared.vb")]
+        [DeploymentItem(@"Shared\Test.shared.cs")]
+        [DeploymentItem(@"Shared\Test.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_FullTypes_2")]
         [TestMethod]
         public void TestClientCodegen_Scenarios_FullTypes()
         {
@@ -420,8 +420,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_3")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_3")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_3")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_3")]
         [TestMethod]
         [Description("Generated code should include error messages from attributes that throw exceptions")]
         public void TestClientCodeGen_AttributeThrowing()
@@ -430,8 +430,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(TestDomainServices.AttributeThrowingDomainService), string.Empty, new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_4")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_4")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_4")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_4")]
         [TestMethod]
         [Description("Generated code in VB should correctly handle root namespace inside VB project")]
         public void VBRootNamespaceTest()
@@ -441,8 +441,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 new Type[] { typeof(VBRootNamespaceTest.VBRootNamespaceTestDomainService), typeof(VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner), typeof(VBRootNamespaceTest2.VBRootNamespaceTestDomainService2) }, "VB", new string[0], "VBRootNamespaceTest", false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_5")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_FullTypes_5")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_5")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_FullTypes_5")]
         [TestMethod]
         [Description("Generated code in VB should correctly handle root namespace inside VB project")]
         public void VBRootNamespaceTest_FullTypes()
@@ -453,10 +453,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 "VB", new string[0], "VBRootNamespaceTest", true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities", "CG_Cities")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Cities")]
+        [DeploymentItem(@"Baselines\Default\Cities", "CG_Cities")]
+        [DeploymentItem(@"Cities\Cities.shared.cs")]
+        [DeploymentItem(@"Cities\Cities.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Cities")]
         [TestMethod]
         [Description("Create client proxies for City domain service and compare to known good copy")]
         public void TestCityClientProxies()
@@ -472,12 +472,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks", "CG_Mocks")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Mocks\MockDomainServices.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Mocks")]
+        [DeploymentItem(@"Baselines\Default\Mocks", "CG_Mocks")]
+        [DeploymentItem(@"Mocks\MockDomainServices.cs")]
+        [DeploymentItem(@"Baselines\Default\Cities")]
+        [DeploymentItem(@"Cities\Cities.shared.cs")]
+        [DeploymentItem(@"Cities\Cities.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Mocks")]
         [TestMethod]
         [Description("Create client proxies for MockCustomer domain service and compare to known good copy")]
         public void TestMockCustomerProviderClientProxies()
@@ -493,8 +493,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Mocks", "CG_Mocks", "MockCustomers.g", typeof(MockCustomerDomainService), sharedFiles, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS", "CG_CATLTS")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATLTS")]
+        [DeploymentItem(@"Baselines\Default\LTS", "CG_CATLTS")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CATLTS")]
         [TestMethod]
         [Description("Create client proxies for Linq to Sql domain service and compare to known good copy")]
         public void TestCatalogLTSClientProxies()
@@ -503,8 +503,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_CATLTS", "Catalog_LTS.g", typeof(TestDomainServices.LTS.Catalog), new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS", "CG_NWLTS")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_NWLTS")]
+        [DeploymentItem(@"Baselines\Default\LTS", "CG_NWLTS")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_NWLTS")]
         [TestMethod]
         public void TestNorthwindLTSClientProxies()
         {
@@ -512,8 +512,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_NWLTS", "Northwind_LTS.g", typeof(TestDomainServices.LTS.Northwind), new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF", "CG_NWEF")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_NWEF")]
+        [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_NWEF")]
         [TestMethod]
         public void TestNorthwindEFClientProxies()
         {
@@ -521,8 +521,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EF.g", typeof(TestDomainServices.EF.Northwind), new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF", "CG_CATEF")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATEF")]
+        [DeploymentItem(@"Baselines\Default\EF", "CG_CATEF")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CATEF")]
         [TestMethod]
         [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
         public void TestCatalogEFClientProxies()
@@ -531,8 +531,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEF", "Catalog_EF.g", typeof(TestDomainServices.EF.Catalog), new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF", "CG_CATEFDbCtx")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CATEFDbCtx")]
+        [DeploymentItem(@"Baselines\Default\EF", "CG_CATEFDbCtx")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CATEFDbCtx")]
         [TestMethod]
         [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
         public void TestCatalogEFDbCtxClientProxies()
@@ -541,8 +541,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFDbCtx.g", typeof(TestDomainServices.DbCtx.Catalog), new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CONFLICT_RESOLUTION")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CONFLICT_RESOLUTION")]
         [TestMethod]
         [Description("Create client proxies and verifies that entity type conflicts are resolved correctly.")]
         public void TestClientCodeGen_ConflictResolution()
@@ -558,8 +558,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_CONFLICT_RESOLUTION", "ConflictResolution.EntityConflicts.g", providerTypes, null, new string[0], false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_CONFLICT_RESOLUTION_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_CONFLICT_RESOLUTION_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_CONFLICT_RESOLUTION_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CONFLICT_RESOLUTION_FullTypes")]
         [TestMethod]
         [Description("Create client proxies and verifies that entity type conflicts are resolved correctly.")]
         public void TestClientCodeGen_ConflictResolution_FullTypes()
@@ -682,10 +682,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", typeof(GlobalNamespaceTest_DomainService_Invalid), error1, error2);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Global")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Global")]
+        [DeploymentItem(@"Shared\Global.shared.cs")]
+        [DeploymentItem(@"Shared\Global.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Global")]
         [TestMethod] 
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator.")]
@@ -714,10 +714,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Global_Full")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global_Full")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Global_Full")]
+        [DeploymentItem(@"Shared\Global.shared.cs")]
+        [DeploymentItem(@"Shared\Global.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Global_Full")]
         [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator using full type names.")]
@@ -747,10 +747,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Global")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Global")]
+        [DeploymentItem(@"Shared\Global.shared.cs")]
+        [DeploymentItem(@"Shared\Global.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Global")]
         [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator when the RootNamespace is empty.")]
@@ -781,10 +781,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_Global_Full")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Global.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Global_Full")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Global_Full")]
+        [DeploymentItem(@"Shared\Global.shared.cs")]
+        [DeploymentItem(@"Shared\Global.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Global_Full")]
         [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator using full type names when the RootNamespace is empty.")]
@@ -815,10 +815,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_SystemNamespace")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\SystemNamespace.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\SystemNamespace.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_SystemNamespace")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_SystemNamespace")]
+        [DeploymentItem(@"Shared\SystemNamespace.shared.cs")]
+        [DeploymentItem(@"Shared\SystemNamespace.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_SystemNamespace")]
         [TestMethod]
         [WorkItem(810123)]
         [Description("Verifies that codegen succeeds when System namespaces are included in user domain services")]
@@ -850,10 +850,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\Scenarios", "CG_SystemNamespace_Full")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\SystemNamespace.shared.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\SystemNamespace.shared.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_SystemNamespace_Full")]
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_SystemNamespace_Full")]
+        [DeploymentItem(@"Shared\SystemNamespace.shared.cs")]
+        [DeploymentItem(@"Shared\SystemNamespace.shared.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_SystemNamespace_Full")]
         [TestMethod]
         [WorkItem(810123)]
         [Description("Verifies that codegen succeeds when System namespaces are included in user domain services using full names")]
@@ -885,8 +885,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios", "CG_Scenarios_SharedEntities")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_Scenarios_SharedEntities")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_SharedEntities")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_SharedEntities")]
         [TestMethod]
         [Description("Test that entities shared across two domain services can be generated.")]
         public void TestClientCodegen_SharedEntities()

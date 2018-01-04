@@ -63,7 +63,7 @@ public <#= this.DomainContextTypeName #>() :
 }
 		
 public <#= this.DomainContextTypeName #>(Uri serviceUri) : 
-	this(DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
+	this(OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
 {
 	
 }

@@ -132,6 +132,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// Direct test of the query pipeline
         /// </summary>
         [TestMethod]
+        [TestCategory("DatabaseTest")]
+        [Ignore] // Re enable test once databases are setup on build server
         public void DomainService_DirectQuery()
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
@@ -332,6 +334,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
 
         [TestMethod]
+        [TestCategory("DatabaseTest")]
+        [Ignore] // Re enable test once databases are setup on build server
         public void TestDomainService_QueryDirect()
         {
             TestDomainServices.LTS.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.LTS.Catalog>(DomainOperationType.Query);

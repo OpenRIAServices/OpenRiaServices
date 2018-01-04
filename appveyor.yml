@@ -4,7 +4,7 @@ configuration:
 - Signed
 platform: Any CPU
 before_build:
-- cmd: appveyor-retry nuget restore RiaServices.sln
+- ps: "appveyor-retry dotnet restore OpenRiaServices.DomainServices.Client\\Framework\\Silverlight\\project.json\nappveyor-retry nuget restore RiaServices.sln"
 build:
   project: RiaServices.sln
   parallel: true
