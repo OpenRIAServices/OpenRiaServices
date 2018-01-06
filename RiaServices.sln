@@ -29,11 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contrib", "Contrib", "{9FBE785E-A32B-454B-82BB-147D2F0B7FFF}"
-	ProjectSection(SolutionItems) = preProject
-		Contrib.txt = Contrib.txt
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{0254F915-6CD6-43E8-8639-B925CE5233A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server", "OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
@@ -146,8 +141,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCodeFirstModels", "OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj", "{A94B2843-C68E-4548-9168-63469D625935}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server.UnitTesting", "OpenRiaServices.DomainServices.Server.UnitTesting\Framework\OpenRiaServices.DomainServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RiaServicesContrib.DomainServices.EntityFramework", "RiaServicesContrib.DomainServices.EntityFramework\Framework\RiaServicesContrib.DomainServices.EntityFramework.csproj", "{E078A28C-0C43-48E4-AFE0-37101C07B9BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Portable\OpenRiaServices.DomainServices.Client.csproj", "{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}"
 EndProject
@@ -468,12 +461,6 @@ Global
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -582,7 +569,6 @@ Global
 		{A87DF95C-1852-480D-8FDC-4468D4EB738E} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{A94B2843-C68E-4548-9168-63469D625935} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{E078A28C-0C43-48E4-AFE0-37101C07B9BD} = {9FBE785E-A32B-454B-82BB-147D2F0B7FFF}
 		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8} = {0254F915-6CD6-43E8-8639-B925CE5233A6}
 		{E7D958FE-3D14-4EAD-B810-10471757CC4F} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{9CFB422B-2995-4813-831C-2BDC013B68BF} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
