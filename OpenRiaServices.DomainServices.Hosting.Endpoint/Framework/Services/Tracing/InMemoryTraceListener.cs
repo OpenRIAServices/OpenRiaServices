@@ -99,5 +99,13 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             return entries.Reverse().ToArray();
         }
+
+        /// <summary>
+        /// Provide unit tests with a way to reset the trace entries
+        /// </summary>
+        internal static void Clear()
+        {
+            entries = new ConcurrentQueue<XElement>();
+        }
     }
 }

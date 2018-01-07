@@ -8,7 +8,7 @@ using System.IO;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
+namespace OpenRiaServices.DomainServices.Hosting.OData.Test
 {
     /// <summary>
     /// Provides a helper class for tests that rely on a local web
@@ -164,8 +164,11 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
         /// <summary>httpruntime config section (goes to: /configuration/system.web/httpRuntime)</summary>
         public static string WebConfigHttpRuntimeFragment
         {
-            get;
-            set;
+            get
+            {
+                //return string.Empty;
+                return "<httpRuntime targetFramework=\"4.5\" />";
+            }
         }
 
         /// <summary>Text fragment to set up the compilation section in a standard web.config file.</summary>
@@ -270,6 +273,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
             configContents +=
                 " </connectionStrings>\r\n" +
                 " <system.web>\r\n" +
+                " <globalization culture=\"en-US\" uiCulture=\"en-US\" />\r\n" +
                 (WebConfigTrustLevelFragment ?? string.Empty) +
                 WebConfigCompilationFragment +
                 (WebConfigHttpRuntimeFragment ?? string.Empty) +
@@ -278,9 +282,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
                 WebConfigCodeDomFragment +
                 WebConfigServiceModelFragment +
                 "</configuration>\r\n";
-
-            // Clear httpRuntime section to prevent subsequently created web apps from injecting httpRuntime settings unknowingly
-            WebConfigHttpRuntimeFragment = null;
 
             File.WriteAllText(Path.Combine(physicalPath, "web.config"), configContents);
 

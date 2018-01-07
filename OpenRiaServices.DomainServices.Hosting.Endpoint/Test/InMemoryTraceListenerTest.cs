@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         public void GetEntriesTest()
         {
             XElement[] actual;
-            InMemoryTraceListener_Accessor.entries = new System.Collections.Concurrent.ConcurrentQueue<XElement>();
+            InMemoryTraceListener.Clear();
             InMemoryTraceListener target = new InMemoryTraceListener();
             target.Write("System.ServiceModel Information: 1 : ");
             target.WriteLine("<TraceRecord xmlns=\"http://schemas.microsoft.com/2004/10/E2ETraceEvent/TraceRecord\" Severity=\"Information\"><TraceIdentifier>http://msdn.microsoft.com/en-US/library/System.ServiceModel.Security.SecurityImpersonationSuccess.aspx</TraceIdentifier><Description>Security Impersonation succeeded at the server.</Description><AppDomain>/LM/W3SVC/1/ROOT/riatracing-1-129141143812693125</AppDomain><ExtendedData xmlns=\"http://schemas.microsoft.com/2006/08/ServiceModel/SecurityImpersonationTraceRecord\"><OperationAction>http://tempuri.org/WcfTraceService/GetTrace</OperationAction><OperationName>GetTrace</OperationName></ExtendedData></TraceRecord>");
@@ -65,7 +65,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
             target.WriteLine("foobarbaz");
             target.Write("System.ServiceModel Information: 3 : ");
             target.WriteLine("<TraceRecord xmlns=\"http://schemas.microsoft.com/2004/10/E2ETraceEvent/TraceRecord\" Severity=\"Information\"><TraceIdentifier>http://msdn.microsoft.com/en-US/library/System.ServiceModel.Security.SecurityImpersonationSuccess.aspx</TraceIdentifier><Description>Security Impersonation succeeded at the server.</Description><AppDomain>/LM/W3SVC/1/ROOT/riatracing-1-129141143812693125</AppDomain><ExtendedData xmlns=\"http://schemas.microsoft.com/2006/08/ServiceModel/SecurityImpersonationTraceRecord\"><OperationAction>http://tempuri.org/WcfTraceService/GetTrace</OperationAction><OperationName>GetTrace</OperationName></ExtendedData></TraceRecord>");
-            actual = InMemoryTraceListener_Accessor.GetEntries();
+            actual = InMemoryTraceListener.GetEntries();
             Assert.IsNotNull(actual);
             Assert.IsTrue(actual.Length == 3);
             int lastEntryCode = 4;
@@ -85,11 +85,11 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
         public void MaxEntriesTest()
         {
-            InMemoryTraceListener_Accessor.MaxEntries = 500;
-            Assert.IsTrue(InMemoryTraceListener_Accessor.MaxEntries == 500);
+            InMemoryTraceListener.MaxEntries = 500;
+            Assert.IsTrue(InMemoryTraceListener.MaxEntries == 500);
             try
             {
-                InMemoryTraceListener_Accessor.MaxEntries = -1;
+                InMemoryTraceListener.MaxEntries = -1;
                 Assert.Fail("InMemoryTraceListener.MaxEntries accepted -1 as a value");
             }
             catch (Exception e)

@@ -133,6 +133,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.TextTemplate", "OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.TextTemplate.Test", "OpenRiaServices.DomainServices.Tools.TextTemplate\Test\OpenRiaServices.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A94B2843-C68E-4548-9168-63469D625932} = {A94B2843-C68E-4548-9168-63469D625932}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Data.DomainServices", "OpenRiaServices.Data.DomainServices\Framework\OpenRiaServices.Data.DomainServices.csproj", "{835586F6-F1F4-4A3F-A24E-795D37143F4B}"
 EndProject

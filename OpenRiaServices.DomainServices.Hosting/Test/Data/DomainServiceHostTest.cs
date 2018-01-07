@@ -9,7 +9,7 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using OpenRiaServices.Common.Test;
 using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Server;
+//using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -144,7 +144,9 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-#if !CODECOV
+#if !SIGNED
+        [Ignore]
+#endif
         [TestMethod]
         [Description("Verifies the SilverlightFaultBehavior can be created in partial trust")]
         public void DomainServiceHost_MediumTrust_SilverlightFaultBehavior()
@@ -157,6 +159,9 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             new SilverlightFaultBehavior();
         }
 
+#if !SIGNED
+        [Ignore]
+#endif
         [TestMethod]
         [Description("Verifies the DomainServicesSection can be created in partial trust")]
         public void DomainServiceHost_MediumTrust_DomainServicesSection()
@@ -168,11 +173,10 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
         {
             new DomainServicesSection();
         }
-#endif
     }
 
     [EnableClientAccess]
-    public class MyDomainService : DomainService
+    public class MyDomainService : OpenRiaServices.DomainServices.Server.DomainService
     {
         public IQueryable<MyDomainService_Entity> GetEntities()
         {

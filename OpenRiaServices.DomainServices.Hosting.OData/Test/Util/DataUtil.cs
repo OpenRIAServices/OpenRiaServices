@@ -17,7 +17,7 @@ namespace System.Data.Test.Astoria
         public static string DefaultDataSource
         {
             [DebuggerStepThrough]
-            get { return @".\SQLEXPRESS"; }
+            get { return @"(localdb)\MSSQLLocalDB;"; }
         }
 
         /// <summary>Provider name, suitable for use with EntityConnectionString.</summary>
