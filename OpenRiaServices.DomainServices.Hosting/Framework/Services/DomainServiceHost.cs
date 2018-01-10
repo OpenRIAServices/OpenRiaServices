@@ -111,15 +111,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
                 implementedContracts = new Dictionary<string, ContractDescription>();
 
-                DomainServicesSection config = (DomainServicesSection)WebConfigurationManager.GetSection("system.serviceModel/domainServices");
-                if (config == null)
-                {
-                    // Make sure we have a config instance, as that's where we put our default configuration. If we don't do this, our 
-                    // binary endpoint won't be used when someone doesn't have a <domainServices/> section in their web.config.
-                    config = new DomainServicesSection();
-                    config.InitializeDefaultInternal();
-                }
-
+                DomainServicesSection config = DomainServicesSection.Current;
                 foreach (ProviderSettings provider in config.Endpoints)
                 {
                     DomainServiceEndpointFactory endpointFactory = DomainServiceHost.CreateEndpointFactoryInstance(provider);
