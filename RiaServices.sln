@@ -85,7 +85,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientClassLib2", "OpenRiaS
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SilverlightVbDataClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightVb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\SilverlightVb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test.Vb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
 EndProject
@@ -159,6 +159,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Netstandard", "Netstandard", "{20D333D2-D0A4-4D28-BB27-494A8AE297E3}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.xproj", "{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "snk", "snk", "{1C67164F-6163-47D1-B2B5-C8A2B88842CD}"
+	ProjectSection(SolutionItems) = preProject
+		snk\OpenRiaServices.snk = snk\OpenRiaServices.snk
+		snk\Tests.snk = snk\Tests.snk
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -578,6 +584,7 @@ Global
 		{FDE752B0-6A65-4457-8CDC-4D347B51E67C} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{20D333D2-D0A4-4D28-BB27-494A8AE297E3} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
 		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64} = {20D333D2-D0A4-4D28-BB27-494A8AE297E3}
+		{1C67164F-6163-47D1-B2B5-C8A2B88842CD} = {53F7B128-2A99-4C85-B990-18CCE502EDCC}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Desktop.vsmdi

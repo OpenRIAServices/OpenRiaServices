@@ -31,6 +31,7 @@
     <DefineConstants Condition="'$(DefineTrace)' != ''">$(DefineConstants),SIGNED=1</DefineConstants>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
+	<AssemblyOriginatorKeyFile Condition="$(MSBuildProjectFile.Contains('.Test.'))">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
