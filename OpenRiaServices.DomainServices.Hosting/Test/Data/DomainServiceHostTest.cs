@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-#if !SIGNED
+#if !MEDIUM_TRUST
         [Ignore]
 #endif
         [TestMethod]
@@ -159,7 +159,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             new SilverlightFaultBehavior();
         }
 
-#if !SIGNED
+#if !MEDIUM_TRUST
         [Ignore]
 #endif
         [TestMethod]

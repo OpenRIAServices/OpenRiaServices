@@ -1585,7 +1585,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             }
         }
 
-#if SIGNED
+#if MEDIUM_TRUST
 
         [TestMethod]
         [Description("Verifies the medium trust sandbox calls back as SecurityTransparent")]

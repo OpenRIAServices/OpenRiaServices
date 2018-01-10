@@ -1009,7 +1009,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         public void PersonnelServiceDocument()
         {
             LocalWebServerHelper.WebConfigTrustLevelFragment = null;
-#if !SIGNED
+#if !MEDIUM_TRUST
             foreach (string trustLevel in new[] { "  <trust level=\"Full\"/>\r\n", string.Empty })
 #else
             foreach (string trustLevel in new[] { "  <trust level=\"Medium\"/>\r\n", string.Empty })
@@ -1087,7 +1087,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         public void PersonnelMetadataDocument()
         {
             LocalWebServerHelper.WebConfigTrustLevelFragment = null;
-#if !SIGNED
+#if !MEDIUM_TRUST
             foreach (string trustLevel in new[] { "  <trust level=\"Full\"/>\r\n", string.Empty })
 #else
             foreach (string trustLevel in new[] { "  <trust level=\"Medium\"/>\r\n", string.Empty })
@@ -1276,7 +1276,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
             };
 
             LocalWebServerHelper.WebConfigTrustLevelFragment = null;
-#if !SIGNED
+#if !MEDIUM_TRUST
             foreach (string trustLevel in new[] { "  <trust level=\"Full\"/>\r\n", string.Empty })
 #else
             foreach (string trustLevel in new[] { "  <trust level=\"Medium\"/>\r\n", string.Empty })
@@ -1546,7 +1546,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
             };
 
             LocalWebServerHelper.WebConfigTrustLevelFragment = null;
-#if !SIGNED
+#if !MEDIUM_TRUST
             foreach (string trustLevel in new[] { "  <trust level=\"Full\"/>\r\n", string.Empty })
 #else
             foreach (string trustLevel in new[] { "  <trust level=\"Medium\"/>\r\n", string.Empty })
@@ -1716,7 +1716,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         public void IgnoreExcluded()
         {
             LocalWebServerHelper.WebConfigTrustLevelFragment = null;
-#if !SIGNED
+#if !MEDIUM_TRUST
             foreach (string trustLevel in new[] { "  <trust level=\"Full\"/>\r\n", string.Empty })
 #else
             foreach (string trustLevel in new[] { "  <trust level=\"Medium\"/>\r\n", string.Empty })
