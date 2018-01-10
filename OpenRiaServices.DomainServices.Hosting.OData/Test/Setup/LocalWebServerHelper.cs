@@ -153,7 +153,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
                        "   <serviceHostingEnvironment aspNetCompatibilityEnabled=\"true\"/>" +
                        "   <domainServices>\r\n" +
                        "     <endpoints>\r\n" +
-                       "       <add name=\"" + TestUtil.ODataEndPointName + "\" type=\"OpenRiaServices.DomainServices.Hosting.ODataEndpointFactory, OpenRiaServices.DomainServices.Hosting.OData\" />\r\n" +
+                       "       <add name=\"" + TestUtil.ODataEndPointName + "\" type=\"" + typeof(ODataEndpointFactory).AssemblyQualifiedName + "\" />\r\n" +
                        "     </endpoints>\r\n" +
                        "   </domainServices>\r\n" +
                        "</system.serviceModel>\r\n";
@@ -245,7 +245,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
             //   Setting Debug to 'true' includes symbols in the @ServiceHost directive.
             //
             string serviceContents =
-                "<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"OpenRiaServices.DomainServices.Hosting.DomainServiceHostFactory, OpenRiaServices.DomainServices.Hosting\" Service=\"" + serviceType.FullName.Replace('+', '.') + "\" %>\r\n";
+                $"<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"{typeof(DomainServiceHostFactory).AssemblyQualifiedName}\" Service=\"{(serviceType.FullName.Replace('+', '.'))}\" %>\r\n";
 
             //DomainDataServiceTest.TheDataService\" %>\r\n" +
             //"namespace DomainDataServiceTest\r\n" +
@@ -259,7 +259,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
                 "<configuration>\r\n" +
                 "  <configSections>\r\n" +
                 "    <sectionGroup name=\"system.serviceModel\">\r\n" +
-                "      <section name=\"domainServices\" type=\"OpenRiaServices.DomainServices.Hosting.DomainServicesSection, OpenRiaServices.DomainServices.Hosting\" allowDefinition=\"MachineToApplication\" requirePermission=\"false\" />\r\n" +
+                "      <section name=\"domainServices\" type=\"" + typeof(DomainServicesSection).AssemblyQualifiedName + "\" allowDefinition=\"MachineToApplication\" requirePermission=\"false\" />\r\n" +
                 "    </sectionGroup>\r\n" +
                 "  </configSections>\r\n" +
                 " <connectionStrings>\r\n";

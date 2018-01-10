@@ -168,9 +168,9 @@
       <Project>{A1407522-0D18-4D64-A5B9-8E5C569AAA51}</Project>
       <Name>SilverlightVbDataClients</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightVb\SilverlightVb.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj">
       <Project>{3E32C394-4E3E-4684-9AF0-360996D4E970}</Project>
-      <Name>SilverlightVb</Name>
+      <Name>OpenRiaServices.DomainServices.Client.Test.Vb</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\OpenRiaServices.DomainServices.Client.Test.csproj">
       <Project>{18708280-F972-487E-A86C-45D518ACF831}</Project>
