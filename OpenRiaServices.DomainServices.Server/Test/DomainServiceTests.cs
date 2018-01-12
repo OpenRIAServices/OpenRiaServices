@@ -777,7 +777,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
 
         [TestMethod]
-        [Ignore] // This test get different results depending on test execution order, (but always fail)
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore] // This test get different results depending on test execution order, (but always fail)
         public void TDPRegistration_TestDuplicateRegistration()
         {
             DomainServiceDescription descriptionA = DomainServiceDescription.GetDescription(typeof(ProviderB));
