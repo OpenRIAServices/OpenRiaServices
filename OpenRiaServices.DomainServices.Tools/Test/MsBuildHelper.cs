@@ -215,7 +215,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             public void Initialize(IEventSource eventSource)
             {
-                eventSource.ErrorRaised += (s, a) => this._errors.Add(a.Message);
+                eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
             }
 
             public void Shutdown() { }
