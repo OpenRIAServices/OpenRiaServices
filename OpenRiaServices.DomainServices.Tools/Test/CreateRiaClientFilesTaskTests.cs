@@ -64,6 +64,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // ServerOutputPath
                 string serverOutputPath = task.ServerOutputPath;
                 Assert.IsFalse(string.IsNullOrEmpty(serverOutputPath), "Empty server output path");
+
+                // The ServerOutputPath always resolves to Debug since no configuration is set
+#if RELEASE
+                serverOutputPath = serverOutputPath.Replace("Debug", "Release");
+#elif SIGNED
+                serverOutputPath = serverOutputPath.Replace("Debug", "Signed");
+#endif
+
                 Assert.IsTrue(Directory.Exists(serverOutputPath), "Server output path should exist");
                 string dllPath = Path.Combine(serverOutputPath, "ServerClassLib.dll");
                 Assert.IsTrue(File.Exists(dllPath), "Should have found ServerClassLib.dll at " + dllPath);
