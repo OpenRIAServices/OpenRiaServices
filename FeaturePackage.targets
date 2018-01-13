@@ -11,6 +11,9 @@
   <PropertyGroup>
     <SLTargetFrameworkDirectory Condition=" '$(TargetFrameworkDirectory)' == '' ">$(ProgramFiles)\Reference Assemblies\Microsoft\Framework\Silverlight\v5.0</SLTargetFrameworkDirectory>
     <TargetFrameworkSDKDirectory Condition=" '$(TargetFrameworkSDKDirectory)' == '' ">$(ProgramFiles)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client</TargetFrameworkSDKDirectory>
+	
+	<IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
+	<IsTestProject Condition="'$(IsTestProject)' == ''">false</IsTestProject>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -30,8 +33,8 @@
     <!-- Set SIGNED constant for VB projects -->
     <DefineConstants Condition="'$(DefineTrace)' != ''">$(DefineConstants),SIGNED=1</DefineConstants>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
-	<AssemblyOriginatorKeyFile Condition="$(MSBuildProjectFile.Contains('.Test.'))">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
+	<AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
