@@ -44,6 +44,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [TestMethod]
+        [Ignore] // Test is flaky
         public void CodeGen_DomainService_CtorThrows()
         {
             ConsoleLogger logger = new ConsoleLogger();

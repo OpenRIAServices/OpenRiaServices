@@ -16,6 +16,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Thread.CurrentThread.CurrentUICulture
                 = Thread.CurrentThread.CurrentCulture
                     = new System.Globalization.CultureInfo("en-US");
+
+            DomainContext.DomainClientFactory = new Web.WebDomainClientFactory()
+            {
+                ServerBaseUri = TestURIs.RootURI,
+            };
         }
     }
 }

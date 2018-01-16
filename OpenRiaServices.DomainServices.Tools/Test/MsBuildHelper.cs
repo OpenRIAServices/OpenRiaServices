@@ -101,6 +101,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private static Project LoadProject(string projectPath, Engine engine)
         {
+            engine.DefaultToolsVersion = "4.0";
+
             var project = new Project(engine);
             project.Load(projectPath);
 #if SIGNED
@@ -110,6 +112,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 #else
             project.SetProperty("Configuration", "Release");
 #endif
+            project.SetProperty("BuildProjectReferences", "false");
             return project;
         }
 
@@ -215,7 +218,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             public void Initialize(IEventSource eventSource)
             {
-                eventSource.ErrorRaised += (s, a) => this._errors.Add(a.Message);
+                eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
             }
 
             public void Shutdown() { }

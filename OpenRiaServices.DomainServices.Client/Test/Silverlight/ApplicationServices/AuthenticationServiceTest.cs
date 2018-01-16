@@ -432,6 +432,16 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
         // LoggedOut event
         // PropertyChanged/RaisePropertyChanged/OnPropertyChanged
 
+#if !SILVERLIGHT
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            // Make sure all callbacks for async cancellation happens directly
+            // Otherwise we have race conditions for tests with cancel directly after invoke
+            SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
+        }
+#endif
+
         [TestMethod]
         [Description("Tests that cancelling an operation that does not support cancel with throw a NotSupportedException.")]
         public void CancelThrowsWhenNotSupported()
@@ -562,7 +572,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
         public void EndExceptionsCaught()
         {
             ThrowingAuthentication mock = new ThrowingAuthentication();
-            Exception error = new Exception(AuthenticationServiceTest.ErrorMessage); 
+            Exception error = new Exception(AuthenticationServiceTest.ErrorMessage);
             mock.EndError = error;
 
             Action<AuthenticationOperation> callback =
@@ -1516,4 +1526,4 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
         #endregion
     }
- }
+}

@@ -4,7 +4,7 @@ configuration:
 - Signed
 platform: Any CPU
 before_build:
-- cmd: appveyor-retry nuget restore RiaServices.sln
+- ps: "appveyor-retry dotnet restore OpenRiaServices.DomainServices.Client\\Framework\\Silverlight\\project.json\nappveyor-retry nuget restore RiaServices.sln\n.\\Setup-TestDatabases.ps1 -UseSqlCmd"
 build:
   project: RiaServices.sln
   parallel: true
@@ -16,8 +16,10 @@ after_build:
     # Remove signed packages for normal build and the other way around
 
     if ($env:CONFIGURATION -eq "Release") {dir OpenRiaServices.NuGet\bin\*.nupkg | where {$_.Name -match "OpenRiaServices.Signed"} | del }
-
     if ($env:CONFIGURATION -eq "Signed") { dir OpenRiaServices.NuGet\bin\*.nupkg | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del}
 artifacts:
 - path: 'OpenRiaServices.NuGet\bin\*.nupkg'
-test: off
+before_test:
+- ps: start-process 'C:\Program Files (x86)\IIS Express\iisexpress.exe' -ArgumentList "/port:60002","/path:Test\WebsiteFullTrust\" -PassThru
+# Not all test are currently passing, remove the follwoing to run them
+test: off 

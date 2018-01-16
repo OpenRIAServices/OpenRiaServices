@@ -538,7 +538,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             },
             (mock, service, asyncResult) =>
             {
-                ExceptionHelper.ExpectException<DomainOperationException>(
+                ExceptionHelper.ExpectException<SubmitOperationException>(
                     () => Assert.IsNull(service.EndSaveUserMock(asyncResult), "This should fail."),
                     string.Format(Resource.DomainContext_SubmitOperationFailed, WebAuthenticationServiceTest.ErrorMessage));
                 Assert.IsFalse(mock.DomainClient.Submitted,
@@ -574,7 +574,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 Assert.IsTrue(ar.IsCompleted || mock.DomainClient.CancellationRequested,
                     "IAsyncResult should be complete or cancelled.");
 
-                verify(mock, service, ar);
+                try
+                {
+                    verify(mock, service, ar);
+                }
+                catch (Exception ex)
+                {
+                    this.Enqueue(() => { throw ex; });
+                }
 
                 testCompleted = true;
             };
@@ -598,7 +605,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             {
                 this.EnqueueCallback(() => asyncCallback(asyncResult));
             }
-
             this.EnqueueConditional(() => testCompleted);
         }
 

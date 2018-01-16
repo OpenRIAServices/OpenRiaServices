@@ -30,6 +30,10 @@ namespace OpenRiaServices.Common.Test
         [SecuritySafeCritical]
         public static void ExecuteInMediumTrust(Action action)
         {
+#if !MEDIUM_TRUST
+            Assert.Inconclusive("Medium trust is obsolete");
+#endif
+
             SandBoxer.ExecuteInMediumTrust(action.Method, null);
         }
 
@@ -60,7 +64,7 @@ namespace OpenRiaServices.Common.Test
         [SecuritySafeCritical]
         public static void ExecuteInMediumTrust(MethodInfo methodInfo, object parameter)
         {
-#if !SIGNED
+#if !MEDIUM_TRUST
             Assert.Inconclusive("Medium trust is only valid for signed builds");
 #endif
 

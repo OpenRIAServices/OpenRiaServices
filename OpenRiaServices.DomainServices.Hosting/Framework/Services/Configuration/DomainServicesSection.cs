@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Web.Configuration;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -9,6 +10,31 @@ namespace OpenRiaServices.DomainServices.Hosting
     public class DomainServicesSection : ConfigurationSection
     {
         private readonly ConfigurationProperty propEndpoints;
+        private static DomainServicesSection s_Current;
+
+        /// <summary>
+        /// Get DomainServicesSection specified in web.config under "system.serviceModel/domainServices"
+        /// or creates a new one with default settings.
+        /// </summary>
+        public static DomainServicesSection Current
+        {
+            get
+            {
+                if (s_Current != null)
+                    return s_Current;
+
+                DomainServicesSection config = (DomainServicesSection)WebConfigurationManager.GetSection("system.serviceModel/domainServices");
+                if (config == null)
+                {
+                    // Make sure we have a config instance, as that's where we put our default configuration. If we don't do this, our 
+                    // binary endpoint won't be used when someone doesn't have a <domainServices/> section in their web.config.
+                    config = new DomainServicesSection();
+                    config.InitializeDefaultInternal();
+                }
+                s_Current = config;
+                return config;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServicesSection"/> class.

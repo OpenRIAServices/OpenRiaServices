@@ -12,6 +12,7 @@ using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using DbContextModels.Northwind;
 using TestDomainServices.Testing;
+using System.Configuration;
 
 namespace TestDomainServices.DbCtx
 {
@@ -496,7 +497,10 @@ namespace TestDomainServices.DbCtx
 
         protected override DbCtxNorthwindEntities CreateDbContext()
         {
-            return new DbCtxNorthwindEntities("metadata=res://*/Northwind.NorthwindDbCtx.csdl|res://*/Northwind.NorthwindDbCtx.ssdl|res://*/Northwind.NorthwindDbCtx.msl;provider=System.Data.SqlClient;provider connection string=\"Server=.\\mssql2012;Initial Catalog=Northwind;Persist Security Info=True;User ID=RiaTest;Password=TestPassword;MultipleActiveResultSets=True\"");
+            // TODO: Allow using connection string from 
+            var builder = new System.Data.Entity.Core.EntityClient.EntityConnectionStringBuilder("metadata=res://*/Northwind.NorthwindDbCtx.csdl|res://*/Northwind.NorthwindDbCtx.ssdl|res://*/Northwind.NorthwindDbCtx.msl;provider=System.Data.SqlClient;");
+            builder.ProviderConnectionString = ConfigurationManager.ConnectionStrings["Northwind"].ConnectionString;
+            return new DbCtxNorthwindEntities(builder.ConnectionString);
         }
     }
 

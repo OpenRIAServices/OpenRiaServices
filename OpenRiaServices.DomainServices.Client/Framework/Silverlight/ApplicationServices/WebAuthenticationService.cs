@@ -611,8 +611,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
         /// <summary>
         /// Search for at AuthenticationDomainContextBase implementation in the specified assembly.
-        /// First it tries baased on name using <see cref="DomainContextType"/>, then find the first 
-        /// imeplementation deriving from AuthenticationDomainContextBase.
+        /// First it tries based on name using <see cref="DomainContextType"/>, then find the first 
+        /// implementation deriving from AuthenticationDomainContextBase.
         /// </summary>
         /// <param name="applicationAssembly"></param>
         /// <returns>
@@ -625,8 +625,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             if (!string.IsNullOrEmpty(this.DomainContextType))
             {
                 // First, try to load the type by full name from the application assembly
-
-                type = applicationAssembly.GetType(this.DomainContextType);
+                type = applicationAssembly?.GetType(this.DomainContextType);
                 // If that doesn't work, allow for assembly qualified names
                 if (type == null)
                 {
@@ -634,7 +633,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 }
             }
 
-            if (type == null)
+            if (type == null && applicationAssembly != null)
             {
                 // Finally, we'll look for a domain context that has been generated from a domain 
                 // service extending AuthenticationBase<T>. Our CodeProcessor generates these 

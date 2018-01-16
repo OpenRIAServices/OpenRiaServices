@@ -14,6 +14,8 @@ namespace NorthwindPOCOModel
     /// </summary>
     public class NorthwindEntities : ObjectContext
     {
+        public const string ConnectionStringName = "NorthwindPOCOEntities";
+
         private readonly ObjectSet<Category> _categories;
         private readonly ObjectSet<Product> _products;
 
@@ -26,7 +28,7 @@ namespace NorthwindPOCOModel
         }
 
         public NorthwindEntities()
-            : base("name=NorthwindPOCOEntities", "NorthwindEntities")
+            : base($"name={ConnectionStringName}", "NorthwindEntities")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             _products = CreateObjectSet<Product>();

@@ -8,7 +8,7 @@ using System.IO;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
+namespace OpenRiaServices.DomainServices.Hosting.OData.Test
 {
     /// <summary>
     /// Provides a helper class for tests that rely on a local web
@@ -153,7 +153,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
                        "   <serviceHostingEnvironment aspNetCompatibilityEnabled=\"true\"/>" +
                        "   <domainServices>\r\n" +
                        "     <endpoints>\r\n" +
-                       "       <add name=\"" + TestUtil.ODataEndPointName + "\" type=\"OpenRiaServices.DomainServices.Hosting.ODataEndpointFactory, OpenRiaServices.DomainServices.Hosting.OData\" />\r\n" +
+                       "       <add name=\"" + TestUtil.ODataEndPointName + "\" type=\"" + typeof(ODataEndpointFactory).AssemblyQualifiedName + "\" />\r\n" +
                        "     </endpoints>\r\n" +
                        "   </domainServices>\r\n" +
                        "</system.serviceModel>\r\n";
@@ -164,8 +164,11 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
         /// <summary>httpruntime config section (goes to: /configuration/system.web/httpRuntime)</summary>
         public static string WebConfigHttpRuntimeFragment
         {
-            get;
-            set;
+            get
+            {
+                //return string.Empty;
+                return "<httpRuntime targetFramework=\"4.5\" />";
+            }
         }
 
         /// <summary>Text fragment to set up the compilation section in a standard web.config file.</summary>
@@ -242,7 +245,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
             //   Setting Debug to 'true' includes symbols in the @ServiceHost directive.
             //
             string serviceContents =
-                "<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"OpenRiaServices.DomainServices.Hosting.DomainServiceHostFactory, OpenRiaServices.DomainServices.Hosting\" Service=\"" + serviceType.FullName.Replace('+', '.') + "\" %>\r\n";
+                $"<%@ ServiceHost Language=\"C#\" Debug=\"true\" Factory=\"{typeof(DomainServiceHostFactory).AssemblyQualifiedName}\" Service=\"{(serviceType.FullName.Replace('+', '.'))}\" %>\r\n";
 
             //DomainDataServiceTest.TheDataService\" %>\r\n" +
             //"namespace DomainDataServiceTest\r\n" +
@@ -256,7 +259,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
                 "<configuration>\r\n" +
                 "  <configSections>\r\n" +
                 "    <sectionGroup name=\"system.serviceModel\">\r\n" +
-                "      <section name=\"domainServices\" type=\"OpenRiaServices.DomainServices.Hosting.DomainServicesSection, OpenRiaServices.DomainServices.Hosting\" allowDefinition=\"MachineToApplication\" requirePermission=\"false\" />\r\n" +
+                "      <section name=\"domainServices\" type=\"" + typeof(DomainServicesSection).AssemblyQualifiedName + "\" allowDefinition=\"MachineToApplication\" requirePermission=\"false\" />\r\n" +
                 "    </sectionGroup>\r\n" +
                 "  </configSections>\r\n" +
                 " <connectionStrings>\r\n";
@@ -270,6 +273,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
             configContents +=
                 " </connectionStrings>\r\n" +
                 " <system.web>\r\n" +
+                " <globalization culture=\"en-US\" uiCulture=\"en-US\" />\r\n" +
                 (WebConfigTrustLevelFragment ?? string.Empty) +
                 WebConfigCompilationFragment +
                 (WebConfigHttpRuntimeFragment ?? string.Empty) +
@@ -278,9 +282,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.UnitTests
                 WebConfigCodeDomFragment +
                 WebConfigServiceModelFragment +
                 "</configuration>\r\n";
-
-            // Clear httpRuntime section to prevent subsequently created web apps from injecting httpRuntime settings unknowingly
-            WebConfigHttpRuntimeFragment = null;
 
             File.WriteAllText(Path.Combine(physicalPath, "web.config"), configContents);
 

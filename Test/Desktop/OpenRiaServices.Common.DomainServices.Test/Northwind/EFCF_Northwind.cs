@@ -511,9 +511,7 @@ namespace TestDomainServices.EFCF
             {
                 // if there is an active connection in scope use it
                 // Here we have to append the mapping file info to the connection string
-                //"data source=Alexappfxss01;Persist Security Info=True;User ID=RiaTest;Password=TestPassword;MultipleActiveResultSets=True;Database=Northwind_Light"
                 connection = string.Format("Persist Security Info=True;MultipleActiveResultSets=True;{0}", connection);
-                //connection = "Data Source=AlexAppFxss02;Initial Catalog=Northwind;Persist Security Info=True;User ID=RiaTest;Password=TestPassword;MultipleActiveResultSets=True";
                 context = new EFCFNorthwindEntities(connection);
             }
             else

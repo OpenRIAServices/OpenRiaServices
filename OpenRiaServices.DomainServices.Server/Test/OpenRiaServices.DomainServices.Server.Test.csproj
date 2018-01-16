@@ -121,6 +121,9 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\DomainIdentifierAttributeTests.cs">
       <Link>DomainIdentifierAttributeTests.cs</Link>
     </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Utilities\TestInitializer.cs">
+      <Link>Utilities\TestInitializer.cs</Link>
+    </Compile>
     <Compile Include="AttributeUsageTest.cs" />
     <Compile Include="AuthorizationAttributeTests.cs" />
     <Compile Include="AuthorizationContextTests.cs" />

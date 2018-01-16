@@ -1,12 +1,16 @@
 # OpenRiaServiecs
 
-[![Build status](https://ci.appveyor.com/api/projects/status/g05thwo5ryy1e3pi/branch/master?svg=true)](https://ci.appveyor.com/project/Daniel-Svensson/openriaserviecs/branch/master)
+[![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
+[![Tests status](https://img.shields.io/appveyor/tests/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
+
+<!-- Below badges should be reenabled once new scripts for appveyor build is set up
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
 [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarqube.com/OpenRiaServices/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=OpenRiaServices)
+-->
 
 The Open RIA Services project continues what was previously known as WCF RIA Services.
 
-The source code and issue list is currently kept at Codeplex (https://openriaservices.codeplex.com).
+The source code and issue list is currently kept at github (https://github.com/OpenRiaServices/OpenRiaServices).
 
 Documentation:
 * The original dokumentation for WCF RIA Services is still relevant and can be found at https://msdn.microsoft.com/en-us/library/ee707344(v=vs.91).aspx . Namespaces and assembly names are no longer correct since they changed with the release of OpenRiaServices.

@@ -13,10 +13,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     [TestClass]
     public class WebContextGeneratorTest
     {
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.cs")]
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext0.g.vb")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
+        [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
+        [DeploymentItem(@"Baselines\Default\WebContext\WebContext0.g.cs")]
+        [DeploymentItem(@"Baselines\Default\WebContext\WebContext0.g.vb")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices()
@@ -25,8 +25,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext0.g", Type.EmptyTypes, null, new string[0], "RootNamespace", new ConsoleLogger(), true, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices_FullTypes()
@@ -35,8 +35,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext0.g", Type.EmptyTypes, null, new string[0], "RootNamespace", new ConsoleLogger(), true, true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices_FullTypes_NoRootNamespace()
@@ -45,8 +45,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext3.g", Type.EmptyTypes, "VB", new string[0], string.Empty, new ConsoleLogger(), true, true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
+        [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when a single service is present.")]
         public void OneAuthenticationService()
@@ -55,8 +55,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, new string[0], "RootNamespace", new ConsoleLogger(), true, false));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when a single service is present.")]
         public void OneAuthenticationService_FullTypes()
@@ -65,8 +65,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, new string[0], "RootNamespace", new ConsoleLogger(), true, true));
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext")]
+        [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void TwoAuthenticationServices()
@@ -81,8 +81,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 "There should be a message when multiple authentication services are detected.");
         }
 
-        [DeploymentItem(@"Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "CG_WebContext_FullTypes")]
+        [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void TwoAuthenticationServices_FullTypes()

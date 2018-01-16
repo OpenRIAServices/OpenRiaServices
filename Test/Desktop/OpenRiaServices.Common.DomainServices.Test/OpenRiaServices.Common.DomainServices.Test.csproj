@@ -98,6 +98,7 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -137,6 +138,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios_RootNs_FullTypeNames.g.vb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -174,6 +178,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\AdventureWorks.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks.dbml</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\Northwind.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -199,7 +208,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind_NoFks.tt</DependentUpon>
     </Compile>
-    <Compile Include="Mocks\ServerSideAsyncDomainService.cs" />
+    <Compile Include="Mocks\ServerSideAsyncDomainService.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Northwind\EFCF_Northwind.cs" />
     <Compile Include="Northwind\EFDbCtx_Northwind.cs" />
     <Compile Include="Shared\Test.shared.cs">
@@ -349,22 +360,37 @@
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Cities\Cities.shared.cs" />
-    <Compile Include="Cities\CityData.cs" />
-    <Compile Include="Cities\CityDomainService.cs" />
-    <Compile Include="Cities\CityDomainServiceHost.cs" />
-    <Compile Include="Cities\CityDomainServiceHostFactory.cs" />
-    <Compile Include="Cities\CityDomainService_AuthRequired.cs" />
-    <Compile Include="Cities\CityEntities.cs" />
-    <Compile Include="Cities\CityTypes.cs" />
+    <Compile Include="Cities\Cities.shared.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityData.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityDomainService.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityDomainServiceHost.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityDomainServiceHostFactory.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityDomainService_AuthRequired.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityEntities.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\CityTypes.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="AdventureWorks\EF_Catalog.cs" />
     <Compile Include="AdventureWorks\LTS_Catalog.cs" />
-    <Compile Include="Cities\RequiresUserAttribute.cs" />
-    <Compile Include="Cities\RequiresUserForStateAttribute.cs" />
-    <Compile Include="DataModels\AdventureWorks.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorks.dbml</DependentUpon>
+    <Compile Include="Cities\RequiresUserAttribute.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Cities\RequiresUserForStateAttribute.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="DataModels\AdventureWorks1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -421,13 +447,27 @@
     <Compile Include="DBImager.cs" />
     <Compile Include="Inheritance\EF_Inheritance_DomainService.cs" />
     <Compile Include="Inheritance\LTS_Inheritance_DomainService.cs" />
-    <Compile Include="Mocks\AssociationInheritanceScenarios.cs" />
-    <Compile Include="Mocks\AuthenticationServices.cs" />
-    <Compile Include="Mocks\ComplexTypeScenarios.cs" />
-    <Compile Include="Mocks\CompositionAndInheritanceScenarios.cs" />
-    <Compile Include="Mocks\CompositionScenarios.cs" />
-    <Compile Include="Mocks\MockDomainServices.cs" />
-    <Compile Include="Mocks\SharedScenarios.cs" />
+    <Compile Include="Mocks\AssociationInheritanceScenarios.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Mocks\AuthenticationServices.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Mocks\ComplexTypeScenarios.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Mocks\CompositionAndInheritanceScenarios.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Mocks\CompositionScenarios.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Mocks\MockDomainServices.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Mocks\SharedScenarios.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Northwind\EF_Northwind.cs" />
     <Compile Include="Northwind\EF_Northwind_POCO.cs" />
     <Compile Include="Northwind\LTS_Northwind.cs" />
@@ -446,7 +486,12 @@
     <Compile Include="Shared\Mock.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Cities\Cities.shared.vb" />
+    <Content Include="Baselines\FullTypeNames\WebContext\WebContext3.g.vb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Cities\Cities.shared.vb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shared\Test.shared.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -573,8 +618,8 @@
     </None>
     <None Include="DataModels\AdventureWorks.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>AdventureWorks.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>AdventureWorks.designer.cs</LastGenOutput>
     </None>
     <EntityDeploy Include="DataModels\AdventureWorks.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

@@ -280,7 +280,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 DateTime date2 = Convert.ToDateTime(response.Headers["Date"]);
                 DateTime expires2 = Convert.ToDateTime(response.Headers["Expires"]);
-                Assert.AreEqual(2, (int)expires2.Subtract(date).TotalSeconds, "Incorrect cache duration");
+                Assert.AreEqual(2, (int)expires2.Subtract(date2).TotalSeconds, "Incorrect cache duration");
 
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
@@ -290,12 +290,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             EnqueueConditional(() => DateTime.UtcNow.Subtract(date).TotalSeconds > 1); // Make sure 1 second has passed since the first request.
 
+            Enqueue(() => Assert.IsTrue( DateTime.UtcNow.Subtract(date).TotalSeconds < 2, "Less than 2 seconds should have passed"));
+
             ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesInStateWithCaching?state=WA"), response =>
             {
                 Assert.AreEqual("private, max-age=2", response.Headers["Cache-Control"], "Incorrect cache header");
 
                 DateTime expires2 = Convert.ToDateTime(response.Headers["Expires"]);
                 Assert.AreEqual(expires, expires2, "Response was not cached");
+
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    Assert.AreEqual(responseText, reader.ReadToEnd(), "Response different");
+                }
             });
 
             EnqueueTestComplete();

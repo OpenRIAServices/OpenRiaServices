@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "PDB")]
+        [DeploymentItem(@"ProjectPath.txt", "PDB")]
         [Description("PdbReader finds files defining properties in server assembly")]
         [TestMethod]
         public void PdbReader_Finds_Method_Files()
@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt", "PDB")]
+        [DeploymentItem(@"ProjectPath.txt", "PDB")]
         [Description("PdbReader finds all files for a type")]
         [TestMethod]
         public void PdbReader_Finds_Types_Files()

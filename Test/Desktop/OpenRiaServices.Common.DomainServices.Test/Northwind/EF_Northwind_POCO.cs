@@ -15,6 +15,8 @@ using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using NorthwindPOCOModel;
 using TestDomainServices.Testing;
+using System.Data.Entity.Core.EntityClient;
+using System.Configuration;
 
 namespace TestDomainServices.EF
 {
@@ -94,9 +96,10 @@ namespace TestDomainServices.EF
             if (!string.IsNullOrEmpty(connection))
             {
                 // if there is an active connection in scope use it
-                // Here we have to append the mapping file info to the connection string
-                connection = string.Format("metadata=res://*/Northwind.csdl|res://*/Northwind.ssdl|res://*/Northwind.msl;provider=System.Data.SqlClient;provider connection string=\"{0}\"", connection);
-                context = new NorthwindEntities(connection);
+                var builder = new EntityConnectionStringBuilder();
+                builder.ConnectionString = ConfigurationManager.ConnectionStrings[NorthwindEntities.ConnectionStringName].ConnectionString;
+                builder.ProviderConnectionString = connection;
+                context = new NorthwindEntities(builder.ConnectionString);
             }
             else
             {

@@ -51,7 +51,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
             target.Name = "tracing";
             target.Parameters["maxEntries"] = "123";
             IEnumerable<ServiceEndpoint> actual = target.CreateEndpoints(null, sh);
-            Assert.IsTrue(123 == InMemoryTraceListener_Accessor.MaxEntries);
+            Assert.IsTrue(123 == InMemoryTraceListener.MaxEntries);
             Assert.IsNotNull(actual);
             ServiceEndpoint[] endpoints = actual.ToArray();
             Assert.IsTrue(endpoints.Length == 2);

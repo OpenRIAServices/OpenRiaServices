@@ -257,7 +257,10 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
 
         private static bool IsAttributeBlocked(Type attributeType)
         {
-            return blockList.Contains(attributeType);
+            return blockList.Contains(attributeType)
+                // __DynamicallyInvokableAttribute might be added at compile time, don't propagate them
+                || attributeType.FullName == "__DynamicallyInvokableAttribute"
+                ;
         }
 
         internal static string ConvertValueToCode(object value, bool isCSharp)

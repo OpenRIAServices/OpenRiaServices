@@ -793,10 +793,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(2, so.ChangeSet.ModifiedEntities.Count);
 
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(8, propChanged.Count);
+                Assert.AreEqual(9, propChanged.Count);
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneName"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneID"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop == "CanAssignCityZone"));
+                Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZone"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "IsAssignCityZoneInvoked"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAutoAssignCityZone"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZoneIfAuthorized"));
@@ -888,10 +888,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(newCity.CanAssignCityZone);
 
                 // verify we got property change notifications for the new city entity (guard property should be reverted once SubmitChanges is called)
-                Assert.AreEqual(9, propChanged_addedCity.Count);
+                Assert.AreEqual(10, propChanged_addedCity.Count);
                 Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneName"));
                 Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneID"));
-                Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "CanAssignCityZone"));
+                Assert.AreEqual(2, propChanged_addedCity.Count(prop => prop == "CanAssignCityZone"));
                 Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "IsAssignCityZoneInvoked"));
                 // The other custom method invocations should have changed from true -> false during submit
                 // and from false -> true after submit
@@ -2373,8 +2373,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 Assert.AreEqual(4.0m, calc.Value);
 
-                Assert.AreEqual(1, propChanged.Count(p => p == "CanAddTwice"), "Property changes for CanAddTwice");
-                Assert.AreEqual(1, propChanged.Count(p => p == "IsAddTwiceInvoked"), "Property changes for CanAddTwice");
+                Assert.IsTrue(1 <= propChanged.Count(p => p == "CanAddTwice"), "Property changes for CanAddTwice");
+                Assert.IsTrue(1 <= propChanged.Count(p => p == "IsAddTwiceInvoked"), "Property changes for CanAddTwice");
             });
             EnqueueTestComplete();
         }
