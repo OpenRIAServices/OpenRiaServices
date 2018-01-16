@@ -101,6 +101,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private static Project LoadProject(string projectPath, Engine engine)
         {
+            engine.DefaultToolsVersion = "4.0";
+
             var project = new Project(engine);
             project.Load(projectPath);
 #if SIGNED
@@ -110,6 +112,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 #else
             project.SetProperty("Configuration", "Release");
 #endif
+            project.SetProperty("BuildProjectReferences", "false");
             return project;
         }
 

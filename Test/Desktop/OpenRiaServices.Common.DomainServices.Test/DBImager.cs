@@ -141,7 +141,7 @@ namespace TestDomainServices.Testing
             //if (ConStr.Trim().EndsWith(".mdf"))
             //{
             string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(ConStr));
-            ConStr = $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={ConStr};Integrated Security=True;Connect Timeout=30";
+            ConStr = $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={ConStr};Integrated Security=True;Connect Timeout=5";
             //}
 
             //ConStr = $"Data Source=.;AttachDbFilename={ConStr};Integrated Security=True;Connect Timeout=30";
@@ -191,10 +191,13 @@ namespace TestDomainServices.Testing
                             cmd.CommandText = $"EXEC sp_detach_db '{catalogName}', 'true';";
                             //cmd.CommandType = CommandType.Text;
                             cmd.ExecuteNonQuery();
-
                         }
                     }
 
+                    string DestMDF = HttpContext.Current.Server.MapPath("~/App_Data/" + dbName + ".mdf");
+                    string DestLDF = DestMDF.Replace(".mdf", ".ldf");
+                    File.Delete(DestMDF);
+                    File.Delete(DestLDF);
                 }
                 else
                 {
