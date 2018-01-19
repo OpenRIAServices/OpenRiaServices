@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
@@ -244,6 +245,108 @@ namespace OpenRiaServices.DomainServices.Client.Test
             WeakReference weakRef = new WeakReference(this.GetICV(entitySet));
             System.GC.Collect();         
             Assert.IsFalse(weakRef.IsAlive);
+        }
+
+#if !SILVERLIGHT
+        [TestMethod]
+        public void TEMP_Performance()
+        {
+            var entitySet = CreateEntitySet<City>();
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var initNumEntites = 400;
+            var numDoubles = 6;
+
+            Console.WriteLine("add");
+            var numEntities = initNumEntites;
+            for (var i = 0; i < numDoubles; i++)
+            {
+                entitySet = CreateEntitySet<City>();
+                sw.Restart();
+                AddRange(entitySet, CreateCities(numEntities));
+                Console.WriteLine($"{numEntities}: {sw.ElapsedMilliseconds}");
+                numEntities *= 2;
+                sw.Restart();
+            }
+
+            Console.WriteLine("attach");
+            numEntities = initNumEntites;
+            for (var i = 0; i < numDoubles; i++)
+            {
+                entitySet = CreateEntitySet<City>();
+                sw.Restart();
+                foreach (var city in CreateCities(numEntities))
+                {
+                    entitySet.Attach(city);
+                }
+                Console.WriteLine($"{numEntities}: {sw.ElapsedMilliseconds}");
+                numEntities *= 2;
+                sw.Restart();
+            }
+
+            initNumEntites = 800;
+            numEntities = initNumEntites;
+            Console.WriteLine("modify all");
+            for (var i = 0; i < numDoubles; i++)
+            {
+                entitySet = CreateEntitySet<City>();
+                AddRange(entitySet, CreateCities(numEntities));
+                sw.Restart();
+                foreach (var entity in entitySet.ToList())
+                {
+                    entity.Name = "changed";
+                }
+                Console.WriteLine($"{numEntities}: {sw.ElapsedMilliseconds}");
+                numEntities *= 2;
+                sw.Restart();
+            }
+
+            numEntities = initNumEntites;
+            Console.WriteLine("remove all");
+            for (var i = 0; i < numDoubles; i++)
+            {
+                entitySet = CreateEntitySet<City>();
+                AddRange(entitySet, CreateCities(numEntities));
+                sw.Restart();
+                foreach (var entity in entitySet.ToList())
+                {
+                    entitySet.Remove(entity);
+                }
+                Console.WriteLine($"{numEntities}: {sw.ElapsedMilliseconds}");
+                numEntities *= 2;
+                sw.Restart();
+            }
+
+            numEntities = initNumEntites;
+            Console.WriteLine("detach all");
+            for (var i = 0; i < numDoubles; i++)
+            {
+                entitySet = CreateEntitySet<City>();
+                AddRange(entitySet, CreateCities(numEntities));
+                sw.Restart();
+                foreach (var entity in entitySet.ToList())
+                {
+                    entitySet.Detach(entity);
+                }
+                Console.WriteLine($"{numEntities}: {sw.ElapsedMilliseconds}");
+                numEntities *= 2;
+                sw.Restart();
+            }
+        }
+#endif
+
+        private static IEnumerable<City> CreateCities(int num)
+        {
+            for (var i = 0; i < num; i++)
+            {
+                yield return new City {Name = "" + i, CountyName = "c", StateName = "s"};
+            }
+        }
+
+        private static void AddRange<T>(ICollection<T> set, IEnumerable<T> items) where T: Entity
+        {
+            foreach (var i in items) set.Add(i);
         }
 
         private EntitySet<T> CreateEntitySet<T>() where T : Entity
