@@ -146,6 +146,7 @@
     <Compile Include="ApplicationServices\WindowsAuthentication.cs" />
     <Compile Include="Data\ComplexObject.INotifyDataErrorInfo.cs" />
     <Compile Include="Data\ComplexObject.cs" />
+    <Compile Include="Data\DictList.cs" />
     <Compile Include="Data\DomainClientFactory.cs" />
     <Compile Include="Data\DefaultDomainClientFactory.cs" />
     <Compile Include="Data\EntityActionAttribute.cs" />

@@ -128,6 +128,9 @@
     <Compile Include="..\Silverlight\Data\DefaultDomainClientFactory.cs">
       <Link>Data\DefaultDomainClientFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\DictList.cs">
+      <Link>Data\DictList.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\DomainClientFactory.cs">
       <Link>Data\DomainClientFactory.cs</Link>
     </Compile>

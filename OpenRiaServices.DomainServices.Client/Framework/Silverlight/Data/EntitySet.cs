@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-
+using OpenRiaServices.DomainServices.Client.Data;
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
 #endif
@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Client
         private EntitySetOperations _supportedOperations;
         private IList _list;
         private IDictionary<object, Entity> _identityCache;
-        private List<Entity> _interestingEntities;
+        private DictList<Entity> _interestingEntities;
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
 
         /// <summary>
@@ -48,6 +48,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._entityType = entityType;
             this._identityCache = new Dictionary<object, Entity>();
+            this._interestingEntities = new DictList<Entity>();
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this._identityCache = new Dictionary<object, Entity>();
-            this._interestingEntities = null;
+            this._interestingEntities = new DictList<Entity>();
             this._list = this.CreateList();
 
             this.OnCollectionChanged(NotifyCollectionChangedAction.Reset, clearedEntities, -1);
@@ -181,9 +182,9 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._interestingEntities == null)
                 {
-                    this._interestingEntities = new List<Entity>();
+                    this._interestingEntities = new DictList<Entity>();
                 }
-                return this._interestingEntities.AsReadOnly();
+                return this._interestingEntities.ToList().AsReadOnly();
             }
         }
 
@@ -198,7 +199,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (isInteresting)
             {
-                if (!this.InterestingEntities.Contains(entity))
+                if (!this._interestingEntities.Contains(entity))
                 {
                     this._interestingEntities.Add(entity);
                     if (this._interestingEntities.Count == 1)
@@ -363,7 +364,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             // An entity is considered attached if it is in this set or
             // if it is "know" by this set, for example having been deleted
-            return entity.EntitySet == this || this.InterestingEntities.Contains(entity);
+            return entity.EntitySet == this || this._interestingEntities.Contains(entity);
         }
 
         /// <summary>
@@ -740,7 +741,11 @@ namespace OpenRiaServices.DomainServices.Client
                 this.AddToCache(entity);
                 cachedEntity = entity;
 
-                int idx = this._list.Add(entity);
+                // it's possible that the entity is already in the list
+                // but not in the cache, if it was inferred
+                int idx = this._list.IndexOf(entity);
+                if (idx == -1)
+                    idx = this._list.Add(entity);
                 entity.MarkUnmodified();
                 entity.EntitySet = this;
 
@@ -1221,6 +1226,8 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         where TEntity : Entity
     {
+        private DictList<TEntity> _dictlist;
+
         /// <summary>
         /// Initializes a new instance of the EntitySet class
         /// </summary>
@@ -1235,7 +1242,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created storage list instance.</returns>
         protected override IList CreateList()
         {
-            return new List<TEntity>();
+            _dictlist = new DictList<TEntity>();
+            return _dictlist;
         }
 
         /// <summary>
@@ -1268,7 +1276,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return ((IList<TEntity>)List).GetEnumerator();
+            return _dictlist.ToList().GetEnumerator();
         }
 
         /// <summary>
@@ -1352,7 +1360,7 @@ namespace OpenRiaServices.DomainServices.Client
 #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
-            ((IList<TEntity>)List).CopyTo(array, arrayIndex);
+            _dictlist.CopyTo(array, arrayIndex);
         }
 
         bool ICollection<TEntity>.Contains(TEntity item)
@@ -1441,7 +1449,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             public int IndexOf(object value)
             {
-                return this.Source.List.IndexOf(value);
+                return this.Source._dictlist.IndexOf(value);
             }
 
             public void Insert(int index, object value)

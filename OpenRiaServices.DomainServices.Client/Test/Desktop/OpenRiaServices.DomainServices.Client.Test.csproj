@@ -205,6 +205,9 @@
     <Compile Include="..\Silverlight\Data\DataServiceTests.cs">
       <Link>Data\DataServiceTests.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\DictListTests.cs">
+      <Link>Data\DictListTests.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\DomainClientTests.cs">
       <Link>Data\DomainClientTests.cs</Link>
     </Compile>

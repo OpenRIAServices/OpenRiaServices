@@ -200,6 +200,7 @@
     <Compile Include="Data\ComplexTypeTests.cs" />
     <Compile Include="Data\CompositionInheritanceTests.cs" />
     <Compile Include="Data\CompositionTests.cs" />
+    <Compile Include="Data\DictListTests.cs" />
     <Compile Include="Data\DomainContexts\ExtensibilityScenarios.cs" />
     <Compile Include="Data\ServerSideAsyncTests.cs" />
     <Compile Include="Data\SubmitOperationExceptionTests.cs" />
