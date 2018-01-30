@@ -112,6 +112,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (TypeUtility.IsAttributeDefined(property, typeof(CompositionAttribute), false))
                 {
                     this._hasComposition = true;
+                    metaMember.IsComposition = true;
                 }
 
                 if (MetaType.IsRoundtripMember(metaMember))
@@ -519,32 +520,37 @@ namespace OpenRiaServices.DomainServices.Client
 
         public MetaType MetaType { get; }
 
-        public EditableAttribute EditableAttribute { get; set; }
+        public EditableAttribute EditableAttribute { get; internal set; }
 
         internal PropertyInfo Member { get; }
 
-        public bool IsAssociationMember { get; set; }
+        public bool IsAssociationMember { get; internal set; }
 
-        public bool IsDataMember { get; set; }
+        public bool IsDataMember { get; internal set; }
 
-        public bool IsKeyMember { get; set; }
+        public bool IsKeyMember { get; internal set; }
 
-        public bool IsRoundtripMember { get; set; }
+        public bool IsRoundtripMember { get; internal set; }
 
-        public bool IsComplex { get; set; }
+        public bool IsComplex { get; internal set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this member is a supported collection type.
         /// </summary>
-        public bool IsCollection { get; set; }
+        public bool IsCollection { get; internal set; }
 
         /// <summary>
         /// Returns <c>true</c> if the member has a property validator.
         /// </summary>
         /// <remarks>The return value does not take into account whether or not the member requires
         /// type validation.</remarks>
-        public bool RequiresValidation { get; set; }
+        public bool RequiresValidation { get; internal set; }
 
+        /// <summary>
+        /// Get the value of the member
+        /// </summary>
+        /// <param name="instance">the instance from which the member should be accessed</param>
+        /// <returns>the value of the property</returns>
         public object GetValue(object instance)
         {
 #if NETSTANDARD1_3
@@ -558,6 +564,12 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         }
 
+        /// <summary>
+        /// Set the value of the member
+        /// </summary>
+        /// <param name="instance">the instance from which the member should be accessed</param>
+        /// <param name="value">the value to set</param>
+        /// <returns>the value of the property</returns>
         public void SetValue(object instance, object value)
         {
 #if NETSTANDARD1_3
@@ -571,7 +583,12 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         }
 
-        public bool IsMergable { get; set; }
+        public bool IsMergable { get; internal set; }
+
+        /// <summary>
+        /// <c>true</c> if the member is marked with a <see cref="CompositionAttribute"/>
+        /// </summary>
+        public bool IsComposition { get; internal set; }
 
 #if !NETSTANDARD1_3
         /// <summary>
@@ -587,11 +604,12 @@ namespace OpenRiaServices.DomainServices.Client
 
         private static Func<object, object> CreateGetterDelegateHelper<T, Tprop>(PropertyInfo propertyInfo)
         {
-            // If no getter was found, fallback to using reflection which will throw exception
             var getMethod = propertyInfo.GetGetMethod();
             if (getMethod == null)
             {
-                return obj => propertyInfo.GetValue(obj, null);
+                // If no getter was found, fallback to method throw same type of exception
+                // which exception would do, these should never propagate to the user
+                return obj => { throw new ArgumentException("Internal error: No getter"); };
             }
 
             var getter = (Func<T, Tprop>)Delegate.CreateDelegate(typeof(Func<T, Tprop>), getMethod);
@@ -616,7 +634,9 @@ namespace OpenRiaServices.DomainServices.Client
             var setMethod = propertyInfo.GetSetMethod();
             if (setMethod == null)
             {
-                return (object obj, object value) => propertyInfo.SetValue(obj, value, null);
+                // If no setter was found, fallback to method throw same type of exception
+                // which exception would do, these should never propagate to the user
+                return (obj, val) => { throw new ArgumentException("Internal error: No setter"); };
             }
 
             var setter = (Action<T, Tprop>)Delegate.CreateDelegate(typeof(Action<T, Tprop>), setMethod);

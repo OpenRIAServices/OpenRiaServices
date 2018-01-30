@@ -1077,7 +1077,7 @@ namespace OpenRiaServices.DomainServices.Client
                 base.Visit(entity);
             }
 
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
                 if (entityCollection != null && entityCollection.HasValues)
                 {
@@ -1088,7 +1088,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
                 // only visit the Entity if the value has been assigned
                 // or loaded - we don't want to cause deferred loads.
@@ -1114,9 +1114,9 @@ namespace OpenRiaServices.DomainServices.Client
             {
             }
 
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                if (member.IsComposition)
                 {
                     IEnumerable<Entity> children = entityCollection.Entities.ToArray();
                     foreach (Entity child in children)
@@ -1127,9 +1127,9 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                if (member.IsComposition)
                 {
                     Entity child = null;
                     if (entityRef == null)
@@ -1137,7 +1137,7 @@ namespace OpenRiaServices.DomainServices.Client
                         // If the EntityRef hasn't been accesssed before, it might
                         // not be initialized yet. In this case we need to access
                         // the property directly.
-                        child = (Entity)propertyInfo.GetValue(parent, null);
+                        child = (Entity)member.GetValue(parent);
                     }
                     else
                     {
@@ -1146,7 +1146,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                     // set value though property setter to ensure that
                     // FK sync code is run
-                    propertyInfo.SetValue(parent, null, null);
+                    member.SetValue(parent, null);
 
                     if (child != null)
                     {
@@ -1170,9 +1170,9 @@ namespace OpenRiaServices.DomainServices.Client
             {
             }
 
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                if (member.IsComposition)
                 {
                     IEnumerable<Entity> children = entityCollection.Entities.ToArray();
                     foreach (Entity child in children)
@@ -1185,17 +1185,17 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                if (member.IsComposition)
                 {
                     Entity child = null;
                     if (entityRef == null)
                     {
-                        // If the EntityRef hasn't been accesssed before, it might
+                        // If the EntityRef hasn't been accessed before, it might
                         // not be initialized yet. In this case we need to access
                         // the property directly.
-                        child = (Entity)propertyInfo.GetValue(parent, null);
+                        child = (Entity)member.GetValue(parent);
                     }
                     else
                     {

@@ -256,6 +256,8 @@ namespace OpenRiaServices.DomainServices.Server
             this.MetaType = metaType;
         }
 
+        public string Name => Member.Name;
+
         public MetaType MetaType
         {
             get;

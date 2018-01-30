@@ -197,9 +197,9 @@ namespace OpenRiaServices.DomainServices.Client
                 base.Visit(entity);
             }
 
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                if (member.IsComposition)
                 {
                     bool lastIsChild = this._isChild;
                     this._isChild = true;
@@ -212,17 +212,17 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
-                if (propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                if (member.IsComposition)
                 {
                     Entity child = null;
                     if (entityRef == null)
                     {
-                        // If the EntityRef hasn't been accesssed before, it might
+                        // If the EntityRef hasn't been accessed before, it might
                         // not be initialized yet. In this case we need to access
                         // the property directly to force it to load.
-                        child = (Entity)propertyInfo.GetValue(parent, null);
+                        child = (Entity)member.GetValue(parent);
                     }
                     else
                     {
@@ -289,8 +289,9 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
+                var propertyInfo = member.Member;
                 // Check for [ExternalReference] properties, if found we can skip visiting these
                 // external entities so they will not be included in our change set.
                 if (propertyInfo.GetCustomAttributes(typeof(ExternalReferenceAttribute), true).Any())
@@ -298,7 +299,7 @@ namespace OpenRiaServices.DomainServices.Client
                     return;
                 }
 
-                bool isComposition = propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any();
+                bool isComposition = member.IsComposition;
                 List<int> currentIds = new List<int>();
                 List<int> originalIds = new List<int>();
 
@@ -391,8 +392,9 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
+                var propertyInfo = member.Member;
                 // Check for [ExternalReference] properties, if found we can skip visiting these
                 // external entities so they will not be included in our change set.
                 if (propertyInfo.GetCustomAttributes(typeof(ExternalReferenceAttribute), true).Any())
@@ -412,7 +414,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // Now determine the originally referenced entity if this association is a composition
                 // and the child has been removed
                 Entity prevReferenced = null;
-                bool isComposition = propertyInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any();
+                bool isComposition = member.IsComposition;
                 if (isComposition && parent.EntityState != EntityState.New)
                 {
                     AssociationAttribute assocAttrib = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).Single();
@@ -465,11 +467,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         internal class AssociationUpdateChecker : EntityVisitor
         {
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
+                var propertyInfo = member.Member;
+
                 // look for any invalid updates made to composed children
-                if (entityCollection.HasValues && 
-                    TypeUtility.IsAttributeDefined(propertyInfo, typeof(CompositionAttribute), false))
+                if (entityCollection.HasValues && member.IsComposition)
                 {
                     AssociationAttribute assoc = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
                     foreach (Entity childEntity in entityCollection.Entities)
@@ -479,8 +482,9 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
+                var propertyInfo = member.Member;
                 // we don't want to cause any deferred loading of the EntityRef
                 // in non-compositional cases
                 Entity entity = null;
@@ -490,7 +494,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 // look for any invalid updates made to composed children
-                if (entity != null && TypeUtility.IsAttributeDefined(propertyInfo, typeof(CompositionAttribute), false))
+                if (entity != null && member.IsComposition)
                 {
                     AssociationAttribute assoc = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
                     CheckInvalidChildUpdates(entity, assoc);
