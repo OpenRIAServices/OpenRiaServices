@@ -125,11 +125,11 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (entity.EntityState == EntityState.Modified)
                 {
-                    foreach (PropertyInfo modifiedProperty in entity.ModifiedProperties)
+                    foreach (MetaMember member in entity.ModifiedProperties)
                     {
-                        if (modifiedProperty.GetCustomAttributes(typeof(KeyAttribute), false).Any())
+                        if (member.IsKeyMember)
                         {
-                            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Entity_KeyMembersCannotBeChanged, modifiedProperty.Name, entity.GetType().Name));
+                            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Entity_KeyMembersCannotBeChanged, member.Name, entity.GetType().Name));
                         }
                     }
                 }

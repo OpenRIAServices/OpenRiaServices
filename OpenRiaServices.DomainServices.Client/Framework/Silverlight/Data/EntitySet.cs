@@ -913,7 +913,10 @@ namespace OpenRiaServices.DomainServices.Client
                 this._collectionChangedEventHandler(this, args);
             }
 
-            this.RaisePropertyChanged("Count");
+            if (this.PropertyChanged != null)
+            {
+                this.RaisePropertyChanged("Count");
+            }
         }
 
 #region IEnumerable Members
