@@ -102,7 +102,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._metaType == null)
                 {
-                    var metaType  = MetaType.GetMetaType(this.GetType());
+                    var metaType = MetaType.GetMetaType(this.GetType());
                     this._metaType = metaType;
 
                     if (!metaType.IsLegacyEntityActionsDiscovered)
@@ -345,11 +345,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the collection of properties that are currently modified
         /// </summary>
-        internal IEnumerable<PropertyInfo> ModifiedProperties
+        internal IEnumerable<MetaMember> ModifiedProperties
         {
             get
             {
-                return this.MetaType.DataMembers.Select(p => p.Member).Where(this.PropertyHasChanged);
+                return this.MetaType.DataMembers.Where(this.PropertyHasChanged);
             }
         }
 
@@ -446,7 +446,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                         InvokeActionCore(value, customMethod);
                     }
-                        
+
 
                     if (value != null && this._entityState == EntityState.Unmodified)
                     {
@@ -536,8 +536,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 foreach (MetaMember metaMember in metaType.DataMembers.Where(f => f.IsComplex && !f.IsCollection))
                 {
-                    PropertyInfo propertyInfo = metaMember.Member;
-                    ComplexObject propertyValue = propertyInfo.GetValue(this, null) as ComplexObject;
+                    ComplexObject propertyValue = metaMember.GetValue(this) as ComplexObject;
                     if (propertyValue != null)
                     {
                         propertyValue.IsMergingState = this._isMerging;
@@ -604,7 +603,7 @@ namespace OpenRiaServices.DomainServices.Client
                     foreach (var entityAction in MetaType.GetEntityActions())
                     {
                         // Check if CanInvoke might have changed
-                        if (this.EntityState != EntityState.Deleted 
+                        if (this.EntityState != EntityState.Deleted
                             && this.EntitySet != null)
                         {
                             if (entityAction.AllowMultipleInvocations || !this.IsActionInvoked(entityAction.Name))
@@ -867,7 +866,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             foreach (var customMethodInfo in MetaType.GetEntityActions())
             {
-                bool wasInvoked = previouslyInvoked != null 
+                bool wasInvoked = previouslyInvoked != null
                     && previouslyInvoked.Any(action => action.Name == customMethodInfo.Name);
 
                 // For the current implementation, we always raise the CanInvoke change notification
@@ -1034,7 +1033,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 return;
             }
-            
+
             IDictionary<string, object> otherState = otherEntity.ExtractState();
             Merge(otherState, loadBehavior);
         }
@@ -1056,7 +1055,7 @@ namespace OpenRiaServices.DomainServices.Client
             // set this flag so change tracking and edit enforcement
             // is suspended during the merge
             this.IsMergingState = true;
-            
+
             this.ApplyState(otherState, loadBehavior);
 
             // after the merge update our original state based on the
@@ -1069,7 +1068,7 @@ namespace OpenRiaServices.DomainServices.Client
                     // considered modfied, so we wipe out original values
                     this._originalValues = null;
 
-                    if (this.EntityState == EntityState.Modified 
+                    if (this.EntityState == EntityState.Modified
                         && (this._customMethodInvocations == null || this._customMethodInvocations.Count == 0)
                         && !this.HasChildChanges)
                     {
@@ -1091,11 +1090,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Returns true if the specified property has been modified
         /// </summary>
-        /// <param name="prop">The property to check</param>
+        /// <param name="member">The property to check</param>
         /// <returns>true if the specified property has been modified</returns>
-        private bool PropertyHasChanged(PropertyInfo prop)
+        private bool PropertyHasChanged(MetaMember member)
         {
-            return ObjectStateUtility.PropertyHasChanged(this, this._originalValues, prop);
+            return ObjectStateUtility.PropertyHasChanged(this, this._originalValues, member);
         }
 
         /// <summary>
@@ -1163,7 +1162,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             // First check if the parent has an existing instance attached for this
             // property and detach if necessary.
-            string memberName = metaMember.Member.Name;
+            string memberName = metaMember.Name;
             ComplexObject prevInstance = null;
             if (this.TrackedInstances.TryGetValue(memberName, out prevInstance))
             {
@@ -1612,15 +1611,15 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
 
-      /// <summary>
-      /// Undoes a previously invoked action.
-      /// </summary>
-      /// <param name="action">The action to undo.</param>
-      /// <param name="throwIfSubmitting">if set to <c>true</c> then InvalidOperationException is thrown if the entity is beeing submitted.</param>
-      /// <exception cref="System.ArgumentNullException">action</exception>
-      /// <exception cref="System.InvalidOperationException">A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted</exception>
-      /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions" /></exception>
-      private void UndoAction(EntityAction action, bool throwIfSubmitting)
+        /// <summary>
+        /// Undoes a previously invoked action.
+        /// </summary>
+        /// <param name="action">The action to undo.</param>
+        /// <param name="throwIfSubmitting">if set to <c>true</c> then InvalidOperationException is thrown if the entity is beeing submitted.</param>
+        /// <exception cref="System.ArgumentNullException">action</exception>
+        /// <exception cref="System.InvalidOperationException">A custom method cannot be undone on an entity that is part of a change-set that is in the process of being submitted</exception>
+        /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions" /></exception>
+        private void UndoAction(EntityAction action, bool throwIfSubmitting)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
@@ -1650,7 +1649,7 @@ namespace OpenRiaServices.DomainServices.Client
         protected internal bool CanInvokeAction(string name)
         {
             // custom methods cannot be invoked if the entity is deleted, or if the entity is unattached.
-            bool canInvoke = this.EntityState != EntityState.Deleted 
+            bool canInvoke = this.EntityState != EntityState.Deleted
                              && this.EntitySet != null
                              && !this.IsSubmitting;
 
@@ -1659,7 +1658,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // return false if method name is invalid 
                 //  or the action is already invoked and multiple invocations are not allowd
                 var customMethod = MetaType.GetEntityAction(name);
-                if (customMethod == null 
+                if (customMethod == null
                         || (customMethod.AllowMultipleInvocations == false && IsActionInvoked(name)))
                     canInvoke = false;
             }
@@ -1697,15 +1696,20 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The identity for this entity</returns>
         public virtual object GetIdentity()
         {
-            // for identity purposes, we need to make sure values are always ordered
-            PropertyInfo[] keyMembers = this.MetaType.KeyMembers.OrderBy(p => p.Name).ToArray();
+            var keyMembers = this.MetaType.KeyMembers;
+
+            // If key consists of a single property return that property
+            if (keyMembers.Count == 1)
+            {
+                return keyMembers[0].GetValue(this);
+            }
 
             // build the key value array, returning null immediately if any
             // values are null
-            object[] keyValues = new object[keyMembers.Length];
-            for (int i = 0; i < keyMembers.Length; i++)
+            object[] keyValues = new object[keyMembers.Count];
+            for (int i = 0; i < keyMembers.Count; i++)
             {
-                object keyValue = keyMembers[i].GetValue(this, null);
+                object keyValue = keyMembers[i].GetValue(this);
                 if (keyValue == null)
                 {
                     return null;
@@ -1713,14 +1717,7 @@ namespace OpenRiaServices.DomainServices.Client
                 keyValues[i] = keyValue;
             }
 
-            if (keyValues.Length == 1)
-            {
-                return keyValues[0];
-            }
-            else
-            {
-                return EntityKey.Create(keyValues);
-            }
+            return EntityKey.Create(keyValues);
         }
 
         /// <summary>
@@ -1729,18 +1726,29 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>A string representation of the current entity</returns>
         public override string ToString()
         {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            PropertyInfo[] keyMembers = this.MetaType.KeyMembers.ToArray();
-            foreach (PropertyInfo keyMember in keyMembers.OrderBy(m => m.Name))
+            var keyMembers = this.MetaType.KeyMembers;
+            string keyText;
+
+            if (keyMembers.Count == 1)
             {
-                if (sb.Length > 0)
-                {
-                    sb.Append(",");
-                }
-                object keyValue = keyMember.GetValue(this, null);
-                sb.Append(keyValue != null ? keyValue.ToString() : "null");
+                object keyValue = keyMembers[0].GetValue(this);
+                keyText = keyValue != null ? keyValue.ToString() : "null";
             }
-            string keyText = keyMembers.Length > 1 ? "{" + sb.ToString() + "}" : sb.ToString();
+            else
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                foreach (MetaMember keyMember in keyMembers)
+                {
+                    if (sb.Length > 0)
+                    {
+                        sb.Append(",");
+                    }
+                    object keyValue = keyMember.GetValue(this);
+                    sb.Append(keyValue != null ? keyValue.ToString() : "null");
+                }
+                keyText = keyMembers.Count > 1 ? "{" + sb.ToString() + "}" : sb.ToString();
+            }
+
             return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} : {1}", GetType().Name, keyText);
         }
 
@@ -2062,7 +2070,7 @@ namespace OpenRiaServices.DomainServices.Client.EntityExtensions
             targetEntity.Merge(otherEntity, loadBehavior);
         }
 
-        public static void Merge(this Entity targetEntity, IDictionary<string,object> otherState, LoadBehavior loadBehavior)
+        public static void Merge(this Entity targetEntity, IDictionary<string, object> otherState, LoadBehavior loadBehavior)
         {
             targetEntity.Merge(otherState, loadBehavior);
         }
