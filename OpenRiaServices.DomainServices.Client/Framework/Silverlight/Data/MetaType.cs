@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly bool _hasComposition;
         private readonly bool _shouldRoundtripOriginal;
         private readonly Type _type;
-        private readonly IEnumerable<Type> _childTypes = new List<Type>();
+        private readonly Type[] _childTypes;
         private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private readonly MetaMember _versionMember;
         private readonly ReadOnlyCollection<MetaMember> _keyMembers;
@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly ReadOnlyCollection<ValidationAttribute> _validationAttributes;
 
 
-        private readonly IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
+        private readonly Dictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
 
         /// <summary>
         /// Returns the MetaType for the specified Type.
@@ -161,10 +161,13 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (this._hasComposition)
             {
-                this._childTypes = type
-                        .GetProperties(MemberBindingFlags)
-                        .Where(p => p.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                this._childTypes = _metaMembers.Values
+                        .Where(m => m.IsComposition)
                         .Select(p => TypeUtility.GetElementType(p.PropertyType)).ToArray();
+            }
+            else
+            {
+                this._childTypes = TypeUtility.EmptyTypes;
             }
 
             this._type = type;

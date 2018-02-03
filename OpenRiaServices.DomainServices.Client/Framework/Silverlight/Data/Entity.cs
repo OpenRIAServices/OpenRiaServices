@@ -20,13 +20,13 @@ namespace OpenRiaServices.DomainServices.Client
     {
         private Action _setChangedCallback;
         private EditSession _editSession;
-        private IList<EntityAction> _customMethodInvocations;
+        private List<EntityAction> _customMethodInvocations;
         private EntityConflict _conflict;
         private EntitySet _lastSet;
         private EntitySet _entitySet;
         private EntityState _entityState = EntityState.Detached;
         private IDictionary<string, object> _originalValues;
-        private IDictionary<string, IEntityRef> _entityRefs;
+        private Dictionary<string, IEntityRef> _entityRefs;
         private PropertyChangedEventHandler _propChangedHandler;
         private EntityValidationResultCollection _validationErrors;
         private bool _isApplyingState;
@@ -921,7 +921,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the map of EntityRef member name to IEntityRef instance.
         /// </summary>
-        private IDictionary<string, IEntityRef> EntityRefs
+        private Dictionary<string, IEntityRef> EntityRefs
         {
             get
             {
