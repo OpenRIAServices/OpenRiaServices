@@ -394,6 +394,10 @@ namespace OpenRiaServices.DomainServices.Client
 
         private void RaiseCanInvokeChanged()
         {
+            // If no one is listening for property changes then do not emit them
+            if (_propChangedHandler == null)
+                return;
+
             foreach (var customMethod in MetaType.GetEntityActions())
             {
                 this.RaisePropertyChanged(customMethod.CanInvokePropertyName);
