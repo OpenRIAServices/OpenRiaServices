@@ -525,23 +525,26 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
+        /// <summary>
+        /// Get a value indicating if we are currently merging state from another entity.
+        /// This is common when loading entities.
+        /// 
+        /// This flag us used to suspended change tracking and edit enforcement   
+        /// during the merge
+        /// </summary>
         protected internal bool IsMergingState
         {
             get { return this._isMerging; }
             private set
             {
                 this._isMerging = value;
-
-                MetaType metaType = MetaType.GetMetaType(this.GetType());
-
-                foreach (MetaMember metaMember in metaType.DataMembers.Where(f => f.IsComplex && !f.IsCollection))
+                foreach (MetaMember metaMember in MetaType.DataMembers.Where(f => f.IsComplex && !f.IsCollection))
                 {
                     ComplexObject propertyValue = metaMember.GetValue(this) as ComplexObject;
                     if (propertyValue != null)
                     {
                         propertyValue.IsMergingState = this._isMerging;
                     }
-
                 }
             }
         }

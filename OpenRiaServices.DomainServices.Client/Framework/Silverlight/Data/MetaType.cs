@@ -41,6 +41,9 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private readonly MetaMember _versionMember;
         private readonly ReadOnlyCollection<MetaMember> _keyMembers;
+        private readonly ReadOnlyCollection<MetaMember> _dataMembers;
+        private readonly ReadOnlyCollection<ValidationAttribute> _validationAttributes;
+
 
         private readonly IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
 
@@ -98,9 +101,11 @@ namespace OpenRiaServices.DomainServices.Client
                     metaMember.RequiresValidation = TypeUtility.IsAttributeDefined(property, typeof(ValidationAttribute), true);
                 }
 
-                if (TypeUtility.IsAttributeDefined(property, typeof(AssociationAttribute), false))
+
+                var associationAttributes = property.GetCustomAttributes(typeof(AssociationAttribute), false);
+                if (associationAttributes.Any())
                 {
-                    metaMember.IsAssociationMember = true;
+                    metaMember.AssociationAttribute = (AssociationAttribute)associationAttributes.SingleOrDefault();
                 }
 
                 bool isKeyMember = TypeUtility.IsAttributeDefined(property, typeof(KeyAttribute), false);
@@ -113,6 +118,11 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     this._hasComposition = true;
                     metaMember.IsComposition = true;
+                }
+
+                if (TypeUtility.IsAttributeDefined(property, typeof(ExternalReferenceAttribute), true))
+                {
+                    metaMember.IsExternalReference = true;
                 }
 
                 if (MetaType.IsRoundtripMember(metaMember))
@@ -159,10 +169,14 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._type = type;
 
+            _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this._type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
+            _requiresValidation = _validationAttributes.Any();
+
             this.CalculateAttributesRecursive(type, new HashSet<Type>());
 
             // for identity purposes, we need to make sure values are always ordered
             _keyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
+            _dataMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsDataMember).ToArray());
         }
 
         /// <summary>
@@ -324,7 +338,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsDataMember);
+                return _dataMembers;
             }
         }
 
@@ -336,7 +350,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsRoundtripMember).Select(m => m.Member);
+                return this._dataMembers.Where(m => m.IsRoundtripMember).Select(m => m.Member);
             }
         }
 
@@ -402,7 +416,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._type.GetCustomAttributes(true).OfType<ValidationAttribute>();
+                return _validationAttributes;
             }
         }
 
@@ -524,7 +538,9 @@ namespace OpenRiaServices.DomainServices.Client
 
         internal PropertyInfo Member { get; }
 
-        public bool IsAssociationMember { get; internal set; }
+        public bool IsAssociationMember { get { return AssociationAttribute != null; } }
+
+        public AssociationAttribute AssociationAttribute { get; internal set; }
 
         public bool IsDataMember { get; internal set; }
 
@@ -533,6 +549,11 @@ namespace OpenRiaServices.DomainServices.Client
         public bool IsRoundtripMember { get; internal set; }
 
         public bool IsComplex { get; internal set; }
+
+        /// <summary>
+        /// <c>true</c> if the member is annotated with a <see cref="ExternalReferenceAttribute"/>
+        /// </summary>
+        public bool IsExternalReference { get; internal set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this member is a supported collection type.

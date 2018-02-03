@@ -291,10 +291,9 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
-                var propertyInfo = member.Member;
                 // Check for [ExternalReference] properties, if found we can skip visiting these
                 // external entities so they will not be included in our change set.
-                if (propertyInfo.GetCustomAttributes(typeof(ExternalReferenceAttribute), true).Any())
+                if (member.IsExternalReference)
                 {
                     return;
                 }
@@ -350,7 +349,7 @@ namespace OpenRiaServices.DomainServices.Client
                         associatedEntities = new Dictionary<string, int[]>();
                         this._currentChangeSetEntry.Associations = associatedEntities;
                     }
-                    associatedEntities.Add(propertyInfo.Name, currentIds.ToArray());
+                    associatedEntities.Add(member.Name, currentIds.ToArray());
                 }
 
                 if (originalIds.Count > 0)
@@ -361,7 +360,7 @@ namespace OpenRiaServices.DomainServices.Client
                         associatedEntities = new Dictionary<string, int[]>();
                         this._currentChangeSetEntry.OriginalAssociations = associatedEntities;
                     }
-                    associatedEntities.Add(propertyInfo.Name, originalIds.ToArray());
+                    associatedEntities.Add(member.Name, originalIds.ToArray());
                 }
             }
 
@@ -394,10 +393,9 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
-                var propertyInfo = member.Member;
                 // Check for [ExternalReference] properties, if found we can skip visiting these
                 // external entities so they will not be included in our change set.
-                if (propertyInfo.GetCustomAttributes(typeof(ExternalReferenceAttribute), true).Any())
+                if (member.IsExternalReference)
                 {
                     return;
                 }
@@ -417,8 +415,7 @@ namespace OpenRiaServices.DomainServices.Client
                 bool isComposition = member.IsComposition;
                 if (isComposition && parent.EntityState != EntityState.New)
                 {
-                    AssociationAttribute assocAttrib = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).Single();
-                    ChangeSetEntry entry = this.FindOriginalChildren(assocAttrib).SingleOrDefault();
+                    ChangeSetEntry entry = this.FindOriginalChildren(member.AssociationAttribute).SingleOrDefault();
                     if (entry != null)
                     {
                         prevReferenced = entry.Entity;
@@ -445,7 +442,7 @@ namespace OpenRiaServices.DomainServices.Client
                         associatedEntities = new Dictionary<string, int[]>();
                         this._currentChangeSetEntry.Associations = associatedEntities;
                     }
-                    associatedEntities.Add(propertyInfo.Name, new int[] { refId });
+                    associatedEntities.Add(member.Name, new int[] { refId });
                 }
 
                 // If the association is a composition, set the original reference
@@ -457,7 +454,7 @@ namespace OpenRiaServices.DomainServices.Client
                         associatedEntities = new Dictionary<string, int[]>();
                         this._currentChangeSetEntry.OriginalAssociations = associatedEntities;
                     }
-                    associatedEntities.Add(propertyInfo.Name, new int[] { refId });
+                    associatedEntities.Add(member.Name, new int[] { refId });
                 }
             }
         }
@@ -469,12 +466,10 @@ namespace OpenRiaServices.DomainServices.Client
         {
             protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
             {
-                var propertyInfo = member.Member;
-
                 // look for any invalid updates made to composed children
                 if (entityCollection.HasValues && member.IsComposition)
                 {
-                    AssociationAttribute assoc = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
+                    AssociationAttribute assoc = member.AssociationAttribute;
                     foreach (Entity childEntity in entityCollection.Entities)
                     {
                         CheckInvalidChildUpdates(childEntity, assoc);
@@ -484,7 +479,6 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
             {
-                var propertyInfo = member.Member;
                 // we don't want to cause any deferred loading of the EntityRef
                 // in non-compositional cases
                 Entity entity = null;
@@ -496,8 +490,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // look for any invalid updates made to composed children
                 if (entity != null && member.IsComposition)
                 {
-                    AssociationAttribute assoc = (AssociationAttribute)propertyInfo.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
-                    CheckInvalidChildUpdates(entity, assoc);
+                    CheckInvalidChildUpdates(entity, member.AssociationAttribute);
                 }
             }
 
