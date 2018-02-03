@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Client
         private EntitySetOperations _supportedOperations;
         private IList _list;
         private IDictionary<object, Entity> _identityCache;
-        private List<Entity> _interestingEntities;
+        private readonly HashSet<Entity> _interestingEntities;
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
 
         /// <summary>
@@ -48,6 +48,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._entityType = entityType;
             this._identityCache = new Dictionary<object, Entity>();
+            this._interestingEntities = new HashSet<Entity>();
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this._identityCache = new Dictionary<object, Entity>();
-            this._interestingEntities = null;
+            this._interestingEntities.Clear();
             this._list = this.CreateList();
 
             this.OnCollectionChanged(NotifyCollectionChangedAction.Reset, clearedEntities, -1);
@@ -175,15 +176,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets a collection of all 'interesting' entities for the purposes of changeset computation. Interesting
         /// entities include those that are new, removed, or have been touched by an update operation.
         /// </summary>
-        internal ReadOnlyCollection<Entity> InterestingEntities
+        internal IEnumerable<Entity> InterestingEntities
         {
             get
             {
-                if (this._interestingEntities == null)
-                {
-                    this._interestingEntities = new List<Entity>();
-                }
-                return this._interestingEntities.AsReadOnly();
+                return this._interestingEntities;
             }
         }
 
