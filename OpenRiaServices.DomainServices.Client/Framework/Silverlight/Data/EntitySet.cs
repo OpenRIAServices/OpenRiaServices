@@ -195,7 +195,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (isInteresting)
             {
-                if (!this._interestingEntities.Contains(entity))
+                if (!this.InterestingEntities.Contains(entity))
                 {
                     this._interestingEntities.Add(entity);
                     if (this._interestingEntities.Count == 1)
@@ -360,7 +360,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             // An entity is considered attached if it is in this set or
             // if it is "know" by this set, for example having been deleted
-            return entity.EntitySet == this || this._interestingEntities.Contains(entity);
+            return entity.EntitySet == this || this.InterestingEntities.Contains(entity);
         }
 
         /// <summary>
