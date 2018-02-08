@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
     /// with duplicate hashes. Order of stored values is not guaranteed
     /// to remain consistent between operations.
     /// </summary>
-    internal class DictList<T> : IList
+    internal class IndexedList<T> : IList
     {
         public bool IsReadOnly => false;
         public bool IsFixedSize => false;

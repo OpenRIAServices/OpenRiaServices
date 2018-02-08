@@ -120,9 +120,6 @@
     <Compile Include="..\Silverlight\Data\DefaultDomainClientFactory.cs">
       <Link>Data\DefaultDomainClientFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Silverlight\Data\DictList.cs">
-      <Link>Data\DictList.cs</Link>
-    </Compile>
     <Compile Include="..\Silverlight\Data\DomainClientFactory.cs">
       <Link>Data\DomainClientFactory.cs</Link>
     </Compile>
@@ -176,6 +173,9 @@
     </Compile>
     <Compile Include="..\Silverlight\Data\IDomainClientFactory.cs">
       <Link>Data\IDomainClientFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight\Data\IndexedList.cs">
+      <Link>Data\IndexedList.cs</Link>
     </Compile>
     <Compile Include="..\Silverlight\Data\MergeAttribute.cs">
       <Link>Data\MergeAttribute.cs</Link>

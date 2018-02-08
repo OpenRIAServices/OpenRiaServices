@@ -1222,7 +1222,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         where TEntity : Entity
     {
-        private DictList<TEntity> _dictlist;
+        private IndexedList<TEntity> _dictlist;
 
         /// <summary>
         /// Initializes a new instance of the EntitySet class
@@ -1238,7 +1238,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created storage list instance.</returns>
         protected override IList CreateList()
         {
-            _dictlist = new DictList<TEntity>();
+            _dictlist = new IndexedList<TEntity>();
             return _dictlist;
         }
 
