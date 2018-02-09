@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace OpenRiaServices.DomainServices.Client.Data
 {
@@ -111,23 +112,10 @@ namespace OpenRiaServices.DomainServices.Client.Data
             return NotContainedIndex;
         }
 
-        /// <summary>
-        /// Insert the given item into the list at the given index. Note that
-        /// this is an O(n) operation.
-        /// </summary>
         public void Insert(int index, object value)
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-
-            _list.Insert(index, (T)value);
-            // update indexes of all affected items in list
-            // todo: performance could be made constant-time with the 'swap to the end'
-            //       strategy used by RemoveAt
-            for (var i = index; i < _list.Count; i++)
-            {
-                var item = _list[i];
-                _dict[item] = i;
-            }
+            throw new NotSupportedException(
+                string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Insert"));
         }
 
         /// <summary>
