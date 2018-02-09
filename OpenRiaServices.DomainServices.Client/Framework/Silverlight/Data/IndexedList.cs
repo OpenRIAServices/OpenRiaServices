@@ -5,9 +5,8 @@ using System.Collections.Generic;
 namespace OpenRiaServices.DomainServices.Client.Data
 {
     /// <summary>
-    /// List with constant-time add/contains/remove. Cannot store values
-    /// with duplicate hashes. Order of stored values is not guaranteed
-    /// to remain consistent between operations.
+    /// List with constant-time add/contains. Remove is O(n). Cannot store values
+    /// with duplicate hashes.
     /// </summary>
     internal class IndexedList<T> : IList
     {
@@ -28,8 +27,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         private readonly Dictionary<T, int> _dict = new Dictionary<T, int>();
 
         /// <summary>
-        /// Get/set value by index. Note that order of stored values
-        /// may not remain consisten between list operations.
+        /// Get/set value by index.
         /// </summary>
         public object this[int index]
         {
@@ -42,8 +40,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         }
 
         /// <summary>
-        /// Get an enumerator for items in the list. Note that order of stored values
-        /// may not remain consisten between list operations.
+        /// Get an enumerator for items in the list.
         /// </summary>
         public IEnumerator GetEnumerator()
         {
@@ -152,21 +149,15 @@ namespace OpenRiaServices.DomainServices.Client.Data
         /// </summary>
         public void RemoveAt(int index)
         {
-            // to negate the need to update all following item indexes,
-            // overwrite the item to remove with the last item in the list, then
-            // remove the last item. Note that this alters the order of the list.
+            var item = _list[index];
+            _list.RemoveAt(index);
+            _dict.Remove(item);
 
-            var lastIndex = _list.Count - 1;
-            var lastItem = _list[lastIndex];
-            var removedItem = _list[index];
-
-            _list.RemoveAt(lastIndex);
-            _dict.Remove(removedItem);
-
-            if (index != lastIndex)
+            // update list indexes in dictionary for all subsequent items
+            for (var i = index; i < _list.Count; i++)
             {
-                _list[index] = lastItem;
-                _dict[lastItem] = index;
+                item = _list[i];
+                _dict[item] = i;
             }
         }
 
