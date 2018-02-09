@@ -1222,7 +1222,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         where TEntity : Entity
     {
-        private IndexedList<TEntity> _dictlist;
+        private IndexedList<TEntity> _indexedList;
 
         /// <summary>
         /// Initializes a new instance of the EntitySet class
@@ -1238,8 +1238,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created storage list instance.</returns>
         protected override IList CreateList()
         {
-            _dictlist = new IndexedList<TEntity>();
-            return _dictlist;
+            _indexedList = new IndexedList<TEntity>();
+            return _indexedList;
         }
 
         /// <summary>
@@ -1272,7 +1272,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return _dictlist.ToList().GetEnumerator();
+            return _indexedList.ToList().GetEnumerator();
         }
 
         /// <summary>
@@ -1356,7 +1356,7 @@ namespace OpenRiaServices.DomainServices.Client
 #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
-            _dictlist.CopyTo(array, arrayIndex);
+            _indexedList.CopyTo(array, arrayIndex);
         }
 
         bool ICollection<TEntity>.Contains(TEntity item)
@@ -1445,7 +1445,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             public int IndexOf(object value)
             {
-                return this.Source._dictlist.IndexOf(value);
+                return this.Source._indexedList.IndexOf(value);
             }
 
             public void Insert(int index, object value)
