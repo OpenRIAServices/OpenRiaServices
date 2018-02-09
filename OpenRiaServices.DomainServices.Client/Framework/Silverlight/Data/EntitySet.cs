@@ -1272,7 +1272,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return _indexedList.ToList().GetEnumerator();
+            return _indexedList.AsList().GetEnumerator();
         }
 
         /// <summary>

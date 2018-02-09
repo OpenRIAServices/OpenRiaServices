@@ -173,7 +173,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         /// <summary>
         /// Get the backing list
         /// </summary>
-        public List<T> ToList()
+        public List<T> AsList()
         {
             return _list;
         }
