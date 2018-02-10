@@ -9,12 +9,12 @@ namespace OpenRiaServices.DomainServices.Client.Test.Data
     [TestClass]
     public class IndexedListTests : UnitTestBase
     {
-        private IndexedList<City> _indexedList;
+        private IndexedList _indexedList;
 
         [TestInitialize]
         public void TestSetup()
         {
-            _indexedList = new IndexedList<City>();
+            _indexedList = new IndexedList();
         }
 
         [TestMethod]

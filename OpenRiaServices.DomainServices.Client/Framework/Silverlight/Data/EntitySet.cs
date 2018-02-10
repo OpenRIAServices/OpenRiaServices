@@ -1222,7 +1222,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         where TEntity : Entity
     {
-        private IndexedList<TEntity> _indexedList;
+        private IndexedList _indexedList;
 
         /// <summary>
         /// Initializes a new instance of the EntitySet class
@@ -1238,7 +1238,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created storage list instance.</returns>
         protected override IList CreateList()
         {
-            _indexedList = new IndexedList<TEntity>();
+            _indexedList = new IndexedList();
             return _indexedList;
         }
 
@@ -1272,7 +1272,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return _indexedList.AsList().GetEnumerator();
+            return _indexedList.AsList().Cast<TEntity>().GetEnumerator();
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
     /// List with constant-time add/contains. Remove is O(n). Cannot store values
     /// with duplicate hashes.
     /// </summary>
-    internal class IndexedList<T> : IList
+    internal class IndexedList : IList
     {
         public bool IsReadOnly => false;
         public bool IsFixedSize => false;
@@ -19,13 +19,13 @@ namespace OpenRiaServices.DomainServices.Client.Data
 
         private const int NotContainedIndex = -1;
 
-        private readonly List<T> _list = new List<T>();
+        private readonly List<object> _list = new List<object>();
 
         /// <summary>
         /// Dictionary of { item, index in _list }
         /// NOTE: this restricts usage to items with unique hashes
         /// </summary>
-        private readonly Dictionary<T, int> _dict = new Dictionary<T, int>();
+        private readonly Dictionary<object, int> _dict = new Dictionary<object, int>();
 
         /// <summary>
         /// Get/set value by index.
@@ -35,8 +35,8 @@ namespace OpenRiaServices.DomainServices.Client.Data
             get { return _list[index]; }
             set
             {
-                _list[index] = (T)value;
-                _dict[(T)value] = index;
+                _list[index] = value;
+                _dict[value] = index;
             }
         }
 
@@ -69,14 +69,12 @@ namespace OpenRiaServices.DomainServices.Client.Data
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
 
-            var tval = (T) value;
-
-            if (_dict.ContainsKey(tval))
+            if (_dict.ContainsKey(value))
                 throw new InvalidOperationException("Cannot add duplicate values");
 
             var idx = _list.Count;
-            _list.Add(tval);
-            _dict[tval] = idx;
+            _list.Add(value);
+            _dict[value] = idx;
             return idx;
         }
 
@@ -86,7 +84,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         public bool Contains(object value)
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-            return _dict.ContainsKey((T)value);
+            return _dict.ContainsKey(value);
         }
 
         /// <summary>
@@ -107,7 +105,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
             int idx;
-            if (_dict.TryGetValue((T)value, out idx))
+            if (_dict.TryGetValue(value, out idx))
                 return idx;
             return NotContainedIndex;
         }
@@ -152,7 +150,7 @@ namespace OpenRiaServices.DomainServices.Client.Data
         /// <summary>
         /// Get the backing list
         /// </summary>
-        public List<T> AsList()
+        public List<object> AsList()
         {
             return _list;
         }
