@@ -6,14 +6,14 @@
     <title>Open RIA Services ViewModel Extensions</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Open RIA Services Toolkit - Silverlight ViewModel (MVVM) features</description>
     <summary>Open RIA Services Toolkit - Silverlight ViewModel (MVVM) features</summary>
     <releaseNotes>4.5.0:
-For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745</releaseNotes>
-    <copyright>2016 Outercurve Foundation</copyright>
+For detailed release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases/tag/v4.5.0</releaseNotes>
+    <copyright>2018 Outercurve Foundation</copyright>
     <language />
     <tags>WCF RIA Services RIAServices Silverlight ViewModel MVVM OpenRiaServices</tags>
     <dependencies>

@@ -6,8 +6,8 @@
     <title>Open RIA Services Client - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       OpenRiaServices.Signed.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects.
@@ -18,7 +18,7 @@
 * Fix silverlight designer behaviour (Issue #99)
 
 4.5.0:
-For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
+For detailed release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases/tag/v4.5.0
 
 4.5.0-rc1:
 * Improved performance for large EntityCollections
@@ -39,7 +39,7 @@ see https://docs.microsoft.com/sv-se/dotnet/articles/standard/library for netsta
 * Extend client API for non Silverlight platforms
 
 4.5.0-beta1: Added DomainClientFactory</releaseNotes>
-    <copyright>2016 Outercurve Foundation</copyright>
+    <copyright>2018 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices Signed</tags>
     <dependencies>
