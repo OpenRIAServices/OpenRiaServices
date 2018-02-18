@@ -6,15 +6,15 @@
         <title>RIA Services for Entity Framework 6+</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
-        <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-        <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>RIAServicesContrib.EntityFramework provides the DbDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DbContext from the EntityFramework package.
 
       This package supports versions of EntityFramework starting with EF 6.0.1.</description>
         <summary>RIA Services Contrib - Entity Framework 6+ support with DbDomainService</summary>
         <releaseNotes>Fixed error in resource file.
-        Check http://www.openriaservices.net for known issues as they happen.
+        Check https://github.com/OpenRIAServices/OpenRiaServices for known issues as they happen.
 
 We are not currently creating the web.config file that the original Microsoft version made. If you are using a class library then copying the contents of the app.config to a web.config file should work.</releaseNotes>
         <copyright>Copyright (c) 2013, The Outercurve Foundation</copyright>

@@ -6,14 +6,14 @@
         <title>Open RIA Services Client Code Generator</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
-        <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-        <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. 
         If the signed T4 template is used on the server then you need to use OpenRiaServices.Signed.Client.CodeGen instead.</description>
         <summary>Open RIA Services - Code generation client assemblies and targets.</summary>
         <releaseNotes>
-          For detailed release notes see https://openriaservices.codeplex.com/releases/view/619745
+          For detailed release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases/tag/v4.5.0
           
           4.5.0-rc1:
           * Faster type discovery should result in faster code gen for som scenarios
@@ -29,7 +29,9 @@
           4.4.1.0:
           * Support for .NET Framework 4.6
         </releaseNotes>
-        <copyright>2016 Outercurve Foundation</copyright>
+		<minClientVersion>2.8</minClientVersion>
+		<developmentDependency>true</developmentDependency>
+        <copyright>2018 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices CodeGen</tags>
       <dependencies>

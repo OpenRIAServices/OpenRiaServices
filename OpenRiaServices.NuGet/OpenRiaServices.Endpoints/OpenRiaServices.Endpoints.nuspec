@@ -6,8 +6,8 @@
     <title>Open RIA Services SOAP and JSON Endpoints</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
       OpenRiaServices.Endpoints provides the OpenRiaServices.DomainServices.Hosting.Endpoint assembly, which serves the SOAP and JSON endpoints for Domain Services.
@@ -16,7 +16,7 @@
     </description>
     <summary>Open RIA Services - SOAP and JSON Endpoints for web development</summary>
     <releaseNotes />
-    <copyright>2016 Outercurve Foundation</copyright>
+    <copyright>2018 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices SOAP JSON OpenRiaServices</tags>
     <dependencies>

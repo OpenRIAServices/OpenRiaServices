@@ -6,13 +6,13 @@
     <title>Open RIA Services for Azure Table Storage</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
-    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.WindowsAzure provides the TableDomainService&lt;T&gt; class, as well as the TableEntity and TableEntityContext classes that can be used to create Domain Services backed by Windows Azure Table Storage.</description>
     <summary>Open RIA Services Toolkit - Windows Azure Table Storage support with TableDomainService</summary>
     <releaseNotes />
-    <copyright>2016 Outercurve Foundation</copyright>
+    <copyright>2018 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Azure OpenRiaServices</tags>
   </metadata>

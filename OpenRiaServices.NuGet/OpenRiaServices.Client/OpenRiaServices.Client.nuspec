@@ -6,13 +6,13 @@
         <title>Open RIA Services Client, Code Generator, and MVVM Support</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
-        <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-        <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>OpenRiaServices.Client is the full OpenRiaServices client for wpf/silverlight and portable libraries in a single package.</description>
         <summary>Open RIA Services - Full client</summary>
-        <releaseNotes>4.5.0: For detailed release notes see  https://openriaservices.codeplex.com/releases/view/619745</releaseNotes>
-        <copyright>2016 Outercurve Foundation</copyright>
+        <releaseNotes>4.5.0: For detailed release notes see  https://github.com/OpenRIAServices/OpenRiaServices/releases/tag/v4.5.0</releaseNotes>
+        <copyright>2018 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices</tags>
         <dependencies>

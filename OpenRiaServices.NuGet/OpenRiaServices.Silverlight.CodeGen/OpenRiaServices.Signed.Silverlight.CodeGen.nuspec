@@ -6,8 +6,8 @@
         <title>Open RIA Services Silverlight Code Generator - Signed</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
-        <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-        <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Code generation for silverlight targets, other target platforms should use OpenRiaServices.Client.CodeGen.</description>
         <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
@@ -15,7 +15,9 @@
           4.5.0 - Silverlight specific version of OpenRiaServices.Client.CodeGen
 * Use msbuild property OpenRiaGenerateApplicationContext to control webcontext generation instead of SilverlightApplication
         </releaseNotes>
-        <copyright>2016 Outercurve Foundation</copyright>
+		<minClientVersion>2.8</minClientVersion>
+		<developmentDependency>true</developmentDependency>
+        <copyright>2018 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
         <dependencies>

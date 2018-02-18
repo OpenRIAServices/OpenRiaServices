@@ -6,14 +6,14 @@
     <title>Open RIA Services T4 Code Generation - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://openriaservices.codeplex.com/license</licenseUrl>
-    <projectUrl>http://openriaservices.codeplex.com</projectUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.T4 provides the CSharpClientCodeGenerator class, as well as many supporting classes, which can be used to override the existing code generation pattern for RIA Services.</description>
     <summary>Open RIA Services Toolkit - T4 Code Generation</summary>
     <releaseNotes>4.5.0-rc1: Faster type discovery should result in faster code gen for som scenarios
 4.4.1.1: Support for .NET Framework 4.6.1</releaseNotes>
-    <copyright>2016 Outercurve Foundation</copyright>
+    <copyright>2018 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices T4 OpenRiaServices Signed</tags>
     <dependencies>
