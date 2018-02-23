@@ -3,8 +3,15 @@ configuration:
 - Release
 - Signed
 platform: Any CPU
+init:
+- cmd: git lfs uninstall
 before_build:
-- ps: "appveyor-retry dotnet restore OpenRiaServices.DomainServices.Client\\Framework\\Silverlight\\project.json\nappveyor-retry nuget restore RiaServices.sln\n.\\Setup-TestDatabases.ps1 -UseSqlCmd"
+- ps: >-
+    dotnet restore OpenRiaServices.DomainServices.Client\Framework\Silverlight\project.json
+    
+    nuget restore RiaServices.sln
+    
+    $LastExitCode = 0
 build:
   project: RiaServices.sln
   parallel: true
@@ -16,10 +23,14 @@ after_build:
     # Remove signed packages for normal build and the other way around
 
     if ($env:CONFIGURATION -eq "Release") {dir OpenRiaServices.NuGet\bin\*.nupkg | where {$_.Name -match "OpenRiaServices.Signed"} | del }
+    
     if ($env:CONFIGURATION -eq "Signed") { dir OpenRiaServices.NuGet\bin\*.nupkg | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del}
 artifacts:
 - path: 'OpenRiaServices.NuGet\bin\*.nupkg'
 before_test:
-- ps: start-process 'C:\Program Files (x86)\IIS Express\iisexpress.exe' -ArgumentList "/port:60002","/path:Test\WebsiteFullTrust\" -PassThru
-# Not all test are currently passing, remove the follwoing to run them
+- ps: >-
+    .\Setup-TestDatabases.ps1 -UseSqlCmd
+    
+    start-process 'C:\Program Files (x86)\IIS Express\iisexpress.exe' -ArgumentList "/port:60002","/path:Test\WebsiteFullTrust\" -PassThru
+# Not all test are currently passing, remove the following to run them
 test: off 
