@@ -135,7 +135,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsNull(lo.Error);
+                Assert.AreEqual(null, lo.Error, "Load should succeed without error");
 
                 foreach(DataTests.Northwind.LTS.Product product in ctxt.Products)
                 {

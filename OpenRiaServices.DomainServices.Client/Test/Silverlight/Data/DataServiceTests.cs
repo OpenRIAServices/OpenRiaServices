@@ -20,7 +20,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
     public class DataServiceTests : UnitTestBase
     {
         // Allow some delay between when the Date header and Expires headers are set
-        private const double OutputCacheMaxDelta = 0.6;
+        // The dates are set at differetn times and only have 1s of resolution so 
+        // which can lead to 1 second difference even if only 1ms has passed
+        private const double OutputCacheMaxDelta = 1.0;
 
         // Test Todo:
         // - test wrong number of parameters sent / mismatch of name/type
@@ -290,14 +292,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 }
             });
 
-            EnqueueConditional(() => DateTime.UtcNow.Subtract(date).TotalSeconds > 1); // Make sure 1 second has passed since the first request.
-
-            Enqueue(() => Assert.IsTrue(DateTime.UtcNow.Subtract(date).TotalSeconds < 2, "Less than 2 seconds should have passed"));
+            EnqueueConditional(() => DateTime.UtcNow.Subtract(date.ToUniversalTime()).TotalSeconds > 1); // Make sure 1 second has passed since the first request.
 
             ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesInStateWithCaching?state=WA"), response =>
             {
                 Assert.AreEqual("private, max-age=2", response.Headers["Cache-Control"], "Incorrect cache header");
 
+                Assert.IsTrue(DateTime.UtcNow.Subtract(date).TotalSeconds < 2, "Less than 2 seconds should have passed");
                 DateTime expires2 = Convert.ToDateTime(response.Headers["Expires"]);
                 Assert.AreEqual(expires, expires2, "Response was not cached");
 
