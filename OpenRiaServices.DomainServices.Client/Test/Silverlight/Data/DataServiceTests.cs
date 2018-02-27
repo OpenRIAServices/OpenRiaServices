@@ -292,13 +292,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 }
             });
 
-            EnqueueConditional(() => DateTime.UtcNow.Subtract(date.ToUniversalTime()).TotalSeconds > 1); // Make sure 1 second has passed since the first request.
+            EnqueueConditional(() => DateTime.UtcNow.Subtract(date.ToUniversalTime()).TotalSeconds >= 1); // Make sure 1 second has passed since the first request.
 
             ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesInStateWithCaching?state=WA"), response =>
             {
                 Assert.AreEqual("private, max-age=2", response.Headers["Cache-Control"], "Incorrect cache header");
 
-                Assert.IsTrue(DateTime.UtcNow.Subtract(date).TotalSeconds < 2, "Less than 2 seconds should have passed");
+                Assert.IsTrue(DateTime.UtcNow.Subtract(date.ToUniversalTime()).TotalSeconds <= 2, "Less than 2 seconds should have passed");
                 DateTime expires2 = Convert.ToDateTime(response.Headers["Expires"]);
                 Assert.AreEqual(expires, expires2, "Response was not cached");
 
@@ -514,10 +514,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
-                if (buildRequest != null)
-                {
-                    buildRequest(request);
-                }
+                buildRequest?.Invoke(request);
                 request.BeginGetResponse(delegate (IAsyncResult asyncResult)
                 {
                     try

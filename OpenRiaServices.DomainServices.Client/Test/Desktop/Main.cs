@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,6 +22,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 ServerBaseUri = TestURIs.RootURI,
             };
+
+            HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
         }
     }
 }
