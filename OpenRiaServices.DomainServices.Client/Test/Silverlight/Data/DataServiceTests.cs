@@ -19,6 +19,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
     [TestClass]
     public class DataServiceTests : UnitTestBase
     {
+        // Allow some delay between when the Date header and Expires headers are set
+        private const double OutputCacheMaxDelta = 0.6;
 
         // Test Todo:
         // - test wrong number of parameters sent / mismatch of name/type
@@ -172,7 +174,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 DateTime date = Convert.ToDateTime(response.Headers["Date"]);
                 DateTime expires = Convert.ToDateTime(response.Headers["Expires"]);
-                Assert.AreEqual(2, (int)expires.Subtract(date).TotalSeconds, "Incorrect cache duration");
+                Assert.AreEqual(2.0, expires.Subtract(date).TotalSeconds, OutputCacheMaxDelta, "Incorrect cache duration");
             });
 
             EnqueueTestComplete();
@@ -189,7 +191,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 DateTime date = Convert.ToDateTime(response.Headers["Date"]);
                 DateTime expires = Convert.ToDateTime(response.Headers["Expires"]);
-                Assert.AreEqual(2, (int)expires.Subtract(date).TotalSeconds, "Incorrect cache duration");
+                Assert.AreEqual(2.0, expires.Subtract(date).TotalSeconds, OutputCacheMaxDelta, "Incorrect cache duration");
             });
 
             EnqueueTestComplete();
@@ -237,7 +239,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // This time wait for 2 seconds such that the cache will be invalidated.
             EnqueueDelay(2000);
-            
+
             ExecuteRequest(
                 new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesWithCaching2"),
                 response =>
@@ -266,7 +268,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 date = Convert.ToDateTime(response.Headers["Date"]);
                 expires = Convert.ToDateTime(response.Headers["Expires"]);
-                Assert.AreEqual(2, (int)expires.Subtract(date).TotalSeconds, "Incorrect cache duration");
+                Assert.AreEqual(2.0, expires.Subtract(date).TotalSeconds, OutputCacheMaxDelta, "Incorrect cache duration");
 
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
@@ -280,7 +282,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 DateTime date2 = Convert.ToDateTime(response.Headers["Date"]);
                 DateTime expires2 = Convert.ToDateTime(response.Headers["Expires"]);
-                Assert.AreEqual(2, (int)expires2.Subtract(date2).TotalSeconds, "Incorrect cache duration");
+                Assert.AreEqual(2.0, expires2.Subtract(date2).TotalSeconds, OutputCacheMaxDelta, "Incorrect cache duration");
 
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
@@ -290,7 +292,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             EnqueueConditional(() => DateTime.UtcNow.Subtract(date).TotalSeconds > 1); // Make sure 1 second has passed since the first request.
 
-            Enqueue(() => Assert.IsTrue( DateTime.UtcNow.Subtract(date).TotalSeconds < 2, "Less than 2 seconds should have passed"));
+            Enqueue(() => Assert.IsTrue(DateTime.UtcNow.Subtract(date).TotalSeconds < 2, "Less than 2 seconds should have passed"));
 
             ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesInStateWithCaching?state=WA"), response =>
             {
@@ -378,27 +380,33 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestInvalidProviderName() {
+        public void TestInvalidProviderName()
+        {
             // first test an invalid name
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-DNE.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("NonExistentMethod", null), false);
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return lo.IsComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 Assert.IsNotNull(lo.Error);
                 Assert.IsTrue(lo.Error.Message.Contains("Load operation failed"));
             });
 
             // now test an empty name (just the service path is specified w/o a DomainService name)
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 ctxt = new TestDataContext(TestURIs.RootURI);
                 lo = ctxt.Load(ctxt.CreateQuery<Product>("NonExistentMethod", null), false);
             });
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return lo.IsComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 Assert.IsNotNull(lo.Error);
                 Assert.IsTrue(lo.Error.Message.Contains("Load operation failed"));
             });
@@ -411,7 +419,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// operation finishes with the expected WebResponse.StatusCode.
         /// </summary>
         [TestMethod]
-        public void TestInvalidMethodName() {
+        public void TestInvalidMethodName()
+        {
             TestDataContext ctxt = new TestDataContext(TestURIs.LTS_Catalog);
             ExceptionHelper.ExpectException<MissingMethodException>(delegate
             {
@@ -425,13 +434,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestProviderAccessibility() {
+        public void TestProviderAccessibility()
+        {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-InaccessibleProvider.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return lo.IsComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 Assert.IsNotNull(lo.Error);
                 // TODO: Assert proper error message... Note: WCF error messages differ between desktop and Silverlight.
                 //Assert.IsTrue(lo.Error.InnerException.Message.StartsWith("There was no endpoint listening"));
@@ -446,13 +458,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestNonDomainService() {
+        public void TestNonDomainService()
+        {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-NonDomainService.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return lo.IsComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 Assert.IsNotNull(lo.Error);
                 // TODO: Assert proper error message... Note: WCF error messages differ between desktop and Silverlight.
                 //Assert.IsTrue(lo.Error.InnerException.Message.StartsWith("There was no endpoint listening"));
@@ -472,7 +487,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = service.Load(service.GetTestEntitiesQuery(), false);
 
             EnqueueConditional(() => lo.IsComplete);
-            
+
             EnqueueCallback(() =>
             {
                 DomainOperationException ex = (DomainOperationException)lo.Error;
@@ -502,7 +517,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
                     buildRequest(request);
                 }
-                request.BeginGetResponse(delegate(IAsyncResult asyncResult)
+                request.BeginGetResponse(delegate (IAsyncResult asyncResult)
                 {
                     try
                     {
