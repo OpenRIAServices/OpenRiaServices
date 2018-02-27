@@ -139,8 +139,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 foreach(DataTests.Northwind.LTS.Product product in ctxt.Products)
                 {
-                    Assert.IsTrue(!string.IsNullOrEmpty(product.SupplierName));
-                    Assert.IsTrue(!string.IsNullOrEmpty(product.CategoryName));
+                    bool shouldHaveValue = product.ProductID != 1;
+
+                    // All rows except product 1 should have references to supplier and category
+                    Assert.AreEqual(shouldHaveValue, !string.IsNullOrEmpty(product.SupplierName));
+                    Assert.AreEqual(shouldHaveValue, !string.IsNullOrEmpty(product.CategoryName));
                 }
             });
 
