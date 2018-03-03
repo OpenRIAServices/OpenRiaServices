@@ -284,7 +284,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             // First check if the parent has an existing instance attached for this
             // property and detach if necessary.
-            string memberName = metaMember.Member.Name;
+            string memberName = metaMember.Name;
             ComplexObject prevInstance = null;
             if (this.TrackedInstances.TryGetValue(memberName, out prevInstance))
             {

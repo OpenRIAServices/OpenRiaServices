@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using OpenRiaServices.DomainServices.Server.Data;
 
@@ -35,11 +37,15 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly bool _hasComposition;
         private readonly bool _shouldRoundtripOriginal;
         private readonly Type _type;
-        private readonly IEnumerable<Type> _childTypes = new List<Type>();
+        private readonly Type[] _childTypes;
         private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private readonly MetaMember _versionMember;
+        private readonly ReadOnlyCollection<MetaMember> _keyMembers;
+        private readonly ReadOnlyCollection<MetaMember> _dataMembers;
+        private readonly ReadOnlyCollection<ValidationAttribute> _validationAttributes;
 
-        private readonly IDictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
+
+        private readonly Dictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
 
         /// <summary>
         /// Returns the MetaType for the specified Type.
@@ -95,9 +101,11 @@ namespace OpenRiaServices.DomainServices.Client
                     metaMember.RequiresValidation = TypeUtility.IsAttributeDefined(property, typeof(ValidationAttribute), true);
                 }
 
-                if (TypeUtility.IsAttributeDefined(property, typeof(AssociationAttribute), false))
+
+                var associationAttributes = property.GetCustomAttributes(typeof(AssociationAttribute), false);
+                if (associationAttributes.Any())
                 {
-                    metaMember.IsAssociationMember = true;
+                    metaMember.AssociationAttribute = (AssociationAttribute)associationAttributes.SingleOrDefault();
                 }
 
                 bool isKeyMember = TypeUtility.IsAttributeDefined(property, typeof(KeyAttribute), false);
@@ -109,6 +117,12 @@ namespace OpenRiaServices.DomainServices.Client
                 if (TypeUtility.IsAttributeDefined(property, typeof(CompositionAttribute), false))
                 {
                     this._hasComposition = true;
+                    metaMember.IsComposition = true;
+                }
+
+                if (TypeUtility.IsAttributeDefined(property, typeof(ExternalReferenceAttribute), true))
+                {
+                    metaMember.IsExternalReference = true;
                 }
 
                 if (MetaType.IsRoundtripMember(metaMember))
@@ -130,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 metaMember.IsMergable = MetaType.IsMergeableMember(metaMember);
-                
+
 
                 metaMember.EditableAttribute = (EditableAttribute)property.GetCustomAttributes(typeof(EditableAttribute), false).SingleOrDefault();
                 this._metaMembers.Add(property.Name, metaMember);
@@ -147,15 +161,25 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (this._hasComposition)
             {
-                this._childTypes = type
-                        .GetProperties(MemberBindingFlags)
-                        .Where(p => p.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
+                this._childTypes = _metaMembers.Values
+                        .Where(m => m.IsComposition)
                         .Select(p => TypeUtility.GetElementType(p.PropertyType)).ToArray();
+            }
+            else
+            {
+                this._childTypes = TypeUtility.EmptyTypes;
             }
 
             this._type = type;
 
+            _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this._type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
+            _requiresValidation = _validationAttributes.Any();
+
             this.CalculateAttributesRecursive(type, new HashSet<Type>());
+
+            // for identity purposes, we need to make sure values are always ordered
+            _keyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
+            _dataMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsDataMember).ToArray());
         }
 
         /// <summary>
@@ -215,7 +239,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
                    (TypeUtility.IsAttributeDefined(metaMember.Member, typeof(MergeAttribute), true) == false ||
-                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof (MergeAttribute), true).First()).IsMergeable);
+                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof(MergeAttribute), true).First()).IsMergeable);
         }
 
 
@@ -300,12 +324,13 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets the collection of key members for this entity Type.
+        /// The entries are sorted by Name for indentiy purposes.
         /// </summary>
-        public IEnumerable<PropertyInfo> KeyMembers
+        public ReadOnlyCollection<MetaMember> KeyMembers
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsKeyMember).Select(m => m.Member);
+                return this._keyMembers;
             }
         }
 
@@ -316,7 +341,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsDataMember);
+                return _dataMembers;
             }
         }
 
@@ -328,18 +353,18 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsRoundtripMember).Select(m => m.Member);
+                return this._dataMembers.Where(m => m.IsRoundtripMember).Select(m => m.Member);
             }
         }
 
         /// <summary>
         /// Gets the collection of association members for this entity Type.
         /// </summary>
-        public IEnumerable<PropertyInfo> AssociationMembers
+        public IEnumerable<MetaMember> AssociationMembers
         {
             get
             {
-                return this._metaMembers.Values.Where(m => m.IsAssociationMember).Select(m => m.Member);
+                return this._metaMembers.Values.Where(m => m.IsAssociationMember);
             }
         }
 
@@ -394,7 +419,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._type.GetCustomAttributes(true).OfType<ValidationAttribute>();
+                return _validationAttributes;
             }
         }
 
@@ -492,91 +517,156 @@ namespace OpenRiaServices.DomainServices.Client
     [DebuggerDisplay("Name = {Member.Name}")]
     internal sealed class MetaMember
     {
+#if !NETSTANDARD1_3
+        private static MethodInfo s_getterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+        private static MethodInfo s_setterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateSetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+
+        private Func<object, object> _getter;
+        private Action<object, object> _setter;
+#endif
+
         public MetaMember(MetaType metaType, PropertyInfo propertyInfo)
         {
             this.Member = propertyInfo;
             this.MetaType = metaType;
         }
 
-        public MetaType MetaType
-        {
-            get;
-            private set;
-        }
+        public string Name => Member.Name;
 
-        public EditableAttribute EditableAttribute
-        {
-            get;
-            set;
-        }
+        public Type PropertyType => Member.PropertyType;
 
-        public PropertyInfo Member
-        {
-            get;
-            private set;
-        }
+        public MetaType MetaType { get; }
 
-        public bool IsAssociationMember
-        {
-            get;
-            set;
-        }
+        public EditableAttribute EditableAttribute { get; internal set; }
 
-        public bool IsDataMember
-        {
-            get;
-            set;
-        }
+        internal PropertyInfo Member { get; }
 
-        public bool IsKeyMember
-        {
-            get;
-            set;
-        }
+        public bool IsAssociationMember { get { return AssociationAttribute != null; } }
 
-        public bool IsRoundtripMember
-        {
-            get;
-            set;
-        }
+        public AssociationAttribute AssociationAttribute { get; internal set; }
 
-        public bool IsComplex
-        {
-            get;
-            set;
-        }
+        public bool IsDataMember { get; internal set; }
+
+        public bool IsKeyMember { get; internal set; }
+
+        public bool IsRoundtripMember { get; internal set; }
+
+        public bool IsComplex { get; internal set; }
+
+        /// <summary>
+        /// <c>true</c> if the member is annotated with a <see cref="ExternalReferenceAttribute"/>
+        /// </summary>
+        public bool IsExternalReference { get; internal set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this member is a supported collection type.
         /// </summary>
-        public bool IsCollection
-        {
-            get;
-            set;
-        }
+        public bool IsCollection { get; internal set; }
 
         /// <summary>
         /// Returns <c>true</c> if the member has a property validator.
         /// </summary>
         /// <remarks>The return value does not take into account whether or not the member requires
         /// type validation.</remarks>
-        public bool RequiresValidation
-        {
-            get;
-            set;
-        }
+        public bool RequiresValidation { get; internal set; }
 
+        /// <summary>
+        /// Get the value of the member
+        /// </summary>
+        /// <param name="instance">the instance from which the member should be accessed</param>
+        /// <returns>the value of the property</returns>
         public object GetValue(object instance)
         {
-            // TODO : In the future as a performance optimization we should emit a delegate
-            // to invoke the getter, rather than use reflection.
-            return this.Member.GetValue(instance, null);
+#if NETSTANDARD1_3
+            return Member.GetValue(instance);
+#else
+            if (_getter == null)
+            {
+                _getter = CreateGetterDelegate(Member);
+            }
+            return _getter(instance);
+#endif
         }
 
-        public bool IsMergable
+        /// <summary>
+        /// Set the value of the member
+        /// </summary>
+        /// <param name="instance">the instance from which the member should be accessed</param>
+        /// <param name="value">the value to set</param>
+        /// <returns>the value of the property</returns>
+        public void SetValue(object instance, object value)
         {
-            get; 
-            set;
+#if NETSTANDARD1_3
+            Member.SetValue(instance, value);
+#else
+            if (_setter == null)
+            {
+                _setter = CreateSetterDelegate(Member);
+            }
+            _setter(instance, value);
+#endif
         }
+
+        public bool IsMergable { get; internal set; }
+
+        /// <summary>
+        /// <c>true</c> if the member is marked with a <see cref="CompositionAttribute"/>
+        /// </summary>
+        public bool IsComposition { get; internal set; }
+
+#if !NETSTANDARD1_3
+        /// <summary>
+        /// Helper method which creates a delegate which can be used to invoke a specific getter
+        /// </summary>
+        /// <param name="propertyInfo"></param>
+        /// <returns></returns>
+        private static Func<object, object> CreateGetterDelegate(PropertyInfo propertyInfo)
+        {
+            var helper = s_getterDelegateHelper.MakeGenericMethod(propertyInfo.DeclaringType, propertyInfo.PropertyType);
+            return (Func<object, object>)helper.Invoke(null, new[] { propertyInfo });
+        }
+
+        private static Func<object, object> CreateGetterDelegateHelper<T, Tprop>(PropertyInfo propertyInfo)
+        {
+            var getMethod = propertyInfo.GetGetMethod();
+            if (getMethod == null)
+            {
+                // If no getter was found, fallback to method throw same type of exception
+                // which exception would do, these should never propagate to the user
+                return obj => { throw new ArgumentException("Internal error: No getter"); };
+            }
+
+            var getter = (Func<T, Tprop>)Delegate.CreateDelegate(typeof(Func<T, Tprop>), getMethod);
+            // Add a wrapper which performs boxing of the function
+            return (object instance) => (object)getter((T)instance);
+        }
+
+        /// <summary>
+        /// Helper method which creates a delegate which can be used to invoke a specific getter
+        /// </summary>
+        /// <param name="propertyInfo"></param>
+        /// <returns></returns>
+        private static Action<object, object> CreateSetterDelegate(PropertyInfo propertyInfo)
+        {
+            var helper = s_setterDelegateHelper.MakeGenericMethod(propertyInfo.DeclaringType, propertyInfo.PropertyType);
+            return (Action<object, object>)helper.Invoke(null, new[] { propertyInfo });
+        }
+
+        private static Action<object, object> CreateSetterDelegateHelper<T, Tprop>(PropertyInfo propertyInfo)
+        {
+            // If no getter was found, fallback to using reflection which will throw exception
+            var setMethod = propertyInfo.GetSetMethod();
+            if (setMethod == null)
+            {
+                // If no setter was found, fallback to method throw same type of exception
+                // which exception would do, these should never propagate to the user
+                return (obj, val) => { throw new ArgumentException("Internal error: No setter"); };
+            }
+
+            var setter = (Action<T, Tprop>)Delegate.CreateDelegate(typeof(Action<T, Tprop>), setMethod);
+            // Add a wrapper which performs unboxing for the function
+            return (object obj, object value) => setter((T)obj, (Tprop)value);
+        }
+#endif
     }
 }

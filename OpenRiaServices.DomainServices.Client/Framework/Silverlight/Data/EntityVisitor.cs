@@ -22,11 +22,11 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("entity");
             }
 
-            foreach (PropertyInfo association in entity.MetaType.AssociationMembers)
+            foreach (MetaMember association in entity.MetaType.AssociationMembers)
             {
                 if (typeof(IEntityCollection).IsAssignableFrom(association.PropertyType))
                 {
-                    this.VisitEntityCollection((IEntityCollection)association.GetValue(entity, null), association);
+                    this.VisitEntityCollection((IEntityCollection)association.GetValue(entity), association);
                 }
                 else
                 {
@@ -42,8 +42,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// Visit the specified <see cref="IEntityCollection"/>.
         /// </summary>
         /// <param name="entityCollection">The <see cref="IEntityCollection"/>.</param>
-        /// <param name="propertyInfo">The <see cref="PropertyInfo"/> for the collection member.</param>
-        protected virtual void VisitEntityCollection(IEntityCollection entityCollection, PropertyInfo propertyInfo)
+        /// <param name="member">The <see cref="MetaMember"/> for the collection member.</param>
+        protected virtual void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
         {
         }
 
@@ -52,8 +52,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="entityRef">The EntityRef to visit.</param>
         /// <param name="parent">The parent of the reference member</param>
-        /// <param name="propertyInfo">The <see cref="PropertyInfo"/> for the reference member</param>
-        protected virtual void VisitEntityRef(IEntityRef entityRef, Entity parent, PropertyInfo propertyInfo)
+        /// <param name="member">The <see cref="MetaMember"/> for the reference member</param>
+        protected virtual void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
         {
         }
     }

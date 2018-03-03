@@ -222,7 +222,7 @@ namespace OpenRiaServices.DomainServices.Client
             foreach (MetaMember metaMember in metaType.Members.Where(m => m.RequiresValidation || m.IsComplex))
             {
                 ValidationContext propertyValidationContext = ValidationUtilities.CreateValidationContext(instance, validationContext);
-                propertyValidationContext.MemberName = metaMember.Member.Name;
+                propertyValidationContext.MemberName = metaMember.Name;
 
                 // Form the current member path, appending the current
                 // member name if it is complex.
@@ -233,7 +233,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         currMemberPath += ".";
                     }
-                    currMemberPath += metaMember.Member.Name;
+                    currMemberPath += metaMember.Name;
                 }
 
                 object value = metaMember.GetValue(instance);
@@ -538,12 +538,12 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 // filter the results to only those with a member name that begins with a dotted path
                 // starting at the current complex member
-                IEnumerable<ValidationResult> results = validationResults.Where(p => p.MemberNames.Any(q => !string.IsNullOrEmpty(q) && q.StartsWith(complexMember.Member.Name + ".", StringComparison.Ordinal)));
+                IEnumerable<ValidationResult> results = validationResults.Where(p => p.MemberNames.Any(q => !string.IsNullOrEmpty(q) && q.StartsWith(complexMember.Name + ".", StringComparison.Ordinal)));
                 
                 ComplexObject complexObject = (ComplexObject)complexMember.GetValue(instance);
                 if (complexObject != null)
                 {
-                    results = ValidationUtilities.RemoveMemberPrefix(results, complexMember.Member.Name);
+                    results = ValidationUtilities.RemoveMemberPrefix(results, complexMember.Name);
                     ApplyValidationErrors(complexObject, results);
                 }
             }

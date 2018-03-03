@@ -157,7 +157,7 @@ namespace OpenRiaServices.DomainServices.Client
                 object storeValue = versionMember.GetValue(this._storeEntity);
 
                 // since Timestamp values are readonly, we must use ApplyState to set the value
-                this._currentEntity.ApplyState(new Dictionary<string, object> { { versionMember.Member.Name, storeValue } });
+                this._currentEntity.ApplyState(new Dictionary<string, object> { { versionMember.Name, storeValue } });
             }
 
             // clear the conflict now that it is resolved
