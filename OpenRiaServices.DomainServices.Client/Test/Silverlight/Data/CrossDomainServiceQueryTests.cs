@@ -135,12 +135,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsNull(lo.Error);
+                Assert.AreEqual(null, lo.Error, "Load should succeed without error");
 
                 foreach(DataTests.Northwind.LTS.Product product in ctxt.Products)
                 {
-                    Assert.IsTrue(!string.IsNullOrEmpty(product.SupplierName));
-                    Assert.IsTrue(!string.IsNullOrEmpty(product.CategoryName));
+                    // All rows except product 1 should have references to supplier and category
+                    Assert.IsTrue(!string.IsNullOrEmpty(product.SupplierName), "Supplier not loaded");
+                    Assert.IsTrue(!string.IsNullOrEmpty(product.CategoryName), "Category not loaded");
                 }
             });
 

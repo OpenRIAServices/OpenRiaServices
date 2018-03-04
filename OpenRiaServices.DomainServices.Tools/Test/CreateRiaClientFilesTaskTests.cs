@@ -66,10 +66,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 Assert.IsFalse(string.IsNullOrEmpty(serverOutputPath), "Empty server output path");
 
                 // The ServerOutputPath always resolves to Debug since no configuration is set
-#if RELEASE
-                serverOutputPath = serverOutputPath.Replace("Debug", "Release");
-#elif SIGNED
+#if SIGNED
                 serverOutputPath = serverOutputPath.Replace("Debug", "Signed");
+#elif !DEBUG
+                serverOutputPath = serverOutputPath.Replace("Debug", "Release");
 #endif
 
                 Assert.IsTrue(Directory.Exists(serverOutputPath), "Server output path should exist");

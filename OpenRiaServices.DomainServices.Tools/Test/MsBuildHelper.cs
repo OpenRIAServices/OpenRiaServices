@@ -103,17 +103,25 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             engine.DefaultToolsVersion = "4.0";
 
+            BuildProperty configuration = new BuildProperty("Configuration", GetConfiguration());
+            engine.GlobalProperties[configuration.Name] = configuration;
+
             var project = new Project(engine);
             project.Load(projectPath);
-#if SIGNED
-            project.SetProperty("Configuration", "Signed");
-#elif DEBUG
-            project.SetProperty("Configuration", "Debug");
-#else
-            project.SetProperty("Configuration", "Release");
-#endif
+            project.SetProperty(configuration.Name, configuration.Value);
             project.SetProperty("BuildProjectReferences", "false");
             return project;
+        }
+
+        private static string  GetConfiguration()
+        {
+#if SIGNED
+            return "Signed";
+#elif DEBUG
+            return "Debug";
+#else
+            return "Release";
+#endif
         }
 
         /// <summary>
