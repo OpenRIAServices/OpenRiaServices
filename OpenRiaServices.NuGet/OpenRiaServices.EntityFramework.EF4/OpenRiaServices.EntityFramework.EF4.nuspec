@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.EntityFramework.EF4</id>
-    <version>4.5.0</version>
+    <version>4.5.1</version>
     <title>Open RIA Services support for ObjectContext</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve RIA Services</owners>
@@ -16,11 +16,11 @@
     <summary>OpenRiaServices.EntityFramework provides the LinqToEntitiesDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with an ObjectContext using older versions of Entity Framework.
 
       This package supports versions of EntityFramework less than 6. If you are using ObjectContext with EF 6 use the OpenRiaServices.EntityFramework package instead.</summary>
-    <releaseNotes />
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
     <copyright>2018 Outercurve Foundation</copyright>
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices ObjectContext</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="4.5.0"/>
+      <dependency id="OpenRiaServices.Server" version="4.5.1"/>
     </dependencies>
   </metadata>
   <files>

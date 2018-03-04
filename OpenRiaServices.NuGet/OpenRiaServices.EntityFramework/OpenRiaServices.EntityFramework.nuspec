@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.EntityFramework</id>
-    <version>4.5.0</version>
+    <version>4.5.1</version>
     <title>Open RIA Services support for Entity Framework 6+</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -15,13 +15,13 @@
       This package supports versions of EntityFramework starting with EF 6.0.1
     </description>
     <summary>Open RIA Services - Entity Framework 6 support with DbDomainService and LinqToEntitiesDomainService</summary>
-    <releaseNotes />
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
     <copyright>2018 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
     <dependencies>
       <dependency id="EntityFramework" version="6.0.1" />
-      <dependency id="OpenRiaServices.Server" version="4.5.0"/>
+      <dependency id="OpenRiaServices.Server" version="4.5.1"/>
     </dependencies>
   </metadata>
   <files>
