@@ -3,6 +3,27 @@ param($RepositoryRoot = "$PSScriptRoot", $SqlServer = "(localdb)\MSSQLLocalDB", 
 
 $DatabaseFolder = join-path $RepositoryRoot "Test/Databases"
 
+# Verify SqlServer or SQLPS module is installed
+if (-not $UseSqlCmd)
+{
+	if ((-not (Get-Module SqlServer -ListAvailable)) -and (-not (Get-Module SQLPS)))
+	{
+		# This will install the nuget provider if not already installed
+		Get-PackageProvider -Name NuGet -Force
+		# Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+		# Installs SQL Module
+		Install-Module -Name SqlServer -Force -Scope CurrentUser
+	}
+	
+	# Check if module is loaded and if not import it
+	if ((Get-Module SqlServer -ListAvailable) -and (-not (Get-Module SqlServer))) {
+		Import-Module SqlServer
+	}
+	elseif ((Get-Module SQLPS -ListAvailable) -and (-not (Get-Module SQLPS))) {
+		Import-Module SQLPS
+	}
+}
+
 function Execute-SQL([string]$sql)
 {
 	if ($UseSqlCmd)
@@ -38,7 +59,7 @@ function CreateDatabaseFromBackup([string]$databaseName, [string]$LogicalNameMDF
     $LogFile =  $DatabaseFileWithoutExt + ".ldf"
 
 
-    echo "Restoring a new backop of '$databaseName' from '$BackupFile'"
+    echo "Restoring a new backup of '$databaseName' from '$BackupFile' to '$DataFile'"
 
     Remove-Database $databaseName
 
