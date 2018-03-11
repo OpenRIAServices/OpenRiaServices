@@ -27,8 +27,8 @@ namespace OpenRiaServices.DomainServices.Client
     {
         private readonly Action<TEntity> _attachAction;
         private readonly Action<TEntity> _detachAction;
-        private readonly AssociationAttribute _assocAttribute;
         private readonly Entity _parent;
+        private readonly MetaMember _metaMember;
         private EntitySet _sourceSet;
         private readonly Func<TEntity, bool> _entityPredicate;
         private List<TEntity> _entities;
@@ -39,7 +39,9 @@ namespace OpenRiaServices.DomainServices.Client
         private TEntity _detachingEntity;
         private bool _entitiesLoaded;
         private bool _entitiesAdded;
-        private readonly bool _isComposition;
+
+        private AssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
+        private bool IsComposition => _metaMember.IsComposition;
 
         /// <summary>
         /// Initializes a new instance of the EntityCollection class
@@ -52,32 +54,29 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (parent == null)
             {
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
             }
             if (string.IsNullOrEmpty(memberName))
             {
-                throw new ArgumentNullException("memberName");
+                throw new ArgumentNullException(nameof(memberName));
             }
             if (entityPredicate == null)
             {
-                throw new ArgumentNullException("entityPredicate");
+                throw new ArgumentNullException(nameof(entityPredicate));
             }
 
             this._parent = parent;
             this._entityPredicate = entityPredicate;
+            this._metaMember = this._parent.MetaType[memberName];
 
-            PropertyInfo propInfo = this._parent.GetType().GetProperty(memberName, MetaType.MemberBindingFlags);
-            if (propInfo == null)
+            if (this._metaMember == null)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), "memberName");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), nameof(memberName));
             }
-            this._assocAttribute = propInfo.GetCustomAttributes(false).OfType<AssociationAttribute>().SingleOrDefault();
-            if (this._assocAttribute == null)
+            if (this._metaMember.AssociationAttribute == null)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.MemberMustBeAssociation, memberName), "memberName");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.MemberMustBeAssociation, memberName), nameof(memberName));
             }
-
-            this._isComposition = propInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any();
 
             // register our callback so we'll be notified whenever the
             // parent entity is added or removed from an EntitySet
@@ -102,11 +101,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (attachAction == null)
             {
-                throw new ArgumentNullException("attachAction");
+                throw new ArgumentNullException(nameof(attachAction));
             }
             if (detachAction == null)
             {
-                throw new ArgumentNullException("detachAction");
+                throw new ArgumentNullException(nameof(detachAction));
             }
 
             this._attachAction = attachAction;
@@ -248,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Client
                         this.SourceSet.Add(entity);
                         addedToSet = true;
                     }
-                    else if (this._isComposition && entity.EntityState == EntityState.Deleted)
+                    else if (this.IsComposition && entity.EntityState == EntityState.Deleted)
                     {
                         // if a deleted entity is added to a compositional association,
                         // the delete should be undone
@@ -272,7 +271,7 @@ namespace OpenRiaServices.DomainServices.Client
             // we're monitoring the source entity set from here on.
             this.Load();
 
-            if (this._isComposition)
+            if (this.IsComposition)
             {
                 entity.Parent.OnChildUpdate();
             } 
@@ -321,7 +320,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            if (this._isComposition)
+            if (this.IsComposition)
             {
                 // when a composed entity is removed from its collection,
                 // it's inferred as a delete
@@ -357,9 +356,9 @@ namespace OpenRiaServices.DomainServices.Client
             this.Entities.Add(entity);
             this.EntitiesHashSet.Add(entity);
 
-            if (this._isComposition)
+            if (this.IsComposition)
             {
-                entity.SetParent(this._parent, this._assocAttribute);
+                entity.SetParent(this._parent, this.AssocAttribute);
             }
         }
 
@@ -466,7 +465,7 @@ namespace OpenRiaServices.DomainServices.Client
         private void ParentEntityPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Reset the loaded entities as needed.
-            if (this._entitiesLoaded && this._assocAttribute.ThisKeyMembers.Contains(e.PropertyName))
+            if (this._entitiesLoaded && this.AssocAttribute.ThisKeyMembers.Contains(e.PropertyName))
             {
                 // A FK member for this association has changed on the parent
                 // so we need to reset the cached collection
@@ -564,13 +563,13 @@ namespace OpenRiaServices.DomainServices.Client
                         // Make sure we unsubscribe from any sets we may have already subscribed to (e.g. in case 
                         // of inferred adds). If we didn't already subscribe, this will be a no-op.
                         ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
-                        this._sourceSet.RegisterAssociationCallback(this._assocAttribute, this.OnEntityAssociationUpdated, false);
+                        this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
                     }
 
                     // subscribe to the source set CollectionChanged event
                     this._sourceSet = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
                     ((INotifyCollectionChanged)this._sourceSet).CollectionChanged += this.SourceSet_CollectionChanged;
-                    this._sourceSet.RegisterAssociationCallback(this._assocAttribute, this.OnEntityAssociationUpdated, true);
+                    this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, true);
                 }
             }
             else if (this._parent.EntitySet == null && this._sourceSet != null)
@@ -578,7 +577,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // If the parent entity has been detached and we were monitoring,
                 // we need to remove our event handler
                 ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
-                this._sourceSet.RegisterAssociationCallback(this._assocAttribute, this.OnEntityAssociationUpdated, false);
+                this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
                 this._sourceSet = null;
             }
         }
@@ -767,7 +766,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._assocAttribute;
+                return this.AssocAttribute;
             }
         }
 

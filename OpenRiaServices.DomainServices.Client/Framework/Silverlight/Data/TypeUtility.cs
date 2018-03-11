@@ -192,29 +192,6 @@ namespace OpenRiaServices.DomainServices
     
         #endregion
 
-        public static bool GetSingleAttributeOrNull(PropertyInfo property, Type attributeType, bool inherit)
-        {
-            var properties = property.GetCustomAttributes(attributeType, inherit);
-
-#if REFLECTION_V2
-            using (var enumerator = properties.GetEnumerator())
-            {
-                // Check for first item
-                if (!enumerator.MoveNext())
-                    return false;
-                var attribute = enumerator.Current;
-
-                // Check for second item
-                if (enumerator.MoveNext())
-                    return false;
-                else
-                    return true;
-            }
-#else
-            return properties.Length == 1;
-#endif
-        }
-
         /// <summary>
         /// Returns <c>true</c> if the given type is a <see cref="Nullable"/>
         /// </summary>
