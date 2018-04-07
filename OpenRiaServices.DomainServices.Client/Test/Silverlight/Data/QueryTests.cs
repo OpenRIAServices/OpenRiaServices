@@ -1882,7 +1882,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             Catalog catalog = CreateDomainContext();
 
-            LoadOperation lo = catalog.Load(catalog.GetPurchaseOrdersQuery().Take(5), false);
+            LoadOperation lo = catalog.Load(catalog.GetPurchaseOrdersQuery()
+                .OrderBy(c => c.PurchaseOrderID).Take(5), false);
 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
@@ -1910,7 +1911,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             Catalog catalog = CreateDomainContext();
 
-            var query = catalog.GetPurchaseOrdersQuery().Take(purchaseOrdersToTake);
+            var query = catalog.GetPurchaseOrdersQuery()
+                .OrderBy(c => c.PurchaseOrderID)
+                .Take(purchaseOrdersToTake);
             query.IncludeTotalCount = true;
             LoadOperation lo = catalog.Load(query, LoadBehavior.RefreshCurrent, false);
 
