@@ -16,15 +16,17 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TEntity">The type of the associated <see cref="Entity"/></typeparam>
     public sealed class EntityRef<TEntity> : IEntityRef where TEntity : Entity
     {
-        private readonly AssociationAttribute _assocAttribute;
         private readonly Entity _parent;
+        private readonly MetaMember _metaMember;
         private EntitySet _sourceSet;
         private readonly Func<TEntity, bool> _entityPredicate;
         private TEntity _entity;
         private bool _hasAssignedEntity;
-        private readonly string _memberName;
         private bool _hasLoadedEntity;
-        private readonly bool _isComposition;
+
+        private string MemberName => _metaMember.Name;
+        private bool IsComposition => _metaMember.IsComposition;
+        private AssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
 
         /// <summary>
         /// Initializes a new instance of the EntityRef class
@@ -36,33 +38,29 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (parent == null)
             {
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
             }
             if (string.IsNullOrEmpty(memberName))
             {
-                throw new ArgumentNullException("memberName");
+                throw new ArgumentNullException(nameof(memberName));
             }
             if (entityPredicate == null)
             {
-                throw new ArgumentNullException("entityPredicate");
+                throw new ArgumentNullException(nameof(entityPredicate));
             }
 
             this._parent = parent;
             this._entityPredicate = entityPredicate;
-            this._memberName = memberName;
+            this._metaMember = this._parent.MetaType[memberName];
 
-            PropertyInfo propInfo = this._parent.GetType().GetProperty(memberName, OpenRiaServices.DomainServices.Client.MetaType.MemberBindingFlags);
-            if (propInfo == null)
+            if (this._metaMember == null)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), "memberName");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), nameof(memberName));
             }
-            this._assocAttribute = propInfo.GetCustomAttributes(false).OfType<AssociationAttribute>().SingleOrDefault();
-            if (this._assocAttribute == null)
+            if (this._metaMember.AssociationAttribute == null)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.MemberMustBeAssociation, memberName), "memberName");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.MemberMustBeAssociation, memberName), nameof(memberName));
             }
-
-            this._isComposition = propInfo.GetCustomAttributes(typeof(CompositionAttribute), false).Any();
 
             // register our callback so we'll be notified whenever the
             // parent entity is added or removed from an EntitySet
@@ -96,11 +94,11 @@ namespace OpenRiaServices.DomainServices.Client
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
                     this._entity = this.GetSingleMatch(set);
 
-                    if (this._entity != null && this._isComposition)
+                    if (this._entity != null && this.IsComposition)
                     {
                         // if this is a compositional association, set the
                         // entity's parent
-                        this._entity.SetParent(this._parent, this._assocAttribute);
+                        this._entity.SetParent(this._parent, this.AssocAttribute);
                     }
 
                     // record the fact that we've queried for the entity
@@ -130,7 +128,7 @@ namespace OpenRiaServices.DomainServices.Client
                         value.IsInferred = true;
                         this.SourceSet.Add(value);
                     }
-                    else if (this._isComposition && value.EntityState == EntityState.Deleted)
+                    else if (this.IsComposition && value.EntityState == EntityState.Deleted)
                     {
                         // if a deleted entity is added to a compositional association,
                         // the delete should be undone
@@ -138,11 +136,11 @@ namespace OpenRiaServices.DomainServices.Client
                     }
                 }
 
-                if (this._isComposition && entityChanged)
+                if (this.IsComposition && entityChanged)
                 {
                     if (value != null)
                     {
-                        value.SetParent(this._parent, this._assocAttribute);
+                        value.SetParent(this._parent, this.AssocAttribute);
                     }
                     else
                     {
@@ -191,14 +189,14 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 this._entity = value;
 
-                if (this._entity != null && this._isComposition)
+                if (this._entity != null && this.IsComposition)
                 {
                     // if this is a compositional association, set the
                     // entity's parent
-                    this._entity.SetParent(this._parent, this._assocAttribute);
+                    this._entity.SetParent(this._parent, this.AssocAttribute);
                 }
 
-                this._parent.RaisePropertyChanged(this._memberName);
+                this._parent.RaisePropertyChanged(this.MemberName);
             }
         }
 
@@ -254,20 +252,20 @@ namespace OpenRiaServices.DomainServices.Client
                         // Make sure we unsubscribe from any sets we may have already subscribed to (e.g. in case 
                         // of inferred adds). If we didn't already subscribe, this will be a no-op.
                         ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
-                        this._sourceSet.RegisterAssociationCallback(this._assocAttribute, this.OnEntityAssociationUpdated, false);
+                        this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
                     }
 
                     // parent was attached
                     this._sourceSet = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
                     ((INotifyCollectionChanged)this._sourceSet).CollectionChanged += this.SourceSet_CollectionChanged;
-                    this._sourceSet.RegisterAssociationCallback(this._assocAttribute, this.OnEntityAssociationUpdated, true);
+                    this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, true);
                 }
             }
             else if ((this._parent.EntitySet == null) && (this._sourceSet != null))
             {
                 // parent was detached
                 ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
-                this._sourceSet.RegisterAssociationCallback(this._assocAttribute, this.OnEntityAssociationUpdated, false);
+                this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
                 this._sourceSet = null;
             }
         }
@@ -378,7 +376,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             // Reset the loaded entity as needed.
-            if (this._assocAttribute.ThisKeyMembers.Contains(e.PropertyName))
+            if (this.AssocAttribute.ThisKeyMembers.Contains(e.PropertyName))
             {
                 // a key member for this association was updated
                 // so we need to reset
@@ -386,7 +384,7 @@ namespace OpenRiaServices.DomainServices.Client
                 this._hasAssignedEntity = false;
                 this._hasLoadedEntity = false;
 
-                this._parent.RaisePropertyChanged(this._memberName);
+                this._parent.RaisePropertyChanged(this.MemberName);
             }
         }
 
@@ -395,7 +393,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this._assocAttribute;
+                return this.AssocAttribute;
             }
         }
 

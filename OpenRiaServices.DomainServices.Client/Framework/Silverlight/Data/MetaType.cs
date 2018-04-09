@@ -43,9 +43,7 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly ReadOnlyCollection<MetaMember> _keyMembers;
         private readonly ReadOnlyCollection<MetaMember> _dataMembers;
         private readonly ReadOnlyCollection<ValidationAttribute> _validationAttributes;
-
-
-        private readonly Dictionary<string, EntityActionAttribute> _customUpdateMethods = new Dictionary<string, EntityActionAttribute>();
+        private readonly Dictionary<string, EntityActionAttribute> _customUpdateMethods;
 
         /// <summary>
         /// Returns the MetaType for the specified Type.
@@ -102,11 +100,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
 
-                var associationAttributes = property.GetCustomAttributes(typeof(AssociationAttribute), false);
-                if (associationAttributes.Any())
-                {
-                    metaMember.AssociationAttribute = (AssociationAttribute)associationAttributes.SingleOrDefault();
-                }
+                metaMember.AssociationAttribute = (AssociationAttribute)property.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
 
                 bool isKeyMember = TypeUtility.IsAttributeDefined(property, typeof(KeyAttribute), false);
                 if (isKeyMember)
@@ -185,7 +179,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the correct property binding flags to use for data members.
         /// </summary>
-        internal static BindingFlags MemberBindingFlags
+        private static BindingFlags MemberBindingFlags
         {
             get
             {
