@@ -15,6 +15,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         // The version of Silverlight we use in registry keys below
         private const string SLVER = "v5.0";
+        private static Dictionary<string, PortableExecutableReference> s_referenceCache = new Dictionary<string, PortableExecutableReference>();
+
         private static ParseOptions _cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5,  preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
 
@@ -94,6 +96,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 var parseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
                     preprocessorSymbols: new
                     [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
+                references.Add(GetVisualBasicReference());
 
                 // Parse files
                 List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
@@ -115,6 +118,26 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
+        private static PortableExecutableReference
+            GetReference(string filename)
+        {
+            PortableExecutableReference reference;
+
+            if (s_referenceCache.TryGetValue(filename, out reference))
+            {
+                return reference;
+            }
+
+            reference = MetadataReference.CreateFromFile(filename);
+            s_referenceCache.Add(filename, reference);
+            return reference;
+        }
+
+        private static PortableExecutableReference GetVisualBasicReference()
+        {
+            return GetReference(Path.Combine(GetSilverlightSdkReferenceAssembliesPath(), "Microsoft.VisualBasic.dll"));
+        }
+
         private static MemoryStream Compile(Compilation compilation, string documentationFile)
         {
             var memoryStream = new MemoryStream();
@@ -133,7 +156,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             List<MetadataReference> references = new List<MetadataReference>();
             foreach (string s in referenceAssemblies)
-                references.Add(MetadataReference.CreateFromFile(s));
+                references.Add(GetReference(s));
             return references;
         }
 
