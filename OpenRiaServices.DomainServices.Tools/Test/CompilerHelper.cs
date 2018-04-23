@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Tasks;
-using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.VisualBasic;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -25,41 +25,116 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
         public static bool CompileCSharpSource(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string documentationFile)
         {
-            List<ITaskItem> sources = new List<ITaskItem>();
-            foreach (string f in files)
-                sources.Add(new TaskItem(f));
+            var stream = CompileCSharpSilverlightAssembly("tempFile", files, referenceAssemblies, documentationFile);
 
-            List<ITaskItem> references = new List<ITaskItem>();
-            foreach (string s in referenceAssemblies)
-                references.Add(new TaskItem(s));
+            // The Compile method will throw on error, this method always returns true
+            stream.Dispose();
+            return true;
+        }
 
-            Csc csc = new Csc();
-            MockBuildEngine buildEngine = new MockBuildEngine();
-            csc.BuildEngine = buildEngine;  // needed before task can log
-
-            csc.NoStandardLib = true;   // don't include std lib stuff -- we're feeding it silverlight
-            csc.NoConfig = true;        // don't load the csc.rsp file to get references
-            csc.TargetType = "library";
-            csc.Sources = sources.ToArray();
-            csc.References = references.ToArray();
-            csc.DefineConstants += "SILVERLIGHT";
-            if (!string.IsNullOrEmpty(documentationFile))
+        public static SourceText LoadFile(string filename)
+        {
+            using (var file = File.OpenRead(filename))
             {
-                csc.DocumentationFile = documentationFile;
+                return SourceText.From(file);
             }
- 
-            bool result = false;
+        }
+
+        public static SyntaxTree ParseCSharpFile(string filename, ParseOptions options)
+        {
+            var stringText = LoadFile(filename);
+            return Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseSyntaxTree(stringText, options, filename);
+        }
+
+        public static SyntaxTree ParseVBFile(string filename, ParseOptions options)
+        {
+            var stringText = LoadFile(filename);
+            return Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory.ParseSyntaxTree(stringText, options, filename);
+        }
+
+        public static MemoryStream CompileCSharpSilverlightAssembly(string assemblyName,
+            IEnumerable<string> files,
+            IEnumerable<string> referenceAssemblies,
+            string documentationFile = null)
+        {
+            List<MetadataReference> references = GetMetadataReferences(referenceAssemblies);
+
             try
             {
-                result = csc.Execute();
+                var parseOptions = new CSharpParseOptions(preprocessorSymbols: new
+                    [] { "SILVERLIGHT" });
+
+                // Parse files
+                List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
+                foreach (var file in files)
+                    syntaxTrees.Add(ParseCSharpFile(file, parseOptions));
+
+                // Do compilation when parsing succeeded
+                var compileOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+                Compilation compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
+
+                return Compile(compilation, documentationFile);
             }
             catch (Exception ex)
             {
-                Assert.Fail("Exception occurred invoking CSC task on " + sources[0].ItemSpec + ":\r\n" + ex);
+                Assert.Fail("Exception occurred invoking CSC task on '{0}' \r\n {1}", files.FirstOrDefault(), ex);
+                // We will never get here since assert will throw
+                return null;
             }
-            
-            Assert.IsTrue(result, "CSC failed to compile " + sources[0].ItemSpec + ":\r\n" + buildEngine.ConsoleLogger.Errors);
-            return result;
+        }
+
+        public static MemoryStream CompileVBSilverlightAssembly(string assemblyName,
+            IEnumerable<string> files,
+            IEnumerable<string> referenceAssemblies,
+            string documentationFile = null)
+        {
+            List<MetadataReference> references = GetMetadataReferences(referenceAssemblies);
+
+            try
+            {
+                var parseOptions = new VisualBasicParseOptions(preprocessorSymbols: new
+                    [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
+
+                // Parse files
+                List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
+                foreach (var file in files)
+                    syntaxTrees.Add(ParseVBFile(file, parseOptions));
+
+                // Do compilation when parsing succeeded
+                var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+                Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
+
+                // Same file
+                return Compile(compilation, documentationFile);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Exception occurred invoking CSC task on '{0}' \r\n {1}", files.FirstOrDefault(), ex);
+                // We will never get here since assert will throw
+                return null;
+            }
+        }
+
+        private static MemoryStream Compile(Compilation compilation, string documentationFile)
+        {
+            var memoryStream = new MemoryStream();
+            using (Stream documentationStream = (documentationFile != null) ? File.OpenWrite(documentationFile) : null)
+            {
+                var emitResult = compilation.Emit(memoryStream, null, documentationStream);
+                if (!emitResult.Success)
+                {
+                    Assert.Fail("Failed to compile assembly \r\n {0}", string.Join(" \r\n", emitResult.Diagnostics));
+                }
+                return memoryStream;
+            }
+        }
+
+        private static List<MetadataReference> GetMetadataReferences(IEnumerable<string> referenceAssemblies)
+        {
+            List<MetadataReference> references = new List<MetadataReference>();
+            foreach (string s in referenceAssemblies)
+                references.Add(MetadataReference.CreateFromFile(s));
+            return references;
         }
 
         /// <summary>
@@ -70,51 +145,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
         public static bool CompileVisualBasicSource(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string rootNamespace, string documentationFile)
         {
-            List<ITaskItem> sources = new List<ITaskItem>();
-            foreach (string f in files)
-                sources.Add(new TaskItem(f));
+            var stream = CompileVBSilverlightAssembly("tempFile", files, referenceAssemblies, documentationFile);
 
-            // Transform references into a list of ITaskItems.
-            // Here, we skip over mscorlib explicitly because this is already included as a project reference.
-            List<ITaskItem> references =
-                referenceAssemblies
-                    .Where(reference => !reference.EndsWith("mscorlib.dll", StringComparison.Ordinal))
-                    .Select<string, ITaskItem>(reference => new TaskItem(reference) as ITaskItem)
-                    .ToList();
-
-            Vbc vbc = new Vbc();
-            MockBuildEngine buildEngine = new MockBuildEngine();
-            vbc.BuildEngine = buildEngine;  // needed before task can log
-
-            vbc.NoStandardLib = true;   // don't include std lib stuff -- we're feeding it silverlight
-            vbc.NoConfig = true;        // don't load the vbc.rsp file to get references
-            vbc.TargetType = "library";
-            vbc.Sources = sources.ToArray();
-            vbc.References = references.ToArray();
-            vbc.SdkPath = GetSilverlightSdkReferenceAssembliesPath();
-            vbc.DefineConstants += "SILVERLIGHT";
-            if (!string.IsNullOrEmpty(rootNamespace))
-            {
-                vbc.RootNamespace = rootNamespace;
-            }
-
-            if (!string.IsNullOrEmpty(documentationFile))
-            {
-                vbc.DocumentationFile = documentationFile;
-            }
-
-            bool result = false;
-            try
-            {
-                result = vbc.Execute();
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Exception occurred invoking VBC task on " + sources[0].ItemSpec + ":\r\n" + ex);
-            }
-
-            Assert.IsTrue(result, "VBC failed to compile " + sources[0].ItemSpec + ":\r\n" + buildEngine.ConsoleLogger.Errors);
-            return result;
+            // The Compile method will throw on error, this method always returns true
+            stream.Dispose();
+            return true;
         }
 
         /// <summary>
