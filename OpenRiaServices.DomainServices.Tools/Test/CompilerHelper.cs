@@ -15,6 +15,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         // The version of Silverlight we use in registry keys below
         private const string SLVER = "v5.0";
+        private static ParseOptions _cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5,  preprocessorSymbols: new
+                    [] { "SILVERLIGHT" });
 
         /// <summary>
         /// Invokes CSC to build the given files against the given set of references
@@ -61,13 +63,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             try
             {
-                var parseOptions = new CSharpParseOptions(preprocessorSymbols: new
-                    [] { "SILVERLIGHT" });
-
                 // Parse files
                 List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
                 foreach (var file in files)
-                    syntaxTrees.Add(ParseCSharpFile(file, parseOptions));
+                    syntaxTrees.Add(ParseCSharpFile(file, _cSharpParseOptions));
 
                 // Do compilation when parsing succeeded
                 var compileOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
@@ -92,7 +91,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             try
             {
-                var parseOptions = new VisualBasicParseOptions(preprocessorSymbols: new
+                var parseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
+                    preprocessorSymbols: new
                     [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
 
                 // Parse files
