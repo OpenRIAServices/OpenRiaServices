@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.VisualBasic;
+using System.Collections.Immutable;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -71,7 +72,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     syntaxTrees.Add(ParseCSharpFile(file, _cSharpParseOptions));
 
                 // Do compilation when parsing succeeded
-                var compileOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+                var compileOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
+                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
                 Compilation compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 return Compile(compilation, documentationFile);
@@ -104,7 +106,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     syntaxTrees.Add(ParseVBFile(file, parseOptions));
 
                 // Do compilation when parsing succeeded
-                var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+                var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary, assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
                 Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 // Same file
@@ -149,6 +151,24 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     Assert.Fail("Failed to compile assembly \r\n {0}", string.Join(" \r\n", emitResult.Diagnostics));
                 }
                 return memoryStream;
+            }
+        }
+
+        class DummyComparer : MetadataReferenceResolver
+        {
+            public override bool Equals(object other)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override ImmutableArray<PortableExecutableReference> ResolveReference(string reference, string baseFilePath, MetadataReferenceProperties properties)
+            {
+                throw new NotImplementedException();
             }
         }
 
