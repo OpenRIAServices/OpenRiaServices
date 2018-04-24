@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private const string SLVER = "v5.0";
         private static Dictionary<string, PortableExecutableReference> s_referenceCache = new Dictionary<string, PortableExecutableReference>();
 
-        private static ParseOptions _cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5,  preprocessorSymbols: new
+        private static ParseOptions _cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
         public static bool CompileCSharpSource(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string documentationFile)
         {
-            var stream = CompileCSharpSilverlightAssembly("tempFile", files, referenceAssemblies, documentationFile);
+            var stream = CompileCSharpSilverlightAssembly("tempFile", files, referenceAssemblies, null, documentationFile);
 
             // The Compile method will throw on error, this method always returns true
             stream.Dispose();
@@ -60,6 +60,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public static MemoryStream CompileCSharpSilverlightAssembly(string assemblyName,
             IEnumerable<string> files,
             IEnumerable<string> referenceAssemblies,
+            IEnumerable<SourceText> sources,
             string documentationFile = null)
         {
             List<MetadataReference> references = GetMetadataReferences(referenceAssemblies);
@@ -68,8 +69,18 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 // Parse files
                 List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
-                foreach (var file in files)
-                    syntaxTrees.Add(ParseCSharpFile(file, _cSharpParseOptions));
+                if (files != null)
+                {
+                    foreach (var file in files)
+                        syntaxTrees.Add(ParseCSharpFile(file, _cSharpParseOptions));
+                }
+
+
+                if (sources != null)
+                {
+                    foreach (var file in sources)
+                        syntaxTrees.Add(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseSyntaxTree(file, _cSharpParseOptions));
+                }
 
                 // Do compilation when parsing succeeded
                 var compileOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
@@ -77,6 +88,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 Compilation compilation = CSharpCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 return Compile(compilation, documentationFile);
+            }
+            catch (UnitTestAssertException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -89,6 +104,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public static MemoryStream CompileVBSilverlightAssembly(string assemblyName,
             IEnumerable<string> files,
             IEnumerable<string> referenceAssemblies,
+            string rootNamespace,
             string documentationFile = null)
         {
             List<MetadataReference> references = GetMetadataReferences(referenceAssemblies);
@@ -106,11 +122,17 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     syntaxTrees.Add(ParseVBFile(file, parseOptions));
 
                 // Do compilation when parsing succeeded
-                var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary, assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
+                var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
+                    rootNamespace: rootNamespace,
+                    assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
                 Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 // Same file
                 return Compile(compilation, documentationFile);
+            }
+            catch (UnitTestAssertException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -148,27 +170,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 var emitResult = compilation.Emit(memoryStream, null, documentationStream);
                 if (!emitResult.Success)
                 {
+                    using (var sw = new StreamWriter("failed.txt"))
+                        compilation.SyntaxTrees.First().GetText().Write(sw);
+
                     Assert.Fail("Failed to compile assembly \r\n {0}", string.Join(" \r\n", emitResult.Diagnostics));
                 }
                 return memoryStream;
-            }
-        }
-
-        class DummyComparer : MetadataReferenceResolver
-        {
-            public override bool Equals(object other)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
-
-            public override ImmutableArray<PortableExecutableReference> ResolveReference(string reference, string baseFilePath, MetadataReferenceProperties properties)
-            {
-                throw new NotImplementedException();
             }
         }
 
@@ -188,7 +195,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
         public static bool CompileVisualBasicSource(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string rootNamespace, string documentationFile)
         {
-            var stream = CompileVBSilverlightAssembly("tempFile", files, referenceAssemblies, documentationFile);
+            var stream = CompileVBSilverlightAssembly("tempFile", files, referenceAssemblies, rootNamespace, documentationFile);
 
             // The Compile method will throw on error, this method always returns true
             stream.Dispose();

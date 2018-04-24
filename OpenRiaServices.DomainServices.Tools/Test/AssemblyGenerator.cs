@@ -6,6 +6,7 @@ using System.Reflection;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.CodeAnalysis.Text;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -461,24 +462,28 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private MemoryStream CompileSource()
         {
-            List<string> files = new List<string>(capacity:2) { GeneratedCodeFile };
-            // If client has added extra user code into the
-            // compile request, add it in now
-            string userCodeFile = this.UserCodeFile;
-            if (!string.IsNullOrEmpty(userCodeFile))
-            {
-                files.Add(userCodeFile);
-            }
-
             string assemblyname = Path.GetFileNameWithoutExtension(this.OutputAssemblyName);
             if (this._isCSharp)
             {
+                var contents = new List<SourceText>(capacity: 2);
+                contents.Add(SourceText.From(GeneratedCode));
+                if (!string.IsNullOrEmpty(UserCode))
+                    contents.Add(SourceText.From(UserCode));
 
-                return CompilerHelper.CompileCSharpSilverlightAssembly(assemblyname, files, ReferenceAssemblies);
+                return CompilerHelper.CompileCSharpSilverlightAssembly(assemblyname, files:null, referenceAssemblies: ReferenceAssemblies, sources: contents);
             }
             else
             {
-                return CompilerHelper.CompileVBSilverlightAssembly(assemblyname, files, ReferenceAssemblies);
+                var files = new List<string>(capacity: 2) { GeneratedCodeFile };
+                // If client has added extra user code into the
+                // compile request, add it in now
+                string userCodeFile = this.UserCodeFile;
+                if (!string.IsNullOrEmpty(userCodeFile))
+                {
+                    files.Add(userCodeFile);
+                }
+
+                return CompilerHelper.CompileVBSilverlightAssembly(assemblyname, files, ReferenceAssemblies, rootNamespace: "TestRootNS", documentationFile: null);
             }
         }
 
