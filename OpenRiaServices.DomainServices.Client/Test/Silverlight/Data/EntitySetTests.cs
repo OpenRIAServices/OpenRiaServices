@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using DataTests.AdventureWorks.LTS;
+using DataTests.Northwind.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
@@ -244,6 +244,60 @@ namespace OpenRiaServices.DomainServices.Client.Test
             WeakReference weakRef = new WeakReference(this.GetICV(entitySet));
             System.GC.Collect();         
             Assert.IsFalse(weakRef.IsAlive);
+        }
+
+        [TestMethod]
+        public void InferredAddThenAttach_EntityCollection()
+        {
+            NorthwindEntityContainer ec = new NorthwindEntityContainer();
+
+            // track changes on products
+            int productAdded = 0;
+            int productRemoved = 0;
+            int productPropertyChanged = 0;
+            EntitySet<Product> productsSet = ec.GetEntitySet<Product>();
+            productsSet.EntityAdded += (obj, args) => productAdded += 1;
+            productsSet.EntityRemoved += (obj, args) => productRemoved += 1;
+            productsSet.PropertyChanged += (obj, args) => productPropertyChanged += 1;
+
+            // create and add order to container
+            Order order = new Order
+            {
+                OrderID = 1
+            };
+            ec.LoadEntities(new Entity[] { order });
+            ((IChangeTracking)ec).AcceptChanges();
+
+            // build a detached graph of a detail and product
+            Order_Detail detail = new Order_Detail
+            {
+                OrderID = 1,
+                ProductID = 2
+            };
+            Product product = new Product
+            {
+                ProductID = 3
+            };
+            detail.Product = product;
+
+            // Add detached detail to attached order.
+            // Product is now tracked since it is an 'inferred' entity
+            order.Order_Details.Add(detail);
+            Assert.IsTrue(product.IsInferred);
+            Assert.AreEqual(1, productAdded);
+            Assert.AreEqual(0, productRemoved);
+            Assert.AreEqual(2, productPropertyChanged);
+
+            // now explicitly attach product
+            productsSet.Attach(product);
+
+            // should not have duplicate refernce to product
+            Assert.AreEqual(1, productsSet.Count);
+
+            // should not raise events since product was already added
+            Assert.AreEqual(1, productAdded);
+            Assert.AreEqual(0, productRemoved);
+            Assert.AreEqual(2, productPropertyChanged);
         }
 
         private EntitySet<T> CreateEntitySet<T>() where T : Entity

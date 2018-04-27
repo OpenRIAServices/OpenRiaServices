@@ -326,6 +326,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(1, cs.ModifiedEntities.Count);
             Assert.IsFalse(cs.AddedEntities.Contains(newProduct2));
             Assert.IsTrue(cs.ModifiedEntities.Contains(newProduct2));
+
+            // verify that duplicate references aren't added when an
+            // inferred entity is attached
+            Assert.AreEqual(2, ec.GetEntitySet<Product>().Count);
         }
 
         /// <summary>
