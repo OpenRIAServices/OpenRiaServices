@@ -463,27 +463,18 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private MemoryStream CompileSource()
         {
             string assemblyname = Path.GetFileNameWithoutExtension(this.OutputAssemblyName);
+            var contents = new List<SourceText>(capacity: 2);
+            contents.Add(SourceText.From(GeneratedCode));
+            if (!string.IsNullOrEmpty(UserCode))
+                contents.Add(SourceText.From(UserCode));
+
             if (this._isCSharp)
             {
-                var contents = new List<SourceText>(capacity: 2);
-                contents.Add(SourceText.From(GeneratedCode));
-                if (!string.IsNullOrEmpty(UserCode))
-                    contents.Add(SourceText.From(UserCode));
-
-                return CompilerHelper.CompileCSharpSilverlightAssembly(assemblyname, files:null, referenceAssemblies: ReferenceAssemblies, sources: contents);
+                return CompilerHelper.CompileCSharpSilverlightAssembly(assemblyname, contents, referenceAssemblies: ReferenceAssemblies);
             }
             else
             {
-                var files = new List<string>(capacity: 2) { GeneratedCodeFile };
-                // If client has added extra user code into the
-                // compile request, add it in now
-                string userCodeFile = this.UserCodeFile;
-                if (!string.IsNullOrEmpty(userCodeFile))
-                {
-                    files.Add(userCodeFile);
-                }
-
-                return CompilerHelper.CompileVBSilverlightAssembly(assemblyname, files, ReferenceAssemblies, rootNamespace: "TestRootNS", documentationFile: null);
+                return CompilerHelper.CompileVBSilverlightAssembly(assemblyname, contents, ReferenceAssemblies, rootNamespace: "TestRootNS", documentationFile: null);
             }
         }
 

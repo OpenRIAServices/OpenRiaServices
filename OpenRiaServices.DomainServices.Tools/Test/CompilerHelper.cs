@@ -18,69 +18,66 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private const string SLVER = "v5.0";
         private static Dictionary<string, PortableExecutableReference> s_referenceCache = new Dictionary<string, PortableExecutableReference>();
 
-        private static ParseOptions _cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
+        private static ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
 
+        private static ParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
+                    preprocessorSymbols: new
+                    [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
+
         /// <summary>
-        /// Invokes CSC to build the given files against the given set of references
+        /// Invokes CSharp compilation of the given files against the given set of references
         /// </summary>
         /// <param name="files"></param>
         /// <param name="referenceAssemblies"></param>
-        /// <param name="lang"></param>
         /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
-        public static bool CompileCSharpSource(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string documentationFile)
+        public static bool CompileCSharpSourceFromFiles(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string documentationFile)
         {
-            var stream = CompileCSharpSilverlightAssembly("tempFile", files, referenceAssemblies, null, documentationFile);
+            var sources = files.Select(filename => LoadFile(filename));
 
-            // The Compile method will throw on error, this method always returns true
-            stream.Dispose();
-            return true;
+            // The Compile method will throw on error, this method always returns true on success
+            using (var stream = CompileCSharpSilverlightAssembly("tempFile", sources, referenceAssemblies, documentationFile: documentationFile))
+                return true;
         }
 
-        public static SourceText LoadFile(string filename)
+        /// <summary>
+        /// Invokes VisualBasic compilation of the given files against the given set of references
+        /// </summary>
+        /// <param name="files"></param>
+        /// <param name="referenceAssemblies"></param>
+        /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
+        /// <param name="rootNamespace">the projects rootNamespace</param>
+        public static bool CompileVisualBasicSourceFromFiles(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string rootNamespace, string documentationFile)
         {
-            using (var file = File.OpenRead(filename))
-            {
-                return SourceText.From(file);
-            }
+            var sources = files.Select(filename => LoadFile(filename));
+
+            // The Compile method will throw on error, this method always returns true on success
+            using (var stream = CompileVBSilverlightAssembly("tempFile", sources, referenceAssemblies, rootNamespace, documentationFile))
+                return true;
         }
 
-        public static SyntaxTree ParseCSharpFile(string filename, ParseOptions options)
-        {
-            var stringText = LoadFile(filename);
-            return Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseSyntaxTree(stringText, options, filename);
-        }
-
-        public static SyntaxTree ParseVBFile(string filename, ParseOptions options)
-        {
-            var stringText = LoadFile(filename);
-            return Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory.ParseSyntaxTree(stringText, options, filename);
-        }
-
+        /// <summary>
+        /// Perform CSharp 'Silverlight' compilation of the given source files and refernces to produce
+        /// an in memory assembly.
+        /// </summary>
+        /// <param name="assemblyName"></param>
+        /// <param name="sources"></param>
+        /// <param name="referenceAssemblies"></param>
+        /// <param name="documentationFile"></param>
+        /// <returns></returns>
         public static MemoryStream CompileCSharpSilverlightAssembly(string assemblyName,
-            IEnumerable<string> files,
-            IEnumerable<string> referenceAssemblies,
             IEnumerable<SourceText> sources,
+            IEnumerable<string> referenceAssemblies,
             string documentationFile = null)
         {
-            List<MetadataReference> references = GetMetadataReferences(referenceAssemblies);
+            List<MetadataReference> references = LoadReferences(referenceAssemblies);
 
             try
             {
                 // Parse files
-                List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
-                if (files != null)
-                {
-                    foreach (var file in files)
-                        syntaxTrees.Add(ParseCSharpFile(file, _cSharpParseOptions));
-                }
-
-
-                if (sources != null)
-                {
-                    foreach (var file in sources)
-                        syntaxTrees.Add(Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseSyntaxTree(file, _cSharpParseOptions));
-                }
+                var syntaxTrees = sources
+                    .Select(text => Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseSyntaxTree(text, s_cSharpParseOptions))
+                    .ToList();
 
                 // Do compilation when parsing succeeded
                 var compileOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
@@ -95,31 +92,38 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
             catch (Exception ex)
             {
-                Assert.Fail("Exception occurred invoking CSC task on '{0}' \r\n {1}", files.FirstOrDefault(), ex);
+                Assert.Fail("Exception occurred on Csharp compilation. \nError: {0}", ex);
                 // We will never get here since assert will throw
                 return null;
             }
         }
 
+        /// <summary>
+        /// Perform VB 'Silverlight' compilation of the given source files and refernces to produce
+        /// an in memory assembly.
+        /// </summary>
+        /// <param name="assemblyName"></param>
+        /// <param name="sources"></param>
+        /// <param name="referenceAssemblies"></param>
+        /// <param name="documentationFile"></param>
+        /// <param name="files">todo: describe files parameter on CompileVBSilverlightAssembly</param>
+        /// <param name="rootNamespace">todo: describe rootNamespace parameter on CompileVBSilverlightAssembly</param>
+        /// <returns></returns>
         public static MemoryStream CompileVBSilverlightAssembly(string assemblyName,
-            IEnumerable<string> files,
+            IEnumerable<SourceText> sources,
             IEnumerable<string> referenceAssemblies,
             string rootNamespace,
             string documentationFile = null)
         {
-            List<MetadataReference> references = GetMetadataReferences(referenceAssemblies);
+            List<MetadataReference> references = LoadReferences(referenceAssemblies);
+            references.Add(GetVisualBasicReference());
 
             try
             {
-                var parseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
-                    preprocessorSymbols: new
-                    [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
-                references.Add(GetVisualBasicReference());
-
                 // Parse files
-                List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
-                foreach (var file in files)
-                    syntaxTrees.Add(ParseVBFile(file, parseOptions));
+                var syntaxTrees = sources
+                    .Select(text => Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory.ParseSyntaxTree(text, s_VbParseOptions))
+                    .ToList();
 
                 // Do compilation when parsing succeeded
                 var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
@@ -136,14 +140,32 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
             catch (Exception ex)
             {
-                Assert.Fail("Exception occurred invoking CSC task on '{0}' \r\n {1}", files.FirstOrDefault(), ex);
+                Assert.Fail("Exception occurred invoking compiling VB sources. \nError: {0}", ex);
                 // We will never get here since assert will throw
                 return null;
             }
         }
 
-        private static PortableExecutableReference
-            GetReference(string filename)
+        private static SourceText LoadFile(string filename)
+        {
+            using (var file = File.OpenRead(filename))
+            {
+                return SourceText.From(file);
+            }
+        }
+
+        public static SyntaxTree ParseVBFile(string filename, ParseOptions options)
+        {
+            var stringText = LoadFile(filename);
+            return Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory.ParseSyntaxTree(stringText, options, filename);
+        }
+
+        /// <summary>
+        /// Loads a referenced dll from file so it can be used for compilation.
+        /// Files are cached to allow reuse
+        /// </summary>
+        /// <param name="filename">full path to dll</param>
+        private static PortableExecutableReference LoadReference(string filename)
         {
             PortableExecutableReference reference;
 
@@ -157,11 +179,21 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return reference;
         }
 
+        /// <summary>
+        /// Loads the special Microsoft.VisualBasic.dll required for several VB specific operations
+        /// </summary>
         private static PortableExecutableReference GetVisualBasicReference()
         {
-            return GetReference(Path.Combine(GetSilverlightSdkReferenceAssembliesPath(), "Microsoft.VisualBasic.dll"));
+            return LoadReference(Path.Combine(GetSilverlightSdkReferenceAssembliesPath(), "Microsoft.VisualBasic.dll"));
         }
 
+        /// <summary>
+        /// Perform actual compilation and return the resulting assembly as a <see cref="MemoryStream"/>.
+        /// Assert (Throws) that compilation succeeds so can 
+        /// </summary>
+        /// <param name="compilation"></param>
+        /// <param name="documentationFile"></param>
+        /// <returns></returns>
         private static MemoryStream Compile(Compilation compilation, string documentationFile)
         {
             var memoryStream = new MemoryStream();
@@ -170,37 +202,25 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 var emitResult = compilation.Emit(memoryStream, null, documentationStream);
                 if (!emitResult.Success)
                 {
-                    using (var sw = new StreamWriter("failed.txt"))
-                        compilation.SyntaxTrees.First().GetText().Write(sw);
-
                     Assert.Fail("Failed to compile assembly \r\n {0}", string.Join(" \r\n", emitResult.Diagnostics));
                 }
                 return memoryStream;
             }
         }
 
-        private static List<MetadataReference> GetMetadataReferences(IEnumerable<string> referenceAssemblies)
+        /// <summary>
+        /// Load referenced dll files
+        /// </summary>
+        /// <param name="referenceAssemblies">The sources to load (must be full path)</param>
+        private static List<MetadataReference> LoadReferences(IEnumerable<string> referenceAssemblies)
         {
-            List<MetadataReference> references = new List<MetadataReference>();
+            var references = new List<MetadataReference>();
             foreach (string s in referenceAssemblies)
-                references.Add(GetReference(s));
+                references.Add(LoadReference(s));
             return references;
         }
 
-        /// <summary>
-        /// Invokes VBC to build the given files against the given set of references
-        /// </summary>
-        /// <param name="files"></param>
-        /// <param name="referenceAssemblies"></param>
-        /// <param name="documentationFile">If nonblank, the documentation file to generate during the compile.</param>
-        public static bool CompileVisualBasicSource(IEnumerable<string> files, IEnumerable<string> referenceAssemblies, string rootNamespace, string documentationFile)
-        {
-            var stream = CompileVBSilverlightAssembly("tempFile", files, referenceAssemblies, rootNamespace, documentationFile);
 
-            // The Compile method will throw on error, this method always returns true
-            stream.Dispose();
-            return true;
-        }
 
         /// <summary>
         /// Extract the list of assemblies both generated and referenced by SilverlightClient.
