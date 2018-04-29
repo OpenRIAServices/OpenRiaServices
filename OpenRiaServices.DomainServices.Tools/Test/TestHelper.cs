@@ -756,12 +756,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 if (isCSharp)
                 {
                     files.AddRange(codeGenOptions.SharedFiles.Where(sharedFile => Path.GetExtension(sharedFile).Equals(".cs")));
-                    CompilerHelper.CompileCSharpSource(files, referenceAssemblies, documentationFile);
+                    CompilerHelper.CompileCSharpSourceFromFiles(files, referenceAssemblies, documentationFile);
                 }
                 else
                 {
                     files.AddRange(codeGenOptions.SharedFiles.Where(sharedFile => Path.GetExtension(sharedFile).Equals(".vb")));
-                    CompilerHelper.CompileVisualBasicSource(files, referenceAssemblies, options.ClientRootNamespace, documentationFile);
+                    CompilerHelper.CompileVisualBasicSourceFromFiles(files, referenceAssemblies, options.ClientRootNamespace, documentationFile);
                 }
             }
             finally

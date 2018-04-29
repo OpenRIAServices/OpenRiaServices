@@ -7,7 +7,7 @@ init:
 - cmd: git lfs uninstall
 before_build:
 - ps: >-
-    dotnet restore OpenRiaServices.DomainServices.Client\Framework\Silverlight\project.json
+    dotnet restore .
     
     nuget restore RiaServices.sln
     
