@@ -497,7 +497,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Event raised whenever the contents of the collection changes
         /// </summary>
-        event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
+        public event NotifyCollectionChangedEventHandler CollectionChanged
         {
             add
             {

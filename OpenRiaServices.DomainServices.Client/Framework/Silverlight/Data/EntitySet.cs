@@ -905,7 +905,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="index">The affected index</param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedAction action, object affectedObject, int index)
         {
-            if (this._collectionChangedEventHandler != null)
+            var handler = this._collectionChangedEventHandler;
+            if (handler != null)
             {
                 NotifyCollectionChangedEventArgs args = null;
                 if (action == NotifyCollectionChangedAction.Add)
@@ -920,12 +921,12 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
                 }
-                this._collectionChangedEventHandler(this, args);
+                handler(this, args);
             }
 
             if (this.PropertyChanged != null)
             {
-                this.RaisePropertyChanged("Count");
+                this.RaisePropertyChanged(nameof(Count));
             }
         }
 
@@ -950,7 +951,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Event raised when the collection has changed, or the collection is reset.
         /// </summary>
-        event NotifyCollectionChangedEventHandler INotifyCollectionChanged.CollectionChanged
+        public event NotifyCollectionChangedEventHandler CollectionChanged
         {
             add
             {
