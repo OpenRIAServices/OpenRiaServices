@@ -255,10 +255,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
             int productAdded = 0;
             int productRemoved = 0;
             int productPropertyChanged = 0;
+            int productsCollectionChanged = 0;
             EntitySet<Product> productsSet = ec.GetEntitySet<Product>();
             productsSet.EntityAdded += (obj, args) => productAdded += 1;
             productsSet.EntityRemoved += (obj, args) => productRemoved += 1;
             productsSet.PropertyChanged += (obj, args) => productPropertyChanged += 1;
+            ((INotifyCollectionChanged) productsSet).CollectionChanged += (obj, args) =>
+                productsCollectionChanged += 1;
 
             // create and add order to container
             Order order = new Order
@@ -287,6 +290,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(1, productAdded);
             Assert.AreEqual(0, productRemoved);
             Assert.AreEqual(2, productPropertyChanged);
+            Assert.AreEqual(1, productsCollectionChanged);
 
             // now explicitly attach product
             productsSet.Attach(product);
@@ -298,6 +302,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(1, productAdded);
             Assert.AreEqual(0, productRemoved);
             Assert.AreEqual(2, productPropertyChanged);
+            Assert.AreEqual(1, productsCollectionChanged);
         }
 
         private EntitySet<T> CreateEntitySet<T>() where T : Entity
