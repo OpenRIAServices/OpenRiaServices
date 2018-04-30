@@ -737,7 +737,13 @@ namespace OpenRiaServices.DomainServices.Client
                 this.AddToCache(entity);
                 cachedEntity = entity;
 
-                int idx = this._list.Add(entity);
+                int idx = 0;
+                bool isInList = this.InterestingEntities.Contains(entity);
+                if (!isInList)
+                {
+                    idx = this._list.Add(entity);
+                }
+
                 entity.MarkUnmodified();
                 entity.EntitySet = this;
 
@@ -749,7 +755,11 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 entity.OnLoaded(true);
-                this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
+
+                if (!isInList)
+                {
+                    this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
+                }
             }
             else
             {
