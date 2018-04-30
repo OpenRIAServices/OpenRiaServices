@@ -245,6 +245,9 @@
     <Compile Include="..\Silverlight\Data\EntityTests.cs">
       <Link>Data\EntityTests.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\IndexedListTests.cs">
+      <Link>Data\IndexedListTests.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\PoxTests.cs">
       <Link>Data\PoxTests.cs</Link>
     </Compile>

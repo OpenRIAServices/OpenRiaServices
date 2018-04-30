@@ -182,6 +182,9 @@
     <Compile Include="..\Silverlight\Data\IDomainClientFactory.cs">
       <Link>Data\IDomainClientFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Silverlight\Data\IndexedList.cs">
+      <Link>Data\IndexedList.cs</Link>
+    </Compile>
     <Compile Include="..\Silverlight\Data\MergeAttribute.cs">
       <Link>Data\MergeAttribute.cs</Link>
     </Compile>

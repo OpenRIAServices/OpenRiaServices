@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-
+using OpenRiaServices.DomainServices.Client.Data;
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
 #endif
@@ -737,7 +737,11 @@ namespace OpenRiaServices.DomainServices.Client
                 this.AddToCache(entity);
                 cachedEntity = entity;
 
-                int idx = this._list.Add(entity);
+                // it's possible that the entity is already in the list
+                // but not in the cache, if it was inferred
+                int idx = this._list.IndexOf(entity);
+                if (idx == -1)
+                    idx = this._list.Add(entity);
                 entity.MarkUnmodified();
                 entity.EntitySet = this;
 
@@ -1221,6 +1225,8 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
         where TEntity : Entity
     {
+        private IndexedList _indexedList;
+
         /// <summary>
         /// Initializes a new instance of the EntitySet class
         /// </summary>
@@ -1235,7 +1241,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created storage list instance.</returns>
         protected override IList CreateList()
         {
-            return new List<TEntity>();
+            _indexedList = new IndexedList();
+            return _indexedList;
         }
 
         /// <summary>
@@ -1268,7 +1275,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return ((IList<TEntity>)List).GetEnumerator();
+            return _indexedList.AsList().Cast<TEntity>().GetEnumerator();
         }
 
         /// <summary>
@@ -1352,7 +1359,7 @@ namespace OpenRiaServices.DomainServices.Client
 #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
-            ((IList<TEntity>)List).CopyTo(array, arrayIndex);
+            _indexedList.CopyTo(array, arrayIndex);
         }
 
         bool ICollection<TEntity>.Contains(TEntity item)
@@ -1441,7 +1448,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             public int IndexOf(object value)
             {
-                return this.Source.List.IndexOf(value);
+                return this.Source._indexedList.IndexOf(value);
             }
 
             public void Insert(int index, object value)
