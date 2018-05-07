@@ -53,7 +53,6 @@
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -79,6 +78,7 @@
     <Compile Include="DomainServiceClientCodeGeneratorAttributeTests.cs" />
     <Compile Include="FilenameMapTests.cs" />
     <Compile Include="MockCodeGenerationHost.cs" />
+    <Compile Include="MsBuildHelper.cs" />
     <Compile Include="RiaClientFilesTaskTests.cs" />
     <Compile Include="SourceFileLocationServiceTests.cs" />
     <Compile Include="AssemblyGenerator.cs" />
@@ -106,7 +106,6 @@
     <Compile Include="MockBuildEngine.cs" />
     <Compile Include="MockDomainServices.cs" />
     <Compile Include="MockSharedCodeService.cs" />
-    <Compile Include="MsBuildHelper.cs" />
     <Compile Include="NamingTests.cs" />
     <Compile Include="NotificationMethodGeneratorTest.cs" />
     <Compile Include="PdbReaderTests.cs" />

@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Build.BuildEngine;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Build.Execution;
+using Microsoft.Build.Evaluation;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -15,6 +16,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     /// </summary>
     public static class MsBuildHelper
     {
+        public static string DefaultToolsVersion = "14.0";
+        public static string ToolsVersion = "14.0";
+
         /// <summary>
         /// Extract the list of assemblies both generated and referenced by the named project.
         /// </summary>
@@ -35,41 +39,44 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             projectPath = Path.GetFullPath(projectPath);
 
-            Engine engine = new Engine();
-            var project = LoadProject(projectPath, engine);
+            var project = LoadProject(projectPath);
 
             // Ask to be told of generated outputs
-            IDictionary targetOutputs = new Dictionary<object, object>();
             string[] buildTargets = new string[] { "ResolveAssemblyReferences" };
 
-            bool success = engine.BuildProject(project, buildTargets, targetOutputs);
-            if (success)
+            var results = project.Build(buildTargets);
+            Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
+
+            foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
             {
-                BuildItemGroup buildItems = project.EvaluatedItems;
-                foreach (BuildItem buildItem in buildItems)
-                {
-                    string otherProjectPath = buildItem.FinalItemSpec;
-                    if (!Path.IsPathRooted(otherProjectPath))
-                    {
-                        otherProjectPath = Path.Combine(Path.GetDirectoryName(projectPath), otherProjectPath);
-                    }
+                string assemblyPath = GetFullPath(projectPath, reference);
 
-                    if (buildItem.Name.Equals("_ResolveAssemblyReferenceResolvedFiles", StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (!assemblies.Contains(otherProjectPath))
-                            assemblies.Add(otherProjectPath);
-                    }
-                    else if (buildItem.Name.Equals("ProjectReference", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // Project references recursively extract references
-                        string outputAssembly = GetOutputAssembly(otherProjectPath);
-
-                        if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                            assemblies.Add(outputAssembly);
-                    }
-                }
+                if (!assemblies.Contains(assemblyPath))
+                    assemblies.Add(assemblyPath);
             }
+
+            foreach (var reference in project.ProjectInstance.GetItems("ProjectReference"))
+            {
+                string otherProjectPath = GetFullPath(projectPath, reference);
+                // Project references recursively extract references
+                string outputAssembly = GetOutputAssembly(otherProjectPath);
+
+                if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
+                    assemblies.Add(outputAssembly);
+            }
+
             MakeFullPaths(assemblies, Path.GetDirectoryName(projectPath));
+        }
+
+        private static string GetFullPath(string projectPath, ProjectItemInstance reference)
+        {
+            string otherProjectPath = reference.EvaluatedInclude;
+            if (!Path.IsPathRooted(otherProjectPath))
+            {
+                otherProjectPath = Path.Combine(Path.GetDirectoryName(projectPath), otherProjectPath);
+            }
+
+            return otherProjectPath;
         }
 
         /// <summary>
@@ -82,12 +89,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string outputAssembly = null;
             projectPath = Path.GetFullPath(projectPath);
 
-            Engine engine = new Engine();
-            var project = LoadProject(projectPath, engine);
+            var project = LoadProject(projectPath);
 
-            string outputPath = project.GetEvaluatedProperty("OutputPath");
-            string assemblyName = project.GetEvaluatedProperty("AssemblyName");
-            string outputType = project.GetEvaluatedProperty("OutputType");
+            string outputPath = project.GetPropertyValue("OutputPath");
+            string assemblyName = project.GetPropertyValue("AssemblyName");
+            string outputType = project.GetPropertyValue("OutputType");
 
             if (!Path.IsPathRooted(outputPath))
                 outputPath = Path.Combine(Path.GetDirectoryName(projectPath), outputPath);
@@ -99,21 +105,19 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
         }
 
-        private static Project LoadProject(string projectPath, Engine engine)
+        internal static ProjectWrapper LoadProject(string projectPath)
         {
-            engine.DefaultToolsVersion = "4.0";
+            var projectCollection = new ProjectCollection();
+            projectCollection.DefaultToolsVersion = ToolsVersion;
+            projectCollection.SetGlobalProperty("Configuration", GetConfiguration());
 
-            BuildProperty configuration = new BuildProperty("Configuration", GetConfiguration());
-            engine.GlobalProperties[configuration.Name] = configuration;
-
-            var project = new Project(engine);
-            project.Load(projectPath);
-            project.SetProperty(configuration.Name, configuration.Value);
+            var project = projectCollection.LoadProject(projectPath, ToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
-            return project;
+
+            return new ProjectWrapper(project);
         }
 
-        private static string  GetConfiguration()
+        private static string GetConfiguration()
         {
 #if SIGNED
             return "Signed";
@@ -134,30 +138,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             projectPath = Path.GetFullPath(projectPath);
 
-            Engine engine = new Engine();
-            var project = LoadProject(projectPath, engine);
-
-            ErrorLogger logger = new ErrorLogger();
-            engine.RegisterLogger(logger);
-
-            // Ask to be told of generated outputs
-            IDictionary targetOutputs = new Dictionary<object, object>();
-            string[] buildTargets = new string[] { "Build" };
-
-            bool success = engine.BuildProject(project, buildTargets, targetOutputs);
-            if (!success)
+            var project = LoadProject(projectPath);
+            foreach (var buildItem in project.GetItems("Compile"))
             {
-                string message = string.Join(Environment.NewLine, logger.Errors.ToArray());
-                Assert.Fail(message);
-            }
-
-            BuildItemGroup buildItems = project.EvaluatedItems;
-            foreach (BuildItem buildItem in buildItems)
-            {
-                if (buildItem.Name.Equals("Compile", StringComparison.OrdinalIgnoreCase))
-                {
-                    items.Add(buildItem.FinalItemSpec);
-                }
+                items.Add(buildItem.EvaluatedInclude);
             }
 
             MakeFullPaths(items, Path.GetDirectoryName(projectPath));
@@ -205,19 +189,49 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return result;
         }
 
-        /// <summary>
-        /// Converts a collection of ITaskItem to a collection of strings
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        public static List<string> AsStrings(IEnumerable<ITaskItem> items)
+        public class ProjectWrapper
         {
-            List<string> result = new List<string>(items.Count());
-            foreach (ITaskItem item in items)
+            private ProjectInstance _projectInstance;
+
+            public Project Project { get; }
+            public ProjectInstance ProjectInstance
             {
-                result.Add(item.ItemSpec);
+                get
+                {
+                    return (_projectInstance) ?? (_projectInstance = BuildManager.DefaultBuildManager.GetProjectInstanceForBuild(Project));
+                }
             }
-            return result;
+
+            public ProjectWrapper(Project project)
+            {
+                this.Project = project;
+            }
+
+            public BuildResult Build(string[] targets, IEnumerable<Microsoft.Build.Framework.ILogger> loggers = null)
+            {
+                var manager = BuildManager.DefaultBuildManager;
+                var parameters = new BuildParameters()
+                {
+                    GlobalProperties = new Dictionary<string, string>()
+                     {
+                         {"Configuration", "Debug" },
+                     },
+                    Loggers = loggers
+                };
+
+                var projectInstance = manager.GetProjectInstanceForBuild(Project);
+                return manager.Build(parameters, new BuildRequestData(projectInstance, targets));
+            }
+
+            internal string GetPropertyValue(string v)
+            {
+                return this.Project.GetPropertyValue(v);
+            }
+
+            internal ICollection<ProjectItem> GetItems(string v)
+            {
+                return this.Project.GetItems(v);
+            }
         }
 
         private class ErrorLogger : Microsoft.Build.Framework.ILogger
