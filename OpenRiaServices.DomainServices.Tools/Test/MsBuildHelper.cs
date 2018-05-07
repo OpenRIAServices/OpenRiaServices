@@ -42,9 +42,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             var project = LoadProject(projectPath);
 
             // Ask to be told of generated outputs
-            string[] buildTargets = new string[] { "ResolveAssemblyReferences" };
-
-            var results = project.Build(buildTargets);
+            var results = project.Build(new string[] { "ResolveAssemblyReferences" });
             Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
 
             foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
