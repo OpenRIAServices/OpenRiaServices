@@ -4,8 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using Microsoft.Build.BuildEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConsoleLogger = OpenRiaServices.DomainServices.Server.Test.Utilities.ConsoleLogger;
 
@@ -189,19 +187,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     IEnumerable<string> projects = cache.GetAllKnownProjects();
 
                     // Simulate the exception so we get the exact text
-                    string warningMessage = null;
-                    try
-                    {
-                        Engine engine = new Engine();
-                        Project project = new Project(engine);
-                        project.Load(badProjectPath);
-
-                    }
-                    catch (InvalidProjectFileException ipfe)
-                    {
-                        warningMessage = string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Open_Project, badProjectPath, ipfe.Message);
-                    }
-
+                    string warningMessage = TestHelper.GetFailedToOpenProjectMessage(badProjectPath);
                     TestHelper.AssertContainsWarnings(logger, new string[] { warningMessage });
 
                 }
@@ -228,19 +214,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     IEnumerable<string> files = projectFileReader.LoadSourceFilesFromProject(badProjectPath);
 
                     // Simulate the exception so we get the exact text
-                    string warningMessage = null;
-                    try
-                    {
-                        Engine engine = new Engine();
-                        Project project = new Project(engine);
-                        project.Load(badProjectPath);
-
-                    }
-                    catch (InvalidProjectFileException ipfe)
-                    {
-                        warningMessage = string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Open_Project, badProjectPath, ipfe.Message);
-                    }
-
+                    string warningMessage = TestHelper.GetFailedToOpenProjectMessage(badProjectPath);
                     TestHelper.AssertContainsWarnings(logger, new string[] { warningMessage });
 
                 }

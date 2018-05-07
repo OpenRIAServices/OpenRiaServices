@@ -13,6 +13,8 @@ using OpenRiaServices.DomainServices.Tools.SharedTypes;
 using OpenRiaServices.DomainServices.Tools.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using System.Globalization;
+using Microsoft.Build.Exceptions;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -658,6 +660,22 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         internal static string GenerateCodeAssertSuccess(string language, IEnumerable<Type> domainServiceTypes, ISharedCodeService typeService)
         {
             return TestHelper.GenerateCodeAssertSuccess(language, domainServiceTypes, new ConsoleLogger(), typeService);
+        }
+
+        internal static string GetFailedToOpenProjectMessage(string badProjectPath)
+        {
+            // Simulate the exception so we get the exact text
+            try
+            {
+                MsBuildHelper.LoadProject(badProjectPath);
+            }
+            catch (InvalidProjectFileException ipfe)
+            {
+                return string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Open_Project, badProjectPath, ipfe.Message);
+            }
+
+            Assert.Fail("load should have failed");
+            return null;
         }
 
         /// <summary>
