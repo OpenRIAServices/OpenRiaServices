@@ -14,7 +14,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         private readonly string _relativeTestDir;
         private readonly bool _isCSharp;
-        private string _outputAssemblyName;
         private readonly IEnumerable<Type> _domainServiceTypes;
         private DomainServiceCatalog _domainServiceCatalog;
         private MockBuildEngine _mockBuildEngine;
@@ -22,10 +21,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private string _generatedCode;
         private Assembly _generatedAssembly;
         private IList<string> _referenceAssemblies;
-        private string _generatedCodeFile;
         private Type[] _generatedTypes;
         private string _userCode;
-        private string _userCodeFile;
         private readonly bool _useFullTypeNames;
 
 
@@ -42,6 +39,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
+            this.OutputAssemblyName = Guid.NewGuid().ToString();
         }
 
 
@@ -61,17 +59,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        internal string OutputAssemblyName
-        {
-            get
-            {
-                if (this._outputAssemblyName == null)
-                {
-                    this._outputAssemblyName = Path.GetTempFileName() + ".dll";
-                }
-                return this._outputAssemblyName;
-            }
-        }
+        internal string OutputAssemblyName { get; }
 
         internal string UserCode
         {
@@ -84,23 +72,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 this._userCode = value;
             }
         }
-
-        internal string UserCodeFile
-        {
-            get
-            {
-                if (this._userCodeFile == null)
-                {
-                    if (!string.IsNullOrEmpty(this.UserCode))
-                    {
-                        this._userCodeFile = Path.GetTempFileName();
-                        File.WriteAllText(this._userCodeFile, this.UserCode);
-                    }
-                }
-                return this._userCodeFile;
-            }
-        }
-
 
         internal MockBuildEngine MockBuildEngine
         {
@@ -361,20 +332,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return false;
         }
 
-        private string GeneratedCodeFile
-        {
-            get
-            {
-                if (this._generatedCodeFile == null)
-                {
-                    this._generatedCodeFile = Path.GetTempFileName();
-                    File.WriteAllText(this._generatedCodeFile, this.GeneratedCode);
-                }
-                return this._generatedCodeFile;
-            }
-
-        }
-
         private string GenerateCode()
         {
             ClientCodeGenerationOptions options = new ClientCodeGenerationOptions()
@@ -486,26 +443,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             this._generatedTypes = null;
             this._generatedAssembly = null;
-            this.SafeDelete(this._generatedCodeFile);
-            this.SafeDelete(this._userCodeFile);
         }
 
         #endregion
-
-        private void SafeDelete(string file)
-        {
-            if (!string.IsNullOrEmpty(file) && File.Exists(file))
-            {
-                try
-                {
-                    File.Delete(file);
-                    System.Diagnostics.Debug.WriteLine("Deleted test file: " + file);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Could not delete " + file + ":\r\n" + ex.Message);
-                }
-            }
-        }
     }
 }
