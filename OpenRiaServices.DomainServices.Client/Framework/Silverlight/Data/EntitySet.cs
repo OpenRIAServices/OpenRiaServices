@@ -25,7 +25,10 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
+        // backing entity list
         private IList _list;
+        // set of entities, for fast lookup
+        private HashSet<Entity> _set;
         private IDictionary<object, Entity> _identityCache;
         private readonly HashSet<Entity> _interestingEntities;
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
@@ -118,6 +121,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._identityCache = new Dictionary<object, Entity>();
             this._interestingEntities.Clear();
             this._list = this.CreateList();
+            this._set = new HashSet<Entity>();
 
             this.OnCollectionChanged(NotifyCollectionChangedAction.Reset, clearedEntities, -1);
 
@@ -271,6 +275,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._supportedOperations = operationsToSupport;
 
             this._list = this.CreateList();
+            this._set = new HashSet<Entity>();
         }
 
         /// <summary>
@@ -417,9 +422,10 @@ namespace OpenRiaServices.DomainServices.Client
                 entity.UndoDelete();
             }
 
-            if (!this._list.Contains(entity))
+            if (!this._set.Contains(entity))
             {
                 int idx = this._list.Add(entity);
+                this._set.Add(entity);
                 entity.EntitySet = this;
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
             }
@@ -482,13 +488,14 @@ namespace OpenRiaServices.DomainServices.Client
 
             entity.EntitySet = null;
 
-            this._list.Remove(entity);
+            this._list.RemoveAt(idx);
+            this._set.Remove(entity);
             this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, entity, idx);
         }
 
         internal bool Contains(Entity entity)
         {
-            return this._list != null && this._list.Contains(entity);
+            return this._set != null && this._set.Contains(entity);
         }
 
         /// <summary>
@@ -673,7 +680,8 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (idx != -1)
             {
-                this._list.Remove(entity);
+                this._list.RemoveAt(idx);
+                this._set.Remove(entity);
             }
             this.RemoveFromCache(entity);
             this.TrackAsInteresting(entity, false);
@@ -738,10 +746,11 @@ namespace OpenRiaServices.DomainServices.Client
                 cachedEntity = entity;
 
                 int idx = 0;
-                bool isInList = this.InterestingEntities.Contains(entity);
+                bool isInList = this._set.Contains(entity);
                 if (!isInList)
                 {
                     idx = this._list.Add(entity);
+                    this._set.Add(entity);
                 }
 
                 entity.MarkUnmodified();
