@@ -4,7 +4,7 @@ using System.Linq;
 namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
-    /// The value of a sucessfully completed Invoke operation
+    /// The value of a successfully completed Invoke operation
     /// </summary>
     public class InvokeResult
     {
@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainServices.Client
     }
 
     /// <summary>
-    /// The value of a sucessfully completed Invoke operation
+    /// The value of a successfully completed Invoke operation
     /// </summary>
     public class InvokeResult<T> : InvokeResult
     {
@@ -33,9 +33,19 @@ namespace OpenRiaServices.DomainServices.Client
         /// <value>
         /// The value.
         /// </value>
-        public T Value  
+        public T Value
         {
             get { return _value; }
+        }
+
+        /// <summary>
+        /// Implicit conversion to <typeparamref name="T"/> so that <see cref="Value"/> does not need to be used
+        /// in most cases.
+        /// </summary>
+        /// <param name="invokeResult"></param>
+        public static implicit operator T(InvokeResult<T> invokeResult)
+        {
+            return invokeResult.Value;
         }
     }
 
