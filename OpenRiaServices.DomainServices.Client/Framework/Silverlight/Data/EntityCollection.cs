@@ -11,6 +11,7 @@ using System.Reflection;
 
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
+using OpenRiaServices.DomainServices.Client.Internal;
 #endif
 
 namespace OpenRiaServices.DomainServices.Client

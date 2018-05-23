@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using OpenRiaServices.DomainServices.Client.Internal;
 
 namespace OpenRiaServices.DomainServices.Client
 {

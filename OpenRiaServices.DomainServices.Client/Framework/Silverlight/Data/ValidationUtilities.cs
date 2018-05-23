@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.DomainServices;
+using OpenRiaServices.DomainServices.Client.Internal;
 #if SERVERFX
 using DataResource = OpenRiaServices.DomainServices.Server.Resource;
 #else
