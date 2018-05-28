@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         private Action<object, object> _setter;
 #endif
 
-        public MetaMember(MetaType metaType, PropertyInfo property)
+        internal MetaMember(MetaType metaType, PropertyInfo property, bool isRoundtripEntity)
         {
             this.Member = property;
             this.MetaType = metaType;
@@ -48,28 +48,64 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             AssociationAttribute = (AssociationAttribute)property.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
             EditableAttribute = (EditableAttribute)property.GetCustomAttributes(typeof(EditableAttribute), false).SingleOrDefault();
 
-            IsRoundtripMember = CheckIfRoundtripMember(this);
+            IsRoundtripMember = CheckIfRoundtripMember(this, isRoundtripEntity);
             IsMergable = CheckIfMergeableMember(this);
         }
 
+        /// <summary>
+        /// Gets the name of the property
+        /// </summary>
         public string Name => Member.Name;
 
+        /// <summary>
+        /// Gets the CLR type of this property
+        /// </summary>
         public Type PropertyType => Member.PropertyType;
 
+        /// <summary>
+        /// Get the <see cref="MetaType"/> where the property is defined
+        /// </summary>
         public MetaType MetaType { get; }
 
+        /// <summary>
+        /// Gets any <see cref="EditableAttribute"/> applied to the property, or <c>null</c>
+        /// if no attribute is specified for the property
+        /// </summary>
         public EditableAttribute EditableAttribute { get; }
 
+        /// <summary>
+        /// Gets the underlying <see cref="PropertyInfo"/> for the property which this 
+        /// instance represents.
+        /// </summary>
         internal PropertyInfo Member { get; }
 
+        /// <summary>
+        /// Returns <c>true</c> if the property has a <see cref="AssociationAttribute"/> applied
+        /// and is therefore part of a data relationship (such as a foreign key)
+        /// </summary>
         public bool IsAssociationMember { get { return AssociationAttribute != null; } }
 
+        /// <summary>
+        /// Gets any <see cref="AssociationAttribute"/> applied to the property, or <c>null</c>
+        /// if no attribute is specified for the property
+        /// </summary>
         public AssociationAttribute AssociationAttribute { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this member is one of the supported values to send between 
+        /// server and client (and it has both getter and setter).
+        /// It is used to determine if it is part of the data contract between server and client. 
+        /// </summary>
         public bool IsDataMember { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this member is part of the <see cref="MetaType"/>s key.
+        /// </summary>
         public bool IsKeyMember { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this member is part of the <see cref="MetaType"/>s key.
+        /// </summary>
         public bool IsRoundtripMember { get; }
 
         /// <summary>
@@ -84,7 +120,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         public bool IsExternalReference { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this member is a supported collection type.
+        /// Gets a value indicating whether this member is a supported collection type.
         /// </summary>
         public bool IsCollection { get; }
 
@@ -132,6 +168,11 @@ namespace OpenRiaServices.DomainServices.Client.Internal
 #endif
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this member is mergable 
+        /// (should be updated when loading with behaviour <see cref="LoadBehavior.MergeIntoCurrent"/> or <see cref="LoadBehavior.RefreshCurrent"/>).
+        /// Supported types are mergable by default unless a <see cref="MergeAttribute"/> is defined with <see cref="MergeAttribute.IsMergeable"/> set to false.
+        /// </summary>
         public bool IsMergable { get; }
 
         /// <summary>
@@ -202,10 +243,8 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         }
 
 
-        private static bool CheckIfRoundtripMember(MetaMember metaMember)
+        private static bool CheckIfRoundtripMember(MetaMember metaMember, bool isRoundtripEntity)
         {
-            bool isRoundtripEntity = TypeUtility.IsAttributeDefined(metaMember.Member.DeclaringType, typeof(RoundtripOriginalAttribute), true);
-
             return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
                        (isRoundtripEntity || TypeUtility.IsAttributeDefined(metaMember.Member, typeof(RoundtripOriginalAttribute), false));
         }

@@ -68,6 +68,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
 
             this.IsComplex = TypeUtility.IsComplexType(type);
 
+            bool isRoundtripEntity = TypeUtility.IsAttributeDefined(type.DeclaringType, typeof(RoundtripOriginalAttribute), true);
             bool hasOtherRoundtripMembers = false;
 
             IEnumerable<PropertyInfo> properties = type.GetProperties(MemberBindingFlags)
@@ -75,13 +76,16 @@ namespace OpenRiaServices.DomainServices.Client.Internal
                 .OrderBy(p => p.Name);
             foreach (PropertyInfo property in properties)
             {
-                MetaMember metaMember = new MetaMember(this, property);
+                MetaMember metaMember = new MetaMember(this, property, isRoundtripEntity);
 
                 if (metaMember.IsComplex)
                     this.HasComplexMembers = true;
 
                 if (metaMember.IsComposition)
                     this.HasComposition = true;
+
+                if (metaMember.RequiresValidation)
+                    this._requiresValidation = true;
 
                 if (metaMember.IsRoundtripMember)
                 {
@@ -103,7 +107,6 @@ namespace OpenRiaServices.DomainServices.Client.Internal
                 this._metaMembers.Add(property.Name, metaMember);
             }
 
-
             this.ShouldRoundtripOriginal = (hasOtherRoundtripMembers || VersionMember == null);
             if (this.HasComposition)
             {
@@ -119,13 +122,22 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             this.Type = type;
 
             _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this.Type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
-            _requiresValidation = _validationAttributes.Any();
-
-            this.CalculateAttributesRecursive(type, new HashSet<Type>());
+            _requiresValidation = _requiresValidation || _validationAttributes.Any();
 
             // for identity purposes, we need to make sure values are always ordered
             KeyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
             _dataMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsDataMember).ToArray());
+
+            // Reqursivly search properties on all complex members for validation attribues
+            if (!_requiresValidation && HasComplexMembers)
+            {
+                var visitedTypes = new HashSet<Type>();
+                foreach (var member in Members)
+                {
+                    if (member.IsComplex)
+                        this.SearchForValidationAttributesRecursive(member.PropertyType, new HashSet<Type>());
+                }
+            }
         }
 
         /// <summary>
@@ -155,7 +167,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>the EntityActionAttribute for the custom method; or <c>null</c> if no method was found</returns>
-        internal EntityActionAttribute GetEntityAction(string name)
+        public EntityActionAttribute GetEntityAction(string name)
         {
             EntityActionAttribute res;
             _customUpdateMethods.TryGetValue(name, out res);
@@ -166,7 +178,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// Gets <see cref="EntityActionAttribute" /> for all custom update method on the MetaType.
         /// </summary>
         /// <returns>Meta information about all entity actions on the type</returns>
-        internal IEnumerable<EntityActionAttribute> GetEntityActions()
+        public IEnumerable<EntityActionAttribute> GetEntityActions()
         {
             return _customUpdateMethods.Values;
         }
@@ -210,15 +222,9 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         public MetaMember VersionMember { get; }
 
         /// <summary>
-        /// Gets the collection of members for this Type.
+        /// Gets the collection of all members for this Type.
         /// </summary>
-        public IEnumerable<MetaMember> Members
-        {
-            get
-            {
-                return this._metaMembers.Values;
-            }
-        }
+        public IEnumerable<MetaMember> Members => this._metaMembers.Values;
 
         /// <summary>
         /// Gets the collection of key members for this entity Type.
@@ -229,25 +235,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// <summary>
         /// Gets the collection of data members for this Type.
         /// </summary>
-        public IEnumerable<MetaMember> DataMembers
-        {
-            get
-            {
-                return _dataMembers;
-            }
-        }
-
-        /// <summary>
-        /// Gets the collection of members that should be roundtripped in
-        /// the original entity.
-        /// </summary>
-        public IEnumerable<PropertyInfo> RoundtripMembers
-        {
-            get
-            {
-                return this._dataMembers.Where(m => m.IsRoundtripMember).Select(m => m.Member);
-            }
-        }
+        public IEnumerable<MetaMember> DataMembers => _dataMembers;
 
         /// <summary>
         /// Gets the collection of association members for this entity Type.
@@ -257,14 +245,6 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             get
             {
                 return this._metaMembers.Values.Where(m => m.IsAssociationMember);
-            }
-        }
-
-        internal IEnumerable<MetaMember> MergableMembers
-        {
-            get
-            {
-                return this._metaMembers.Values.Where(m => m.IsMergable);
             }
         }
 
@@ -297,17 +277,16 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// </summary>
         /// <param name="type">The root type to calculate attributes for.</param>
         /// <param name="visited">Visited set for recursion.</param>
-        private void CalculateAttributesRecursive(Type type, HashSet<Type> visited)
+        private void SearchForValidationAttributesRecursive(Type type, HashSet<Type> visited)
         {
-            if (!visited.Add(type))
+            // If found or already visited the type then we don't need to visit it again
+            if (!visited.Add(type) || this._requiresValidation)
             {
                 return;
             }
 
-            if (!this._requiresValidation)
-            {
-                this._requiresValidation = TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true);
-            }
+            // Check for type level validation
+            this._requiresValidation = TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true);
 
             // visit all data members
             IEnumerable<PropertyInfo> properties = type.GetProperties(MemberBindingFlags).Where(p => p.GetIndexParameters().Length == 0).OrderBy(p => p.Name);
@@ -322,7 +301,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
                 if (TypeUtility.IsSupportedComplexType(property.PropertyType))
                 {
                     Type elementType = TypeUtility.GetElementType(property.PropertyType);
-                    this.CalculateAttributesRecursive(elementType, visited);
+                    this.SearchForValidationAttributesRecursive(elementType, visited);
                 }
             }
         }
