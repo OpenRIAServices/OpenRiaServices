@@ -9,10 +9,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using OpenRiaServices.DomainServices.Client.Internal;
 
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
-using OpenRiaServices.DomainServices.Client.Internal;
 #endif
 
 namespace OpenRiaServices.DomainServices.Client
