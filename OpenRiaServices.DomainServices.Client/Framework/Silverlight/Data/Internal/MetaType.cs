@@ -68,7 +68,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
 
             this.IsComplex = TypeUtility.IsComplexType(type);
 
-            bool isRoundtripEntity = TypeUtility.IsAttributeDefined(type.DeclaringType, typeof(RoundtripOriginalAttribute), true);
+            bool isRoundtripEntity = TypeUtility.IsAttributeDefined(type, typeof(RoundtripOriginalAttribute), true);
             bool hasOtherRoundtripMembers = false;
 
             IEnumerable<PropertyInfo> properties = type.GetProperties(MemberBindingFlags)
