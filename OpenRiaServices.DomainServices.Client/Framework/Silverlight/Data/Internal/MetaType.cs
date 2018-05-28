@@ -31,8 +31,8 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// but that shouldn't be a problem.
         /// </summary>
         [ThreadStatic]
-        private static Dictionary<Type, MetaType> _metaTypes;
-        private bool _requiresValidation;
+        private static Dictionary<Type, MetaType> s_metaTypes;
+        private readonly bool _requiresValidation;
         private readonly Type[] _childTypes;
         private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private readonly ReadOnlyCollection<MetaMember> _dataMembers;
@@ -128,14 +128,18 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             KeyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
             _dataMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsDataMember).ToArray());
 
-            // Reqursivly search properties on all complex members for validation attribues
             if (!_requiresValidation && HasComplexMembers)
             {
+                // Reqursivly search properties on all complex members for validation attribues to 
+                // determine if validation is required
                 var visitedTypes = new HashSet<Type>();
                 foreach (var member in Members)
                 {
-                    if (member.IsComplex)
-                        this.SearchForValidationAttributesRecursive(member.PropertyType, new HashSet<Type>());
+                    if (member.IsComplex && SearchForValidationAttributesRecursive(member.PropertyType, visitedTypes))
+                    {
+                        _requiresValidation = true;
+                        break;
+                    }
                 }
             }
         }
@@ -187,11 +191,11 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         {
             get
             {
-                if (_metaTypes == null)
+                if (s_metaTypes == null)
                 {
-                    _metaTypes = new Dictionary<Type, MetaType>();
+                    s_metaTypes = new Dictionary<Type, MetaType>();
                 }
-                return _metaTypes;
+                return s_metaTypes;
             }
         }
 
@@ -277,33 +281,37 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// </summary>
         /// <param name="type">The root type to calculate attributes for.</param>
         /// <param name="visited">Visited set for recursion.</param>
-        private void SearchForValidationAttributesRecursive(Type type, HashSet<Type> visited)
+        /// <returns><c>true</c> if any nested type or property requires validation</returns>
+        private static bool SearchForValidationAttributesRecursive(Type type, HashSet<Type> visited)
         {
-            // If found or already visited the type then we don't need to visit it again
-            if (!visited.Add(type) || this._requiresValidation)
+            // If already visited the type then we don't need to visit it again
+            if (!visited.Add(type))
             {
-                return;
+                return false;
             }
 
             // Check for type level validation
-            this._requiresValidation = TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true);
+            if (TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true))
+                return true;
 
             // visit all data members
             IEnumerable<PropertyInfo> properties = type.GetProperties(MemberBindingFlags).Where(p => p.GetIndexParameters().Length == 0).OrderBy(p => p.Name);
             foreach (PropertyInfo property in properties)
             {
-                if (!this._requiresValidation)
-                {
-                    this._requiresValidation = TypeUtility.IsAttributeDefined(property, typeof(ValidationAttribute), true);
-                }
+                if (TypeUtility.IsAttributeDefined(property, typeof(ValidationAttribute), true))
+                    return true;
 
                 // for complex members we must drill in recursively
                 if (TypeUtility.IsSupportedComplexType(property.PropertyType))
                 {
                     Type elementType = TypeUtility.GetElementType(property.PropertyType);
-                    this.SearchForValidationAttributesRecursive(elementType, visited);
+
+                    if (SearchForValidationAttributesRecursive(elementType, visited))
+                        return true;
                 }
             }
+
+            return false;
         }
 
         /// <summary>
