@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using OpenRiaServices.DomainServices.Client.Internal;
 
 namespace OpenRiaServices.DomainServices.Client
 {

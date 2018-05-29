@@ -12,6 +12,7 @@ using OpenRiaServices.Silverlight.Testing;
 namespace OpenRiaServices.DomainServices.Client.Test
 {
     using System.Reflection;
+    using Internal;
     using TestDomainServices;
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
     using TypeUtility = SSmDsClient::OpenRiaServices.DomainServices.TypeUtility;

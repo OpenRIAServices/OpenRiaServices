@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using OpenRiaServices.DomainServices.Client.Internal;
 
 namespace OpenRiaServices.DomainServices.Client
 {
