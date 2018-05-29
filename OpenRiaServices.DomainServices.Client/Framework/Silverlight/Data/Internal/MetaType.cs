@@ -132,7 +132,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             {
                 // Reqursivly search properties on all complex members for validation attribues to 
                 // determine if validation is required
-                var visitedTypes = new HashSet<Type>();
+                var visitedTypes = new HashSet<Type>() { type };
                 foreach (var member in Members)
                 {
                     if (member.IsComplex && SearchForValidationAttributesRecursive(member.PropertyType, visitedTypes))
