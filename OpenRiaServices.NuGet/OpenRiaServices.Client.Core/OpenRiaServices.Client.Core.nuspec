@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Client.Core</id>
-    <version>4.5.1</version>
+    <version>4.5.2</version>
     <title>Open RIA Services Client</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -13,10 +13,7 @@
       OpenRiaServices.Client.Core provides the OpenRiaServices.DomainServices.Client and OpenRiaServices.DomainServices.Client.Web assemblies for your client projects.
     </description>
     <summary>Open RIA Services - client assemblies and references.</summary>
-    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases
-
-4.5.1:
-* Improved performance</releaseNotes>
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
     <copyright>2018 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
