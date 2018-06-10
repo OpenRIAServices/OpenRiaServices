@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Client.Core</id>
-    <version>4.5.2</version>
+    <version>4.5.3</version>
     <title>Open RIA Services Client - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>

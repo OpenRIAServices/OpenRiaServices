@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Signed.Client</id>
-        <version>4.5.2</version>
+        <version>4.5.3</version>
         <title>Open RIA Services Signed Client, Code Generator, and MVVM Support</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -17,11 +17,11 @@
         <tags>WCF RIA Services RIAServices OpenRiaServices</tags>
         <dependencies>
             <group>
-                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.2"/>
+                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.3"/>
                 <dependency id="OpenRiaServices.Signed.Client.CodeGen" version="4.5.1"/>
             </group>
             <group targetFramework="sl50">
-                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.2"/>
+                <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.3"/>
                 <dependency id="OpenRiaServices.Signed.Silverlight.CodeGen" version="4.5.1"/>
                 <dependency id="OpenRiaServices.Signed.ViewModel" version="4.5.1"/>
             </group>
