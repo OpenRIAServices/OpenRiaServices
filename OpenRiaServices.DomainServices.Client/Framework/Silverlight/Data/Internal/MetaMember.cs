@@ -30,9 +30,9 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             bool hasGetter = (property.GetGetMethod() != null);
 
             IsCollection = TypeUtility.IsSupportedCollectionType(property.PropertyType);
+            IsComplex = TypeUtility.IsSupportedComplexType(property.PropertyType);
             if (hasGetter && (property.GetSetMethod() != null))
             {
-                IsComplex = TypeUtility.IsSupportedComplexType(property.PropertyType);
                 IsDataMember = IsComplex || TypeUtility.IsPredefinedType(property.PropertyType);
             }
 

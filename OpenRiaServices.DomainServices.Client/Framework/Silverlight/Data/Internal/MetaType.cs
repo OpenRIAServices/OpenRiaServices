@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
     /// it may be cached on types elsewhere providing multithreaded access to visible properties.
     /// </remarks>
     /// </summary>
-    [DebuggerDisplay("Type = {_type.Name}")]
+    [DebuggerDisplay("Type = {Type.Name}")]
     public sealed class MetaType
     {
         /// <summary>
@@ -284,10 +284,21 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// <returns><c>true</c> if any nested type or property requires validation</returns>
         private static bool SearchForValidationAttributesRecursive(Type type, HashSet<Type> visited)
         {
+            // For collections and similar, get the type in the collection
+            type = TypeUtility.GetElementType(type);
+
             // If already visited the type then we don't need to visit it again
             if (!visited.Add(type))
             {
                 return false;
+            }
+
+            // Check metatype cache to se if we have already
+            // determined if the type requires validation
+            MetaType metaType;
+            if (s_metaTypes.TryGetValue(type, out metaType))
+            {
+                return metaType.RequiresValidation;
             }
 
             // Check for type level validation
@@ -304,9 +315,7 @@ namespace OpenRiaServices.DomainServices.Client.Internal
                 // for complex members we must drill in recursively
                 if (TypeUtility.IsSupportedComplexType(property.PropertyType))
                 {
-                    Type elementType = TypeUtility.GetElementType(property.PropertyType);
-
-                    if (SearchForValidationAttributesRecursive(elementType, visited))
+                    if (SearchForValidationAttributesRecursive(property.PropertyType, visited))
                         return true;
                 }
             }
