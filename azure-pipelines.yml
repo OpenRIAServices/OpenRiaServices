@@ -6,6 +6,7 @@ queue:
   - msbuild
   - visualstudio
   - vstest
+  - java
 
 steps:
 
@@ -50,7 +51,7 @@ steps:
      !**\obj\**
      !**\Silverlight\**
 
-	runOnlyImpactedTests: false
+    runOnlyImpactedTests: false
     vsTestVersion: 14.0
     runInParallel: true
     codeCoverageEnabled: false
@@ -59,3 +60,88 @@ steps:
     rerunFailedTests: true
     rerunFailedThreshold: 40
   timeoutInMinutes: 40
+
+- task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+  displayName: 'Run Code Analysis'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+- task: PowerShell@1
+  displayName: 'PowerShell Script'
+  inputs:
+    scriptName: 'OpenRiaServices.NuGet/Pack-All.ps1'
+    arguments: '-Version "$(FullVersion)"'
+  enabled: false
+
+
+
+- task: NuGetPackager@0
+  displayName: 'NuGet Packager '
+  inputs:
+    searchPattern: 'OpenRiaServices.NuGet\**\*.nuspec;-:OpenRiaServices.NuGet\**\*.Signed.*nuspec;-:OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;-:OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;-:OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
+    versionByBuild: byEnvVar
+    versionEnvVar: FullVersion
+  enabled: false
+  continueOnError: true
+  condition: succeededOrFailed()
+
+- task: NuGetCommand@2
+  displayName: 'NuGet pack'
+  inputs:
+    command: pack
+    packagesToPack: 'OpenRiaServices.NuGet\**\*.nuspec;!OpenRiaServices.NuGet\**\*.Signed.*nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
+    versioningScheme: byEnvVar
+    versionEnvVar: FullVersion
+    includeSymbols: true
+  enabled: false
+  continueOnError: true
+
+- powershell: |
+   if ($env:CONFIGURATION -ne "Signed") {
+       dir OpenRiaServices.NuGet\*.nupkg -Recurse | where {$_.Name -match "OpenRiaServices.Signed"} | del}
+   
+   if ($env:CONFIGURATION -eq "Signed") {
+       dir OpenRiaServices.NuGet\*.nupkg -Recurse  | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del} 
+
+  displayName: 'PowerShell Script'
+  enabled: false
+
+
+
+- task: NuGetPublisher@0
+  displayName: 'NuGet Publisher '
+  inputs:
+    connectedServiceName: myget
+    nuGetVersion: 4.0.0.2283
+    continueOnEmptyNupkgMatch: true
+  enabled: false
+  continueOnError: true
+
+- task: NuGetCommand@2
+  displayName: 'NuGet custom'
+  inputs:
+    command: custom
+    arguments: 'push '
+  enabled: false
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)'
+    Contents: |
+     OpenRiaServices.NuGet\**\*.nupkg
+     .sonarqube\out\**
+     !**\packages\**
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
+
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
+- task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
+  displayName: 'Publish Quality Gate Result'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
