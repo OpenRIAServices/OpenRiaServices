@@ -1,16 +1,131 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+resources:
+- repo: self
 
-pool:
-  vmImage: 'Ubuntu 16.04'
+queue:
+  name: Hosted VS2017
+  demands: 
+  - msbuild
+  - visualstudio
+
+variables:
+  FullVersion: '4.5.1-dev$(Build.BuildNumber)'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.x'
+  inputs:
+    versionSpec: 4.x
+
+- powershell: |
+   [string]$RepositoryRoot = "$(Build.SourcesDirectory)"
+   
+   $url = "https://download.microsoft.com/download/3/A/3/3A35179D-5C87-4D0A-91EB-BF5FEDC601A4/sdk/silverlight_sdk.exe"
+   $fileName = "silverlight_5_sdk.exe"
+   $fullPath = (join-path $RepositoryRoot $fileName)
+   
+   if (Test-Path $fullPath)
+   {
+     echo "'$fileName' already downloading, reusing it"
+   }
+   else
+   {
+     echo "Downloading Silverlight sdk"
+     Measure-Command {  (New-Object System.Net.WebClient).DownloadFile($url, $fullPath) }
+     echo "Downloaded Silverlight sdk"
+   }
+   
+   dir $fullPath
+   if (-not $DownloadOnly)
+   {
+     echo "Installing"
+    "executing $fullPath /q  /norestart"
+   
+     & $fullPath "/q"  "/norestart"
+   
+    echo "Success  = '$?'"
+   }
+   
+   echo "deleting global.json"
+   del (join-path $RepositoryRoot "global.json") 
+
+  displayName: 'PowerShell Script'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore RiaServices_VS2017.sln'
+  inputs:
+    restoreSolution: '$(Parameters.solution)'
+
+- task: VSBuild@1
+  displayName: 'Build solution RiaServices_VS2017.sln'
+  inputs:
+    solution: '$(Parameters.solution)'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: VSTest@2
+  displayName: 'Test Assemblies **\$(BuildConfiguration)\*test*.dll;-:**\obj\**'
+  inputs:
+    testAssemblyVer2: |
+     **\*test*.dll
+     !**\obj\**
+    runOnlyImpactedTests: true
+    runAllTestsAfterXBuilds: 10
+    runInParallel: true
+    codeCoverageEnabled: false
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+  enabled: false
+  continueOnError: true
+  timeoutInMinutes: 40
+
+- task: NuGetPackager@0
+  displayName: 'NuGet Packager '
+  inputs:
+    searchPattern: 'OpenRiaServices.NuGet\**\*.nuspec;-:OpenRiaServices.NuGet\**\*.Signed.*nuspec;-:OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;-:OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;-:OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
+    versionByBuild: byEnvVar
+    versionEnvVar: FullVersion
+  enabled: false
+  continueOnError: true
+
+- task: PowerShell@1
+  displayName: 'PowerShell Script'
+  inputs:
+    scriptType: inlineScript
+    inlineScript: |
+     if ($env:CONFIGURATION -ne "Signed") {
+         dir OpenRiaServices.NuGet\*.nupkg -Recurse | where {$_.Name -match "OpenRiaServices.Signed"} | del}
+     
+     if ($env:CONFIGURATION -eq "Signed") {
+         dir OpenRiaServices.NuGet\*.nupkg -Recurse  | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del}
+
+- task: NuGetPublisher@0
+  displayName: 'NuGet Publisher '
+  inputs:
+    connectedServiceName: myget
+    nuGetVersion: 4.0.0.2283
+    continueOnEmptyNupkgMatch: true
+  enabled: false
+  continueOnError: true
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)\OpenRiaServices.NuGet\'
+    Contents: |
+     **\*.nupkg
+     .sonarqube\out\**
+     !**\packages\**
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
+
+
+
+
