@@ -1,67 +1,46 @@
-resources:
-- repo: self
-
 queue:
-  name: Hosted VS2017
+
+  name: Hosted
   demands: 
+  - DotNetFramework
   - msbuild
   - visualstudio
-
-variables:
-  FullVersion: '4.5.1-dev$(Build.BuildNumber)'
+  - vstest
 
 steps:
 
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.8.1'
-  inputs:
-    versionSpec: 4.8.1
-
-- powershell: |
-   [string]$RepositoryRoot = "$(Build.SourcesDirectory)"
-   
-   $url = "https://download.microsoft.com/download/3/A/3/3A35179D-5C87-4D0A-91EB-BF5FEDC601A4/sdk/silverlight_sdk.exe"
-   $fileName = "silverlight_5_sdk.exe"
-   $fullPath = (join-path $RepositoryRoot $fileName)
-   
-   if (Test-Path $fullPath)
-   {
-     echo "'$fileName' already downloading, reusing it"
-   }
-   else
-   {
-     echo "Downloading Silverlight sdk"
-     Measure-Command {  (New-Object System.Net.WebClient).DownloadFile($url, $fullPath) }
-     echo "Downloaded Silverlight sdk"
-   }
-   
-   dir $fullPath
-   if (-not $DownloadOnly)
-   {
-     echo "Installing"
-    "executing $fullPath /q  /norestart"
-   
-     & $fullPath "/q"  "/norestart"
-   
-    echo "Success  = '$?'"
-   }
-   
-   echo "deleting global.json"
-   del (join-path $RepositoryRoot "global.json") 
-
-  displayName: 'PowerShell Script'
-
-- task: NuGetCommand@2
-  displayName: 'NuGet restore RiaServices_VS2017.sln'
-  inputs:
-    restoreSolution: '$(Parameters.solution)'
-
-- task: VSBuild@1
-  displayName: 'Build solution RiaServices_VS2017.sln'
+- task: NuGetInstaller@0
+  displayName: 'NuGet restore RiaServices.sln'
   inputs:
     solution: '$(Parameters.solution)'
+    nuGetVersion: 3.5.0.1829
+
+- task: PowerShell@1
+  displayName: 'PowerShell Script'
+  inputs:
+    scriptName: 'Setup-TestDatabases.ps1'
+
+- task: VSBuild@1
+  displayName: 'Build solution RiaServices.sln'
+  inputs:
+    solution: '$(Parameters.solution)'
+    vsVersion: 14.0
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
+
+- powershell: |
+   # Write your powershell commands here.
+   
+   $port = 60002
+   $iisExpressExe = "c:\Program Files (x86)\IIS Express\iisexpress.exe"
+   $path = (Resolve-path "Test\WebsiteFullTrust")
+   Write-Host $path
+   Write-host "Starting site on port: $port"
+   $params = "/port:$port /path:$path"
+   $command = """$iisExpressExe"" $params"
+   cmd /c start cmd /k "$command"
+ 
+  displayName: 'Start test webserver'
 
 - task: VSTest@2
   displayName: 'Test Assemblies **\$(BuildConfiguration)\*test*.dll;-:**\obj\**'
@@ -69,63 +48,14 @@ steps:
     testAssemblyVer2: |
      **\*test*.dll
      !**\obj\**
-    runOnlyImpactedTests: true
-    runAllTestsAfterXBuilds: 10
+     !**\Silverlight\**
+
+	runOnlyImpactedTests: false
+    vsTestVersion: 14.0
     runInParallel: true
     codeCoverageEnabled: false
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-  enabled: false
-  continueOnError: true
+    rerunFailedTests: true
+    rerunFailedThreshold: 40
   timeoutInMinutes: 40
-
-- task: NuGetPackager@0
-  displayName: 'NuGet Packager '
-  inputs:
-    searchPattern: 'OpenRiaServices.NuGet\**\*.nuspec;-:OpenRiaServices.NuGet\**\*.Signed.*nuspec;-:OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;-:OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;-:OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
-    versionByBuild: byEnvVar
-    versionEnvVar: FullVersion
-  enabled: false
-  continueOnError: true
-
-- task: PowerShell@1
-  displayName: 'PowerShell Script'
-  inputs:
-    scriptType: inlineScript
-    inlineScript: |
-     if ($env:CONFIGURATION -ne "Signed") {
-         dir OpenRiaServices.NuGet\*.nupkg -Recurse | where {$_.Name -match "OpenRiaServices.Signed"} | del}
-     
-     if ($env:CONFIGURATION -eq "Signed") {
-         dir OpenRiaServices.NuGet\*.nupkg -Recurse  | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del}
-
-- task: NuGetPublisher@0
-  displayName: 'NuGet Publisher '
-  inputs:
-    connectedServiceName: myget
-    nuGetVersion: 4.0.0.2283
-    continueOnEmptyNupkgMatch: true
-  enabled: false
-  continueOnError: true
-
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-  inputs:
-    SourceFolder: '$(build.sourcesdirectory)\OpenRiaServices.NuGet\'
-    Contents: |
-     **\*.nupkg
-     .sonarqube\out\**
-     !**\packages\**
-    TargetFolder: '$(build.artifactstagingdirectory)'
-  condition: succeededOrFailed()
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-  condition: succeededOrFailed()
-
-
-
-
-
