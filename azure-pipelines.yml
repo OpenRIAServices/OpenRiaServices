@@ -13,9 +13,9 @@ variables:
 steps:
 
 - task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.x'
+  displayName: 'Use NuGet 4.8.1'
   inputs:
-    versionSpec: 4.x
+    versionSpec: 4.8.1
 
 - powershell: |
    [string]$RepositoryRoot = "$(Build.SourcesDirectory)"
