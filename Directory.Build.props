@@ -1,0 +1,65 @@
+<Project>
+
+  <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
+  <PropertyGroup>
+    <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
+    <IsTestProject Condition="'$(IsTestProject)' == ''">false</IsTestProject>
+
+    <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/OpenRIAServices/OpenRiaServices/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  
+  </PropertyGroup>
+  
+ <PropertyGroup Condition="'$(Configuration)' == 'Signed'">
+    <!-- Set SIGNED constant for CS projects -->
+    <DefineConstants Condition="'$(DefineTrace)' == ''">$(DefineConstants);SIGNED</DefineConstants>
+    <!-- Set SIGNED constant for VB projects -->
+    <DefineConstants Condition="'$(DefineTrace)' != ''">$(DefineConstants),SIGNED=1</DefineConstants>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign><Optimize>true</Optimize>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  
+  <!-- Add Silverlight build support -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' ">
+    <NugetTargetMoniker>Silverlight,Version=v5.0</NugetTargetMoniker>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <LanguageTargets>$(MSBuildProgramFiles32)\MSBuild\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets</LanguageTargets>
+    <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
+    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile47</TargetFrameworkProfile>
+    <NugetTargetMoniker>.NETPortable,Version=v0.0,Profile=Profile47</NugetTargetMoniker>
+    <DefineConstants>$(DefineConstants);PORTABLE;PORTABLE47;SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+    
+  <ItemGroup Condition=" '$(TargetFramework)' == 'sl5' ">
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows" />
+  </ItemGroup>
+</Project>
