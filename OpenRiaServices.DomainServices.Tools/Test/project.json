@@ -1,12 +1,22 @@
 ﻿{
   "dependencies": {
     "EntityFramework": "6.1.3",
-    "Microsoft.Build": "15.8.166",
-    "Microsoft.Build.Framework": "15.8.166",
-    "Microsoft.Build.Utilities.Core": "15.8.166",
-    "Microsoft.CodeAnalysis.CSharp": "2.7.0",
-    "Microsoft.CodeAnalysis.VisualBasic": "2.7.0"
-  },
+    "Microsoft.Build": {
+      "version": "15.8.166",
+      "type": "build"
+    },
+    "Microsoft.Build.Framework": {
+      "version": "15.8.166",
+      "type": "build"
+    },
+    "Microsoft.Build.Utilities.Core": {
+      "version": "15.8.166",
+      "type": "build"
+    },
+      "Microsoft.CodeAnalysis.CSharp": "2.7.0",
+      "Microsoft.CodeAnalysis.VisualBasic": "2.7.0",
+      "Microsoft.Build.Locator": "1.0.31"
+    },
   "frameworks": {
     "net46": {}
   },

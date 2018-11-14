@@ -8,6 +8,7 @@ using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Evaluation;
+using Microsoft.Build.Locator;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -16,8 +17,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     /// </summary>
     public static class MsBuildHelper
     {
-        public static string DefaultToolsVersion = "14.0";
-        public static string ToolsVersion = "14.0";
+        public static string DefaultToolsVersion = "15.0";
+        public static string ToolsVersion = "15.0";
 
         /// <summary>
         /// Extract the list of assemblies both generated and referenced by the named project.
@@ -42,7 +43,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             var project = LoadProject(projectPath);
 
             // Ask to be told of generated outputs
-            var results = project.Build(new string[] { "ResolveAssemblyReferences" });
+            var log = new ErrorLogger();
+            var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
+            Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
             Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
 
             foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
@@ -100,7 +103,17 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             string extension = outputType.Equals("Exe", StringComparison.InvariantCultureIgnoreCase) ? ".exe" : ".dll";
             outputAssembly += extension;
-            return MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
+            var fullPath = MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
+            if (!File.Exists(fullPath))
+            {
+                var target = project.GetPropertyValue("TargetFramework");
+                var assemblyPart = "\\" + assemblyName + extension;
+                var alternativePath = fullPath.Replace(assemblyPart, "\\"  + target + assemblyPart);
+                if (File.Exists(alternativePath))
+                    return alternativePath;
+            }
+
+            return fullPath;
         }
 
         internal static ProjectWrapper LoadProject(string projectPath)
@@ -111,6 +124,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             var project = projectCollection.LoadProject(projectPath, ToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
+            if (project.GetProperty("TargetFramework") == null)
+                project.SetProperty("TargetFramework", "sl5");
 
             return new ProjectWrapper(project);
         }
@@ -214,7 +229,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                      {
                          {"Configuration", "Debug" },
                      },
-                    Loggers = loggers
+                    Loggers = loggers,
+                     
                 };
 
                 var projectInstance = manager.GetProjectInstanceForBuild(Project);
