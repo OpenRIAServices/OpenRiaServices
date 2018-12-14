@@ -1502,7 +1502,7 @@ namespace OpenRiaServices.DomainServices.Tools {
         ///   Looks up a localized string similar to &lt;summary&gt;
         ///Gets the context that is registered as a lifetime object with the current application.
         ///&lt;/summary&gt;
-        ///&lt;exception cref=&quot;InvalidOperationException&quot;&gt; is thrown if there is no current application,
+        ///&lt;exception cref=&quot;System.InvalidOperationException&quot;&gt; is thrown if there is no current application,
         ///no contexts have been added, or more than one context has been added.
         ///&lt;/exception&gt;
         ///&lt;seealso cref=&quot;System.Windows.Application.ApplicationLifetimeObjects&quot;/&gt;.
