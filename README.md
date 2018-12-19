@@ -16,7 +16,7 @@ Documentation:
 * The original documentation for WCF RIA Services is still relevant and can be found at https://msdn.microsoft.com/en-us/library/ee707344(v=vs.91).aspx . Namespaces and assembly names are no longer correct since they changed with the release of OpenRiaServices.
 * Documentation for changes since WCF RIA Services can be found under https://openriaservices.codeplex.com/documentation 
 
-Contribution Guidelines can be found at https://openriaservices.codeplex.com/wikipage?title=Contribution%20Guidelines&referringTitle=Documentation
+Contribution Guidelines can be found at https://github.com/OpenRIAServices/OpenRiaServices/wiki/Contribution-Guidelines
 
 
 
