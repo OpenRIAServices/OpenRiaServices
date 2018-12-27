@@ -19,7 +19,7 @@ namespace Website.Services
         [OperationContract]
         public void CreateNewDatabase(string databaseName)
         {
-            string connection = DBImager.GetConnectionString(databaseName);
+            string connection = DBImager.CreateNewDatabase(databaseName);
             ActiveConnections.Set(databaseName, connection);
         }
 
