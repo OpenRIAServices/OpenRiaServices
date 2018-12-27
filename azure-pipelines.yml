@@ -16,10 +16,13 @@ steps:
     solution: '$(Parameters.solution)'
     nuGetVersion: 3.5.0.1829
 
-- task: PowerShell@1
-  displayName: 'PowerShell Script'
-  inputs:
-    scriptName: 'Setup-TestDatabases.ps1'
+- powershell: |
+   sqllocaldb start MSSQLLocalDB
+   if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
+   
+   .\Setup-TestDatabases.ps1
+
+  displayName: 'Setup Test Databases'
 
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
@@ -61,18 +64,12 @@ steps:
     rerunFailedThreshold: 40
   timeoutInMinutes: 40
 
-- task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
-  displayName: 'Run Code Analysis'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
 - task: PowerShell@1
   displayName: 'PowerShell Script'
   inputs:
     scriptName: 'OpenRiaServices.NuGet/Pack-All.ps1'
     arguments: '-Version "$(FullVersion)"'
   enabled: false
-
-
 
 - task: NuGetPackager@0
   displayName: 'NuGet Packager '
@@ -105,8 +102,6 @@ steps:
   displayName: 'PowerShell Script'
   enabled: false
 
-
-
 - task: NuGetPublisher@0
   displayName: 'NuGet Publisher '
   inputs:
@@ -135,13 +130,8 @@ steps:
   condition: succeededOrFailed()
 
 
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
-
-- task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
-  displayName: 'Publish Quality Gate Result'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
