@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.T4</id>
-    <version>4.5.1</version>
+    <version>4.5.4</version>
     <title>Open RIA Services T4 Code Generation - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.T4 provides the CSharpClientCodeGenerator class, as well as many supporting classes, which can be used to override the existing code generation pattern for RIA Services.</description>
