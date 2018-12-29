@@ -610,7 +610,7 @@ Initializes a new instance of the WebContext class.
     <value>&lt;summary&gt;
 Gets the context that is registered as a lifetime object with the current application.
 &lt;/summary&gt;
-&lt;exception cref="InvalidOperationException"&gt; is thrown if there is no current application,
+&lt;exception cref="System.InvalidOperationException"&gt; is thrown if there is no current application,
 no contexts have been added, or more than one context has been added.
 &lt;/exception&gt;
 &lt;seealso cref="System.Windows.Application.ApplicationLifetimeObjects"/&gt;</value>

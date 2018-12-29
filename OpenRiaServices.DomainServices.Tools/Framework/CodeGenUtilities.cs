@@ -665,6 +665,10 @@ namespace OpenRiaServices.DomainServices.Tools
                 typeDecl.BaseTypes.Add(new CodeTypeReference(underlyingType));
             }
 
+            typeDecl.Comments.Add(new CodeCommentStatement("<summary>", true));
+            typeDecl.Comments.Add(new CodeCommentStatement($"Enum {enumType.Name}", true));
+            typeDecl.Comments.Add(new CodeCommentStatement("</summary>", true));
+
             // Generate [DataContract] if it appears in the original only.  Use Reflection only because that matches
             // what WCF will do.
             DataContractAttribute dataContractAttr = (DataContractAttribute)Attribute.GetCustomAttribute(enumType, typeof(DataContractAttribute));
@@ -681,6 +685,10 @@ namespace OpenRiaServices.DomainServices.Tools
                 string memberName = memberNames[i];
                 CodeTypeReference enumTypeRef = CodeGenUtilities.GetTypeReference(enumValueType, codeGenerator, typeDecl);
                 CodeMemberField enumMember = new CodeMemberField(enumTypeRef, memberName);
+
+                enumMember.Comments.Add(new CodeCommentStatement("<summary>", true));
+                enumMember.Comments.Add(new CodeCommentStatement(memberName, true));
+                enumMember.Comments.Add(new CodeCommentStatement("</summary>", true));
 
                 // Generate an initializer for the enum member.
                 // GetRawConstantValue is the safest way to get the raw value of the enum field
