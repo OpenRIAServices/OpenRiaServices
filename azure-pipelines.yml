@@ -24,6 +24,20 @@ steps:
 
   displayName: 'Setup Test Databases'
 
+- task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: 'sonarcloud.io'
+    organization: openriaservices
+    projectKey: 'OpenRIAServices_OpenRiaServices'
+    projectName: OpenRiaServices
+    projectVersion: '$(FullVersion)'
+    extraProperties: |
+     # Additional properties that will be passed to the scanner, 
+     # Put one key=value per line, example:
+     # sonar.exclusions=**/*.bin
+     sonar.cs.vstest.reportsPaths='$(Agent.TempDirectory)'
+
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
   inputs:
@@ -31,6 +45,7 @@ steps:
     vsVersion: 14.0
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
+    maximumCpuCount: true
 
 - powershell: |
    # Write your powershell commands here.
@@ -63,6 +78,10 @@ steps:
     rerunFailedTests: true
     rerunFailedThreshold: 40
   timeoutInMinutes: 40
+
+
+- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+  displayName: 'Run Code Analysis'
 
 - task: PowerShell@1
   displayName: 'PowerShell Script'
@@ -135,3 +154,8 @@ steps:
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
+
+
+- task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
+  displayName: 'Publish Quality Gate Result'
+  continueOnError: true
