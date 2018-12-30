@@ -1,12 +1,16 @@
 # OpenRiaServiecs
 
-[![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
-[![Tests status](https://img.shields.io/appveyor/tests/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
+Azure Pipelines: [![Build status](https://svensson-daniel.visualstudio.com/OpenRiaServices/_apis/build/status/OpenRiaServices-github?branchName=master)](https://svensson-daniel.visualstudio.com/OpenRiaServices/_build?definitionId=11)
+[![Tests](https://img.shields.io/azure-devops/tests/svensson-daniel/OpenRiaServices/11/master.svg)](https://svensson-daniel.visualstudio.com/OpenRiaServices/_build?definitionId=11)
+
+Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
+
 
 <!-- Below badges should be reenabled once new scripts for appveyor build is set up
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
-[![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarqube.com/OpenRiaServices/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=OpenRiaServices)
 -->
+Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarqube.com/OpenRiaServices/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=OpenRiaServices)
+
 
 The Open RIA Services project continues what was previously known as WCF RIA Services.
 
