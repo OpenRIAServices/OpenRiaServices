@@ -8,12 +8,22 @@ queue:
   - vstest
   - java
 
+variables:
+  BuildConfiguration: 'release'
+  BuildPlatform: 'any cpu'
+  Solution: 'RiaServices.sln'
+
 steps:
+
+- task: gittools.gitversion.gitversion-task.GitVersion@4
+  displayName: GitVersion
+  inputs:
+    preferBundledVersion: true
 
 - task: NuGetInstaller@0
   displayName: 'NuGet restore RiaServices.sln'
   inputs:
-    solution: '$(Parameters.solution)'
+    solution: '$(Solution)'
     nuGetVersion: 3.5.0.1829
 
 - powershell: |
@@ -23,7 +33,7 @@ steps:
    .\Setup-TestDatabases.ps1
 
   displayName: 'Setup Test Databases'
-
+  
 - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
   inputs:
@@ -31,18 +41,19 @@ steps:
     organization: openriaservices
     projectKey: 'OpenRIAServices_OpenRiaServices'
     projectName: OpenRiaServices
-    projectVersion: '$(FullVersion)'
+    projectVersion: '$(GitVersion.NuGetVersion)'
     extraProperties: |
      # Additional properties that will be passed to the scanner, 
      # Put one key=value per line, example:
      # sonar.exclusions=**/*.bin
-     sonar.cs.vstest.reportsPaths='$(Agent.TempDirectory)'
+     sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\**\*.trx
+     sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)\**\*.coverage
 
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
   inputs:
-    solution: '$(Parameters.solution)'
-    vsVersion: 14.0
+    solution: '$(Solution)'
+    vsVersion: '14.0'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     maximumCpuCount: true
@@ -70,15 +81,14 @@ steps:
      !**\Silverlight\**
 
     runOnlyImpactedTests: false
-    vsTestVersion: 14.0
+    vsTestVersion: '14.0'
     runInParallel: true
-    codeCoverageEnabled: false
+    codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     rerunFailedTests: true
     rerunFailedThreshold: 40
   timeoutInMinutes: 40
-
 
 - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
@@ -87,7 +97,7 @@ steps:
   displayName: 'PowerShell Script'
   inputs:
     scriptName: 'OpenRiaServices.NuGet/Pack-All.ps1'
-    arguments: '-Version "$(FullVersion)"'
+    arguments: '-Version "$(GitVersion.NuGetVersion)"'
   enabled: false
 
 - task: NuGetPackager@0
@@ -95,7 +105,7 @@ steps:
   inputs:
     searchPattern: 'OpenRiaServices.NuGet\**\*.nuspec;-:OpenRiaServices.NuGet\**\*.Signed.*nuspec;-:OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;-:OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;-:OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
     versionByBuild: byEnvVar
-    versionEnvVar: FullVersion
+    versionEnvVar: GitVersion.NuGetVersion
   enabled: false
   continueOnError: true
   condition: succeededOrFailed()
@@ -106,7 +116,7 @@ steps:
     command: pack
     packagesToPack: 'OpenRiaServices.NuGet\**\*.nuspec;!OpenRiaServices.NuGet\**\*.Signed.*nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
     versioningScheme: byEnvVar
-    versionEnvVar: FullVersion
+    versionEnvVar: GitVersion.NuGetVersion
     includeSymbols: true
   enabled: false
   continueOnError: true
