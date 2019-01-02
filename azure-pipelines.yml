@@ -92,6 +92,8 @@ steps:
 
 - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
+  continueOnError: true  
+  condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
 - task: PowerShell@1
   displayName: 'PowerShell Script'
@@ -168,4 +170,7 @@ steps:
 
 - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
-  continueOnError: true
+  continueOnError: true  
+  condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+
+
