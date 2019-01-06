@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
     [TestClass]
     public class WebAuthenticationServiceTest : UnitTestBase
     {
-#region Mock
+        #region Mock
 
         private class MockWebAuthenticationService : WebAuthenticationService
         {
@@ -596,8 +596,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 () => Assert.IsNull(asyncResult.AsyncWaitHandle, "This property is not supported."));
             Assert.IsFalse(asyncResult.CompletedSynchronously,
                 "IAsyncResult should not have completed synchronously.");
-            Assert.IsFalse(asyncResult.IsCompleted,
-                "IAsyncResult should not be complete.");
+
+            // We don't have a dispatcher SynchronizationContext when running tests on the
+            // full framework, so the operation will complete on another thread which can happen before we reach this assert
+            // TODO: Try to get tests to run on a dispatcher by using mstest v2 extensobility
+#if SILVERLIGHT
+             Assert.IsFalse(asyncResult.IsCompleted,    "IAsyncResult should not be complete.");
+#endif
 
             proceed(mock, service, asyncResult);
 
