@@ -27,19 +27,19 @@ Imports System.Threading
 Imports System.Threading.Tasks
 
 
-'''<summary>
-'''Enum GlobalNamespaceTest_Enum_NonShared
-'''</summary>
+''' <summary>
+''' Enum GlobalNamespaceTest_Enum_NonShared
+''' </summary>
 Public Enum GlobalNamespaceTest_Enum_NonShared
     
-    '''<summary>
-    '''DefaultValue
-    '''</summary>
+    ''' <summary>
+    ''' DefaultValue
+    ''' </summary>
     DefaultValue = 0
     
-    '''<summary>
-    '''NonDefaultValue
-    '''</summary>
+    ''' <summary>
+    ''' NonDefaultValue
+    ''' </summary>
     NonDefaultValue = 1
 End Enum
 

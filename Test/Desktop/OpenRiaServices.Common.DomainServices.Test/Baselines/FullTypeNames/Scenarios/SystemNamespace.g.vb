@@ -267,14 +267,14 @@ Namespace System
         End Function
     End Class
     
-    '''<summary>
-    '''Enum SystemGeneratedEnum
-    '''</summary>
+    ''' <summary>
+    ''' Enum SystemGeneratedEnum
+    ''' </summary>
     Public Enum SystemGeneratedEnum
         
-        '''<summary>
-        '''SystemGeneratedEnumValue
-        '''</summary>
+        ''' <summary>
+        ''' SystemGeneratedEnumValue
+        ''' </summary>
         SystemGeneratedEnumValue = 0
     End Enum
 End Namespace
@@ -531,14 +531,14 @@ Namespace System.Subsystem
         End Function
     End Class
     
-    '''<summary>
-    '''Enum SubsystemGeneratedEnum
-    '''</summary>
+    ''' <summary>
+    ''' Enum SubsystemGeneratedEnum
+    ''' </summary>
     Public Enum SubsystemGeneratedEnum
         
-        '''<summary>
-        '''SubsystemGeneratedEnumValue
-        '''</summary>
+        ''' <summary>
+        ''' SubsystemGeneratedEnumValue
+        ''' </summary>
         SubsystemGeneratedEnumValue = 0
     End Enum
 End Namespace
@@ -768,14 +768,14 @@ Namespace SystemExtensions
         End Function
     End Class
     
-    '''<summary>
-    '''Enum SystemExtensionsGeneratedEnum
-    '''</summary>
+    ''' <summary>
+    ''' Enum SystemExtensionsGeneratedEnum
+    ''' </summary>
     Public Enum SystemExtensionsGeneratedEnum
         
-        '''<summary>
-        '''SystemExtensionsGeneratedEnumValue
-        '''</summary>
+        ''' <summary>
+        ''' SystemExtensionsGeneratedEnumValue
+        ''' </summary>
         SystemExtensionsGeneratedEnumValue = 0
     End Enum
 End Namespace

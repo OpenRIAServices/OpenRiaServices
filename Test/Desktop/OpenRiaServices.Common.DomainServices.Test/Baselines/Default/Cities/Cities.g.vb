@@ -1531,27 +1531,27 @@ Namespace Cities
         End Function
     End Class
     
-    '''<summary>
-    '''Enum ShippingZone
-    '''</summary>
+    ''' <summary>
+    ''' Enum ShippingZone
+    ''' </summary>
     <DataContract([Namespace]:="CityNamespace", Name:="CityName")>  _
     Public Enum ShippingZone
         
-        '''<summary>
-        '''Pacific
-        '''</summary>
+        ''' <summary>
+        ''' Pacific
+        ''' </summary>
         <EnumMember(Value:="P")>  _
         Pacific = 0
         
-        '''<summary>
-        '''Central
-        '''</summary>
+        ''' <summary>
+        ''' Central
+        ''' </summary>
         <EnumMember(Value:="C")>  _
         Central = 1
         
-        '''<summary>
-        '''Eastern
-        '''</summary>
+        ''' <summary>
+        ''' Eastern
+        ''' </summary>
         <EnumMember(Value:="E")>  _
         Eastern = 2
     End Enum

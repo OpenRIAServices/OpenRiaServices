@@ -1045,19 +1045,19 @@ Namespace TestDomainServices
         End Function
     End Class
     
-    '''<summary>
-    '''Enum ImageKindEnum
-    '''</summary>
+    ''' <summary>
+    ''' Enum ImageKindEnum
+    ''' </summary>
     Public Enum ImageKindEnum
         
-        '''<summary>
-        '''ThumbNail
-        '''</summary>
+        ''' <summary>
+        ''' ThumbNail
+        ''' </summary>
         ThumbNail = 0
         
-        '''<summary>
-        '''Full
-        '''</summary>
+        ''' <summary>
+        ''' Full
+        ''' </summary>
         Full = 1
     End Enum
     
