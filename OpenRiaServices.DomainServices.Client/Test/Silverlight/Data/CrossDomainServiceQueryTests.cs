@@ -127,7 +127,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             Northwind ctxt = CreateNorthwind();
 
-            LoadOperation lo = ctxt.Load(ctxt.GetProductsQuery(), false);
+            LoadOperation lo = ctxt.Load(ctxt.GetProductsQuery().Where(p => p.ProductID != 1), false);
 
             EnqueueConditional(delegate
             {
@@ -136,6 +136,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(null, lo.Error, "Load should succeed without error");
+                Assert.AreNotEqual(0, ctxt.Products.Count);
 
                 foreach(DataTests.Northwind.LTS.Product product in ctxt.Products)
                 {
