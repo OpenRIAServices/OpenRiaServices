@@ -92,12 +92,15 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
                 {
                     message.WriteBodyContents(writer);
                     writer.Flush();
-                    buffer = ms.ToArray();
 
+                    buffer = ms.ToArray();
+#if DEBUG
+                    // Below will output text to console including control characters which sonarqube cannot handle
                     foreach (byte b in buffer)
                     {
                         Console.Write((char)b);
                     }
+#endif
                 }
             }
 
