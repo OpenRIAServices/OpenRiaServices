@@ -11,7 +11,7 @@
     <PackageReference Include="SilverlightToolkit-Testing" Version="5.2011.12.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <!--<PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />-->
   </ItemGroup>
@@ -48,14 +48,15 @@
     <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\TestUris.cs" Link="TestUris.cs" />
     <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestHelper.cs" Link="UnitTestHelper.cs" />
   </ItemGroup>
+ 
   <ItemGroup Condition="'$(TargetFramework)'=='sl5'">
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\DependencyObjectExtensions.cs" Link="DependencyObjectExtensions.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestBase.cs" Link="UnitTestBase.cs" />
-    <Compile Remove="UnitTestBase.cs" />
-    <Compile Remove="SandBoxer.cs" />
+    <Compile Remove="Platforms/net45/*.cs" />
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\DependencyObjectExtensions.cs" Link="Silverlight\DependencyObjectExtensions.cs" />
+    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestBase.cs" Link="Silverlight\UnitTestBase.cs" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
+  
 </Project>

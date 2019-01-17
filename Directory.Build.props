@@ -14,13 +14,13 @@
   
  <PropertyGroup Condition="'$(Configuration)' == 'Signed'">
     <!-- Set SIGNED constant for CS projects -->
-    <DefineConstants Condition="'$(DefineTrace)' == ''">$(DefineConstants);SIGNED</DefineConstants>
+    <DefineConstants Condition="'$(MSBuildProjectExtension)' == '.csproj'">$(DefineConstants);SIGNED</DefineConstants>
     <!-- Set SIGNED constant for VB projects -->
-    <DefineConstants Condition="'$(DefineTrace)' != ''">$(DefineConstants),SIGNED=1</DefineConstants>
+    <DefineConstants Condition="'$(MSBuildProjectExtension)' == '.vbproj'">$(DefineConstants),SIGNED=1</DefineConstants>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
     <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign><Optimize>true</Optimize>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
@@ -31,8 +31,15 @@
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' and '$(MSBuildProjectExtension)' == '.csproj' ">
     <LanguageTargets>$(MSBuildProgramFiles32)\MSBuild\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets</LanguageTargets>
     <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' and '$(MSBuildProjectExtension)' == '.vbproj' ">
+    <LanguageTargets>$(MSBuildProgramFiles32)\MSBuild\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.VisualBasic.targets</LanguageTargets>
+    <DefineConstants>$(DefineConstants),SILVERLIGHT=1</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">

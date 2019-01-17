@@ -21,7 +21,7 @@
     <PackageReference Include="SilverlightToolkit-Testing" Version="5.2011.12.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <!--<PackageReference Include="MSTest.TestAdapter" Version="1.1.11" />
     <PackageReference Include="MSTest.TestFramework" Version="1.1.11" />-->
   </ItemGroup>
@@ -39,7 +39,7 @@
   <ItemGroup>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="DomainContexts\Cities.g.cs" />
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs" Link="DomainContexts\Cities.shared.cs" />
-    <Compile Include="..\Desktop\CodegenWorkaround.cs" Link="CodegenWorkaround.cs" />
+    <Compile Include="..\Desktop\Platforms\net45\CodegenWorkaround.cs" Link="CodegenWorkaround.cs" />
     <Compile Include="..\SilverlightExternal\EntityTests.cs" Link="EntityTests.cs" />
   </ItemGroup>
   <ItemGroup>

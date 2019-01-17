@@ -70,5 +70,9 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' ">
+    <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
+  </PropertyGroup>
 
 </Project>
