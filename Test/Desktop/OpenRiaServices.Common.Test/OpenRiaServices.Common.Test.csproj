@@ -55,8 +55,4 @@
     <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestBase.cs" Link="Silverlight\UnitTestBase.cs" />
   </ItemGroup>
   
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
-  </ItemGroup>
-  
 </Project>

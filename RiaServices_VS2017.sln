@@ -56,7 +56,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib2", "OpenRiaS
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "SilverlightVbDataClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test.Vb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test.Vb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
 EndProject
@@ -155,8 +155,8 @@ Global
 		{A94B2843-C68E-4548-9168-63469D625932}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A94B2843-C68E-4548-9168-63469D625932}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A94B2843-C68E-4548-9168-63469D625932}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A94B2843-C68E-4548-9168-63469D625932}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{A94B2843-C68E-4548-9168-63469D625932}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{A94B2843-C68E-4548-9168-63469D625932}.Signed|Any CPU.ActiveCfg = Release|Any CPU
+		{A94B2843-C68E-4548-9168-63469D625932}.Signed|Any CPU.Build.0 = Release|Any CPU
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
