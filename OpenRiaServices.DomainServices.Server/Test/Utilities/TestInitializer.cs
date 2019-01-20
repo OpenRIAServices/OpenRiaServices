@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
-//using Microsoft.Build.Locator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Tools.Test.Utilities
@@ -15,21 +14,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test.Utilities
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
-            /*
-            var msbuildLocator = typeof(TestInitializer
- ).Assembly.GetReferencedAssemblies().FirstOrDefault(n => n.Name == "Microsoft.Build.Locator");
-
-            if (msbuildLocator != null)
-            {
-               var assembly = System.Reflection.Assembly.Load(msbuildLocator);
-               var locator = assembly.GetType("Microsoft.Build.Locator.MSBuildLocator");
-                locator.GetMethod("RegisterDefaults", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
-                    .Invoke(null, null);
-
-            }
-            */
-            //Microsoft.Build.Locator.MSBuildLocator.RegisterDefaults();
-
             //Set currenct culture to en-US by default since there are hard coded
             //strings in some tests
             Thread.CurrentThread.CurrentCulture =
@@ -42,10 +26,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test.Utilities
             var type = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
             if (type == null)
                 throw new Exception("Do not remove, ensures static reference to System.Data.Entity.SqlServer");
-
-            var type2 = typeof(Microsoft.Build.Tasks.Copy);
-            if (type2 == null)
-                throw new Exception("Do not remove, ensures static reference to Assembly Microsoft.Build.Tasks.Core assembly");
         }
     }
 }

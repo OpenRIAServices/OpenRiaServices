@@ -88,9 +88,6 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\DomainIdentifierAttributeTests.cs">
       <Link>DomainIdentifierAttributeTests.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Utilities\TestInitializer.cs">
-      <Link>Utilities\TestInitializer.cs</Link>
-    </Compile>
     <Compile Include="AttributeUsageTest.cs" />
     <Compile Include="AuthorizationAttributeTests.cs" />
     <Compile Include="AuthorizationContextTests.cs" />
@@ -118,6 +115,7 @@
     <Compile Include="ApplicationServices\MockUser.cs" />
     <Compile Include="ApplicationServices\ProfileUsageAttributeTest.cs" />
     <Compile Include="ApplicationServices\UserBaseTest.cs" />
+    <Compile Include="Utilities\TestInitializer.cs" />
     <Compile Include="UtilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +165,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

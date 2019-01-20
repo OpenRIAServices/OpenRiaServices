@@ -8,7 +8,6 @@ using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Evaluation;
-using Microsoft.Build.Locator;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -121,12 +120,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             var projectCollection = new ProjectCollection();
             projectCollection.DefaultToolsVersion = ToolsVersion;
             projectCollection.SetGlobalProperty("Configuration", GetConfiguration());
+            projectCollection.SetGlobalProperty("TargetFramework", "sl5");
 
             var project = projectCollection.LoadProject(projectPath, ToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
-            if (project.GetProperty("TargetFramework") == null)
-                project.SetProperty("TargetFramework", "sl5");
-
+ 
             return new ProjectWrapper(project);
         }
 

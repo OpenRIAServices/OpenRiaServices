@@ -3,8 +3,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
     <TargetFramework>net46</TargetFramework>
-    <!--<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>-->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <Target Name="WriteProjectPath" BeforeTargets="CopyFilesToOutputDirectory">
     <Message Text="Writing project path" />
@@ -13,12 +13,15 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.1.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Microsoft.Build" Version="15.8.166"  ExcludeAssets="runtime"/>
-    <PackageReference Include="Microsoft.Build.Framework" Version="15.8.166"  ExcludeAssets="runtime"/>
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.8.166"  ExcludeAssets="runtime"/>
+    <PackageReference Include="Microsoft.Build" Version="15.8.166" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.8.166" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.8.166" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.8.166" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.7.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="2.7.0" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.0.31" />
+    <!--<PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />-->
+    <!--<PackageReference Include="Microsoft.Build.Locator" Version="1.0.31" />-->
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
