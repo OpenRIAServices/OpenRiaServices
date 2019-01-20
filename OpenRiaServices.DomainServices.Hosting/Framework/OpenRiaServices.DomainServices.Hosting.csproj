@@ -1,164 +1,67 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20826</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E3844512-48A8-451A-9BE4-AC7793016B9D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.Hosting</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Hosting</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net45</TargetFramework>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
+    <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Hosting.xml</DocumentationFile>
-    <WarningLevel>4</WarningLevel>
-    <ErrorReport>prompt</ErrorReport>
-    <DefineConstants>TRACE;SERVERFX;$(Configuration)</DefineConstants>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
-    <Reference Include="System.ServiceModel.Web">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="mscorlib" />
     <Reference Include="system" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\Behaviors\MessageUtility.cs">
-      <Link>Services\Behaviors\MessageUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
-      <Link>Linq\BinaryTypeUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
-      <Link>Linq\TypeUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
-      <Link>Services\ExceptionHandlingUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\DynamicMethodUtility.cs">
-      <Link>Services\DynamicMethodUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\MetaType.cs">
-      <Link>Services\MetaType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs">
-      <Link>TypeDescriptorExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\DomainServiceFault.cs">
-      <Link>Services\DomainServiceFault.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\QueryResult.cs">
-      <Link>Services\QueryResult.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\ServiceQuery.cs">
-      <Link>Services\ServiceQuery.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\ServiceQueryPart.cs">
-      <Link>Services\ServiceQueryPart.cs</Link>
-    </Compile>
-    <Compile Include="Linq\DynamicQueryableMethodValidator.cs" />
-    <Compile Include="Services\Behaviors\IQueryOperationSettings.cs" />
-    <Compile Include="Services\Behaviors\WebHttpQueryStringConverter.cs" />
-    <Compile Include="Services\Behaviors\DomainServiceWebHttpBehavior.cs" />
-    <Compile Include="Services\Behaviors\DomainOperationInvoker.cs" />
-    <Compile Include="Services\Behaviors\SubmitOperationBehavior.cs" />
-    <Compile Include="Services\Behaviors\DomainServiceBehavior.cs" />
-    <Compile Include="Services\Behaviors\QueryOperationBehavior.cs" />
-    <Compile Include="Services\Behaviors\InvokeOperationBehavior.cs" />
-    <Compile Include="Services\ChangeSetProcessor.cs" />
-    <Compile Include="Services\Configuration\PoxBinaryEndpointFactory.cs" />
-    <Compile Include="Services\DiagnosticUtility.cs" />
-    <Compile Include="Services\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs" />
-    <Compile Include="Services\Configuration\DomainServiceEndpointFactory.cs" />
-    <Compile Include="Services\Configuration\DomainServicesSection.cs" />
-    <Compile Include="Services\QueryProcessor.cs" />
-    <Compile Include="Services\SerializationUtility.cs" />
-    <Compile Include="Services\ServiceUtility.cs" />
-    <Compile Include="Services\DomainServiceHostFactory.cs" />
-    <Compile Include="Services\DomainServiceHost.cs" />
-    <Compile Include="Services\Behaviors\SilverlightFaultBehavior.cs" />
-    <Compile Include="EnableClientAccessAttribute.cs" />
-    <Compile Include="Services\Resource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\Behaviors\MessageUtility.cs" Link="Services\Behaviors\MessageUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs" Link="Linq\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs" Link="Linq\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs" Link="Services\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Services\DynamicMethodUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\MetaType.cs" Link="Services\MetaType.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\QueryResult.cs" Link="Services\QueryResult.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\ServiceQuery.cs" Link="Services\ServiceQuery.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
+    <Compile Update="Services\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' " />
-    <Compile Include="Linq\DefaultQueryResolver.cs" />
-    <Compile Include="Linq\DynamicQueryable.cs">
+    <Compile Remove="GlobalSuppressions.cs" Condition="'$(RunCodeAnalysis)' != 'true' " />
+    <Compile Update="Linq\DynamicQueryable.cs">
       <!-- This file is kept in sync with same file from another depot. Avoid changing the style. -->
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Linq\QueryDeserializer.cs" />
-    <Compile Include="Linq\QueryResolver.cs" />
-    <Compile Include="Linq\Resource.Designer.cs">
+    <Compile Update="Linq\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DataContractSurrogateGenerator.cs">
-    </Compile>
-    <Compile Include="Services\DomainServiceSerializationSurrogate.cs">
-    </Compile>
-    <Compile Include="Services\DomainServiceWsdlExportExtension.cs" />
-    <Compile Include="Services\ServiceCodeGen\DomainServiceHttpModule.cs" />
-    <Compile Include="Services\ServiceCodeGen\DomainServiceVirtualFile.cs">
-    </Compile>
-    <Compile Include="Services\ServiceCodeGen\DomainServiceVirtualPathProvider.cs">
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Services\Resource.resx">
+    <EmbeddedResource Update="Services\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Linq\Resource.resx">
+    <EmbeddedResource Update="Linq\Resource.resx">
       <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
+  <!--<ItemGroup>
+    <Compile Remove="SilverlightApplication.cs" />
+  </ItemGroup>-->
 </Project>

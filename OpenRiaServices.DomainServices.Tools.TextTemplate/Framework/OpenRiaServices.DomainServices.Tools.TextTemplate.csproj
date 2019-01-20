@@ -1,282 +1,125 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
-    <OutputPath>bin\MyGet\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DebugNet40\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
-    <NoWarn>1591</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
-    <OutputPath>bin\ReleaseNet40\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
-    <OutputPath>bin\MyGet40\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>..\..\bin\Signed\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;SIGNED</DefineConstants>
-    <DocumentationFile>..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
-    <Optimize>true</Optimize>
-    <NoWarn>1591</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1D3AE529-961A-47FD-834B-7893FE6FF479}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.XML</DocumentationFile>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.Tools.TextTemplate</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Tools.TextTemplate</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <FileAlignment>512</FileAlignment>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.xml</DocumentationFile>
+    <TargetFramework>net45</TargetFramework>
     <NoWarn>1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE;SERVERFX;CODECOV</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\CustomValidationCustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\CustomValidationCustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DataMemberAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\DataMemberAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DisplayCustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\DisplayCustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DomainIdentifierAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\DomainIdentifierAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\EditableAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\EditableAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ICustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\ICustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\RangeCustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\RangeCustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\StandardCustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\StandardCustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\UIHintCustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\UIHintCustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ValidationCustomAttributeBuilder.cs">
-      <Link>CSharpGenerators\AttributeGenerationHelpers\ValidationCustomAttributeBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Naming.cs">
-      <Link>Utilities\Naming.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\SharedTypes\VirtualType.cs">
-      <Link>Utilities\VirtualType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
-      <Link>Utilities\BinaryTypeUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
-      <Link>Utilities\TypeUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
-      <Link>Utilities\ExceptionHandlingUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs">
-      <Link>Utilities\SerializationUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs">
-      <Link>Utilities\TypeDescriptorExtensions.cs</Link>
-    </Compile>
-    <Compile Include="CodeGeneratorTextTemplate.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\CustomValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\CustomValidationCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DataMemberAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DataMemberAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DisplayCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DisplayCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DomainIdentifierAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DomainIdentifierAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\EditableAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\EditableAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ICustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ICustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\RangeCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\RangeCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\StandardCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\StandardCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\UIHintCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\UIHintCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ValidationCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Naming.cs" Link="Utilities\Naming.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\SharedTypes\VirtualType.cs" Link="Utilities\VirtualType.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs" Link="Utilities\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs" Link="Utilities\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="Utilities\TypeDescriptorExtensions.cs" />
+    <Compile Update="CodeGeneratorTextTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CodeGeneratorTextTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="ComplexObjectGenerator.cs">
+    <Compile Update="ComplexObjectGenerator.cs">
       <DependentUpon>ComplexObjectGenerator.tt</DependentUpon>
       <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="ComplexObjectGenerator.partial.cs" />
-    <Compile Include="CSharpGenerators\AttributeGenerationHelpers\AttributeGeneratorHelper.cs" />
-    <Compile Include="CSharpGenerators\CSharpComplexObjectGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpComplexObjectGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpComplexObjectGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="CSharpGenerators\CSharpComplexObjectGenerator.partial.cs" />
-    <Compile Include="CSharpGenerators\CSharpDomainContextGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpDomainContextGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpDomainContextGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="CSharpGenerators\CSharpDomainContextGenerator.partial.cs" />
-    <Compile Include="CSharpGenerators\CSharpEntityGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpEntityGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpEntityGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="CSharpGenerators\CSharpEntityGenerator.partial.cs" />
-    <Compile Include="CSharpGenerators\CSharpEnumGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpEnumGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpEnumGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="CSharpGenerators\CSharpEnumGenerator.partial.cs" />
-    <Compile Include="CSharpGenerators\CSharpClientCodeGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpClientCodeGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpClientCodeGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="CSharpGenerators\CSharpClientCodeGenerator.partial.cs" />
-    <Compile Include="CSharpGenerators\CSharpWebContextGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpWebContextGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpWebContextGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="CSharpGenerators\CSharpWebContextGenerator.partial.cs" />
-    <Compile Include="DataContractProxyGenerator.cs">
+    <Compile Update="DataContractProxyGenerator.cs">
       <DependentUpon>DataContractProxyGenerator.tt</DependentUpon>
       <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="DataContractProxyGenerator.partial.cs" />
-    <Compile Include="DomainContextGenerator.cs">
+    <Compile Update="DomainContextGenerator.cs">
       <DependentUpon>DomainContextGenerator.tt</DependentUpon>
       <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="DomainContextGenerator.partial.cs" />
-    <Compile Include="EntityGenerator.cs">
+    <Compile Update="EntityGenerator.cs">
       <DependentUpon>EntityGenerator.tt</DependentUpon>
       <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="EntityGenerator.partial.cs" />
-    <Compile Include="EnumGenerator.cs">
+    <Compile Update="EnumGenerator.cs">
       <DependentUpon>EnumGenerator.tt</DependentUpon>
       <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="EnumGenerator.partial.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClientCodeGenerator.cs">
+    <Compile Update="ClientCodeGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ClientCodeGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClientCodeGenerator.partial.cs" />
-    <Compile Include="Resource.Designer.cs">
+    <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="TextTemplateResource.Designer.cs">
+    <Compile Update="TextTemplateResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TextTemplateResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\CodeGenUtilities.cs" />
-    <Compile Include="WebContextGenerator.cs">
+    <Compile Update="WebContextGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WebContextGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Include="WebContextGenerator.partial.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CodeGeneratorTextTemplate.tt">
@@ -344,33 +187,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resource.resx">
+    <EmbeddedResource Update="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextTemplateResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TextTemplateResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
-      <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>OpenRiaServices.DomainServices.Tools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
 </Project>
