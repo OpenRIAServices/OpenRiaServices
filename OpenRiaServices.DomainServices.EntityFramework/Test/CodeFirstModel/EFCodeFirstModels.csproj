@@ -1,136 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build;WriteProjectPath" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
     <SonarQubeTestProject>True</SonarQubeTestProject>
-  </PropertyGroup>
-  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A94B2843-C68E-4548-9168-63469D625935}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CodeFirstModels</RootNamespace>
     <AssemblyName>CodeFirstModels</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFramework>net45</TargetFramework>
+    <DefineConstants>$(DefineConstants);DBCONTEXT</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;DBCONTEXT</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE;DBCONTEXT</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Engine" />
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Tasks.v4.0" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Category.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="CustomerDemographic.cs" />
-    <Compile Include="DbContextModel.cs" />
-    <Compile Include="Employee.cs" />
-    <Compile Include="Order.cs" />
-    <Compile Include="Order_Detail.cs" />
-    <Compile Include="Product.cs" />
-    <Compile Include="ProductInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Region.cs" />
-    <Compile Include="Shipper.cs" />
-    <Compile Include="Supplier.cs" />
-    <Compile Include="Territory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
-      <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>OpenRiaServices.DomainServices.Tools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Test\ServerClassLib\ServerClassLib.csproj">
-      <Project>{FE9777B2-ED24-4464-9D35-42A628B00EF7}</Project>
-      <Name>ServerClassLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj">
-      <Project>{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}</Project>
-      <Name>T4ClientCodeGenerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
-      <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Target Name="WriteProjectPath">
     <Message Text="Writing project path" />
     <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
   </Target>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+  </ItemGroup>
 </Project>

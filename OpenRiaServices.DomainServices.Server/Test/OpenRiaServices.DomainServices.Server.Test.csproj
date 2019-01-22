@@ -1,177 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CDEDEFB0-D36F-4367-B611-977099403B60}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.Server.Test</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Server.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;CODECOV;SERVERFX</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
+    <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.XML" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\DomainIdentifierAttributeTests.cs">
-      <Link>DomainIdentifierAttributeTests.cs</Link>
-    </Compile>
-    <Compile Include="AttributeUsageTest.cs" />
-    <Compile Include="AuthorizationAttributeTests.cs" />
-    <Compile Include="AuthorizationContextTests.cs" />
-    <Compile Include="AuthorizationResultTests.cs" />
-    <Compile Include="AuthorizationTests.cs" />
-    <Compile Include="ChangeSetTests.cs" />
-    <Compile Include="DirectServiceTests.cs" />
-    <Compile Include="DomainMethodServerTest.cs" />
-    <Compile Include="DomainOperationEntryTests.cs" />
-    <Compile Include="DomainOperationTestDataProviders.cs" />
-    <Compile Include="DomainServiceDescriptionTest.cs" />
-    <Compile Include="DomainServiceTests.cs" />
-    <Compile Include="KnownTypeUtilitiesTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryAttributeTests.cs" />
-    <Compile Include="RequiresAuthenticationAttributeTests.cs" />
-    <Compile Include="RequiresRoleAttributeTests.cs" />
-    <Compile Include="ServerTestHelper.cs" />
-    <Compile Include="InvokeOperationServerTest.cs" />
-    <Compile Include="ApplicationServices\AuthenticationBaseTest.cs" />
-    <Compile Include="ApplicationServices\AuthenticationCodeProcessorTest.cs" />
-    <Compile Include="ApplicationServices\MockMembershipProvider.cs" />
-    <Compile Include="ApplicationServices\MockProfileProvider.cs" />
-    <Compile Include="ApplicationServices\MockRoleProvider.cs" />
-    <Compile Include="ApplicationServices\MockUser.cs" />
-    <Compile Include="ApplicationServices\ProfileUsageAttributeTest.cs" />
-    <Compile Include="ApplicationServices\UserBaseTest.cs" />
-    <Compile Include="Utilities\TestInitializer.cs" />
-    <Compile Include="UtilityTests.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\DomainIdentifierAttributeTests.cs" Link="DomainIdentifierAttributeTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
-      <Project>{72137db5-8a91-4ff8-a292-5f6e73a66cd6}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
-      <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
-      <Name>EFDbContextModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
-      <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>OpenRiaServices.DomainServices.Tools</Name>
-      <Aliases>global</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
-      <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
-      <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
       <Aliases>global,OpenRiaServicesDomainServicesHosting</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj">
-      <Project>{1a2b04d0-1a09-414e-bc3f-c0c159ad668b}</Project>
-      <Name>EFPOCOModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
-      <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
-      <Name>OpenRiaServices.Common.DomainServices.Test</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
-      <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
-      <Name>OpenRiaServices.Common.Test</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj" />
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
       <Aliases>global,SystemWebDomainServices</Aliases>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -1,133 +1,53 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <AssemblyAttributeClsCompliant>false</AssemblyAttributeClsCompliant>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F572B235-A989-47F5-A36F-51091E976743}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.Hosting.OData.Test</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Hosting.OData.Test</AssemblyName>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net45</TargetFramework>
     <GenerateAssemblyRefs>true</GenerateAssemblyRefs>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>bin\Signed\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Any CPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebDev.WebHost, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Setup\WebDev.WebHost.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj">
-      <Project>{20790a5f-1dd7-4d1c-8303-c34256e12c68}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework.EF4</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
-      <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting.OData</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj" />
   </ItemGroup>
   <ItemGroup>
     <!-- Model files. -->
-    <Compile Include="Models\Northwind.Designer.cs">
+    <Compile Update="Models\Northwind.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.edmx</DependentUpon>
     </Compile>
     <!-- Utility files. -->
-    <Compile Include="Util\CompactUtil.cs" />
-    <Compile Include="Util\DataUtil.cs" />
-    <Compile Include="Util\IOUtil.cs" />
-    <Compile Include="Util\FrameworkUtil.cs" />
-    <Compile Include="Util\DisposeUtil.cs" />
-    <Compile Include="Util\NetworkUtil.cs" />
-    <Compile Include="Util\ProcessValueCoordinator.cs" />
-    <Compile Include="Util\TestUtil.cs" />
-    <Compile Include="Setup\LocalWebRequest.cs" />
-    <Compile Include="Setup\LocalWebServerHelper.cs" />
-    <Compile Include="Setup\SerializationFormatData.cs" />
-    <Compile Include="Setup\TestWebRequest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DomainDataServiceUnitTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <EntityDeploy Include="Models\Northwind.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Northwind.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

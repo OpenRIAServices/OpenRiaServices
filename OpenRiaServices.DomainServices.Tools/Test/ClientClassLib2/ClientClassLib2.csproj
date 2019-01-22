@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>sl5</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SonarQubeTestProject>True</SonarQubeTestProject>
   </PropertyGroup>
-  
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Windows" />
@@ -16,12 +14,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
- 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj">
-      <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
- 
 </Project>

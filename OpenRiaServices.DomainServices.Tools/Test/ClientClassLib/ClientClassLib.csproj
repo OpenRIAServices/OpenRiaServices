@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>sl5</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SonarQubeTestProject>True</SonarQubeTestProject>
   </PropertyGroup>
-
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.ServiceModel" />
@@ -19,7 +17,6 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
-  
   <ItemGroup>
     <Compile Include="..\ServerClassLib\CodelessType.linked.cs">
       <Link>CodelessType.linked.cs</Link>
@@ -39,19 +36,9 @@
     <Compile Include="..\ServerClassLib\TestValidator.linked.cs">
       <Link>TestValidator.linked.cs</Link>
     </Compile>
-    <!--<Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestEntity.client.cs" />
-    <Compile Include="TestEntity.reverse.linked.cs" />-->
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj">
-      <Project>{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClientClassLib2\ClientClassLib2.csproj">
-      <Project>{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}</Project>
-      <Name>ClientClassLib2</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\ClientClassLib2\ClientClassLib2.csproj" />
   </ItemGroup>
- 
 </Project>

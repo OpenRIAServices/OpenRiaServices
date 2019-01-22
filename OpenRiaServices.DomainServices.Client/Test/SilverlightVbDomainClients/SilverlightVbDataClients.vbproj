@@ -2,8 +2,6 @@
   <PropertyGroup>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <DefineTrace>true</DefineTrace>
-    <ProjectGuid>{A1407522-0D18-4D64-A5B9-8E5C569AAA51}</ProjectGuid>
-    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <RootNamespace />
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients</AssemblyName>
