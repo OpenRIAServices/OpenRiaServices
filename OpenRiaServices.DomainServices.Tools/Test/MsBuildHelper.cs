@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Evaluation;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
@@ -107,7 +106,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 var target = project.GetPropertyValue("TargetFramework");
                 var assemblyPart = "\\" + assemblyName + extension;
-                var alternativePath = fullPath.Replace(assemblyPart, "\\"  + target + assemblyPart);
+                var alternativePath = fullPath.Replace(assemblyPart, "\\" + target + assemblyPart);
                 if (File.Exists(alternativePath))
                     return alternativePath;
             }
@@ -120,11 +119,26 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             var projectCollection = new ProjectCollection();
             projectCollection.DefaultToolsVersion = ToolsVersion;
             projectCollection.SetGlobalProperty("Configuration", GetConfiguration());
-            projectCollection.SetGlobalProperty("TargetFramework", "sl5");
 
             var project = projectCollection.LoadProject(projectPath, ToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
- 
+
+            if (project.GetProperty("TargetFramework") == null)
+            {
+                var targetFrameworks = project.GetProperty("TargetFrameworks")?.EvaluatedValue;
+                if (targetFrameworks != null && !targetFrameworks.Contains(';'))
+                {
+                    project.SetGlobalProperty("TargetFramework", targetFrameworks);
+                }
+                else
+                {
+                    // fallback to silverlight since that what client 
+                    // projects currently should use
+                    project.SetGlobalProperty("TargetFramework", "sl5");
+                }
+            }
+
+
             return new ProjectWrapper(project);
         }
 
@@ -228,7 +242,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                          {"Configuration", "Debug" },
                      },
                     Loggers = loggers,
-                     
+
                 };
 
                 var projectInstance = manager.GetProjectInstanceForBuild(Project);
@@ -248,7 +262,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private class ErrorLogger : Microsoft.Build.Framework.ILogger
         {
-            readonly List<string> _errors = new List<string>();
+            private readonly List<string> _errors = new List<string>();
 
             public void Initialize(IEventSource eventSource)
             {
