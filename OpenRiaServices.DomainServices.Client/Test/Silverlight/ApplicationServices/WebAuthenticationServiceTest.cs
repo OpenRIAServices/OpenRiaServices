@@ -580,7 +580,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 }
                 catch (Exception ex)
                 {
-                    this.Enqueue(() => { throw ex; });
+                    this.EnqueueCallback(() => { throw ex; });
                 }
 
                 testCompleted = true;
