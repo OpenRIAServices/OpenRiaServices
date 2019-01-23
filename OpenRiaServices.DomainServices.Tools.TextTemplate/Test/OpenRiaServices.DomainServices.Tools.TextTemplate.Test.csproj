@@ -33,6 +33,10 @@
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
       <Aliases>global,SystemWebDomainServices</Aliases>
     </ProjectReference>
+    <!-- Ensure Tools Test project is built first so we can reference projectpath -->
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj" />
   </ItemGroup>
