@@ -8,11 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web;
 #endif
 
-#if SERVERFX
-namespace OpenRiaServices.DomainServices.Hosting.Test
-#else
+
 namespace OpenRiaServices.DomainServices.Client.Test
-#endif
 {
     public delegate void GenericDelegate();
 

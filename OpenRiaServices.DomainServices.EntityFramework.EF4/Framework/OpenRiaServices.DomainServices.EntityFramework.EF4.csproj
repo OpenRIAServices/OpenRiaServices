@@ -28,7 +28,7 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\ObjectContextUtilities.cs" Link="ObjectContextUtilities.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptionContextBase.cs" Link="TypeDescriptionContextBase.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptorBase.cs" Link="TypeDescriptorBase.cs" />
-    <Compile Condition=" '$(RunCodeAnalysis)' == 'true' " Update="GlobalSuppressions.cs">
+    <Compile Update="GlobalSuppressions.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\Resource.Designer.cs" Link="Resource.Designer.cs">

@@ -182,9 +182,6 @@
       <Aliases>DomainServicesTests</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbExpressions\VbExpressions.vbproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
-      <Aliases>NotUsed</Aliases>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\Services\TestServices.wsdl" />

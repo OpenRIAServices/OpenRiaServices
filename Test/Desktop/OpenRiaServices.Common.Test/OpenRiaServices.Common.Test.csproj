@@ -1,21 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ProjectGuid>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</ProjectGuid>
     <TargetFrameworks>net45;sl5</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)'=='sl5'">
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)'!='sl5'">
-    <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-  
   
   <ItemGroup Condition="'$(TargetFramework)'=='sl5'">
     <PackageReference Include="SilverlightToolkit-Testing" Version="5.2011.12.1" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
