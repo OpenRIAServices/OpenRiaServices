@@ -38,30 +38,34 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             projectPath = Path.GetFullPath(projectPath);
 
-            var project = LoadProject(projectPath);
-
-            // Ask to be told of generated outputs
-            var log = new ErrorLogger();
-            var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
-            Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
-            Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
-
-            foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
+            using (var project = LoadProject(projectPath))
             {
-                string assemblyPath = GetFullPath(projectPath, reference);
 
-                if (!assemblies.Contains(assemblyPath))
-                    assemblies.Add(assemblyPath);
-            }
 
-            foreach (var reference in project.ProjectInstance.GetItems("ProjectReference"))
-            {
-                string otherProjectPath = GetFullPath(projectPath, reference);
-                // Project references recursively extract references
-                string outputAssembly = GetOutputAssembly(otherProjectPath);
+                // Ask to be told of generated outputs
+                var log = new ErrorLogger();
+                var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
+                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
+                Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
 
-                if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                    assemblies.Add(outputAssembly);
+                foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
+                {
+                    string assemblyPath = GetFullPath(projectPath, reference);
+
+                    if (!assemblies.Contains(assemblyPath))
+                        assemblies.Add(assemblyPath);
+                }
+
+                foreach (var reference in project.ProjectInstance.GetItems("ProjectReference"))
+                {
+                    string otherProjectPath = GetFullPath(projectPath, reference);
+                    // Project references recursively extract references
+                    string outputAssembly = GetOutputAssembly(otherProjectPath);
+
+                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
+                        assemblies.Add(outputAssembly);
+                }
+
             }
 
             MakeFullPaths(assemblies, Path.GetDirectoryName(projectPath));
@@ -88,11 +92,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string outputAssembly = null;
             projectPath = Path.GetFullPath(projectPath);
 
-            var project = LoadProject(projectPath);
+            string outputPath, assemblyName, outputType, target;
 
-            string outputPath = project.GetPropertyValue("OutputPath");
-            string assemblyName = project.GetPropertyValue("AssemblyName");
-            string outputType = project.GetPropertyValue("OutputType");
+            using (var project = LoadProject(projectPath))
+            {
+                outputPath = project.GetPropertyValue("OutputPath");
+                assemblyName = project.GetPropertyValue("AssemblyName");
+                outputType = project.GetPropertyValue("OutputType");
+                target = project.GetPropertyValue("TargetFramework");
+            }
 
             if (!Path.IsPathRooted(outputPath))
                 outputPath = Path.Combine(Path.GetDirectoryName(projectPath), outputPath);
@@ -104,12 +112,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             var fullPath = MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
             if (!File.Exists(fullPath))
             {
-                var target = project.GetPropertyValue("TargetFramework");
                 var assemblyPart = "\\" + assemblyName + extension;
                 var alternativePath = fullPath.Replace(assemblyPart, "\\" + target + assemblyPart);
                 if (File.Exists(alternativePath))
                     return alternativePath;
             }
+
 
             return fullPath;
         }
@@ -163,10 +171,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             projectPath = Path.GetFullPath(projectPath);
 
-            var project = LoadProject(projectPath);
-            foreach (var buildItem in project.GetItems("Compile"))
+            using (var project = LoadProject(projectPath))
             {
-                items.Add(buildItem.EvaluatedInclude);
+                foreach (var buildItem in project.GetItems("Compile"))
+                {
+                    items.Add(buildItem.EvaluatedInclude);
+                }
             }
 
             MakeFullPaths(items, Path.GetDirectoryName(projectPath));
@@ -214,16 +224,26 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return result;
         }
 
-        public class ProjectWrapper
+        public sealed class ProjectWrapper : IDisposable
         {
             private ProjectInstance _projectInstance;
+            private BuildManager _buildManager;
+
+            private BuildManager BuildManager
+            {
+                get
+                {
+                    //return _buildManager ?? (_buildManager = new BuildManager());
+                    return BuildManager.DefaultBuildManager;
+                }
+            }
 
             public Project Project { get; }
             public ProjectInstance ProjectInstance
             {
                 get
                 {
-                    return (_projectInstance) ?? (_projectInstance = BuildManager.DefaultBuildManager.GetProjectInstanceForBuild(Project));
+                    return (_projectInstance) ?? (_projectInstance = BuildManager.GetProjectInstanceForBuild(Project));
                 }
             }
 
@@ -234,7 +254,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             public BuildResult Build(string[] targets, IEnumerable<Microsoft.Build.Framework.ILogger> loggers = null)
             {
-                var manager = BuildManager.DefaultBuildManager;
                 var parameters = new BuildParameters()
                 {
                     GlobalProperties = new Dictionary<string, string>()
@@ -245,8 +264,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
                 };
 
-                var projectInstance = manager.GetProjectInstanceForBuild(Project);
-                return manager.Build(parameters, new BuildRequestData(projectInstance, targets));
+                var projectInstance = BuildManager.GetProjectInstanceForBuild(Project);
+                return BuildManager.Build(parameters, new BuildRequestData(projectInstance, targets));
             }
 
             internal string GetPropertyValue(string v)
@@ -258,6 +277,53 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 return this.Project.GetItems(v);
             }
+
+            #region IDisposable Support
+            private bool disposedValue = false; // To detect redundant calls
+
+            private void Dispose(bool disposing)
+            {
+                if (!disposedValue)
+                {
+                    if (disposing)
+                    {
+                        _projectInstance = null;
+                        BuildManager.ResetCaches();
+                        //if (_buildManager != null)
+                        //{
+                        //    _buildManager.ResetCaches();
+                        //    _buildManager.Dispose();
+
+                        //}
+
+                        // Unload project to remove it from cached static data
+                        var projectCollection = Project.ProjectCollection;
+                        projectCollection.UnloadProject(Project);
+                        projectCollection.UnloadAllProjects();
+                        projectCollection.UnregisterAllLoggers();
+                        projectCollection.RemoveAllToolsets();
+                            projectCollection.Dispose();
+                    }
+
+                    disposedValue = true;
+                }
+            }
+
+            // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+            // ~ProjectWrapper() {
+            //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            //   Dispose(false);
+            // }
+
+            // This code added to correctly implement the disposable pattern.
+            public void Dispose()
+            {
+                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                Dispose(true);
+                // TODO: uncomment the following line if the finalizer is overridden above.
+                // GC.SuppressFinalize(this);
+            }
+            #endregion
         }
 
         private class ErrorLogger : Microsoft.Build.Framework.ILogger
