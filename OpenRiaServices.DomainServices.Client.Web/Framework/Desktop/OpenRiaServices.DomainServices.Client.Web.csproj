@@ -61,6 +61,7 @@
 
   <ItemGroup>
     <Compile Include="..\Silverlight\**\*.cs" Exclude="..\Silverlight\obj\**\*.cs;..\Silverlight\bin\**\*.cs"/>
+    <EmbeddedResource Include="..\Silverlight\**\*.resx" Exclude="..\Silverlight\obj\**\*.resx;..\Silverlight\bin\**\*.resx"/>
   </ItemGroup>
 
   <ItemGroup>
