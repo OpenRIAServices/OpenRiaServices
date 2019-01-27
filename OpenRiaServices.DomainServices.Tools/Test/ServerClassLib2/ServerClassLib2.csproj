@@ -3,6 +3,11 @@
     <SonarQubeTestProject>True</SonarQubeTestProject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net45</TargetFramework>
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
