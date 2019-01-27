@@ -17,6 +17,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         public static string DefaultToolsVersion = "15.0";
         public static string ToolsVersion = "15.0";
+        private static readonly Dictionary<string, IList<string>> s_ReferenceAssembliesByProjectPath = new Dictionary<string, IList<string>>();
 
         /// <summary>
         /// Extract the list of assemblies both generated and referenced by the named project.
@@ -24,9 +25,21 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetReferenceAssemblies(string projectPath)
         {
-            List<string> assemblies = new List<string>();
-            GetReferenceAssemblies(projectPath, assemblies);
-            return assemblies;
+            IList<string> cachedAssemblies;
+
+            lock (s_ReferenceAssembliesByProjectPath)
+            {
+                if (!s_ReferenceAssembliesByProjectPath.TryGetValue(projectPath, out cachedAssemblies))
+                {
+                    cachedAssemblies = new List<string>();
+                    GetReferenceAssemblies(projectPath, cachedAssemblies);
+
+                    s_ReferenceAssembliesByProjectPath.Add(projectPath, cachedAssemblies);
+                }
+            }
+
+            // Create a new copy to prevent modifications to original list
+            return new List<string>(cachedAssemblies);
         }
 
         /// <summary>
@@ -134,18 +147,20 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             if (project.GetProperty("TargetFramework") == null)
             {
                 var targetFrameworks = project.GetProperty("TargetFrameworks")?.EvaluatedValue;
-                if (targetFrameworks != null && !targetFrameworks.Contains(';'))
+                if (targetFrameworks != null)
                 {
-                    project.SetGlobalProperty("TargetFramework", targetFrameworks);
-                }
-                else
-                {
-                    // fallback to silverlight since that what client 
-                    // projects currently should use
-                    project.SetGlobalProperty("TargetFramework", "sl5");
+                    if (!targetFrameworks.Contains(';'))
+                    {
+                        project.SetGlobalProperty("TargetFramework", targetFrameworks);
+                    }
+                    else
+                    {
+                        // fallback to silverlight since that what client 
+                        // projects currently should use
+                        project.SetGlobalProperty("TargetFramework", "sl5");
+                    }
                 }
             }
-
 
             return new ProjectWrapper(project);
         }
@@ -227,16 +242,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public sealed class ProjectWrapper : IDisposable
         {
             private ProjectInstance _projectInstance;
-            private BuildManager _buildManager;
 
-            private BuildManager BuildManager
-            {
-                get
-                {
-                    //return _buildManager ?? (_buildManager = new BuildManager());
-                    return BuildManager.DefaultBuildManager;
-                }
-            }
+            private BuildManager BuildManager => BuildManager.DefaultBuildManager;
 
             public Project Project { get; }
             public ProjectInstance ProjectInstance
@@ -273,9 +280,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 return this.Project.GetPropertyValue(v);
             }
 
-            internal ICollection<ProjectItem> GetItems(string v)
+            internal ICollection<ProjectItemInstance> GetItems(string v)
             {
-                return this.Project.GetItems(v);
+                return this.ProjectInstance.GetItems(v);
             }
 
             #region IDisposable Support
@@ -302,7 +309,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                         projectCollection.UnloadAllProjects();
                         projectCollection.UnregisterAllLoggers();
                         projectCollection.RemoveAllToolsets();
-                            projectCollection.Dispose();
+                        projectCollection.Dispose();
                     }
 
                     disposedValue = true;
