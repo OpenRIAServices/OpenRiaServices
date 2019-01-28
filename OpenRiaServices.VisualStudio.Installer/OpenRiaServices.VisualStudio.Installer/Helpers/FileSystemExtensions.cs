@@ -9,9 +9,6 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
 {
     public static class FilesystemExtensions
     {
-
-        private static string DirectorySeparatorStr;
-
         /// <summary>
         /// Gets the relative path between two paths.
         /// </summary>

@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NorthwindModel;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using TestHelper = Microsoft.AppFx.UnitTests.Setup.Utilities.TestHelper;
+using TestHelper = OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities.TestHelper;
 
-namespace Microsoft.AppFx.UnitTests.Setup.Wizards
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
     [TestClass]
     public class BusinessLogicClassContextTests

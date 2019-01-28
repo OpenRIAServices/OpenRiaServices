@@ -30,7 +30,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         private ContextViewModel _currentContextViewModel;
         private bool _generateMetadataClasses;
         private ClientBuildManager _clientBuildManager;
-        private IBusinessLogicModel _businessLogicModel;
+        private BusinessLogicModel _businessLogicModel;
         private readonly List<Type> _contextTypes;
         private readonly IVsHelp _help;
 
@@ -159,8 +159,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (this._contextViewModels == null)
                 {
                     this._contextViewModels = new List<ContextViewModel>();
-                    IEnumerable<IContextData> contextDataItems = ((IContextData[])(this.BusinessLogicModel.GetContextDataItems())).OrderBy(c => c.Name);
-                    foreach (IContextData contextData in contextDataItems)
+                    IEnumerable<ContextData> contextDataItems = ((ContextData[])(this.BusinessLogicModel.GetContextDataItems())).OrderBy(c => c.Name);
+                    foreach (ContextData contextData in contextDataItems)
                     {
                         this._contextViewModels.Add(new ContextViewModel(this.BusinessLogicModel, contextData));
                     }
@@ -339,7 +339,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
          /// <value>This object is <see cref="IDisposable"/>, and we will dispose it
         /// when the current instance is disposed.
         /// </value>
-        private IBusinessLogicModel BusinessLogicModel
+        private BusinessLogicModel BusinessLogicModel
         {
             get
             {
@@ -349,7 +349,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     try
                     {
                         this._businessLogicModel =
-                            (IBusinessLogicModel) ClientBuildManager.CreateObject(typeof (BusinessLogicModel), false);
+                            (BusinessLogicModel) ClientBuildManager.CreateObject(typeof (BusinessLogicModel), false);
                     }
                     catch (HttpException)
                     {
@@ -385,7 +385,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         }
                     }
 
-                    IBusinessLogicData data = new BusinessLogicData()
+                    BusinessLogicData data = new BusinessLogicData()
                     {
                         Language = this.Language,
                         AssemblyPaths = assemblyNames.ToArray(),
@@ -405,7 +405,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="namespaceName">The namespace into which to generate the class</param>
         /// <returns>The generated code and references</returns>
-        public IGeneratedCode GenerateBusinessLogicClass(string namespaceName)
+        public GeneratedCode GenerateBusinessLogicClass(string namespaceName)
         {
             ContextViewModel contextViewModel = this.CurrentContextViewModel;
             if (contextViewModel != null)
@@ -423,7 +423,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="optionalSuffix">If not blank, an optional suffix for namespace and class (for testing)</param>
         /// <returns>The generated code and references</returns>
-        public IGeneratedCode GenerateMetadataClasses(string optionalSuffix)
+        public GeneratedCode GenerateMetadataClasses(string optionalSuffix)
         {
             ContextViewModel contextViewModel = this.CurrentContextViewModel;
             if (contextViewModel != null)

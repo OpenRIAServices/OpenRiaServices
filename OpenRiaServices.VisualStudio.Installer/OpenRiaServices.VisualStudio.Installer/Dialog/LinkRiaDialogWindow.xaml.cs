@@ -43,7 +43,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
 
         private void VsDialogWindow_Initialized(object sender, System.EventArgs e)
         {
-            var noneComboBoxItem = new ComboBoxItem {DataContext = null, Content = "<No Project Set>"};
+            var noneComboBoxItem = new ComboBoxItem { DataContext = null, Content = "<No Project Set>" };
             //load our combobox items
             this.Projects.Items.Add(noneComboBoxItem);
             //add all the other projects too
@@ -54,14 +54,18 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             // if this is null
             var selectedItem = this.Projects.Items.OfType<ComboBoxItem>().FirstOrDefault(i => i.DataContext == _linker.LinkedProject);
             this.Projects.SelectedItem = selectedItem ?? noneComboBoxItem;
+            this.OpenRiaGenerateApplicationContext.IsChecked = this._linker.OpenRiaGenerateApplicationContext;
+            this.OpenRiaClientUseFullTypeNames.IsChecked = this._linker.OpenRiaClientUseFullTypeNames;
             this.DisableFastUpToDateCheckBox.IsChecked = this._linker.DisableFastUpToDateCheck;
+
+
             this.Projects.SelectionChanged += new SelectionChangedEventHandler(this.Projects_SelectionChanged);
 
 
         }
         private void Projects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.DisableFastUpToDateCheckBox.IsChecked = true;
+            // this.DisableFastUpToDateCheckBox.IsChecked = true;
         }
 
 
@@ -80,6 +84,16 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             if (this._linker.DisableFastUpToDateCheck != this.DisableFastUpToDateCheckBox.IsChecked)
             {
                 this._linker.DisableFastUpToDateCheck = this.DisableFastUpToDateCheckBox.IsChecked;
+            }
+
+            if (this._linker.OpenRiaClientUseFullTypeNames != this.OpenRiaClientUseFullTypeNames.IsChecked)
+            {
+                this._linker.OpenRiaClientUseFullTypeNames = this.OpenRiaClientUseFullTypeNames.IsChecked;
+            }
+
+            if (this._linker.OpenRiaGenerateApplicationContext != this.OpenRiaGenerateApplicationContext.IsChecked)
+            {
+                this._linker.OpenRiaGenerateApplicationContext = this.OpenRiaGenerateApplicationContext.IsChecked;
             }
 
             _project.Save();

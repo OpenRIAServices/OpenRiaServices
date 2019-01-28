@@ -23,8 +23,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// </remarks>
     public class ContextViewModel : INotifyPropertyChanged
     {
-        private readonly IBusinessLogicModel _businessLogicModel;
-        private readonly IContextData _contextData;
+        private readonly BusinessLogicModel _businessLogicModel;
+        private readonly ContextData _contextData;
         private List<EntityViewModel> _entities;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// </summary>
         /// <param name="businessLogicModel">The <see cref="BusinessLogicModel"/> in the other AppDomain with which to communicate.</param>
         /// <param name="contextData">The shared state with the corresponding <see cref="BusinessLogicContext"/> instance in the other AppDomain.</param>
-        public ContextViewModel(IBusinessLogicModel businessLogicModel, IContextData contextData)
+        public ContextViewModel(BusinessLogicModel businessLogicModel, ContextData contextData)
         {
             System.Diagnostics.Debug.Assert(businessLogicModel != null, "businessLogicModel cannot be null");
             System.Diagnostics.Debug.Assert(contextData != null, "contextData cannot be null");
@@ -53,10 +53,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         /// <summary>
-        /// Gets the <see cref="IContextData"/> state shared with the corresponding
+        /// Gets the <see cref="ContextData"/> state shared with the corresponding
         /// <see cref="BusinessLogicContext"/> in the other AppDomain.
         /// </summary>
-        public IContextData ContextData
+        public ContextData ContextData
         {
             get
             {
@@ -115,10 +115,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             {
                 if (this._entities == null)
                 {
-                    IEntityData[] entityStates = this._businessLogicModel.GetEntityDataItemsForContext(this.ContextData);
+                    EntityData[] entityStates = this._businessLogicModel.GetEntityDataItemsForContext(this.ContextData);
                     this._entities = new List<EntityViewModel>();
 
-                    foreach (IEntityData entityState in entityStates)
+                    foreach (EntityData entityState in entityStates)
                     {
                         EntityViewModel entityViewModel = new EntityViewModel(this, entityState);
                         this._entities.Add(entityViewModel);

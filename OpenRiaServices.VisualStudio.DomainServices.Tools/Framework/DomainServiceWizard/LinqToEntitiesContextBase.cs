@@ -58,7 +58,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Invoked to create the entities known to this context
         /// </summary>
         /// <returns>The list of entities</returns>
-        protected override IEnumerable<IBusinessLogicEntity> CreateEntities()
+        protected override IEnumerable<BusinessLogicEntity> CreateEntities()
         {
             List<BusinessLogicEntity> entities = new List<BusinessLogicEntity>();
 
@@ -147,7 +147,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="optionalSuffix">If not null, optional suffix to class name and namespace</param>
         /// <param name="entity">The entity for which to generate the additional metadata.</param>
         /// <returns><c>true</c> means at least some code was generated.</returns>
-        protected override bool GenerateAdditionalMetadataClasses(ICodeGenContext codeGenContext, string optionalSuffix, BusinessLogicEntity entity)
+        protected override bool GenerateAdditionalMetadataClasses(CodeGenContext codeGenContext, string optionalSuffix, BusinessLogicEntity entity)
         {
             LinqToEntitiesEntity linqToEntitiesEntity = (LinqToEntitiesEntity)entity;
             bool generatedCode = this.GenerateMetadataClassesForComplexTypes(codeGenContext, optionalSuffix, linqToEntitiesEntity.EntityType.Properties);
@@ -161,7 +161,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="optionalSuffix">If not null, optional suffix to class name and namespace</param>
         /// <param name="properties">The list of properties for which to generate metadata classes.</param>
         /// <returns><c>true</c> means at least some code was generated.</returns>
-        private bool GenerateMetadataClassesForComplexTypes(ICodeGenContext codeGenContext, string optionalSuffix, IEnumerable<EdmProperty> properties)
+        private bool GenerateMetadataClassesForComplexTypes(CodeGenContext codeGenContext, string optionalSuffix, IEnumerable<EdmProperty> properties)
         {
             bool generatedCode = false;
             foreach (var prop in properties)

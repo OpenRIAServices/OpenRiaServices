@@ -174,7 +174,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codegenContext">A <see cref="ClientProxyGenerator"/>.</param>
         /// <param name="referencingType">The referencing type.</param>
         /// <returns>A <see cref="CodeTypeReference"/> for a CLR type.</returns>
-        public static CodeTypeReference GetTypeReference(Type type, ICodeGenContext codegenContext, CodeTypeDeclaration referencingType)
+        public static CodeTypeReference GetTypeReference(Type type, CodeGenContext codegenContext, CodeTypeDeclaration referencingType)
         {
             if (type.IsPrimitive || type == typeof(void) || type == typeof(decimal) || type == typeof(string) || type == typeof(object))
             {
@@ -257,7 +257,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="propertyInfo"><see cref="PropertyInfo"/> for the original property.</param>
         /// <param name="insideNamespace">Whether or not our buddy class is inside a namespace.</param>
         /// <returns>A code snippet for a buddy property.</returns>
-        public static CodeSnippetTypeMember CreateAutomaticPropertyDeclaration(ICodeGenContext codeGenContext, CodeTypeDeclaration buddyClass, PropertyInfo propertyInfo, bool insideNamespace)
+        public static CodeSnippetTypeMember CreateAutomaticPropertyDeclaration(CodeGenContext codeGenContext, CodeTypeDeclaration buddyClass, PropertyInfo propertyInfo, bool insideNamespace)
         {
             // Create a field declaration: public static $propertyType$ $propertyName;
             CodeTypeReference propTypeRef = CodeGenUtilities.GetTypeReference(propertyInfo.PropertyType, codeGenContext, buddyClass);

@@ -4,16 +4,16 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-
 using EnvDTE;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.Win32;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using OpenRiaServices.VisualStudio.Installer.Dialog;
 using OpenRiaServices.VisualStudio.Installer.Helpers;
+using System.Threading;
+using Microsoft.VisualStudio.Threading;
 
 namespace OpenRiaServices.VisualStudio.Installer
 {
@@ -29,22 +29,19 @@ namespace OpenRiaServices.VisualStudio.Installer
     /// </summary>
     // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
     // a package.
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     // This attribute is used to register the information needed to show this package
     // in the Help/About dialog of Visual Studio.
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GuidList.guidVisualStudio_MenuExtensionPkgString)]
-    public sealed class OpenRiaServicesPackage : Package
+    public sealed class OpenRiaServicesPackage : AsyncPackage
     {
         private uint _solutionNotBuildingAndNotDebuggingContextCookie;
-        private DTE _dte;
-        private DTEEvents _dteEvents;
         private IVsMonitorSelection _vsMonitorSelection;
-        private OleMenuCommand _managePackageDialogCommand;
-        private OleMenuCommand _managePackageForSolutionDialogCommand;
         private OleMenuCommandService _mcs;
+
         /// <summary>
         /// Default constructor of the package.
         /// Inside this method you can place any initialization code that does not require 
@@ -56,29 +53,25 @@ namespace OpenRiaServices.VisualStudio.Installer
         {
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
         }
-    
+
 
         /////////////////////////////////////////////////////////////////////////////
         // Overridden Package Implementation
-        #region Package Members
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
         /// where you can put all the initialization code that rely on services provided by VisualStudio.
         /// </summary>
-        protected override void Initialize()
+        // This method is run automatically the first time the command is being executed
+
+        protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
-            base.Initialize();
-            AddMenuCommandHandlers();
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-        }
+            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            await base.InitializeAsync(cancellationToken, progress);
 
-        #endregion
-
-        private void AddMenuCommandHandlers()
-        {
-            _mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            _mcs = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != _mcs)
             {
                 CommandID menuCommandID = new CommandID(GuidList.guidVisualStudio_MenuExtensionCmdSet, (int)PkgCmdIDList.cmdidLinkOpenRiaServicesProject);
@@ -86,8 +79,6 @@ namespace OpenRiaServices.VisualStudio.Installer
                 _mcs.AddCommand(menuItem);
             }
         }
-
-
 
         private bool IsSolutionExistsAndNotDebuggingAndNotBuilding()
         {
@@ -103,8 +94,6 @@ namespace OpenRiaServices.VisualStudio.Installer
             command.Enabled = command.Visible;
         }
 
-
-
         /// <summary>
         /// This function is the callback used to execute a command when the a menu item is clicked.
         /// See the Initialize method to see how the menu item is associated to this function using
@@ -113,7 +102,7 @@ namespace OpenRiaServices.VisualStudio.Installer
         private void LinkRiaProjectCallback(object sender, EventArgs e)
         {
             Project project = VsMonitorSelection.GetActiveProject();
-            
+
             if (project != null && !project.IsUnloaded() && project.IsSupported())
             {
                 ShowLinkedProjectDialog(project);
@@ -126,15 +115,13 @@ namespace OpenRiaServices.VisualStudio.Installer
                 string errorMessage = String.IsNullOrEmpty(projectName)
                     ? Resources.NoProjectSelected
                     : String.Format(CultureInfo.CurrentCulture, Resources.DTE_ProjectUnsupported, projectName);
-                
+
                 MessageHelper.ShowWarningMessage(errorMessage, Resources.ErrorDialogBoxTitle);
             }
         }
 
         private static void ShowLinkedProjectDialog(Project project)
         {
-         
-
             DialogWindow window = GetVSRiaLinkWindow(project);
 
             window.ShowModal();
@@ -145,8 +132,6 @@ namespace OpenRiaServices.VisualStudio.Installer
         private static DialogWindow GetVSRiaLinkWindow(Project project)
         {
             return new LinkRiaDialogWindow(project);
-
-
         }
 
         private bool HasActiveLoadedSupportedProject
@@ -163,6 +148,7 @@ namespace OpenRiaServices.VisualStudio.Installer
         {
             get
             {
+                ThreadHelper.ThrowIfNotOnUIThread();
                 if (_vsMonitorSelection == null)
                 {
                     // get the UI context cookie for the debugging mode
@@ -177,5 +163,4 @@ namespace OpenRiaServices.VisualStudio.Installer
         }
 
     }
-    
 }

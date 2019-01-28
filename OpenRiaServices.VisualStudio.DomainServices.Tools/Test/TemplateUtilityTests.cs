@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.Test
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
     [TestClass]
     public class TemplateUtilityTests

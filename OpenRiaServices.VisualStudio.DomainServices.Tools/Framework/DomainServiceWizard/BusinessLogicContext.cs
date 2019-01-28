@@ -21,15 +21,15 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// We expect different data access layers to provide their own subclasses of this type.
     /// This base class can be used for a blank business logic class.
     /// </remarks>
-    public class BusinessLogicContext : IBusinessLogicContext
+    public class BusinessLogicContext
     {
         // Key into CodeTypeDeclaration.UserData to dictionary of generated helper methods
         private const string UserDataHelperMethods = "HelperMethods";
 
         private readonly string _name;
         private readonly Type _contextType;
-        private List<IBusinessLogicEntity> _entities;
-        private IContextData _contextData;
+        private List<BusinessLogicEntity> _entities;
+        private ContextData _contextData;
         private static int uniqueContextID = 0;
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Gets or sets the mutable state shared with <see cref="ContextViewModel"/>
         /// across AppDomain boundaries.
         /// </summary>
-        public IContextData ContextData
+        public ContextData ContextData
         {
             get
             {
@@ -141,7 +141,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <summary>
         /// Gets the collection of entities exposed by this context, sorted by name
         /// </summary>
-        public IEnumerable<IBusinessLogicEntity> Entities
+        public IEnumerable<BusinessLogicEntity> Entities
         {
             get
             {
@@ -149,7 +149,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 {
                     try
                     {
-                        this._entities = new List<IBusinessLogicEntity>(this.CreateEntities());
+                        this._entities = new List<BusinessLogicEntity>(this.CreateEntities());
                     }
                     catch (Exception ex)
                     {
@@ -168,16 +168,16 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         // arbitrary DAL model's metadata will be fatal to VS because it could be running
                         // from the data binding engine.  Consequently, we have decided it is acceptable to
                         // ignore fatal exceptions for this release and to return an empty entity list.
-                        this._entities = new List<IBusinessLogicEntity>();
+                        this._entities = new List<BusinessLogicEntity>();
                     }
-                    this._entities.Sort(new Comparison<IBusinessLogicEntity>((x, y) => String.Compare(x.Name, y.Name, StringComparison.OrdinalIgnoreCase)));
+                    this._entities.Sort(new Comparison<BusinessLogicEntity>((x, y) => String.Compare(x.Name, y.Name, StringComparison.OrdinalIgnoreCase)));
                 }
                 return this._entities;
             }
         }
 
         /// <summary>
-        /// Gets the collection of <see cref="IEntityData"/> data objects for all the
+        /// Gets the collection of <see cref="EntityData"/> data objects for all the
         /// entities that belong to the current context.
         /// </summary>
         /// <remarks>
@@ -185,11 +185,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// the UI quickly but pay for the cost of scanning the context only when
         /// the UI requires it.
         /// </remarks>
-        public IEnumerable<IEntityData> EntityDataItems
+        public IEnumerable<EntityData> EntityDataItems
         {
             get
             {
-                return this.Entities.Select<IBusinessLogicEntity, IEntityData>(ble => ble.EntityData);
+                return this.Entities.Select<BusinessLogicEntity, EntityData>(ble => ble.EntityData);
             }
         }
 
@@ -199,7 +199,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context into which to generate code.  It cannot be null.</param>
         /// <param name="businessLogicClass">The class into which to generate the method</param>
         /// <param name="entity">The entity which will be affected by this method</param>
-        public void GenerateEntityDomainOperationEntries(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
+        public void GenerateEntityDomainOperationEntries(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
         {
             CodeMemberMethod selectMethod = this.GenerateSelectMethod(codeGenContext, businessLogicClass, entity);
             if (selectMethod != null)
@@ -226,7 +226,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Virtual method to extract the entities exposed by this context.
         /// </summary>
         /// <returns>An unsorted list of entities</returns>
-        protected virtual IEnumerable<IBusinessLogicEntity> CreateEntities()
+        protected virtual IEnumerable<BusinessLogicEntity> CreateEntities()
         {
             return new BusinessLogicEntity[0];
         }
@@ -240,7 +240,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicClass">The class into which to generate the method</param>
         /// <param name="entity">The entity which will be affected by this method</param>
         /// <returns>The newly created method</returns>
-        protected virtual CodeMemberMethod GenerateSelectMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
+        protected virtual CodeMemberMethod GenerateSelectMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
         {
             return null;
         }
@@ -251,7 +251,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context into which to generate code.  It cannot be null.</param>
         /// <param name="businessLogicClass">The class into which to generate the method</param>
         /// <param name="entity">The entity which will be affected by this method</param>
-        protected virtual void GenerateUpdateMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
+        protected virtual void GenerateUpdateMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
         {
         }
 
@@ -261,7 +261,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context into which to generate code.  It cannot be null.</param>
         /// <param name="businessLogicClass">The class into which to generate the method</param>
         /// <param name="entity">The entity which will be affected by this method</param>
-        protected virtual void GenerateInsertMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
+        protected virtual void GenerateInsertMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
         {
         }
 
@@ -271,7 +271,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context into which to generate code.  It cannot be null.</param>
         /// <param name="businessLogicClass">The class into which to generate the method</param>
         /// <param name="entity">The entity which will be affected by this method</param>
-        protected virtual void GenerateDeleteMethod(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, IBusinessLogicEntity entity)
+        protected virtual void GenerateDeleteMethod(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
         {
         }
 
@@ -282,7 +282,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeNamespace">The namespace object into which the type should be defined.</param>
         /// <param name="className">The name of the class.  It cannot be null.</param>
         /// <returns>A new CodeTypeDeclaration for the generated class.</returns>
-        protected virtual CodeTypeDeclaration CreateBusinessLogicClass(ICodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
+        protected virtual CodeTypeDeclaration CreateBusinessLogicClass(CodeGenContext codeGenContext, CodeNamespace codeNamespace, string className)
         {
             CodeTypeDeclaration businessLogicClass = CodeGenUtilities.CreateTypeDeclaration(className, codeNamespace.Name);
             businessLogicClass.BaseTypes.Add(BusinessLogicClassConstants.DomainServiceTypeName);
@@ -297,7 +297,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="namespaceName">The namespace to use for the class.</param>
         /// <param name="rootNamespace">The root namespace (VB).</param>
         /// <returns>A value containing the generated source code and necessary references.</returns>
-        public IGeneratedCode GenerateBusinessLogicClass(string language, string className, string namespaceName, string rootNamespace)
+        public GeneratedCode GenerateBusinessLogicClass(string language, string className, string namespaceName, string rootNamespace)
         {
             using (CodeGenContext codeGenContext = new CodeGenContext(language, rootNamespace))
             {
@@ -313,14 +313,14 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="rootNamespace">The root namespace (VB).</param>
         /// <param name="optionalSuffix">If nonblank, the suffix to append to namespace and class names for testing</param>
         /// <returns>A value containing the generated source code and necessary references.</returns>
-        public IGeneratedCode GenerateMetadataClasses(string language, string rootNamespace, string optionalSuffix)
+        public GeneratedCode GenerateMetadataClasses(string language, string rootNamespace, string optionalSuffix)
         {
             using (CodeGenContext codeGenContext = new CodeGenContext(language, rootNamespace))
             {
                 bool generatedAnyCode = this.GenerateMetadataClasses(codeGenContext, optionalSuffix);
                 if (generatedAnyCode)
                 {
-                    IGeneratedCode generatedCode = codeGenContext.GenerateCode();
+                    GeneratedCode generatedCode = codeGenContext.GenerateCode();
                     return generatedCode;
                 }
             }
@@ -430,7 +430,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="codeGenContext">The context to use to generate code.</param>
         /// <param name="optionalSuffix">If nonblank, the suffix to append to namespace and class names for testing</param>
         /// <returns><c>true</c> means at least some code was generated.</returns>
-        protected bool GenerateMetadataClasses(ICodeGenContext codeGenContext, string optionalSuffix)
+        protected bool GenerateMetadataClasses(CodeGenContext codeGenContext, string optionalSuffix)
         {
             bool generatedCode = false;
             if (this.NeedToGenerateMetadataClasses)
@@ -468,7 +468,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// This default implementation of the virtual method does not generate any additional classes. It needs to be overridden in the derived
         /// classes to generate additional metadata classes if necessary.
         /// </remarks>
-        protected virtual bool GenerateAdditionalMetadataClasses(ICodeGenContext codeGenContext, string optionalSuffix, BusinessLogicEntity entity)
+        protected virtual bool GenerateAdditionalMetadataClasses(CodeGenContext codeGenContext, string optionalSuffix, BusinessLogicEntity entity)
         {
             return false;
         }
@@ -480,7 +480,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="optionalSuffix">If not null, optional suffix to class name and namespace</param>
         /// <param name="type">The type of the object for which to generate the metadata class.</param>
         /// <returns><c>true</c> means at least some code was generated.</returns>
-        public bool GenerateMetadataClass(ICodeGenContext codeGenContext, string optionalSuffix, Type type)
+        public bool GenerateMetadataClass(CodeGenContext codeGenContext, string optionalSuffix, Type type)
         {
             // If already have a buddy class, bypass all this logic
             // Use soft dependency (string name) to avoid static dependency on DataAnnotations.
@@ -659,7 +659,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="businessLogicClass">The class containing the generated code.</param>
         /// <param name="helperMemberName">The name of the helper member.</param>
         /// <param name="generatorCallback">Callback that will create this helper if it does not yet exist.</param>
-        public static void GenerateHelperMemberIfNecessary(ICodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, string helperMemberName, Func<CodeTypeMember> generatorCallback)
+        public static void GenerateHelperMemberIfNecessary(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, string helperMemberName, Func<CodeTypeMember> generatorCallback)
         {
             System.Diagnostics.Debug.Assert(codeGenContext != null, "CodeGenContext cannot be null"); 
             System.Diagnostics.Debug.Assert(businessLogicClass != null, "BusinessLogicClass cannot be null");

@@ -12,7 +12,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <see cref="BusinessLogicViewModel"/>.
     /// </summary>
     [Serializable]
-    public class BusinessLogicData : MarshalByRefObject, IBusinessLogicData
+    public class BusinessLogicData : MarshalByRefObject
     {
         /// <summary>
         /// Gets or sets the language for code generation,

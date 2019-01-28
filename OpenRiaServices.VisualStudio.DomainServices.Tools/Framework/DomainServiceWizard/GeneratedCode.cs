@@ -7,7 +7,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// Tuple to hold the source code and references for generated code
     /// </summary>
-    public class GeneratedCode : MarshalByRefObject, IGeneratedCode
+    public class GeneratedCode : MarshalByRefObject
     {
         private readonly string _sourceCode;
         private readonly IEnumerable<string> _references;

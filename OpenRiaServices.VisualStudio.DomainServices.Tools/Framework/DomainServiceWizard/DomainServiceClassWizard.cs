@@ -40,8 +40,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         // The dialog is a member only so the test helper can locate it
         BusinessLogicClassDialog _dialog;
 
-        private IGeneratedCode _businessLogicCode;
-        private IGeneratedCode _metadataCode;
+        private GeneratedCode _businessLogicCode;
+        private GeneratedCode _metadataCode;
         private bool _isClientAccessEnabled;
         private bool _isODataEndpointEnabled;
       
@@ -210,7 +210,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     namespaceName = this.ComputeNamespace();
 
                     // User said OK -- so let's generate the code
-                    IGeneratedCode generatedCode = businessLogicViewModel.GenerateBusinessLogicClass(namespaceName);
+                    GeneratedCode generatedCode = businessLogicViewModel.GenerateBusinessLogicClass(namespaceName);
 
                     replacementsDictionary.Add("$generatedcode$", generatedCode.SourceCode);
                     this.AddReferences(generatedCode.References);
@@ -220,7 +220,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     if (businessLogicViewModel.IsMetadataClassGenerationRequested)
                     {
                         // The null namespace asks to generate into the entity types own namespaces
-                        IGeneratedCode generatedMetadataCode = businessLogicViewModel.GenerateMetadataClasses(null /* optionalSuffix */);
+                        GeneratedCode generatedMetadataCode = businessLogicViewModel.GenerateMetadataClasses(null /* optionalSuffix */);
                         replacementsDictionary.Add("$generatedmetadatacode$", generatedMetadataCode.SourceCode);
                         this.AddReferences(generatedMetadataCode.References);
                         this._generateMetadataFile = generatedMetadataCode.SourceCode.Length > 0;

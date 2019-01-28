@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using OpenRiaServices.DomainServices.LinqToSql;
-using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
+using OpenRiaServices.DomainServices.LinqToSql;
 
-namespace Microsoft.AppFx.UnitTests.Setup.Utilities
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
 {
     internal class TestHelper
     {

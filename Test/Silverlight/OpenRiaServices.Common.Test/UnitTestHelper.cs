@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -27,6 +28,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     StringComparison.OrdinalIgnoreCase);
                 return englishBuild && englishOS;
             }
+        }
+
+        /// <summary>
+        /// Creates a temporary folder under the current temporary path.
+        /// </summary>
+        /// <returns>The name of the folder that has been created.</returns>
+        public static string CreateTempFolder()
+        {
+            string tempFolderName = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(tempFolderName);
+            return tempFolderName;
         }
 
         /// <summary>

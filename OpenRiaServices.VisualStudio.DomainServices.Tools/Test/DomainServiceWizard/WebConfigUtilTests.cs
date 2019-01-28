@@ -5,19 +5,14 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Configuration;
-using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
 using System.Xml;
 using System.Xml.Linq;
-
-using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web.Configuration;
-using NorthwindModel;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace Microsoft.AppFx.UnitTests.Setup.Wizards
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
     [TestClass]
     public class WebConfigUtilTests

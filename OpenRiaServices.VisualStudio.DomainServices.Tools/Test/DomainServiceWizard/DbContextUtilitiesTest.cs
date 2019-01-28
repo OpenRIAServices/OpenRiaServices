@@ -1,7 +1,7 @@
 ﻿using OpenRiaServices.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.VisualStudio.ServiceModel.DomainServices.Tools.Test.DomainServiceWizard
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.DomainServiceWizard
 {
     [TestClass]
     public class DbContextUtilitiesTest

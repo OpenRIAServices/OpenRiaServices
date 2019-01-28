@@ -111,6 +111,5 @@
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.VisualStudio.Interface\OpenRiaServices.VisualStudio.Interface.csproj" />
   </ItemGroup>
 </Project>

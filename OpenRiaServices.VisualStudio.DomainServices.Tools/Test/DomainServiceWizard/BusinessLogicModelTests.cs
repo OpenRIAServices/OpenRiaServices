@@ -6,13 +6,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.DomainServices.Client.Test;
-using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AdventureWorksModel;
 using NorthwindModel;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace Microsoft.AppFx.UnitTests.Setup.Wizards
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
     [TestClass]
     public class BusinessLogicClassModelTests
@@ -23,9 +22,9 @@ namespace Microsoft.AppFx.UnitTests.Setup.Wizards
         public void BusinessLogicModel_Ctor_Logger()
         {
             // Null logger throws
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
+            ExceptionHelper.ExpectArgumentNullExceptionStandard((GenericDelegate)delegate
             {
-                BusinessLogicModel model = new BusinessLogicModel(null);
+                Tools.BusinessLogicModel model = new Tools.BusinessLogicModel((Action<string>)null);
             }, "logger");
 
             // Valid logger is accepted

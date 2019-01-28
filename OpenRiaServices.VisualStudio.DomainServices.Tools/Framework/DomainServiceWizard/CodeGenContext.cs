@@ -15,7 +15,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
     /// <summary>
     /// This class captures the CodeDom provider, root namespace, etc and provides some common code gen helper methods
     /// </summary>
-    public sealed class CodeGenContext : IDisposable, ICodeGenContext
+    public sealed class CodeGenContext : IDisposable
     {
         private CodeDomProvider _provider;
         private CodeCompileUnit _compileUnit = new CodeCompileUnit();
@@ -149,7 +149,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// Generates code for the current compile unit into a string.  Also strips out auto-generated comments/
         /// </summary>
         /// <returns>The generated code and necessary references.</returns>
-        public IGeneratedCode GenerateCode()
+        public GeneratedCode GenerateCode()
         {
             string generatedCode = string.Empty;
             using (TextWriter t = new StringWriter(CultureInfo.InvariantCulture))

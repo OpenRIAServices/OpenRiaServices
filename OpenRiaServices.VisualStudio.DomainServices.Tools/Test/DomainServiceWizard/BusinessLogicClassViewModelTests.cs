@@ -4,13 +4,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using OpenRiaServices.DomainServices.Client.Test;
-using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AdventureWorksModel;
 using NorthwindModel;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace Microsoft.AppFx.UnitTests.Setup.Wizards
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
     [TestClass]
     public class BusinessLogicClassViewModelTests

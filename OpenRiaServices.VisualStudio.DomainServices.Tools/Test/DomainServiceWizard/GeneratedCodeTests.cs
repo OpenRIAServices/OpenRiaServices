@@ -1,10 +1,9 @@
 ﻿// #define UPDATE_BASELINES    // uncomment to update baselines in bulk
 using System.Linq;
 using OpenRiaServices.DomainServices.Client.Test;
-using Microsoft.VisualStudio.ServiceModel.DomainServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.AppFx.UnitTests.Setup.Wizards
+namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
     [TestClass]
     public class GeneratedCodeTests

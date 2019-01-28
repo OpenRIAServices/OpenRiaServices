@@ -13,6 +13,7 @@ namespace OpenRiaServices.VisualStudio.Installer
     {
         private const string LinkedPropertyName = "LinkedOpenRiaServerProject";
         private const string DisableFastUpToDateCheckPropertyName = "DisableFastUpToDateCheck";
+        private const string OpenRiaGenerateApplicationContextPropertyName = "OpenRiaGenerateApplicationContext";
 
         private readonly Project _riaProject;
         private readonly DTE _dte;
@@ -23,7 +24,6 @@ namespace OpenRiaServices.VisualStudio.Installer
             _dte = dte;
         }
 
-
         /// <summary>
         /// Gets the linked ria project. Returns null if one isn't set or if the relative file path is invalid.
         /// </summary>
@@ -31,6 +31,7 @@ namespace OpenRiaServices.VisualStudio.Installer
         {
             get
             {
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 var property = GetLinkedProperty(_riaProject);
                 if (property == null)
                 {
@@ -42,14 +43,11 @@ namespace OpenRiaServices.VisualStudio.Installer
                 var absoluteLinkedProjectLocation = linkedProjectLocation.AbsolutePathFrom(RiaProjectDir());
                 var childProjects = _dte.Solution.GetSupportedChildProjects();
                 return FindProjectFromLocation(childProjects, absoluteLinkedProjectLocation);
-
-
             }
             set
             {
                 if (value == null)
                 {
-
                     var linkedProperty = GetLinkedProperty(_riaProject.AsMSBuildProject());
                     if (linkedProperty == null)
                     {
@@ -58,16 +56,12 @@ namespace OpenRiaServices.VisualStudio.Installer
 
                     //it exists but we delete it
                     _riaProject.AsMSBuildProject().RemoveProperty(linkedProperty);
-
-
                 }
                 else
                 {
-
                     var relativePath = RiaProjectDir().RelativePathTo(value.FullName);
                     _riaProject.AsMSBuildProject().SetProperty(LinkedPropertyName, relativePath);
                 }
-
             }
         }
 
@@ -75,32 +69,70 @@ namespace OpenRiaServices.VisualStudio.Installer
         {
             get
             {
-                ProjectProperty disableFastUpToDateCheck = this.GetDisableFastUpToDateCheck(this._riaProject);
-                if (disableFastUpToDateCheck == null)
-                {
-                    return null;
-                }
-                return new bool?(disableFastUpToDateCheck.EvaluatedValue == "true");
+                return GetBooleanProperty(DisableFastUpToDateCheckPropertyName);
             }
             set
             {
-                if (!value.HasValue || !value.Value)
-                {
-                    ProjectProperty disableFastUpToDateCheck = this.GetDisableFastUpToDateCheck(this._riaProject.AsMSBuildProject());
-                    if (disableFastUpToDateCheck != null)
-                    {
-                        this._riaProject.AsMSBuildProject().RemoveProperty(disableFastUpToDateCheck);
-                    }
-                }
-                else
-                {
-                    this._riaProject.AsMSBuildProject().SetProperty("DisableFastUpToDateCheck", "true");
-                }
+                SetBooleanProperty(DisableFastUpToDateCheckPropertyName, value);
             }
         }
 
+        public bool? OpenRiaGenerateApplicationContext
+        {
+            get
+            {
+                return GetBooleanProperty(OpenRiaGenerateApplicationContextPropertyName);
+            }
+            set
+            {
+                SetBooleanProperty(OpenRiaGenerateApplicationContextPropertyName, value);
+            }
+        }
 
+        public bool? OpenRiaClientUseFullTypeNames
+        {
+            get
+            {
+                return GetBooleanProperty(nameof(OpenRiaClientUseFullTypeNames));
+            }
+            set
+            {
+                SetBooleanProperty(nameof(OpenRiaClientUseFullTypeNames), value);
+            }
+        }
 
+        private bool? GetBooleanProperty(string name)
+        {
+            var project = this._riaProject.AsMSBuildProject();
+            ProjectProperty projectProperty = project.GetProperty(name);
+            if (projectProperty == null)
+            {
+                return null;
+            }
+            return new bool?(projectProperty.EvaluatedValue == "true");
+        }
+
+        private void SetBooleanProperty(string name, bool? value)
+        {
+            var project = this._riaProject.AsMSBuildProject();
+
+            if (value == null)
+            {
+                ProjectProperty projectProperty = project.GetProperty(name);
+                if (projectProperty != null)
+                {
+                    project.RemoveProperty(projectProperty);
+                }
+            }
+            else if (value == false)
+            {
+                project.SetProperty(name, "false");
+            }
+            else
+            {
+                project.SetProperty(name, "true");
+            }
+        }
 
         private static Project FindProjectFromLocation(IEnumerable<Project> projects, string absoluteLocation)
         {
@@ -108,24 +140,11 @@ namespace OpenRiaServices.VisualStudio.Installer
                 .FirstOrDefault(p => Path.GetFullPath(absoluteLocation) == Path.GetFullPath(p.FullName));
         }
 
-        private ProjectProperty GetDisableFastUpToDateCheck(Project p)
-        {
-            return p.AsMSBuildProject().GetProperty(DisableFastUpToDateCheckPropertyName);
-
-
-        }
-
         private ProjectProperty GetLinkedProperty(Project p)
         {
             return p.AsMSBuildProject().GetProperty(LinkedPropertyName);
-   
-
         }
 
-        private ProjectProperty GetDisableFastUpToDateCheck(Microsoft.Build.Evaluation.Project p)
-        {
-            return p.GetProperty(DisableFastUpToDateCheckPropertyName);
-        }
         private ProjectProperty GetLinkedProperty(Microsoft.Build.Evaluation.Project p)
         {
             return p.GetProperty(LinkedPropertyName);
@@ -137,8 +156,5 @@ namespace OpenRiaServices.VisualStudio.Installer
             var riaProjectDir = Path.GetDirectoryName(riaProjectLocation);
             return riaProjectDir;
         }
-
-
-
     }
 }

@@ -6,7 +6,7 @@
     <ProjectType>CSharp</ProjectType>
     <TemplateGroupID>Silverlight</TemplateGroupID>
     <TemplateID>Microsoft.Silverlight.CSharp.RIAServicesLibrary</TemplateID>
-    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>RIAServicesLibrary</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
@@ -30,12 +30,12 @@
   </WizardExtension>
   <WizardData>
     <packages repository="extension"
-          repositoryId="OpenRiaServices.Tools.Outercurve.83014b5f-3f89-4eff-a7fa-b5ec62657247">
+          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
         <package id="OpenRiaServices.Silverlight" version = "4.3.0.0"/>
     </packages>
   </WizardData>
   <WizardExtension>
-    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.12.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
     <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.RiaServicesLibraryWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>
