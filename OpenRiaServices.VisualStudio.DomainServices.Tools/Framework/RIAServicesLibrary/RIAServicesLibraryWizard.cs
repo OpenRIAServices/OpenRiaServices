@@ -49,7 +49,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             ProjectItem projectItem = this._slClassLibProject.ParentProjectItem;
             ProjectItems projectItems = projectItem == null ? null : projectItem.Collection;
             Project parentProject = projectItems == null ? null : projectItems.Parent as Project;
-            SolutionFolder slProjectParentSolutionFolder = (parentProject != null && parentProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+            SolutionFolder slProjectParentSolutionFolder = (parentProject != null 
+                && parentProject.Object is SolutionFolder)
                                                             ? parentProject.Object as SolutionFolder
                                                             : null;
 
@@ -148,7 +149,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             {
             }
             Project activeProject = projects == null ? null : projects.OfType<Project>().FirstOrDefault();
-            if (activeProject != null && activeProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+            if (activeProject != null && activeProject
+                .Object is SolutionFolder)
             {
                 this._activeSolutionFolder = activeProject.Object as SolutionFolder;
                 System.Diagnostics.Debug.Assert(this._activeSolutionFolder != null, "Failed to cast dynamic oject to SolutionFolder");

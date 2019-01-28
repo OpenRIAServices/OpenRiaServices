@@ -351,7 +351,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         this._businessLogicModel =
                             (IBusinessLogicModel) ClientBuildManager.CreateObject(typeof (BusinessLogicModel), false);
                     }
-                    catch (HttpException ex)
+                    catch (HttpException)
                     {
                         MessageBox.Show(
                             "Visual Studio returned an HttpException. This may indicate that you are missing the httpRuntime is missing from the web.config. For more details, go to http://bit.ly/1jeC1LT");
