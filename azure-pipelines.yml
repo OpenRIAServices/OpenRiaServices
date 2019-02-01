@@ -1,8 +1,7 @@
 queue:
 
-  name: Hosted
-  demands: 
-  - DotNetFramework
+  name: Hosted 2017
+  demands:
   - msbuild
   - visualstudio
   - vstest
@@ -15,24 +14,43 @@ variables:
 
 steps:
 
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.9.2'
+  inputs:
+    versionSpec: 4.9.2
+    
 - task: gittools.gitversion.gitversion-task.GitVersion@4
   displayName: GitVersion
   inputs:
     preferBundledVersion: true
 
-- task: NuGetInstaller@0
-  displayName: 'NuGet restore RiaServices.sln'
-  inputs:
-    solution: '$(Solution)'
-    nuGetVersion: 3.5.0.1829
-
 - powershell: |
-   sqllocaldb start MSSQLLocalDB
-   if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
+   [string]$RepositoryRoot = "$(Build.SourcesDirectory)"
    
-   .\Setup-TestDatabases.ps1
+   $url = "https://download.microsoft.com/download/3/A/3/3A35179D-5C87-4D0A-91EB-BF5FEDC601A4/sdk/silverlight_sdk.exe"
+   $fileName = "silverlight_5_sdk.exe"
+   $fullPath = (join-path $RepositoryRoot $fileName)
+   
+   if (Test-Path $fullPath)
+   {
+     echo "'$fileName' already downloading, reusing it"
+   }
+   else
+   {
+     echo "Downloading Silverlight sdk"
+     Measure-Command {  (New-Object System.Net.WebClient).DownloadFile($url, $fullPath) }
+     echo "Downloaded Silverlight sdk"
+   }
+   
+   dir $fullPath
+   echo "Installing Silverlight 5 SDK"
+   "executing $fullPath /q  /norestart"
+   
+   & $fullPath "/q"  "/norestart"
+   
+   echo "Success  = '$?'"
 
-  displayName: 'Setup Test Databases'
+  displayName: 'Download and install Silverlight 5 SDK'
   
 - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
@@ -53,13 +71,15 @@ steps:
   displayName: 'Build solution RiaServices.sln'
   inputs:
     solution: '$(Solution)'
-    vsVersion: '14.0'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     maximumCpuCount: true
 
 - powershell: |
-   # Write your powershell commands here.
+   sqllocaldb start MSSQLLocalDB
+   if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
+   
+   .\Setup-TestDatabases.ps1
    
    $port = 60002
    $iisExpressExe = "c:\Program Files (x86)\IIS Express\iisexpress.exe"
@@ -70,18 +90,17 @@ steps:
    $command = """$iisExpressExe"" $params"
    cmd /c start cmd /k "$command"
  
-  displayName: 'Start test webserver'
+  displayName: 'Setup database and Start test webserver'
 
 - task: VSTest@2
-  displayName: 'Test Assemblies **\$(BuildConfiguration)\*test*.dll;-:**\obj\**'
+  displayName: 'Run tests'
   inputs:
     testAssemblyVer2: |
-     **\*test*.dll
+     **\bin\**\OpenRiaServices.DomainServices.*Test.dll
      !**\obj\**
-     !**\Silverlight\**
+     !**\sl5\**
 
     runOnlyImpactedTests: false
-    vsTestVersion: '14.0'
     runInParallel: true
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
