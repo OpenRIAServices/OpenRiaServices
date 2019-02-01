@@ -61,5 +61,12 @@
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj" />
     <ProjectReference Include="..\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
   </ItemGroup>
-
+  
+  <!-- Copy xap file to both websites-->
+  <Target Name="CopyXapToWebProjects" AfterTargets="XapPackager" Inputs="$(XapOutputFile)" Outputs="..\WebsiteFullTrust\ClientBin\$(XapFileName);..\Website\ClientBin\$(XapFileName)">
+    <Copy SourceFiles="$(XapOutputFile)" DestinationFolder="$(MSBuildThisFileDirectory)..\WebsiteFullTrust\ClientBin\">
+    </Copy>
+    <Copy SourceFiles="$(XapOutputFile)" DestinationFolder="$(MSBuildThisFileDirectory)..\Website\ClientBin\">
+    </Copy>
+  </Target>
 </Project>
