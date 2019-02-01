@@ -5,6 +5,9 @@
     <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
     <IsTestProject Condition="'$(IsTestProject)' == ''">false</IsTestProject>
 
+    <!-- Use csharp 7.3 for all projects -->
+    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">7.3</LangVersion>
+
     <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/OpenRIAServices/OpenRiaServices/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
@@ -17,6 +20,7 @@
     <DebugType>pdbonly</DebugType>
     <DebugType Condition=" '$(TargetFramework)' == 'netstandard2.0' ">portable</DebugType>
     <!-- Condition=" " -->
+    
   </PropertyGroup>
   
  <PropertyGroup Condition="'$(Configuration)' == 'Signed'">
