@@ -51,6 +51,11 @@ steps:
    echo "Success  = '$?'"
 
   displayName: 'Download and install Silverlight 5 SDK'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore RiaServices.sln'
+  inputs:
+    restoreSolution: '$(Solutiaon)'
   
 - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
