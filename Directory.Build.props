@@ -3,10 +3,15 @@
   <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
   <PropertyGroup>
     <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
-    <IsTestProject Condition="'$(IsTestProject)' == ''">false</IsTestProject>
+    <IsFrameworkProject Condition="'$(IsFrameworkProject)' == '' And $(MSBuildProjectDirectory.Contains('\Framework\'))">true</IsFrameworkProject>
+
+    <Configurations>Debug;Release;Signed</Configurations>
 
     <!-- Use csharp 7.3 for all projects -->
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">7.3</LangVersion>
+   
+    <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
+    <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
 
     <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/OpenRIAServices/OpenRiaServices/blob/master/LICENSE</PackageLicenseUrl>
@@ -34,7 +39,7 @@
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  
+
   <!-- Add Silverlight build support -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' ">
     <NugetTargetMoniker>Silverlight,Version=v5.0</NugetTargetMoniker>
@@ -51,7 +56,7 @@
     <LanguageTargets>$(MSBuildProgramFiles32)\MSBuild\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.VisualBasic.targets</LanguageTargets>
     <DefineConstants>$(DefineConstants),SILVERLIGHT=1</DefineConstants>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
     <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -59,7 +64,7 @@
     <NugetTargetMoniker>.NETPortable,Version=v0.0,Profile=Profile47</NugetTargetMoniker>
     <DefineConstants>$(DefineConstants);PORTABLE;PORTABLE47;SILVERLIGHT</DefineConstants>
   </PropertyGroup>
-    
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'sl5' ">
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -70,7 +75,7 @@
       <HintPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.DataAnnotations.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -79,4 +84,5 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
   </ItemGroup>
+  
 </Project>
