@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>OpenRiaServices.DomainServices.Tools.Test.T4Generator</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Tools.Test.T4Generator</AssemblyName>

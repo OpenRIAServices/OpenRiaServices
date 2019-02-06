@@ -3,7 +3,7 @@
   <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
   <PropertyGroup>
     <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
-    <IsFrameworkProject Condition="'$(IsFrameworkProject)' == '' And $(MSBuildProjectDirectory.Contains('\Framework\'))">true</IsFrameworkProject>
+    <IsFrameworkProject Condition="'$(IsTestProject)' != 'true'">true</IsFrameworkProject>
 
     <Configurations>Debug;Release;Signed</Configurations>
 
@@ -11,10 +11,11 @@
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">7.3</LangVersion>
    
     <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
+
+    <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputPath>
     <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
 
     <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/OpenRIAServices/OpenRiaServices/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 

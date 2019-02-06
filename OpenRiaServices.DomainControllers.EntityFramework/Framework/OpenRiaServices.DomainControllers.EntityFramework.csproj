@@ -3,7 +3,6 @@
     <TargetFramework>net451</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);ASPNETMVC;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\$(Configuration)\OpenRiaServices.DomainControllers.EntityFramework.xml</DocumentationFile>
     <RunCodeAnalysis>$(CodeAnalysis)</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>

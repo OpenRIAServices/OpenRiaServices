@@ -2,8 +2,6 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.xml</DocumentationFile>
     <TargetFramework>net45</TargetFramework>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>

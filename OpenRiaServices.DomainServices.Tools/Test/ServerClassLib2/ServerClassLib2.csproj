@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net45</TargetFramework>
     <DebugType>pdbonly</DebugType>

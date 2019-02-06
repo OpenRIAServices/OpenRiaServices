@@ -3,9 +3,7 @@
     <TargetFramework>net451</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>1591</NoWarn>
-    <DefineConstants>$(DefineConstants);ASPNETMVC</DefineConstants>
-    <DocumentationFile>..\..\bin\$(Configuration)\OpenRiaServices.DomainControllers.Server.xml</DocumentationFile>
-  </PropertyGroup>
+    <DefineConstants>$(DefineConstants);ASPNETMVC</DefineConstants>  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.1.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.1.2" />

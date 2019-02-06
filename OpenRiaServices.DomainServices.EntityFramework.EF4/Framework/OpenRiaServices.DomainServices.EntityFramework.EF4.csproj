@@ -4,8 +4,6 @@
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
     <RootNamespace>OpenRiaServices.DomainServices.EntityFramework</RootNamespace>
     <TargetFramework>net45</TargetFramework>
-    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
     <RootNamespace>CodeFirstModels</RootNamespace>

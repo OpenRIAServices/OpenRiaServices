@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>sl5</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <DefineConstants>TRACE;DEBUG;SILVERLIGHT;VBTests</DefineConstants>
     <NoWarn>108</NoWarn>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>

@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFrameworks>sl5</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>

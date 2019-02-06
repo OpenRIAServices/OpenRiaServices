@@ -4,8 +4,6 @@
     <TargetFramework>net45</TargetFramework>
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <RootNamespace>OpenRiaServices.DomainServices.Hosting</RootNamespace>
-    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Hosting.Endpoint.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />

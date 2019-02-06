@@ -3,8 +3,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>SERVERFX;LINQTOSQL;$(DefineConstants)</DefineConstants>
     <TargetFramework>net45</TargetFramework>
-    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.LinqToSql.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

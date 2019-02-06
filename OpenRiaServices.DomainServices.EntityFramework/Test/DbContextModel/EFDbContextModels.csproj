@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
     <RootNamespace>DbContextModels</RootNamespace>
     <AssemblyName>DbContextModels</AssemblyName>
     <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
-  <Target Name="WriteProjectPath">
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
     <Message Text="Writing project path" />
     <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
   </Target>

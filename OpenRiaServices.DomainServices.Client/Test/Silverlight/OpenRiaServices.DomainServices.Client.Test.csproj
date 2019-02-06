@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>sl5</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <SonarQubeTestProject>True</SonarQubeTestProject>
     <NoWarn>108</NoWarn>
   </PropertyGroup>
 

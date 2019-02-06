@@ -3,7 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
-  <Target Name="WriteProjectPath">
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
     <Message Text="Writing project path" />
     <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
   </Target>
