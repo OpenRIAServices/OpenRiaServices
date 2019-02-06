@@ -24,9 +24,9 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.dll" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.dll" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.pdb" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.pdb" />
-    <file src="..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.EntityFramework.EF4.xml" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.xml" />
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.dll" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.dll" />
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.pdb" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.pdb" />
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.xml" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.xml" />
     
   </files>
 </package>

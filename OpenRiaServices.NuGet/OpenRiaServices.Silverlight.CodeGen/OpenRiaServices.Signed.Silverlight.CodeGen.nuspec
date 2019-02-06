@@ -22,7 +22,7 @@
     </metadata>
     <files>
       <file src="build\OpenRiaServices.Silverlight.CodeGen.targets" target="build\OpenRiaServices.Signed.Silverlight.CodeGen.targets"/>
-      <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
-      <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
+      <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
+      <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
 </package>

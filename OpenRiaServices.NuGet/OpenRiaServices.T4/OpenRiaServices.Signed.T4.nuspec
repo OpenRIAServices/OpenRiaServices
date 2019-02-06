@@ -20,11 +20,11 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" target="lib\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" target="lib\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.TextTemplate.xml" target="lib\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.xml" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="lib\net45\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.pdb" target="lib\net45\OpenRiaServices.DomainServices.Tools.pdb" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.xml" target="lib\net45\OpenRiaServices.DomainServices.Tools.xml" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" target="lib\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" target="lib\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.pdb" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.xml" target="lib\net45\OpenRiaServices.DomainServices.Tools.TextTemplate.xml" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.dll" target="lib\net45\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.pdb" target="lib\net45\OpenRiaServices.DomainServices.Tools.pdb" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.xml" target="lib\net45\OpenRiaServices.DomainServices.Tools.xml" />
   </files>
 </package>

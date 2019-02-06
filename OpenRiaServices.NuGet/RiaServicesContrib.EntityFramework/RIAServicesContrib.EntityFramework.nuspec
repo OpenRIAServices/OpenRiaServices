@@ -26,7 +26,7 @@ We are not currently creating the web.config file that the original Microsoft ve
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Release\v4.0\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net40\RiaServicesContrib.DomainServices.EntityFramework.dll" />
-    <file src="..\..\bin\Release\v4.5\Desktop\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net45\RiaServicesContrib.DomainServices.EntityFramework.dll" />
+    <file src="..\..\bin\Release\v4.0\net45\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net40\RiaServicesContrib.DomainServices.EntityFramework.dll" />
+    <file src="..\..\bin\Release\v4.5\net45\RiaServicesContrib.DomainServices.EntityFramework.dll" target="lib\Net45\RiaServicesContrib.DomainServices.EntityFramework.dll" />
   </files>
 </package>

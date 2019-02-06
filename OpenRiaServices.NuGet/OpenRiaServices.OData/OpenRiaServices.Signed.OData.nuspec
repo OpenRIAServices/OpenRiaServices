@@ -28,8 +28,8 @@
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.OData.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.OData.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.OData.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.OData.pdb" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.OData.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.OData.xml" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.OData.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.OData.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.OData.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.OData.pdb" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.OData.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.OData.xml" />
   </files>
 </package>

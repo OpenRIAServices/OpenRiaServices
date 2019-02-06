@@ -23,8 +23,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.dll" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.pdb" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.pdb" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.LinqToSql.xml" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.xml" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.LinqToSql.dll" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.LinqToSql.pdb" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.pdb" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.LinqToSql.xml" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.xml" />
   </files>
 </package>

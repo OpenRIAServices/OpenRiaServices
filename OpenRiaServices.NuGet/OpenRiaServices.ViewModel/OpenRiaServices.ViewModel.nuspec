@@ -20,8 +20,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Data.DomainServices.dll" target="lib\sl50\OpenRiaServices.Data.DomainServices.dll" />
-    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Data.DomainServices.pdb" target="lib\sl50\OpenRiaServices.Data.DomainServices.pdb" />
-    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Data.DomainServices.xml" target="lib\sl50\OpenRiaServices.Data.DomainServices.xml" />
+    <file src="..\..\bin\Release\sl5\OpenRiaServices.Data.DomainServices.dll" target="lib\sl50\OpenRiaServices.Data.DomainServices.dll" />
+    <file src="..\..\bin\Release\sl5\OpenRiaServices.Data.DomainServices.pdb" target="lib\sl50\OpenRiaServices.Data.DomainServices.pdb" />
+    <file src="..\..\bin\Release\sl5\OpenRiaServices.Data.DomainServices.xml" target="lib\sl50\OpenRiaServices.Data.DomainServices.xml" />
   </files>
 </package>
