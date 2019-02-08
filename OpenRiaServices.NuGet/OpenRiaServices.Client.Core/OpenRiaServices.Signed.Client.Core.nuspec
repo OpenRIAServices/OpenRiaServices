@@ -20,15 +20,8 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5" />
       <group targetFramework=".NETPortable4.0-Profile47" />
-      <group targetFramework=".NETStandard1.3">
-        <dependency id="NETStandard.Library" version="1.6.0" />
-        <dependency id="System.ComponentModel.Annotations" version="4.3.0" />
-        <dependency id="System.ComponentModel.Primitives" version="4.3.0" />
-        <dependency id="System.Linq.Queryable" version="4.3.0" />
-        <dependency id="System.Reflection.TypeExtensions" version="4.3.0" />
-        <dependency id="System.Runtime.Serialization.Formatters" version="4.3.0" />
-        <dependency id="System.Runtime.Serialization.Primitives" version="4.3.0" />
-        <dependency id="System.Security.Principal" version="4.3.0" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
       </group>
       <group targetFramework="Silverlight5.0" />
     </dependencies>
