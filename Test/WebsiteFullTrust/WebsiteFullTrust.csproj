@@ -151,8 +151,9 @@
       <Name>OpenRiaServices.Common.DomainServices.Test</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="ClientBin\" />
+    <Content Include="ClientBin\System.Test.xap" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
