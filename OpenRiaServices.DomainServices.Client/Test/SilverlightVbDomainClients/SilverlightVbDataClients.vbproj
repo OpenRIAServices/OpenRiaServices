@@ -40,7 +40,7 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.vb" Link="DomainClients\Test.shared.vb" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj" />
-    <ProjectReference Include="..\..\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj" />
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
 </Project>

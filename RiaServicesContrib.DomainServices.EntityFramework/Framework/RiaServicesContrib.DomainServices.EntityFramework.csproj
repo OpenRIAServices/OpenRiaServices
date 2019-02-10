@@ -137,7 +137,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">
       <Link>ExceptionHandlingUtility.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\AssociationInfo.cs">

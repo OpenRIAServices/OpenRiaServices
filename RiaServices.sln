@@ -108,9 +108,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainContr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainControllers.EntityFramework", "OpenRiaServices.DomainControllers.EntityFramework\Framework\OpenRiaServices.DomainControllers.EntityFramework.csproj", "{653F3946-541C-42D3-BBC1-CE89B392BDA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj", "{687A8B88-6B00-4807-B889-C682CC381A27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj", "{687A8B88-6B00-4807-B889-C682CC381A27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj", "{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj", "{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Controls.DomainServices", "OpenRiaServices.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj", "{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}"
 EndProject

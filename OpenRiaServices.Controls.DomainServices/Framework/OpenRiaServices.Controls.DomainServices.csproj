@@ -23,17 +23,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs">
       <Link>Common\BinaryTypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs">
       <Link>Common\TypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">
       <Link>Common\ExceptionHandlingUtility.cs</Link>
     </Compile>
   </ItemGroup>

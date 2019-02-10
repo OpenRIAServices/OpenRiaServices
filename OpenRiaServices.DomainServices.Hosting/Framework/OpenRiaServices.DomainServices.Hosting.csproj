@@ -17,17 +17,17 @@
     <Reference Include="system" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\Behaviors\MessageUtility.cs" Link="Services\Behaviors\MessageUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs" Link="Linq\BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs" Link="Linq\TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs" Link="Services\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\Behaviors\MessageUtility.cs" Link="Services\Behaviors\MessageUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="Linq\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="Linq\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Services\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Services\DynamicMethodUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\MetaType.cs" Link="Services\MetaType.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\QueryResult.cs" Link="Services\QueryResult.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\ServiceQuery.cs" Link="Services\ServiceQuery.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\QueryResult.cs" Link="Services\QueryResult.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\ServiceQuery.cs" Link="Services\ServiceQuery.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
     <Compile Update="Services\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

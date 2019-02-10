@@ -24,11 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\WeakCollectionChangedListener.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\WeakCollectionChangedListener.cs">
       <Link>WeakCollectionChangedListener.cs</Link>
     </Compile>
     <Compile Update="Resources.Designer.cs">

@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs" />
-    <Compile Include="..\Silverlight\**\*.cs" Exclude="..\Silverlight\obj\**\*.cs;..\Silverlight\bin\**\*.cs" />
-    <EmbeddedResource Include="..\Silverlight\**\*.resx" Exclude="..\Silverlight\obj\**\*.resx;..\Silverlight\bin\**\*.resx" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">

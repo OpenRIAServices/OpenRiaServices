@@ -41,35 +41,31 @@
     <Reference Include="System.Web" />
   </ItemGroup>
 
+
   <ItemGroup>
-    <Compile Include="..\Silverlight\**\*.cs" Exclude="..\Silverlight\obj\**\*.cs;..\Silverlight\bin\**\*.cs"/>
-    <EmbeddedResource Include="..\Silverlight\**\*.resx" Exclude="..\Silverlight\obj\**\*.resx;..\Silverlight\bin\**\*.resx"/>
+    <Compile Remove="Data\ServiceQuery.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="..\Silverlight\Data\ServiceQuery.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\AsyncResultBase.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\AsyncResultBase.cs">
       <Link>AsyncResultBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs">
       <Link>Data\BinaryTypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\DomainClientAsyncResult.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\DomainClientAsyncResult.cs">
       <Link>Data\DomainClientAsyncResult.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs">
       <Link>Data\TypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">
       <Link>Data\ExceptionHandlingUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
       <Link>Data\Behaviors\WebHttpQueryStringConverter.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs">
       <Link>Data\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs</Link>
     </Compile>
   </ItemGroup>
@@ -79,14 +75,14 @@
     <Compile Remove="Data\Behaviors\MessageUtility.cs" />
     <Compile Remove="Data\WebDomainClientFactory.cs" />
     <Compile Remove="Data\Behaviors\WebDomainClientWebHttpBehavior.cs" />
-    <Compile Remove="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs" />
-    <Compile Remove="..\..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs" />
+    <Compile Remove="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs" />
+    <Compile Remove="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Silverlight\Data\ServiceQuery.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
  
 </Project>

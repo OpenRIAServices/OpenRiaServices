@@ -65,8 +65,8 @@
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\CodeDomVisitor.cs" Link="DomainServiceWizard\CodeDomVisitor.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\DbContextUtilities.cs" Link="DomainServiceWizard\DbContextUtilities.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs" Link="DomainServiceWizard\TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="DomainServiceWizard\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.Designer.cs" Link="MetadataResource.Designer.cs">
       <DependentUpon>MetadataResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>

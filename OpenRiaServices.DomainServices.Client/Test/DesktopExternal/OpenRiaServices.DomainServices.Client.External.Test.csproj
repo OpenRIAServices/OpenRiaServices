@@ -39,8 +39,8 @@
     <Compile Include="..\SilverlightExternal\EntityTests.cs" Link="EntityTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj" />
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj" />
   </ItemGroup>
 </Project>

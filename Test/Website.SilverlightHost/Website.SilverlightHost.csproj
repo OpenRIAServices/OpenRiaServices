@@ -51,8 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <!--<ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Test\Desktop\OpenRiaServices.DomainServices.Client.Web.Test.csproj" />-->
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\DesktopExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Controls.DomainServices\Test\OpenRiaServices.Controls.DomainServices.Test.csproj" />

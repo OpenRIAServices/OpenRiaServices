@@ -161,10 +161,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj">
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj">
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
   </ItemGroup>
