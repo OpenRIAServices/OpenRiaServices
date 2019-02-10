@@ -1,7 +1,7 @@
 # OpenRiaServiecs
 
-Azure Pipelines: [![Build status](https://svensson-daniel.visualstudio.com/OpenRiaServices/_apis/build/status/OpenRiaServices-github?branchName=master)](https://svensson-daniel.visualstudio.com/OpenRiaServices/_build?definitionId=11)
-[![Tests](https://img.shields.io/azure-devops/tests/svensson-daniel/OpenRiaServices/11/master.svg)](https://svensson-daniel.visualstudio.com/OpenRiaServices/_build?definitionId=11)
+Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=master)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
+[![Tests](https://img.shields.io/azure-devops/tests/OpenRiaServices/OpenRiaServices/1/master.svg)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
 
 Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
 
