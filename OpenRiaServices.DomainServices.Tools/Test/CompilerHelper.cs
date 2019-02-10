@@ -237,7 +237,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string projectDir = Path.GetDirectoryName(projectPath);
 
             // Folder of project we want to build
-            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop"));
+            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.DomainServices.Client.Web\Framework"));
 
             string projectOutputDir = Path.Combine(testProjectDir, outputPath);
             string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.DomainServices.Client.Web.csproj");
