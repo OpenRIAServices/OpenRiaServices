@@ -138,12 +138,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         // prefix and compare only the real parts of the code
         private static string StripAutoGenPrefix(string s, string lineCommentStart)
         {
-            while (s.StartsWith(lineCommentStart))
+            int index = 0;
+            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length) == 0)
             {
-                int crlfPos = s.IndexOf("\r\n");
-                s = s.Substring(crlfPos + 2);
+                index = s.IndexOf("\r\n", index) + 2;
             }
-            return s;
+            return s.Substring(index);
         }
 
         // Returns the full path to a deployment item file
