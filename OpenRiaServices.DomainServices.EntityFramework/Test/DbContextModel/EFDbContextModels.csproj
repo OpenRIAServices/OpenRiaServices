@@ -1,435 +1,302 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build;WriteProjectPath" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-    <SonarQubeTestProject>True</SonarQubeTestProject>
-  </PropertyGroup>
-  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DebugNet40\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <NoWarn>618</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
-    <OutputPath>bin\ReleaseNet40\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
-    <OutputPath>bin\MyGet40\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>618</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DbContextModels</RootNamespace>
     <AssemblyName>DbContextModels</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;CODECOV</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
+    <Message Text="Writing project path" />
+    <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
+  </Target>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Engine" />
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Tasks.v4.0" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdventureWorks\Address.cs">
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="AdventureWorks\Address.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\AddressType.cs">
+    <Compile Update="AdventureWorks\AddressType.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\AdventureWorksDbCtx.Context.cs">
+    <Compile Update="AdventureWorks\AdventureWorksDbCtx.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorksDbCtx.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\AdventureWorksDbCtx.cs">
+    <Compile Update="AdventureWorks\AdventureWorksDbCtx.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\AdventureWorksDbCtx.Designer.cs">
+    <Compile Update="AdventureWorks\AdventureWorksDbCtx.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorksDbCtx.edmx</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\AdventureWorksPartialClasses.cs" />
-    <Compile Include="AdventureWorks\AWBuildVersion.cs">
+    <Compile Update="AdventureWorks\AWBuildVersion.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\BillOfMaterial.cs">
+    <Compile Update="AdventureWorks\BillOfMaterial.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Contact.cs">
+    <Compile Update="AdventureWorks\Contact.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ContactCreditCard.cs">
+    <Compile Update="AdventureWorks\ContactCreditCard.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ContactType.cs">
+    <Compile Update="AdventureWorks\ContactType.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\CountryRegion.cs">
+    <Compile Update="AdventureWorks\CountryRegion.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\CountryRegionCurrency.cs">
+    <Compile Update="AdventureWorks\CountryRegionCurrency.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\CreditCard.cs">
+    <Compile Update="AdventureWorks\CreditCard.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Culture.cs">
+    <Compile Update="AdventureWorks\Culture.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Currency.cs">
+    <Compile Update="AdventureWorks\Currency.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\CurrencyRate.cs">
+    <Compile Update="AdventureWorks\CurrencyRate.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Customer.cs">
+    <Compile Update="AdventureWorks\Customer.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\CustomerAddress.cs">
+    <Compile Update="AdventureWorks\CustomerAddress.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\DatabaseLog.cs">
+    <Compile Update="AdventureWorks\DatabaseLog.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Department.cs">
+    <Compile Update="AdventureWorks\Department.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Document.cs">
+    <Compile Update="AdventureWorks\Document.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Employee.cs">
+    <Compile Update="AdventureWorks\Employee.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\EmployeeAddress.cs">
+    <Compile Update="AdventureWorks\EmployeeAddress.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\EmployeeDepartmentHistory.cs">
+    <Compile Update="AdventureWorks\EmployeeDepartmentHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\EmployeePayHistory.cs">
+    <Compile Update="AdventureWorks\EmployeePayHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ErrorLog.cs">
+    <Compile Update="AdventureWorks\ErrorLog.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Illustration.cs">
+    <Compile Update="AdventureWorks\Illustration.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Individual.cs">
+    <Compile Update="AdventureWorks\Individual.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\JobCandidate.cs">
+    <Compile Update="AdventureWorks\JobCandidate.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Location.cs">
+    <Compile Update="AdventureWorks\Location.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Product.cs">
+    <Compile Update="AdventureWorks\Product.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductCategory.cs">
+    <Compile Update="AdventureWorks\ProductCategory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductCostHistory.cs">
+    <Compile Update="AdventureWorks\ProductCostHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductDescription.cs">
+    <Compile Update="AdventureWorks\ProductDescription.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductDocument.cs">
+    <Compile Update="AdventureWorks\ProductDocument.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductInventory.cs">
+    <Compile Update="AdventureWorks\ProductInventory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductListPriceHistory.cs">
+    <Compile Update="AdventureWorks\ProductListPriceHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductModel.cs">
+    <Compile Update="AdventureWorks\ProductModel.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductModelIllustration.cs">
+    <Compile Update="AdventureWorks\ProductModelIllustration.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductModelProductDescriptionCulture.cs">
+    <Compile Update="AdventureWorks\ProductModelProductDescriptionCulture.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductPhoto.cs">
+    <Compile Update="AdventureWorks\ProductPhoto.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductProductPhoto.cs">
+    <Compile Update="AdventureWorks\ProductProductPhoto.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductReview.cs">
+    <Compile Update="AdventureWorks\ProductReview.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductSubcategory.cs">
+    <Compile Update="AdventureWorks\ProductSubcategory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ProductVendor.cs">
+    <Compile Update="AdventureWorks\ProductVendor.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\PurchaseOrder.cs">
+    <Compile Update="AdventureWorks\PurchaseOrder.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\PurchaseOrderDetail.cs">
+    <Compile Update="AdventureWorks\PurchaseOrderDetail.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesOrderDetail.cs">
+    <Compile Update="AdventureWorks\SalesOrderDetail.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesOrderHeader.cs">
+    <Compile Update="AdventureWorks\SalesOrderHeader.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesOrderHeaderSalesReason.cs">
+    <Compile Update="AdventureWorks\SalesOrderHeaderSalesReason.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesPerson.cs">
+    <Compile Update="AdventureWorks\SalesPerson.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesPersonQuotaHistory.cs">
+    <Compile Update="AdventureWorks\SalesPersonQuotaHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesReason.cs">
+    <Compile Update="AdventureWorks\SalesReason.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesTaxRate.cs">
+    <Compile Update="AdventureWorks\SalesTaxRate.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesTerritory.cs">
+    <Compile Update="AdventureWorks\SalesTerritory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SalesTerritoryHistory.cs">
+    <Compile Update="AdventureWorks\SalesTerritoryHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ScrapReason.cs">
+    <Compile Update="AdventureWorks\ScrapReason.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Shift.cs">
+    <Compile Update="AdventureWorks\Shift.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ShipMethod.cs">
+    <Compile Update="AdventureWorks\ShipMethod.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\ShoppingCartItem.cs">
+    <Compile Update="AdventureWorks\ShoppingCartItem.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SpecialOffer.cs">
+    <Compile Update="AdventureWorks\SpecialOffer.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\SpecialOfferProduct.cs">
+    <Compile Update="AdventureWorks\SpecialOfferProduct.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\StateProvince.cs">
+    <Compile Update="AdventureWorks\StateProvince.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Store.cs">
+    <Compile Update="AdventureWorks\Store.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\StoreContact.cs">
+    <Compile Update="AdventureWorks\StoreContact.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\sysdiagram.cs">
+    <Compile Update="AdventureWorks\sysdiagram.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\TransactionHistory.cs">
+    <Compile Update="AdventureWorks\TransactionHistory.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\TransactionHistoryArchive.cs">
+    <Compile Update="AdventureWorks\TransactionHistoryArchive.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\UnitMeasure.cs">
+    <Compile Update="AdventureWorks\UnitMeasure.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\Vendor.cs">
+    <Compile Update="AdventureWorks\Vendor.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\VendorAddress.cs">
+    <Compile Update="AdventureWorks\VendorAddress.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\VendorContact.cs">
+    <Compile Update="AdventureWorks\VendorContact.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\WorkOrder.cs">
+    <Compile Update="AdventureWorks\WorkOrder.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="AdventureWorks\WorkOrderRouting.cs">
+    <Compile Update="AdventureWorks\WorkOrderRouting.cs">
       <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Category.cs">
+    <Compile Update="Northwind\Category.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Customer.cs">
+    <Compile Update="Northwind\Customer.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\CustomerDemographic.cs">
+    <Compile Update="Northwind\CustomerDemographic.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Employee.cs">
+    <Compile Update="Northwind\Employee.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\NorthwindDbCtx.Designer.cs">
+    <Compile Update="Northwind\NorthwindDbCtx.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>NorthwindDbCtx.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\NorthwindPartialClasses.cs" />
-    <Compile Include="Northwind\NorthwindEntities.Context.cs">
+    <Compile Update="Northwind\NorthwindEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>NorthwindEntities.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\NorthwindEntities.cs">
+    <Compile Update="Northwind\NorthwindEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Order.cs">
+    <Compile Update="Northwind\Order.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Order_Detail.cs">
+    <Compile Update="Northwind\Order_Detail.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Product.cs">
+    <Compile Update="Northwind\Product.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Region.cs">
+    <Compile Update="Northwind\Region.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Shipper.cs">
+    <Compile Update="Northwind\Shipper.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Supplier.cs">
+    <Compile Update="Northwind\Supplier.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind\Territory.cs">
+    <Compile Update="Northwind\Territory.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
-      <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>OpenRiaServices.DomainServices.Tools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Test\ServerClassLib\ServerClassLib.csproj">
-      <Project>{FE9777B2-ED24-4464-9D35-42A628B00EF7}</Project>
-      <Name>ServerClassLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj">
-      <Project>{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}</Project>
-      <Name>T4ClientCodeGenerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
-      <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Northwind\NorthwindDbCtx.edmx">
@@ -460,18 +327,8 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>NorthwindEntities.cs</LastGenOutput>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
-  <Target Name="WriteProjectPath">
-    <Message Text="Writing project path" />
-    <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
-  </Target>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+  </ItemGroup>
 </Project>

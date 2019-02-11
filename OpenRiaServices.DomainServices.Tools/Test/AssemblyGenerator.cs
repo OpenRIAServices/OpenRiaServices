@@ -361,8 +361,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
 
             MemoryStream generatedAssembly = CompileSource();
-
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
+
             Assembly assy = null;
             Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>();
 

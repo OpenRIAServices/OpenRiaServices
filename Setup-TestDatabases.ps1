@@ -12,7 +12,7 @@ if (-not $UseSqlCmd)
 		Get-PackageProvider -Name NuGet -Force
 		# Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
 		# Installs SQL Module
-		Install-Module -Name SqlServer -Force -Scope CurrentUser
+		Install-Module -Name SqlServer -AllowClobber -Force -Scope CurrentUser
 	}
 	
 	# Check if module is loaded and if not import it

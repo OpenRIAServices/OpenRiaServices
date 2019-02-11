@@ -1,170 +1,130 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26510.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{4449F469-F1E9-4241-A444-B2BBAC7667EC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{2095B11C-903C-47FF-B812-82DFA7A068AC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{2095B11C-903C-47FF-B812-82DFA7A068AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{E8CAC11B-50B6-4243-A12A-D831EBB064CB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{8D64085D-DABC-4228-85E3-F337DFA7D55E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E2A65FE6-AFA6-4742-A839-3DFF47893599}"
-	ProjectSection(SolutionItems) = preProject
-		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
-		RiaServices.vsmdi = RiaServices.vsmdi
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Input", "Test Input", "{D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53F7B128-2A99-4C85-B990-18CCE502EDCC}"
 	ProjectSection(SolutionItems) = preProject
-		Desktop.vsmdi = Desktop.vsmdi
+		Directory.Build.props = Directory.Build.props
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{0254F915-6CD6-43E8-8639-B925CE5233A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server", "OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server", "OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.EntityFramework.EF4", "OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj", "{20790A5F-1DD7-4D1C-8303-C34256E12C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.EntityFramework.EF4", "OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj", "{20790A5F-1DD7-4D1C-8303-C34256E12C68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools", "OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools", "OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting", "OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting", "OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.Test", "OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj", "{A94B2843-C68E-4548-9168-63469D625932}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.csproj", "{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Test", "OpenRiaServices.DomainServices.Hosting\Test\OpenRiaServices.DomainServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices", "OpenRiaServices.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj", "{174DE0B6-BBA8-43DF-8755-BC8927EB9138}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.Test", "Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj", "{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.Test", "OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj", "{A94B2843-C68E-4548-9168-63469D625932}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Test", "OpenRiaServices.DomainServices.Hosting\Test\OpenRiaServices.DomainServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Silverlight\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{03788A27-145D-4282-8FDC-C336A3BBC471}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.Test", "Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Common.DomainServices.Test", "Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj", "{AA5C3992-1C78-4751-8E1C-421A34FD7E76}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C} = {B15B8171-0EDC-4D96-A126-E086E4F3EA2C}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Silverlight\OpenRiaServices.DomainServices.Client.Test.csproj", "{18708280-F972-487E-A86C-45D518ACF831}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.SilverlightHost", "Test\Website.SilverlightHost\Website.SilverlightHost.csproj", "{8F487386-A11E-4AA8-AB5E-98B294E0328E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FDE9B3AB-B284-46E1-B2C0-98465C227E60} = {FDE9B3AB-B284-46E1-B2C0-98465C227E60}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.DomainServices.Test", "Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj", "{AA5C3992-1C78-4751-8E1C-421A34FD7E76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Test\Website\Website.csproj", "{FDE9B3AB-B284-46E1-B2C0-98465C227E60}"
 	ProjectSection(ProjectDependencies) = postProject
-		{18708280-F972-487E-A86C-45D518ACF831} = {18708280-F972-487E-A86C-45D518ACF831}
 		{7B2AB186-E78E-402A-843F-705D77179E06} = {7B2AB186-E78E-402A-843F-705D77179E06}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj", "{7B2AB186-E78E-402A-843F-705D77179E06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj", "{7B2AB186-E78E-402A-843F-705D77179E06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Controls.DomainServices.Test", "OpenRiaServices.Controls.DomainServices\Test\OpenRiaServices.Controls.DomainServices.Test.csproj", "{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Controls.DomainServices.Test", "OpenRiaServices.Controls.DomainServices\Test\OpenRiaServices.Controls.DomainServices.Test.csproj", "{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server.Test", "OpenRiaServices.DomainServices.Server\Test\OpenRiaServices.DomainServices.Server.Test.csproj", "{CDEDEFB0-D36F-4367-B611-977099403B60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Test", "OpenRiaServices.DomainServices.Server\Test\OpenRiaServices.DomainServices.Server.Test.csproj", "{CDEDEFB0-D36F-4367-B611-977099403B60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientClassLib", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib\ClientClassLib.csproj", "{3AB9EA3C-D906-4930-AC3D-B4773F929D99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib\ClientClassLib.csproj", "{3AB9EA3C-D906-4930-AC3D-B4773F929D99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClassLib", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib\ServerClassLib.csproj", "{FE9777B2-ED24-4464-9D35-42A628B00EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib\ServerClassLib.csproj", "{FE9777B2-ED24-4464-9D35-42A628B00EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib2\ClientClassLib2.csproj", "{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib2\ClientClassLib2.csproj", "{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SilverlightVbDataClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "SilverlightVbDataClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Test.Vb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test.Vb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Local", "OpenRiaServices.DomainServices.Hosting.Local\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Local", "OpenRiaServices.DomainServices.Hosting.Local\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Local.Test", "OpenRiaServices.DomainServices.Hosting.Local\Test\OpenRiaServices.DomainServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Local.Test", "OpenRiaServices.DomainServices.Hosting.Local\Test\OpenRiaServices.DomainServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.LinqToSql", "OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.LinqToSql", "OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VbExpressions", "OpenRiaServices.DomainServices.Client\Test\VbExpressions\VbExpressions.vbproj", "{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight\OpenRiaServices.DomainServices.Client.Web.csproj", "{6428863A-11FE-48EA-AE51-B2BA5DD29E57}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbExpressions", "OpenRiaServices.DomainServices.Client\Test\VbExpressions\VbExpressions.vbproj", "{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWap", "OpenRiaServices.DomainServices.Tools\Test\TestWap\TestWap.csproj", "{D08C2165-DC46-407B-9CCC-40ED1972F552}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web.Test", "OpenRiaServices.DomainServices.Client.Web\Test\Silverlight\OpenRiaServices.DomainServices.Client.Web.Test.csproj", "{DF732E93-F424-459A-978C-B3A3450C9FAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Endpoint", "OpenRiaServices.DomainServices.Hosting.Endpoint\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj", "{BDB2F9A3-5FC7-45FD-8496-B23752232688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Endpoint.Test", "OpenRiaServices.DomainServices.Hosting.Endpoint\Test\OpenRiaServices.DomainServices.Hosting.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Endpoint", "OpenRiaServices.DomainServices.Hosting.Endpoint\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.Endpoint.Test", "OpenRiaServices.DomainServices.Hosting.Endpoint\Test\OpenRiaServices.DomainServices.Hosting.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFPOCOModels", "Test\Desktop\EFPOCOModels\EFPOCOModels.csproj", "{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFPOCOModels", "Test\Desktop\EFPOCOModels\EFPOCOModels.csproj", "{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteFullTrust", "Test\WebsiteFullTrust\WebsiteFullTrust.csproj", "{FB928CDD-D223-4921-B97D-EB16EEE7D2AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.OData", "OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.OData", "OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Hosting.OData.Test", "OpenRiaServices.DomainServices.Hosting.OData\Test\OpenRiaServices.DomainServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.OData.Test", "OpenRiaServices.DomainServices.Hosting.OData\Test\OpenRiaServices.DomainServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T4ClientCodeGenerator", "OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeLoadExceptionProject", "Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj", "{2265A098-F256-418D-9D11-9FD6561E8D42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeLoadExceptionProject", "Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj", "{2265A098-F256-418D-9D11-9FD6561E8D42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\SilverlightExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\DesktopExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\DesktopExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.TextTemplate", "OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.TextTemplate", "OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.TextTemplate.Test", "OpenRiaServices.DomainServices.Tools.TextTemplate\Test\OpenRiaServices.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Tools.TextTemplate.Test", "OpenRiaServices.DomainServices.Tools.TextTemplate\Test\OpenRiaServices.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A94B2843-C68E-4548-9168-63469D625932} = {A94B2843-C68E-4548-9168-63469D625932}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.EntityFramework", "OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj", "{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Data.DomainServices", "OpenRiaServices.Data.DomainServices\Framework\OpenRiaServices.Data.DomainServices.csproj", "{835586F6-F1F4-4A3F-A24E-795D37143F4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDbContextModels", "OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj", "{A87DF95C-1852-480D-8FDC-4468D4EB738E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.EntityFramework", "OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj", "{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCodeFirstModels", "OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj", "{A94B2843-C68E-4548-9168-63469D625935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDbContextModels", "OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj", "{A87DF95C-1852-480D-8FDC-4468D4EB738E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.UnitTesting", "OpenRiaServices.DomainServices.Server.UnitTesting\Framework\OpenRiaServices.DomainServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCodeFirstModels", "OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj", "{A94B2843-C68E-4548-9168-63469D625935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.VisualStudio.DomainServices.Tools", "OpenRiaServices.VisualStudio.DomainServices.Tools\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj", "{E7D958FE-3D14-4EAD-B810-10471757CC4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Server.UnitTesting", "OpenRiaServices.DomainServices.Server.UnitTesting\Framework\OpenRiaServices.DomainServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.VisualStudio.Interface", "OpenRiaServices.VisualStudio.Interface\OpenRiaServices.VisualStudio.Interface.csproj", "{9CFB422B-2995-4813-831C-2BDC013B68BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Portable\OpenRiaServices.DomainServices.Client.csproj", "{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainControllers.Server", "OpenRiaServices.DomainControllers.Server\Framework\OpenRiaServices.DomainControllers.Server.csproj", "{ACE91549-D86E-4EB6-8C2A-5FF51386BB68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.VisualStudio.DomainServices.Tools", "OpenRiaServices.VisualStudio.DomainServices.Tools\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj", "{E7D958FE-3D14-4EAD-B810-10471757CC4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainControllers.EntityFramework", "OpenRiaServices.DomainControllers.EntityFramework\Framework\OpenRiaServices.DomainControllers.EntityFramework.csproj", "{653F3946-541C-42D3-BBC1-CE89B392BDA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.VisualStudio.Interface", "OpenRiaServices.VisualStudio.Interface\OpenRiaServices.VisualStudio.Interface.csproj", "{9CFB422B-2995-4813-831C-2BDC013B68BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj", "{687A8B88-6B00-4807-B889-C682CC381A27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainControllers.Server", "OpenRiaServices.DomainControllers.Server\Framework\OpenRiaServices.DomainControllers.Server.csproj", "{ACE91549-D86E-4EB6-8C2A-5FF51386BB68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj", "{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainControllers.EntityFramework", "OpenRiaServices.DomainControllers.EntityFramework\Framework\OpenRiaServices.DomainControllers.EntityFramework.csproj", "{653F3946-541C-42D3-BBC1-CE89B392BDA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Controls.DomainServices", "OpenRiaServices.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj", "{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Silverlight.ComboBoxExtensions", "OpenRiaServices.Silverlight.ComboBoxExtensions\Framework\Silverlight\OpenRiaServices.Silverlight.ComboBoxExtensions.csproj", "{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Data.DomainServices", "OpenRiaServices.Data.DomainServices\Framework\OpenRiaServices.Data.DomainServices.csproj", "{262310D5-90C5-41E7-A0D2-634785830C2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.DomainServices.Client.Web.Test", "OpenRiaServices.DomainServices.Client.Web\Test\Desktop\OpenRiaServices.DomainServices.Client.Web.Test.csproj", "{FDE752B0-6A65-4457-8CDC-4D347B51E67C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website.SilverlightHost", "Test\Website.SilverlightHost\Website.SilverlightHost.csproj", "{7E0328F1-3476-4DC9-98B4-68A95ABE2646}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Netstandard", "Netstandard", "{20D333D2-D0A4-4D28-BB27-494A8AE297E3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualStudio", "VisualStudio", "{CE0A276C-C50F-4752-A280-5D1B5CE0C207}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\Silverlight\OpenRiaServices.DomainServices.Client.xproj", "{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{5612B0C3-4314-4795-ACA9-DDC5F25AE04D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "snk", "snk", "{1C67164F-6163-47D1-B2B5-C8A2B88842CD}"
-	ProjectSection(SolutionItems) = preProject
-		snk\OpenRiaServices.snk = snk\OpenRiaServices.snk
-		snk\Tests.snk = snk\Tests.snk
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeGen", "CodeGen", "{96D29745-0D96-4959-AB96-8FBEDC8AB485}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnrealeasedDomainController", "UnrealeasedDomainController", "{62CFE19E-EA47-4078-9C10-F59930BBCC05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,24 +157,6 @@ Global
 		{E3844512-48A8-451A-9BE4-AC7793016B9D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3844512-48A8-451A-9BE4-AC7793016B9D}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{E3844512-48A8-451A-9BE4-AC7793016B9D}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138}.Release|Any CPU.Build.0 = Release|Any CPU
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{A94B2843-C68E-4548-9168-63469D625932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A94B2843-C68E-4548-9168-63469D625932}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A94B2843-C68E-4548-9168-63469D625932}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -227,12 +169,6 @@ Global
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{03788A27-145D-4282-8FDC-C336A3BBC471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03788A27-145D-4282-8FDC-C336A3BBC471}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03788A27-145D-4282-8FDC-C336A3BBC471}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03788A27-145D-4282-8FDC-C336A3BBC471}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03788A27-145D-4282-8FDC-C336A3BBC471}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{03788A27-145D-4282-8FDC-C336A3BBC471}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{AFEA4CCA-4B98-4551-B75F-93D1A084C817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFEA4CCA-4B98-4551-B75F-93D1A084C817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFEA4CCA-4B98-4551-B75F-93D1A084C817}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -245,18 +181,6 @@ Global
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{18708280-F972-487E-A86C-45D518ACF831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18708280-F972-487E-A86C-45D518ACF831}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18708280-F972-487E-A86C-45D518ACF831}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18708280-F972-487E-A86C-45D518ACF831}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18708280-F972-487E-A86C-45D518ACF831}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{18708280-F972-487E-A86C-45D518ACF831}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{FDE9B3AB-B284-46E1-B2C0-98465C227E60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDE9B3AB-B284-46E1-B2C0-98465C227E60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDE9B3AB-B284-46E1-B2C0-98465C227E60}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -341,30 +265,12 @@ Global
 		{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{D08C2165-DC46-407B-9CCC-40ED1972F552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D08C2165-DC46-407B-9CCC-40ED1972F552}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D08C2165-DC46-407B-9CCC-40ED1972F552}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D08C2165-DC46-407B-9CCC-40ED1972F552}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D08C2165-DC46-407B-9CCC-40ED1972F552}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{D08C2165-DC46-407B-9CCC-40ED1972F552}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{DF732E93-F424-459A-978C-B3A3450C9FAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF732E93-F424-459A-978C-B3A3450C9FAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF732E93-F424-459A-978C-B3A3450C9FAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF732E93-F424-459A-978C-B3A3450C9FAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF732E93-F424-459A-978C-B3A3450C9FAE}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{DF732E93-F424-459A-978C-B3A3450C9FAE}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{063022B7-FAF8-43FB-B605-30A5F29910C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{063022B7-FAF8-43FB-B605-30A5F29910C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{063022B7-FAF8-43FB-B605-30A5F29910C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -413,12 +319,6 @@ Global
 		{2265A098-F256-418D-9D11-9FD6561E8D42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2265A098-F256-418D-9D11-9FD6561E8D42}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{2265A098-F256-418D-9D11-9FD6561E8D42}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -437,12 +337,6 @@ Global
 		{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -467,12 +361,6 @@ Global
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8}.Signed|Any CPU.Build.0 = Signed|Any CPU
 		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7D958FE-3D14-4EAD-B810-10471757CC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -497,49 +385,53 @@ Global
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
 		{653F3946-541C-42D3-BBC1-CE89B392BDA9}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C}.Signed|Any CPU.Build.0 = Signed|Any CPU
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{687A8B88-6B00-4807-B889-C682CC381A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{687A8B88-6B00-4807-B889-C682CC381A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{687A8B88-6B00-4807-B889-C682CC381A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{687A8B88-6B00-4807-B889-C682CC381A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{687A8B88-6B00-4807-B889-C682CC381A27}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{687A8B88-6B00-4807-B889-C682CC381A27}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{262310D5-90C5-41E7-A0D2-634785830C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262310D5-90C5-41E7-A0D2-634785830C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262310D5-90C5-41E7-A0D2-634785830C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262310D5-90C5-41E7-A0D2-634785830C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262310D5-90C5-41E7-A0D2-634785830C2A}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{262310D5-90C5-41E7-A0D2-634785830C2A}.Signed|Any CPU.Build.0 = Signed|Any CPU
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Signed|Any CPU.ActiveCfg = Signed|Any CPU
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Signed|Any CPU.Build.0 = Signed|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4449F469-F1E9-4241-A444-B2BBAC7667EC} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
 		{2095B11C-903C-47FF-B812-82DFA7A068AC} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
 		{E8CAC11B-50B6-4243-A12A-D831EBB064CB} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{8D64085D-DABC-4228-85E3-F337DFA7D55E} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{0254F915-6CD6-43E8-8639-B925CE5233A6} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
 		{72E74082-7928-4A70-83C1-49806B942FCB} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{20790A5F-1DD7-4D1C-8303-C34256E12C68} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{B33BF27F-7DF7-46FF-A1DA-F12A873E124F} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+		{B33BF27F-7DF7-46FF-A1DA-F12A873E124F} = {96D29745-0D96-4959-AB96-8FBEDC8AB485}
 		{E3844512-48A8-451A-9BE4-AC7793016B9D} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{B15B8171-0EDC-4D96-A126-E086E4F3EA2C} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
-		{174DE0B6-BBA8-43DF-8755-BC8927EB9138} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
-		{3F4FBBD2-A634-44C7-9DEF-D71F349E706C} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{A94B2843-C68E-4548-9168-63469D625932} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{03788A27-145D-4282-8FDC-C336A3BBC471} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{AFEA4CCA-4B98-4551-B75F-93D1A084C817} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{18708280-F972-487E-A86C-45D518ACF831} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
-		{8F487386-A11E-4AA8-AB5E-98B294E0328E} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{FDE9B3AB-B284-46E1-B2C0-98465C227E60} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{7B2AB186-E78E-402A-843F-705D77179E06} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
@@ -554,10 +446,7 @@ Global
 		{7E3F2770-7A6C-4D56-9040-C16966BB6A1B} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{E9141C78-4083-4ED9-B0C3-591BF5986488} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{6428863A-11FE-48EA-AE51-B2BA5DD29E57} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
 		{D08C2165-DC46-407B-9CCC-40ED1972F552} = {D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}
-		{DF732E93-F424-459A-978C-B3A3450C9FAE} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
-		{BDB2F9A3-5FC7-45FD-8496-B23752232688} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{063022B7-FAF8-43FB-B605-30A5F29910C1} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{9FA9ED54-49F1-4BC6-B316-43970A34D738} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{1A2B04D0-1A09-414E-BC3F-C0C159AD668B} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
@@ -566,25 +455,29 @@ Global
 		{F572B235-A989-47F5-A36F-51091E976743} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{2265A098-F256-418D-9D11-9FD6561E8D42} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{E28A2FBA-1BD8-4ABC-AE5D-49F541E0B3C7} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{1D3AE529-961A-47FD-834B-7893FE6FF479} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+		{1D3AE529-961A-47FD-834B-7893FE6FF479} = {96D29745-0D96-4959-AB96-8FBEDC8AB485}
 		{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{835586F6-F1F4-4A3F-A24E-795D37143F4B} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
 		{72137DB5-8A91-4FF8-A292-5F6E73A66CD6} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{A87DF95C-1852-480D-8FDC-4468D4EB738E} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{A94B2843-C68E-4548-9168-63469D625935} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{707294BD-86CF-4C3D-B9C9-A869A34AA6E0} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{EFDFCFAE-D785-4A99-AA90-F6A6E56E6BD8} = {0254F915-6CD6-43E8-8639-B925CE5233A6}
-		{E7D958FE-3D14-4EAD-B810-10471757CC4F} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{9CFB422B-2995-4813-831C-2BDC013B68BF} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{ACE91549-D86E-4EB6-8C2A-5FF51386BB68} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{653F3946-541C-42D3-BBC1-CE89B392BDA9} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E} = {4449F469-F1E9-4241-A444-B2BBAC7667EC}
-		{FDE752B0-6A65-4457-8CDC-4D347B51E67C} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{20D333D2-D0A4-4D28-BB27-494A8AE297E3} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
-		{A4EBC92A-D2D8-40EA-BE6F-1EAF76F1CD64} = {20D333D2-D0A4-4D28-BB27-494A8AE297E3}
-		{1C67164F-6163-47D1-B2B5-C8A2B88842CD} = {53F7B128-2A99-4C85-B990-18CCE502EDCC}
+		{E7D958FE-3D14-4EAD-B810-10471757CC4F} = {CE0A276C-C50F-4752-A280-5D1B5CE0C207}
+		{9CFB422B-2995-4813-831C-2BDC013B68BF} = {CE0A276C-C50F-4752-A280-5D1B5CE0C207}
+		{ACE91549-D86E-4EB6-8C2A-5FF51386BB68} = {62CFE19E-EA47-4078-9C10-F59930BBCC05}
+		{653F3946-541C-42D3-BBC1-CE89B392BDA9} = {62CFE19E-EA47-4078-9C10-F59930BBCC05}
+		{687A8B88-6B00-4807-B889-C682CC381A27} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
+		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
+		{9F270A2E-8A2F-46C2-985C-CE32EBCE70C2} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
+		{262310D5-90C5-41E7-A0D2-634785830C2A} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
+		{7E0328F1-3476-4DC9-98B4-68A95ABE2646} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
+		{CE0A276C-C50F-4752-A280-5D1B5CE0C207} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
+		{5612B0C3-4314-4795-ACA9-DDC5F25AE04D} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
+		{96D29745-0D96-4959-AB96-8FBEDC8AB485} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
+		{62CFE19E-EA47-4078-9C10-F59930BBCC05} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Desktop.vsmdi

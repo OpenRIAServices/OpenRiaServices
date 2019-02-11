@@ -1,4 +1,5 @@
 version: 1.0.{build}
+image: Visual Studio 2017
 configuration:
 - Release
 - Signed
@@ -7,11 +8,7 @@ init:
 - cmd: git lfs uninstall
 before_build:
 - ps: >-
-    dotnet restore .
-    
     nuget restore RiaServices.sln
-    
-    $LastExitCode = 0
 build:
   project: RiaServices.sln
   parallel: true

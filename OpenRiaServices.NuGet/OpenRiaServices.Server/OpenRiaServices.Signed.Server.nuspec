@@ -34,8 +34,8 @@
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Signed.Server.targets" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.dll" />
-    <file src="..\..\bin\Signed\Desktop\OpenRiaServices.DomainServices.Server.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.dll" />
+    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Server.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.dll" />
   </files>
 </package>

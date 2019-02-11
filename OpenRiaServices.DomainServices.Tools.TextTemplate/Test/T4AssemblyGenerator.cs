@@ -7,14 +7,12 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using OpenRiaServices.DomainServices.Server.Test.Utilities;
 using System.Text;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Tasks;
-using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
 using OpenRiaServices.DomainServices.Tools.TextTemplate;
 using OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators;
 using OpenRiaServices.DomainServices.Tools.Test;
+using Microsoft.CodeAnalysis.Text;
 
 namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
 {
@@ -293,11 +291,8 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 return null;
             }
 
-            string generatedAssemblyFileName = this._isCSharp ? this.CompileCSharpSource() : this.CompileVisualBasicSource();
-            if (string.IsNullOrEmpty(generatedAssemblyFileName))
-            {
-                Assert.Fail("Expected compile to succeed");
-            }
+            MemoryStream generatedAssembly = CompileSource();
+            Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
             Assembly assy = null;
             Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>();
@@ -321,7 +316,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                     }
                 }
 
-                assy = Assembly.ReflectionOnlyLoadFrom(generatedAssemblyFileName);
+                assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
                 Assert.IsNotNull(assy);
 
                 AssemblyName[] refNames = assy.GetReferencedAssemblies();
@@ -353,97 +348,23 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
             return assy;
         }
 
-        internal string CompileCSharpSource()
+
+        private MemoryStream CompileSource()
         {
-            List<ITaskItem> sources = new List<ITaskItem>();
-            string codeFile = this.GeneratedCodeFile;
-            sources.Add(new TaskItem(codeFile));
+            string assemblyname = Path.GetFileNameWithoutExtension(this.OutputAssemblyName);
+            var contents = new List<SourceText>(capacity: 2);
+            contents.Add(SourceText.From(GeneratedCode));
+            if (!string.IsNullOrEmpty(UserCode))
+                contents.Add(SourceText.From(UserCode));
 
-            // If client has added extra user code into the
-            // compile request, add it in now
-            string userCodeFile = this.UserCodeFile;
-            if (!string.IsNullOrEmpty(userCodeFile))
+            if (this._isCSharp)
             {
-                sources.Add(new TaskItem(userCodeFile));
+                return CompilerHelper.CompileCSharpSilverlightAssembly(assemblyname, contents, referenceAssemblies: ReferenceAssemblies);
             }
-
-            List<ITaskItem> references = new List<ITaskItem>();
-            foreach (string s in this.ReferenceAssemblies)
-                references.Add(new TaskItem(s));
-
-            Csc csc = new Csc();
-            MockBuildEngine buildEngine = this.MockBuildEngine;
-            csc.BuildEngine = buildEngine;  // needed before task can log
-
-            csc.NoStandardLib = true;   // don't include std lib stuff -- we're feeding it silverlight
-            csc.NoConfig = true;        // don't load the csc.rsp file to get references
-            csc.TargetType = "library";
-            csc.Sources = sources.ToArray();
-            csc.References = references.ToArray();
-            csc.DefineConstants += "SILVERLIGHT";
-            csc.OutputAssembly = new TaskItem(this.OutputAssemblyName);
-            bool result = false;
-            try
+            else
             {
-                result = csc.Execute();
+                return CompilerHelper.CompileVBSilverlightAssembly(assemblyname, contents, ReferenceAssemblies, rootNamespace: "TestRootNS", documentationFile: null);
             }
-            catch (Exception ex)
-            {
-                Assert.Fail("Exception occurred invoking CSC task on " + sources[0].ItemSpec + ":\r\n" + ex);
-            }
-
-            Assert.IsTrue(result, "CSC failed to compile " + sources[0].ItemSpec + ":\r\n" + buildEngine.ConsoleLogger.Errors);
-            return csc.OutputAssembly.ItemSpec;
-        }
-
-        internal string CompileVisualBasicSource()
-        {
-            List<ITaskItem> sources = new List<ITaskItem>();
-            sources.Add(new TaskItem(this.GeneratedCodeFile));
-
-            // If client has added extra user code into the
-            // compile request, add it in now
-            string userCodeFile = this.UserCodeFile;
-            if (!string.IsNullOrEmpty(userCodeFile))
-            {
-                sources.Add(new TaskItem(userCodeFile));
-            }
-
-            // Transform references into a list of ITaskItems.
-            // Here, we skip over mscorlib explicitly because this is already included as a project reference.
-            List<ITaskItem> references =
-                this.ReferenceAssemblies
-                    .Where(reference => !reference.EndsWith("mscorlib.dll", StringComparison.Ordinal))
-                    .Select<string, ITaskItem>(reference => new TaskItem(reference) as ITaskItem)
-                    .ToList();
-
-            Vbc vbc = new Vbc();
-            MockBuildEngine buildEngine = this.MockBuildEngine;
-            vbc.BuildEngine = buildEngine;  // needed before task can log
-
-            vbc.NoStandardLib = true;   // don't include std lib stuff -- we're feeding it silverlight
-            vbc.NoConfig = true;        // don't load the vbc.rsp file to get references
-            vbc.TargetType = "library";
-            vbc.Sources = sources.ToArray();
-            vbc.References = references.ToArray();
-            vbc.SdkPath = CompilerHelper.GetSilverlightSdkReferenceAssembliesPath();
-            vbc.RootNamespace = "TestRootNS";
-            vbc.DefineConstants += "SILVERLIGHT";
-
-            vbc.OutputAssembly = new TaskItem(this.OutputAssemblyName);
-
-            bool result = false;
-            try
-            {
-                result = vbc.Execute();
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Exception occurred invoking VBC task on " + sources[0].ItemSpec + ":\r\n" + ex);
-            }
-
-            Assert.IsTrue(result, "VBC failed to compile " + sources[0].ItemSpec + ":\r\n" + buildEngine.ConsoleLogger.Errors);
-            return vbc.OutputAssembly.ItemSpec;
         }
 
         #region IDisposable Members

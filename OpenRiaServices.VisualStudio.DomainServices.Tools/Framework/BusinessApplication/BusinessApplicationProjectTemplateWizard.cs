@@ -246,7 +246,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             {
             }
             Project activeProject = projects == null ? null : projects.OfType<Project>().FirstOrDefault();
-            if (activeProject != null && activeProject.Kind == ProjectKinds.vsProjectKindSolutionFolder)
+            if (activeProject != null 
+                && activeProject.Object is SolutionFolder)
             {
                 this._selectedSolutionFolder = activeProject;
             }

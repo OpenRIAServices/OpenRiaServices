@@ -22,8 +22,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.dll" target="lib\sl50\OpenRiaServices.Controls.DomainServices.dll" />
-    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.pdb" target="lib\sl50\OpenRiaServices.Controls.DomainServices.pdb" />
-    <file src="..\..\bin\Release\Silverlight\OpenRiaServices.Controls.DomainServices.xml" target="lib\sl50\OpenRiaServices.Controls.DomainServices.xml" />
+    <file src="..\..\bin\Release\sl5\OpenRiaServices.Controls.DomainServices.dll" target="lib\sl50\OpenRiaServices.Controls.DomainServices.dll" />
+    <file src="..\..\bin\Release\sl5\OpenRiaServices.Controls.DomainServices.pdb" target="lib\sl50\OpenRiaServices.Controls.DomainServices.pdb" />
+    <file src="..\..\bin\Release\sl5\OpenRiaServices.Controls.DomainServices.xml" target="lib\sl50\OpenRiaServices.Controls.DomainServices.xml" />
   </files>
 </package>

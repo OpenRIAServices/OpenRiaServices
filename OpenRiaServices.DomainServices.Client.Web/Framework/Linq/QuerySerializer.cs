@@ -623,7 +623,8 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override Expression VisitMethodCall(MethodCallExpression m)
             {
-                if (m.Method.DeclaringType.FullName == "Microsoft.VisualBasic.CompilerServices.Operators" && m.Arguments.Count == 3)
+                if (TypeIsVBOperatorsType(m.Method.DeclaringType)
+                    && m.Arguments.Count == 3)
                 {
                     ExpressionType comparisonType;
                     if (MethodCallConverter.GetVBObjectComparisonType(m, out comparisonType))
@@ -643,6 +644,15 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 return base.VisitMethodCall(m);
+            }
+
+            private static bool TypeIsVBOperatorsType(Type type)
+            {
+                string fullname = type.FullName;
+
+                // The Operators type changed name for VS 2017 to EmbeddedOperators
+                return (fullname == "Microsoft.VisualBasic.CompilerServices.Operators"
+                    || fullname == "Microsoft.VisualBasic.CompilerServices.EmbeddedOperators");
             }
 
             protected override Expression VisitBinary(BinaryExpression b)
@@ -668,7 +678,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 // Translate VB equality/inequality comparisons into normal string comparisons
                 bool isVbCompareString =
-                    mce != null && mce.Method.DeclaringType.FullName == "Microsoft.VisualBasic.CompilerServices.Operators" &&
+                    mce != null && TypeIsVBOperatorsType(mce.Method.DeclaringType) &&
                     mce.Method.Name == "CompareString" && mce.Arguments.Count == 3;
                 if (isVbCompareString && constant != null && constant.Type == typeof(int) && (int)constant.Value == 0)
                 {
@@ -759,7 +769,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 comparisonType = (ExpressionType)(-1);
 
-                if (!String.Equals(m.Method.DeclaringType.FullName, "Microsoft.VisualBasic.CompilerServices.Operators", StringComparison.Ordinal))
+                if (!TypeIsVBOperatorsType(m.Method.DeclaringType))
                 {
                     return false;
                 }

@@ -229,8 +229,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetSilverlightClientAssemblies(string relativeTestDir)
         {
-            List<string> assemblies = new List<string>();
-
             string projectPath = string.Empty;  // path to current project
             string outputPath = string.Empty;   // output path for current project, used to infer output path of test project
             TestHelper.GetProjectPaths(relativeTestDir, out projectPath, out outputPath);
@@ -239,14 +237,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string projectDir = Path.GetDirectoryName(projectPath);
 
             // Folder of project we want to build
-            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Silverlight"));
+            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.DomainServices.Client.Web\Framework"));
 
             string projectOutputDir = Path.Combine(testProjectDir, outputPath);
             string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.DomainServices.Client.Web.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)
-            MsBuildHelper.GetReferenceAssemblies(testProjectFile, assemblies);
+            List<string> assemblies = 
+                MsBuildHelper.GetReferenceAssemblies(testProjectFile);
             string outputAssembly = MsBuildHelper.GetOutputAssembly(testProjectFile);
             if (!string.IsNullOrEmpty(outputAssembly))
             {

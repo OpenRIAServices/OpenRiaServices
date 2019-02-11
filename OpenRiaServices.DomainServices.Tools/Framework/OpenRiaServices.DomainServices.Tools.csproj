@@ -1,230 +1,44 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>..\..\bin\Signed\</OutputPath>
-    <DefineConstants>TRACE;SERVERFX;NET40;NET40;SIGNED</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.Tools</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Tools</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.Tools.XML</DocumentationFile>
-    <WarningLevel>4</WarningLevel>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;SERVERFX;NET40;DBCONTEXT</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;SERVERFX</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.Tools.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <!-- All configurations set NET40 if this project is to be compiled against v4.0 -->
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);NET40;NET45;DBCONTEXT</DefineConstants>
+    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET40</DefineConstants>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Engine" />
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\BinaryTypeUtility.cs">
-      <Link>BinaryTypeUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\Data\TypeUtility.cs">
-      <Link>TypeUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs">
-      <Link>SerializationUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Silverlight\ExceptionHandlingUtility.cs">
-      <Link>ExceptionHandlingUtility.cs</Link>
-    </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs">
-      <Link>TypeDescriptorExtensions.cs</Link>
-    </Compile>
-    <Compile Include="AssemblyUtilities.cs" />
-    <Compile Include="CleanOpenRiaClientFilesTask.cs" />
-    <Compile Include="ClientProxyFixupCodeDomVisitor.cs" />
-    <Compile Include="ClientCodeGenerationOptions.cs" />
-    <Compile Include="ClientCodeGenerationDispatcher.cs" />
-    <Compile Include="CodeDomClientCodeGenerator.cs">
-    </Compile>
-    <Compile Include="CodeDomVisitor.cs" />
-    <Compile Include="CodeGenerationHost.cs" />
-    <Compile Include="CodeGenUtilities.cs" />
-    <Compile Include="CodeMemberShareKind.cs" />
-    <Compile Include="ComplexTypeProxyGenerator.cs" />
-    <Compile Include="CreateOpenRiaClientFilesTask.cs" />
-    <Compile Include="CSharpCodeDomClientCodeGenerator.cs" />
-    <Compile Include="DataContractProxyGenerator.cs" />
-    <Compile Include="DbContextUtilities.cs" />
-    <Compile Include="EntityProxyGenerator.cs" />
-    <Compile Include="DomainServiceClientCodeGeneratorAttribute.cs" />
-    <Compile Include="ICodeGenerationHost.cs" />
-    <Compile Include="ICodeGeneratorMetadata.cs" />
-    <Compile Include="IDomainServiceClientCodeGenerator.cs" />
-    <Compile Include="ILoggingService.cs" />
-    <Compile Include="IndentationLevel.cs">
-    </Compile>
-    <Compile Include="InvokeKind.cs" />
-    <Compile Include="ISharedCodeService.cs" />
-    <Compile Include="LinkedServerProjectCache.cs" />
-    <Compile Include="MetadataPipeline\AttributeBuilderException.cs" />
-    <Compile Include="MetadataPipeline\AttributeDeclaration.cs" />
-    <Compile Include="MetadataPipeline\DataMemberAttributeBuilder.cs" />
-    <Compile Include="MetadataPipeline\EditableAttributeBuilder.cs" />
-    <Compile Include="MetadataPipeline\ICustomAttributeBuilder.cs" />
-    <Compile Include="NotificationMethodGenerator.cs">
-    </Compile>
-    <Compile Include="Pdb\PdbSourceFileProviderFactory.cs" />
-    <Compile Include="SharedCodeServiceParameters.cs" />
-    <Compile Include="SharedTypes\FilenameMap.cs" />
-    <Compile Include="SharedTypes\ISourceFileProvider.cs" />
-    <Compile Include="SharedTypes\ISourceFileProviderFactory.cs" />
-    <Compile Include="Pdb\SymStore\HResults.cs" />
-    <Compile Include="Pdb\SymStore\ISymBinder2.cs" />
-    <Compile Include="Pdb\SymStore\ISymConstant.cs" />
-    <Compile Include="Pdb\SymStore\ISymEncMethod.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
+    <Compile Update="Pdb\SymStore\*.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Pdb\SymStore\ISymENCUpdate.cs">
+    <Compile Update="MetadataPipeline\RangeCustomAttributeBuilder.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Pdb\SymStore\ISymReader2.cs" />
-    <Compile Include="Pdb\SymStore\ISymScope2.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\ISymSearchInfo.cs" />
-    <Compile Include="Pdb\SymStore\SymAccess.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\symbinder.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymConstant.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymDocument.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\symmethod.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymNamespace.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymReader.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymScope.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymSearchInfo.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\SymSearchPolicyAttributes.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Pdb\SymStore\symvariable.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="ProjectFileReader.cs" />
-    <Compile Include="ProjectSourceFileCache.cs" />
-    <Compile Include="RiaClientFilesTask.cs" />
-    <Compile Include="SharedTypes\CodeMemberKey.cs" />
-    <Compile Include="SharedTypes\SharedCodeService.cs" />
-    <Compile Include="SharedTypes\SourceFileLocationService.cs" />
-    <Compile Include="SharedTypes\ISourceFileLocationService.cs" />
-    <Compile Include="SharedTypes\SharedAssemblies.cs" />
-    <Compile Include="SharedTypes\SharedSourceFiles.cs" />
-    <Compile Include="SharedTypes\VirtualType.cs" />
-    <Compile Include="AppDomainUtilities.cs" />
-    <Compile Include="SourceInfo\SourceInfo.cs" />
-    <Compile Include="SourceInfo\SourceInfoSourceFileProviderFactory.cs" />
-    <Compile Include="TargetPlatform.cs" />
-    <Compile Include="TypeConstants.cs" />
-    <Compile Include="MetadataPipeline\DomainIdentifierAttributeBuilder.cs" />
-    <Compile Include="MetadataPipeline\CustomAttributeGenerator.cs" />
-    <Compile Include="MetadataPipeline\CustomValidationCustomAttributeBuilder.cs" />
-    <Compile Include="DomainOperationEntryProxyGenerator.cs">
-    </Compile>
-    <Compile Include="DomainServiceCatalog.cs" />
-    <Compile Include="DomainServiceProxyGenerator.cs">
-    </Compile>
-    <Compile Include="MetadataPipeline\DisplayCustomAttributeBuilder.cs" />
-    <Compile Include="CustomMethodProxyGenerator.cs">
-    </Compile>
-    <Compile Include="GlobalSuppressions.cs" Condition=" '$(RunCodeAnalysis)' == 'true' " />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="Naming.cs" />
-    <Compile Include="InvokeOperationProxyGenerator.cs">
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProxyGenerator.cs" />
-    <Compile Include="MetadataPipeline\RangeCustomAttributeBuilder.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Resource.Designer.cs">
+    <Compile Condition=" '$(RunCodeAnalysis)' != 'true' " Remove="GlobalSuppressions.cs" />
+    <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="MetadataPipeline\StandardCustomAttributeBuilder.cs" />
-    <Compile Include="MetadataPipeline\UIHintCustomAttributeBuilder.cs" />
-    <Compile Include="MetadataPipeline\ValidationCustomAttributeBuilder.cs" />
-    <Compile Include="ValidateDomainServicesTask.cs" />
-    <Compile Include="Validation\DomainServiceValidator.cs" />
-    <Compile Include="VisualBasicCodeDomClientCodeGenerator.cs" />
-    <Compile Include="WebContextGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resource.resx">
+    <EmbeddedResource Update="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
@@ -232,18 +46,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pdb\ReadMe.txt" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Condition="Exists('$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets')" Project="$(FeaturePackageInfrastructure)\bin\AutomaticAssemblyFileVersion.targets" />
 </Project>

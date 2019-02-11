@@ -1,382 +1,193 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7B2AB186-E78E-402A-843F-705D77179E06}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Client.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>108</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworks>net45;sl5</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>108</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>108</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='sl5'">
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='sl5'">
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Extensions" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.ServiceModel.Web.Extensions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+    <Reference Include="System.Xml.Linq, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+  </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs">
-      <Link>Data\DomainClients\Cities.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs">
-      <Link>Data\DomainClients\Catalog_LTS.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs" Link="Data\DomainClients\Catalog_LTS.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs">
-      <Link>Data\DomainClients\Northwind_LTS.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs" Link="Data\DomainClients\Northwind_LTS.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
-      <Link>Data\DomainClients\ComplexTypeScenarios.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" Link="Data\DomainClients\ComplexTypeScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs">
-      <Link>Data\DomainClients\MockCustomers.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs" Link="Data\DomainClients\MockCustomers.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs">
-      <Link>Data\DomainClients\ServerSideAsyncDomainService.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs" Link="Data\DomainClients\ServerSideAsyncDomainService.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs">
-      <Link>Data\DomainClients\CompositionInheritanceScenarios.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs" Link="Data\DomainClients\CompositionInheritanceScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionScenarios.g.cs">
-      <Link>Data\DomainClients\CompositionScenarios.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionScenarios.g.cs" Link="Data\DomainClients\CompositionScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\EFDbContextScenarios.g.cs">
-      <Link>Data\DomainClients\EFDbContextScenarios.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\EFDbContextScenarios.g.cs" Link="Data\DomainClients\EFDbContextScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs">
-      <Link>Data\DomainClients\IncludeScenariosTestProvider.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs" Link="Data\DomainClients\IncludeScenariosTestProvider.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\InheritanceScenarios1.g.cs">
-      <Link>Data\DomainClients\InheritanceScenarios1.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\InheritanceScenarios1.g.cs" Link="Data\DomainClients\InheritanceScenarios1.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs">
-      <Link>Data\DomainClients\RequiresSecureEndpointScenarios.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs" Link="Data\DomainClients\RequiresSecureEndpointScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\SharedEntities.g.cs">
-      <Link>Data\DomainClients\SharedEntities.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\SharedEntities.g.cs" Link="Data\DomainClients\SharedEntities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs">
-      <Link>Data\DomainClients\TestProvider_Scenarios.g.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs" Link="Data\DomainClients\TestProvider_Scenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext1.g.cs">
-      <Link>Data\DomainClients\WebContext1.g.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs">
-      <Link>Data\DomainClients\Cities.shared.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext1.g.cs" Link="Data\DomainClients\WebContext1.g.cs" />
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs" Link="Data\DomainClients\Cities.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityData.cs">
-      <Link>Data\DomainClients\CityData.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityData.cs" Link="Data\DomainClients\CityData.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs">
-      <Link>Data\DomainClients\Mock.shared.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs" Link="Data\DomainClients\Mock.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs">
-      <Link>Data\DomainClients\Test.shared.cs</Link>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClients\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainClient.cs">
-      <Link>ApplicationServices\AuthenticationDomainClient.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContext.cs">
-      <Link>ApplicationServices\AuthenticationDomainContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationServiceTest.cs">
-      <Link>ApplicationServices\AuthenticationServiceTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthenticationTest.cs">
-      <Link>ApplicationServices\FormsAuthenticationTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\LoginParametersTest.cs">
-      <Link>ApplicationServices\LoginParametersTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationServiceTest.cs">
-      <Link>ApplicationServices\WebAuthenticationServiceTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\WebContextBaseTest.cs">
-      <Link>ApplicationServices\WebContextBaseTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\AssociationInheritanceTests.cs">
-      <Link>Data\AssociationInheritanceTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\AssociationTests.cs">
-      <Link>Data\AssociationTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ChangeSetTests.cs">
-      <Link>Data\ChangeSetTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\CitiesDomainServiceTests.cs">
-      <Link>Data\CitiesDomainServiceTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ComplexTypeTests.cs">
-      <Link>Data\ComplexTypeTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\CompositionInheritanceTests.cs">
-      <Link>Data\CompositionInheritanceTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\CompositionTests.cs">
-      <Link>Data\CompositionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\CrossDomainContextTests.cs">
-      <Link>Data\CrossDomainContextTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\CrossDomainServiceQueryTests.cs">
-      <Link>Data\CrossDomainServiceQueryTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\CustomMethodTests.cs">
-      <Link>Data\CustomMethodTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DataAnnotationsTests.cs">
-      <Link>Data\DataAnnotationsTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DataServiceTests.cs">
-      <Link>Data\DataServiceTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainClientTests.cs">
-      <Link>Data\DomainClientTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainContexts\ExtensibilityScenarios.cs">
-      <Link>Data\DomainClients\ExtensibilityScenarios.cs</Link>
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainClient.cs" Link="ApplicationServices\AuthenticationDomainClient.cs" />
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContext.cs" Link="ApplicationServices\AuthenticationDomainContext.cs" />
+    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationServiceTest.cs" Link="ApplicationServices\AuthenticationServiceTest.cs" />
+    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthenticationTest.cs" Link="ApplicationServices\FormsAuthenticationTest.cs" />
+    <Compile Include="..\Silverlight\ApplicationServices\LoginParametersTest.cs" Link="ApplicationServices\LoginParametersTest.cs" />
+    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationServiceTest.cs" Link="ApplicationServices\WebAuthenticationServiceTest.cs" />
+    <Compile Include="..\Silverlight\ApplicationServices\WebContextBaseTest.cs" Link="ApplicationServices\WebContextBaseTest.cs" />
+    <Compile Include="..\Silverlight\Data\AssociationInheritanceTests.cs" Link="Data\AssociationInheritanceTests.cs" />
+    <Compile Include="..\Silverlight\Data\AssociationTests.cs" Link="Data\AssociationTests.cs" />
+    <Compile Include="..\Silverlight\Data\ChangeSetTests.cs" Link="Data\ChangeSetTests.cs" />
+    <Compile Include="..\Silverlight\Data\CitiesDomainServiceTests.cs" Link="Data\CitiesDomainServiceTests.cs" />
+    <Compile Include="..\Silverlight\Data\ComplexTypeTests.cs" Link="Data\ComplexTypeTests.cs" />
+    <Compile Include="..\Silverlight\Data\CompositionInheritanceTests.cs" Link="Data\CompositionInheritanceTests.cs" />
+    <Compile Include="..\Silverlight\Data\CompositionTests.cs" Link="Data\CompositionTests.cs" />
+    <Compile Include="..\Silverlight\Data\CrossDomainContextTests.cs" Link="Data\CrossDomainContextTests.cs" />
+    <Compile Include="..\Silverlight\Data\CrossDomainServiceQueryTests.cs" Link="Data\CrossDomainServiceQueryTests.cs" />
+    <Compile Include="..\Silverlight\Data\CustomMethodTests.cs" Link="Data\CustomMethodTests.cs" />
+    <Compile Include="..\Silverlight\Data\DataAnnotationsTests.cs" Link="Data\DataAnnotationsTests.cs" />
+    <Compile Include="..\Silverlight\Data\DataServiceTests.cs" Link="Data\DataServiceTests.cs" />
+    <Compile Include="..\Silverlight\Data\DomainClientTests.cs" Link="Data\DomainClientTests.cs" />
+    <Compile Include="..\Silverlight\Data\DomainContexts\ExtensibilityScenarios.cs" Link="Data\DomainClients\ExtensibilityScenarios.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\Silverlight\Data\DomainContextTestBase.cs">
-      <Link>Data\DomainContextTestBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainContextTests.cs">
-      <Link>Data\DomainContextTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainIdentifierAttributeTests.cs">
-      <Link>Data\DomainIdentifierAttributeTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainIdentifierTests.cs">
-      <Link>Data\DomainIdentifierTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainOperationExceptionTests.cs">
-      <Link>Data\DomainOperationExceptionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntityCollectionTests.cs">
-      <Link>Data\EntityCollectionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntityConflictTests.cs">
-      <Link>Data\EntityConflictTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntityContainerTests.cs">
-      <Link>Data\EntityContainerTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntityQueryTests.cs">
-      <Link>Data\EntityQueryTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntitySetTests.cs">
-      <Link>Data\EntitySetTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntityTests.cs">
-      <Link>Data\EntityTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\PoxTests.cs">
-      <Link>Data\PoxTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ServerSideAsyncTests.cs">
-      <Link>Data\ServerSideAsyncTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\SubmitOperationExceptionTests.cs">
-      <Link>Data\SubmitOperationExceptionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ValidationResultCollectionTests.cs">
-      <Link>Data\ValidationResultCollectionTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\EntityValidationTests.cs">
-      <Link>Data\EntityValidationTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ErrorPropagationTests.cs">
-      <Link>Data\ErrorPropagationTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ExceptionHandlingUtilityTest.cs">
-      <Link>Data\ExceptionHandlingUtilityTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\InheritanceTests.cs">
-      <Link>Data\InheritanceTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\InvokeOperationTests.cs">
-      <Link>Data\InvokeOperationTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\MessageUtilityTests.cs">
-      <Link>Data\MessageUtilityTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\OperationErrorTest.cs">
-      <Link>Data\OperationErrorTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\OperationTests.cs">
-      <Link>Data\OperationTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\PerfTests.cs">
-      <Link>Data\PerfTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\QueryTests.cs">
-      <Link>Data\QueryTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\SerializationTests.cs">
-      <Link>Data\SerializationTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\SharedEntitiesTests.cs">
-      <Link>Data\SharedEntitiesTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\TestDataContext.cs">
-      <Link>Data\TestDataContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\TestHelpers.cs">
-      <Link>Data\TestHelpers.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\TypeUtilityTests.cs">
-      <Link>Data\TypeUtilityTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\UpdateTests.cs">
-      <Link>Data\UpdateTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\ValidationUtilitiesTests.cs">
-      <Link>Data\ValidationUtilitiesTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\WebDomainClientTests.cs">
-      <Link>Data\WebDomainClientTests.cs</Link>
-    </Compile>
-    <Compile Include="CodegenWorkaround.cs" />
-    <Compile Include="Data\QuerySerializationTests.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\Services\Reference.cs">
+    <Compile Include="..\Silverlight\Data\DomainContextTestBase.cs" Link="Data\DomainContextTestBase.cs" />
+    <Compile Include="..\Silverlight\Data\DomainContextTests.cs" Link="Data\DomainContextTests.cs" />
+    <Compile Include="..\Silverlight\Data\DomainIdentifierAttributeTests.cs" Link="Data\DomainIdentifierAttributeTests.cs" />
+    <Compile Include="..\Silverlight\Data\DomainIdentifierTests.cs" Link="Data\DomainIdentifierTests.cs" />
+    <Compile Include="..\Silverlight\Data\DomainOperationExceptionTests.cs" Link="Data\DomainOperationExceptionTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntityCollectionTests.cs" Link="Data\EntityCollectionTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntityConflictTests.cs" Link="Data\EntityConflictTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntityContainerTests.cs" Link="Data\EntityContainerTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntityQueryTests.cs" Link="Data\EntityQueryTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntitySetTests.cs" Link="Data\EntitySetTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntityTests.cs" Link="Data\EntityTests.cs" />
+    <Compile Include="..\Silverlight\Data\PoxTests.cs" Link="Data\PoxTests.cs" />
+    <Compile Include="..\Silverlight\Data\ServerSideAsyncTests.cs" Link="Data\ServerSideAsyncTests.cs" />
+    <Compile Include="..\Silverlight\Data\SubmitOperationExceptionTests.cs" Link="Data\SubmitOperationExceptionTests.cs" />
+    <Compile Include="..\Silverlight\Data\ValidationResultCollectionTests.cs" Link="Data\ValidationResultCollectionTests.cs" />
+    <Compile Include="..\Silverlight\Data\EntityValidationTests.cs" Link="Data\EntityValidationTests.cs" />
+    <Compile Include="..\Silverlight\Data\ErrorPropagationTests.cs" Link="Data\ErrorPropagationTests.cs" />
+    <Compile Include="..\Silverlight\Data\ExceptionHandlingUtilityTest.cs" Link="Data\ExceptionHandlingUtilityTest.cs" />
+    <Compile Include="..\Silverlight\Data\InheritanceTests.cs" Link="Data\InheritanceTests.cs" />
+    <Compile Include="..\Silverlight\Data\InvokeOperationTests.cs" Link="Data\InvokeOperationTests.cs" />
+    <Compile Include="..\Silverlight\Data\MessageUtilityTests.cs" Link="Data\MessageUtilityTests.cs" />
+    <Compile Include="..\Silverlight\Data\OperationErrorTest.cs" Link="Data\OperationErrorTest.cs" />
+    <Compile Include="..\Silverlight\Data\OperationTests.cs" Link="Data\OperationTests.cs" />
+    <Compile Include="..\Silverlight\Data\PerfTests.cs" Link="Data\PerfTests.cs" />
+    <Compile Include="..\Silverlight\Data\QueryTests.cs" Link="Data\QueryTests.cs" />
+    <Compile Include="..\Silverlight\Data\SerializationTests.cs" Link="Data\SerializationTests.cs" />
+    <Compile Include="..\Silverlight\Data\SharedEntitiesTests.cs" Link="Data\SharedEntitiesTests.cs" />
+    <Compile Include="..\Silverlight\Data\TestDataContext.cs" Link="Data\TestDataContext.cs" />
+    <Compile Include="..\Silverlight\Data\TestHelpers.cs" Link="Data\TestHelpers.cs" />
+    <Compile Include="..\Silverlight\Data\TypeUtilityTests.cs" Link="Data\TypeUtilityTests.cs" />
+    <Compile Include="..\Silverlight\Data\UpdateTests.cs" Link="Data\UpdateTests.cs" />
+    <Compile Include="..\Silverlight\Data\ValidationUtilitiesTests.cs" Link="Data\ValidationUtilitiesTests.cs" />
+    <Compile Include="..\Silverlight\Data\WebDomainClientTests.cs" Link="Data\WebDomainClientTests.cs" />
+    <Compile Update="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="TestSyncronizationContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='sl5'">
+    <Compile Remove="Platforms\net45\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj">
+      <Aliases>global,SSmDsWeb</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
+      <Aliases>global,SSmDsClient</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
-      <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
-      <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
       <Aliases>DomainServicesLts</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
       <Aliases>DomainServices</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
       <Aliases>WebRia</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Desktop\OpenRiaServices.DomainServices.Client.Web.csproj">
-      <Project>{BDB2F9A3-5FC7-45FD-8496-B23752232688}</Project>
-      <Name>OpenRiaServices.DomainServices.Client.Web</Name>
-      <Aliases>global,SSmDsWeb</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj">
-      <Project>{AFEA4CCA-4B98-4551-B75F-93D1A084C817}</Project>
-      <Name>OpenRiaServices.Common.Test</Name>
-      <Aliases>global</Aliases>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
-      <Project>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</Project>
-      <Name>OpenRiaServices.Common.DomainServices.Test</Name>
       <Aliases>DomainServicesTests</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\Framework\Desktop\OpenRiaServices.DomainServices.Client.csproj">
-      <Project>{3F4FBBD2-A634-44C7-9DEF-D71F349E706C}</Project>
-      <Name>OpenRiaServices.DomainServices.Client</Name>
-      <Aliases>global,SSmDsClient</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\VbExpressions\VbExpressions.vbproj">
-      <Project>{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}</Project>
-      <Name>VbExpressions</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\VbExpressions\VbExpressions.vbproj" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\Services\TestServices.wsdl" />
     <None Include="Service References\Services\TestServices.xsd" />
     <None Include="Service References\Services\TestServices1.wsdl" />
     <None Include="Service References\Services\TestServices1.xsd" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\Services\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\Services\TestServices.disco" />
@@ -393,7 +204,4 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

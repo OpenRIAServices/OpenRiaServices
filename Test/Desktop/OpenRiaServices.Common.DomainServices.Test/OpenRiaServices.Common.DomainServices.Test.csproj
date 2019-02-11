@@ -1,141 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- All feature packages define a property for their root and include a common targets file to set common properties -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <FeaturePackageRoot>$(MSBuildProjectDirectory)\..\..\..</FeaturePackageRoot>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNet40|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DebugNet40\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
-    <OutputPath>bin\ReleaseNet40\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetFramework>net45</TargetFramework>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
-    <OutputPath>bin\MyGet40\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
-    <OutputPath>bin\Signed\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AA5C3992-1C78-4751-8E1C-421A34FD7E76}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.Common.DomainServices.Test</RootNamespace>
-    <AssemblyName>OpenRiaServices.Common.DomainServices.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;CODECOV</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
-      <Project>{72137db5-8a91-4ff8-a292-5f6e73a66cd6}</Project>
-      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj">
-      <Project>{A94B2843-C68E-4548-9168-63469D625935}</Project>
-      <Name>EFCodeFirstModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj">
-      <Project>{A87DF95C-1852-480D-8FDC-4468D4EB738E}</Project>
-      <Name>EFDbContextModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj">
-      <Name>EFPOCOModels</Name>
-      <Project>{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}</Project>
-    </ProjectReference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All"  />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios_RootNs_FullTypeNames.g.vb">
@@ -168,52 +59,49 @@
     <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="AdventureWorks\EF_DbCtx_Catalog.cs" />
     <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs">
       <SubType>Code</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="DataModels\AdventureWorks.cs">
+    <Compile Update="DataModels\AdventureWorks.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\AdventureWorks.designer.cs">
+    <Compile Update="DataModels\AdventureWorks.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.dbml</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Northwind.cs">
+    <Compile Update="DataModels\Northwind.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Northwind2008.cs">
+    <Compile Update="DataModels\Northwind2008.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind2008.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\Model1.cs">
+    <Compile Update="DataModels\ScenarioModels\Model1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\Model2.cs">
+    <Compile Update="DataModels\ScenarioModels\Model2.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model2.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\Northwind_NoFks.cs">
+    <Compile Update="DataModels\ScenarioModels\Northwind_NoFks.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind_NoFks.tt</DependentUpon>
     </Compile>
-    <Compile Include="Mocks\ServerSideAsyncDomainService.cs">
+    <Compile Update="Mocks\ServerSideAsyncDomainService.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Northwind\EFCF_Northwind.cs" />
-    <Compile Include="Northwind\EFDbCtx_Northwind.cs" />
-    <Compile Include="Shared\Test.shared.cs">
+    <Compile Update="Shared\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.cs">
@@ -360,130 +248,114 @@
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Cities\Cities.shared.cs">
+    <Compile Update="Cities\Cities.shared.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityData.cs">
+    <Compile Update="Cities\CityData.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityDomainService.cs">
+    <Compile Update="Cities\CityDomainService.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityDomainServiceHost.cs">
+    <Compile Update="Cities\CityDomainServiceHost.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityDomainServiceHostFactory.cs">
+    <Compile Update="Cities\CityDomainServiceHostFactory.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityDomainService_AuthRequired.cs">
+    <Compile Update="Cities\CityDomainService_AuthRequired.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityEntities.cs">
+    <Compile Update="Cities\CityEntities.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\CityTypes.cs">
+    <Compile Update="Cities\CityTypes.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="AdventureWorks\EF_Catalog.cs" />
-    <Compile Include="AdventureWorks\LTS_Catalog.cs" />
-    <Compile Include="Cities\RequiresUserAttribute.cs">
+    <Compile Update="Cities\RequiresUserAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Cities\RequiresUserForStateAttribute.cs">
+    <Compile Update="Cities\RequiresUserForStateAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="DataModels\AdventureWorks1.Designer.cs">
+    <Compile Update="DataModels\AdventureWorks1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Northwind.designer.cs">
+    <Compile Update="DataModels\Northwind.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.dbml</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Northwind1.Designer.cs">
+    <Compile Update="DataModels\Northwind1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Northwind2008.Designer.cs">
+    <Compile Update="DataModels\Northwind2008.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind2008.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.metadata.cs" />
-    <Compile Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.designer.cs">
+    <Compile Update="DataModels\ScenarioModels\LTS_InheritanceScenarios.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LTS_InheritanceScenarios.dbml</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\EF_InheritanceScenarios.Designer.cs">
+    <Compile Update="DataModels\ScenarioModels\EF_InheritanceScenarios.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EF_InheritanceScenarios.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
-    <Compile Include="DataModels\ScenarioModels\ContextInstantiationScenarios.cs" />
-    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.cs" />
-    <Compile Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.Designer.cs">
+    <Compile Update="DataModels\ScenarioModels\EF_Northwind_Scenarios.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EF_Northwind_Scenarios.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\LTS_Northwind_ExternalMapping.cs" />
-    <Compile Include="DataModels\ScenarioModels\LTS_Northwind_Scenarios.cs" />
-    <Compile Include="DataModels\ScenarioModels\LTS_Northwind_Scenarios.metadata.cs" />
-    <Compile Include="DataModels\ScenarioModels\Northwind_Resources.Designer.cs">
+    <Compile Update="DataModels\ScenarioModels\Northwind_Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind_Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\ScenarioModels\Northwind_NoFks.Designer.cs">
+    <Compile Update="DataModels\ScenarioModels\Northwind_NoFks.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind_NoFks.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DBImager.cs" />
-    <Compile Include="Inheritance\EF_Inheritance_DomainService.cs" />
-    <Compile Include="Inheritance\LTS_Inheritance_DomainService.cs" />
-    <Compile Include="Mocks\AssociationInheritanceScenarios.cs">
+    <Compile Update="Mocks\AssociationInheritanceScenarios.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mocks\AuthenticationServices.cs">
+    <Compile Update="Mocks\AuthenticationServices.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mocks\ComplexTypeScenarios.cs">
+    <Compile Update="Mocks\ComplexTypeScenarios.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mocks\CompositionAndInheritanceScenarios.cs">
+    <Compile Update="Mocks\CompositionAndInheritanceScenarios.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mocks\CompositionScenarios.cs">
+    <Compile Update="Mocks\CompositionScenarios.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mocks\MockDomainServices.cs">
+    <Compile Update="Mocks\MockDomainServices.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Mocks\SharedScenarios.cs">
+    <Compile Update="Mocks\SharedScenarios.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Northwind\EF_Northwind.cs" />
-    <Compile Include="Northwind\EF_Northwind_POCO.cs" />
-    <Compile Include="Northwind\LTS_Northwind.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
+    <Compile Update="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Shared\SystemNamespace.shared.cs">
+    <Compile Update="Shared\SystemNamespace.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Shared\Global.shared.cs">
+    <Compile Update="Shared\Global.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Shared\Mock.shared.cs">
+    <Compile Update="Shared\Mock.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Content Include="Baselines\FullTypeNames\WebContext\WebContext3.g.vb">
@@ -495,24 +367,6 @@
     <Content Include="Shared\Test.shared.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
-      <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
-      <Name>OpenRiaServices.DomainServices.Tools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj">
-      <Project>{E9141C78-4083-4ED9-B0C3-591BF5986488}</Project>
-      <Name>OpenRiaServices.DomainServices.LinqToSql</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.DomainServices.Hosting</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Baselines\Default\Cities\Cities.g.cs">
@@ -613,9 +467,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="DataModels\AdventureWorks.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <SubType>Designer</SubType>
@@ -689,15 +540,10 @@
       <LastGenOutput>Northwind_NoFks.cs</LastGenOutput>
       <DependentUpon>Northwind_NoFks.edmx</DependentUpon>
     </None>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DataModels\Northwind.dbml.layout">
@@ -720,19 +566,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DataModels\ScenarioModels\Northwind_Resources.resx">
+    <EmbeddedResource Update="DataModels\ScenarioModels\Northwind_Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Northwind_Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>DataTests.Scenarios.LTS.Northwind_ExternalMapping</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <Compile Remove="Baselines\**\*.cs" />
+  </ItemGroup>
 </Project>
