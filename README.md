@@ -18,7 +18,7 @@ The source code and issue list is currently kept at github (https://github.com/O
 
 Documentation:
 * The original documentation for WCF RIA Services is still relevant and can be found at https://msdn.microsoft.com/en-us/library/ee707344(v=vs.91).aspx . Namespaces and assembly names are no longer correct since they changed with the release of OpenRiaServices.
-* Documentation for changes since WCF RIA Services can be found under https://openriaservices.codeplex.com/documentation 
+* Documentation for changes since WCF RIA Services can be found under https://github.com/OpenRIAServices/OpenRiaServices/releases
 
 Contribution Guidelines can be found at https://github.com/OpenRIAServices/OpenRiaServices/wiki/Contribution-Guidelines
 
