@@ -9,7 +9,7 @@ Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/op
 <!-- Below badges should be reenabled once new scripts for appveyor build is set up
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
 -->
-Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarqube.com/OpenRiaServices/tech_debt.svg)](https://sonarqube.com/dashboard/index?id=OpenRiaServices)
+Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarqube.com/OpenRIAServices_OpenRiaServices/tech_debt.svg)](https://sonarcloud.io/dashboard?id=OpenRIAServices_OpenRiaServices)
 
 
 The Open RIA Services project continues what was previously known as WCF RIA Services.
