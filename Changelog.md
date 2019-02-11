@@ -3,12 +3,12 @@
 ## Client
 
 1. Add netstandard 2.0 target
+1. Support quiery translation for builtin VB operators in projects compiled using VS 2017
 
 ## Server
 
 ## Code generation
 
-1. Support VB projects compiled using VS 2017
 
 ## Other
 
