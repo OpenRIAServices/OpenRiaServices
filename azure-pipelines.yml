@@ -69,8 +69,8 @@ steps:
      # Additional properties that will be passed to the scanner, 
      # Put one key=value per line, example:
      # sonar.exclusions=**/*.bin
-     sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\**\*.trx
-     sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)\**\*.coverage
+     # sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\**\*.trx
+     # sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)\**\*.coverage
 
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
