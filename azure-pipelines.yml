@@ -79,6 +79,7 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     maximumCpuCount: true
+    msbuildArgs: '/p:ContinuousIntegrationBuild=true'
 
 - powershell: |
    sqllocaldb start MSSQLLocalDB
@@ -101,7 +102,7 @@ steps:
   displayName: 'Run tests'
   inputs:
     testAssemblyVer2: |
-     **\bin\**\OpenRiaServices.DomainServices.*Test.dll
+     **\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
      !**\obj\**
      !**\sl5\**
 
@@ -111,7 +112,8 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     rerunFailedTests: true
-    rerunFailedThreshold: 40
+    rerunFailedThreshold: 40    
+    diagnosticsEnabled: false
   timeoutInMinutes: 40
 
 - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
