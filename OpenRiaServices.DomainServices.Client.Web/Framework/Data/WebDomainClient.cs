@@ -174,7 +174,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 return _webDomainClientFactory
 #if NETSTANDARD
-                    ?? (_webDomainClientFactory = new Wcf.SoapDomainClientFactory());
+                    ?? (_webDomainClientFactory = new SoapDomainClientFactory());
 #else
                     ?? (_webDomainClientFactory = new WebDomainClientFactory());
 #endif

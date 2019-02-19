@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.DomainServices.Client.Web {
+namespace OpenRiaServices.DomainServices.Client {
     using System;
     
     
