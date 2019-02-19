@@ -18,6 +18,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
     using System.Globalization;
     using System.Threading;
+    using SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Behaviors;
 
     /// <summary>
     /// Tests <see cref="WebDomainClient&lt;TContract&gt;"/> members.

@@ -4,16 +4,17 @@ using System.Globalization;
 using System.IO;
 using System.ServiceModel.Channels;
 using System.Text;
+using System.Xml;
 #if SILVERLIGHT
 using System.Windows.Browser;
 #else
 using System.Web;
 #endif
-using System.Xml;
 
 #if SERVERFX
 namespace OpenRiaServices.DomainServices.Hosting
 #else
+using OpenRiaServices.DomainServices.Client.Web.Behaviors;
 namespace OpenRiaServices.DomainServices.Client
 #endif
 {

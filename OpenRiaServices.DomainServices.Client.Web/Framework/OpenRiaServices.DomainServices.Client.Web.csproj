@@ -73,13 +73,10 @@
   <!-- Remove ServiceModel.Web dependent parts (binary endpoint) -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <Compile Remove="Data\Behaviors\MessageUtility.cs" />
-    <Compile Remove="Data\WebDomainClientFactory.cs" />
-    <Compile Remove="Data\Behaviors\WebDomainClientWebHttpBehavior.cs" />
+    <Compile Remove="Web\WebDomainClientFactory.cs" />
+    <Compile Remove="Web\Behaviors\WebDomainClientWebHttpBehavior.cs" />
     <Compile Remove="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs" />
     <Compile Remove="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Silverlight\Data\ServiceQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
