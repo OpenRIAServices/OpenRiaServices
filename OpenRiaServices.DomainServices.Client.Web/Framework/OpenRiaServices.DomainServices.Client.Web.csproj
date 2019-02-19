@@ -63,7 +63,7 @@
       <Link>Data\ExceptionHandlingUtility.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
-      <Link>Data\Behaviors\WebHttpQueryStringConverter.cs</Link>
+      <Link>Web\Behaviors\WebHttpQueryStringConverter.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs">
       <Link>Data\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs</Link>
@@ -83,6 +83,29 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Data\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Data\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
  
 </Project>
