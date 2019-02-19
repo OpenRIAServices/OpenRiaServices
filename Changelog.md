@@ -3,7 +3,21 @@
 ## Client
 
 1. Add netstandard 2.0 target
-1. Support quiery translation for builtin VB operators in projects compiled using VS 2017
+2. Support query translation for builtin VB operators in projects compiled using VS 2017
+3. Support using "soap" endpoint from client (Cross Platform)
+  * native support for all platforms supporting netstandard 2
+   Run this code before creating first DomainContext, 
+  ``` csharp
+  DomainContext.DomainClientFactory = new OpenRiaServices.DomainServices.Client.Web.SoapDomainClientFactory()
+{
+    ServerBaseUri = "https://my.site.com/",
+};
+* Limitations / differences from binary endpoint:
+  * Standard query size limitations apply (no workaround as for binary endpoint)
+  * invoke operations will use POST even when for operations with HasSideEffect=false
+  * soap endpoint must be manually enabled on server
+
+  ```
 
 ## Server
 
