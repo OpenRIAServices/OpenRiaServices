@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
-using System.ServiceModel.Dispatcher;
-using OpenRiaServices.DomainServices.Client.Web;
+using OpenRiaServices.DomainServices.Client.Web.Behaviors;
 
-namespace OpenRiaServices.DomainServices.Client.Wcf
+namespace OpenRiaServices.DomainServices.Client.Web
 {
     /// <summary>
     /// For connecting to services using the /soap endpoint based on <see cref="BasicHttpBinding"/>.
@@ -22,6 +13,7 @@ namespace OpenRiaServices.DomainServices.Client.Wcf
     /// </summary>
     public class SoapDomainClientFactory : WcfDomainClientFactory
     {
+        private const string EndpointSuffix = "/soap";
         private readonly SoapEndpointBehavior _soapBehavior;
 
         /// <summary>
@@ -66,7 +58,7 @@ namespace OpenRiaServices.DomainServices.Client.Wcf
         /// <returns>endpoint usefull to connect to soap endpoint of the service</returns>
         protected override EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
         {
-            return new EndpointAddress(new Uri(endpoint.OriginalString + "/soap", UriKind.Absolute));
+            return new EndpointAddress(new Uri(endpoint.OriginalString + EndpointSuffix, UriKind.Absolute));
         }
 
         /// <summary>

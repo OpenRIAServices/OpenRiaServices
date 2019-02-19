@@ -12,7 +12,7 @@ using System.Web;
 #if SERVERFX
 namespace OpenRiaServices.DomainServices.Hosting
 #else
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
 #endif
 {
     internal class WebHttpQueryStringConverter : QueryStringConverter

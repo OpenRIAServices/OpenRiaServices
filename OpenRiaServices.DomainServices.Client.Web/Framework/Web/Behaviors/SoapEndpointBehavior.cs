@@ -3,22 +3,22 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
-namespace OpenRiaServices.DomainServices.Client.Web
+namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
 {
     /// <summary>
     /// A SOAP endpoint behavior which injects a message inspector that adds query headers.
     /// </summary>
-    sealed class SoapEndpointBehavior : IEndpointBehavior
+    sealed partial class SoapEndpointBehavior : IEndpointBehavior
     {
         /// <summary>
         /// Message insepctor to use if it is set to a non-<c>null</c> value.
         /// </summary>
         private readonly IClientMessageInspector _cookieInspector;
-        private readonly SoapQueryInspector _inspector;
-        
+        private readonly QueryInspector _soapQueryInspector;
+
         public SoapEndpointBehavior(WcfDomainClientFactory factory)
         {
-            _inspector = new SoapQueryInspector(factory);
+            _soapQueryInspector = new QueryInspector(factory);
             _cookieInspector = factory.SharedCookieMessageInspector;
         }
 
@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
             var inspectors = clientRuntime.ClientMessageInspectors;
 #endif
 
-            inspectors.Add(_inspector);
+            inspectors.Add(_soapQueryInspector);
             if (_cookieInspector != null)
                 inspectors.Add(_cookieInspector);
         }
@@ -79,6 +79,6 @@ namespace OpenRiaServices.DomainServices.Client.Web
                     });
                 }
             }
-            }
+        }
     }
 }
