@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
     /// <summary>
     /// Base class DomainClientFactories targeting WCF and creating <see cref="WebDomainClient{TContract}"/> instances.
     /// For most uses you should use a concerete implementation such as 
-    /// "WebDomainClientFactory" or <see cref="Wcf.SoapDomainClientFactory"/>
+    /// "WebDomainClientFactory" or <see cref="SoapDomainClientFactory"/>
     /// instead.
     /// </summary>
 #else
