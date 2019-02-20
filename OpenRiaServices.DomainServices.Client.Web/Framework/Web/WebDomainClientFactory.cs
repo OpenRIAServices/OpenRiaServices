@@ -5,6 +5,7 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
+using OpenRiaServices.DomainServices.Client.Web.Behaviors;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {

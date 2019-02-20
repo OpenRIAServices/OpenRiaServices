@@ -8,19 +8,30 @@ using System.ServiceModel.Dispatcher;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
+#if NETSTANDARD
     /// <summary>
     /// Base class DomainClientFactories targeting WCF and creating <see cref="WebDomainClient{TContract}"/> instances.
-    /// For most uses you should use a concerete implementation such as <see cref="WebDomainClientFactory"/> instead.
+    /// For most uses you should use a concerete implementation such as 
+    /// "WebDomainClientFactory" or <see cref="SoapDomainClientFactory"/>
+    /// instead.
     /// </summary>
+#else
+    /// <summary>
+    /// Base class DomainClientFactories targeting WCF and creating <see cref="WebDomainClient{TContract}"/> instances.
+    /// For most uses you should use a concerete implementation such as 
+    /// <see cref="WebDomainClientFactory"/> or <see cref="SoapDomainClientFactory"/>
+    /// instead.
+    /// </summary>
+#endif
     public abstract class WcfDomainClientFactory : DomainClientFactory
     {
         private readonly MethodInfo _createInstanceMethod;
         private CookieContainer _cookieContainer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WebDomainClientFactory" /> class.
+        /// Initializes a new instance of the <see cref="WcfDomainClientFactory" /> class.
         /// </summary>
-        public WcfDomainClientFactory()
+        protected WcfDomainClientFactory()
         {
             _createInstanceMethod = typeof(WcfDomainClientFactory).GetMethod(nameof(CreateInstance), BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -134,8 +145,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
 
         /// <summary>
         /// When <see cref="CookieContainer"/> is set to a non-<c>null</c> value then
-        /// this inspector is used by 
-        /// <see cref="WebDomainClientWebHttpBehavior.ApplyClientBehavior(System.ServiceModel.Description.ServiceEndpoint, ClientRuntime)"/>
+        /// this inspector is used by wcf based transports to setup cookie suport
         /// </summary>
         internal IClientMessageInspector SharedCookieMessageInspector { get; private set; }
     }

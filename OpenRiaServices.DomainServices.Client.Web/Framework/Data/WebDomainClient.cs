@@ -172,7 +172,12 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return _webDomainClientFactory ?? (_webDomainClientFactory = new WebDomainClientFactory());
+                return _webDomainClientFactory
+#if NETSTANDARD
+                    ?? (_webDomainClientFactory = new SoapDomainClientFactory());
+#else
+                    ?? (_webDomainClientFactory = new WebDomainClientFactory());
+#endif
             }
         }
 
