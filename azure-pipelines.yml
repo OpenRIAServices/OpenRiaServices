@@ -121,22 +121,6 @@ steps:
   continueOnError: true  
   condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
-- task: PowerShell@1
-  displayName: 'PowerShell Script'
-  inputs:
-    scriptName: 'OpenRiaServices.NuGet/Pack-All.ps1'
-    arguments: '-Version "$(GitVersion.NuGetVersion)"'
-  enabled: false
-
-- task: NuGetPackager@0
-  displayName: 'NuGet Packager '
-  inputs:
-    searchPattern: 'OpenRiaServices.NuGet\**\*.nuspec;-:OpenRiaServices.NuGet\**\*.Signed.*nuspec;-:OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;-:OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;-:OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
-    versionByBuild: byEnvVar
-    versionEnvVar: GitVersion.NuGetVersion
-  enabled: false
-  continueOnError: true
-  condition: succeededOrFailed()
 
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
@@ -146,8 +130,10 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
     includeSymbols: true
+    packDestination: '$(Build.ArtifactStagingDirectory)' 
   enabled: false
   continueOnError: true
+  # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 - powershell: |
    if ($env:CONFIGURATION -ne "Signed") {
@@ -168,24 +154,15 @@ steps:
   enabled: false
   continueOnError: true
 
-- task: NuGetCommand@2
-  displayName: 'NuGet custom'
-  inputs:
-    command: custom
-    arguments: 'push '
-  enabled: false
-
 - task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  displayName: 'Copy nupkg to: $(build.artifactstagingdirectory)'
   inputs:
     SourceFolder: '$(build.sourcesdirectory)'
     Contents: |
-     OpenRiaServices.NuGet\**\*.nupkg
-     .sonarqube\out\**
-     !**\packages\**
+     OpenRiaServices.NuGet\bin\**\*.nupkg
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
-
+  enabled: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
@@ -193,10 +170,7 @@ steps:
     PathtoPublish: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
 
-
 - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
   continueOnError: true  
   condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
-
-
