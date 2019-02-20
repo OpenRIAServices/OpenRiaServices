@@ -14,11 +14,8 @@ namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
             private const string IncludeTotalCountPropertyName = "DomainServiceIncludeTotalCount";
             private const string QueryPropertyName = "DomainServiceQuery";
 
-            private readonly WcfDomainClientFactory _factory;
-
-            public QueryInspector(WcfDomainClientFactory factory)
+            public QueryInspector()
             {
-                _factory = factory;
             }
 
             private static string RewriteAction(string action)

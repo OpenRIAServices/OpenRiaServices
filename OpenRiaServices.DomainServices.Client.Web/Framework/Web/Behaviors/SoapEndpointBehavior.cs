@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
 
         public SoapEndpointBehavior(WcfDomainClientFactory factory)
         {
-            _soapQueryInspector = new QueryInspector(factory);
+            _soapQueryInspector = new QueryInspector();
             _cookieInspector = factory.SharedCookieMessageInspector;
         }
 
