@@ -90,7 +90,7 @@
   * but if we set ContinuousIntegrationBuild property on CI build we need to include it for all projects
   * we might be able to set DeterministicSourcePaths only for frameworks to true if we determine we are in a CI build
   -->
-  <ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
+  <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
   </ItemGroup>
   
