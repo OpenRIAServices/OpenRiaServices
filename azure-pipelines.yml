@@ -78,8 +78,7 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     maximumCpuCount: true
-    msbuildArgs: '/p:ContinuousIntegrationBuild=true'
-
+ 
 - powershell: |
    sqllocaldb start MSSQLLocalDB
    if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
