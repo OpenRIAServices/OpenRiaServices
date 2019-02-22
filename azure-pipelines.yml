@@ -126,7 +126,7 @@ steps:
     packagesToPack: 'OpenRiaServices.NuGet\**\*.nuspec;!OpenRiaServices.NuGet\**\*.Signed.*nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
-    includeSymbols: true
+#    includeSymbols: true
     packDestination: '$(Build.ArtifactStagingDirectory)' 
   enabled: true
   continueOnError: true
