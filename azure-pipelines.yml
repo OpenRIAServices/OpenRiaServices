@@ -123,24 +123,13 @@ steps:
   displayName: 'NuGet pack'
   inputs:
     command: pack
-    packagesToPack: 'OpenRiaServices.NuGet\**\*.nuspec;!OpenRiaServices.NuGet\**\*.Signed.*nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
+    packagesToPack: 'OpenRiaServices.NuGet\OpenRiaServices.*\*.nuspec;!OpenRiaServices.NuGet\OpenRiaServices.*\*.Signed.*nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
-#    includeSymbols: true
     packDestination: '$(Build.ArtifactStagingDirectory)' 
   enabled: true
   continueOnError: true
   # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-- powershell: |
-   if ($env:CONFIGURATION -ne "Signed") {
-       dir OpenRiaServices.NuGet\*.nupkg -Recurse | where {$_.Name -match "OpenRiaServices.Signed"} | del}
-   
-   if ($env:CONFIGURATION -eq "Signed") {
-       dir OpenRiaServices.NuGet\*.nupkg -Recurse  | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del} 
-
-  displayName: 'PowerShell Script'
-  enabled: false
 
 - task: NuGetPublisher@0
   displayName: 'NuGet Publisher '
@@ -150,16 +139,6 @@ steps:
     continueOnEmptyNupkgMatch: true
   enabled: false
   continueOnError: true
-
-- task: CopyFiles@2
-  displayName: 'Copy nupkg to: $(build.artifactstagingdirectory)'
-  inputs:
-    SourceFolder: '$(build.sourcesdirectory)'
-    Contents: |
-     OpenRiaServices.NuGet\bin\**\*.nupkg
-    TargetFolder: '$(build.artifactstagingdirectory)'
-  condition: succeededOrFailed()
-  enabled: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
