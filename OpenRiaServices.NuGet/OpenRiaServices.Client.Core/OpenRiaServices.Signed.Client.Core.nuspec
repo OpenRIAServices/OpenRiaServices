@@ -53,9 +53,9 @@
     <file src="..\..\bin\Signed\netstandard2.0\OpenRiaServices.DomainServices.Client.xml" target="lib\netstandard2.0\OpenRiaServices.DomainServices.Client.xml" />
 
     <!-- Portable binaries -->
-    <file src="..\..\bin\Signed\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.dll" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.dll" />
-    <file src="..\..\bin\Signed\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.pdb" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.pdb" />
-    <file src="..\..\bin\Signed\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.xml" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.xml" />
+    <file src="..\..\bin\Signed\portable40-net45+sl5+win8\OpenRiaServices.DomainServices.Client.dll" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.dll" />
+    <file src="..\..\bin\Signed\portable40-net45+sl5+win8\OpenRiaServices.DomainServices.Client.pdb" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.pdb" />
+    <file src="..\..\bin\Signed\portable40-net45+sl5+win8\OpenRiaServices.DomainServices.Client.xml" target="lib\portable-net45+sl5+win8\OpenRiaServices.DomainServices.Client.xml" />
 
     <!-- Silverlight binaries -->
     <file src="..\..\bin\Signed\sl5\OpenRiaServices.DomainServices.Client.dll" target="lib\sl5\OpenRiaServices.DomainServices.Client.dll" />
