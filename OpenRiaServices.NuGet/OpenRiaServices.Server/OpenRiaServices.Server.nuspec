@@ -36,6 +36,10 @@
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
     <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
     <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.dll" />
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.pdb" />
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.xml" />
     <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Server.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.dll" />
-  </files>
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Server.pdb" target="lib\net45\OpenRiaServices.DomainServices.Server.pdb" />
+    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Server.xml" target="lib\net45\OpenRiaServices.DomainServices.Server.xml" />
+    </files>
 </package>

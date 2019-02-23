@@ -6,7 +6,8 @@
     <IsFrameworkProject Condition="'$(IsTestProject)' != 'true'">true</IsFrameworkProject>
 
     <Configurations>Debug;Release;Signed</Configurations>
-
+    <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
+    
     <!-- Use csharp 7.3 for all projects -->
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">7.3</LangVersion>
    
@@ -25,8 +26,7 @@
     pdb reader cannot read the portable ones
     -->
     <DebugType>pdbonly</DebugType>
-    <DebugType Condition=" '$(TargetFramework)' == 'netstandard2.0' ">portable</DebugType>
-    <!-- Condition=" " -->
+    <DebugType Condition=" $(TargetFramework.StartsWith('netstandard')) ">portable</DebugType>
     
   </PropertyGroup>
   
@@ -85,6 +85,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
+  </ItemGroup>
+
+  <!-- Enable source link, we really only want this for framework assemblies and CI builds
+  -->
+  <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
   </ItemGroup>
   
 </Project>
