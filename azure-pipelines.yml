@@ -129,7 +129,7 @@ steps:
     packDestination: '$(Build.ArtifactStagingDirectory)' 
   enabled: true
   continueOnError: true
-  # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: NuGetPublisher@0
   displayName: 'NuGet Publisher '
