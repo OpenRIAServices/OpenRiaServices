@@ -3,9 +3,8 @@
   <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
   <PropertyGroup>
     <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
-    <IsFrameworkProject Condition="'$(IsTestProject)' != 'true'">true</IsFrameworkProject>
+    <IsFrameworkProject Condition="'$(IsTestProject)' != 'true' and !$(MSBuildProjectFile.Contains('.VisualStudio.')) ">true</IsFrameworkProject>
 
-    <Configurations>Debug;Release;Signed</Configurations>
     <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
     
     <!-- Use csharp 7.3 for all projects -->
@@ -21,6 +20,12 @@
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
+    <!-- Setup signing-->
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+
     <!-- opt out from portable pdbs, for better compability with older net framework releases
     This is required for several test related projects since code generation's 
     pdb reader cannot read the portable ones
@@ -30,18 +35,6 @@
     
   </PropertyGroup>
   
- <PropertyGroup Condition="'$(Configuration)' == 'Signed'">
-    <!-- Set SIGNED constant for CS projects -->
-    <DefineConstants Condition="'$(MSBuildProjectExtension)' == '.csproj'">$(DefineConstants);SIGNED</DefineConstants>
-    <!-- Set SIGNED constant for VB projects -->
-    <DefineConstants Condition="'$(MSBuildProjectExtension)' == '.vbproj'">$(DefineConstants),SIGNED=1</DefineConstants>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
-    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-
   <!-- Add Silverlight build support -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' ">
     <NugetTargetMoniker>Silverlight,Version=v5.0</NugetTargetMoniker>

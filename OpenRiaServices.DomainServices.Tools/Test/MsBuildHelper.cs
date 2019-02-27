@@ -167,9 +167,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private static string GetConfiguration()
         {
-#if SIGNED
-            return "Signed";
-#elif DEBUG
+#if DEBUG
             return "Debug";
 #else
             return "Release";
