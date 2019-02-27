@@ -27,7 +27,7 @@
  
 1. Use VS 2017 for compilation
 2. Replaced multiple projects with using built in multitargeting with SDK style projects
-1. All assemblies are strong named ("signed") 
+1. All assemblies are strong named ("signed") (#145)
   * The "signed" version of all nuget packages will be depreciated since it is only to replace them with the "normal" nuget packages
   * This will significantly make maintainance easier as well as make it easier to "get started" since there are less variations
 
