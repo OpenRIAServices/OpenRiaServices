@@ -108,14 +108,11 @@ namespace OpenRiaServices.DomainServices.Tools
                     // before the final call to AssemblyUtilities.SetAssemblyResolver (when the DomainServiceCatalog is instanciated)
                     // we need to setup our assembly resolver with the server assembly in case the server version is signed
                     // but this version is unsigned
-#if SIGNED
                     if (!serverAssembly.GetName().IsSigned())
                     {
                         loggingService.LogWarning(Resource.ClientCodeGen_SignedTools_UnsignedServer);
                     }
-#else
-                    AssemblyUtilities.SetAssemblyResolver(new[] { serverAssembly });
-#endif
+
                 }
                 else
                 {
