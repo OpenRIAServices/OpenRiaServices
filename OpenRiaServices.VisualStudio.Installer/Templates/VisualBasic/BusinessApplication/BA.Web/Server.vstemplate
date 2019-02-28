@@ -1,0 +1,71 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BusinessApplication.Web</Name>
+    <Description>BusinessApplication.Web</Description>
+    <ProjectType>VisualBasic</ProjectType>
+    <ProjectSubType></ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>false</CreateNewFolder>
+    <DefaultName>BusinessApplication.Web</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon />
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$safeprojectname$.Web.vbproj" File="BusinessApplication.Web.vbproj" ReplaceParameters="true">
+      <Folder Name="My Project" TargetFolderName="My Project">
+        <ProjectItem ReplaceParameters="true" TargetFileName="Application.myapp">Application.myapp</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Application.Designer.vb">Application.Designer.vb</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+        <Folder Name="MyExtensions" TargetFolderName="MyExtensions">
+          <ProjectItem ReplaceParameters="true" TargetFileName="MyWebExtension.vb">MyWebExtension.vb</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="App_Data" TargetFolderName="App_Data" />
+      <Folder Name="ClientBin" TargetFolderName="ClientBin" />
+      <Folder Name="Models" TargetFolderName="Models">
+        <Folder Name="Shared" TargetFolderName="Shared">
+          <ProjectItem ReplaceParameters="true" TargetFileName="User.shared.vb">User.shared.vb</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="User.vb">User.vb</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationData.vb">RegistrationData.vb</ProjectItem>
+      </Folder>
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ValidationErrorResources.resx">ValidationErrorResources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationDataResources.resx">RegistrationDataResources.resx</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ValidationErrorResources.Designer.vb">ValidationErrorResources.Designer.vb</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrationDataResources.Designer.vb">RegistrationDataResources.Designer.vb</ProjectItem>
+      </Folder>
+      <Folder Name="Services" TargetFolderName="Services">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AuthenticationService.vb">AuthenticationService.vb</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserRegistrationService.vb">UserRegistrationService.vb</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true">__safeclientprojectname__TestPage.aspx</ProjectItem>
+      <ProjectItem ReplaceParameters="true">__safeclientprojectname__TestPage.html</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Silverlight.js">Silverlight.js</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Release.config">Web.Release.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="GlobalSuppressions.vb">GlobalSuppressions.vb</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+    <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <packages repository="extension" repositoryId="cf249cd4-01b1-4533-8c65-2b1bb6dfa72b">
+      <package id="Microsoft.AspNet.Providers.Core" version="1.1" />
+      <package id="Microsoft.AspNet.Providers" version="1.2" />
+    </packages>
+    <packages repository="extension"
+          repositoryId="OpenRiaServices.Tools.Outercurve.83014b5f-3f89-4eff-a7fa-b5ec62657247">
+        <package id="OpenRiaServices.Server" version = "4.3.0.0/>
+    </packages>
+  </WizardData>
+  <WizardExtension>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.12.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.BusinessApplicationServerTemplateWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
