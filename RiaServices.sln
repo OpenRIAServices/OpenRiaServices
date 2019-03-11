@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28606.126
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -121,6 +121,24 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeGen", "CodeGen", "{96D29745-0D96-4959-AB96-8FBEDC8AB485}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnrealeasedDomainController", "UnrealeasedDomainController", "{62CFE19E-EA47-4078-9C10-F59930BBCC05}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualStudioExtension", "VisualStudioExtension", "{E5E3E0D1-56E9-439F-85EB-310F7E383910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.VisualStudio.Installer", "VisualStudio\Installer\OpenRiaServices.VisualStudio.Installer.csproj", "{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.VisualStudio.DomainServices.Tools", "VisualStudio\Tools\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj", "{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.VisualStudio.DomainServices.Tools.Test", "VisualStudio\Tools\Test\OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj", "{259C54F8-1B01-418F-B8D2-D5288AD7A3A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{0835F2FE-7B01-418A-9E35-735FF43F6601}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{D985FCAF-DB0D-438F-825E-07D9B5B52980}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationDomainService", "VisualStudio\ItemTemplates\CSharp\AuthenticationDomainService\AuthenticationDomainService.csproj", "{C317F649-C1F8-4474-AECF-51BE88F26218}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{26D71C60-FD74-4559-8FA9-910020F9540D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainServiceClass", "VisualStudio\ItemTemplates\CSharp\DomainServiceClass\DomainServiceClass.csproj", "{9977461F-0CBE-4063-8138-8449C47CA7CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -308,6 +326,26 @@ Global
 		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E0328F1-3476-4DC9-98B4-68A95ABE2646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{259C54F8-1B01-418F-B8D2-D5288AD7A3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259C54F8-1B01-418F-B8D2-D5288AD7A3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259C54F8-1B01-418F-B8D2-D5288AD7A3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259C54F8-1B01-418F-B8D2-D5288AD7A3A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C317F649-C1F8-4474-AECF-51BE88F26218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C317F649-C1F8-4474-AECF-51BE88F26218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C317F649-C1F8-4474-AECF-51BE88F26218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C317F649-C1F8-4474-AECF-51BE88F26218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -365,6 +403,14 @@ Global
 		{5612B0C3-4314-4795-ACA9-DDC5F25AE04D} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
 		{96D29745-0D96-4959-AB96-8FBEDC8AB485} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
 		{62CFE19E-EA47-4078-9C10-F59930BBCC05} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8} = {E5E3E0D1-56E9-439F-85EB-310F7E383910}
+		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA} = {E5E3E0D1-56E9-439F-85EB-310F7E383910}
+		{259C54F8-1B01-418F-B8D2-D5288AD7A3A2} = {E5E3E0D1-56E9-439F-85EB-310F7E383910}
+		{0835F2FE-7B01-418A-9E35-735FF43F6601} = {E5E3E0D1-56E9-439F-85EB-310F7E383910}
+		{D985FCAF-DB0D-438F-825E-07D9B5B52980} = {0835F2FE-7B01-418A-9E35-735FF43F6601}
+		{C317F649-C1F8-4474-AECF-51BE88F26218} = {26D71C60-FD74-4559-8FA9-910020F9540D}
+		{26D71C60-FD74-4559-8FA9-910020F9540D} = {D985FCAF-DB0D-438F-825E-07D9B5B52980}
+		{9977461F-0CBE-4063-8138-8449C47CA7CA} = {26D71C60-FD74-4559-8FA9-910020F9540D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}

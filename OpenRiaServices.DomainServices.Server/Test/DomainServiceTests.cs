@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Security.Principal;
 using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Hosting;
 using System.Xml.Linq;
 using Cities;
