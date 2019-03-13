@@ -617,10 +617,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             this.CityDomainContext =
                 new CityDomainContext(
+#pragma warning disable CS0618 // We are intentionally using constructor which is intended to be removed
                     new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(uri, usesHttps: false, channelFactory: factory)
                     {
                         EntityTypes = new List<Type>() { typeof(City), typeof(Zip) }
                     });
+#pragma warning restore CS0618 // We are intentionally using constructor which is intended to be removed
         }
 
         private void AssertInProgress(IAsyncResult asyncResult)
