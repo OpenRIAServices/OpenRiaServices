@@ -42,7 +42,11 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             while (containerProjects.Any())
             {
                 var containerProject = containerProjects.Dequeue();
-                foreach (ProjectItem item in containerProject.ProjectItems)
+                var projectItems = containerProject.ProjectItems;
+                if (projectItems == null) // This can happen if project is unloaded
+                    continue;
+
+                foreach (ProjectItem item in projectItems)
                 {
                     var nestedProject = item.SubProject;
                     if (nestedProject == null)
@@ -68,7 +72,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
 
         public static bool IsSolutionFolder(this Project project)
         {
-            return project.Kind != null && project.Kind.Equals(VsConstants.VsProjectItemKindSolutionFolder, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(project.Kind, VsConstants.VsProjectItemKindSolutionFolder, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool IsTopLevelSolutionFolder(this Project project)
