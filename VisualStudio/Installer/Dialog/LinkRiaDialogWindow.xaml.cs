@@ -65,7 +65,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
         }
         private void Projects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // this.DisableFastUpToDateCheckBox.IsChecked = true;
+
         }
 
 
@@ -81,20 +81,10 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
                 var selectedProject = itemAsComboBoxItem.DataContext as Project;
                 _linker.LinkedProject = selectedProject;
             }
-            if (this._linker.DisableFastUpToDateCheck != this.DisableFastUpToDateCheckBox.IsChecked)
-            {
-                this._linker.DisableFastUpToDateCheck = this.DisableFastUpToDateCheckBox.IsChecked;
-            }
 
-            if (this._linker.OpenRiaClientUseFullTypeNames != this.OpenRiaClientUseFullTypeNames.IsChecked)
-            {
-                this._linker.OpenRiaClientUseFullTypeNames = this.OpenRiaClientUseFullTypeNames.IsChecked;
-            }
-
-            if (this._linker.OpenRiaGenerateApplicationContext != this.OpenRiaGenerateApplicationContext.IsChecked)
-            {
-                this._linker.OpenRiaGenerateApplicationContext = this.OpenRiaGenerateApplicationContext.IsChecked;
-            }
+            this._linker.DisableFastUpToDateCheck = this.DisableFastUpToDateCheckBox.IsChecked;
+            this._linker.OpenRiaClientUseFullTypeNames = this.OpenRiaClientUseFullTypeNames.IsChecked;
+            this._linker.OpenRiaGenerateApplicationContext = this.OpenRiaGenerateApplicationContext.IsChecked;
 
             _project.Save();
 

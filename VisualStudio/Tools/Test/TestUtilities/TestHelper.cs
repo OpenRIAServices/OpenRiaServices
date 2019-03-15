@@ -6,38 +6,22 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
 using OpenRiaServices.DomainServices.LinqToSql;
+using ToolHelper = OpenRiaServices.DomainServices.Tools.Test.TestHelper;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
 {
-    internal class TestHelper
+    internal static class TestHelper
     {
-        public static string ExtensionFromLanguage(string language)
-        {
-            return language == "C#" ? ".cs" : ".vb";
-        }
-
-        public static string LineCommentFromLanguage(string language)
-        {
-            string extension = ExtensionFromLanguage(language);
-            return extension.EndsWith("cs") ? "//" : "'";
-        }
+        public static string ExtensionFromLanguage(string language) => ToolHelper.ExtensionFromLanguage(language);
 
         public static string GetProjectPath()
         {
-            string projectPathFile = Path.Combine(TestHelper.TestDir, "ProjectPath.txt");
+            string projectPathFile = Path.Combine(TestHelper.TestDir, "DomainServiceToolsPath.txt");
             if (!File.Exists(projectPathFile))
                 Assert.Fail("Could not find " + projectPathFile + ".  Did you forget a [Deployment] attribute?");
 
-            string projectPath = string.Empty;
-            string inputString = string.Empty;
-            using (StreamReader t1 = new StreamReader(projectPathFile))
-            {
-                inputString = t1.ReadToEnd();
-            }
-
-            string[] split = inputString.Split(',');
-            projectPath = split[0];
-            return projectPath;
+            var path = File.ReadAllText(projectPathFile);
+            return path.Trim();
         }
 
         public static string GetProjectDir()
@@ -94,74 +78,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
             get
             {
                 return Path.GetDirectoryName(typeof(TestHelper).Assembly.Location);
-            }
-        }
-
-        public static string GetOutputTestDataDir(string subDir)
-        {
-            string path = Path.GetFullPath(Path.Combine(TestDir, subDir));
-            return path;
-        }
-
-        /// <summary>
-        /// Converts all the whitespace in the given string into a single space char.
-        /// This is intended to give us resilience to formatting and whitespace changes to CodeDom
-        /// </summary>
-        /// <param name="s">String to convert</param>
-        /// <returns>Collapsed version of string</returns>
-        public static string NormalizeWhitespace(string s)
-        {
-            StringBuilder sb = new StringBuilder();
-            int maxLen = s.Length;
-            for (int i = 0; i < maxLen; /* no incr */)
-            {
-                char c = s[i++];
-                if (Char.IsWhiteSpace(c))
-                {
-                    sb.Append(' ');
-                    while (i < maxLen && Char.IsWhiteSpace(s[i]))
-                        ++i;
-                }
-                else
-                {
-                    sb.Append(c);
-                }
-            }
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Asserts that the generated code contains all the expected code.
-        /// Whitespace is normalized, so the input strings can use spaces to represent arbitrary whitespace
-        /// </summary>
-        /// <param name="generatedCode"></param>
-        /// <param name="expectedCode"></param>
-        public static void AssertGeneratedCodeContains(string generatedCode, params string[] expectedCode)
-        {
-            string normalizedGeneratedCode = NormalizeWhitespace(generatedCode);
-            StringBuilder sb = new StringBuilder();
-            foreach (string code in expectedCode)
-            {
-                string s = NormalizeWhitespace(code);
-                if (!normalizedGeneratedCode.Contains(s))
-                    Assert.Fail("Generated code did not contain:\r\n<" + code + ">");
-            }
-        }
-
-        /// <summary>
-        /// Assert none of the given strings are present in the generated code
-        /// </summary>
-        /// <param name="generatedCode"></param>
-        /// <param name="expectedCode"></param>
-        public static void AssertGeneratedCodeDoesNotContain(string generatedCode, params string[] expectedCode)
-        {
-            string normalizedGeneratedCode = NormalizeWhitespace(generatedCode);
-            StringBuilder sb = new StringBuilder();
-            foreach (string code in expectedCode)
-            {
-                string s = NormalizeWhitespace(code);
-                if (normalizedGeneratedCode.Contains(s))
-                    Assert.Fail("Generated code was not expected to contain:\r\n<" + code + ">");
             }
         }
 

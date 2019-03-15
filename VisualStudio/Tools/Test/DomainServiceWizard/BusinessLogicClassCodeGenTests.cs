@@ -36,7 +36,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         }
 #endif
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for an empty model")]
         public void BusinessLogicClass_CodeGen_Empty_CSharp()
@@ -44,7 +44,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", null, "Empty_DomainService", new string[0]);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for an empty model")]
         public void BusinessLogicClass_CodeGen_Empty_VB()
@@ -52,7 +52,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", null, "Empty_DomainService", new string[0]);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for an empty model with an OData endpoing")]
         public void BusinessLogicClass_CodeGen_Empty_OData_CSharp()
@@ -61,7 +61,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for an empty model with an OData endpoint")]
         public void BusinessLogicClass_CodeGen_Empty_OData_VB()
@@ -70,7 +70,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_Scenarios_CSharp()
@@ -79,7 +79,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios), "EF_Northwind_Scenarios", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_Scenarios_VB()
@@ -88,7 +88,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios), "EF_Northwind_Scenarios", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind POCO model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_CSharp()
@@ -97,7 +97,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind POCO model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_VB()
@@ -106,7 +106,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind POCO model with root namespace same as namespace")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_VB_RootNs()
@@ -115,7 +115,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO_RootNS", references, false, "BizLogic.Test", "BizLogic.Test");
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for LTS Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_Scenarios_CSharp()
@@ -124,7 +124,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios), "LTS_Northwind_Scenarios", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_Scenarios_VB()
@@ -133,7 +133,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios), "LTS_Northwind_Scenarios", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_CSharp()
@@ -142,7 +142,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(NorthwindModel.NorthwindEntities), "EF_Northwind", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_VB()
@@ -151,7 +151,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(NorthwindModel.NorthwindEntities), "EF_Northwind", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for LTS Northwind model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_CSharp()
@@ -160,7 +160,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS Northwind model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_VB()
@@ -169,7 +169,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS Northwind model with rootnamespace")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_VB_RootNs()
@@ -178,7 +178,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind_RootNs", references, false, "BizLogic.Test", "BizLogic.Test");
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_CSharp()
@@ -187,7 +187,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(AdventureWorksEntities), "EF_AdventureWorks", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_VB()
@@ -196,7 +196,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks", references);
         }
         
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_CSharp()
@@ -205,7 +205,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_VB()
@@ -214,7 +214,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for LTS AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_LTS_AdventureWorks_CSharp()
@@ -223,7 +223,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(DataTests.AdventureWorks.LTS.AdventureWorks), "LTS_AdventureWorks", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_LTS_AdventureWorks_VB()
@@ -232,7 +232,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DataTests.AdventureWorks.LTS.AdventureWorks), "LTS_AdventureWorks", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for BuddyMetadataScenarios model that contains custom scenarios")]
         public void BusinessLogicClass_CodeGen_LTS_BuddyMetadataScenarios_CSharp()
@@ -241,7 +241,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(DataModels.ScenarioModels.BuddyMetadataScenariosDataContext), "BuddyMetadataScenarios", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for BuddyMetadataScenarios model that contains custom scenarios")]
         public void BusinessLogicClass_CodeGen_LTS_BuddyMetadataScenarios_VB()
@@ -250,7 +250,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DataModels.ScenarioModels.BuddyMetadataScenariosDataContext), "BuddyMetadataScenarios", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies c# codegen baseline for BusinessLogicClass for EF DbContext model")]
         public void BusinessLogicClass_CodeGen_EF_DBContextScenarios_CSharp()
@@ -259,7 +259,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(DbContextModels.Northwind.DbCtxNorthwindEntities), "EF_DBContext_Northwind", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF DbContext model")]
         public void BusinessLogicClass_CodeGen_EF_DBContextScenarios_VB()
@@ -268,7 +268,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(DbContextModels.Northwind.DbCtxNorthwindEntities), "EF_DBContext_Northwind", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies c# codegen baseline for BusinessLogicClass for EF CodeFirst model")]
         public void BusinessLogicClass_CodeGen_EF_CodeFirstScenarios_CSharp()
@@ -277,7 +277,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("C#", typeof(CodeFirstModels.EFCFNorthwindEntities), "EF_CF_Context", references);
         }
 
-        [DeploymentItem(@"Microsoft.VisualStudio.ServiceModel.DomainServices.Tools\Test\ProjectPath.txt")]
+        [DeploymentItem(@"DomainServiceToolsPath.txt")]
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF CodeFirst model")]
         public void BusinessLogicClass_CodeGen_EF_CodeFirstScenarios_VB()

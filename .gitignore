@@ -156,3 +156,4 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+/VisualStudio/Tools/Test/DomainServiceToolsPath.txt

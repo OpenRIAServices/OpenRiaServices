@@ -20,6 +20,10 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
     <TargetFrameworkProfile />
+    <!--prevent build server errors about to long path on deployment to experimental instance-->
+    <DeployExtension Condition="'$(BUILD_BUILDID)$(APPVEYOR_BUILD_NUMBER)' != ''">False"</DeployExtension>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
@@ -42,10 +46,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EnvDTE80">

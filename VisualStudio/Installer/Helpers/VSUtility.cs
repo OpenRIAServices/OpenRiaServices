@@ -16,18 +16,6 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
     /// <from>NuGet</from>
     internal static class VsUtility
     {
-        // some of thses probably won't ever be seen but let's be safe!
-        private static HashSet<string> _unsupportedTypes = new HashSet<string>
-        {
-            VsConstants.UnloadedProjectTypeGuid, 
-            VsConstants.VsProjectItemKindPhysicalFile,
-            VsConstants.VsProjectItemKindPhysicalFolder, 
-            VsConstants.VsProjectItemKindSolutionFolder,
-            VsConstants.VsProjectItemKindSolutionItem,
-            VsConstants.VsProjectKindMisc
-        };
-     
-
         public static Project GetActiveProject(IVsMonitorSelection vsMonitorSelection)
         {
             IntPtr ppHier = IntPtr.Zero;
@@ -45,21 +33,21 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
                 }
 
                 // multiple items are selected.
-                if (pitemid == (uint) VSConstants.VSITEMID.Selection)
+                if (pitemid == (uint)VSConstants.VSITEMID.Selection)
                 {
                     return null;
                 }
 
                 IVsHierarchy hierarchy =
-                    Marshal.GetTypedObjectForIUnknown(ppHier, typeof (IVsHierarchy)) as IVsHierarchy;
+                    Marshal.GetTypedObjectForIUnknown(ppHier, typeof(IVsHierarchy)) as IVsHierarchy;
                 if (hierarchy != null)
                 {
                     object project;
                     if (
-                        hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int) __VSHPROPID.VSHPROPID_ExtObject,
+                        hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject,
                             out project) >= 0)
                     {
-                        return (Project) project;
+                        return (Project)project;
                     }
                 }
 
@@ -90,13 +78,8 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             }
             catch (Exception)
             {
-
                 return false;
             }
-            
-
-            
         }
-
     }
 }
