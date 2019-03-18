@@ -1,0 +1,41 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2402"/>
+    <Description Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2403"/>
+    <Icon>CSRIAServicesLibrary.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <TemplateGroupID>Silverlight</TemplateGroupID>
+    <TemplateID>Microsoft.Silverlight.CSharp.RIAServicesLibrary</TemplateID>
+    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>RIAServicesLibrary</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <SortOrder>45</SortOrder>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="RIAServicesLibrary.csproj" ReplaceParameters="true">
+      <ProjectItem OpenInEditor="true" ReplaceParameters="true">Class1.cs</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+    <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <packages repository="extension"
+          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
+        <package id="OpenRiaServices.Silverlight" version = "4.3.0.0"/>
+    </packages>
+  </WizardData>
+  <WizardExtension>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
+    <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.RiaServicesLibraryWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

@@ -12,7 +12,7 @@ using System.Collections.Immutable;
 
 namespace OpenRiaServices.DomainServices.Tools.Test
 {
-    internal class CompilerHelper
+    public class CompilerHelper
     {
         // The version of Silverlight we use in registry keys below
         private const string SLVER = "v5.0";

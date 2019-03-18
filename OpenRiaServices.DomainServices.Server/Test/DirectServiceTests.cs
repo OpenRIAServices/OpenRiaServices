@@ -12,7 +12,6 @@ using System.Runtime.Serialization.Json;
 using System.Security.Principal;
 using OpenRiaServices.DomainServices.Client.Test;
 using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Hosting;
 using System.Text;
 using System.Threading;

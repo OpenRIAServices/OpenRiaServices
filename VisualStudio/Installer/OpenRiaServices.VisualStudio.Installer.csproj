@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <MinimumVisualStudioVersion>$(VisualStudioVersion)</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <VsixType>v3</VsixType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenRiaServices.VisualStudio.Installer</RootNamespace>
+    <AssemblyName>OpenRiaServices.VisualStudio.Installer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <TargetFrameworkProfile />
+    <!--prevent build server errors about to long path on deployment to experimental instance-->
+    <DeployExtension Condition="'$(BUILD_BUILDID)$(APPVEYOR_BUILD_NUMBER)' != ''">False"</DeployExtension>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartAction>Program</StartAction>
+    <StartPrograms>$(DevEnvDir)devenv.exe</StartPrograms>
+    <StartArguments>/rootsuffix Exp</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <DeployExtension>False</DeployExtension>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EnvDTE80">
+      <Version>8.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="9.0.30730" />
+    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="9.0.21023" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.0.23205" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Design" Version="14.0.23205" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30320" />
+    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="14.0.50702" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="14.0.50702" />
+    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="14.0.23205" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools">
+      <Version>15.9.3039</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.IO.Abstractions" Version="1.4.0.81" />
+    <PackageReference Include="VSSDK.ComponentModelHost" Version="12.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dialog\LinkRiaDialogWindow.xaml.cs">
+      <DependentUpon>LinkRiaDialogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialog\VsDialogWindow.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="Helpers\DTEExtensions.cs" />
+    <Compile Include="Helpers\FilesystemExtensions.cs" />
+    <Compile Include="Helpers\MessageHelper.cs" />
+    <Compile Include="Helpers\ProjectExtensions.cs" />
+    <Compile Include="Helpers\ServiceLocator.cs" />
+    <Compile Include="Helpers\VsConstants.cs" />
+    <Compile Include="Helpers\VSUtility.cs" />
+    <Compile Include="OpenRiaServicesPackage.cs" />
+    <Compile Include="PkgCmdID.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RiaProjectLinker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DomainServiceClass.10.0.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="ItemTemplates\VisualBasic\Web\1033\AuthenticationDomainService.zip">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ItemTemplates\VisualBasic\Web\1033\DomainServiceClass.zip">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\OpenRIAServicesClassLibrary.zip">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\SilverlightBusinessApplication.zip">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\OpenRIAServicesClassLibrary.zip">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\SilverlightBusinessApplication.zip">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <VSCTCompile Include="VisualStudio.MenuExtension.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
+    <Resource Include="Resources\Package.ico" />
+    <!--
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Client.CodeGen.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Client.CodeGen.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Client.Core.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Client.Core.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Server.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Server.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Client.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Signed.Client.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Client.CodeGen.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Signed.Client.CodeGen.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Client.Core.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Signed.Client.Core.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Server.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Signed.Server.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Silverlight.CodeGen.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Signed.Silverlight.CodeGen.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Silverlight.CodeGen.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.Silverlight.CodeGen.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.ViewModel.4.5.1.nupkg">
+      <Link>Packages\OpenRiaServices.ViewModel.4.5.1.nupkg</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+	-->
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="key.snk" />
+    <Content Include="Packages\microsoft.aspnet.providers.1.2.0.nupkg">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Packages\microsoft.aspnet.providers.core.1.1.0.nupkg">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Packages\SilverlightToolkit-Core.4.2010.4.nupkg">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Packages\SilverlightToolkit-Data.4.2010.4.nupkg">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
+      <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
+      <Name>OpenRiaServices.DomainServices.Hosting.OData</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
+      <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
+      <Name>OpenRiaServices.DomainServices.Hosting</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+      <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
+      <Name>OpenRiaServices.DomainServices.Server</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\Tools\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj">
+      <Project>{E7D958FE-3D14-4EAD-B810-10471757CC4F}</Project>
+      <Name>OpenRiaServices.VisualStudio.DomainServices.Tools</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\AuthenticationDomainService\AuthenticationDomainService.csproj">
+      <Project>{C317F649-C1F8-4474-AECF-51BE88F26218}</Project>
+      <Name>AuthenticationDomainService</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ItemTemplates\CSharp\DomainServiceClass\DomainServiceClass.csproj">
+      <Project>{9977461F-0CBE-4063-8138-8449C47CA7CA}</Project>
+      <Name>DomainServiceClass</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VSPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Dialog\LinkRiaDialogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <PropertyGroup>
+    <UseCodebase>true</UseCodebase>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,38 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>DomainService.cs</DefaultName>
+    <Name Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2202">Domain Service</Name>
+    <Description Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2203">Open RIA Services Domain Service</Description>
+    <ProjectType>CSharp\Web</ProjectType>
+    <ProjectSubType>Web</ProjectSubType>
+    <TemplateGroupID>Web</TemplateGroupID>
+    <TemplateID>OpenRiaServices.Web.CSharp.DomainService</TemplateID>
+    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <Icon>DomainServiceClass.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <References>
+      <Reference>
+        <Assembly>System.ComponentModel.DataAnnotations</Assembly>
+      </Reference>
+      <Reference>
+        <Assembly>System.Runtime.Serialization</Assembly>
+      </Reference>
+    </References>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">BusinessLogic.cs</ProjectItem>
+    <ProjectItem SubType="Code" TargetFileName="$fileinputname$.metadata.cs" ReplaceParameters="true">BusinessLogic.metadata.cs</ProjectItem>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
+    <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.DomainServiceClassWizard</FullClassName>
+    <Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+    <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <packages repository="extension"
+          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
+        <package id="OpenRiaServices.Server" version = "4.5.1"/>
+    </packages>
+  </WizardData>
+</VSTemplate>

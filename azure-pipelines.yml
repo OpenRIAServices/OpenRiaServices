@@ -69,7 +69,7 @@ steps:
     extraProperties: |
      # Additional properties that will be passed to the scanner, 
      # Put one key=value per line, example:
-     # sonar.exclusions=**/*.bin
+     sonar.exclusions=VisualStudio/ItemTemplates/**,VisualStudio/Templates/**;
 
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
@@ -101,6 +101,8 @@ steps:
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
+     VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*Test.dll
+     !VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
      !**\obj\**
      !**\sl5\**
 
@@ -139,6 +141,15 @@ steps:
     continueOnEmptyNupkgMatch: true
   enabled: false
   continueOnError: true
+
+- task: CopyFiles@2
+  displayName: 'Copy VS Extension: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)'
+    Contents: |
+     VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'

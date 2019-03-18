@@ -32,6 +32,7 @@ build/
 *_p.c
 *.ilk
 *.meta
+*.exe
 *.obj
 *.pch
 *.pdb
@@ -85,9 +86,6 @@ _TeamCity*
 # NCrunch
 *.ncrunch*
 .*crunch*.local.xml
-
-# Installshield output folder
-[Ee]xpress/
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/
@@ -158,3 +156,4 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+/VisualStudio/Tools/Test/DomainServiceToolsPath.txt

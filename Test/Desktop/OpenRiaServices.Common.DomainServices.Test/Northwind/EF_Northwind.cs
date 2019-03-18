@@ -10,7 +10,6 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions;
 using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using NorthwindModel;

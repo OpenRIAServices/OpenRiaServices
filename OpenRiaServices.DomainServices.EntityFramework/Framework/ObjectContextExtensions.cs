@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using OpenRiaServices.DomainServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework.ObjectContextExtensions
+namespace OpenRiaServices.DomainServices.EntityFramework
 {
     /// <summary>
     /// ObjectContext extension methods useful to LinqToEntitiesDomainService authors
