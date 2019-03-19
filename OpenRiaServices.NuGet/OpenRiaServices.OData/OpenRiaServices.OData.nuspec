@@ -22,7 +22,7 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices SOAP JSON OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="4.5.0"/>
+      <dependency id="OpenRiaServices.Server" version="$version$"/>
     </dependencies>
 
   </metadata>

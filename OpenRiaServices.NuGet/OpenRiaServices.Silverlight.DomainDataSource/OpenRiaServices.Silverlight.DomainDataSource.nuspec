@@ -17,7 +17,7 @@
     <tags>WCF RIA Services RIAServices Silverlight DomainDataSource OpenRIAServices</tags>
     <dependencies>
       <group targetFramework="Silverlight5.0">
-        <dependency id="OpenRiaServices.Silverlight.Core"  version="4.5.1"/>
+        <dependency id="OpenRiaServices.Client.Core"  version="$version$"/>
       </group>
     </dependencies>
   </metadata>

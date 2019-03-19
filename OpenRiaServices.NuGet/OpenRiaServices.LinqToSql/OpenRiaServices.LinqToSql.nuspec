@@ -19,7 +19,7 @@
       <frameworkAssembly assemblyName="System.Data.Linq" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="4.5.1"/>
+      <dependency id="OpenRiaServices.Server" version="$version$"/>
     </dependencies>
   </metadata>
   <files>
