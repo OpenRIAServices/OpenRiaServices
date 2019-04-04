@@ -1,4 +1,4 @@
-#if VS10
+﻿#if VS10
 #else
 // ported from $/DevDiv/PU/WPT/venus/mvw/data/LocalDB/LocalDB.cs
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
@@ -604,7 +604,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             }
             catch (Exception)
             {
+                // Do nothing, we will return "defaultValue" on failure
             }
+
             return returnValue;
         }
 
@@ -682,6 +684,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 }
                 catch
                 {
+                    // Do nothing, we will return "defaultValue" on failure
                 }
             }
             return returnValue;

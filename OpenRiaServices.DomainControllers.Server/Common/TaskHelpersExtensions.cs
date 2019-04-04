@@ -10,8 +10,7 @@ namespace System.Threading.Tasks
     internal static class TaskHelpersExtensions
     {
         private static Task<AsyncVoid> _defaultCompleted = TaskHelpers.FromResult<AsyncVoid>(default(AsyncVoid));
-        private static readonly Action<Task> _rethrowWithNoStackLossDelegate = GetRethrowWithNoStackLossDelegate();
-
+ 
         /// <summary>
         /// Calls the given continuation, after the given task completes, if it ends in a faulted state.
         /// Will not be called if the task did not fault (meaning, it will not be called if the task ran
@@ -490,68 +489,6 @@ namespace System.Threading.Tasks
             return tcs.Task;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "This general exception is not intended to be seen by the user")]
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "This general exception is not intended to be seen by the user")]
-        [SuppressMessage("Microsoft.Web.FxCop", "MW1201:DoNotCallProblematicMethodsOnTask", Justification = "The usages here are deemed safe, and provide the implementations that this rule relies upon.")]
-        private static Action<Task> GetRethrowWithNoStackLossDelegate()
-        {
-#if NETFX_CORE
-            return task => task.GetAwaiter().GetResult();
-#else
-            MethodInfo getAwaiterMethod = typeof(Task).GetMethod("GetAwaiter", Type.EmptyTypes);
-            if (getAwaiterMethod != null)
-            {
-                // .NET 4.5 - dump the same code the 'await' keyword would have dumped
-                // >> task.GetAwaiter().GetResult()
-                // No-ops if the task completed successfully, else throws the originating exception complete with the correct call stack.
-                var taskParameter = Expression.Parameter(typeof(Task));
-                var getAwaiterCall = Expression.Call(taskParameter, getAwaiterMethod);
-                var getResultCall = Expression.Call(getAwaiterCall, "GetResult", Type.EmptyTypes);
-                var lambda = Expression.Lambda<Action<Task>>(getResultCall, taskParameter);
-                return lambda.Compile();
-            }
-            else
-            {
-                Func<Exception, Exception> prepForRemoting = null;
-
-                try
-                {
-                    if (AppDomain.CurrentDomain.IsFullyTrusted)
-                    {
-                        // .NET 4 - do the same thing Lazy<T> does by calling Exception.PrepForRemoting
-                        // This is an internal method in mscorlib.dll, so pass a test Exception to it to make sure we can call it.
-                        var exceptionParameter = Expression.Parameter(typeof(Exception));
-                        var prepForRemotingCall = Expression.Call(exceptionParameter, "PrepForRemoting", Type.EmptyTypes);
-                        var lambda = Expression.Lambda<Func<Exception, Exception>>(prepForRemotingCall, exceptionParameter);
-                        var func = lambda.Compile();
-                        func(new Exception()); // make sure the method call succeeds before assigning the 'prepForRemoting' local variable
-                        prepForRemoting = func;
-                    }
-                }
-                catch
-                {
-                } // If delegate creation fails (medium trust) we will simply throw the base exception.
-
-                return task =>
-                {
-                    try
-                    {
-                        task.Wait();
-                    }
-                    catch (AggregateException ex)
-                    {
-                        Exception baseException = ex.GetBaseException();
-                        if (prepForRemoting != null)
-                        {
-                            baseException = prepForRemoting(baseException);
-                        }
-                        throw baseException;
-                    }
-                };
-            }
-#endif
-        }
-
         /// <summary>
         /// Marks a Task as "exception observed". The Task is required to have been completed first.
         /// </summary>
@@ -741,7 +678,7 @@ namespace System.Threading.Tasks
         /// </summary>
         internal static void ThrowIfFaulted(this Task task)
         {
-            _rethrowWithNoStackLossDelegate(task);
+            task.GetAwaiter().GetResult();
         }
 
         /// <summary>
