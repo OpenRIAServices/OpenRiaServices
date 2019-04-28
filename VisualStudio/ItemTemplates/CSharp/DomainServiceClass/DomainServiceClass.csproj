@@ -71,7 +71,9 @@
     <None Include="DomainServiceClass.ico" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="DomainServiceClass.vstemplate" />
+    <VSTemplate Include="DomainServiceClass.vstemplate">
+      <OutputSubPath>Open Ria Services</OutputSubPath>
+    </VSTemplate>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
