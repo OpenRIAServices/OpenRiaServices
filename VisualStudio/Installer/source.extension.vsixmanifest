@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="874C448B-42DE-466B-A7E7-0EFEC1E7C009" Version="0.0.9.0" Language="en-US" Publisher="Open Ria Services" />
+        <Identity Id="874C448B-42DE-466B-A7E7-0EFEC1E7C008" Version="0.0.9.0" Language="en-US" Publisher="Open Ria Services" />
         <DisplayName>Open Ria Services</DisplayName>
         <Description xml:space="preserve">sOpenRiaServices Tooling and Templates For Visual Studio 2015, 2017 and 2019
 
@@ -31,10 +31,10 @@ For 4.6.0+</Description>
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Authentication Domain Service.zip" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Domain Service Class.zip" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Silverlight Business Application.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Open RIA Services Class Library.zip" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Silverlight Business Application.zip" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Open RIA Services Class Library.zip" />
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:TargetPath="|OpenRiaServicesLibrary;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />

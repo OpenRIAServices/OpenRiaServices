@@ -21,9 +21,11 @@
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
     <TargetFrameworkProfile />
     <!--prevent build server errors about to long path on deployment to experimental instance-->
-    <DeployExtension Condition="'$(BUILD_BUILDID)$(APPVEYOR_BUILD_NUMBER)' != ''">False"</DeployExtension>
+    <DeployExtension>True</DeployExtension>
+    <DeployExtension Condition="'$(BUILD_BUILDID)$(APPVEYOR_BUILD_NUMBER)' != ''">False</DeployExtension>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <VSIXSubPath>OpenRiaServices</VSIXSubPath>
   </PropertyGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
@@ -38,7 +40,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
-    <DeployExtension>False</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
