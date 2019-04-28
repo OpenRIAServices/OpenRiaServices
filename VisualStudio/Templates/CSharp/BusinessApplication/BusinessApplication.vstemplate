@@ -1,11 +1,10 @@
 ﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
     <TemplateData>
-        <Name Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2302"/>
-        <Description Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2303"/>
-        <Icon>CSBusinessApplication.ico</Icon>
+      <Name>Open Ria Services Silverlight Business Application</Name>
+      <Description>Open Ria Services application</Description>
+        <Icon>BusinessApplicationProjectTemplate.ico</Icon>
         <ProjectType>CSharp</ProjectType>
-        <TemplateGroupID>Silverlight</TemplateGroupID>
-        <TemplateID>OpenRiaServices.Silverlight.CSharp.BusinessApplication</TemplateID>
+        <TemplateID>OpenRiaServices.Client.CSharp.BusinessApplication</TemplateID>
         <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
         <SortOrder>44</SortOrder>
         <CreateNewFolder>true</CreateNewFolder>
@@ -14,7 +13,7 @@
         <LocationField>Enabled</LocationField>
         <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
         <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
-        <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+        <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
     </TemplateData>
     <TemplateContent>
         <Project TargetFileName="$safeprojectname$.csproj" File="BusinessApplication.csproj" ReplaceParameters="true">
@@ -72,7 +71,6 @@
             <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml.cs">App.xaml.cs</ProjectItem>
             <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml">MainPage.xaml</ProjectItem>
             <ProjectItem ReplaceParameters="true" TargetFileName="MainPage.xaml.cs">MainPage.xaml.cs</ProjectItem>
-            <ProjectItem ReplaceParameters="true" TargetFileName="GlobalSuppressions.cs">GlobalSuppressions.cs</ProjectItem>
         </Project>
     </TemplateContent>
     <WizardExtension>
@@ -82,8 +80,7 @@
   <WizardData>
     <packages repository="extension"
           repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
-        <package id="OpenRiaServices.Silverlight" version = "4.3.0.0"/>
-        <package id="SilverlightToolkit-Data" version = "4.2010.4"/>
+        <package id="OpenRiaServices.Client" version = "4.5.0"/>
     </packages>
   </WizardData>
   <WizardExtension>

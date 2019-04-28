@@ -229,6 +229,20 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+    <ProjectReference Include="..\Templates\CSharp\BusinessApplication\BusinessApplicationProjectTemplate.csproj">
+      <Project>{C8814DD1-905D-41F8-B587-99FD85524F8B}</Project>
+      <Name>BusinessApplicationProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\Templates\CSharp\RIAServicesLibrary\OpenRiaServicesLibrary.csproj">
+      <Project>{B1D492E3-3283-43E3-8598-9892E3CD2F54}</Project>
+      <Name>OpenRiaServicesLibrary</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\Tools\Framework\OpenRiaServices.VisualStudio.DomainServices.Tools.csproj">
       <Project>{E7D958FE-3D14-4EAD-B810-10471757CC4F}</Project>
       <Name>OpenRiaServices.VisualStudio.DomainServices.Tools</Name>

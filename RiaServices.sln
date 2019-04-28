@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -139,6 +139,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{26D71C60-FD74-4559-8FA9-910020F9540D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainServiceClass", "VisualStudio\ItemTemplates\CSharp\DomainServiceClass\DomainServiceClass.csproj", "{9977461F-0CBE-4063-8138-8449C47CA7CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{2EDF0504-D588-4C91-A0B9-8209C5997405}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{546DB9D1-BA54-499A-854D-00D8A311B56A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServicesLibrary", "VisualStudio\Templates\CSharp\RIAServicesLibrary\OpenRiaServicesLibrary.csproj", "{B1D492E3-3283-43E3-8598-9892E3CD2F54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessApplicationProjectTemplate", "VisualStudio\Templates\CSharp\BusinessApplication\BusinessApplicationProjectTemplate.csproj", "{C8814DD1-905D-41F8-B587-99FD85524F8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -346,6 +354,14 @@ Global
 		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9977461F-0CBE-4063-8138-8449C47CA7CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1D492E3-3283-43E3-8598-9892E3CD2F54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1D492E3-3283-43E3-8598-9892E3CD2F54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1D492E3-3283-43E3-8598-9892E3CD2F54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1D492E3-3283-43E3-8598-9892E3CD2F54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -411,6 +427,10 @@ Global
 		{C317F649-C1F8-4474-AECF-51BE88F26218} = {26D71C60-FD74-4559-8FA9-910020F9540D}
 		{26D71C60-FD74-4559-8FA9-910020F9540D} = {D985FCAF-DB0D-438F-825E-07D9B5B52980}
 		{9977461F-0CBE-4063-8138-8449C47CA7CA} = {26D71C60-FD74-4559-8FA9-910020F9540D}
+		{2EDF0504-D588-4C91-A0B9-8209C5997405} = {0835F2FE-7B01-418A-9E35-735FF43F6601}
+		{546DB9D1-BA54-499A-854D-00D8A311B56A} = {2EDF0504-D588-4C91-A0B9-8209C5997405}
+		{B1D492E3-3283-43E3-8598-9892E3CD2F54} = {546DB9D1-BA54-499A-854D-00D8A311B56A}
+		{C8814DD1-905D-41F8-B587-99FD85524F8B} = {546DB9D1-BA54-499A-854D-00D8A311B56A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}
