@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="874C448B-42DE-466B-A7E7-0EFEC1E7C008" Version="0.0.9.0" Language="en-US" Publisher="Open Ria Services" />
+        <Identity Id="874C448B-42DE-466B-A7E7-0EFEC1E7C008" Version="0.0.9.1" Language="en-US" Publisher="Open Ria Services" />
         <DisplayName>Open Ria Services</DisplayName>
         <Description xml:space="preserve">sOpenRiaServices Tooling and Templates For Visual Studio 2015, 2017 and 2019
 
