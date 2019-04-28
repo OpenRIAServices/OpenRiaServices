@@ -1,8 +1,8 @@
 ﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
   <TemplateData>
     <DefaultName>DomainService.cs</DefaultName>
-    <Name Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2202">Domain Service</Name>
-    <Description Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2203">Open RIA Services Domain Service</Description>
+    <Name>Domain Service</Name>
+    <Description>Open RIA Services Domain Service</Description>
     <ProjectType>CSharp</ProjectType>
     <TemplateGroupID>Web</TemplateGroupID>
     <TemplateID>OpenRiaServices.Web.CSharp.DomainService</TemplateID>
@@ -32,7 +32,7 @@
   </WizardExtension>
   <WizardData>
     <packages repository="extension"
-          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
+          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C009">
       <package id="OpenRiaServices.Server" version = "4.5.1"/>
     </packages>
   </WizardData>

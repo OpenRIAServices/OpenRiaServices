@@ -79,7 +79,7 @@
   </WizardExtension>
   <WizardData>
     <packages repository="extension"
-          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
+          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C009">
         <package id="OpenRiaServices.Client" version = "4.5.0"/>
     </packages>
   </WizardData>
