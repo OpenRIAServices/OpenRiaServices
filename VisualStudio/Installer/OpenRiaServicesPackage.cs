@@ -13,6 +13,7 @@ using OpenRiaServices.VisualStudio.Installer.Dialog;
 using OpenRiaServices.VisualStudio.Installer.Helpers;
 using System.Threading;
 using Microsoft.VisualStudio.Threading;
+using System.Reflection;
 
 namespace OpenRiaServices.VisualStudio.Installer
 {
@@ -29,6 +30,8 @@ namespace OpenRiaServices.VisualStudio.Installer
     // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
     // a package.
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    // We must load package to setup assembly resolve in order to be able to load zip files wich reference unsigned dll
+    [ProvideAutoLoad(VSConstants.UICONTEXT.ShellInitialized_string, PackageAutoLoadFlags.BackgroundLoad)]
     // This attribute is used to register the information needed to show this package
     // in the Help/About dialog of Visual Studio.
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
@@ -65,11 +68,12 @@ namespace OpenRiaServices.VisualStudio.Installer
 
         protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
+            SetupBindingRedirectForOldZipTemplates();
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+
             await base.InitializeAsync(cancellationToken, progress);
 
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             _mcs = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != _mcs)
             {
@@ -77,6 +81,36 @@ namespace OpenRiaServices.VisualStudio.Installer
                 MenuCommand menuItem = new OleMenuCommand(LinkRiaProjectCallback, null, BeforeQueryStatusForAddPackageDialog, menuCommandID);
                 _mcs.AddCommand(menuItem);
             }
+        }
+
+        /// <summary>
+        /// Resolve references from old templates in zip files to unsigned tooling assembly with references
+        /// to the actual boundled strong named assembly.
+        /// </summary>
+        private void SetupBindingRedirectForOldZipTemplates()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveUnsignedToolsWithSigned;
+        }
+
+        /// <summary>
+        /// Resolve references from old templates in zip files to unsigned tooling assembly with references
+        /// to the actual boundled strong named assembly.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static Assembly AssemblyResolveUnsignedToolsWithSigned(object sender, ResolveEventArgs args)
+        {
+            var nameComparison = StringComparison.OrdinalIgnoreCase;
+
+            if (args.Name != null
+                && args.Name.StartsWith("OpenRiaServices.VisualStudio.DomainServices.Tools", nameComparison)
+                && args.Name.IndexOf("PublicKeyToken=null", nameComparison) != -1)
+            {
+                return typeof(DomainServices.Tools.DomainServiceClassWizard).Assembly;
+            }
+
+            return null;
         }
 
         private bool IsSolutionExistsAndNotDebuggingAndNotBuilding()

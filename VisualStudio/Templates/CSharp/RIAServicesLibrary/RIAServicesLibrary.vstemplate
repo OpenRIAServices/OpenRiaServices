@@ -1,27 +1,25 @@
-﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
-    <Name Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2402"/>
-    <Description Package="{cf249cd4-01b1-4533-8c65-2b1bb6dfa72b}" ID="2403"/>
-    <Icon>CSRIAServicesLibrary.ico</Icon>
+    <Name>OpenRiaServicesLibrary</Name>
+    <Description>Open Ria Services Library - Client and Server projects with code generation</Description>
+    <Icon>OpenRiaServicesLibrary.ico</Icon>
     <ProjectType>CSharp</ProjectType>
-    <TemplateGroupID>Silverlight</TemplateGroupID>
-    <TemplateID>Microsoft.Silverlight.CSharp.RIAServicesLibrary</TemplateID>
     <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>d0c855c5-11b4-4f93-9505-80c4cd7eae14</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
-    <DefaultName>RIAServicesLibrary</DefaultName>
+    <DefaultName>Open Ria Services Library</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
-    <SortOrder>45</SortOrder>
   </TemplateData>
   <TemplateContent>
-    <Project File="RIAServicesLibrary.csproj" ReplaceParameters="true">
-      <ProjectItem OpenInEditor="true" ReplaceParameters="true">Class1.cs</ProjectItem>
-      <Folder Name="Properties" TargetFolderName="Properties">
-        <ProjectItem OpenInEditor="false" ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      </Folder>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">Class1.cs</ProjectItem>
     </Project>
   </TemplateContent>
   <WizardExtension>
@@ -30,8 +28,8 @@
   </WizardExtension>
   <WizardData>
     <packages repository="extension"
-          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C008">
-        <package id="OpenRiaServices.Silverlight" version = "4.3.0.0"/>
+          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C009">
+      <package id="OpenRiaServices.Client" version = "4.5.0"/>
     </packages>
   </WizardData>
   <WizardExtension>

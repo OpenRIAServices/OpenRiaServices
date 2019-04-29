@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{C8814DD1-905D-41F8-B587-99FD85524F8B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessApplicationProjectTemplate</RootNamespace>
+    <AssemblyName>BusinessApplicationProjectTemplate</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <GeneratePkgDefFile>false</GeneratePkgDefFile>
+    <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CreateVsixContainer>false</CreateVsixContainer>
+    <DeployExtension>false</DeployExtension>
+    <DeployVSTemplates>false</DeployVSTemplates>
+    <CopyVsixManifestToOutput>false</CopyVsixManifestToOutput>
+    <CopyBuildOutputToOutputDirectory>false</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>false</CopyOutputSymbolsToOutputDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </None>
+    <None Include="Assets\Resources\ApplicationResources.cs" />
+    <None Include="Assets\Resources\ApplicationStrings.Designer.cs" />
+    <None Include="Assets\Resources\SecurityQuestions.Designer.cs" />
+    <None Include="BA.Web\GlobalSuppressions.cs" />
+    <None Include="BA.Web\Models\RegistrationData.cs" />
+    <None Include="BA.Web\Models\Shared\User.shared.cs" />
+    <None Include="BA.Web\Models\User.cs" />
+    <None Include="BA.Web\Resources\RegistrationData.cs" />
+    <None Include="BA.Web\Resources\RegistrationDataResources.Designer.cs" />
+    <None Include="BA.Web\Resources\User.cs" />
+    <None Include="BA.Web\Resources\User.shared.cs" />
+    <None Include="BA.Web\Resources\ValidationErrorResources.Designer.cs" />
+    <None Include="BA.Web\Services\AuthenticationService.cs" />
+    <None Include="BA.Web\Services\UserRegistrationService.cs" />
+    <None Include="Views\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </None>
+    <None Include="Views\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </None>
+    <None Include="Views\Login\LoginForm.xaml.cs">
+      <DependentUpon>LoginForm.xaml</DependentUpon>
+    </None>
+    <None Include="Views\Login\LoginRegistrationWindow.xaml.cs">
+      <DependentUpon>LoginRegistrationWindow.xaml</DependentUpon>
+    </None>
+    <None Include="Views\Login\LoginStatus.xaml.cs">
+      <DependentUpon>LoginStatus.xaml</DependentUpon>
+    </None>
+    <None Include="Views\Login\RegistrationForm.xaml.cs">
+      <DependentUpon>RegistrationForm.xaml</DependentUpon>
+    </None>
+    <None Include="BA.Web\Web.Debug.config" />
+    <None Include="BA.Web\Web.Release.config" />
+    <None Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </None>
+    <None Include="Controls\BusyIndicator.cs" />
+    <None Include="Controls\VisualStates.cs" />
+    <None Include="Helpers\DataFieldExtensions.cs" />
+    <None Include="Helpers\NotOperatorValueConverter.cs" />
+    <None Include="Helpers\TargetNullValueConverter.cs" />
+    <None Include="Models\LoginInfo.cs" />
+    <None Include="Models\RegistrationData.partial.cs" />
+    <None Include="Models\User.partial.cs" />
+    <None Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BusinessApplicationProjectTemplate.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <VSTemplate Include="BusinessApplication.vstemplate">
+		<OutputSubPath>Open Ria Services</OutputSubPath>
+	</VSTemplate>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BusinessApplication.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MainPage.xaml">
+      <Generator>MSBuild:None</Generator>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Controls\BusyIndicator.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\About.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\ErrorWindow.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\Home.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\Login\LoginForm.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\Login\LoginRegistrationWindow.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\Login\LoginStatus.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Views\Login\RegistrationForm.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Styles.xaml">
+      <Generator>MSBuild:None</Generator>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Resources\ErrorResources.resx" />
+    <None Include="Assets\Resources\SecurityQuestions.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BA.Web\Resources\ValidationErrorResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BA.Web\BusinessApplication.Web.csproj" />
+    <None Include="BA.Web\server.vstemplate" />
+    <None Include="BA.Web\Silverlight.js" />
+    <None Include="BA.Web\__safeclientprojectname__TestPage.aspx" />
+    <None Include="BA.Web\__safeclientprojectname__TestPage.html" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

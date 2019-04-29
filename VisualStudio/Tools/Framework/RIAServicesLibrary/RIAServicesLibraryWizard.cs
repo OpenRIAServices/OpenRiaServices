@@ -82,6 +82,17 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             // Reference: http://www.visualstudiodev.com/visual-studio-extensibility/using-automation-to-create-templates-using-different-framework-versions-in-vs2008-23148.shtml
             string templateName = "ClassLibrary.zip|FrameworkVersion=" + this._replacementsDictionary["$targetframeworkversion$"];
             string netClassLibProjectTemplate = solution2.GetProjectTemplate(templateName, language);
+            try
+            {
+                // VS 2017 and 2019 will find netstandard template intstead of expected template above
+                // But code below should find standard net framework project template
+                netClassLibProjectTemplate = solution2.GetProjectTemplate(templateName.Replace(".zip", ""), language);
+            }
+            catch (FileNotFoundException)
+            {
+                // Use first found template
+            }
+
             string netClassLibProjectName = classLibName + ".Web";
             string destination = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(slClassLibProjectPath)), netClassLibProjectName);
 

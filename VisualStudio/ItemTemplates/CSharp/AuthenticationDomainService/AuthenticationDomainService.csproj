@@ -70,6 +70,7 @@
   <ItemGroup>
     <VSTemplate Include="AuthenticationDomainService.vstemplate">
       <SubType>Designer</SubType>
+      <OutputSubPath>Open Ria Services</OutputSubPath>
     </VSTemplate>
   </ItemGroup>
   <ItemGroup>
