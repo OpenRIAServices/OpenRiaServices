@@ -37,7 +37,7 @@
     <Reference Include="Microsoft.CSharp"/>
 		<Reference Include="System.Data"/>
 		<Reference Include="System.Xml"/>
-	</ItemGroup>v
+	</ItemGroup>
 	<ItemGroup>
     <Compile Include="Class1.cs" />
 		<Compile Include="Properties\AssemblyInfo.cs" />
