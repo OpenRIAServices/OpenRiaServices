@@ -148,6 +148,8 @@ steps:
     SourceFolder: '$(build.sourcesdirectory)'
     Contents: |
      VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
+     VisualStudio\Installer\publishManifest.json
+     VisualStudio\Installer\overview.md
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
