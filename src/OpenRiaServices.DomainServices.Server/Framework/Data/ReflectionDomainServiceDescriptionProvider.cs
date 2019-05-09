@@ -39,11 +39,12 @@ namespace OpenRiaServices.DomainServices.Server
 
             foreach (MethodInfo method in methodsToInspect)
             {
+#if !NETSTANDARD2_0
                 // We need to ensure the buddy metadata provider is registered before we
                 // attempt to do convention, since we rely on IsEntity which relies on
                 // KeyAttributes being present
                 RegisterAssociatedMetadataProvider(method);
-
+#endif
                 if (method.GetCustomAttributes(typeof(IgnoreAttribute), false).Length > 0)
                 {
                     continue;
@@ -81,6 +82,7 @@ namespace OpenRiaServices.DomainServices.Server
             return TypeDescriptor.GetProperties(type).Cast<PropertyDescriptor>().Any(p => p.Attributes[typeof(KeyAttribute)] != null);
         }
 
+#if !NETSTANDARD2_0
         /// <summary>
         /// Register the associated metadata provider for Types in the signature
         /// of the specified method as required.
@@ -138,7 +140,7 @@ namespace OpenRiaServices.DomainServices.Server
             // If the MetadataType reference chain doesn't contain a cycle, register the use of the AssociatedMetadataTypeTypeDescriptionProvider.
             DomainServiceDescription.RegisterCustomTypeDescriptor(new AssociatedMetadataTypeTypeDescriptionProvider(type), type);
         }
-
+#endif
 
         /// <summary>
         /// This method classifies an operation by setting its its operation type.
