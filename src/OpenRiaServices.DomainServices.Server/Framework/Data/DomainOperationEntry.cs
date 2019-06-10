@@ -496,7 +496,6 @@ namespace OpenRiaServices.DomainServices.Server
             return null;
         }
 
-#pragma warning disable S1144 // Unused private types or members should be removed, this is used by reflection
         private static async ValueTask<object> UnwrapGenericResult<T>(object result)
         {
             if(result == null)
@@ -507,7 +506,6 @@ namespace OpenRiaServices.DomainServices.Server
             else
                 return await ((ValueTask<T>)result).ConfigureAwait(false);
         }
-#pragma warning restore S1144 // Unused private types or members should be removed
 
         /// <summary>
         /// Returns a textual description of the <see cref="DomainOperationEntry"/>.
