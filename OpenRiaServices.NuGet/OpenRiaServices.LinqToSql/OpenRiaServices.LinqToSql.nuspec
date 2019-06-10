@@ -6,7 +6,7 @@
     <title>Open RIA Services for Linq to Sql (DataContext)</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.LinqToSql provides the LinqToSqlDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DataContext class from Linq to Sql.</description>

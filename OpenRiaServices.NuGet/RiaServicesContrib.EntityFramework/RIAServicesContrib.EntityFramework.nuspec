@@ -6,7 +6,7 @@
         <title>RIA Services for Entity Framework 6+</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
-        <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+        <license type="expression">Apache-2.0</license>
         <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>RIAServicesContrib.EntityFramework provides the DbDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DbContext from the EntityFramework package.
