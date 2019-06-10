@@ -2,17 +2,17 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.LinqToSql</id>
-    <version>4.5.1</version>
+    <version>4.6.0</version>
     <title>Open RIA Services for Linq to Sql (DataContext) - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.LinqToSql provides the LinqToSqlDomainService&lt;T&gt; class which can be used to create Domain Service classes for use with a DataContext class from Linq to Sql.</description>
     <summary>Open RIA Services - Linq to Sql (DataContext) support with LinqToSqlDomainService.</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <copyright>2019 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices LinqToSql OpenRIAServices signed</tags>
     <frameworkAssemblies>
@@ -22,9 +22,5 @@
       <dependency id="OpenRiaServices.Server" version="4.5.1"/>
     </dependencies>
   </metadata>
-  <files>
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.LinqToSql.dll" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.dll" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.LinqToSql.pdb" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.pdb" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.LinqToSql.xml" target="lib\net45\OpenRiaServices.DomainServices.LinqToSql.xml" />
-  </files>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></files>
 </package>

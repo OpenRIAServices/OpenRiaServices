@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Server</id>
-    <version>4.5.1</version>
+    <version>4.6.0</version>
     <title>OpenRiaServices.Signed.Server</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
@@ -17,29 +17,13 @@
       The package also includes a targets file and tools assembly that provides build-time validation of your DomainService classes.
     </description>
     <summary>Open RIA Services - Server-side assemblies, configuration, and build targets.</summary>
-    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases
-
-4.5.1:
-* Improved startup performance
-* Improved performance for first request
-</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
+    <copyright>2019 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices signed</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
-  <files>
-    <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="tools\Install.ps1" target="tools\Install.ps1" />
-    <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Signed.Server.targets" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.dll" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.pdb" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.xml" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Server.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.dll" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Server.pdb" target="lib\net45\OpenRiaServices.DomainServices.Server.pdb" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Server.xml" target="lib\net45\OpenRiaServices.DomainServices.Server.xml" />
-  </files>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></files>
 </package>
