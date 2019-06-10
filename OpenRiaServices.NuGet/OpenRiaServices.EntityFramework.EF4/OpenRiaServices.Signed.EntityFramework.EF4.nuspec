@@ -6,7 +6,7 @@
     <title>Open RIA Services support for ObjectContext - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve RIA Services</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <iconUrl>https://nugetgallery.blob.core.windows.net/icons/OpenRiaServices.EntityFramework.EF4.4.3.0-alpha1.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -23,5 +23,5 @@
       <dependency id="OpenRiaServices.Signed.Server" version="4.5.1"/>
     </dependencies>
   </metadata>
-  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></files>
 </package>

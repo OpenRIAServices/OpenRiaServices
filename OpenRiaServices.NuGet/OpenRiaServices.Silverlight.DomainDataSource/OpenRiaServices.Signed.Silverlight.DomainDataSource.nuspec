@@ -6,7 +6,7 @@
     <title>Open RIA Services Silverlight DomainDataSource - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.Signed.Silverlight.DomainDataSource provides the DomainDataSource control for Silverlight, providing a declarative model for binding UI controls to a DomainContext.</description>
@@ -21,5 +21,5 @@
       </group>
     </dependencies>
   </metadata>
-  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></files>
 </package>

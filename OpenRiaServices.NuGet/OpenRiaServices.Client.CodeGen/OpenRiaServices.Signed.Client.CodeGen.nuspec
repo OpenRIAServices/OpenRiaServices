@@ -19,5 +19,5 @@
       <dependencies>
       </dependencies>
     </metadata>
-    <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
+    <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></files>
 </package>

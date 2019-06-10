@@ -19,5 +19,5 @@
       <dependency id="OpenRiaServices.Signed.Server" version="4.5.1" />
     </dependencies>
   </metadata>
-  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></files>
 </package>

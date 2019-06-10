@@ -8,7 +8,7 @@
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>OpenRiaServices.WebForms contains the ASP.NET DomainDataSource and DomainValidator controls for using a DomainService in an ASP.NET Web Forms application.</description>
     <summary>Open RIA Services - ASP.NET Web Forms Controls</summary>
