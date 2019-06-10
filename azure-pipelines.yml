@@ -112,35 +112,25 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     rerunFailedTests: true
-    rerunFailedThreshold: 40    
+    rerunFailedThreshold: 40
     diagnosticsEnabled: false
   timeoutInMinutes: 40
 
-- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
-  continueOnError: true  
+  continueOnError: true
   condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
 
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
   inputs:
     command: pack
-    packagesToPack: 'OpenRiaServices.NuGet\OpenRiaServices.*\*.nuspec;!OpenRiaServices.NuGet\OpenRiaServices.*\*.Signed.*nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
+    packagesToPack: 'OpenRiaServices.NuGet\OpenRiaServices.*\*.nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
     packDestination: '$(Build.ArtifactStagingDirectory)' 
-  enabled: true
   continueOnError: true
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-
-- task: NuGetPublisher@0
-  displayName: 'NuGet Publisher '
-  inputs:
-    connectedServiceName: myget
-    nuGetVersion: 4.0.0.2283
-    continueOnEmptyNupkgMatch: true
-  enabled: false
-  continueOnError: true
 
 - task: CopyFiles@2
   displayName: 'Copy VS Extension: $(build.artifactstagingdirectory)'
