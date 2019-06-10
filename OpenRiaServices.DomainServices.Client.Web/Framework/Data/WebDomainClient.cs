@@ -41,7 +41,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// is null.
         /// </exception>
         public WebDomainClient(Uri serviceUri)
-            : this(serviceUri, /* usesHttps */ false, (ChannelFactory<TContract>)null)
+            : this(serviceUri, /* usesHttps */ false, (WcfDomainClientFactory)null)
         {
         }
 
@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
         public WebDomainClient(Uri serviceUri, bool usesHttps)
-            : this(serviceUri, usesHttps, (ChannelFactory<TContract>)null)
+            : this(serviceUri, usesHttps, (WcfDomainClientFactory)null)
         {
         }
 
@@ -77,6 +77,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="ArgumentException"> is thrown if <paramref name="serviceUri"/>
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
+        [Obsolete("Use constructor taking a WcfDomainClientFactory instead")]
         public WebDomainClient(Uri serviceUri, bool usesHttps, ChannelFactory<TContract> channelFactory)
          : this(serviceUri, usesHttps, (WcfDomainClientFactory)null)
         {
