@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata minClientVersion="2.8">
         <id>OpenRiaServices.Signed.Silverlight.CodeGen</id>
-        <version>4.5.4</version>
+        <version>4.6.0</version>
         <title>Open RIA Services Silverlight Code Generator - Signed</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
@@ -13,16 +13,12 @@
         <summary>Open RIA Services - Silverlight client assemblies and references.</summary>
         <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
         <developmentDependency>true</developmentDependency>
-        <copyright>2018 Outercurve Foundation</copyright>
+        <copyright>2019 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices CodeGen</tags>
         <dependencies>
             <dependency id="OpenRiaServices.Signed.Client.Core" version="4.5.1" />
         </dependencies>
     </metadata>
-    <files>
-      <file src="build\OpenRiaServices.Silverlight.CodeGen.targets" target="build\OpenRiaServices.Signed.Silverlight.CodeGen.targets"/>
-      <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Server.dll" target="build\OpenRiaServices.DomainServices.Server.dll"/>
-      <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
-    </files>
+    <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
 </package>

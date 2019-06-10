@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.EntityFramework.EF4</id>
-    <version>4.5.1</version>
+    <version>4.6.0</version>
     <title>Open RIA Services support for ObjectContext - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve RIA Services</owners>
@@ -17,16 +17,11 @@
 
       This package supports versions of EntityFramework less than 6. If you are using ObjectContext with EF 6 use the OpenRiaServices.EntityFramework package instead.</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <copyright>2019 Outercurve Foundation</copyright>
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices ObjectContext signed</tags>
     <dependencies>
       <dependency id="OpenRiaServices.Signed.Server" version="4.5.1"/>
     </dependencies>
   </metadata>
-  <files>
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.dll" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.dll" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.pdb" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.pdb" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.xml" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.EF4.xml" />
-    
-  </files>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
 </package>

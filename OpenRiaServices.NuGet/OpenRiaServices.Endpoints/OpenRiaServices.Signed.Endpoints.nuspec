@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Signed.Endpoints</id>
-    <version>4.5.1</version>
+    <version>4.6.0</version>
     <title>Open RIA Services SOAP and JSON Endpoints - Signed</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -16,7 +16,7 @@
     </description>
     <summary>Open RIA Services - SOAP and JSON Endpoints for web development</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <copyright>2019 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices SOAP JSON OpenRiaServices</tags>
     <dependencies>
@@ -24,10 +24,5 @@
     </dependencies>
 
   </metadata>
-  <files>
-    <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" />
-    <file src="..\..\bin\Signed\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" />
-  </files>
+  <files>    <file src="..\UnsignedReadme.txt" target="Readme.txt" /></FILES>
 </package>

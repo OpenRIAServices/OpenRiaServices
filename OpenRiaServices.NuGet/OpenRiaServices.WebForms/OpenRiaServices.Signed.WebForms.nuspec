@@ -4,7 +4,7 @@
   <metadata>
     <id>OpenRiaServices.WebForms</id>
     <title>Open RIA Services Web Forms Controls</title>
-    <version>4.4.0.0</version>
+    <version>4.6.0</version>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
@@ -13,7 +13,7 @@
     <description>OpenRiaServices.WebForms contains the ASP.NET DomainDataSource and DomainValidator controls for using a DomainService in an ASP.NET Web Forms application.</description>
     <summary>Open RIA Services - ASP.NET Web Forms Controls</summary>
     <releaseNotes />
-    <copyright>2013 Outercurve Foundation</copyright>
+    <copyright>2019 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices aspnet WebForms OpenRiaServices</tags>
   </metadata>
