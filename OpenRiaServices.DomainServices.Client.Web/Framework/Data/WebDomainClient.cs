@@ -334,8 +334,8 @@ namespace OpenRiaServices.DomainServices.Client
                     else
                     {
                         result = new QueryCompletedResult(
-                            new Entity[0],
-                            new Entity[0],
+                            Enumerable.Empty<Entity>(),
+                            Enumerable.Empty<Entity>(),
                             /* totalCount */ 0,
                             validationErrors ?? Enumerable.Empty<ValidationResult>());
                     }
@@ -430,13 +430,12 @@ namespace OpenRiaServices.DomainServices.Client
                 submitOperations,
                 new AsyncCallback(delegate(IAsyncResult asyncResponseResult)
                 {
-
                     try
                     {
                         try
                         {
                             var returnValue = (IEnumerable<ChangeSetEntry>)InvokeMethod(channel,  endSubmitMethod, new object[] { asyncResponseResult });
-                                    taskCompletionSource.TrySetResult(new SubmitCompletedResult(changeSet, returnValue ?? Enumerable.Empty<ChangeSetEntry>()));
+                            taskCompletionSource.TrySetResult(new SubmitCompletedResult(changeSet, returnValue ?? Enumerable.Empty<ChangeSetEntry>()));
 
                         }
                         finally
