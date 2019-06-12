@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -30,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
                 }
-                this._entityTypes =new ReadOnlyCollection<Type>(value.ToList());
+                this._entityTypes = new ReadOnlyCollection<Type>(value.ToList());
             }
         }
 
@@ -50,92 +52,24 @@ namespace OpenRiaServices.DomainServices.Client
         /// Executes an asynchronous query operation.
         /// </summary>
         /// <param name="query">The query to invoke.</param>
-        /// <param name="callback">The callback to invoke when the query has been executed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this query.</returns>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used to request cancellation</param>
+        /// <returns>The results returned by the query.</returns>
         /// <remarks>
         /// Queries with side-effects may be invoked differently. For example, clients that invoke a DomainService 
         /// over HTTP may use POST requests for queries with side-effects, while GET may be used otherwise.
         /// </remarks>
-        public IAsyncResult BeginQuery(EntityQuery query, AsyncCallback callback, object userState)
-        {
-            if (query == null)
-            {
-                throw new ArgumentNullException("query");
-            }
-
-            if (callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
-
-            DomainClientAsyncResult domainClientResult = DomainClientAsyncResult.CreateQueryResult(this, callback, userState);
-            domainClientResult.InnerAsyncResult = this.BeginQueryCore(
-                query,
-                delegate(IAsyncResult result)
-                {
-                    DomainClientAsyncResult clientResult = (DomainClientAsyncResult)result.AsyncState;
-                    clientResult.InnerAsyncResult = result;
-                    clientResult.Complete();
-                },
-                domainClientResult);
-
-            return domainClientResult;
-        }
+        public Task<QueryCompletedResult> QueryAsync(EntityQuery query, CancellationToken cancellationToken) => QueryAsyncCore(query, cancellationToken);
 
         /// <summary>
         /// Method called by the framework to begin the asynchronous query operation.
         /// </summary>
         /// <param name="query">The query to invoke.</param>
-        /// <param name="callback">The callback to invoke when the query has been executed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this query.</returns>
-        protected abstract IAsyncResult BeginQueryCore(EntityQuery query, AsyncCallback callback, object userState);
-
-        /// <summary>
-        /// Attempts to cancel the query request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what query operation to cancel.</param>
-        /// <exception cref="ArgumentNullException"> if <paramref name="asyncResult"/> is null.</exception>
-        /// <exception cref="ArgumentException"> if <paramref name="asyncResult"/> is for another operation or was not created by this <see cref="DomainClient"/> instance.</exception>
-        /// <exception cref="InvalidOperationException"> if the operation associated with <paramref name="asyncResult"/> has been canceled.</exception>
-        /// <exception cref="InvalidOperationException"> if the operation associated with <paramref name="asyncResult"/> has completed.</exception>
-        public void CancelQuery(IAsyncResult asyncResult)
-        {
-            this.VerifyCancellationSupport();
-
-            DomainClientAsyncResult domainClientResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Query, true /* cancel */);
-            this.CancelQueryCore(domainClientResult.InnerAsyncResult);
-        }
-
-        /// <summary>
-        /// Attempts to cancel the query request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what query operation to cancel.</param>
-        protected virtual void CancelQueryCore(IAsyncResult asyncResult)
-        {
-            // Default implementation does nothing.
-            return;
-        }
-
-        /// <summary>
-        /// Gets the results of an asynchronous query operation.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies a query.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used to request cancellation</param>
         /// <returns>The results returned by the query.</returns>
-        public QueryCompletedResult EndQuery(IAsyncResult asyncResult)
-        {
-            DomainClientAsyncResult domainClientResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Query, false /* cancel */);
-            return this.EndQueryCore(domainClientResult.InnerAsyncResult);
-        }
 
-        /// <summary>
-        /// Method called by the framework to complete the asynchronous query operation
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies a query.</param>
-        /// <returns>The results returned by the query.</returns>
-        protected abstract QueryCompletedResult EndQueryCore(IAsyncResult asyncResult);
+        protected abstract Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken);
 
+        
         /// <summary>
         /// Submits the specified <see cref="EntityChangeSet"/> to the DomainService asynchronously.
         /// </summary>
@@ -165,7 +99,7 @@ namespace OpenRiaServices.DomainServices.Client
             // call the actual implementation asynchronously
             domainClientResult.InnerAsyncResult = this.BeginSubmitCore(
                 changeSet,
-                delegate(IAsyncResult result)
+                delegate (IAsyncResult result)
                 {
                     DomainClientAsyncResult clientResult = (DomainClientAsyncResult)result.AsyncState;
                     clientResult.InnerAsyncResult = result;
@@ -264,7 +198,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             domainClientResult.InnerAsyncResult = this.BeginInvokeCore(
                 invokeArgs,
-                delegate(IAsyncResult result)
+                delegate (IAsyncResult result)
                 {
                     DomainClientAsyncResult clientResult = (DomainClientAsyncResult)result.AsyncState;
                     clientResult.InnerAsyncResult = result;

@@ -10,6 +10,8 @@ using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using OpenRiaServices.DomainServices.Client.Web;
+using System.Threading;
+using System.Threading.Tasks;
 
 #if SILVERLIGHT
 using System.Windows;
@@ -262,11 +264,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// Method called by the framework to begin an asynchronous query operation
         /// </summary>
         /// <param name="query">The query to invoke.</param>
-        /// <param name="callback">The callback to invoke when the query has been executed.</param>
-        /// <param name="userState">Optional state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this query.</returns>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
+        /// </param>/// <returns>An asynchronous result that identifies this query.</returns>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
-        protected sealed override IAsyncResult BeginQueryCore(EntityQuery query, AsyncCallback callback, object userState)
+        protected sealed override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
             MethodInfo beginQueryMethod = WebDomainClient<TContract>.ResolveBeginMethod(query.QueryName);
             MethodInfo endQueryMethod = WebDomainClient<TContract>.ResolveEndMethod(query.QueryName);
@@ -281,34 +282,103 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             TContract channel = this.ChannelFactory.CreateChannel();
+            var taskCompletionSource = new TaskCompletionSource<QueryCompletedResult>();
 
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = WebDomainClientAsyncResult<TContract>.CreateQueryResult(this, channel, endQueryMethod, callback, userState);
+            if (cancellationToken.CanBeCanceled)
+            {
+                // TODO: unregister on completion?
+                cancellationToken.Register(state =>
+                {
+                    // It is important to cancel the task before the channel
+                    // otherwise we might propagate exception from the closed channel instead
+                    taskCompletionSource.TrySetCanceled();
+                    ((IChannel)state).Abort();
+                }, channel);
+            }
+
+            var callback = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
+            {
+                try
+                {
+                    IEnumerable<ValidationResult> validationErrors = null;
+                    QueryResult returnValue = null;
+                    try
+                    {
+                        returnValue = (QueryResult)InvokeMethod(channel, endQueryMethod, new object[] { asyncResponseResult });
+                    }
+                    catch (FaultException<DomainServiceFault> fe)
+                    {
+                        if (fe.Detail.OperationErrors != null)
+                        {
+                            validationErrors = fe.Detail.GetValidationErrors();
+                        }
+                        else
+                        {
+                            throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
+                        }
+                    }
+                    finally
+                    {
+                        ((IChannel)channel).Close();
+                    }
+
+                    QueryCompletedResult result;
+                    if (returnValue != null)
+                    {
+                        result = new QueryCompletedResult(
+                            returnValue.GetRootResults().Cast<Entity>(),
+                            returnValue.GetIncludedResults().Cast<Entity>(),
+                            returnValue.TotalCount,
+                            Enumerable.Empty<ValidationResult>());
+                    }
+                    else
+                    {
+                        result = new QueryCompletedResult(
+                            new Entity[0],
+                            new Entity[0],
+                            /* totalCount */ 0,
+                            validationErrors ?? Enumerable.Empty<ValidationResult>());
+                    }
+
+                    taskCompletionSource.TrySetResult(result);
+                }
+                catch (Exception ex)
+                {
+                    taskCompletionSource.TrySetException(ex);
+                }
+            });
 
             // Pass async operation related parameters.
-            realParameters[parameterInfos.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
-            {
-                wcfAsyncResult.InnerAsyncResult = asyncResponseResult;
-                wcfAsyncResult.Complete();
-            });
-            realParameters[parameterInfos.Length - 1] = userState;
+            realParameters[parameterInfos.Length - 2] = callback;
+            realParameters[parameterInfos.Length - 1] = /*userState*/ null;
 
-            IAsyncResult asyncResult;
+            // Pass the query as a message property.
+            using (OperationContextScope scope = new OperationContextScope((IContextChannel)channel))
+            {
+                if (query.Query != null)
+                {
+                    OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.QueryPropertyName, query.Query);
+                }
+                if (query.IncludeTotalCount)
+                {
+                    OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.IncludeTotalCountPropertyName, true);
+                }
+
+                InvokeMethod(channel, beginQueryMethod, realParameters);
+            }
+
+            return taskCompletionSource.Task;
+        }
+
+        /// <summary>
+        /// Invokes a method on the specified channel and takes care of unwrapping TargetInvocationException
+        /// </summary>
+        /// <returns>result of invocation</returns>
+        private static object InvokeMethod(TContract channel, MethodInfo method, object[] parameters)
+        {
             try
             {
-                // Pass the query as a message property.
-                using (OperationContextScope scope = new OperationContextScope((IContextChannel)channel))
-                {
-                    if (query.Query != null)
-                    {
-                        OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.QueryPropertyName, query.Query);
-                    }
-                    if (query.IncludeTotalCount)
-                    {
-                        OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.IncludeTotalCountPropertyName, true);
-                    }
-
-                    asyncResult = (IAsyncResult)beginQueryMethod.Invoke(channel, realParameters);
-                }
+                return method.Invoke(channel, parameters);
             }
             catch (TargetInvocationException tie)
             {
@@ -318,85 +388,6 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 throw;
-            }
-
-            if (!asyncResult.CompletedSynchronously)
-            {
-                wcfAsyncResult.InnerAsyncResult = asyncResult;
-            }
-
-            return wcfAsyncResult;
-        }
-
-        /// <summary>
-        /// Attempts to cancel the query request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what query operation to cancel.</param>
-        protected sealed override void CancelQueryCore(IAsyncResult asyncResult)
-        {
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Query, /* cancel */ true);
-            ((IChannel)wcfAsyncResult.Channel).Abort();
-        }
-
-        /// <summary>
-        /// Gets the results of a query.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies a query.</param>
-        /// <returns>The results returned by the query.</returns>
-        protected sealed override QueryCompletedResult EndQueryCore(IAsyncResult asyncResult)
-        {
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Query, /* cancel */ false);
-            MethodInfo endQueryMethod = (MethodInfo)wcfAsyncResult.EndOperationMethod;
-
-            IEnumerable<ValidationResult> validationErrors = null;
-            QueryResult returnValue = null;
-            try
-            {
-                try
-                {
-                    returnValue = (QueryResult)endQueryMethod.Invoke(wcfAsyncResult.Channel, new object[] { wcfAsyncResult.InnerAsyncResult });
-                }
-                catch (TargetInvocationException tie)
-                {
-                    if (tie.InnerException != null)
-                    {
-                        throw tie.InnerException;
-                    }
-
-                    throw;
-                }
-                finally
-                {
-                    ((IChannel)wcfAsyncResult.Channel).Close();
-                }
-            }
-            catch (FaultException<DomainServiceFault> fe)
-            {
-                if (fe.Detail.OperationErrors != null)
-                {
-                    validationErrors = fe.Detail.GetValidationErrors();
-                }
-                else
-                {
-                    throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
-                }
-            }
-
-            if (returnValue != null)
-            {
-                return new QueryCompletedResult(
-                    returnValue.GetRootResults().Cast<Entity>(),
-                    returnValue.GetIncludedResults().Cast<Entity>(),
-                    returnValue.TotalCount,
-                    Enumerable.Empty<ValidationResult>());
-            }
-            else
-            {
-                return new QueryCompletedResult(
-                    new Entity[0],
-                    new Entity[0],
-                    /* totalCount */ 0,
-                    validationErrors ?? Enumerable.Empty<ValidationResult>());
             }
         }
 

@@ -558,17 +558,18 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_InvalidEntityQueryDomainClient, query.QueryName));
             }
 
-            IAsyncResult result = null;
             Action<LoadOperation> cancelAction = null;
 
+            CancellationToken cancellationToken = default;
             if (this.DomainClient.SupportsCancellation)
             {
+
+                var cts = new CancellationTokenSource();
+                cancellationToken = cts.Token;
+
                 cancelAction = (op) =>
                 {
-                    if (result != null)
-                    {
-                        this.DomainClient.CancelQuery(result);
-                    }
+                    cts.Cancel();
 
                     // corresponding code in CompleteLoad ensures that
                     // decrement isn't called again for a canceled
@@ -593,24 +594,22 @@ namespace OpenRiaServices.DomainServices.Client
             this.IncrementLoadCount();
 
             // Proceed with query
-            result = this.DomainClient.BeginQuery(
-                query,
-                delegate(IAsyncResult asyncResult)
+            this.DomainClient.QueryAsync(
+                query, cancellationToken)
+                .ContinueWith(result =>
                 {
                     this._syncContext.Post(
                         delegate
                         {
-                            this.CompleteLoad(asyncResult);
+                            this.CompleteLoad(result, loadOperation);
                         }, null);
-                },
-                loadOperation);
+                });
 
             return loadOperation;
         }
 
-        private void CompleteLoad(IAsyncResult asyncResult)
+        private void CompleteLoad(Task<QueryCompletedResult> result, LoadOperation loadOperation)
         {
-            LoadOperation loadOperation = (LoadOperation)asyncResult.AsyncState;
             IEnumerable<Entity> loadedEntities = null;
             IEnumerable<Entity> allLoadedEntities = null;
             int totalCount = DomainContext.TotalCountUndefined;
@@ -619,6 +618,7 @@ namespace OpenRiaServices.DomainServices.Client
             // no work to do.
             if (loadOperation.IsCanceled)
             {
+                // Loadcount is already decremented
                 return;
             }
 
@@ -628,7 +628,8 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 lock (this._syncRoot)
                 {
-                    results = this.DomainClient.EndQuery(asyncResult);
+                    // The task is known to be completed so this will never block
+                    results = result.GetAwaiter().GetResult();
 
                     // load the entities into the entity container
                     loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadOperation.LoadBehavior).Cast<Entity>();

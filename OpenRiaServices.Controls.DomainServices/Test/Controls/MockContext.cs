@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Client;
 
 namespace OpenRiaServices.Controls.DomainServices.Test
@@ -56,12 +58,7 @@ namespace OpenRiaServices.Controls.DomainServices.Test
             {
             }
 
-            protected override IAsyncResult BeginQueryCore(EntityQuery query, AsyncCallback callback, object userState)
-            {
-                return null;
-            }
-
-            protected override QueryCompletedResult EndQueryCore(IAsyncResult asyncResult)
+            protected override Task<QueryCompletedResult> QueryCoreAsync(EntityQuery query, CancellationToken cancellationToken)
             {
                 return null;
             }

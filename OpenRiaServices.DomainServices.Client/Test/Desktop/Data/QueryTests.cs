@@ -2231,22 +2231,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 EntityTypes = new Type[] { typeof(City) }
             };
-            QueryCompletedResult results = null;
-            client.BeginQuery(
-                new EntityQuery<City>(client, "GetCities", null, true, true),
-                delegate(IAsyncResult asyncResult)
-                {
-                    results = client.EndQuery(asyncResult);
-                },
-                null
-            );
+
+            var queryTask = client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), default);
             EnqueueConditional(delegate
             {
-                return results != null;
+                return queryTask.IsCompleted;
             });
             EnqueueCallback(delegate
             {
-                List<City> cities = results.Entities.Concat(results.IncludedEntities).Cast<City>().ToList();
+                var results = queryTask.Result;
+                List <City> cities = results.Entities.Concat(results.IncludedEntities).Cast<City>().ToList();
                 Assert.IsTrue(cities.Count > 0);
             });
             EnqueueTestComplete();
@@ -2264,33 +2258,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 EntityTypes = new Type[] { typeof(Zip) }
             };
-            DomainOperationException error = null;
-            bool done = false;
-            client.BeginQuery(
+
+            var queryTask = client.QueryAsync(
                 new EntityQuery<Zip>(client, "GetZipsIfAuthenticated", null, true, false),
-                delegate(IAsyncResult asyncResult)
-                {
-                    try
-                    {
-                        client.EndQuery(asyncResult);
-                    }
-                    catch (Exception ex)
-                    {
-                        error = (DomainOperationException)ex;
-                    }
-                    finally
-                    {
-                        done = true;
-                    }
-                },
-                null
-            );
-            EnqueueConditional(delegate
-            {
-                return done;
-            });
+                default);
+            EnqueueConditional(() => queryTask.IsCompleted);
             EnqueueCallback(delegate
             {
+                DomainOperationException error = queryTask.Exception?.InnerException as DomainOperationException;
+
                 Assert.IsNotNull(error, "[Permission(AuthenticationRequired=true)] attribute should have raised a DomainOperationException");
                 Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
                 Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "Access to operation '{0}' was denied.", "GetZipsIfAuthenticated"), error.Message);
@@ -2310,33 +2286,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 EntityTypes = new Type[] { typeof(Zip) }
             };
-            DomainOperationException error = null;
-            bool done = false;
-            client.BeginQuery(
-                new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false),
-                delegate(IAsyncResult asyncResult)
-                {
-                    try
-                    {
-                        client.EndQuery(asyncResult);
-                    }
-                    catch (Exception ex)
-                    {
-                        error = (DomainOperationException)ex;
-                    }
-                    finally
-                    {
-                        done = true;
-                    }
-                },
-                null
-            );
-            EnqueueConditional(delegate
-            {
-                return done;
-            });
+            var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), default);
+;
+            EnqueueConditional(() => queryTask.IsCompleted);
             EnqueueCallback(delegate
             {
+                var error = queryTask.Exception?.InnerException as DomainOperationException;
+
                 Assert.IsNotNull(error, "[Permission(Role=\"manager\")] attribute should have raised a DomainOperationException");
                 Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
                 Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "Access to operation '{0}' was denied.", "GetZipsIfInRole"), error.Message);
@@ -2356,33 +2312,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 EntityTypes = new Type[] { typeof(Zip) }
             };
-            DomainOperationException error = null;
-            bool done = false;
-            client.BeginQuery(
-                new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false),
-                delegate(IAsyncResult asyncResult)
-                {
-                    try
-                    {
-                        client.EndQuery(asyncResult);
-                    }
-                    catch (Exception ex)
-                    {
-                        error = (DomainOperationException)ex;
-                    }
-                    finally
-                    {
-                        done = true;
-                    }
-                },
-                null
-            );
+
+            var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false), default);
             EnqueueConditional(delegate
             {
-                return done;
+                return queryTask.IsCompleted;
             });
             EnqueueCallback(delegate
             {
+                var error = (DomainOperationException)queryTask.Exception?.InnerException;
+
                 Assert.IsNotNull(error, "[RequiresUser(\"mathew\")] attribute should have raised a DomainOperationException");
                 Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
                 Assert.AreEqual(error.Message, "Only one user is authorized for this query, and it isn't you.");
