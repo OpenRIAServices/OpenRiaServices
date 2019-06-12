@@ -248,7 +248,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             return taskCompletionSource.Task;
         }
 
-        protected override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             Assert.AreEqual(0, changeSet.AddedEntities.Count,
                 "Change set should not contained added entities.");
@@ -269,30 +269,41 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             List<ChangeSetEntry> submitOperationsToReturn = new List<ChangeSetEntry>();
             submitOperationsToReturn.Add(new ChangeSetEntry(userToReturn, submitOperations[0].Id, submitOperations[0].Operation));
 
-            this.Result = new AdcSubmitAsyncResult(changeSet, submitOperationsToReturn, userToReturn, callback, userState);
-            return this.Result;
-        }
 
-        protected override void CancelSubmitCore(IAsyncResult asyncResult)
-        {
-            this.CancellationRequested = true;
-        }
-
-        protected override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-        {
-            // Maybe assert expected type
-            if (this.Error != null)
+            AsyncCallback completeCallback = (asyncResult) =>
             {
-                throw this.Error;
-            }
+                var tcs = (TaskCompletionSource<SubmitCompletedResult>)asyncResult.AsyncState;
 
-            this.Submitted = true;
+                // Maybe assert expected type
+                if (this.Error != null)
+                {
+                    tcs.SetException(this.Error);
+                }
+                else if (this.CancellationRequested)
+                {
+                    tcs.SetCanceled();
+                }
+                else
+                {
+                    this.Submitted = true;
 
-            AdcSubmitAsyncResult result = asyncResult as AdcSubmitAsyncResult;
-            result.SubmitOperations.First().Entity = result.User;
-            result.Submit(this.SubmitConflictMembers, this.SubmitErrors, this.SubmitValidationErrors);
-            SubmitCompletedResult results = new SubmitCompletedResult(result.ChangeSet, result.SubmitOperations);
-            return results;
+                    AdcSubmitAsyncResult result = asyncResult as AdcSubmitAsyncResult;
+                    result.SubmitOperations.First().Entity = result.User;
+                    result.Submit(this.SubmitConflictMembers, this.SubmitErrors, this.SubmitValidationErrors);
+                    SubmitCompletedResult results = new SubmitCompletedResult(result.ChangeSet, result.SubmitOperations);
+                    tcs.SetResult(results);
+                }
+            };
+
+            var taskCompletionSource = new TaskCompletionSource<SubmitCompletedResult>();
+            this.Result = new AdcSubmitAsyncResult(changeSet, submitOperationsToReturn, userToReturn, completeCallback, taskCompletionSource);
+
+            cancellationToken.Register(res =>
+            {
+                this.CancellationRequested = true;
+            }, this.Result);
+
+            return taskCompletionSource.Task;
         }
 
         protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)

@@ -171,27 +171,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 () => dc.EndInvoke(result.InnerAsyncResult),
                 "asyncResult");
 
-                // Skip Query since it is now task based
-
-                List<Entity> list = new List<Entity>();
-                list.Add(new Product());
-                ReadOnlyCollection<Entity> simpleCollection = new ReadOnlyCollection<Entity>(list);
-                ReadOnlyCollection<Entity> emptyCollection = new ReadOnlyCollection<Entity>(new List<Entity>());
-                EntityChangeSet emptyChangeSet = new EntityChangeSet(simpleCollection, emptyCollection, emptyCollection);
-                result = null;
-                result = (DomainClientAsyncResult)dc.BeginSubmit(emptyChangeSet, ignored, null);
-            });
-
-            EnqueueConditional(() => result != null);
-
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.InnerAsyncResult);
-
-                ExceptionHelper.ExpectArgumentNullException(
-                    () => dc.EndSubmit(result.InnerAsyncResult),
-                    "asyncResult");
-            });
+                // Skip Query, and submit since it is now task based
+});
 
             EnqueueTestComplete();
         }
@@ -309,30 +290,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return TaskHelper.FromResult(results);
         }
 
-        protected override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             IEnumerable<ChangeSetEntry> submitOperations = changeSet.GetChangeSetEntries();
-            MockAsyncResult ar = new MockAsyncResult(null, userState, new object[] { changeSet, submitOperations, userState });
 
             // perform mock submit operations
-
-            callback.Invoke(ar);
-
-            return ar;
-        }
-
-        protected override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-        {
-            MockAsyncResult ar = (MockAsyncResult)asyncResult;
-            object[] stateParts = (object[])ar.InnerState;
-            EntityChangeSet changeSet = (EntityChangeSet)stateParts[0];
-            IEnumerable<ChangeSetEntry> submitOperations = (IEnumerable<ChangeSetEntry>)stateParts[1];
-
             SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
-
-            return submitResults;
+            return TaskHelper.FromResult(submitResults);
         }
-
         protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
         {
             MockAsyncResult ar = new MockAsyncResult(null, userState, new object[] { invokeArgs.OperationName, invokeArgs.ReturnType, invokeArgs.Parameters, userState });
@@ -503,14 +468,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return TaskHelper.FromResult((QueryCompletedResult)null);
         }
 
-        protected override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
-            return null;
-        }
-
-        protected override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-        {
-            return null;
+            return TaskHelper.FromResult((SubmitCompletedResult)null);
         }
 
         protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)

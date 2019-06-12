@@ -69,24 +69,18 @@ namespace OpenRiaServices.DomainServices.Client
 
         protected abstract Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken);
 
-        
+
         /// <summary>
         /// Submits the specified <see cref="EntityChangeSet"/> to the DomainService asynchronously.
         /// </summary>
         /// <param name="changeSet">The <see cref="EntityChangeSet"/> to submit to the DomainService.</param>
-        /// <param name="callback">The callback to invoke when the submit has been executed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this submit request.</returns>
-        public IAsyncResult BeginSubmit(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used to request cancellation</param>
+        /// <returns>The results returned by the submit request.</returns>
+        public Task<SubmitCompletedResult> SubmitAsync(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
-            if (callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
-
             if (changeSet == null)
             {
-                throw new ArgumentNullException("changeSet");
+                throw new ArgumentNullException(nameof(changeSet));
             }
 
             if (changeSet.IsEmpty)
@@ -94,20 +88,21 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EmptyChangeSet);
             }
 
-            DomainClientAsyncResult domainClientResult = DomainClientAsyncResult.CreateSubmitResult(this, changeSet, callback, userState);
+            // call the actual implementation 
+            var submitTask = SubmitAsyncCore(changeSet, cancellationToken);
+            return submitTask.ContinueWith(res =>
+            {
+                var submitResults = res.GetAwaiter().GetResult();
 
-            // call the actual implementation asynchronously
-            domainClientResult.InnerAsyncResult = this.BeginSubmitCore(
-                changeSet,
-                delegate (IAsyncResult result)
+                // correlate the operation results back to their actual client entity references
+                Dictionary<int, Entity> submittedEntities = submitResults.ChangeSet.GetChangeSetEntries().ToDictionary(p => p.Id, p => p.Entity);
+                foreach (ChangeSetEntry op in submitResults.Results)
                 {
-                    DomainClientAsyncResult clientResult = (DomainClientAsyncResult)result.AsyncState;
-                    clientResult.InnerAsyncResult = result;
-                    clientResult.Complete();
-                },
-                domainClientResult);
+                    op.ClientEntity = submittedEntities[op.Id];
+                }
 
-            return domainClientResult;
+                return submitResults;
+            });
         }
 
         /// <summary>
@@ -115,66 +110,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// Overrides should not call the base method.
         /// </summary>
         /// <param name="changeSet">The <see cref="EntityChangeSet"/> to submit to the DomainService.</param>
-        /// <param name="callback">The callback to invoke when the submit has been executed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this submit request.</returns>
-        protected virtual IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used to request cancellation</param>
+        /// <returns>The results returned by the submit request.</returns>
+        protected virtual Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }
-
-        /// <summary>
-        /// Attempts to cancel the submit request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what submit operation to cancel.</param>
-        /// <exception cref="ArgumentNullException"> if <paramref name="asyncResult"/> is null.</exception>
-        /// <exception cref="ArgumentException"> if <paramref name="asyncResult"/> is for another operation or was not created by this <see cref="DomainClient"/> instance.</exception>
-        /// <exception cref="InvalidOperationException"> if the operation associated with <paramref name="asyncResult"/> has been canceled.</exception>
-        /// <exception cref="InvalidOperationException"> if the operation associated with <paramref name="asyncResult"/> has completed.</exception>
-        public void CancelSubmit(IAsyncResult asyncResult)
-        {
-            this.VerifyCancellationSupport();
-
-            DomainClientAsyncResult domainClientResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Submit, true /* cancel */);
-            this.CancelSubmitCore(domainClientResult.InnerAsyncResult);
-        }
-
-        /// <summary>
-        /// Attempts to cancel the submit request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what submit operation to cancel.</param>
-        protected virtual void CancelSubmitCore(IAsyncResult asyncResult)
-        {
-            // Default implementation does nothing.
-            return;
-        }
-
-        /// <summary>
-        /// Gets the results of a submit request.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies a submit request.</param>
-        /// <returns>The results returned by the submit request.</returns>
-        public SubmitCompletedResult EndSubmit(IAsyncResult asyncResult)
-        {
-            DomainClientAsyncResult domainClientResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Submit, false /* cancel */);
-            SubmitCompletedResult submitResults = this.EndSubmitCore(domainClientResult.InnerAsyncResult);
-
-            // correlate the operation results back to their actual client entity references
-            Dictionary<int, Entity> submittedEntities = domainClientResult.EntityChangeSet.GetChangeSetEntries().ToDictionary(p => p.Id, p => p.Entity);
-            foreach (ChangeSetEntry op in submitResults.Results)
-            {
-                op.ClientEntity = submittedEntities[op.Id];
-            }
-
-            return submitResults;
-        }
-
-        /// <summary>
-        /// Method called by the framework to complete an asynchronous submit operation
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies a submit request.</param>
-        /// <returns>The results returned by the submit request.</returns>
-        protected abstract SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult);
 
         /// <summary>
         /// Invokes an operation asynchronously.

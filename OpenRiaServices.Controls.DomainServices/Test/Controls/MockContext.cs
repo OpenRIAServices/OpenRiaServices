@@ -58,21 +58,15 @@ namespace OpenRiaServices.Controls.DomainServices.Test
             {
             }
 
-            protected override Task<QueryCompletedResult> QueryCoreAsync(EntityQuery query, CancellationToken cancellationToken)
+            protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
             {
                 return null;
             }
 
-            protected override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+            protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
             {
                 return null;
             }
-
-            protected override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-            {
-                return null;
-            }
-
             protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
             {
                 return null;

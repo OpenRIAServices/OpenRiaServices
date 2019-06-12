@@ -273,16 +273,16 @@ namespace OpenRiaServices.DomainServices.Client
                 changeSet = this.EntityContainer.GetChanges();
                 bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
 
-                IAsyncResult result = null;
                 Action<SubmitOperation> cancelAction = null;
+                CancellationToken cancellationToken = default;
                 if (this.DomainClient.SupportsCancellation)
                 {
+                    var tcs = new CancellationTokenSource();
+                    cancellationToken = tcs.Token;
+
                     cancelAction = (op) =>
                     {
-                        if (result != null)
-                        {
-                            this.DomainClient.CancelSubmit(result);
-                        }
+                        tcs.Cancel();
 
                         this.IsSubmitting = false;
                         foreach (Entity entity in changeSet)
@@ -324,18 +324,16 @@ namespace OpenRiaServices.DomainServices.Client
                         entity.IsSubmitting = true;
                     }
 
-                    result = this.DomainClient.BeginSubmit(
-                        changeSet,
-                        delegate(IAsyncResult asyncResult)
+                    this.DomainClient.SubmitAsync(changeSet, cancellationToken)
+                        .ContinueWith(submitTask =>
                         {
                             this._syncContext.Post(
                                 delegate
                                 {
-                                    this.CompleteSubmitChanges(asyncResult);
+                                    this.CompleteSubmitChanges(submitTask, submitOperation);
                                 },
                                 null);
-                        },
-                        submitOperation);
+                        });
                 }
             }
             catch
@@ -840,10 +838,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Completes an event-based asynchronous <see cref="SubmitChanges()"/> operation.
         /// </summary>
-        /// <param name="asyncResult">The asynchronous result that identifies the underlying Load operation.</param>
-        private void CompleteSubmitChanges(IAsyncResult asyncResult)
+        private void CompleteSubmitChanges(Task<SubmitCompletedResult> submitTask, SubmitOperation submitOperation)
         {
-            SubmitOperation submitOperation = (SubmitOperation)asyncResult.AsyncState;
             IEnumerable<ChangeSetEntry> operationResults = null;
             Exception error = null;
 
@@ -854,7 +850,7 @@ namespace OpenRiaServices.DomainServices.Client
                     return;
                 }
 
-                SubmitCompletedResult submitResults = this.DomainClient.EndSubmit(asyncResult);
+                SubmitCompletedResult submitResults = submitTask.GetAwaiter().GetResult();
 
                 // If the request was successful, process the results
                 ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results.Cast<ChangeSetEntry>());

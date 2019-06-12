@@ -265,7 +265,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="query">The query to invoke.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
-        /// </param>/// <returns>An asynchronous result that identifies this query.</returns>
+        /// <returns>An asynchronous result that identifies this query.</returns>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
         protected sealed override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
@@ -397,12 +397,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="changeSet">The changeset to submit. If the changeset is empty, an <see cref="InvalidOperationException"/> will
         /// be thrown.</param>
-        /// <param name="callback">The callback to invoke when the submit has been executed.</param>
-        /// <param name="userState">Optional state that will flow through to the SubmitCompleted event</param>
+        /// 
+        /// 
         /// <returns>An asynchronous result that identifies this submit.</returns>
         /// <exception cref="InvalidOperationException">The changeset is empty.</exception>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
-        protected sealed override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             MethodInfo beginSubmitMethod = WebDomainClient<TContract>.ResolveBeginMethod("SubmitChanges");
             MethodInfo endSubmitMethod = WebDomainClient<TContract>.ResolveEndMethod("SubmitChanges");
@@ -410,89 +410,55 @@ namespace OpenRiaServices.DomainServices.Client
             IEnumerable<ChangeSetEntry> submitOperations = changeSet.GetChangeSetEntries();
 
             TContract channel = this.ChannelFactory.CreateChannel();
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = WebDomainClientAsyncResult<TContract>.CreateSubmitResult(this, channel, endSubmitMethod, changeSet, submitOperations.ToList(), callback, userState);
+
+            var taskCompletionSource = new TaskCompletionSource<SubmitCompletedResult>();
+            if (cancellationToken.CanBeCanceled)
+            {
+                // TODO: unregister on completion?
+                cancellationToken.Register(state =>
+                {
+                    // It is important to cancel the task before the channel
+                    // otherwise we might propagate exception from the closed channel instead
+                    taskCompletionSource.TrySetCanceled();
+                    ((IChannel)state).Abort();
+                }, channel);
+            }
+
 
             object[] parameters =
             {
                 submitOperations,
                 new AsyncCallback(delegate(IAsyncResult asyncResponseResult)
                 {
-                    wcfAsyncResult.InnerAsyncResult = asyncResponseResult;
-                    wcfAsyncResult.Complete();
+
+                    try
+                    {
+                        try
+                        {
+                            var returnValue = (IEnumerable<ChangeSetEntry>)InvokeMethod(channel,  endSubmitMethod, new object[] { asyncResponseResult });
+                                    taskCompletionSource.TrySetResult(new SubmitCompletedResult(changeSet, returnValue ?? Enumerable.Empty<ChangeSetEntry>()));
+
+                        }
+                        finally
+                        {
+                            ((IChannel)channel).Close();
+                        }
+                    }
+                    catch (FaultException<DomainServiceFault> fe)
+                    {
+                        taskCompletionSource.TrySetException(WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail));
+                    }
+                    catch (Exception ex)
+                    {
+                        taskCompletionSource.TrySetException(ex);
+                    }
                 }),
-                userState
+                /* TODO: use userState? */ 
+                /*userState*/ null
             };
 
-            IAsyncResult asyncResult;
-            try
-            {
-                asyncResult = (IAsyncResult)beginSubmitMethod.Invoke(channel, parameters);
-            }
-            catch (TargetInvocationException tie)
-            {
-                if (tie.InnerException != null)
-                {
-                    throw tie.InnerException;
-                }
-
-                throw;
-            }
-
-            if (!asyncResult.CompletedSynchronously)
-            {
-                wcfAsyncResult.InnerAsyncResult = asyncResult;
-            }
-            return wcfAsyncResult;
-        }
-
-        /// <summary>
-        /// Attempts to cancel the submit request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what submit operation to cancel.</param>
-        protected sealed override void CancelSubmitCore(IAsyncResult asyncResult)
-        {
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Submit, /* cancel */ true);
-            ((IChannel)wcfAsyncResult.Channel).Abort();
-        }
-
-        /// <summary>
-        /// Gets the results of a submit.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies a submit.</param>
-        /// <returns>The results returned by the submit.</returns>
-        protected sealed override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-        {
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Submit, /* cancel */ false);
-            MethodInfo endSubmitMethod = wcfAsyncResult.EndOperationMethod;
-            EntityChangeSet changeSet = wcfAsyncResult.EntityChangeSet;
-
-            IEnumerable<ChangeSetEntry> returnValue;
-            try
-            {
-                try
-                {
-                    returnValue = (IEnumerable<ChangeSetEntry>)endSubmitMethod.Invoke(wcfAsyncResult.Channel, new object[] { wcfAsyncResult.InnerAsyncResult });
-                }
-                catch (TargetInvocationException tie)
-                {
-                    if (tie.InnerException != null)
-                    {
-                        throw tie.InnerException;
-                    }
-
-                    throw;
-                }
-                finally
-                {
-                    ((IChannel)wcfAsyncResult.Channel).Close();
-                }
-            }
-            catch (FaultException<DomainServiceFault> fe)
-            {
-                throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
-            }
-
-            return new SubmitCompletedResult(changeSet, returnValue ?? Enumerable.Empty<ChangeSetEntry>());
+            IAsyncResult asyncResult = (IAsyncResult)InvokeMethod(channel, beginSubmitMethod, parameters);
+            return taskCompletionSource.Task;
         }
 
         /// <summary>
