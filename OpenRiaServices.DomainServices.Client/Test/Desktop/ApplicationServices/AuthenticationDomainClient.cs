@@ -306,19 +306,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             return taskCompletionSource.Task;
         }
 
-        protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
+        protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
-            throw new NotSupportedException();
-        }
-
-        protected override void CancelInvokeCore(IAsyncResult asyncResult)
-        {
-            throw new NotSupportedException();
-        }
-
-        protected override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
-        {
-            throw new NotSupportedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -928,35 +928,33 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            IAsyncResult result = null;
             Action<InvokeOperation<TValue>> cancelAction = null;
-
+            CancellationToken cancellationToken = default;
             if (this.DomainClient.SupportsCancellation)
             {
+
+                var cts = new CancellationTokenSource();
+                cancellationToken = cts.Token;
+
                 cancelAction = (op) =>
                 {
-                    if (result != null)
-                    {
-                        this.DomainClient.CancelInvoke(result);
-                    }
+                    cts.Cancel();
                 };
             }
 
             InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, cancelAction);
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            result = this.DomainClient.BeginInvoke(
-                invokeArgs,
-                delegate(IAsyncResult asyncResult)
+            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                .ContinueWith(result =>
                 {
                     this._syncContext.Post(
                         delegate
                         {
-                            this.CompleteInvoke(asyncResult);
+                            this.CompleteInvoke(result, invokeOperation);
                         },
                         null);
-                },
-                invokeOperation);
+                });
 
             return invokeOperation;
         }
@@ -984,17 +982,16 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            IAsyncResult result = null;
             Action<InvokeOperation> cancelAction = null;
-
+            CancellationToken cancellationToken = default;
             if (this.DomainClient.SupportsCancellation)
             {
+                var cts = new CancellationTokenSource();
+                cancellationToken = cts.Token;
+
                 cancelAction = (op) =>
                 {
-                    if (result != null)
-                    {
-                        this.DomainClient.CancelInvoke(result);
-                    }
+                    cts.Cancel();
                 };
             }
 
@@ -1013,26 +1010,22 @@ namespace OpenRiaServices.DomainServices.Client
                 });
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            result = this.DomainClient.BeginInvoke(
-                invokeArgs,
-                delegate(IAsyncResult asyncResult)
+            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                .ContinueWith(result =>
                 {
                     this._syncContext.Post(
                         delegate
                         {
-                            this.CompleteInvoke(asyncResult);
+                            this.CompleteInvoke(result, invokeOperation);
                         },
                         null);
-                },
-                invokeOperation);
+                });
 
             return invokeOperation;
         }
 
-        private void CompleteInvoke(IAsyncResult asyncResult)
+        private void CompleteInvoke(Task<InvokeCompletedResult> invokeTask, InvokeOperation invokeOperation)
         {
-            InvokeOperation invokeOperation = (InvokeOperation)asyncResult.AsyncState;
-
             if (invokeOperation.IsCanceled)
             {
                 return;
@@ -1042,7 +1035,7 @@ namespace OpenRiaServices.DomainServices.Client
             InvokeCompletedResult results = null;
             try
             {
-                results = this.DomainClient.EndInvoke(asyncResult);
+                results = invokeTask.GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {

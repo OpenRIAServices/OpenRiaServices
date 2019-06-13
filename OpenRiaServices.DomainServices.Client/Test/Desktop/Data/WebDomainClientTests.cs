@@ -143,39 +143,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        public void EndInvoke_ThrowsOnBadAsyncResult()
-        {
-            IAsyncResult result;
-
-            // Null IAsyncResult
-            result = null;
-            ExceptionHelper.ExpectArgumentNullException(() => this.DomainClient.EndInvoke(result), "asyncResult");
-
-            // Unexpected IAsyncResult type 
-            result = new MockAsyncResult();
-            ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndInvoke(result), Resources.WrongAsyncResult, "asyncResult");
-
-            ChannelFactory<CityDomainContext.ICityDomainServiceContract> factory = CreateChannelFactory<CityDomainContext.ICityDomainServiceContract>();
-            MethodInfo endMethod = typeof(CityDomainContext.ICityDomainServiceContract).GetMethod("EndGetCities");
-
-            // TODO: This fails because S.SM.DS.Client.DomainClientAsyncResult != S.SM.DS.Web.DomainClientAsyncResult
-            //// IAsyncResult operation not complete
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateInvokeResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //ExceptionHelper.ExpectInvalidOperationException(() => this.DomainClient.EndInvoke(result), Resources.OperationNotComplete);
-
-            //// IAsyncResult from a different operation
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateQueryResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndInvoke(result), Resources.WrongAsyncResult, "asyncResult");
-
-            //// IAsyncResult from a different instance
-            //WebDomainClient<CityDomainContext.ICityDomainServiceContract> otherClient = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities);
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateInvokeResult(otherClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndInvoke(result), Resources.WrongAsyncResult, "asyncResult");
-        }
-
-        [TestMethod]
         [Asynchronous]
         public void Invoke_DefaultBehavior()
         {
@@ -185,11 +152,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 asyncResult = this.BeginInvokeRequest();
             });
             this.EnqueueConditional(() => asyncResult.IsCompleted && this.InvokeCompletedResults != null);
-            this.EnqueueCallback(() =>
-            {
-                // Validate that a second call to EndLoad throws
-                ExceptionHelper.ExpectInvalidOperationException(() => this.InvokeAsyncCallback(asyncResult), Resources.MethodCanOnlyBeInvokedOnce);
-            });
             this.EnqueueTestComplete();
         }
 
@@ -197,13 +159,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void Invoke_CancellationBehavior()
         {
-            IAsyncResult asyncResult = null;
+            Task<InvokeCompletedResult> asyncResult = null;
             this.EnqueueCallback(() =>
             {
                 asyncResult = this.BeginInvokeRequestAndCancel();
             });
             this.EnqueueConditional(() => asyncResult.IsCompleted && this.Error != null);
-            this.EnqueueCallback(() => this.AssertInvokeCancelled(asyncResult));
+            this.EnqueueCallback(() =>
+            {
+                Assert.IsTrue(asyncResult.IsCanceled || asyncResult.Exception?.InnerException is OperationCanceledException, "Task should be cancelled");
+            });
             this.EnqueueTestComplete();
         }
 
@@ -242,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void Submit_DefaultBehavior()
         {
             Task<SubmitCompletedResult> submitTask = this.BeginSubmitRequest();
-            
+
             this.EnqueueConditional(() => submitTask.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -385,27 +350,37 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
         }
 
-        private IAsyncResult BeginInvokeRequest(AsyncCallback callback)
+        private Task<InvokeCompletedResult> BeginInvokeRequest(CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("msg", "foo");
 
             InvokeArgs invokeArgs = new InvokeArgs("Echo", typeof(string), parameters, true /*hasSideEffects*/);
-            var result = this.DomainClient.BeginInvoke(invokeArgs, callback, this.DomainClient);
+            var result = this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                .ContinueWith(task =>
+                {
+                    try
+                    {
+                        InvokeCompletedResult res = task.GetAwaiter().GetResult();
+                        this.InvokeCompletedResults = res;
+                        return res;
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Error = ex;
+                        throw;
+                    }
+                });
             this.AssertInProgress(result);
             return result;
         }
 
-        private IAsyncResult BeginInvokeRequest()
+        private Task<InvokeCompletedResult> BeginInvokeRequestAndCancel()
         {
-            return this.BeginInvokeRequest(this.InvokeAsyncCallback);
-        }
-
-        private IAsyncResult BeginInvokeRequestAndCancel()
-        {
-            var result = this.BeginInvokeRequest(this.InvokeAsyncCancelCallback);
-            this.DomainClient.CancelInvoke(result);
-            return result;
+            var cts = new CancellationTokenSource();
+            var task = this.BeginInvokeRequest(cts.Token);
+            cts.Cancel();
+            return task;
         }
 
         private Task<QueryCompletedResult> BeginQueryRequest(CancellationToken cancellationToken = default)
@@ -466,28 +441,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return task;
         }
 
-        private void AssertInvokeCancelled(IAsyncResult result)
-        {
-            AsyncResultBase asyncResultBase = result as AsyncResultBase;
-            Assert.IsNotNull(asyncResultBase, "Expected an instance of AsyncResultBase");
-            ExceptionHelper.ExpectInvalidOperationException(
-                () => this.DomainClient.EndInvoke(result),
-                Resources.OperationCancelled);
-        }
-
-        private void InvokeAsyncCallback(IAsyncResult result)
-        {
-            this.InvokeCompletedResults = this.DomainClient.EndInvoke(result);
-        }
-
-        private void InvokeAsyncCancelCallback(IAsyncResult result)
-        {
-            this.Error =
-              ExceptionHelper.ExpectInvalidOperationException(
-                  () => this.DomainClient.EndInvoke(result),
-                  Resources.OperationCancelled);
-        }
-
         private static Uri GenerateUriBase(int length)
         {
             string template = TestURIs.RootURI.OriginalString + "{0}/";
@@ -532,22 +485,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNotNull(asyncResult, "Expected an instance of IAsyncResult");
             Assert.IsFalse(asyncResult.IsCompleted);
             Assert.IsFalse(asyncResult.CompletedSynchronously);
-        }
-
-        /// <summary>
-        /// Creates a channel factory.
-        /// </summary>
-        /// <returns>The channel used to communicate with the server.</returns>
-        private ChannelFactory<TContract> CreateChannelFactory<TContract>()
-        {
-            TransportBindingElement transport = new HttpTransportBindingElement();
-
-            CustomBinding binding = new CustomBinding(
-                new BinaryMessageEncodingBindingElement(),
-                transport
-            );
-
-            return new ChannelFactory<TContract>(binding, new EndpointAddress(new Uri("http://localhost")));
         }
     }
 

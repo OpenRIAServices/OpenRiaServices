@@ -117,129 +117,22 @@ namespace OpenRiaServices.DomainServices.Client
             throw new NotSupportedException();
         }
 
+
         /// <summary>
         /// Invokes an operation asynchronously.
         /// </summary>
         /// <param name="invokeArgs">The arguments to the Invoke operation.</param>
-        /// <param name="callback">The callback to invoke when the invocation has been completed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this invocation.</returns>
-        public IAsyncResult BeginInvoke(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
-        {
-            if (invokeArgs == null)
-            {
-                throw new ArgumentNullException("invokeArgs");
-            }
-            if (callback == null)
-            {
-                throw new ArgumentNullException("callback");
-            }
-
-            DomainClientAsyncResult domainClientResult = DomainClientAsyncResult.CreateInvokeResult(this, invokeArgs, callback, userState);
-
-            domainClientResult.InnerAsyncResult = this.BeginInvokeCore(
-                invokeArgs,
-                delegate (IAsyncResult result)
-                {
-                    DomainClientAsyncResult clientResult = (DomainClientAsyncResult)result.AsyncState;
-                    clientResult.InnerAsyncResult = result;
-                    clientResult.Complete();
-                },
-                domainClientResult);
-
-            return domainClientResult;
-        }
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used to request cancellation</param>
+        /// <returns>The results returned by the invocation.</returns>
+        public Task<InvokeCompletedResult> InvokeAsync(InvokeArgs invokeArgs, CancellationToken cancellationToken) => InvokeAsyncCore(invokeArgs, cancellationToken);
 
         /// <summary>
         /// Method called by the framework to begin an Invoke operation asynchronously. Overrides
         /// should not call the base method.
         /// </summary>
         /// <param name="invokeArgs">The arguments to the Invoke operation.</param>
-        /// <param name="callback">The callback to invoke when the invocation has been completed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>An asynchronous result that identifies this invocation.</returns>
-        protected virtual IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Attempts to cancel the invocation request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what invocation operation to cancel.</param>
-        /// <exception cref="ArgumentNullException"> if <paramref name="asyncResult"/> is null.</exception>
-        /// <exception cref="ArgumentException"> if <paramref name="asyncResult"/> is for another operation or was not created by this <see cref="DomainClient"/> instance.</exception>
-        /// <exception cref="InvalidOperationException"> if the operation associated with <paramref name="asyncResult"/> has been canceled.</exception>
-        /// <exception cref="InvalidOperationException"> if the operation associated with <paramref name="asyncResult"/> has completed.</exception>
-        public void CancelInvoke(IAsyncResult asyncResult)
-        {
-            this.VerifyCancellationSupport();
-
-            DomainClientAsyncResult domainClientResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Invoke, true /* cancel */);
-            this.CancelInvokeCore(domainClientResult.InnerAsyncResult);
-        }
-
-        /// <summary>
-        /// Attempts to cancel the invocation request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what invocation operation to cancel.</param>
-        protected virtual void CancelInvokeCore(IAsyncResult asyncResult)
-        {
-            // Default implementation does nothing.
-            return;
-        }
-
-        /// <summary>
-        /// Completes an operation invocation.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies an invocation.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used to request cancellation</param>
         /// <returns>The results returned by the invocation.</returns>
-        public InvokeCompletedResult EndInvoke(IAsyncResult asyncResult)
-        {
-            DomainClientAsyncResult domainClientResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Invoke, false /* cancel */);
-            return this.EndInvokeCore(domainClientResult.InnerAsyncResult);
-        }
-
-        /// <summary>
-        /// Method called by the framework to complete an asynchronous invocation
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies an invocation.</param>
-        /// <returns>The results returned by the invocation.</returns>
-        protected abstract InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult);
-
-        /// <summary>
-        /// Transitions an <see cref="IAsyncResult"/> instance to a completed state.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies an invocation.</param>
-        /// <param name="operationType">The expected operation type.</param>
-        /// <param name="cancel">Boolean indicating whether or not the operation has been canceled.</param>
-        /// <returns>A <see cref="DomainClientAsyncResult"/> reference.</returns>
-        /// <exception cref="ArgumentNullException"> if <paramref name="asyncResult"/> is null.</exception>
-        /// <exception cref="ArgumentException"> if <paramref name="asyncResult"/> is for another operation or was not created by this <see cref="DomainClient"/> instance.</exception>
-        /// <exception cref="InvalidOperationException"> if <paramref name="asyncResult"/> has been canceled.</exception>
-        /// <exception cref="InvalidOperationException"> if <paramref name="asyncResult"/>'s End* method has already been invoked.</exception>
-        /// <exception cref="InvalidOperationException"> if <paramref name="asyncResult"/> has not completed.</exception>
-        private DomainClientAsyncResult EndAsyncResult(IAsyncResult asyncResult, AsyncOperationType operationType, bool cancel)
-        {
-            DomainClientAsyncResult domainClientResult = asyncResult as DomainClientAsyncResult;
-
-            if ((domainClientResult != null) && (!object.ReferenceEquals(this, domainClientResult.DomainClient) || domainClientResult.AsyncOperationType != operationType))
-            {
-                throw new ArgumentException(Resources.WrongAsyncResult, "asyncResult");
-            }
-
-            return AsyncResultBase.EndAsyncOperation<DomainClientAsyncResult>(asyncResult, cancel);
-        }
-
-        /// <summary>
-        /// Throws an exception if cancellation is not supported.
-        /// </summary>
-        private void VerifyCancellationSupport()
-        {
-            if (!this.SupportsCancellation)
-            {
-                throw new NotSupportedException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.Client.Resource.DomainClient_CancellationNotSupported, this.GetType().FullName));
-            }
-        }
+        protected abstract Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken);
     }
 }

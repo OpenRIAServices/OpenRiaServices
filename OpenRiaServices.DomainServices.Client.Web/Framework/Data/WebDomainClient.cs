@@ -265,7 +265,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="query">The query to invoke.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
-        /// <returns>An asynchronous result that identifies this query.</returns>
+        /// <returns>The results returned by the query.</returns>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
         protected sealed override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
@@ -397,9 +397,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="changeSet">The changeset to submit. If the changeset is empty, an <see cref="InvalidOperationException"/> will
         /// be thrown.</param>
-        /// 
-        /// 
-        /// <returns>An asynchronous result that identifies this submit.</returns>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
+        /// <returns>The results returned by the submit request.</returns>
         /// <exception cref="InvalidOperationException">The changeset is empty.</exception>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
         protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
@@ -464,11 +463,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// Invokes an operation asynchronously.
         /// </summary>
         /// <param name="invokeArgs">The arguments to the Invoke operation.</param>
-        /// <param name="callback">The callback to invoke when the invocation has been completed.</param>
-        /// <param name="userState">Optional user state that will be passed through on the <see cref="InvokeCompletedResult"/>.</param>
-        /// <returns>An asynchronous result that identifies this invocation.</returns>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
+        /// <returns>The results returned by the invocation.</returns>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
-        protected sealed override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
+        protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
             MethodInfo beginInvokeMethod = WebDomainClient<TContract>.ResolveBeginMethod(invokeArgs.OperationName);
             MethodInfo endInvokeMethod = WebDomainClient<TContract>.ResolveEndMethod(invokeArgs.OperationName);
@@ -483,117 +481,58 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             TContract channel = this.ChannelFactory.CreateChannel();
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = WebDomainClientAsyncResult<TContract>.CreateInvokeResult(this, channel, endInvokeMethod, invokeArgs, callback, userState);
+            var taskCompletionSource = new TaskCompletionSource<InvokeCompletedResult>();
+            if (cancellationToken.CanBeCanceled)
+            {
+                // TODO: unregister on completion?
+                cancellationToken.Register(state =>
+                {
+                    // It is important to cancel the task before the channel
+                    // otherwise we might propagate exception from the closed channel instead
+                    taskCompletionSource.TrySetCanceled();
+                    ((IChannel)state).Abort();
+                }, channel);
+            }
 
             // Pass async operation related parameters.
             realParameters[parameterInfos.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
             {
-                wcfAsyncResult.InnerAsyncResult = asyncResponseResult;
-                wcfAsyncResult.Complete();
-            });
-            realParameters[parameterInfos.Length - 1] = userState;
-
-            IAsyncResult asyncResult;
-            try
-            {
-                asyncResult = (IAsyncResult)beginInvokeMethod.Invoke(channel, realParameters);
-            }
-            catch (TargetInvocationException tie)
-            {
-                if (tie.InnerException != null)
-                {
-                    throw tie.InnerException;
-                }
-
-                throw;
-            }
-
-            if (!asyncResult.CompletedSynchronously)
-            {
-                wcfAsyncResult.InnerAsyncResult = asyncResult;
-            }
-            return wcfAsyncResult;
-        }
-
-        /// <summary>
-        /// Attempts to cancel the invocation request specified by the <paramref name="asyncResult"/>.
-        /// </summary>
-        /// <param name="asyncResult">An <see cref="IAsyncResult"/> specifying what invocation operation to cancel.</param>
-        protected sealed override void CancelInvokeCore(IAsyncResult asyncResult)
-        {
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Invoke, /* cancel */ true);
-            ((IChannel)wcfAsyncResult.Channel).Abort();
-        }
-
-        /// <summary>
-        /// Gets the results of an invocation.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies an invocation.</param>
-        /// <returns>The results returned by the invocation.</returns>
-        protected sealed override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
-        {
-            WebDomainClientAsyncResult<TContract> wcfAsyncResult = this.EndAsyncResult(asyncResult, AsyncOperationType.Invoke, /* cancel */ false);
-            MethodInfo endInvokeMethod = (MethodInfo)wcfAsyncResult.EndOperationMethod;
-
-            IEnumerable<ValidationResult> validationErrors = null;
-            object returnValue = null;
-            try
-            {
                 try
                 {
-                    returnValue = endInvokeMethod.Invoke(wcfAsyncResult.Channel, new object[] { wcfAsyncResult.InnerAsyncResult });
-                }
-                catch (TargetInvocationException tie)
-                {
-                    if (tie.InnerException != null)
+                    IEnumerable<ValidationResult> validationErrors = null;
+                    object returnValue = null;
+                    try
                     {
-                        throw tie.InnerException;
+                        returnValue = InvokeMethod(channel, endInvokeMethod, new object[] { asyncResponseResult });
+                    }
+                    catch (FaultException<DomainServiceFault> fe)
+                    {
+                        if (fe.Detail.OperationErrors != null)
+                        {
+                            validationErrors = fe.Detail.GetValidationErrors();
+                        }
+                        else
+                        {
+                            throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
+                        }
+                    }
+                    finally
+                    {
+                        ((IChannel)channel).Close();
                     }
 
-                    throw;
+                    var result =  new InvokeCompletedResult(returnValue, validationErrors ?? Enumerable.Empty<ValidationResult>());
+                    taskCompletionSource.TrySetResult(result);
                 }
-                finally
+                catch (Exception ex)
                 {
-                    ((IChannel)wcfAsyncResult.Channel).Close();
+                    taskCompletionSource.TrySetException(ex);
                 }
-            }
-            catch (FaultException<DomainServiceFault> fe)
-            {
-                if (fe.Detail.OperationErrors != null)
-                {
-                    validationErrors = fe.Detail.GetValidationErrors();
-                }
-                else
-                {
-                    throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
-                }
-            }
+            });
+            realParameters[parameterInfos.Length - 1] = /*userState*/null;
 
-            return new InvokeCompletedResult(returnValue, validationErrors ?? Enumerable.Empty<ValidationResult>());
-        }
-
-        /// <summary>
-        /// Transitions an <see cref="IAsyncResult"/> instance to a completed state.
-        /// </summary>
-        /// <param name="asyncResult">An asynchronous result that identifies an invocation.</param>
-        /// <param name="operationType">The expected operation type.</param>
-        /// <param name="cancel">Boolean indicating whether or not the operation has been canceled.</param>
-        /// <returns>A <see cref="WebDomainClientAsyncResult&lt;TContract&gt;"/> reference.</returns>
-        /// <exception cref="ArgumentNullException"> if <paramref name="asyncResult"/> is null.</exception>
-        /// <exception cref="ArgumentException"> if <paramref name="asyncResult"/> is not of type <cref name="TAsyncResult"/>.</exception>
-        /// <exception cref="InvalidOperationException"> if <paramref name="asyncResult"/> has been canceled.</exception>
-        /// <exception cref="InvalidOperationException"> if <paramref name="asyncResult"/>'s End* method has already been invoked.</exception>
-        /// <exception cref="InvalidOperationException"> if <paramref name="asyncResult"/> has not completed.</exception>
-        private WebDomainClientAsyncResult<TContract> EndAsyncResult(IAsyncResult asyncResult, AsyncOperationType operationType, bool cancel)
-        {
-            WebDomainClientAsyncResult<TContract> wcfClientResult = asyncResult as WebDomainClientAsyncResult<TContract>;
-
-            if ((wcfClientResult != null) && (!object.ReferenceEquals(this, wcfClientResult.DomainClient) || wcfClientResult.AsyncOperationType != operationType))
-            {
-                throw new ArgumentException(Resources.WrongAsyncResult, "asyncResult");
-            }
-
-            return AsyncResultBase.EndAsyncOperation<WebDomainClientAsyncResult<TContract>>(asyncResult, cancel);
+            IAsyncResult asyncResult = (IAsyncResult)InvokeMethod(channel, beginInvokeMethod, realParameters);
+            return taskCompletionSource.Task;
         }
 
         private static MethodInfo ResolveBeginMethod(string operationName)

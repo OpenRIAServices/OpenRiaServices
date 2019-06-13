@@ -19,8 +19,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using DomainClientAsyncResult = SSmDsClient::OpenRiaServices.DomainServices.Client.DomainClientAsyncResult;
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
 
     [TestClass]
@@ -147,36 +145,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueTestComplete();
         }
 
-        /// <summary>
-        /// Test that we propagate null values correctly when we invoke DomainClient directly.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void TestMockClientReturnsNull()
-        {
-            NullReturningMockDomainClient dc = new NullReturningMockDomainClient();
-
-            AsyncCallback ignored = delegate { };
-
-            InvokeArgs invokeArgs = new InvokeArgs("M", typeof(void), null, true /*hasSideEffects*/);
-            DomainClientAsyncResult result = (DomainClientAsyncResult)dc.BeginInvoke(invokeArgs, ignored, null);
-
-            EnqueueConditional(() => result != null);
-
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.InnerAsyncResult);
-
-                ExceptionHelper.ExpectArgumentNullException(
-                () => dc.EndInvoke(result.InnerAsyncResult),
-                "asyncResult");
-
-                // Skip Query, and submit since it is now task based
-});
-
-            EnqueueTestComplete();
-        }
-
         [TestMethod]
         [Asynchronous]
         public void TestQuery()
@@ -298,28 +266,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
             return TaskHelper.FromResult(submitResults);
         }
-        protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
-        {
-            MockAsyncResult ar = new MockAsyncResult(null, userState, new object[] { invokeArgs.OperationName, invokeArgs.ReturnType, invokeArgs.Parameters, userState });
 
+        protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
+        {
+            object returnValue = null;
             // do the invoke and get the return value
             if (invokeArgs.OperationName == "Echo")
             {
-                ar.ReturnValue = "Echo: " + (string)invokeArgs.Parameters.Values.First();
+                returnValue = "Echo: " + (string)invokeArgs.Parameters.Values.First();
             }
 
-            callback.Invoke(ar);
-
-            return ar;
-        }
-
-        protected override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
-        {
-            MockAsyncResult ar = (MockAsyncResult)asyncResult;
-
-            InvokeCompletedResult invokeResults = new InvokeCompletedResult(ar.ReturnValue);
-
-            return invokeResults;
+            return TaskHelper.FromResult(new InvokeCompletedResult(returnValue));
         }
 
         /// <summary>
@@ -473,14 +430,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return TaskHelper.FromResult((SubmitCompletedResult)null);
         }
 
-        protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
+        protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
-            return null;
-        }
-
-        protected override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
-        {
-            return null;
+            return TaskHelper.FromResult((InvokeCompletedResult)null);
         }
     }
 }

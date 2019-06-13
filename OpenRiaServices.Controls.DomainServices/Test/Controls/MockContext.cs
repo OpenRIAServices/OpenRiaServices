@@ -67,12 +67,8 @@ namespace OpenRiaServices.Controls.DomainServices.Test
             {
                 return null;
             }
-            protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
-            {
-                return null;
-            }
 
-            protected override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
+            protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
             {
                 return null;
             }
