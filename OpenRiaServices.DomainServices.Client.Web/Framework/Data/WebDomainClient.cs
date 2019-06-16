@@ -453,6 +453,8 @@ namespace OpenRiaServices.DomainServices.Client
             // Pass async operation related parameters.
             realParameters[realParameters.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
             {
+                cancellationTokenRegistration.Dispose();
+
                 try
                 {
                     TResult result = convertResult(() => InvokeMethod(channel, endInvokeMethod, new object[] { asyncResponseResult }));
@@ -468,8 +470,6 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 finally
                 {
-                    cancellationTokenRegistration.Dispose();
-
                     if (((IChannel)channel).State == CommunicationState.Faulted)
                         ((IChannel)channel).Abort();
                     else

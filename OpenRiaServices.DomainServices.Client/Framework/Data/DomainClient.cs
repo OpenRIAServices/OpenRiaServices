@@ -102,7 +102,10 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 return submitResults;
-            });
+            }
+            , CancellationToken.None
+            , TaskContinuationOptions.NotOnCanceled
+            , TaskScheduler.Default);
         }
 
         /// <summary>
