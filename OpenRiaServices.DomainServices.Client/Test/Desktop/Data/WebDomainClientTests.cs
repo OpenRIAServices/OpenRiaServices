@@ -164,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 asyncResult = this.BeginInvokeRequestAndCancel();
             });
-            this.EnqueueConditional(() => asyncResult.IsCompleted && this.Error != null);
+            this.EnqueueConditional(() => asyncResult.IsCompleted);
             this.EnqueueCallback(() =>
             {
                 Assert.IsTrue(asyncResult.IsCanceled || asyncResult.Exception?.InnerException is OperationCanceledException, "Task should be cancelled");
@@ -370,7 +370,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         this.Error = ex;
                         throw;
                     }
-                });
+                }
+                , TaskContinuationOptions.NotOnCanceled);
             this.AssertInProgress(result);
             return result;
         }
@@ -400,7 +401,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     this.Error = ex;
                     throw;
                 }
-            });
+            }, TaskContinuationOptions.NotOnCanceled);
         }
 
         private Task<QueryCompletedResult> BeginQueryRequestAndCancel()
@@ -430,7 +431,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     this.Error = ex;
                     throw;
                 }
-            });
+            }
+            , TaskContinuationOptions.NotOnCanceled);
         }
 
         private Task<SubmitCompletedResult> BeginSubmitRequestAndCancel()
