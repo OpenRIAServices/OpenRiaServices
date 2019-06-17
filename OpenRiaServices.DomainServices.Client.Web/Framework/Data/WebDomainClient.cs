@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 #if SILVERLIGHT
 using System.Windows;
 #endif
+using OpenRiaServices.DomainServices.Client;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -267,7 +268,77 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
         /// <returns>The results returned by the query.</returns>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
-        protected sealed override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
+        protected Task<QueryCompletedResult> QueryAsyncCore2(EntityQuery query, CancellationToken cancellationToken)
+        {
+            TContract channel = this.ChannelFactory.CreateChannel();
+            // Pass the query as a message property.
+            using (OperationContextScope scope = new OperationContextScope((IContextChannel)channel))
+            {
+                if (query.Query != null)
+                {
+                    OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.QueryPropertyName, query.Query);
+                }
+                if (query.IncludeTotalCount)
+                {
+                    OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.IncludeTotalCountPropertyName, true);
+                }
+
+                return CallServiceOperation3(channel,
+                    query.QueryName,
+                    query.Parameters,
+                    cancellationToken)
+                    .ContinueWith( res =>  
+                    {
+                        IEnumerable<ValidationResult> validationErrors = null;
+                        QueryResult returnValue = null;
+                        try
+                        {
+                            // TODO: GetAwaiter().GetResult
+                            returnValue = (QueryResult)res.Result;
+                        }
+                        catch (FaultException<DomainServiceFault> fe)
+                        {
+                            if (fe.Detail.OperationErrors != null)
+                            {
+                                validationErrors = fe.Detail.GetValidationErrors();
+                            }
+                            else
+                            {
+                                throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
+                            }
+                        }
+
+                        if (returnValue != null)
+                        {
+                            return new QueryCompletedResult(
+                                returnValue.GetRootResults().Cast<Entity>(),
+                                returnValue.GetIncludedResults().Cast<Entity>(),
+                                returnValue.TotalCount,
+                                Enumerable.Empty<ValidationResult>());
+                        }
+                        else
+                        {
+                            return new QueryCompletedResult(
+                                Enumerable.Empty<Entity>(),
+                                Enumerable.Empty<Entity>(),
+                                /* totalCount */ 0,
+                                validationErrors ?? Enumerable.Empty<ValidationResult>());
+                        }
+                    }
+                , CancellationToken.None,
+                TaskContinuationOptions.NotOnCanceled
+                , TaskScheduler.Default);
+            }
+        }
+
+        /// <summary>
+        /// Method called by the framework to begin an asynchronous query operation
+        /// </summary>
+        /// <param name="query">The query to invoke.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
+        /// <returns>The results returned by the query.</returns>
+        /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
+        protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
             TContract channel = this.ChannelFactory.CreateChannel();
             // Pass the query as a message property.
@@ -476,6 +547,60 @@ namespace OpenRiaServices.DomainServices.Client
                         ((IChannel)channel).Close();
                 }
             });
+            realParameters[realParameters.Length - 1] = /*userState*/null;
+
+            IAsyncResult asyncResult = (IAsyncResult)InvokeMethod(channel, beginInvokeMethod, realParameters);
+            return taskCompletionSource.Task;
+        }
+
+        private static Task<object> CallServiceOperation3(TContract channel, string operationName, IDictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            MethodInfo beginInvokeMethod = WebDomainClient<TContract>.ResolveBeginMethod(operationName);
+            MethodInfo endInvokeMethod = WebDomainClient<TContract>.ResolveEndMethod(operationName);
+
+            // Pass operation parameters.
+            ParameterInfo[] parameterInfos = beginInvokeMethod.GetParameters();
+            object[] realParameters = new object[parameterInfos.Length];
+            int parametersCount = parameters == null ? 0 : parameters.Count;
+            for (int i = 0; i < parametersCount; i++)
+            {
+                realParameters[i] = parameters[parameterInfos[i].Name];
+            }
+
+            var taskCompletionSource = new TaskCompletionSource<object>();
+            CancellationTokenRegistration cancellationTokenRegistration = default;
+            if (cancellationToken.CanBeCanceled)
+            {
+                cancellationTokenRegistration = cancellationToken.Register(state => { ((IChannel)state).Abort(); }, channel);
+            }
+
+            // Pass async operation related parameters.
+            realParameters[realParameters.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
+            {
+                cancellationTokenRegistration.Dispose();
+
+                try
+                {
+                    object result = InvokeMethod(channel, endInvokeMethod, new object[] { asyncResponseResult });
+                    taskCompletionSource.SetResult(result);
+                }
+                catch (CommunicationException) when (cancellationToken.IsCancellationRequested)
+                {
+                    taskCompletionSource.SetCanceled();
+                }
+                catch (Exception ex)
+                {
+                    taskCompletionSource.SetException(ex);
+                }
+                finally
+                {
+                    if (((IChannel)channel).State == CommunicationState.Faulted)
+                        ((IChannel)channel).Abort();
+                    else
+                        ((IChannel)channel).Close();
+                }
+            });
+            // TODO: Pass something as asyncstate to 
             realParameters[realParameters.Length - 1] = /*userState*/null;
 
             IAsyncResult asyncResult = (IAsyncResult)InvokeMethod(channel, beginInvokeMethod, realParameters);
