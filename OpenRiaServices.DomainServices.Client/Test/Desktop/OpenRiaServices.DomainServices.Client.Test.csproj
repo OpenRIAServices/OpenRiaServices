@@ -93,62 +93,6 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClients\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainClient.cs" Link="ApplicationServices\AuthenticationDomainClient.cs" />
-    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationDomainContext.cs" Link="ApplicationServices\AuthenticationDomainContext.cs" />
-    <Compile Include="..\Silverlight\ApplicationServices\AuthenticationServiceTest.cs" Link="ApplicationServices\AuthenticationServiceTest.cs" />
-    <Compile Include="..\Silverlight\ApplicationServices\FormsAuthenticationTest.cs" Link="ApplicationServices\FormsAuthenticationTest.cs" />
-    <Compile Include="..\Silverlight\ApplicationServices\LoginParametersTest.cs" Link="ApplicationServices\LoginParametersTest.cs" />
-    <Compile Include="..\Silverlight\ApplicationServices\WebAuthenticationServiceTest.cs" Link="ApplicationServices\WebAuthenticationServiceTest.cs" />
-    <Compile Include="..\Silverlight\ApplicationServices\WebContextBaseTest.cs" Link="ApplicationServices\WebContextBaseTest.cs" />
-    <Compile Include="..\Silverlight\Data\AssociationInheritanceTests.cs" Link="Data\AssociationInheritanceTests.cs" />
-    <Compile Include="..\Silverlight\Data\AssociationTests.cs" Link="Data\AssociationTests.cs" />
-    <Compile Include="..\Silverlight\Data\ChangeSetTests.cs" Link="Data\ChangeSetTests.cs" />
-    <Compile Include="..\Silverlight\Data\CitiesDomainServiceTests.cs" Link="Data\CitiesDomainServiceTests.cs" />
-    <Compile Include="..\Silverlight\Data\ComplexTypeTests.cs" Link="Data\ComplexTypeTests.cs" />
-    <Compile Include="..\Silverlight\Data\CompositionInheritanceTests.cs" Link="Data\CompositionInheritanceTests.cs" />
-    <Compile Include="..\Silverlight\Data\CompositionTests.cs" Link="Data\CompositionTests.cs" />
-    <Compile Include="..\Silverlight\Data\CrossDomainContextTests.cs" Link="Data\CrossDomainContextTests.cs" />
-    <Compile Include="..\Silverlight\Data\CrossDomainServiceQueryTests.cs" Link="Data\CrossDomainServiceQueryTests.cs" />
-    <Compile Include="..\Silverlight\Data\CustomMethodTests.cs" Link="Data\CustomMethodTests.cs" />
-    <Compile Include="..\Silverlight\Data\DataAnnotationsTests.cs" Link="Data\DataAnnotationsTests.cs" />
-    <Compile Include="..\Silverlight\Data\DataServiceTests.cs" Link="Data\DataServiceTests.cs" />
-    <Compile Include="..\Silverlight\Data\DomainClientTests.cs" Link="Data\DomainClientTests.cs" />
-    <Compile Include="..\Silverlight\Data\DomainContexts\ExtensibilityScenarios.cs" Link="Data\DomainClients\ExtensibilityScenarios.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="..\Silverlight\Data\DomainContextTestBase.cs" Link="Data\DomainContextTestBase.cs" />
-    <Compile Include="..\Silverlight\Data\DomainContextTests.cs" Link="Data\DomainContextTests.cs" />
-    <Compile Include="..\Silverlight\Data\DomainIdentifierAttributeTests.cs" Link="Data\DomainIdentifierAttributeTests.cs" />
-    <Compile Include="..\Silverlight\Data\DomainIdentifierTests.cs" Link="Data\DomainIdentifierTests.cs" />
-    <Compile Include="..\Silverlight\Data\DomainOperationExceptionTests.cs" Link="Data\DomainOperationExceptionTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntityCollectionTests.cs" Link="Data\EntityCollectionTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntityConflictTests.cs" Link="Data\EntityConflictTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntityContainerTests.cs" Link="Data\EntityContainerTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntityQueryTests.cs" Link="Data\EntityQueryTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntitySetTests.cs" Link="Data\EntitySetTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntityTests.cs" Link="Data\EntityTests.cs" />
-    <Compile Include="..\Silverlight\Data\PoxTests.cs" Link="Data\PoxTests.cs" />
-    <Compile Include="..\Silverlight\Data\ServerSideAsyncTests.cs" Link="Data\ServerSideAsyncTests.cs" />
-    <Compile Include="..\Silverlight\Data\SubmitOperationExceptionTests.cs" Link="Data\SubmitOperationExceptionTests.cs" />
-    <Compile Include="..\Silverlight\Data\ValidationResultCollectionTests.cs" Link="Data\ValidationResultCollectionTests.cs" />
-    <Compile Include="..\Silverlight\Data\EntityValidationTests.cs" Link="Data\EntityValidationTests.cs" />
-    <Compile Include="..\Silverlight\Data\ErrorPropagationTests.cs" Link="Data\ErrorPropagationTests.cs" />
-    <Compile Include="..\Silverlight\Data\ExceptionHandlingUtilityTest.cs" Link="Data\ExceptionHandlingUtilityTest.cs" />
-    <Compile Include="..\Silverlight\Data\InheritanceTests.cs" Link="Data\InheritanceTests.cs" />
-    <Compile Include="..\Silverlight\Data\InvokeOperationTests.cs" Link="Data\InvokeOperationTests.cs" />
-    <Compile Include="..\Silverlight\Data\MessageUtilityTests.cs" Link="Data\MessageUtilityTests.cs" />
-    <Compile Include="..\Silverlight\Data\OperationErrorTest.cs" Link="Data\OperationErrorTest.cs" />
-    <Compile Include="..\Silverlight\Data\OperationTests.cs" Link="Data\OperationTests.cs" />
-    <Compile Include="..\Silverlight\Data\PerfTests.cs" Link="Data\PerfTests.cs" />
-    <Compile Include="..\Silverlight\Data\QueryTests.cs" Link="Data\QueryTests.cs" />
-    <Compile Include="..\Silverlight\Data\SerializationTests.cs" Link="Data\SerializationTests.cs" />
-    <Compile Include="..\Silverlight\Data\SharedEntitiesTests.cs" Link="Data\SharedEntitiesTests.cs" />
-    <Compile Include="..\Silverlight\Data\TestDataContext.cs" Link="Data\TestDataContext.cs" />
-    <Compile Include="..\Silverlight\Data\TestHelpers.cs" Link="Data\TestHelpers.cs" />
-    <Compile Include="..\Silverlight\Data\TypeUtilityTests.cs" Link="Data\TypeUtilityTests.cs" />
-    <Compile Include="..\Silverlight\Data\UpdateTests.cs" Link="Data\UpdateTests.cs" />
-    <Compile Include="..\Silverlight\Data\ValidationUtilitiesTests.cs" Link="Data\ValidationUtilitiesTests.cs" />
-    <Compile Include="..\Silverlight\Data\WebDomainClientTests.cs" Link="Data\WebDomainClientTests.cs" />
     <Compile Update="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

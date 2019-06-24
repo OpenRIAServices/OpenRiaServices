@@ -13,6 +13,9 @@
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="ServiceReferences.ClientConfig" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SilverlightToolkit-Testing" Version="5.2011.12.1" />
@@ -44,19 +47,18 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\ServiceReferences.ClientConfig">
-      <Link>ServiceReferences.ClientConfig</Link>
-    </Content>
+    <Content Include="ServiceReferences.ClientConfig" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <!--<ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Test\Desktop\OpenRiaServices.DomainServices.Client.Web.Test.csproj" />-->
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\DesktopExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Controls.DomainServices\Framework\OpenRiaServices.Controls.DomainServices.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Controls.DomainServices\Test\OpenRiaServices.Controls.DomainServices.Test.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDomainClients.vbproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj" />
     <ProjectReference Include="..\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />

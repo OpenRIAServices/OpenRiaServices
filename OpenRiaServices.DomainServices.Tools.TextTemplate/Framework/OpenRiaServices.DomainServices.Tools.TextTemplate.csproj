@@ -40,7 +40,6 @@
     </Compile>
     <Compile Update="ComplexObjectGenerator.cs">
       <DependentUpon>ComplexObjectGenerator.tt</DependentUpon>
-      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -76,25 +75,21 @@
     </Compile>
     <Compile Update="DataContractProxyGenerator.cs">
       <DependentUpon>DataContractProxyGenerator.tt</DependentUpon>
-      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="DomainContextGenerator.cs">
       <DependentUpon>DomainContextGenerator.tt</DependentUpon>
-      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="EntityGenerator.cs">
       <DependentUpon>EntityGenerator.tt</DependentUpon>
-      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="EnumGenerator.cs">
       <DependentUpon>EnumGenerator.tt</DependentUpon>
-      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>

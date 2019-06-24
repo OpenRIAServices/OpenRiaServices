@@ -57,7 +57,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib", "OpenRiaSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib2\ClientClassLib2.csproj", "{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "SilverlightVbDataClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "SilverlightVbDomainClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDomainClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test.Vb", "OpenRiaServices.DomainServices.Client\Test\SilverlightVb\OpenRiaServices.DomainServices.Client.Test.Vb.csproj", "{3E32C394-4E3E-4684-9AF0-360996D4E970}"
 EndProject

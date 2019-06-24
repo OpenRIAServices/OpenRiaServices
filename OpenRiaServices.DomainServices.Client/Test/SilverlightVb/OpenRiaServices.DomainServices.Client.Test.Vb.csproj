@@ -33,19 +33,19 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\DomainContextTestBase.cs">
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\DomainContextTestBase.cs">
       <Link>OpenRiaServices.DomainServices.Client\Data\DomainContextTestBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\QueryTests.cs">
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\QueryTests.cs">
       <Link>OpenRiaServices.DomainServices.Client\Data\QueryTests.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Silverlight\Data\TestDataContext.cs">
+    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\TestDataContext.cs">
       <Link>OpenRiaServices.DomainServices.Client\Data\TestDataContext.cs</Link>
     </Compile>
-    <Compile Include="..\Silverlight\Data\OperationErrorTest.cs">
+    <Compile Include="..\Desktop\Data\OperationErrorTest.cs">
       <Link>OperationErrorTest.cs</Link>
     </Compile>
-    <Compile Include="..\Silverlight\Data\ServerSideAsyncTests.cs">
+    <Compile Include="..\Desktop\Data\ServerSideAsyncTests.cs">
       <Link>OpenRiaServices.DomainServices.Client\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
     <Compile Update="Service References\Services\Reference.cs">
@@ -79,7 +79,7 @@
     <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\SilverlightVbDomainClients\SilverlightVbDataClients.vbproj" />
+    <ProjectReference Include="..\SilverlightVbDomainClients\SilverlightVbDomainClients.vbproj" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

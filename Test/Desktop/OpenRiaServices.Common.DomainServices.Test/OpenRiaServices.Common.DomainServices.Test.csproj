@@ -19,10 +19,10 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" PrivateAssets="All"/>
+    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All"  />
+    <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
@@ -531,9 +531,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Model2.cs</LastGenOutput>
       <DependentUpon>EF_Northwind_Scenarios.edmx</DependentUpon>
-    </None>
-    <None Include="DataModels\ScenarioModels\Northwind.map">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataModels\ScenarioModels\Northwind_NoFks.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
