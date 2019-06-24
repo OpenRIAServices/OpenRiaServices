@@ -1108,26 +1108,18 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Called when an <see cref="Entity"/> property has changed.
         /// </summary>
-        /// <param name="e">The event arguments</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        /// <param name="propertyName">name of the property</param>
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (e == null)
-            {
-                throw new ArgumentNullException("e");
-            }
-
             // if we're in an edit session, we want to postpone association updates
             // until the edits are commited (EndEdit is called). Note: we only want
             // to process association updates here when we're attached.
             if (!this.IsEditing && this.EntitySet != null)
             {
-                this.EntitySet.UpdateRelatedAssociations(this, e.PropertyName);
+                this.EntitySet.UpdateRelatedAssociations(this, propertyName);
             }
 
-            if (this._propChangedHandler != null)
-            {
-                this._propChangedHandler(this, e);
-            }
+            this._propChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -1145,7 +1137,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.OnDataMemberChanged();
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(propertyName);
 
             // Note, RaiseDataMemberChanged is called on every property update. We need to avoid as
             // much overhead as possible.
@@ -1223,7 +1215,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected internal void RaisePropertyChanged(string propertyName)
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(propertyName);
         }
 
         /// <summary>

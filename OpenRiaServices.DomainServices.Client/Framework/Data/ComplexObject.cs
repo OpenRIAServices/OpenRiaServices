@@ -225,24 +225,16 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("propertyName");
             }
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            OnPropertyChanged(propertyName);
         }
 
         /// <summary>
         /// Called when a <see cref="ComplexObject"/> property has changed.
         /// </summary>
-        /// <param name="e">The event arguments</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        /// <param name="propertyName">The name of the property that has changed</param>
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (e == null)
-            {
-                throw new ArgumentNullException("e");
-            }
-
-            if (this._propChangedHandler != null)
-            {
-                this._propChangedHandler(this, e);
-            }
+            _propChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -273,7 +265,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.OnDataMemberChanged();
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(propertyName);
         }
 
         /// <summary>
