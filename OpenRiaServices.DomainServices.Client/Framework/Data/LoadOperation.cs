@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using OpenRiaServices.DomainServices.Client.Data;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -13,10 +14,9 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public abstract class LoadOperation : OperationBase
     {
-        private readonly ObservableCollection<Entity> _entitiesCollection = new ObservableCollection<Entity>();
-        private ReadOnlyObservableCollection<Entity> _entities;
-        private readonly ObservableCollection<Entity> _allEntitiesCollection = new ObservableCollection<Entity>();
-        private ReadOnlyObservableCollection<Entity> _allEntities;
+        private ReadOnlyObservableLoaderCollection<Entity> _entities;
+        private ReadOnlyObservableLoaderCollection<Entity> _allEntities;
+
         private IEnumerable<ValidationResult> _validationErrors;
         private readonly LoadBehavior _loadBehavior;
         private readonly EntityQuery _query;
@@ -109,14 +109,8 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._entities == null)
                 {
-                    if (this.Result != null && this.Result.Entities.Any())
-                    {
-                        foreach (Entity entity in this.Result.Entities)
-                        {
-                            this._entitiesCollection.Add(entity);
-                        }
-                    }
-                    this._entities = new ReadOnlyObservableCollection<Entity>((ObservableCollection<Entity>)this._entitiesCollection);
+                    var resultEntities = this.Result != null ? this.Result.Entities : Enumerable.Empty<Entity>();
+                    this._entities = new ReadOnlyObservableLoaderCollection<Entity>(resultEntities);
                 }
                 return this._entities;
             }
@@ -133,14 +127,8 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._allEntities == null)
                 {
-                    if (this.Result != null && this.Result.AllEntities.Any())
-                    {
-                        foreach (Entity entity in this.Result.AllEntities)
-                        {
-                            this._allEntitiesCollection.Add(entity);
-                        }
-                    }
-                    this._allEntities = new ReadOnlyObservableCollection<Entity>(this._allEntitiesCollection);
+                    var resultEntities = this.Result != null ? this.Result.AllEntities : Enumerable.Empty<Entity>();
+                    this._allEntities = new ReadOnlyObservableLoaderCollection<Entity>(resultEntities);
                 }
                 return this._allEntities;
             }
@@ -256,8 +244,8 @@ namespace OpenRiaServices.DomainServices.Client
             this._validationErrors = validationErrors;
             this.RaisePropertyChanged("ValidationErrors");
 
-            string message = string.Format(CultureInfo.CurrentCulture, 
-                Resource.DomainContext_LoadOperationFailed_Validation, 
+            string message = string.Format(CultureInfo.CurrentCulture,
+                Resource.DomainContext_LoadOperationFailed_Validation,
                 this.EntityQuery.QueryName);
             DomainOperationException error = new DomainOperationException(message, validationErrors);
 
@@ -277,25 +265,11 @@ namespace OpenRiaServices.DomainServices.Client
 
             // if the Entities property has been examined, update the backing
             // observable collection
-            if (this._entities != null)
-            {
-                this._entitiesCollection.Clear();
-                foreach (Entity entity in result.Entities)
-                {
-                    this._entitiesCollection.Add(entity);
-                }
-            }
+            this._entities?.Reset(result.Entities);
 
             // if the AllEntities property has been examined, update the backing
             // observable collection
-            if (this._allEntities != null)
-            {
-                this._allEntitiesCollection.Clear();
-                foreach (Entity entity in result.AllEntities)
-                {
-                    this._allEntitiesCollection.Add(entity);
-                }
-            }
+            this._allEntities?.Reset(result.AllEntities);
         }
     }
 
@@ -305,8 +279,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TEntity">The entity Type being loaded.</typeparam>
     public sealed class LoadOperation<TEntity> : LoadOperation where TEntity : Entity
     {
-        private readonly ObservableCollection<TEntity> _entitiesCollection = new ObservableCollection<TEntity>();
-        private ReadOnlyObservableCollection<TEntity> _entities;
+        private ReadOnlyObservableLoaderCollection<TEntity> _entities;
         private readonly Action<LoadOperation<TEntity>> _cancelAction;
         private readonly Action<LoadOperation<TEntity>> _completeAction;
 
@@ -349,15 +322,10 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._entities == null)
                 {
-                    if (this.Result != null && this.Result.Entities.Any())
-                    {
-                        foreach (TEntity entity in this.Result.Entities)
-                        {
-                            this._entitiesCollection.Add(entity);
-                        }
-                    }
-                    this._entities = new ReadOnlyObservableCollection<TEntity>((ObservableCollection<TEntity>)this._entitiesCollection);
+                    var resultEntities = this.Result != null ? this.Result.Entities.Cast<TEntity>() : Enumerable.Empty<TEntity>();
+                    this._entities = new ReadOnlyObservableLoaderCollection<TEntity>(resultEntities);
                 }
+
                 return this._entities;
             }
         }
@@ -383,15 +351,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             // if the Entities property has been examined, update the backing
             // observable collection
-            if (this._entities != null)
-            {
-                // update the Entities observable collection
-                this._entitiesCollection.Clear();
-                foreach (TEntity entity in result.Entities)
-                {
-                    this._entitiesCollection.Add(entity);
-                }
-            }
+            this._entities?.Reset(result.Entities.Cast<TEntity>());
         }
 
         /// <summary>

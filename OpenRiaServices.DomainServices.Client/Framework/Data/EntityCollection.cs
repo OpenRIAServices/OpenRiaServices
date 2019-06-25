@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
     public sealed class EntityCollection<TEntity> : IEntityCollection, ICollection<TEntity>, IEnumerable<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged
 #if HAS_COLLECTIONVIEW
-        ,ICollectionViewFactory 
+        , ICollectionViewFactory
 #endif
         where TEntity : Entity
     {
@@ -113,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Client
             this._detachAction = detachAction;
         }
 
-#region IEnumerable Members
+        #region IEnumerable Members
 
         /// <summary>
         /// Returns an enumerator for this collection
@@ -124,7 +124,7 @@ namespace OpenRiaServices.DomainServices.Client
             return this.GetEnumerator();
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> is added to this collection
@@ -254,7 +254,7 @@ namespace OpenRiaServices.DomainServices.Client
                         // the delete should be undone
                         this.SourceSet.Add(entity);
                         addedToSet = true;
-                    }  
+                    }
                 }
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
@@ -262,7 +262,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (!addedToSet || !this.EntitiesHashSet.Contains(entity))
                 {
                     this.AddEntity(entity);
-                    this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1));
+                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1);
                 }
 
                 this._entitiesAdded = true;
@@ -275,7 +275,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (this.IsComposition)
             {
                 entity.Parent.OnChildUpdate();
-            } 
+            }
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace OpenRiaServices.DomainServices.Client
                     // If the entity was removed, raise a collection changed notification. Note that the Detach call above might
                     // have caused a dynamic removal behind the scenes resulting in the entity no longer being in the collection,
                     // with the event already having been raised
-                    this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, entity, idx));
+                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, entity, idx);
                 }
             }
 
@@ -370,7 +370,7 @@ namespace OpenRiaServices.DomainServices.Client
             Debug.Assert(isRemoved == isRemovedInHashSet
                 , "The entity should be present in both Entities and EntitiesHashSet"
 #if !PORTABLE
-                ,"Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet
+                , "Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet
 #endif
             );
             return isRemoved;
@@ -474,7 +474,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-#region IEnumerable<TEntity> Members
+        #region IEnumerable<TEntity> Members
 
         /// <summary>
         /// Returns an enumerator for this collection
@@ -491,9 +491,9 @@ namespace OpenRiaServices.DomainServices.Client
             return this.Entities.ToList().GetEnumerator();
         }
 
-#endregion
+        #endregion
 
-#region INotifyCollectionChanged Members
+        #region INotifyCollectionChanged Members
 
         /// <summary>
         /// Event raised whenever the contents of the collection changes
@@ -510,7 +510,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-#region INotifyPropertyChanged Members
+        #region INotifyPropertyChanged Members
         /// <summary>
         /// Event raised whenever a property on this collection changes
         /// </summary>
@@ -526,7 +526,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Called whenever the parent entity's <see cref="EntitySet"/> membership changes,
@@ -614,14 +614,14 @@ namespace OpenRiaServices.DomainServices.Client
                 // We allow the parent entity to be New during the AcceptChanges phase of a submit (AcceptChanges called on the other entity)
                 // of a successfull Submit operation, in which case we know that it will soon be unmodified.
                 // Without this exception we will fail to raise property changed for the member property if the other entities changes are accepted first
-                if (!containsEntity 
-                    && (this._parent.EntityState != EntityState.New  || (this._parent.IsSubmitting && entity.IsSubmitting && entity.EntityState == EntityState.Unmodified))
+                if (!containsEntity
+                    && (this._parent.EntityState != EntityState.New || (this._parent.IsSubmitting && entity.IsSubmitting && entity.EntityState == EntityState.Unmodified))
                     && this.Filter(typedEntity))
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
                     this.AddEntity(typedEntity);
-                    this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1));
+                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
                 }
                 else if (containsEntity && !this._entityPredicate(typedEntity))
                 {
@@ -630,7 +630,7 @@ namespace OpenRiaServices.DomainServices.Client
                     // no longer matches it should be removed.
                     int idx = this.Entities.IndexOf(typedEntity);
                     this.RemoveEntity(typedEntity);
-                    this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, entity, idx));
+                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, typedEntity, idx);
                 }
             }
         }
@@ -666,9 +666,9 @@ namespace OpenRiaServices.DomainServices.Client
                     {
 #if SILVERLIGHT
                         // SL doesn't support the constructor taking a list of objects
-                        this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(args.Action, affectedEntities.Single(), newStartingIdx));
+                        this.RaiseCollectionChangedNotification(args.Action, (TEntity)affectedEntities.Single(), newStartingIdx);
 #else
-                        this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(args.Action, affectedEntities, newStartingIdx));
+                        this.RaiseCollectionChangedNotification(args.Action, affectedEntities, newStartingIdx);
 #endif
                     }
                 }
@@ -688,9 +688,9 @@ namespace OpenRiaServices.DomainServices.Client
 #if SILVERLIGHT
                     //// REVIEW: Should we instead send out a reset event?
                     // SL doesn't support the constructor taking a list of objects
-                    this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(args.Action, entitiesToRemove.Single(), oldStartingIdx));
+                    this.RaiseCollectionChangedNotification(args.Action, entitiesToRemove.Single(), oldStartingIdx);
 #else
-                    this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(args.Action, entitiesToRemove, oldStartingIdx));
+                    this.RaiseCollectionChangedNotification(args.Action, entitiesToRemove, oldStartingIdx);
 #endif
                 }
             }
@@ -703,39 +703,46 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
 
-        private void RaiseCollectionChangedNotification(NotifyCollectionChangedEventArgs args)
+        private void RaiseCollectionChangedNotification(NotifyCollectionChangedAction action, TEntity entity, int startingIndex)
         {
             // Reset notifications are handled elsewhere for the EntityRemoved event.
-            if (args.Action == NotifyCollectionChangedAction.Add)
+            switch (action)
             {
-                if (this.EntityAdded != null)
-                {
-                    foreach (TEntity entity in args.NewItems.OfType<TEntity>())
-                    {
-                        this.EntityAdded(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
-                    }
-                }
-            }
-            else if (args.Action == NotifyCollectionChangedAction.Remove)
-            {
-                if (this.EntityRemoved != null)
-                {
-                    foreach (TEntity entity in args.OldItems.OfType<TEntity>())
-                    {
-                        this.EntityRemoved(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
-                    }
-                }
+                case NotifyCollectionChangedAction.Add:
+                    this.EntityAdded?.Invoke(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    this.EntityRemoved?.Invoke(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
+                    break;
             }
 
-            if (this._collectionChangedEventHandler != null)
+            this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action, entity, startingIndex));
+            this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
+        }
+
+        private void RaiseCollectionChangedNotification(NotifyCollectionChangedAction action, IList entities, int startingIndex)
+        {
+            // Reset notifications are handled elsewhere for the EntityRemoved event.
+            switch (action)
             {
-                this._collectionChangedEventHandler(this, args);
+                case NotifyCollectionChangedAction.Add:
+                    if (this.EntityAdded != null)
+                    {
+                        foreach (TEntity entity in entities)
+                            this.EntityAdded.Invoke(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    if (this.EntityRemoved != null)
+                    {
+                        foreach (TEntity entity in entities)
+                            this.EntityRemoved.Invoke(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
+                    }
+                    break;
             }
 
-            if (this._propertyChangedEventHandler != null)
-            {
-                this._propertyChangedEventHandler(this, new PropertyChangedEventArgs("Count"));
-            }
+            this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action, entities, startingIndex));
+            this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
         }
 
         /// <summary>
@@ -758,11 +765,11 @@ namespace OpenRiaServices.DomainServices.Client
                 }
             }
 
-            this.RaiseCollectionChangedNotification(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Reset, (IList)null, -1);
         }
-#endregion
+        #endregion
 
-#region IEntityCollection Members
+        #region IEntityCollection Members
         AssociationAttribute IEntityCollection.Association
         {
             get
@@ -796,9 +803,9 @@ namespace OpenRiaServices.DomainServices.Client
         {
             this.Remove((TEntity)entity);
         }
-#endregion
+        #endregion
 
-#region ICollectionViewFactory
+        #region ICollectionViewFactory
 #if HAS_COLLECTIONVIEW
         /// <summary>
         /// Returns a custom view for specialized sorting, filtering, grouping, and currency.
@@ -807,7 +814,7 @@ namespace OpenRiaServices.DomainServices.Client
         ICollectionView ICollectionViewFactory.CreateView()
         {
             // We use the CollectionViewSource to obtain a ListCollectionView, a type internal to Silverlight
-            return new CollectionViewSource() { Source = new ListCollectionViewProxy<TEntity>(this) } .View;
+            return new CollectionViewSource() { Source = new ListCollectionViewProxy<TEntity>(this) }.View;
         }
 
         /// <summary>
@@ -837,9 +844,9 @@ namespace OpenRiaServices.DomainServices.Client
                     WeakCollectionChangedListener.CreateIfNecessary(this._source, this);
             }
 
-#region IList
+            #region IList
 
-        public int Add(object value)
+            public int Add(object value)
             {
                 T entity = value as T;
                 if (entity == null)
@@ -973,19 +980,15 @@ namespace OpenRiaServices.DomainServices.Client
                 get { return this._source; }
             }
 
-#endregion
+            #endregion
 
-#region INotifyCollectionChanged
+            #region INotifyCollectionChanged
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
             private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
             {
-                NotifyCollectionChangedEventHandler handler = this.CollectionChanged;
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                this.CollectionChanged?.Invoke(this, e);
             }
 
             private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -993,21 +996,21 @@ namespace OpenRiaServices.DomainServices.Client
                 this.OnCollectionChanged(e);
             }
 
-#endregion
+            #endregion
 
-#region ICollectionChangedListener
+            #region ICollectionChangedListener
 
             void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
             {
                 this.OnSourceCollectionChanged(sender, e);
             }
 
-#endregion
+            #endregion
         }
 #endif
-#endregion
+        #endregion
 
-#region ICollection<TEntity> Members
+        #region ICollection<TEntity> Members
         bool ICollection<TEntity>.IsReadOnly
         {
             get
@@ -1038,10 +1041,10 @@ namespace OpenRiaServices.DomainServices.Client
         void ICollection<TEntity>.Clear()
         {
             this.Load();
-            foreach(var item in this.Entities.ToList())
+            foreach (var item in this.Entities.ToList())
                 Remove(item);
         }
-#endregion
+        #endregion
     }
 
     /// <summary>

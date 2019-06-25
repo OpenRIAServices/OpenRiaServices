@@ -410,12 +410,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => lo.Entities.Count() == 3);
             EnqueueCallback(delegate
             {
-                // Entities : expect a Reset event + 3 adds
-                Assert.AreEqual(4, entitiesCollectionChangedArgs.Count);
+                // Entities : expect a Reset event and no Adds
+                Assert.AreEqual(1, entitiesCollectionChangedArgs.Count);
                 Assert.AreEqual(3, lo.Entities.Count());
 
-                // AllEntities : expect a Reset event + 3 adds
-                Assert.AreEqual(4, allEntitiesCollectionChangedArgs.Count);
+                // AllEntities : expect a Reset event
+                Assert.AreEqual(1, allEntitiesCollectionChangedArgs.Count);
                 Assert.AreEqual(3, lo.AllEntities.Count());
 
                 Assert.IsTrue(totalCountChanged);
