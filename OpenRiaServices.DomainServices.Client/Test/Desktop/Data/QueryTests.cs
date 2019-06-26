@@ -290,6 +290,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
+                 // TODO: Change logic
+                Assert.IsFalse(cities.IsLoading);
+                Assert.IsTrue(lo.IsCanceled);
                 Assert.IsFalse(lo.HasError);
             });
 

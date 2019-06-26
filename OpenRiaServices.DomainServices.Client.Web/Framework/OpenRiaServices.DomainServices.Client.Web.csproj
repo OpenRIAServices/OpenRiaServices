@@ -25,6 +25,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
@@ -39,11 +40,6 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Remove="Data\ServiceQuery.cs" />
   </ItemGroup>
 
   <ItemGroup>

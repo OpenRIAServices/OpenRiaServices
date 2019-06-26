@@ -211,43 +211,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="error">The error.</param>
         internal new void Complete(Exception error)
         {
-            if (typeof(DomainException).IsAssignableFrom(error.GetType()))
+            if (error is DomainOperationException doe
+                && doe.ValidationErrors.Any())
             {
-                // DomainExceptions should not be modified
-                base.Complete(error);
-                return;
+                this._validationErrors = doe.ValidationErrors;
+                this.RaisePropertyChanged(nameof(ValidationErrors));
             }
-
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_LoadOperationFailed,
-                this.EntityQuery.QueryName, error.Message);
-
-            DomainOperationException domainOperationException = error as DomainOperationException;
-            if (domainOperationException != null)
-            {
-                error = new DomainOperationException(message, domainOperationException);
-            }
-            else
-            {
-                error = new DomainOperationException(message, error);
-            }
-
-            base.Complete(error);
-        }
-
-        /// <summary>
-        /// Completes the load operation with the specified validation errors.
-        /// </summary>
-        /// <param name="validationErrors">The validation errors.</param>
-        internal void Complete(IEnumerable<ValidationResult> validationErrors)
-        {
-            this._validationErrors = validationErrors;
-            this.RaisePropertyChanged(nameof(ValidationErrors));
-
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_LoadOperationFailed_Validation,
-                this.EntityQuery.QueryName);
-            DomainOperationException error = new DomainOperationException(message, validationErrors);
 
             base.Complete(error);
         }

@@ -147,7 +147,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                lo.Complete(validationErrors);
+                // TODO: Write corresponting test against "Load" which tests 
+                //Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "ThrowGeneralException"), expectedException.Message);
+
+                lo.Complete(new DomainOperationException("expected", validationErrors));
             }
             catch (DomainOperationException e)
             {
@@ -156,8 +159,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // verify the exception properties
             Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "ThrowGeneralException"), expectedException.Message);
-        }
+            Assert.AreEqual("expected", expectedException.Message);
+            }
 
         /// <summary>
         /// Verify that Load operations that don't specify a callback to handle
