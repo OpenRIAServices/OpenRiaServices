@@ -23,12 +23,9 @@ Documentation:
 Contribution Guidelines can be found at https://github.com/OpenRIAServices/OpenRiaServices/wiki/Contribution-Guidelines
 
 
-
 # Nuget packages
 
 Here are the most common nuget packages and their current versions.
-
-### Unsigned nuget packages
 
 |Package | Stable | Prerelease |
 |------- | ------ | ---------- |
@@ -41,17 +38,4 @@ Here are the most common nuget packages and their current versions.
 | OpenRiaServices.T4 | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.T4.svg)](https://www.nuget.org/packages/OpenRiaServices.T4) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.T4.svg)]() |
 | OpenRiaServices.Endpoints | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Endpoints.svg)](https://www.nuget.org/packages/OpenRiaServices.Endpoints) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Endpoints.svg)]() |
 
-
-### Signed nuget packages
-
-|Package | Stable | Prerelease |
-|------- | ------ | ---------- |
-| OpenRiaServices.Signed.Client | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.Client.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.Client) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.Client.svg)]() |
-| OpenRiaServices.Signed.Client.Core | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.Client.Core.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.Client.Core) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.Client.Core.svg)]() |
-| OpenRiaServices.Signed.Client.CodeGen | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.Client.CodeGen.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.Client.CodeGen) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.Client.CodeGen.svg)]() |
-| OpenRiaServices.Signed.Server | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.Server.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.Server) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.Server.svg)]() |
-| OpenRiaServices.Signed.EntityFramework | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.EntityFramework.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.EntityFramework) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.EntityFramework.svg)]() |
-| OpenRiaServices.Signed.EntityFramework.EF4 | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.EntityFramework.EF4.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.EntityFramework.EF4) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.EntityFramework.EF4.svg)]() |
-| OpenRiaServices.Signed.T4 | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.T4.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.T4) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.T4.svg)]() |
-| OpenRiaServices.Signed.Endpoints | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Signed.Endpoints.svg)](https://www.nuget.org/packages/OpenRiaServices.Signed.Endpoints) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Signed.Endpoints.svg)]() |
 
