@@ -1,4 +1,22 @@
-# Unreleased (since 4.5.4)
+# 4.6.1
+
+## Client
+
+1. Add new interface *IEntityCollection<TEntity>* (#156)
+  This is a combination of ICollection<>, INotifyPropertyChanged, INotifyCollectionChanged as well as typed events for Add/Remove of entitites.
+  It helps treating collections of entities EntityCollection and EntitySet in a more uniform way.
+  It should help OpenRiaServices.M2M integrate better with the core pacakges.
+2. *LoadOperation* performance improvements (Issue #154)
+ * Raise Reset action instead of multiple Add notfications for **significantly imroved IU responsiveness** when binding to the 
+*Entitites* or *AllEntities* properties before the load operation is completed.
+    * The UI now only updates once instead of potentially once per item
+  * Don't allocate multiple *NotifyCollectionChangedEventArgs* and *PropertyChangedEventArgs* for each entity loaded.
+  * Don't allocate event args if no one is listening
+3. *EntityCollection* performance improvements (Issue #154)
+   * Don't allocate *NotifyCollectionChangedEventArgs* on each change if no one is listening
+   
+
+# 4.6.0
 
 ## Client
 
@@ -20,6 +38,8 @@
 
 ## Server
 
+* Fix namespace for ObjectContextExtensions for OpenRiaServices.EntityFramework (breaking change)
+
 ## Code generation
 
 
@@ -30,9 +50,17 @@
 1. All assemblies are strong named ("signed") (#145)
   * The "signed" version of all nuget packages will be depreciated since it is only to replace them with the "normal" nuget packages
   * This will significantly make maintainance easier as well as make it easier to "get started" since there are less variations
-
+4. Add VS Extension projects to main solution
+* Fix tests for VS Extension project
+ * Remove "Interfaces" assembly to reduce complextity and fix some problems
 
 ## Tooling
+
+* *New Visual Studio extension* https://marketplace.visualstudio.com/items?itemName=OpenRiaServices.OpenRiaServicesTooling release in preview
+  * Updates "manage openriaservices link" dialog with more settings
+  * Update add new item for domainservice item tempate so it generates EF6 compatible code
+   * Add VS2017 + VS2019 support
+   * Bugfix when invoking tooling with unloaded projects
 
 # 4.5.4 and earlier
 
