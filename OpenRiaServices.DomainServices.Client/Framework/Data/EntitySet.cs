@@ -1236,7 +1236,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// Represents a collection of <see cref="Entity"/> instances, providing change tracking and other services.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> this set will contain</typeparam>
-    public sealed class EntitySet<TEntity> : EntitySet, IEnumerable<TEntity>, ICollection<TEntity>
+    public sealed class EntitySet<TEntity> : EntitySet, IEntityCollection<TEntity>
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory 
 #endif
