@@ -1226,7 +1226,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
                     exception = ex;
                 }
-                Assert.AreEqual(null, exception, "Trying to change a property on a readonly entity should throw exception");
+                Assert.AreNotEqual(null, exception, "Trying to change a property on a readonly entity should throw exception");
             });
             EnqueueConditional(delegate
             {
