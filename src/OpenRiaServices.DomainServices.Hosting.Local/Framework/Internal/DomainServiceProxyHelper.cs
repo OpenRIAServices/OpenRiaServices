@@ -47,12 +47,16 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
                 throw new InvalidOperationException(errorMessage);
             }
 
-            int totalCount;
             IEnumerable<ValidationResult> validationErrors;
             object[] parameterValues = parameters ?? new object[0];
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameterValues);
 
-            IEnumerable result = service.Query(queryDescription, out validationErrors, out totalCount);
+            // TODO: Look into removing this blocking Wait
+            var queryResult = service.QueryAsync(queryDescription)
+                .GetAwaiter().GetResult();
+
+            validationErrors = queryResult.ValidationErrors;
+            var result = queryResult.Result;
 
             if (validationErrors != null && validationErrors.Any())
             {

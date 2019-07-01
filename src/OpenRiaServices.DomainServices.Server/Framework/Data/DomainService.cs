@@ -25,9 +25,9 @@ namespace OpenRiaServices.DomainServices.Server
         private const int TotalCountEqualsResultSetCount = -2;
 
         private static IDomainServiceFactory domainServiceFactory;
-        private static MethodInfo countMethod = typeof(DomainService).GetMethod(nameof(DomainService.Count), BindingFlags.NonPublic | BindingFlags.Instance);
-        private static MethodInfo enumerateMethod = typeof(DomainService).GetMethod(nameof(DomainService.Enumerate), BindingFlags.NonPublic | BindingFlags.Static);
-        private static ConcurrentDictionary<Type, Func<IEnumerable, int, IEnumerable>> enumerateMethodMap = new ConcurrentDictionary<Type, Func<IEnumerable, int, IEnumerable>>();
+        private static MethodInfo countMethod = typeof(DomainService).GetMethod(nameof(DomainService.CountAsync), BindingFlags.NonPublic | BindingFlags.Instance);
+        private static MethodInfo enumerateMethod = typeof(DomainService).GetMethod(nameof(DomainService.EnumerateAsync), BindingFlags.NonPublic | BindingFlags.Instance);
+        private static ConcurrentDictionary<Type, Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>> enumerateMethodMap = new ConcurrentDictionary<Type, Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>>();
 
         private ChangeSet _changeSet;
         private DomainServiceContext _serviceContext;
@@ -259,23 +259,42 @@ namespace OpenRiaServices.DomainServices.Server
             this._serviceContext = context;
         }
 
+        public struct ServiceQueryResult
+        {
+            public ServiceQueryResult(IEnumerable result, int? totalResult)
+            {
+                Result = result;
+                TotalCount = totalResult ?? DomainService.TotalCountUndefined;
+                ValidationErrors = null;
+            }
+
+            public ServiceQueryResult(List<ValidationResult> validationErrors)
+            {
+                ValidationErrors = validationErrors.AsReadOnly();
+                TotalCount = DomainService.TotalCountUndefined;
+                Result = null;
+            }
+
+            public IEnumerable Result { get; }
+            public int TotalCount { get; }
+            public IReadOnlyCollection<ValidationResult> ValidationErrors { get; }
+
+            public bool HasValidationErrors => ValidationErrors != null;
+        }
+
         /// <summary>
         /// Performs the query operation indicated by the specified <see cref="QueryDescription"/>
         /// and returns the results. If the query returns a singleton, it should still be returned
         /// as an <see cref="IEnumerable"/> containing the single result.
         /// </summary>
         /// <param name="queryDescription">The description of the query to perform.</param>
-        /// <param name="validationErrors">Output parameter that will contain any validation errors encountered. If no validation
-        /// errors are encountered, this will be set to <c>null</c>.</param>
-        /// <param name="totalCount">Returns the total number of results based on the specified query, but without 
         /// any paging applied to it.</param>
         /// <returns>The query results. May be null if there are no query results.</returns>
-        public virtual IEnumerable Query(QueryDescription queryDescription, out IEnumerable<ValidationResult> validationErrors, out int totalCount)
+        public async virtual ValueTask<ServiceQueryResult> QueryAsync(QueryDescription queryDescription)
         {
             IEnumerable enumerableResult = null;
             List<ValidationResult> validationErrorList = null;
-
-            validationErrors = null;
+            int totalCount;
 
             try
             {
@@ -299,10 +318,7 @@ namespace OpenRiaServices.DomainServices.Server
                         validationErrorList.Add(new ValidationResult(error.ErrorMessage, error.MemberNames));
                     }
 
-                    validationErrors = validationErrorList.AsReadOnly();
-                    totalCount = DomainService.TotalCountUndefined;
-
-                    return null;
+                    return new ServiceQueryResult(validationErrorList);
                 }
 
                 object result = null;
@@ -313,7 +329,15 @@ namespace OpenRiaServices.DomainServices.Server
                     try
                     {
                         result = queryDescription.Method.Invoke(this, parameters, out totalCount);
-                        result = queryDescription.Method.UnwrapTaskResult(result);
+
+                        // TODO: ValueTask support
+                        // TODO: Should add support to a type with both result and count
+                        // Wait for result to be availible before unwrapping
+                        if (queryDescription.Method.IsTaskAsync)
+                        {
+                            await (Task)result;
+                            result = queryDescription.Method.UnwrapTaskResult(result);
+                        }
                     }
                     catch (TargetInvocationException tie)
                     {
@@ -344,11 +368,7 @@ namespace OpenRiaServices.DomainServices.Server
                     }
 
                     validationErrorList.Add(new ValidationResult(vex.ValidationResult.ErrorMessage, vex.ValidationResult.MemberNames));
-
-                    validationErrors = validationErrorList.AsReadOnly();
-                    totalCount = DomainService.TotalCountUndefined;
-
-                    return null;
+                    return new ServiceQueryResult(validationErrorList);
                 }
                 finally
                 {
@@ -368,7 +388,7 @@ namespace OpenRiaServices.DomainServices.Server
                         enumerableResult = QueryComposer.Compose(enumerableResult.AsQueryable(), queryDescription.Query);
                         if (totalCount == DomainService.TotalCountUndefined)
                         {
-                            totalCount = this.GetTotalCountForQuery(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false);
+                            totalCount = await this.GetTotalCountForQuery(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false);
                         }
                     }
                     else if (totalCount == DomainService.TotalCountUndefined)
@@ -382,22 +402,17 @@ namespace OpenRiaServices.DomainServices.Server
                     {
                         if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                         {
-                            totalCount = this.GetTotalCountForQuery(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true);
+                            totalCount = await this.GetTotalCountForQuery(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true);
                         }
 
                         enumerableResult = limitedResults;
                     }
 
                     // Enumerate the query.
-                    Func<IEnumerable, int, IEnumerable> enumerateMethod = DomainService.enumerateMethodMap.GetOrAdd(queryDescription.Method.AssociatedType, type =>
-                    {
-                        MethodInfo concreteEnumerateMethod = DomainService.enumerateMethod.MakeGenericMethod(type);
-                        return (Func<IEnumerable, int, IEnumerable>)Delegate.CreateDelegate(typeof(Func<IEnumerable, int, IEnumerable>), concreteEnumerateMethod);
-                    });
-                    enumerableResult = enumerateMethod(enumerableResult, DomainService.DefaultEstimatedQueryResultCount);
+                    enumerableResult = await CallEnumerateAsync(queryDescription.Method.AssociatedType, enumerableResult);
                     if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                     {
-                        totalCount = ((Array)enumerableResult).Length;
+                        totalCount = ((ICollection)enumerableResult).Count;
                     }
                 }
                 else
@@ -430,7 +445,31 @@ namespace OpenRiaServices.DomainServices.Server
                 throw;
             }
 
-            return enumerableResult;
+            return new ServiceQueryResult(enumerableResult, totalCount);
+        }
+
+        // TODO: ValueTask + ICollection / IReadOnlyCollecion<> result
+        private async ValueTask<ICollection> CallEnumerateAsync(Type entityType, IEnumerable enumerableResult)
+        {
+            Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>> enumerateMethod = DomainService.enumerateMethodMap.GetOrAdd(entityType, type =>
+             {
+                 MethodInfo concreteEnumerateMethod = DomainService.enumerateMethod.MakeGenericMethod(type);
+                 return (DomainService ds, IEnumerable en, int c) =>
+                 {
+                     try
+                     {
+                         return (ValueTask<IEnumerable>)concreteEnumerateMethod.Invoke(ds, new object[] { en, c });
+                     }
+                     catch (TargetInvocationException tie)
+                     {
+                         if (tie.InnerException != null)
+                             throw tie.InnerException;
+                         throw;
+                     }
+                 };
+                 //return (Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>)Delegate.CreateDelegate(typeof(Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>), null, concreteEnumerateMethod);
+             });
+            return (ICollection)await enumerateMethod(this, enumerableResult, DomainService.DefaultEstimatedQueryResultCount);
         }
 
         /// <summary>
@@ -589,7 +628,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport =  ExceptionHandlingUtility.GetUnwrappedException(e);
+                Exception exceptionToReport = ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -728,7 +767,7 @@ namespace OpenRiaServices.DomainServices.Server
                             else if (((EntityActionAttribute)customMethodOperation.OperationAttribute).AllowMultipleInvocations == false)
                             {
                                 throw new InvalidOperationException(
-                                    string.Format(Resource.DomainService_MultipleEntityActionsNotAllowedFor, 
+                                    string.Format(Resource.DomainService_MultipleEntityActionsNotAllowedFor,
                                                 operation.Entity.GetType().Name,
                                                 action.Key));
                             }
@@ -763,7 +802,21 @@ namespace OpenRiaServices.DomainServices.Server
         /// <returns>The total result count if total-counts are supported; -1 otherwise.</returns>
         protected virtual int Count<T>(IQueryable<T> query)
         {
+            // TODO: Obsolete or remove
             return DomainService.TotalCountUndefined;
+        }
+
+        /// <summary>
+        /// Gets the result count for the specified <see cref="IQueryable&lt;T&gt;" />. <see cref="DomainService" />s should 
+        /// override this method to implement support for total-counts of paged result-sets. Overrides shouldn't 
+        /// call the base method.
+        /// </summary>
+        /// <typeparam name="T">The element <see cref="Type"/> of the query.</typeparam>
+        /// <param name="query">The query for which the count should be returned.</param>
+        /// <returns>The total result count if total-counts are supported; -1 otherwise.</returns>
+        protected virtual ValueTask<int> CountAsync<T>(IQueryable<T> query)
+        {
+            return new ValueTask<int>(Count(query));
         }
 
         /// <summary>
@@ -942,36 +995,32 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="queryable">The query.</param>
         /// <param name="skipPagingCheck"><c>true</c> if the paging check can be skipped; <c>false</c> otherwise.</param>
         /// <returns>The total count.</returns>
-        private int GetTotalCountForQuery(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck)
+        private ValueTask<int> GetTotalCountForQuery(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck)
         {
-            int totalCount = DomainService.TotalCountUndefined;
-
             // Only try to get the total count if the query description requested it.
-            if (queryDescription.IncludeTotalCount)
+            if (!queryDescription.IncludeTotalCount)
+                return new ValueTask<int>(DomainService.TotalCountUndefined);
+
+            IQueryable totalCountQuery = queryable;
+            if (skipPagingCheck || QueryComposer.TryComposeWithoutPaging(queryable, out totalCountQuery))
             {
-                IQueryable totalCountQuery = queryable;
-                if (skipPagingCheck || QueryComposer.TryComposeWithoutPaging(queryable, out totalCountQuery))
+                try
                 {
-                    try
-                    {
-                        totalCount = (int)countMethod.MakeGenericMethod(totalCountQuery.ElementType).Invoke(this, new object[] { totalCountQuery });
-                    }
-                    catch (TargetInvocationException ex)
-                    {
-                        if (ex.InnerException != null)
-                        {
-                            throw ex.InnerException;
-                        }
-                        throw;
-                    }
+                    return (ValueTask<int>)countMethod.MakeGenericMethod(totalCountQuery.ElementType).Invoke(this, new object[] { totalCountQuery });
                 }
-                else
+                catch (TargetInvocationException ex)
                 {
-                    totalCount = DomainService.TotalCountEqualsResultSetCount;
+                    if (ex.InnerException != null)
+                    {
+                        throw ex.InnerException;
+                    }
+                    throw;
                 }
             }
-
-            return totalCount;
+            else
+            {
+                return new ValueTask<int>(DomainService.TotalCountEqualsResultSetCount);
+            }
         }
 
         /// <summary>
@@ -1286,13 +1335,15 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="enumerable">The enumerable to enumerate.</param>
         /// <param name="estimatedResultCount">The estimated number of items the enumerable will yield.</param>
         /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
-        private static IEnumerable Enumerate<T>(IEnumerable enumerable, int estimatedResultCount)
+        protected virtual ValueTask<IEnumerable> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount)
         {
+            // TODO: Consider different type signature
+
             // No need to enumerate arrays.
             T[] array = enumerable as T[];
             if (array != null)
             {
-                return array;
+                return new ValueTask<IEnumerable>(array);
             }
 
             ICollection<T> collection = enumerable as ICollection<T>;
@@ -1300,38 +1351,15 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 array = new T[collection.Count];
                 collection.CopyTo(array, 0);
-                return array;
+                return new ValueTask<IEnumerable>(array);
             }
 
-            int index = 0;
-            array = new T[estimatedResultCount];
-
+            var list = new List<T>(estimatedResultCount);
             foreach (T item in enumerable)
             {
-                if (array.Length == index)
-                {
-                    Array.Resize(ref array, index * 2);
-                }
-
-                array[index++] = item;
+                list.Add(item);
             }
-
-            // Our array is full, so we can return it as-is.
-            if (array.Length == index)
-            {
-                return array;
-            }
-
-            // There were no items, so return an empty array.
-            if (index == 0)
-            {
-                return new T[0];
-            }
-
-            // Resize the array based on the number of elements in it.
-            Array.Resize(ref array, index);
-
-            return array;
+            return new ValueTask<IEnumerable>(list);
         }
 
         #region Nested Types

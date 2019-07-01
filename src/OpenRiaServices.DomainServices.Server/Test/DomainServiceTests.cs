@@ -164,11 +164,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
             QueryDescription query = new QueryDescription(queryOperation, new object[0], /* includeTotalCount */ true, new Zip[0].AsQueryable().Where(z => z.Code == 98052));
 
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
             ExceptionHelper.ExpectArgumentException(delegate
             {
-                ds.Query(query, out validationErrors, out totalCount);
+                ds.QueryAsync(query).GetAwaiter().GetResult();
             }, "Expression of type 'System.Linq.EnumerableQuery`1[Cities.City]' cannot be used for parameter of type 'System.Linq.IQueryable`1[Cities.Zip]' of method 'System.Linq.IQueryable`1[Cities.Zip] Where[Zip](System.Linq.IQueryable`1[Cities.Zip], System.Linq.Expressions.Expression`1[System.Func`2[Cities.Zip,System.Boolean]])'");
         }
 
@@ -188,9 +186,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
             QueryDescription query = new QueryDescription(queryOperation, new object[0]);
 
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
-            IEnumerable results = ds.Query(query, out validationErrors, out totalCount);
+            IEnumerable results = ds.QueryAsync(query).GetAwaiter().GetResult().Result;
             Assert.IsTrue(ds.ExecutedQuery, "Query wasn't executed eagerly.");
         }
 
@@ -221,14 +217,12 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 DomainOperationEntry queryOperation = desc.GetQueryMethod(queryName);
                 QueryDescription query = new QueryDescription(queryOperation, new object[0], true, filter);
-
-                IEnumerable<ValidationResult> validationErrors;
-                int totalCount;
-                IEnumerable<Cities.City> queryResults = (IEnumerable<Cities.City>)ds.Query(query, out validationErrors, out totalCount);
+                ;
+                var queryResult = ds.QueryAsync(query).GetAwaiter().GetResult();
                 return new QueryResult<City>()
                 {
-                    Results = queryResults,
-                    TotalCount = totalCount
+                    Results = (IEnumerable<Cities.City>)queryResult.Result,
+                    TotalCount = queryResult.TotalCount
                 };
             };
 
@@ -278,13 +272,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             // verify that even top level exceptions go through
             // the OnError handler
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
             Exception expectedException = null;
             try
             {
                 // cause a context not initialized exception
-                ds.Query(query, out validationErrors, out totalCount);
+                ds.QueryAsync(query).GetAwaiter().GetResult();
             }
             catch (InvalidOperationException e)
             {
@@ -299,7 +291,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Query(query, out validationErrors, out totalCount);
+                ds.QueryAsync(query).GetAwaiter().GetResult();
             }
             catch (TargetInvocationException tie)
             {
@@ -316,10 +308,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             expectedException = null;
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
-            IEnumerable enumerable = null;
             try
             {
-                enumerable = ds.Query(queryDeferredException, out validationErrors, out totalCount);
+                ds.QueryAsync(queryDeferredException).GetAwaiter().GetResult();
             }
             catch (TargetInvocationException tie)
             {
@@ -338,7 +329,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                foreach (var entity in ds.Query(query, out validationErrors, out totalCount))
+                foreach (var entity in ds.QueryAsync(query).GetAwaiter().GetResult().Result)
                 {
                 }
             }
@@ -358,8 +349,10 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
             query = new QueryDescription(queryOperation, new object[] { 50 });
-            ds.Query(query, out validationErrors, out totalCount);
-            Assert.AreEqual(1, validationErrors.Count());
+            var queryResult = ds.QueryAsync(query).GetAwaiter().GetResult();
+
+            Assert.IsTrue(queryResult.HasValidationErrors, "Should have validation errors");
+            Assert.AreEqual(1, queryResult.ValidationErrors.Count());
             Assert.IsNull(ds.LastError);
         }
 
@@ -830,7 +823,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         public void ValidateOperations_Invalid_Update()
         {
             Zip updatedZip = new Zip() { Code = -1, FourDigit = -1 };
-            
+
             ChangeSetEntry operation = new ChangeSetEntry();
             operation.DomainOperationEntry = _domainServiceDescription.GetSubmitMethod(typeof(Zip), DomainOperation.Update);
             operation.Operation = DomainOperation.Update;
@@ -892,7 +885,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation1.Entity = entity1;
             customUpdateOperation1.Operation = DomainOperation.Insert;
             customUpdateOperation1.DomainOperationEntry = insert;
-            customUpdateOperation1.EntityActions = new EntityActionCollection { {"UpdateEntityWithInt", new object[] { 1 } }};
+            customUpdateOperation1.EntityActions = new EntityActionCollection { { "UpdateEntityWithInt", new object[] { 1 } } };
 
             // Custom update arrives with an updated entity.
             // This ensures complex type deep validation is respected.
@@ -908,7 +901,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation3.Entity = entity2;
             customUpdateOperation3.Operation = DomainOperation.None;
             customUpdateOperation3.DomainOperationEntry = null;
-            
+
             List<DomainServiceInsertCustom_Validated_Object> param = new List<DomainServiceInsertCustom_Validated_Object>();
             param.Add(new DomainServiceInsertCustom_Validated_Object());
             customUpdateOperation3.EntityActions = new EntityActionCollection { { "UpdateEntityWithCollection", new object[] { param } } };
@@ -1065,7 +1058,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             success = DomainService.ValidateOperations(new ChangeSetEntry[] { update }, dsd, null);
             Assert.IsFalse(success);
         }
-        
+
         [TestMethod]
         [Description("Calling ValidateOperations with domain method that fails validation")]
         public void ValidateOperations_Invalid_DomainMethod()
@@ -1252,9 +1245,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             service.Initialize(context);
 
-            var totalCount = 0;
-            IEnumerable<ValidationResult> validationErrors;
-            var result = (IEnumerable<PresentationCustomer>)service.Query(new QueryDescription(queryOp), out validationErrors, out totalCount);
+            var result = (IEnumerable<PresentationCustomer>)service.QueryAsync(new QueryDescription(queryOp)).GetAwaiter().GetResult().Result;
             var pmEntity1 = result.Single(p => p.ID == 1);
 
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
@@ -1284,9 +1275,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             service.Initialize(context);
 
-            var totalCount = 0;
-            IEnumerable<ValidationResult> validationErrors;
-            var result = (IEnumerable<PresentationCustomer>)service.Query(new QueryDescription(queryOp), out validationErrors, out totalCount);
+            var result = (IEnumerable<PresentationCustomer>)service.QueryAsync(new QueryDescription(queryOp)).GetAwaiter().GetResult().Result;
             var pmEntity1 = result.Single(p => p.ID == 1);
 
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
@@ -1325,9 +1314,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             service.Initialize(context);
 
-            var totalCount = 0;
-            IEnumerable<ValidationResult> validationErrors;
-            var result = (IEnumerable<PresentationCustomer>)service.Query(new QueryDescription(queryOp), out validationErrors, out totalCount);
+
+            var result = (IEnumerable<PresentationCustomer>)service.QueryAsync(new QueryDescription(queryOp)).GetAwaiter().GetResult().Result;
             var pmEntity1 = result.Single(p => p.ID == 1);
 
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
@@ -2223,7 +2211,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     public class DomainService_AssociatedEntities : DomainService
     {
         private readonly IEnumerable<DataStoreCustomer> customers =
-            new[] 
+            new[]
             {
                 new DataStoreCustomer() { ID = 1, FirstName = "First1", LastName = "Last1", Message = "Value1" },
                 new DataStoreCustomer() { ID = 2, FirstName = "First2", LastName = "Last2", Message = "Value2" },

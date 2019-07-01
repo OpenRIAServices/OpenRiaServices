@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -60,13 +61,28 @@ namespace OpenRiaServices.DomainServices.Client
     [DataContract(Name = "QueryResultOf{0}", Namespace = "DomainServices")]
     public sealed class QueryResult<T> : QueryResult
     {
+
+#if SERVERFX
+        /// <summary>
+        /// Initializes a new instance of the QueryResult class where result is validation error
+        /// </summary>
+        public QueryResult(IEnumerable<ValidationResult> validationErrors)
+        {
+            ValidationErrors = validationErrors;
+        }
+
+        /// <summary>
+        /// Get the ValidationErros for a query (or <c>null</c> if query was successful)
+        /// </summary>
+        [IgnoreDataMember]
+        public IEnumerable<ValidationResult> ValidationErrors { get; }
+#endif
         /// <summary>
         /// Initializes a new instance of the QueryResult class
         /// </summary>
         public QueryResult()
         {
         }
-
         /// <summary>
         /// Initializes a new instance of the QueryResult class with the specified
         /// collection of result items.

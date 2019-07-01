@@ -149,9 +149,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 new ServiceQueryPart("take", "1")
             };
 
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
-            QueryResult<AdventureWorksModel.PurchaseOrder> result = QueryProcessor.Process<AdventureWorksModel.PurchaseOrder>(service, queryOperation, new object[0], serviceQuery, out validationErrors, out totalCount);
+            QueryResult<AdventureWorksModel.PurchaseOrder> result = QueryProcessor.Process<AdventureWorksModel.PurchaseOrder>(service, queryOperation, new object[0], serviceQuery)
+                .GetAwaiter().GetResult();
 
             Assert.AreEqual(1, result.RootResults.Count());
         }
@@ -167,21 +166,18 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew") { IsAuthenticated = true }), DomainOperationType.Submit);
             nw.Initialize(dsc);
 
-            IEnumerable<ValidationResult> validationResults = null;
-            int totalCount;
-
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
             DomainOperationEntry entry = dsd.DomainOperationEntries.First(p => p.Operation == DomainOperation.Query);
             QueryDescription qd = new QueryDescription(entry);
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
-                nw.Query(qd, out validationResults, out totalCount);
+                nw.QueryAsync(qd).GetAwaiter().GetResult();
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Submit, DomainOperationType.Query));
 
             InvokeDescription id = new InvokeDescription(entry, null);
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
-                nw.Invoke(id, out validationResults);
+                nw.Invoke(id, out var validationResults);
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Submit, DomainOperationType.Invoke));
 
             nw = new TestDomainServices.EF.Northwind();
@@ -245,15 +241,13 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ServiceContext_CurrentOperation_DomainService));
             ServiceContext_CurrentOperation_DomainService ds;
-            IEnumerable<ValidationResult> validationErrors;
 
             // Execute a query.
             ds = new ServiceContext_CurrentOperation_DomainService(DomainOperationType.Query);
             DomainOperationEntry queryOp = dsd.GetQueryMethod("GetEntities");
             Assert.IsNotNull(queryOp);
             QueryDescription desc = new QueryDescription(queryOp);
-            int totalCount;
-            ds.Query(desc, out validationErrors, out totalCount);
+            var queryResult = ds.QueryAsync(desc).GetAwaiter().GetResult();
             Assert.AreEqual(queryOp, ServiceContext_CurrentOperation_DomainService.LastOperation);
             Assert.IsNull(ds.Context.Operation);
 
@@ -261,7 +255,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds = new ServiceContext_CurrentOperation_DomainService(DomainOperationType.Invoke);
             DomainOperationEntry invokeOp = dsd.GetInvokeOperation("Echo");
             Assert.IsNotNull(invokeOp);
-            ds.Invoke(new InvokeDescription(invokeOp, null), out validationErrors);
+            ds.Invoke(new InvokeDescription(invokeOp, null), out var validationErrors);
             Assert.AreEqual(invokeOp, ServiceContext_CurrentOperation_DomainService.LastOperation);
             Assert.IsNull(ds.Context.Operation);
 
@@ -289,19 +283,17 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(service.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.Single(p => p.Name == "QueryWithParamValidation");
             QueryDescription qd = new QueryDescription(method, new object[] { -1, "ABC" });
-            int totalCount;
+            
+            var queryResult = service.QueryAsync(qd).GetAwaiter().GetResult();
 
-            IEnumerable<ValidationResult> validationErrors;
-            service.Query(qd, out validationErrors, out totalCount);
+            Assert.IsNotNull(queryResult.ValidationErrors);
+            Assert.AreEqual(2, queryResult.ValidationErrors.Count());
 
-            Assert.IsNotNull(validationErrors);
-            Assert.AreEqual(2, validationErrors.Count());
-
-            ValidationResult error = validationErrors.ElementAt(0);
+            ValidationResult error = queryResult.ValidationErrors.ElementAt(0);
             Assert.AreEqual("The field a must be between 0 and 10.", error.ErrorMessage);
             Assert.AreEqual("a", error.MemberNames.Single());
 
-            error = validationErrors.ElementAt(1);
+            error = queryResult.ValidationErrors.ElementAt(1);
             Assert.AreEqual("The field b must be a string with a maximum length of 2.", error.ErrorMessage);
             Assert.AreEqual("b", error.MemberNames.Single());
         }
@@ -340,17 +332,16 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Query).First(p => p.Name == "GetProductsByCategory");
             QueryDescription qd = new QueryDescription(method, new object[] { 1 });
-            int totalCount;
-            IEnumerable<ValidationResult> validationErrors;
-            IEnumerable result = provider.Query(qd, out validationErrors, out totalCount);
-
-            int count = result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
+   
+            // TODO: Make async
+            var queryResult = provider.QueryAsync(qd).GetAwaiter().GetResult();
+            int count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
             Assert.AreEqual(32, count);
 
             // verify that we can use the same provider to execute another query
             qd = new QueryDescription(method, new object[] { 2 });
-            result = provider.Query(qd, out validationErrors, out totalCount);
-            count = result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
+            queryResult = provider.QueryAsync(qd).GetAwaiter().GetResult();
+            count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
             Assert.AreEqual(43, count);
         }
 
@@ -362,13 +353,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.First(p => p.Name == "GetEntities" && p.Operation == DomainOperation.Query);
             QueryDescription qd = new QueryDescription(method, new object[0]);
-            int totalCount;
-            IEnumerable<ValidationResult> validationErrors;
             ExceptionHelper.ExpectException<Exception>(delegate
             {
                 try
                 {
-                    provider.Query(qd, out validationErrors, out totalCount);
+                    provider.QueryAsync(qd).GetAwaiter().GetResult();
                 }
                 catch (TargetInvocationException ex)
                 {

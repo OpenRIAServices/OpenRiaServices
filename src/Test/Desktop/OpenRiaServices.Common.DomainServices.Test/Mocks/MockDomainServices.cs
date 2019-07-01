@@ -17,6 +17,7 @@ using DataModels.ScenarioModels;
 using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.DomainServices.LinqToSql;
 using TestDomainServices.Saleテ;
+using System.Threading.Tasks;
 
 [assembly: ContractNamespace("http://TestNamespace/ForNoClrNamespace")]
 
@@ -935,15 +936,15 @@ namespace TestDomainServices
 
         private string query = string.Empty;
 
-        public override System.Collections.IEnumerable Query(QueryDescription queryDescription, out IEnumerable<ValidationResult> validationErrors, out int totalCount)
+        public override ValueTask<ServiceQueryResult> QueryAsync(QueryDescription queryDescription)
         {
             if (queryDescription.Method.Name == "GetRoundtripQueryEntities" && queryDescription.Query != null)
-            {   
+            {
                 // This test query is used to test server query deserialization through the entire pipeline.
                 this.query = queryDescription.Query.ToString();
             }
 
-            return base.Query(queryDescription, out validationErrors, out totalCount);
+            return base.QueryAsync(queryDescription);
         }
 
         public IQueryable<RoundtripQueryEntity> GetRoundtripQueryEntities()

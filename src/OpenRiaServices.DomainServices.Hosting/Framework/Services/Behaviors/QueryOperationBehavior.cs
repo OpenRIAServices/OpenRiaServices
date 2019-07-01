@@ -11,6 +11,7 @@ using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -77,10 +78,8 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected override async Task<InvokeResult> InvokeCoreAsync(object instance, object[] inputs)
             {
-                outputs = ServiceUtility.EmptyObjectArray;
-
                 ServiceQuery serviceQuery = null;
                 QueryAttribute queryAttribute = (QueryAttribute)this.operation.OperationAttribute;
                 if (queryAttribute.IsComposable)
@@ -92,13 +91,11 @@ namespace OpenRiaServices.DomainServices.Hosting
                     }
                 }
 
-                IEnumerable<ValidationResult> validationErrors;
-                int totalCount;
                 QueryResult<TEntity> result;
                 try
                 {
                     QueryOperationInvoker.SetOutputCachingPolicy(this.operation);
-                    result = QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery, out validationErrors, out totalCount);
+                    result = await QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery);
                 }
                 catch (Exception ex)
                 {
@@ -110,12 +107,16 @@ namespace OpenRiaServices.DomainServices.Hosting
                     throw ServiceUtility.CreateFaultException(ex);
                 }
 
-                if (validationErrors != null && validationErrors.Any())
+                if (result.ValidationErrors != null && result.ValidationErrors.Any())
                 {
-                    throw ServiceUtility.CreateFaultException(validationErrors);
+                    throw ServiceUtility.CreateFaultException(result.ValidationErrors);
                 }
 
-                return result;
+                return new InvokeResult()
+                {
+                    result = result,
+                    outputs = ServiceUtility.EmptyObjectArray,
+                };
             }
 
             protected override void ConvertInputs(object[] inputs)

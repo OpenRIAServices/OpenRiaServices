@@ -103,11 +103,13 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 QueryDescription queryDesc = new QueryDescription(this.operation, inputs);
 
                 IEnumerable<ValidationResult> validationErrors;
-                int totalCount;
                 IEnumerable<TEntity> result;
                 try
                 {
-                    result = (IEnumerable<TEntity>)((DomainService)instance).Query(queryDesc, out validationErrors, out totalCount);
+                    var queryTask  = ((DomainService)instance).QueryAsync(queryDesc);
+                    var queryResult = queryTask.ConfigureAwait(false).GetAwaiter().GetResult();
+                    validationErrors = queryResult.ValidationErrors;
+                    result = (IEnumerable<TEntity>)queryResult.Result;
                 }
                 catch (UnauthorizedAccessException ex)
                 {

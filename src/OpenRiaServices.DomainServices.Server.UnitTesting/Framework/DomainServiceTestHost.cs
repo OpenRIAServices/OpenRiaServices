@@ -515,13 +515,13 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             OperationContext context = this.CreateOperationContext(DomainOperationType.Query);
 
             QueryDescription queryDescription = Utility.GetQueryDescription(context, queryOperation);
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
 
-            IEnumerable entities = context.DomainService.Query(queryDescription, out validationErrors, out totalCount);
+            var queryTask = context.DomainService.QueryAsync(queryDescription);
+            // TODO: Remove blocking wait
+            var queryResult = queryTask.GetAwaiter().GetResult();
+            ErrorUtility.AssertNoValidationErrors(context, queryResult.ValidationErrors);
 
-            ErrorUtility.AssertNoValidationErrors(context, validationErrors);
-
+            IEnumerable entities = queryResult.Result;
             return (entities == null) ? null : entities.Cast<TEntity>();
         }
 
@@ -540,9 +540,12 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
 
             QueryDescription queryDescription = Utility.GetQueryDescription(context, queryOperation);
             IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
 
-            IEnumerable entities = context.DomainService.Query(queryDescription, out validationErrors, out totalCount);
+            var queryTask = context.DomainService.QueryAsync(queryDescription);
+            // TODO: Remove blocking wait
+            var queryResult = queryTask.GetAwaiter().GetResult();
+            IEnumerable entities = queryResult.Result;
+            validationErrors = queryResult.ValidationErrors;
 
             results = (entities == null) ? null : entities.Cast<TEntity>();
             validationResults = (validationErrors == null) ? null : validationErrors.ToList();

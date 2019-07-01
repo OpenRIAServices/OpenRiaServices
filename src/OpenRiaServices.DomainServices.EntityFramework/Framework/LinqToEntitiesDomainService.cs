@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 #if DBCONTEXT
@@ -10,6 +11,7 @@ using System.Data;
 using System.Data.Objects;
 #endif
 using System.Linq;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.EntityFramework
@@ -116,15 +118,38 @@ namespace OpenRiaServices.DomainServices.EntityFramework
             base.Dispose(disposing);
         }
 
+        protected bool DisableAsyncQuerySypport { get; set; }
+
         /// <summary>
         /// Gets the number of rows in an <see cref="IQueryable&lt;T&gt;" />.
         /// </summary>
         /// <typeparam name="T">The element Type of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
         /// <returns>The total number of rows.</returns>
-        protected override int Count<T>(IQueryable<T> query)
+        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query)
         {
-            return query.Count();
+            // TODO: Provide flag to do it sync instead?
+            if (!DisableAsyncQuerySypport)
+                return new ValueTask<int>(query.CountAsync());
+            else
+                return new ValueTask<int>(query.Count());
+        }
+
+        protected override ValueTask<IEnumerable> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount)
+        {
+            if (!DisableAsyncQuerySypport
+                && enumerable is IQueryable<T> query)
+            {
+                return new ValueTask<IEnumerable>(EnumerateAsync(query));
+            }
+            else
+
+                return base.EnumerateAsync<T>(enumerable, estimatedResultCount);
+        }
+
+        private async Task<IEnumerable> EnumerateAsync<T>(IQueryable<T> query)
+        {
+            return await query.ToListAsync();
         }
 
         /// <summary>

@@ -29,8 +29,9 @@ using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Dom
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
+    using System.Threading.Tasks;
     using MetaType = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.MetaType;
-    
+
 
     /// <summary>
     /// DomainServiceDescription tests
@@ -3652,10 +3653,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainService_BaseMethodOverrides : DomainService
     {
-        public override IEnumerable Query(QueryDescription queryDescription, out IEnumerable<ValidationResult> validationErrors, out int totalCount)
+        public override ValueTask<ServiceQueryResult> QueryAsync(QueryDescription queryDescription)
         {
-            return base.Query(queryDescription, out validationErrors, out totalCount);
+            return base.QueryAsync(queryDescription);
         }
+
         public override bool Submit(ChangeSet changeSet)
         {
             return base.Submit(changeSet);
