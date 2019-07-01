@@ -6,7 +6,7 @@
     <Description>Unit tests for WCF RIA Services</Description>
     <Copyright>© Outercurve Foundation.  All rights reserved.</Copyright>
     <NoWarn>618</NoWarn>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <_GetChildProjectCopyToOutputDirectoryItems>false</_GetChildProjectCopyToOutputDirectoryItems>
   </PropertyGroup>
   <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
