@@ -1213,10 +1213,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 // verify that entities are read only after
                 // submit is in progress
-                Assert.IsTrue(products[0].IsReadOnly);
-                Assert.IsTrue(products[1].IsReadOnly);
-                Assert.IsTrue(products[2].IsReadOnly);
-                Assert.IsFalse(products[3].IsReadOnly);
+                Assert.IsTrue(products[0].IsReadOnly, "expected product to be readonly");
+                Assert.IsTrue(products[1].IsReadOnly, "expected product to be readonly");
+                Assert.IsTrue(products[2].IsReadOnly, "expected product to be readonly");
+                Assert.IsFalse(products[3].IsReadOnly, "unmodified product should not be readonly");
                 Exception exception = null;
                 try
                 {
@@ -1226,7 +1226,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
                     exception = ex;
                 }
-                Assert.IsNotNull(exception);
+                Assert.AreEqual(null, exception, "Trying to change a property on a readonly entity should throw exception");
             });
             EnqueueConditional(delegate
             {
@@ -1237,10 +1237,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 AssertSuccess();
 
                 Product[] products = ctxt.Products.ToArray();
-                Assert.IsFalse(products[0].IsReadOnly);
-                Assert.IsFalse(products[1].IsReadOnly);
-                Assert.IsFalse(products[2].IsReadOnly);
-                Assert.IsFalse(products[3].IsReadOnly);
+                Assert.IsFalse(products[0].IsReadOnly, "entity should not be readonly after submit is complete");
+                Assert.IsFalse(products[1].IsReadOnly, "entity should not be readonly after submit is complete");
+                Assert.IsFalse(products[2].IsReadOnly, "entity should not be readonly after submit is complete");
+                Assert.IsFalse(products[3].IsReadOnly, "entity should not be readonly after submit is complete");
 
                 // verify that all changes have been accepted
                 changeSet = ctxt.EntityContainer.GetChanges();
