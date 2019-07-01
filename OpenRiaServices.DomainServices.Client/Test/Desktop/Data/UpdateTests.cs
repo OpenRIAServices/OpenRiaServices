@@ -819,6 +819,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void DeleteGraph()
         {
+            // IMPORTANT: This test is run multiple times,
+            // once for each derived type.
+            // This means that different database rows will be 
+            // removed for different invocations
+
             Northwind ctxt = CreateDomainContext();
             Order order = null;
 
@@ -840,7 +845,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 AssertSuccess();
 
                 order = ctxt.Orders.Single();
-                Assert.AreEqual(3, order.Order_Details.Count());  // make sure we have details to delete
+                int numDetails = order.Order_Details.Count;
+
+                Assert.IsTrue(numDetails >= 1, "no order details");  // make sure we have details to delete
 
                 // now do the delete
                 foreach (Order_Detail detail in order.Order_Details)
@@ -851,7 +858,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 ctxt.Orders.Remove(order);
 
                 EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(4, changeSet.RemovedEntities.Count);
+                Assert.AreEqual(numDetails+1, changeSet.RemovedEntities.Count);
 
                 SubmitChanges();
             });
