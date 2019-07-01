@@ -1939,7 +1939,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                lo = nw.Load(nw.GetOrderDetailsQuery().Where(p => p.OrderID == 10624), false);
+                lo = nw.Load(nw.GetOrderDetailsQuery().OrderBy(o => o.OrderID).Take(10), false);
             });
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
