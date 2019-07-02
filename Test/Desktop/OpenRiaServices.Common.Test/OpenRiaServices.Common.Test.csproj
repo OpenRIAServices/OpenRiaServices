@@ -33,18 +33,14 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   
-  <ItemGroup>
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\ExceptionHelper.cs" Link="ExceptionHelper.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\FullTrustTestAttribute.cs" Link="FullTrustTestAttribute.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\PerfTestAttribute.cs" Link="PerfTestAttribute.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\TestUris.cs" Link="TestUris.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestHelper.cs" Link="UnitTestHelper.cs" />
+  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
+    <Compile Remove="Platforms/sl5/*.cs" />
+    <None Include="Platforms/sl5/*.cs" />
   </ItemGroup>
- 
+  
   <ItemGroup Condition="'$(TargetFramework)'=='sl5'">
     <Compile Remove="Platforms/net45/*.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\DependencyObjectExtensions.cs" Link="Silverlight\DependencyObjectExtensions.cs" />
-    <Compile Include="..\..\Silverlight\OpenRiaServices.Common.Test\UnitTestBase.cs" Link="Silverlight\UnitTestBase.cs" />
+    <None Include="Platforms/net45/*.cs" />
   </ItemGroup>
   
 </Project>

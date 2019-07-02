@@ -6,5 +6,4 @@ namespace Microsoft.Silverlight.Testing
 
     public class AsynchronousAttribute : Attribute { }
 
-    public class ExclusiveAttribute : Attribute { }
 }
