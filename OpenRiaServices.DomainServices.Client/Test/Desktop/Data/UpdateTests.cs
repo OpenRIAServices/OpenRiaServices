@@ -819,6 +819,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void DeleteGraph()
         {
+            // IMPORTANT: This test is run multiple times,
+            // once for each derived type.
+            // This means that different database rows will be 
+            // removed for different invocations
+
             Northwind ctxt = CreateDomainContext();
             Order order = null;
 
@@ -840,7 +845,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 AssertSuccess();
 
                 order = ctxt.Orders.Single();
-                Assert.AreEqual(3, order.Order_Details.Count());  // make sure we have details to delete
+                int numDetails = order.Order_Details.Count;
+
+                Assert.IsTrue(numDetails >= 1, "no order details");  // make sure we have details to delete
 
                 // now do the delete
                 foreach (Order_Detail detail in order.Order_Details)
@@ -851,7 +858,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 ctxt.Orders.Remove(order);
 
                 EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(4, changeSet.RemovedEntities.Count);
+                Assert.AreEqual(numDetails+1, changeSet.RemovedEntities.Count);
 
                 SubmitChanges();
             });
@@ -1206,10 +1213,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 // verify that entities are read only after
                 // submit is in progress
-                Assert.IsTrue(products[0].IsReadOnly);
-                Assert.IsTrue(products[1].IsReadOnly);
-                Assert.IsTrue(products[2].IsReadOnly);
-                Assert.IsFalse(products[3].IsReadOnly);
+                Assert.IsTrue(products[0].IsReadOnly, "expected product to be readonly");
+                Assert.IsTrue(products[1].IsReadOnly, "expected product to be readonly");
+                Assert.IsTrue(products[2].IsReadOnly, "expected product to be readonly");
+                Assert.IsFalse(products[3].IsReadOnly, "unmodified product should not be readonly");
                 Exception exception = null;
                 try
                 {
@@ -1219,7 +1226,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
                     exception = ex;
                 }
-                Assert.IsNotNull(exception);
+                Assert.AreNotEqual(null, exception, "Trying to change a property on a readonly entity should throw exception");
             });
             EnqueueConditional(delegate
             {
@@ -1230,10 +1237,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 AssertSuccess();
 
                 Product[] products = ctxt.Products.ToArray();
-                Assert.IsFalse(products[0].IsReadOnly);
-                Assert.IsFalse(products[1].IsReadOnly);
-                Assert.IsFalse(products[2].IsReadOnly);
-                Assert.IsFalse(products[3].IsReadOnly);
+                Assert.IsFalse(products[0].IsReadOnly, "entity should not be readonly after submit is complete");
+                Assert.IsFalse(products[1].IsReadOnly, "entity should not be readonly after submit is complete");
+                Assert.IsFalse(products[2].IsReadOnly, "entity should not be readonly after submit is complete");
+                Assert.IsFalse(products[3].IsReadOnly, "entity should not be readonly after submit is complete");
 
                 // verify that all changes have been accepted
                 changeSet = ctxt.EntityContainer.GetChanges();
@@ -1932,7 +1939,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                lo = nw.Load(nw.GetOrderDetailsQuery().Where(p => p.OrderID == 10624), false);
+                lo = nw.Load(nw.GetOrderDetailsQuery().OrderBy(o => o.OrderID).Take(10), false);
             });
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate

@@ -15,8 +15,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     /// </summary>
     public static class MsBuildHelper
     {
-        public static string DefaultToolsVersion = "15.0";
-        public static string ToolsVersion = "15.0";
         private static readonly Dictionary<string, IList<string>> s_ReferenceAssembliesByProjectPath = new Dictionary<string, IList<string>>();
 
         /// <summary>
@@ -138,10 +136,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         internal static ProjectWrapper LoadProject(string projectPath)
         {
             var projectCollection = new ProjectCollection();
-            projectCollection.DefaultToolsVersion = ToolsVersion;
             projectCollection.SetGlobalProperty("Configuration", GetConfiguration());
 
-            var project = projectCollection.LoadProject(projectPath, ToolsVersion);
+            var project = projectCollection.LoadProject(projectPath, projectCollection.DefaultToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
 
             if (project.GetProperty("TargetFramework") == null)
