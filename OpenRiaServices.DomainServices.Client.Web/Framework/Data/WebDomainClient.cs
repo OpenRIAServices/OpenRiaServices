@@ -149,24 +149,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets a value that indicates whether the <see cref="DomainClient"/> supports cancellation.
         /// </summary>
-        public override bool SupportsCancellation
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsCancellation => true;
 
         /// <summary>
         /// Gets whether a secure connection should be used.
         /// </summary>
-        public bool UsesHttps
-        {
-            get
-            {
-                return this._usesHttps;
-            }
-        }
+        public bool UsesHttps => this._usesHttps;
 
         /// <summary>
         /// Gets the <see cref="WcfDomainClientFactory"/> used to create this instance, with fallback to
@@ -228,6 +216,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
                 if (this._channelFactory == null)
                 {
+                    // TODO: Add overload where KnownTypes are passed in
                     this._channelFactory = WebDomainClientFactory.CreateChannelFactory<TContract>(_serviceUri, _usesHttps);
                 }
 
@@ -268,76 +257,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
         /// <returns>The results returned by the query.</returns>
         /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
-        protected Task<QueryCompletedResult> QueryAsyncCore2(EntityQuery query, CancellationToken cancellationToken)
-        {
-            TContract channel = this.ChannelFactory.CreateChannel();
-            // Pass the query as a message property.
-            using (OperationContextScope scope = new OperationContextScope((IContextChannel)channel))
-            {
-                if (query.Query != null)
-                {
-                    OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.QueryPropertyName, query.Query);
-                }
-                if (query.IncludeTotalCount)
-                {
-                    OperationContext.Current.OutgoingMessageProperties.Add(WebDomainClient<object>.IncludeTotalCountPropertyName, true);
-                }
-
-                return CallServiceOperation3(channel,
-                    query.QueryName,
-                    query.Parameters,
-                    cancellationToken)
-                    .ContinueWith( res =>  
-                    {
-                        IEnumerable<ValidationResult> validationErrors = null;
-                        QueryResult returnValue = null;
-                        try
-                        {
-                            // TODO: GetAwaiter().GetResult
-                            returnValue = (QueryResult)res.Result;
-                        }
-                        catch (FaultException<DomainServiceFault> fe)
-                        {
-                            if (fe.Detail.OperationErrors != null)
-                            {
-                                validationErrors = fe.Detail.GetValidationErrors();
-                            }
-                            else
-                            {
-                                throw WebDomainClient<TContract>.GetExceptionFromServiceFault(fe.Detail);
-                            }
-                        }
-
-                        if (returnValue != null)
-                        {
-                            return new QueryCompletedResult(
-                                returnValue.GetRootResults().Cast<Entity>(),
-                                returnValue.GetIncludedResults().Cast<Entity>(),
-                                returnValue.TotalCount,
-                                Enumerable.Empty<ValidationResult>());
-                        }
-                        else
-                        {
-                            return new QueryCompletedResult(
-                                Enumerable.Empty<Entity>(),
-                                Enumerable.Empty<Entity>(),
-                                /* totalCount */ 0,
-                                validationErrors ?? Enumerable.Empty<ValidationResult>());
-                        }
-                    }
-                , CancellationToken.None,
-                TaskContinuationOptions.NotOnCanceled
-                , TaskScheduler.Default);
-            }
-        }
-
-        /// <summary>
-        /// Method called by the framework to begin an asynchronous query operation
-        /// </summary>
-        /// <param name="query">The query to invoke.</param>
-        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
-        /// <returns>The results returned by the query.</returns>
-        /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
         protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
             TContract channel = this.ChannelFactory.CreateChannel();
@@ -356,13 +275,13 @@ namespace OpenRiaServices.DomainServices.Client
                 return CallServiceOperation<QueryCompletedResult>(channel,
                     query.QueryName,
                     query.Parameters,
-                    (Func<object> getValue) =>
+                    (state, asyncResult) =>
                     {
                         IEnumerable<ValidationResult> validationErrors = null;
                         QueryResult returnValue = null;
                         try
                         {
-                            returnValue = (QueryResult)getValue();
+                            returnValue = (QueryResult)EndServiceOperationCall(state, asyncResult);
                         }
                         catch (FaultException<DomainServiceFault> fe)
                         {
@@ -437,13 +356,13 @@ namespace OpenRiaServices.DomainServices.Client
                 "SubmitChanges",
                  new Dictionary<string, object>()
                  {
-                     {"changeSet",submitOperations }
+                     {"changeSet", submitOperations}
                  },
-                 getValue =>
+                 (state, asyncResult) =>
                  {
                      try
                      {
-                         var returnValue = (IEnumerable<ChangeSetEntry>)getValue();
+                         var returnValue = (IEnumerable<ChangeSetEntry>)EndServiceOperationCall(state, asyncResult);
                          return new SubmitCompletedResult(changeSet, returnValue ?? Enumerable.Empty<ChangeSetEntry>());
                      }
                      catch (FaultException<DomainServiceFault> fe)
@@ -466,13 +385,13 @@ namespace OpenRiaServices.DomainServices.Client
             return CallServiceOperation(channel,
                 invokeArgs.OperationName,
                 invokeArgs.Parameters,
-                getValue =>
+                (TContract state, IAsyncResult asyncResult) =>
                 {
                     IEnumerable<ValidationResult> validationErrors = null;
                     object returnValue = null;
                     try
                     {
-                        returnValue = getValue();
+                        returnValue = EndServiceOperationCall(state, asyncResult);
                     }
                     catch (FaultException<DomainServiceFault> fe)
                     {
@@ -490,18 +409,19 @@ namespace OpenRiaServices.DomainServices.Client
                 cancellationToken);
         }
 
-
         /// <summary>
         /// Calls an operation on an already constructed WCF service channel
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
-        /// <param name="channel"></param>
-        /// <param name="operationName"></param>
-        /// <param name="parameters"></param>
-        /// <param name="convertResult"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        private static Task<TResult> CallServiceOperation<TResult>(TContract channel, string operationName, IDictionary<string, object> parameters, Func<Func<object>, TResult> convertResult, CancellationToken cancellationToken)
+        /// <param name="channel">WCF channel</param>
+        /// <param name="operationName">name of method/operation to call</param>
+        /// <param name="parameters">parameters for the call</param>
+        /// <param name="callback">callback responsible for casting return value and epr method error handling</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
+        /// <returns>A <see cref="Task{TResult}"/> which will contain the result of the operation, exception or be cancelled</returns>
+        private static Task<TResult> CallServiceOperation<TResult>(TContract channel, string operationName,
+            IDictionary<string, object> parameters,
+            Func<TContract, IAsyncResult, TResult> callback, CancellationToken cancellationToken)
         {
             MethodInfo beginInvokeMethod = WebDomainClient<TContract>.ResolveBeginMethod(operationName);
             MethodInfo endInvokeMethod = WebDomainClient<TContract>.ResolveEndMethod(operationName);
@@ -528,7 +448,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 try
                 {
-                    TResult result = convertResult(() => InvokeMethod(channel, endInvokeMethod, new object[] { asyncResponseResult }));
+                    TResult result = callback(channel, asyncResponseResult);
                     taskCompletionSource.SetResult(result);
                 }
                 catch (CommunicationException) when (cancellationToken.IsCancellationRequested)
@@ -547,64 +467,22 @@ namespace OpenRiaServices.DomainServices.Client
                         ((IChannel)channel).Close();
                 }
             });
-            realParameters[realParameters.Length - 1] = /*userState*/null;
+            realParameters[realParameters.Length - 1] = /*userState*/endInvokeMethod;
 
-            IAsyncResult asyncResult = (IAsyncResult)InvokeMethod(channel, beginInvokeMethod, realParameters);
+            // Call Begin** method
+            InvokeMethod(channel, beginInvokeMethod, realParameters);
             return taskCompletionSource.Task;
         }
 
-        private static Task<object> CallServiceOperation3(TContract channel, string operationName, IDictionary<string, object> parameters, CancellationToken cancellationToken)
+        /// <summary>
+        /// Method to invoke to get result of invocation started by <see cref="CallServiceOperation{TResult}(TContract, string, IDictionary{string, object}, Func{TContract, IAsyncResult, TResult}, CancellationToken)"/>
+        /// </summary>
+        /// <param name="channel">should be first parameter supplied in callback supplied to <see cref="CallServiceOperation{TResult}(TContract, string, IDictionary{string, object}, Func{TContract, IAsyncResult, TResult}, CancellationToken)"/></param>
+        /// <param name="asyncResult">should be second parameter supplied in callback supplied to <see cref="CallServiceOperation" /> </param>
+        /// <returns>result of service call</returns>
+        private static object EndServiceOperationCall(TContract channel, IAsyncResult asyncResult)
         {
-            MethodInfo beginInvokeMethod = WebDomainClient<TContract>.ResolveBeginMethod(operationName);
-            MethodInfo endInvokeMethod = WebDomainClient<TContract>.ResolveEndMethod(operationName);
-
-            // Pass operation parameters.
-            ParameterInfo[] parameterInfos = beginInvokeMethod.GetParameters();
-            object[] realParameters = new object[parameterInfos.Length];
-            int parametersCount = parameters == null ? 0 : parameters.Count;
-            for (int i = 0; i < parametersCount; i++)
-            {
-                realParameters[i] = parameters[parameterInfos[i].Name];
-            }
-
-            var taskCompletionSource = new TaskCompletionSource<object>();
-            CancellationTokenRegistration cancellationTokenRegistration = default;
-            if (cancellationToken.CanBeCanceled)
-            {
-                cancellationTokenRegistration = cancellationToken.Register(state => { ((IChannel)state).Abort(); }, channel);
-            }
-
-            // Pass async operation related parameters.
-            realParameters[realParameters.Length - 2] = new AsyncCallback(delegate (IAsyncResult asyncResponseResult)
-            {
-                cancellationTokenRegistration.Dispose();
-
-                try
-                {
-                    object result = InvokeMethod(channel, endInvokeMethod, new object[] { asyncResponseResult });
-                    taskCompletionSource.SetResult(result);
-                }
-                catch (CommunicationException) when (cancellationToken.IsCancellationRequested)
-                {
-                    taskCompletionSource.SetCanceled();
-                }
-                catch (Exception ex)
-                {
-                    taskCompletionSource.SetException(ex);
-                }
-                finally
-                {
-                    if (((IChannel)channel).State == CommunicationState.Faulted)
-                        ((IChannel)channel).Abort();
-                    else
-                        ((IChannel)channel).Close();
-                }
-            });
-            // TODO: Pass something as asyncstate to 
-            realParameters[realParameters.Length - 1] = /*userState*/null;
-
-            IAsyncResult asyncResult = (IAsyncResult)InvokeMethod(channel, beginInvokeMethod, realParameters);
-            return taskCompletionSource.Task;
+            return InvokeMethod(channel, (MethodInfo)asyncResult.AsyncState, new object[] { asyncResult });
         }
 
         private static MethodInfo ResolveBeginMethod(string operationName)
