@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using OpenRiaServices.DomainServices.Client.Web;
@@ -16,7 +15,6 @@ using System.Threading.Tasks;
 #if SILVERLIGHT
 using System.Windows;
 #endif
-using OpenRiaServices.DomainServices.Client;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -31,9 +29,8 @@ namespace OpenRiaServices.DomainServices.Client
 
         private ChannelFactory<TContract> _channelFactory;
         private WcfDomainClientFactory _webDomainClientFactory;
-        private readonly bool _usesHttps;
         private IEnumerable<Type> _knownTypes;
-        private Uri _serviceUri;
+        private readonly Uri _serviceUri;
         private bool _initializedFactory;
 
         /// <summary>
@@ -117,7 +114,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
 
             this._serviceUri = serviceUri;
-            this._usesHttps = usesHttps;
+            this.UsesHttps = usesHttps;
             _webDomainClientFactory = domainClientFactory;
 
 #if SILVERLIGHT
@@ -154,7 +151,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets whether a secure connection should be used.
         /// </summary>
-        public bool UsesHttps => this._usesHttps;
+        public bool UsesHttps { get; }
 
         /// <summary>
         /// Gets the <see cref="WcfDomainClientFactory"/> used to create this instance, with fallback to
@@ -217,7 +214,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._channelFactory == null)
                 {
                     // TODO: Add overload where KnownTypes are passed in
-                    this._channelFactory = WebDomainClientFactory.CreateChannelFactory<TContract>(_serviceUri, _usesHttps);
+                    this._channelFactory = WebDomainClientFactory.CreateChannelFactory<TContract>(_serviceUri, UsesHttps);
                 }
 
                 if (!this._initializedFactory)
@@ -229,7 +226,6 @@ namespace OpenRiaServices.DomainServices.Client
                             op.KnownTypes.Add(knownType);
                         }
                     }
-
                     this._initializedFactory = true;
                 }
 
@@ -317,14 +313,14 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Invokes a method on the specified channel and takes care of unwrapping TargetInvocationException
+        /// Invokes a method on the specified instance and takes care of unwrapping TargetInvocationException
         /// </summary>
         /// <returns>result of invocation</returns>
-        private static object InvokeMethod(TContract channel, MethodInfo method, object[] parameters)
+        private static object InvokeMethod(MethodInfo method, object instance, object[] parameters)
         {
             try
             {
-                return method.Invoke(channel, parameters);
+                return method.Invoke(instance, parameters);
             }
             catch (TargetInvocationException tie)
             {
@@ -346,7 +342,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
         /// <returns>The results returned by the submit request.</returns>
         /// <exception cref="InvalidOperationException">The changeset is empty.</exception>
-        /// <exception cref="InvalidOperationException">The specified query does not exist.</exception>
         protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             IEnumerable<ChangeSetEntry> submitOperations = changeSet.GetChangeSetEntries();
@@ -385,7 +380,7 @@ namespace OpenRiaServices.DomainServices.Client
             return CallServiceOperation(channel,
                 invokeArgs.OperationName,
                 invokeArgs.Parameters,
-                (TContract state, IAsyncResult asyncResult) =>
+                (state, asyncResult) =>
                 {
                     IEnumerable<ValidationResult> validationErrors = null;
                     object returnValue = null;
@@ -421,7 +416,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>A <see cref="Task{TResult}"/> which will contain the result of the operation, exception or be cancelled</returns>
         private static Task<TResult> CallServiceOperation<TResult>(TContract channel, string operationName,
             IDictionary<string, object> parameters,
-            Func<TContract, IAsyncResult, TResult> callback, CancellationToken cancellationToken)
+            Func<object, IAsyncResult, TResult> callback, CancellationToken cancellationToken)
         {
             MethodInfo beginInvokeMethod = WebDomainClient<TContract>.ResolveBeginMethod(operationName);
             MethodInfo endInvokeMethod = WebDomainClient<TContract>.ResolveEndMethod(operationName);
@@ -470,7 +465,7 @@ namespace OpenRiaServices.DomainServices.Client
             realParameters[realParameters.Length - 1] = /*userState*/endInvokeMethod;
 
             // Call Begin** method
-            InvokeMethod(channel, beginInvokeMethod, realParameters);
+            InvokeMethod(beginInvokeMethod, channel, realParameters);
             return taskCompletionSource.Task;
         }
 
@@ -480,9 +475,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="channel">should be first parameter supplied in callback supplied to <see cref="CallServiceOperation{TResult}(TContract, string, IDictionary{string, object}, Func{TContract, IAsyncResult, TResult}, CancellationToken)"/></param>
         /// <param name="asyncResult">should be second parameter supplied in callback supplied to <see cref="CallServiceOperation" /> </param>
         /// <returns>result of service call</returns>
-        private static object EndServiceOperationCall(TContract channel, IAsyncResult asyncResult)
+        private static object EndServiceOperationCall(object channel, IAsyncResult asyncResult)
         {
-            return InvokeMethod(channel, (MethodInfo)asyncResult.AsyncState, new object[] { asyncResult });
+            return InvokeMethod((MethodInfo)asyncResult.AsyncState, channel, new object[] { asyncResult });
         }
 
         private static MethodInfo ResolveBeginMethod(string operationName)
@@ -556,7 +551,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
 
                 string sourceUri = current.Host.Source.AbsoluteUri;
-                if (this._usesHttps)
+                if (this.UsesHttps)
                 {
                     // We want to replace a http scheme (everything before the ':' in a Uri) with https.
                     // Doing this via UriBuilder loses the OriginalString. Unfortunately, this leads

@@ -519,7 +519,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(submitTask.IsFaulted, "Should have exception");
 
                 var expectedException = (DomainOperationException)submitTask.Exception.InnerException;
-                Assert.AreEqual("This DomainService does not support operation 'Reject' for entity 'CityWithInfo'.", expectedException.Message);
+                Assert.AreEqual("This DomainService does not support operation 'Reject' for entity 'CityWithInfo'.", expectedException?.Message);
             });
 
             EnqueueTestComplete();
