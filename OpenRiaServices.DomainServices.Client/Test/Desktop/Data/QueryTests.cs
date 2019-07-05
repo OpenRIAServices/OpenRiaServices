@@ -2232,7 +2232,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 EntityTypes = new Type[] { typeof(City) }
             };
 
-            var queryTask = client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), default);
+            var queryTask = client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), CancellationToken.None);
             EnqueueConditional(delegate
             {
                 return queryTask.IsCompleted;
@@ -2261,7 +2261,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             var queryTask = client.QueryAsync(
                 new EntityQuery<Zip>(client, "GetZipsIfAuthenticated", null, true, false),
-                default);
+                CancellationToken.None);
             EnqueueConditional(() => queryTask.IsCompleted);
             EnqueueCallback(delegate
             {
@@ -2286,7 +2286,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 EntityTypes = new Type[] { typeof(Zip) }
             };
-            var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), default);
+            var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), CancellationToken.None);
 ;
             EnqueueConditional(() => queryTask.IsCompleted);
             EnqueueCallback(delegate
@@ -2313,7 +2313,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 EntityTypes = new Type[] { typeof(Zip) }
             };
 
-            var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false), default);
+            var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false), CancellationToken.None);
             EnqueueConditional(delegate
             {
                 return queryTask.IsCompleted;

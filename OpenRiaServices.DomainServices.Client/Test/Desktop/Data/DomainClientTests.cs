@@ -162,7 +162,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var entityQuery = new EntityQuery<Product>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), query);
             entityQuery.IncludeTotalCount = true;
 
-            var queryTask = dc.QueryAsync(entityQuery, default);
+            var queryTask = dc.QueryAsync(entityQuery, );
 
             EnqueueConditional(delegate
             {
@@ -188,7 +188,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 EntityTypes = new Type[] { typeof(Product) }
             };
 
-            var queryTask = dc.QueryAsync(new EntityQuery<Product>(dc, "GetProducts", null, true, false), default);
+            var queryTask = dc.QueryAsync(new EntityQuery<Product>(dc, "GetProducts", null, true, false), CancellationToken.None);
 
             EnqueueConditional(delegate
             {
@@ -222,7 +222,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), new PurchaseOrder[0].AsQueryable().Take(2));
             query.IncludeTotalCount = true;
 
-            var queryTask = dc.QueryAsync(query, default);
+            var queryTask = dc.QueryAsync(query, CancellationToken.None);
 
             EnqueueConditional(() => queryTask.IsCompleted);
 
