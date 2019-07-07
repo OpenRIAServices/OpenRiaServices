@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client
         private ChannelFactory<TContract> _channelFactory;
         private WcfDomainClientFactory _webDomainClientFactory;
         private IEnumerable<Type> _knownTypes;
-        private readonly Uri _serviceUri;
+        private Uri _serviceUri;
         private bool _initializedFactory;
 
         /// <summary>
