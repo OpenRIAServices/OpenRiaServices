@@ -1205,18 +1205,38 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Product[] products = ctxt.Products.ToArray();
                 products[0].UnitPrice += 5.0M;
                 products[1].UnitsInStock -= 1;
-                newProductName = products[2].ProductName + "Foobar";
+                newProductName = products[2].ProductName + "Fo";
                 products[2].ProductName = newProductName;
                 modifiedProductID = products[2].ProductID;
 
                 SubmitChanges(null, userState);
 
+                // There is a race condition here (until we run tests on a "UI" thread with a proper SynchronizationContext) 
+                // so we try to read all properties first before assert
+                // and hope for the best
+                bool r0 = products[0].IsReadOnly;
+                bool r1 = products[1].IsReadOnly;
+                bool r2 = products[2].IsReadOnly;
+                bool r3 = products[3].IsReadOnly;
+
+
+                if (SubmitOperation.Error != null &&
+                    SubmitOperation.EntitiesInError.Any())
+                {
+                    foreach (var entity in SubmitOperation.EntitiesInError)
+                        Console.WriteLine($"entity {entity.ToString()} has validation errors {string.Join(", ", entity.ValidationErrors.Select(e => $"{e.MemberNames}:{e.ErrorMessage}"))}");
+                }
+                Assert.AreEqual(null, SubmitOperation.Error, "submit should not have any error");
+                Assert.IsFalse(SubmitOperation.IsComplete, "submit should not be complete");
+                Assert.IsTrue(ctxt.IsSubmitting, "IsSubmitting should be true");
+
                 // verify that entities are read only after
                 // submit is in progress
-                Assert.IsTrue(products[0].IsReadOnly, "expected product to be readonly");
-                Assert.IsTrue(products[1].IsReadOnly, "expected product to be readonly");
-                Assert.IsTrue(products[2].IsReadOnly, "expected product to be readonly");
-                Assert.IsFalse(products[3].IsReadOnly, "unmodified product should not be readonly");
+
+                Assert.IsTrue(r0, "expected products[0] to be readonly");
+                Assert.IsTrue(r1, "expected products[1] to be readonly");
+                Assert.IsTrue(r2, "expected products[2] to be readonly");
+                Assert.IsFalse(r3, "unmodified product should not be readonly");
                 Exception exception = null;
                 try
                 {
