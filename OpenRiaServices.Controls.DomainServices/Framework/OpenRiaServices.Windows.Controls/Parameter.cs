@@ -91,11 +91,11 @@ namespace OpenRiaServices.Controls
 
         private static void HandleParameterNameChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((Parameter)sender).RaisePropertyChanged("ParameterName");
+            ((Parameter)sender).RaisePropertyChanged(nameof(ParameterName));
         }
         private static void HandleValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((Parameter)sender).RaisePropertyChanged("Value");
+            ((Parameter)sender).RaisePropertyChanged(nameof(Value));
         }
 
         /// <summary>

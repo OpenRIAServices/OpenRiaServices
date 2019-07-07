@@ -161,7 +161,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._conflict != value)
                 {
                     this._conflict = value;
-                    this.RaisePropertyChanged("EntityConflict");
+                    this.RaisePropertyChanged(nameof(EntityConflict));
                 }
             }
         }
@@ -266,7 +266,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                     if (hasChangesChanged)
                     {
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
 
                         // if we're a composed entity we need to notify our parent
                         // that our state has changed
@@ -462,7 +462,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                     if (wasReadOnly != this.IsReadOnly)
                     {
-                        this.RaisePropertyChanged("IsReadOnly");
+                        this.RaisePropertyChanged(nameof(IsReadOnly));
                     }
                 }
             }
@@ -482,7 +482,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (IsReadOnly != wasReadOnly && !preventRaiseReadOnly)
             {
-                RaisePropertyChanged("IsReadOnly");
+                RaisePropertyChanged(nameof(IsReadOnly));
             }
         }
 
@@ -605,7 +605,7 @@ namespace OpenRiaServices.DomainServices.Client
                     this._isSubmitting = value;
                     if (wasReadOnly != this.IsReadOnly)
                     {
-                        this.RaisePropertyChanged("IsReadOnly");
+                        this.RaisePropertyChanged(nameof(IsReadOnly));
                     }
 
                     foreach (var entityAction in MetaType.GetEntityActions())
@@ -884,7 +884,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             if (wasReadOnly != this.IsReadOnly)
-                RaisePropertyChanged("IsReadOnly");
+                RaisePropertyChanged(nameof(IsReadOnly));
         }
 
         internal void UndoDelete()
@@ -1587,7 +1587,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (wasReadOnly != this.IsReadOnly)
             {
-                this.RaisePropertyChanged("IsReadOnly");
+                this.RaisePropertyChanged(nameof(IsReadOnly));
             }
 
             // Perform any action state updates required
@@ -2023,12 +2023,12 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override void OnCollectionChanged()
             {
-                this._entity.RaisePropertyChanged("ValidationErrors");
+                this._entity.RaisePropertyChanged(nameof(ValidationErrors));
             }
 
             protected override void OnHasErrorsChanged()
             {
-                this._entity.RaisePropertyChanged("HasValidationErrors");
+                this._entity.RaisePropertyChanged(nameof(HasValidationErrors));
             }
 
             protected override void OnPropertyErrorsChanged(string propertyName)

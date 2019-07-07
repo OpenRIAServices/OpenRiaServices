@@ -70,7 +70,7 @@ namespace OpenRiaServices.Data.DomainServices
                 if (this._canChangePage != value)
                 {
                     this._canChangePage = value;
-                    this.RaisePropertyChanged("CanChangePage");
+                    this.RaisePropertyChanged(nameof(CanChangePage));
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace OpenRiaServices.Data.DomainServices
                 if (this._isPageChanging != value)
                 {
                     this._isPageChanging = value;
-                    this.RaisePropertyChanged("IsPageChanging");
+                    this.RaisePropertyChanged(nameof(IsPageChanging));
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace OpenRiaServices.Data.DomainServices
                 if (this._itemCount != value)
                 {
                     this._itemCount = value;
-                    this.RaisePropertyChanged("ItemCount");
+                    this.RaisePropertyChanged(nameof(ItemCount));
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace OpenRiaServices.Data.DomainServices
                 if (this._pageIndex != value)
                 {
                     this._pageIndex = value;
-                    this.RaisePropertyChanged("PageIndex");
+                    this.RaisePropertyChanged(nameof(PageIndex));
                 }
             }
         }
@@ -171,7 +171,7 @@ namespace OpenRiaServices.Data.DomainServices
                 if (this._pageSize != value)
                 {
                     this._pageSize = value;
-                    this.RaisePropertyChanged("PageSize");
+                    this.RaisePropertyChanged(nameof(PageSize));
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace OpenRiaServices.Data.DomainServices
                 if (this._totalItemCount != value)
                 {
                     this._totalItemCount = value;
-                    this.RaisePropertyChanged("TotalItemCount");
+                    this.RaisePropertyChanged(nameof(TotalItemCount));
                 }
             }
         }

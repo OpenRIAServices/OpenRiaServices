@@ -20,7 +20,7 @@
 
             if (e.PropertyName == "Name" || e.PropertyName == "FriendlyName")
             {
-                this.RaisePropertyChanged("DisplayName");
+                this.RaisePropertyChanged(nameof(DisplayName));
             }
         }
         #endregion

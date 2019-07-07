@@ -174,7 +174,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         // the set has changes and is the first dirty list
                         // in this container, so raise the change events
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
                     }
                 }
                 else if (this._dirtySetCount > 0)
@@ -184,7 +184,7 @@ namespace OpenRiaServices.DomainServices.Client
                         // if the set has just moved to HasChanges == false and it
                         // is the last dirty set in the this container, raise
                         // the change events
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
                     }
                 }
             }

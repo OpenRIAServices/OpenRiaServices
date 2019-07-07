@@ -129,7 +129,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (hadChanges)
             {
                 // if we had changes, we no longer do
-                this.RaisePropertyChanged("HasChanges");
+                this.RaisePropertyChanged(nameof(HasChanges));
             }
         }
 
@@ -207,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         // this is the first interesting entity in this set
                         // so raise the change notifications
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
                     }
                 }
             }
@@ -221,7 +221,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         // if the last interesting entity has been removed, this set
                         // no longer has changes, so raise the change notifications
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
                     }
                 }
             }

@@ -40,7 +40,7 @@
                 // Do not store the password in a private field as it should not be stored in memory in plain-text.
                 // Instead, the supplied PasswordAccessor serves as the backing store for the value.
 
-                this.RaisePropertyChanged("Password");
+                this.RaisePropertyChanged(nameof(Password));
             }
         }
 
@@ -69,7 +69,7 @@
                 // Do not store the password in a private field as it should not be stored in memory in plain-text.  
                 // Instead, the supplied PasswordAccessor serves as the backing store for the value.
 
-                this.RaisePropertyChanged("PasswordConfirmation");
+                this.RaisePropertyChanged(nameof(PasswordConfirmation));
             }
         }
 
@@ -121,7 +121,7 @@
         /// </summary>
         private void CurrentOperationChanged()
         {
-            this.RaisePropertyChanged("IsRegistering");
+            this.RaisePropertyChanged(nameof(IsRegistering));
         }
 
         /// <summary>

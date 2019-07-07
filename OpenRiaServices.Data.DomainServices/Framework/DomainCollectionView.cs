@@ -481,7 +481,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._canChangePage != canChangePage)
             {
                 this._canChangePage = canChangePage;
-                this.RaisePropertyChanged("CanChangePage");
+                this.RaisePropertyChanged(nameof(CanChangePage));
             }
         }
 
@@ -494,7 +494,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._canGroup != canGroup)
             {
                 this._canGroup = canGroup;
-                this.RaisePropertyChanged("CanGroup");
+                this.RaisePropertyChanged(nameof(CanGroup));
             }
         }
 
@@ -507,7 +507,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._canSort != canSort)
             {
                 this._canSort = canSort;
-                this.RaisePropertyChanged("CanSort");
+                this.RaisePropertyChanged(nameof(CanSort));
             }
         }
 
@@ -520,7 +520,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._pageIndex != pageIndex)
             {
                 this._pageIndex = pageIndex;
-                this.RaisePropertyChanged("PageIndex");
+                this.RaisePropertyChanged(nameof(PageIndex));
             }
         }
 

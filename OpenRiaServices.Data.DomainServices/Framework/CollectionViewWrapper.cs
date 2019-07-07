@@ -940,6 +940,11 @@ namespace OpenRiaServices.Data.DomainServices
             PropertyChanged?.Invoke(this, e);
         }
 
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         #endregion
 
         #region Nested Classes

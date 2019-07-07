@@ -154,7 +154,7 @@ namespace OpenRiaServices.Controls
                     }
 
                     this._sourceEntitySet = value;
-                    this.RaisePropertyChanged("BackingEntitySet");
+                    this.RaisePropertyChanged(nameof(BackingEntitySet));
 
                     if (value != null)
                     {
@@ -179,7 +179,7 @@ namespace OpenRiaServices.Controls
                 if (this._entityType != value)
                 {
                     this._entityType = value;
-                    this.RaisePropertyChanged("EntityType");
+                    this.RaisePropertyChanged(nameof(EntityType));
                 }
             }
         }
@@ -199,7 +199,7 @@ namespace OpenRiaServices.Controls
                 if (this._isPagingOperationPending != value)
                 {
                     this._isPagingOperationPending = value;
-                    this.RaisePropertyChanged("IsPagingOperationPending");
+                    this.RaisePropertyChanged(nameof(IsPagingOperationPending));
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace OpenRiaServices.Controls
                 if (this._itemCount != value)
                 {
                     this._itemCount = value;
-                    this.RaisePropertyChanged("ItemCount");
+                    this.RaisePropertyChanged(nameof(ItemCount));
                 }
             }
         }
@@ -238,7 +238,7 @@ namespace OpenRiaServices.Controls
                 if (this._pageIndex != value)
                 {
                     this._pageIndex = value;
-                    this.RaisePropertyChanged("PageIndex");
+                    this.RaisePropertyChanged(nameof(PageIndex));
                     this.CalculateIsPagingOperationPending();
                 }
             }
@@ -259,7 +259,7 @@ namespace OpenRiaServices.Controls
                 if (this._pageSize != value)
                 {
                     this._pageSize = value;
-                    this.RaisePropertyChanged("PageSize");
+                    this.RaisePropertyChanged(nameof(PageSize));
                 }
             }
         }
@@ -280,7 +280,7 @@ namespace OpenRiaServices.Controls
                 if (this._totalItemCount != value)
                 {
                     this._totalItemCount = value;
-                    this.RaisePropertyChanged("TotalItemCount");
+                    this.RaisePropertyChanged(nameof(TotalItemCount));
                 }
             }
         }
@@ -370,8 +370,8 @@ namespace OpenRiaServices.Controls
                 if (this._pageCount != value)
                 {
                     this._pageCount = value;
-                    this.RaisePropertyChanged("PageCount");
-                    this.RaisePropertyChanged("ItemCount");
+                    this.RaisePropertyChanged(nameof(PageCount));
+                    this.RaisePropertyChanged(nameof(ItemCount));
                 }
             }
         }
@@ -391,7 +391,7 @@ namespace OpenRiaServices.Controls
                 if (this._startPageIndex != value)
                 {
                     this._startPageIndex = value;
-                    this.RaisePropertyChanged("StartPageIndex");
+                    this.RaisePropertyChanged(nameof(StartPageIndex));
                     this.CalculateIsPagingOperationPending();
                 }
             }
@@ -466,7 +466,7 @@ namespace OpenRiaServices.Controls
 
             if ((this.PageSize == 0 || trackedPage >= this.StartPageIndex) && this._raiseCollectionChangedEvents)
             {
-                this.RaisePropertyChanged("ItemCount");
+                this.RaisePropertyChanged(nameof(ItemCount));
             }
         }
 
@@ -616,7 +616,7 @@ namespace OpenRiaServices.Controls
             // Ensure that the added entities are exposed in the collection
             this.AddTrackedItems(e => this.Add(e));
 
-            this.RaisePropertyChanged("ItemCount");
+            this.RaisePropertyChanged(nameof(ItemCount));
             this.RaiseCollectionChanged(NotifyCollectionChangedAction.Reset, null, -1);
             this._raiseCollectionChangedEvents = true;
         }

@@ -813,12 +813,12 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override void OnCollectionChanged()
             {
-                this._complexObject.RaisePropertyChanged("ValidationErrors");
+                this._complexObject.RaisePropertyChanged(nameof(ValidationErrors));
             }
 
             protected override void OnHasErrorsChanged()
             {
-                this._complexObject.RaisePropertyChanged("HasValidationErrors");
+                this._complexObject.RaisePropertyChanged(nameof(HasValidationErrors));
             }
             protected override void OnPropertyErrorsChanged(string propertyName)
             {

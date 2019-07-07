@@ -104,11 +104,11 @@ namespace OpenRiaServices.Controls
 
         private static void HandleDirectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((SortDescriptor)sender).RaisePropertyChanged("Direction");
+            ((SortDescriptor)sender).RaisePropertyChanged(nameof(Direction));
         }
         private static void HandlePropertyPathChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((SortDescriptor)sender).RaisePropertyChanged("PropertyPath");
+            ((SortDescriptor)sender).RaisePropertyChanged(nameof(PropertyPath));
         }
 
         /// <summary>

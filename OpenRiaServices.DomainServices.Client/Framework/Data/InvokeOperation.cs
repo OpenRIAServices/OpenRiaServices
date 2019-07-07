@@ -172,7 +172,7 @@ namespace OpenRiaServices.DomainServices.Client
         internal void Complete(IEnumerable<ValidationResult> validationErrors)
         {
             this._validationErrors = validationErrors;
-            this.RaisePropertyChanged("ValidationErrors");
+            this.RaisePropertyChanged(nameof(ValidationErrors));
 
             string message = string.Format(CultureInfo.CurrentCulture, 
                 Resource.DomainContext_InvokeOperationFailed_Validation, 
@@ -224,7 +224,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (this.Result != null && this.Result.ReturnValue != prevValue)
             {
-                this.RaisePropertyChanged("Value");
+                this.RaisePropertyChanged(nameof(Value));
             }
         }
 

@@ -80,7 +80,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (value != this.ContextData.IsClientAccessEnabled)
                 {
                     this.ContextData.IsClientAccessEnabled = value;
-                    this.RaisePropertyChanged("IsClientAccessEnabled");
+                    this.RaisePropertyChanged(nameof(IsClientAccessEnabled));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (value != this.ContextData.IsODataEndpointEnabled)
                 {
                     this.ContextData.IsODataEndpointEnabled = value;
-                    this.RaisePropertyChanged("IsODataEndpointEnabled");
+                    this.RaisePropertyChanged(nameof(IsODataEndpointEnabled));
                 }
             }
         }
@@ -138,8 +138,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             // Raise a property change for our calculated properties
             // to force them to be re-evaluated by any UI bound to them
-            this.RaisePropertyChanged("IsMetadataClassGenerationAllowed");
-            this.RaisePropertyChanged("IsMetadataClassGenerationRequested");
+            this.RaisePropertyChanged(nameof(IsMetadataClassGenerationAllowed));
+            this.RaisePropertyChanged(nameof(IsMetadataClassGenerationRequested));
         }
 
         /// <summary>

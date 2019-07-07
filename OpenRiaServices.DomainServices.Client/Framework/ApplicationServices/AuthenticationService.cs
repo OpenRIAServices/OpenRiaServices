@@ -414,9 +414,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     // Raise notification events as appropriate
                     if (raiseUserChanged)
                     {
-                        this.RaisePropertyChanged("User");
+                        this.RaisePropertyChanged(nameof(User));
                     }
-                    this.RaisePropertyChanged("IsBusy");
+                    this.RaisePropertyChanged(nameof(IsBusy));
                     this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(ao));
 
                     if (raiseLoggedIn)
@@ -459,7 +459,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw;
             }
 
-            this.RaisePropertyChanged("IsBusy");
+            this.RaisePropertyChanged(nameof(IsBusy));
             this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(this.Operation));
         }
 

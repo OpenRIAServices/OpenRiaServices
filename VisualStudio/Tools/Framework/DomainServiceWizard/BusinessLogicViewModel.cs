@@ -111,7 +111,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (this._className != value)
                 {
                     this._className = value;
-                    this.RaisePropertyChanged("ClassName");
+                    this.RaisePropertyChanged(nameof(ClassName));
                 }
             }
         }
@@ -217,11 +217,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         this._currentContextViewModel.PropertyChanged += this.CurrentContextPropertyChanged;
                     }
 
-                    this.RaisePropertyChanged("CurrentContextViewModel");
+                    this.RaisePropertyChanged(nameof(CurrentContextViewModel));
 
                     // Also raise property changed events on calculated properties that depend on current context
-                    this.RaisePropertyChanged("IsMetadataClassGenerationRequested");
-                    this.RaisePropertyChanged("IsMetadataClassGenerationAllowed");
+                    this.RaisePropertyChanged(nameof(IsMetadataClassGenerationRequested));
+                    this.RaisePropertyChanged(nameof(IsMetadataClassGenerationAllowed));
                 }
             }
         }
@@ -257,8 +257,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (this._generateMetadataClasses != value)
                 {
                     this._generateMetadataClasses = value;
-                    this.RaisePropertyChanged("IsMetadataClassGenerationRequested");
-                    this.RaisePropertyChanged("IsMetadataClassGenerationAllowed");
+                    this.RaisePropertyChanged(nameof(IsMetadataClassGenerationRequested));
+                    this.RaisePropertyChanged(nameof(IsMetadataClassGenerationAllowed));
                 }
             }
         }

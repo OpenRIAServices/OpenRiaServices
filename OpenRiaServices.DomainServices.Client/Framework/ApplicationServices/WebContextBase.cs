@@ -129,8 +129,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     ((INotifyPropertyChanged)this._authentication).PropertyChanged -= this.AuthenticationService_PropertyChanged;
                     this._authentication = value;
                     ((INotifyPropertyChanged)this._authentication).PropertyChanged += this.AuthenticationService_PropertyChanged;
-                    this.RaisePropertyChanged("Authentication");
-                    this.RaisePropertyChanged("User");
+                    this.RaisePropertyChanged(nameof(Authentication));
+                    this.RaisePropertyChanged(nameof(User));
                 }
             }
         }
@@ -164,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (e.PropertyName == "User")
             {
-                this.RaisePropertyChanged("User");
+                this.RaisePropertyChanged(nameof(User));
             }
         }
 

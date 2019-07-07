@@ -199,23 +199,23 @@ namespace OpenRiaServices.Controls
 
         private static void HandleIgnoredValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((FilterDescriptor)sender).RaisePropertyChanged("IgnoredValue");
+            ((FilterDescriptor)sender).RaisePropertyChanged(nameof(IgnoredValue));
         }
         private static void HandleIsCaseSensitiveChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((FilterDescriptor)sender).RaisePropertyChanged("IsCaseSensitive");
+            ((FilterDescriptor)sender).RaisePropertyChanged(nameof(IsCaseSensitive));
         }
         private static void HandleOperatorChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((FilterDescriptor)sender).RaisePropertyChanged("Operator");
+            ((FilterDescriptor)sender).RaisePropertyChanged(nameof(Operator));
         }
         private static void HandlePropertyPathChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((FilterDescriptor)sender).RaisePropertyChanged("PropertyPath");
+            ((FilterDescriptor)sender).RaisePropertyChanged(nameof(PropertyPath));
         }
         private static void HandleValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((FilterDescriptor)sender).RaisePropertyChanged("Value");
+            ((FilterDescriptor)sender).RaisePropertyChanged(nameof(Value));
         }
 
         /// <summary>

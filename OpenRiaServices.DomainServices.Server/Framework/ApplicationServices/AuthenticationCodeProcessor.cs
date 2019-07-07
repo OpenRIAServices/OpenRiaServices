@@ -211,7 +211,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 // Changes to Name need to raise change notification for IsAuthenticated. To accomplish this,
                 // we'll insert a change event at the end of the "if (this._name != value)" block.
                 //
-                // >> this.RaisePropertyChanged("IsAuthenticated");
+                // >> this.RaisePropertyChanged(nameof(IsAuthenticated));
                 CodeMemberProperty nameProperty = entityTypeDeclaration.Members.OfType<CodeMemberProperty>().Where(c => c.Name == "Name").First();
                 nameProperty.SetStatements.OfType<CodeConditionStatement>().First().TrueStatements.Add(
                     new CodeExpressionStatement(

@@ -284,7 +284,7 @@ namespace OpenRiaServices.Controls
                 if (this._canAdd != value)
                 {
                     this._canAdd = value;
-                    this.RaisePropertyChanged("CanAdd");
+                    this.RaisePropertyChanged(nameof(CanAdd));
                 }
             }
         }
@@ -306,7 +306,7 @@ namespace OpenRiaServices.Controls
                 if (this._canChangePage != value)
                 {
                     this._canChangePage = value;
-                    this.RaisePropertyChanged("CanChangePage");
+                    this.RaisePropertyChanged(nameof(CanChangePage));
                 }
             }
         }
@@ -440,7 +440,7 @@ namespace OpenRiaServices.Controls
                 if (this.CheckFlag(CollectionViewFlags.IsPageChanging) != value)
                 {
                     this.SetFlag(CollectionViewFlags.IsPageChanging, value);
-                    this.RaisePropertyChanged("IsPageChanging");
+                    this.RaisePropertyChanged(nameof(IsPageChanging));
                 }
             }
         }
@@ -476,7 +476,7 @@ namespace OpenRiaServices.Controls
                 if (this._itemCount != value)
                 {
                     this._itemCount = value;
-                    this.RaisePropertyChanged("ItemCount");
+                    this.RaisePropertyChanged(nameof(ItemCount));
                 }
             }
         }
@@ -495,7 +495,7 @@ namespace OpenRiaServices.Controls
                 if (this._pageIndex != value)
                 {
                     this._pageIndex = value;
-                    this.RaisePropertyChanged("PageIndex");
+                    this.RaisePropertyChanged(nameof(PageIndex));
                 }
             }
         }
@@ -572,7 +572,7 @@ namespace OpenRiaServices.Controls
                         }
 
                         this.SourcePagedEntityList.PageSize = value;
-                        this.RaisePropertyChanged("PageSize");
+                        this.RaisePropertyChanged(nameof(PageSize));
                         this.CalculatePageCount();
                         this.CalculateCanChangePage();
                         this.CalculateCanAdd();
@@ -605,7 +605,7 @@ namespace OpenRiaServices.Controls
                         // if the count has changed
                         if (this.Count != oldCount)
                         {
-                            this.RaisePropertyChanged("Count");
+                            this.RaisePropertyChanged(nameof(Count));
                         }
 
                         // reset currency values
@@ -624,7 +624,7 @@ namespace OpenRiaServices.Controls
                 if (this._pageSize != value)
                 {
                     this._pageSize = value;
-                    this.RaisePropertyChanged("PageSize");
+                    this.RaisePropertyChanged(nameof(PageSize));
                 }
             }
         }
@@ -667,7 +667,7 @@ namespace OpenRiaServices.Controls
                 if (this._totalItemCount != value)
                 {
                     this._totalItemCount = value;
-                    this.RaisePropertyChanged("TotalItemCount");
+                    this.RaisePropertyChanged(nameof(TotalItemCount));
                     this.CalculatePageCount();
                 }
             }
@@ -771,7 +771,7 @@ namespace OpenRiaServices.Controls
                 if (this._pageCount != value)
                 {
                     this._pageCount = value;
-                    this.RaisePropertyChanged("PageCount");
+                    this.RaisePropertyChanged(nameof(PageCount));
                 }
             }
         }
@@ -1534,14 +1534,14 @@ namespace OpenRiaServices.Controls
             // replaced within the collection.
             if (args.Action != NotifyCollectionChangedAction.Replace)
             {
-                this.RaisePropertyChanged("Count");
+                this.RaisePropertyChanged(nameof(Count));
             }
 
             bool listIsEmpty = this.IsEmpty;
             if (listIsEmpty != this.CheckFlag(CollectionViewFlags.CachedIsEmpty))
             {
                 this.SetFlag(CollectionViewFlags.CachedIsEmpty, listIsEmpty);
-                this.RaisePropertyChanged("IsEmpty");
+                this.RaisePropertyChanged(nameof(IsEmpty));
             }
         }
 

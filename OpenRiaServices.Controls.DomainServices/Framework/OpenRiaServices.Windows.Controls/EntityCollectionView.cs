@@ -864,22 +864,22 @@ namespace OpenRiaServices.Controls
 
             if (this.CurrentPosition != oldCurrentPosition)
             {
-                this.RaisePropertyChanged("CurrentPosition");
+                this.RaisePropertyChanged(nameof(CurrentPosition));
             }
 
             if (this.CurrentItem != oldCurrentItem)
             {
-                this.RaisePropertyChanged("CurrentItem");
+                this.RaisePropertyChanged(nameof(CurrentItem));
             }
 
             if (this.IsCurrentBeforeFirst != oldIsCurrentBeforeFirst)
             {
-                this.RaisePropertyChanged("IsCurrentBeforeFirst");
+                this.RaisePropertyChanged(nameof(IsCurrentBeforeFirst));
             }
 
             if (this.IsCurrentAfterLast != oldIsCurrentAfterLast)
             {
-                this.RaisePropertyChanged("IsCurrentAfterLast");
+                this.RaisePropertyChanged(nameof(IsCurrentAfterLast));
             }
         }
 
@@ -1355,7 +1355,7 @@ namespace OpenRiaServices.Controls
                 if (this._canAddNew != value)
                 {
                     this._canAddNew = value;
-                    this.RaisePropertyChanged("CanAddNew");
+                    this.RaisePropertyChanged(nameof(CanAddNew));
                 }
             }
         }
@@ -1375,7 +1375,7 @@ namespace OpenRiaServices.Controls
                 if (this._canCancelEdit != value)
                 {
                     this._canCancelEdit = value;
-                    this.RaisePropertyChanged("CanCancelEdit");
+                    this.RaisePropertyChanged(nameof(CanCancelEdit));
                 }
             }
         }
@@ -1395,7 +1395,7 @@ namespace OpenRiaServices.Controls
                 if (this._canRemove != value)
                 {
                     this._canRemove = value;
-                    this.RaisePropertyChanged("CanRemove");
+                    this.RaisePropertyChanged(nameof(CanRemove));
                 }
             }
         }
@@ -1526,7 +1526,7 @@ namespace OpenRiaServices.Controls
                 if (!Object.Equals(this._currentAddItem, value))
                 {
                     this._currentAddItem = (Entity)value;
-                    this.RaisePropertyChanged("CurrentAddItem");
+                    this.RaisePropertyChanged(nameof(CurrentAddItem));
                     this.CalculateIsAddingNew();
                 }
             }
@@ -1547,7 +1547,7 @@ namespace OpenRiaServices.Controls
                 if (!Object.Equals(this._currentEditItem, value))
                 {
                     this._currentEditItem = (Entity)value;
-                    this.RaisePropertyChanged("CurrentEditItem");
+                    this.RaisePropertyChanged(nameof(CurrentEditItem));
                     this.CalculateIsEditingItem();
                 }
             }
@@ -1628,7 +1628,7 @@ namespace OpenRiaServices.Controls
                 if (this._isAddingNew != value)
                 {
                     this._isAddingNew = value;
-                    this.RaisePropertyChanged("IsAddingNew");
+                    this.RaisePropertyChanged(nameof(IsAddingNew));
                     this.CalculateCanRemove();
                 }
             }
@@ -1649,7 +1649,7 @@ namespace OpenRiaServices.Controls
                 if (this._isEditingItem != value)
                 {
                     this._isEditingItem = value;
-                    this.RaisePropertyChanged("IsEditingItem");
+                    this.RaisePropertyChanged(nameof(IsEditingItem));
                     this.CalculateCanCancelEdit();
                     this.CalculateCanRemove();
                 }
