@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </exception>
         public static WebContextBase Current
         {
-            get 
+            get
             {
                 if (WebContextBase.current == null)
                 {
@@ -152,20 +152,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new ArgumentNullException("propertyName");
             }
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises an <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = this._propertyChangedEventHandler;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>

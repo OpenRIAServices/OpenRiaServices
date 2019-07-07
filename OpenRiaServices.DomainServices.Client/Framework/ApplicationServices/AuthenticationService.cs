@@ -532,19 +532,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new ArgumentNullException("propertyName");
             }
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises a <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
+            
             PropertyChangedEventHandler handler = this._propertyChangedEventHandler;
             if (handler != null)
             {
-                this.RunInSynchronizationContext(state => handler(this, e), null);
+                var eventArgs = new PropertyChangedEventArgs(propertyName);
+                this.RunInSynchronizationContext(state => handler(this, eventArgs), null);
             }
         }
 

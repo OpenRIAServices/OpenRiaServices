@@ -27,11 +27,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             {
                 base.RaisePropertyChanged(propertyName);
             }
-
-            public void OnPropertyChangedMock(PropertyChangedEventArgs e)
-            {
-                base.OnPropertyChanged(e);
-            }
         }
 
         private class IdentityMock : IIdentity

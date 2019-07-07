@@ -524,15 +524,6 @@ namespace OpenRiaServices.Data.DomainServices
             }
         }
 
-        /// <summary>
-        /// Raises <see cref="INotifyPropertyChanged.PropertyChanged"/> events for the specified property
-        /// </summary>
-        /// <param name="propertyName">The property to raise an event for</param>
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
         #endregion
 
         #region Nested Classes

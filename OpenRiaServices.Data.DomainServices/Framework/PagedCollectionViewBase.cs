@@ -350,20 +350,8 @@ namespace OpenRiaServices.Data.DomainServices
             {
                 throw new ArgumentNullException("propertyName");
             }
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
 
-        /// <summary>
-        /// Raises a <see cref="PropertyChanged"/> event
-        /// </summary>
-        /// <param name="e">The event args</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion
