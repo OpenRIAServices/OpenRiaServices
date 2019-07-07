@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Client
         private int _activeLoadCount;
         private readonly DomainClient _domainClient;
         private EntityContainer _entityContainer;
-        private readonly SynchronizationContext _syncContext;
+        private readonly TaskScheduler _syncContextScheduler;
         private ValidationContext _validationContext;
         private bool _isSubmitting;
         private readonly Dictionary<string, bool> requiresValidationMap = new Dictionary<string, bool>();
@@ -50,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this._domainClient = domainClient;
-            this._syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+            this._syncContextScheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace OpenRiaServices.DomainServices.Client
                 bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
 
                 Action<SubmitOperation> cancelAction = null;
-                CancellationToken cancellationToken = default;
+                CancellationToken cancellationToken = CancellationToken.None;
                 if (this.DomainClient.SupportsCancellation)
                 {
                     var tcs = new CancellationTokenSource();
@@ -297,7 +297,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // Exit early if we have no changes or if there are validation errors
                 if (changeSet.IsEmpty || !validChangeset)
                 {
-                    this._syncContext.Post(delegate
+                    Task.Factory.StartNew(() =>
                     {
                         this.IsSubmitting = false;
 
@@ -314,7 +314,10 @@ namespace OpenRiaServices.DomainServices.Client
                                 submitOperation.Complete();
                             }
                         }
-                    }, null);
+                    }
+                    , CancellationToken.None
+                    , TaskCreationOptions.None
+                    , _syncContextScheduler);
                 }
                 else
                 {
@@ -327,16 +330,11 @@ namespace OpenRiaServices.DomainServices.Client
                     this.DomainClient.SubmitAsync(changeSet, cancellationToken)
                         .ContinueWith(submitTask =>
                         {
-                            this._syncContext.Post(
-                                delegate
-                                {
-                                    this.CompleteSubmitChanges(submitTask, submitOperation);
-                                },
-                                null);
+                            this.CompleteSubmitChanges(submitTask, submitOperation);
                         }
                         , CancellationToken.None
                         , TaskContinuationOptions.NotOnCanceled
-                        , TaskScheduler.Default);
+                        , _syncContextScheduler);
                 }
             }
             catch
@@ -598,15 +596,11 @@ namespace OpenRiaServices.DomainServices.Client
             this.DomainClient.QueryAsync(query, cancellationToken)
                 .ContinueWith(result =>
                 {
-                    this._syncContext.Post(
-                        delegate
-                        {
-                            this.CompleteLoad(result, loadOperation);
-                        }, null);
+                    this.CompleteLoad(result, loadOperation);
                 }
                 , CancellationToken.None
                 , TaskContinuationOptions.NotOnCanceled
-                , TaskScheduler.Default);
+                , _syncContextScheduler);
 
             return loadOperation;
         }
@@ -954,16 +948,11 @@ namespace OpenRiaServices.DomainServices.Client
             this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
                 .ContinueWith(result =>
                 {
-                    this._syncContext.Post(
-                        delegate
-                        {
-                            this.CompleteInvoke(result, invokeOperation);
-                        },
-                        null);
+                    this.CompleteInvoke(result, invokeOperation);
                 }
                 , CancellationToken.None
                 , TaskContinuationOptions.NotOnCanceled
-                , TaskScheduler.Default);
+                , _syncContextScheduler);
 
             return invokeOperation;
         }
@@ -1022,16 +1011,11 @@ namespace OpenRiaServices.DomainServices.Client
             this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
                 .ContinueWith(result =>
                 {
-                    this._syncContext.Post(
-                        delegate
-                        {
-                            this.CompleteInvoke(result, invokeOperation);
-                        },
-                        null);
+                    this.CompleteInvoke(result, invokeOperation);
                 }
                 , CancellationToken.None
                 , TaskContinuationOptions.NotOnCanceled
-                , TaskScheduler.Default);
+                , _syncContextScheduler);
 
             return invokeOperation;
         }
