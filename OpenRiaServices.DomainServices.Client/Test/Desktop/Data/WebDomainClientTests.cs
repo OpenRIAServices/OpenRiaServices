@@ -167,7 +167,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueConditional(() => asyncResult.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                Assert.IsTrue(asyncResult.IsCanceled || asyncResult.Exception?.InnerException is OperationCanceledException, "Task should be cancelled");
+                Assert.IsTrue(asyncResult.IsCanceled, "Task should be cancelled");
             });
             this.EnqueueTestComplete();
         }
@@ -197,7 +197,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueConditional(() => asyncResult.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                Assert.IsTrue(asyncResult.IsCanceled || asyncResult.Exception?.InnerException is OperationCanceledException, "Task should be cancelled");
+                Assert.IsTrue(asyncResult.IsCanceled, "Task should be cancelled");
             });
             this.EnqueueTestComplete();
         }
@@ -230,7 +230,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueConditional(() => submitTask.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                Assert.IsTrue(submitTask.IsCanceled || submitTask.Exception?.InnerException is OperationCanceledException, "Task should be cancelled");
+                Assert.IsTrue(submitTask.IsCanceled, "Task should be cancelled");
             });
             this.EnqueueTestComplete();
         }
