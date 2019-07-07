@@ -45,7 +45,7 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -54,7 +54,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Resource.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -67,7 +67,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,7 +83,7 @@
     <!-- Disable obsolete warning (primarily AssociationAttribute) -->
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <DefineConstants>$(DefineConstants);NETSTANDARD;REFLECTION_V2</DefineConstants>
     <NoWarn>$(NoWarn);CS0618</NoWarn>
@@ -92,9 +92,14 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' ">
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='sl5' and '$(TargetFramework)'!='portable40-net45+sl5+win8'">
+    <Compile Remove="Platforms\net45\**\*.cs" />
+    <None Include="Platforms\net45\**\*.cs" />
+  </ItemGroup>
 
 </Project>
