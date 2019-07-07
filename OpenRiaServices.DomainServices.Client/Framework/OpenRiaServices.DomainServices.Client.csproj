@@ -98,8 +98,8 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='sl5' and '$(TargetFramework)'!='portable40-net45+sl5+win8'">
-    <Compile Remove="Platforms\net45\**\*.cs" />
-    <None Include="Platforms\net45\**\*.cs" />
+    <Compile Remove="Platforms\sl5\**\*.cs" />
+    <None Include="Platforms\sl5\**\*.cs" />
   </ItemGroup>
 
 </Project>
