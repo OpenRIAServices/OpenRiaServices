@@ -414,9 +414,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     // Raise notification events as appropriate
                     if (raiseUserChanged)
                     {
-                        this.RaisePropertyChanged("User");
+                        this.RaisePropertyChanged(nameof(User));
                     }
-                    this.RaisePropertyChanged("IsBusy");
+                    this.RaisePropertyChanged(nameof(IsBusy));
                     this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(ao));
 
                     if (raiseLoggedIn)
@@ -459,7 +459,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw;
             }
 
-            this.RaisePropertyChanged("IsBusy");
+            this.RaisePropertyChanged(nameof(IsBusy));
             this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(this.Operation));
         }
 
@@ -532,19 +532,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new ArgumentNullException("propertyName");
             }
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises a <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
+            
             PropertyChangedEventHandler handler = this._propertyChangedEventHandler;
             if (handler != null)
             {
-                this.RunInSynchronizationContext(state => handler(this, e), null);
+                var eventArgs = new PropertyChangedEventArgs(propertyName);
+                this.RunInSynchronizationContext(state => handler(this, eventArgs), null);
             }
         }
 

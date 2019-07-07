@@ -573,7 +573,7 @@ namespace OpenRiaServices.Controls
                 if (this._canRejectChanges != value)
                 {
                     this._canRejectChanges = value;
-                    this.CommandPropertyNotifier.RaisePropertyChanged("CanRejectChanges");
+                    this.CommandPropertyNotifier.RaisePropertyChanged(nameof(CanRejectChanges));
                 }
             }
         }
@@ -596,7 +596,7 @@ namespace OpenRiaServices.Controls
                 if (this._canSubmitChanges != value)
                 {
                     this._canSubmitChanges = value;
-                    this.CommandPropertyNotifier.RaisePropertyChanged("CanSubmitChanges");
+                    this.CommandPropertyNotifier.RaisePropertyChanged(nameof(CanSubmitChanges));
                 }
             }
         }
@@ -1214,7 +1214,7 @@ namespace OpenRiaServices.Controls
             DomainDataSource.ReadOnlyPropertyChanged(depObj, e, "CanLoad");
 
             DomainDataSource dds = (DomainDataSource)depObj;
-            dds.CommandPropertyNotifier.RaisePropertyChanged("CanLoad");
+            dds.CommandPropertyNotifier.RaisePropertyChanged(nameof(CanLoad));
         }
 
         /// <summary>
@@ -1628,7 +1628,7 @@ namespace OpenRiaServices.Controls
             DomainDataSource.ReadOnlyPropertyChanged(depObj, e, "IsSubmittingChanges");
 
             DomainDataSource dds = (DomainDataSource)depObj;
-            dds.CommandPropertyNotifier.RaisePropertyChanged("IsSubmittingChanges");
+            dds.CommandPropertyNotifier.RaisePropertyChanged(nameof(IsSubmittingChanges));
         }
 
         /// <summary>

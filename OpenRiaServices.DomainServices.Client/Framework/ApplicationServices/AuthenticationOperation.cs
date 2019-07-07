@@ -210,7 +210,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (this.User != null)
             {
-                this.RaisePropertyChanged("User");
+                this.RaisePropertyChanged(nameof(User));
             }
         }
 

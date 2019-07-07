@@ -77,7 +77,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (this.EntityData.IsIncluded != value)
                 {
                     this.EntityData.IsIncluded = value;
-                    this.RaisePropertyChanged("IsIncluded");
+                    this.RaisePropertyChanged(nameof(IsIncluded));
                 }
             }  
         }
@@ -100,7 +100,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 if (value != this.EntityData.IsEditable && (!value || this.EntityData.CanBeEdited))
                 {
                     this.EntityData.IsEditable = value;
-                    this.RaisePropertyChanged("IsEditable");
+                    this.RaisePropertyChanged(nameof(IsEditable));
 
                     // Setting editability also sets include for convenience
                     if (value)

@@ -129,7 +129,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (hadChanges)
             {
                 // if we had changes, we no longer do
-                this.RaisePropertyChanged("HasChanges");
+                this.RaisePropertyChanged(nameof(HasChanges));
             }
         }
 
@@ -207,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         // this is the first interesting entity in this set
                         // so raise the change notifications
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
                     }
                 }
             }
@@ -221,7 +221,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         // if the last interesting entity has been removed, this set
                         // no longer has changes, so raise the change notifications
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
                     }
                 }
             }
@@ -1013,28 +1013,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="propertyName">The property that has changed</param>
         protected void RaisePropertyChanged(string propertyName)
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Called when an <see cref="EntitySet"/> property has changed.
-        /// </summary>
-        /// <param name="e">The event arguments</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (e == null)
-            {
-                throw new ArgumentNullException("e");
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
             if (this._entityContainer != null)
             {
-                this._entityContainer.SetPropertyChanged(this, e.PropertyName);
-            }
-
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, e);
+                this._entityContainer.SetPropertyChanged(this, propertyName);
             }
         }
 

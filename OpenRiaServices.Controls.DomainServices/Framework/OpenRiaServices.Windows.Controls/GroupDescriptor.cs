@@ -82,7 +82,7 @@ namespace OpenRiaServices.Controls
 
         private static void HandlePropertyPathChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ((GroupDescriptor)sender).RaisePropertyChanged("PropertyPath");
+            ((GroupDescriptor)sender).RaisePropertyChanged(nameof(PropertyPath));
         }
 
         /// <summary>

@@ -822,20 +822,7 @@ namespace OpenRiaServices.Controls
         {
             if (DomainDataSourceView.NotifyProperties.Contains(e.PropertyName))
             {
-                this.OnPropertyChanged(e);
-            }
-        }
-
-        /// <summary>
-        /// Raises property changed events
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = this._propertyChangedHandler;
-            if (handler != null)
-            {
-                handler(this, e);
+                this._propertyChangedHandler?.Invoke(this, e);
             }
         }
 

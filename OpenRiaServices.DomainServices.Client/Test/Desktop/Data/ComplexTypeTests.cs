@@ -2533,13 +2533,13 @@ namespace TestDomainServices
         public Action<PropertyChangedEventArgs> TestPropertyChangedCallback;
         public Action<ValidationContext, object> TestValidatePropertyCallback;
 
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        protected override void OnPropertyChanged(string propertyName)
         {
-            base.OnPropertyChanged(e);
+            base.OnPropertyChanged(propertyName);
 
             if (this.TestPropertyChangedCallback != null)
             {
-                this.TestPropertyChangedCallback(e);
+                this.TestPropertyChangedCallback(new PropertyChangedEventArgs(propertyName));
             }
         }
 

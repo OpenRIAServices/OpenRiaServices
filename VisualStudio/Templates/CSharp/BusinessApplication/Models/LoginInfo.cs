@@ -33,7 +33,7 @@
                 {
                     this.ValidateProperty("UserName", value);
                     this.userName = value;
-                    this.RaisePropertyChanged("UserName");
+                    this.RaisePropertyChanged(nameof(UserName));
                 }
             }
         }
@@ -61,7 +61,7 @@
                 // Do not store the password in a private field as it should not be stored in memory in plain-text.
                 // Instead, the supplied PasswordAccessor serves as the backing store for the value.
 
-                this.RaisePropertyChanged("Password");
+                this.RaisePropertyChanged(nameof(Password));
             }
         }
 
@@ -82,7 +82,7 @@
                 {
                     this.ValidateProperty("RememberMe", value);
                     this.rememberMe = value;
-                    this.RaisePropertyChanged("RememberMe");
+                    this.RaisePropertyChanged(nameof(RememberMe));
                 }
             }
         }
@@ -146,8 +146,8 @@
         /// </summary>
         private void CurrentLoginOperationChanged()
         {
-            this.RaisePropertyChanged("IsLoggingIn");
-            this.RaisePropertyChanged("CanLogIn");
+            this.RaisePropertyChanged(nameof(IsLoggingIn));
+            this.RaisePropertyChanged(nameof(CanLogIn));
         }
 
         /// <summary>

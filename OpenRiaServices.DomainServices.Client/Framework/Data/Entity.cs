@@ -161,7 +161,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._conflict != value)
                 {
                     this._conflict = value;
-                    this.RaisePropertyChanged("EntityConflict");
+                    this.RaisePropertyChanged(nameof(EntityConflict));
                 }
             }
         }
@@ -266,7 +266,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                     if (hasChangesChanged)
                     {
-                        this.RaisePropertyChanged("HasChanges");
+                        this.RaisePropertyChanged(nameof(HasChanges));
 
                         // if we're a composed entity we need to notify our parent
                         // that our state has changed
@@ -462,7 +462,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                     if (wasReadOnly != this.IsReadOnly)
                     {
-                        this.RaisePropertyChanged("IsReadOnly");
+                        this.RaisePropertyChanged(nameof(IsReadOnly));
                     }
                 }
             }
@@ -482,7 +482,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (IsReadOnly != wasReadOnly && !preventRaiseReadOnly)
             {
-                RaisePropertyChanged("IsReadOnly");
+                RaisePropertyChanged(nameof(IsReadOnly));
             }
         }
 
@@ -605,7 +605,7 @@ namespace OpenRiaServices.DomainServices.Client
                     this._isSubmitting = value;
                     if (wasReadOnly != this.IsReadOnly)
                     {
-                        this.RaisePropertyChanged("IsReadOnly");
+                        this.RaisePropertyChanged(nameof(IsReadOnly));
                     }
 
                     foreach (var entityAction in MetaType.GetEntityActions())
@@ -884,7 +884,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             if (wasReadOnly != this.IsReadOnly)
-                RaisePropertyChanged("IsReadOnly");
+                RaisePropertyChanged(nameof(IsReadOnly));
         }
 
         internal void UndoDelete()
@@ -1108,26 +1108,18 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Called when an <see cref="Entity"/> property has changed.
         /// </summary>
-        /// <param name="e">The event arguments</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        /// <param name="propertyName">name of the property</param>
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (e == null)
-            {
-                throw new ArgumentNullException("e");
-            }
-
             // if we're in an edit session, we want to postpone association updates
             // until the edits are commited (EndEdit is called). Note: we only want
             // to process association updates here when we're attached.
             if (!this.IsEditing && this.EntitySet != null)
             {
-                this.EntitySet.UpdateRelatedAssociations(this, e.PropertyName);
+                this.EntitySet.UpdateRelatedAssociations(this, propertyName);
             }
 
-            if (this._propChangedHandler != null)
-            {
-                this._propChangedHandler(this, e);
-            }
+            this._propChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -1145,7 +1137,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.OnDataMemberChanged();
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(propertyName);
 
             // Note, RaiseDataMemberChanged is called on every property update. We need to avoid as
             // much overhead as possible.
@@ -1223,7 +1215,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected internal void RaisePropertyChanged(string propertyName)
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this.OnPropertyChanged(propertyName);
         }
 
         /// <summary>
@@ -1595,7 +1587,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (wasReadOnly != this.IsReadOnly)
             {
-                this.RaisePropertyChanged("IsReadOnly");
+                this.RaisePropertyChanged(nameof(IsReadOnly));
             }
 
             // Perform any action state updates required
@@ -2031,12 +2023,12 @@ namespace OpenRiaServices.DomainServices.Client
 
             protected override void OnCollectionChanged()
             {
-                this._entity.RaisePropertyChanged("ValidationErrors");
+                this._entity.RaisePropertyChanged(nameof(ValidationErrors));
             }
 
             protected override void OnHasErrorsChanged()
             {
-                this._entity.RaisePropertyChanged("HasValidationErrors");
+                this._entity.RaisePropertyChanged(nameof(HasValidationErrors));
             }
 
             protected override void OnPropertyErrorsChanged(string propertyName)

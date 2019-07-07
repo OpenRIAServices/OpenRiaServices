@@ -137,7 +137,7 @@ namespace OpenRiaServices.DomainServices.Client
             private set
             {
                 this._isSubmitting = value;
-                this.RaisePropertyChanged("IsSubmitting");
+                this.RaisePropertyChanged(nameof(IsSubmitting));
             }
         }
 
@@ -830,7 +830,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (string.CompareOrdinal(e.PropertyName, "HasChanges") == 0)
             {
                 // just pass the event on
-                this.RaisePropertyChanged("HasChanges");
+                this.RaisePropertyChanged(nameof(HasChanges));
             }
         }
 
@@ -1128,7 +1128,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (this._activeLoadCount == 1)
             {
-                this.RaisePropertyChanged("IsLoading");
+                this.RaisePropertyChanged(nameof(IsLoading));
             }
         }
 
@@ -1140,7 +1140,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (this._activeLoadCount == 0)
             {
-                this.RaisePropertyChanged("IsLoading");
+                this.RaisePropertyChanged(nameof(IsLoading));
             }
         }
 

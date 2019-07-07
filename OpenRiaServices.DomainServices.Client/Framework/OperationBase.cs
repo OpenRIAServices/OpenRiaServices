@@ -34,9 +34,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         public bool IsErrorHandled
         {
-            get 
-            { 
-                return this._isErrorHandled; 
+            get
+            {
+                return this._isErrorHandled;
             }
         }
 
@@ -179,7 +179,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (!this._isErrorHandled)
             {
                 this._isErrorHandled = true;
-                this.RaisePropertyChanged("IsErrorHandled");
+                this.RaisePropertyChanged(nameof(IsErrorHandled));
             }
         }
 
@@ -206,7 +206,7 @@ namespace OpenRiaServices.DomainServices.Client
             // must flag completion before callbacks or events are raised
             this._completed = true;
             this._canceled = true;
-            
+
             // invoke the cancel action
             this.CancelCore();
 
@@ -218,9 +218,9 @@ namespace OpenRiaServices.DomainServices.Client
                 this._completedEventHandler(this, EventArgs.Empty);
             }
 
-            this.RaisePropertyChanged("IsCanceled");
-            this.RaisePropertyChanged("CanCancel");
-            this.RaisePropertyChanged("IsComplete");
+            this.RaisePropertyChanged(nameof(IsCanceled));
+            this.RaisePropertyChanged(nameof(CanCancel));
+            this.RaisePropertyChanged(nameof(IsComplete));
         }
 
         /// <summary>
@@ -252,10 +252,10 @@ namespace OpenRiaServices.DomainServices.Client
                 this._completedEventHandler(this, EventArgs.Empty);
             }
 
-            this.RaisePropertyChanged("IsComplete");
+            this.RaisePropertyChanged(nameof(IsComplete));
             if (prevCanCancel == true)
             {
-                this.RaisePropertyChanged("CanCancel");
+                this.RaisePropertyChanged(nameof(CanCancel));
             }
         }
 
@@ -286,12 +286,12 @@ namespace OpenRiaServices.DomainServices.Client
                 this._completedEventHandler(this, EventArgs.Empty);
             }
 
-            this.RaisePropertyChanged("Error");
-            this.RaisePropertyChanged("HasError");
-            this.RaisePropertyChanged("IsComplete");
+            this.RaisePropertyChanged(nameof(Error));
+            this.RaisePropertyChanged(nameof(HasError));
+            this.RaisePropertyChanged(nameof(IsComplete));
             if (prevCanCancel == true)
             {
-                this.RaisePropertyChanged("CanCancel");
+                this.RaisePropertyChanged(nameof(CanCancel));
             }
 
             if (!this.IsErrorHandled)
@@ -318,24 +318,12 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Called when an property has changed on the operation.
-        /// </summary>
-        /// <param name="e">The event arguments</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (this._propChangedHandler != null)
-            {
-                this._propChangedHandler(this, e);
-            }
-        }
-
-        /// <summary>
         /// Called to raise the PropertyChanged event
         /// </summary>
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaisePropertyChanged(string propertyName)
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            this._propChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #region INotifyPropertyChanged Members

@@ -57,20 +57,7 @@ namespace OpenRiaServices.Controls
         /// <param name="propertyName">The property that changed</param>
         internal void RaisePropertyChanged(string propertyName)
         {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises a <see cref="PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        private void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this._sender, e);
-            }
+            PropertyChanged?.Invoke(this._sender, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

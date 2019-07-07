@@ -937,20 +937,12 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="e">The event args</param>
         protected virtual void OnViewPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.OnPropertyChanged(e);
+            PropertyChanged?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// Raises a <see cref="PropertyChanged"/> event
-        /// </summary>
-        /// <param name="e">The event args</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        protected void RaisePropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

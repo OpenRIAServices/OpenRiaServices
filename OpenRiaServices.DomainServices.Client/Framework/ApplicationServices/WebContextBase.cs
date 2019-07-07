@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </exception>
         public static WebContextBase Current
         {
-            get 
+            get
             {
                 if (WebContextBase.current == null)
                 {
@@ -129,8 +129,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     ((INotifyPropertyChanged)this._authentication).PropertyChanged -= this.AuthenticationService_PropertyChanged;
                     this._authentication = value;
                     ((INotifyPropertyChanged)this._authentication).PropertyChanged += this.AuthenticationService_PropertyChanged;
-                    this.RaisePropertyChanged("Authentication");
-                    this.RaisePropertyChanged("User");
+                    this.RaisePropertyChanged(nameof(Authentication));
+                    this.RaisePropertyChanged(nameof(User));
                 }
             }
         }
@@ -152,20 +152,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new ArgumentNullException("propertyName");
             }
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises an <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler handler = this._propertyChangedEventHandler;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -177,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (e.PropertyName == "User")
             {
-                this.RaisePropertyChanged("User");
+                this.RaisePropertyChanged(nameof(User));
             }
         }
 

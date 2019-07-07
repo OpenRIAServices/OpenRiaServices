@@ -92,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             base.RaiseCompletionPropertyChanges();
             if (this.LoginSuccess)
             {
-                this.RaisePropertyChanged("LoginSuccess");
+                this.RaisePropertyChanged(nameof(LoginSuccess));
             }
         }
 

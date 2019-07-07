@@ -481,7 +481,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._canChangePage != canChangePage)
             {
                 this._canChangePage = canChangePage;
-                this.RaisePropertyChanged("CanChangePage");
+                this.RaisePropertyChanged(nameof(CanChangePage));
             }
         }
 
@@ -494,7 +494,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._canGroup != canGroup)
             {
                 this._canGroup = canGroup;
-                this.RaisePropertyChanged("CanGroup");
+                this.RaisePropertyChanged(nameof(CanGroup));
             }
         }
 
@@ -507,7 +507,7 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._canSort != canSort)
             {
                 this._canSort = canSort;
-                this.RaisePropertyChanged("CanSort");
+                this.RaisePropertyChanged(nameof(CanSort));
             }
         }
 
@@ -520,17 +520,8 @@ namespace OpenRiaServices.Data.DomainServices
             if (this._pageIndex != pageIndex)
             {
                 this._pageIndex = pageIndex;
-                this.RaisePropertyChanged("PageIndex");
+                this.RaisePropertyChanged(nameof(PageIndex));
             }
-        }
-
-        /// <summary>
-        /// Raises <see cref="INotifyPropertyChanged.PropertyChanged"/> events for the specified property
-        /// </summary>
-        /// <param name="propertyName">The property to raise an event for</param>
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion
