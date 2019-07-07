@@ -64,7 +64,7 @@ namespace OpenRiaServices.DomainServices
 
 #if SILVERLIGHT
                 (exception is OutOfMemoryException)
-#elif SERVERFX
+#elif !NETSTANDARD1_3
                 ((exception is OutOfMemoryException) && !(exception is System.InsufficientMemoryException))
 #else
                 ((exception is OutOfMemoryException) && !(exception.GetType().FullName.Equals("System.InsufficientMemoryException", StringComparison.Ordinal)))

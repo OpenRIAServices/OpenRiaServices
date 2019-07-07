@@ -13,11 +13,12 @@ using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
+using OpenRiaServices.DomainServices.Client.Test.Utilities;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using DomainClientAsyncResult = SSmDsClient::OpenRiaServices.DomainServices.Client.DomainClientAsyncResult;
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
 
     [TestClass]
@@ -59,39 +60,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueTestComplete();
         }
         [TestMethod]
-        [Asynchronous]
         public void TestMockClient_CancellationSupport()
         {
             Cities.CityDomainContext dp = new Cities.CityDomainContext(new CitiesMockDomainClient());
 
-            bool domainClientQueryCompleted = false;
-            dp.DomainClient.BeginQuery(
-                new EntityQuery<Cities.City>(dp.DomainClient, "GetCities", null, true, false),
-                delegate(IAsyncResult getCitiesAsyncResult)
-                {
-                    ExceptionHelper.ExpectException<NotSupportedException>(delegate
-                    {
-                        dp.DomainClient.CancelQuery(getCitiesAsyncResult);
-                    }, string.Format(CultureInfo.CurrentCulture, Resource.DomainClient_CancellationNotSupported, typeof(CitiesMockDomainClient).FullName));
+            var query = dp.GetCitiesQuery();
+            LoadOperation lo = dp.Load(query, false);
+            Assert.IsFalse(lo.CanCancel, "Cancellation should not be supported.");
+            Assert.IsFalse(dp.DomainClient.SupportsCancellation, "Cancellation should not be supported.");
 
-                    domainClientQueryCompleted = true;
-                }, null);
-
-            EnqueueConditional(() => domainClientQueryCompleted);
-            EnqueueCallback(delegate
+            ExceptionHelper.ExpectException<NotSupportedException>(delegate
             {
-                var query = dp.GetCitiesQuery();
-                LoadOperation lo = dp.Load(query, false);
-                Assert.IsFalse(lo.CanCancel, "Cancellation should not be supported.");
-                Assert.IsFalse(dp.DomainClient.SupportsCancellation, "Cancellation should not be supported.");
-
-                ExceptionHelper.ExpectException<NotSupportedException>(delegate
-                {
-                    lo.Cancel();
-                }, string.Format(CultureInfo.CurrentCulture, Resources.AsyncOperation_CancelNotSupported));
-            });
-
-            EnqueueTestComplete();
+                lo.Cancel();
+            }, string.Format(CultureInfo.CurrentCulture, Resources.AsyncOperation_CancelNotSupported));
         }
 
         [TestMethod]
@@ -164,74 +145,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueTestComplete();
         }
 
-        /// <summary>
-        /// Test that we propagate null values correctly when we invoke DomainClient directly.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void TestMockClientReturnsNull()
-        {
-            NullReturningMockDomainClient dc = new NullReturningMockDomainClient();
-
-            AsyncCallback ignored = delegate { };
-
-            InvokeArgs invokeArgs = new InvokeArgs("M", typeof(void), null, true /*hasSideEffects*/);
-            DomainClientAsyncResult result = (DomainClientAsyncResult)dc.BeginInvoke(invokeArgs, ignored, null);
-
-            EnqueueConditional(() => result != null);
-
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.InnerAsyncResult);
-
-                ExceptionHelper.ExpectArgumentNullException(
-                () => dc.EndInvoke(result.InnerAsyncResult),
-                "asyncResult");
-
-                result = null;
-                result = (DomainClientAsyncResult)dc.BeginQuery(new EntityQuery<Entity>(dc, "GetIgnored", null, true, false), ignored, null);
-            });
-
-            EnqueueConditional(() => result != null);
-
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.InnerAsyncResult);
-
-                ExceptionHelper.ExpectArgumentNullException(
-                    () => dc.EndQuery(result.InnerAsyncResult),
-                    "asyncResult");
-
-                List<Entity> list = new List<Entity>();
-                list.Add(new Product());
-                ReadOnlyCollection<Entity> simpleCollection = new ReadOnlyCollection<Entity>(list);
-                ReadOnlyCollection<Entity> emptyCollection = new ReadOnlyCollection<Entity>(new List<Entity>());
-                EntityChangeSet emptyChangeSet = new EntityChangeSet(simpleCollection, emptyCollection, emptyCollection);
-                result = null;
-                result = (DomainClientAsyncResult)dc.BeginSubmit(emptyChangeSet, ignored, null);
-            });
-
-            EnqueueConditional(() => result != null);
-
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.InnerAsyncResult);
-
-                ExceptionHelper.ExpectArgumentNullException(
-                    () => dc.EndSubmit(result.InnerAsyncResult),
-                    "asyncResult");
-            });
-
-            EnqueueTestComplete();
-        }
-
         [TestMethod]
         [Asynchronous]
         public void TestQuery()
         {
-            QueryCompletedResult result = null;
-            object userState = this;
-
             WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog)
             {
                 EntityTypes = new Type[] { typeof(Product) }
@@ -245,21 +162,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var entityQuery = new EntityQuery<Product>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), query);
             entityQuery.IncludeTotalCount = true;
 
-            dc.BeginQuery(
-                entityQuery,
-                delegate(IAsyncResult asyncResult)
-                {
-                    result = dc.EndQuery(asyncResult);
-                },
-                userState
-            );
+            var queryTask = dc.QueryAsync(entityQuery, CancellationToken.None);
 
             EnqueueConditional(delegate
             {
-                return result != null;
+                return queryTask.IsCompleted;
             });
             EnqueueCallback(delegate
             {
+                var result = queryTask.Result;
+
                 Assert.AreEqual(79, result.Entities.Concat(result.IncludedEntities).Count());
                 Assert.AreEqual(result.Entities.Count(), result.TotalCount);
             });
@@ -271,28 +183,20 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void TestQueryEvents()
         {
-            QueryCompletedResult result = null;
-            object userState = this;
-
             WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog)
             {
                 EntityTypes = new Type[] { typeof(Product) }
             };
-            dc.BeginQuery(
-                new EntityQuery<Product>(dc, "GetProducts", null, true, false),
-                delegate(IAsyncResult asyncResult)
-                {
-                    result = dc.EndQuery(asyncResult);
-                },
-                userState
-            );
+
+            var queryTask = dc.QueryAsync(new EntityQuery<Product>(dc, "GetProducts", null, true, false), CancellationToken.None);
 
             EnqueueConditional(delegate
             {
-                return result != null;
+                return queryTask.IsCompleted;
             });
             EnqueueCallback(delegate
             {
+                var result = queryTask.Result;
                 Assert.AreEqual(504, result.Entities.Concat(result.IncludedEntities).Count());
                 Assert.AreEqual(result.Entities.Count(), result.TotalCount);
             });
@@ -314,24 +218,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 EntityTypes = new Type[] { typeof(Product), typeof(PurchaseOrder), typeof(PurchaseOrderDetail) }
             };
-            QueryCompletedResult queryResults = null;
 
             var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), new PurchaseOrder[0].AsQueryable().Take(2));
             query.IncludeTotalCount = true;
 
-            dc.BeginQuery(
-                query,
-                delegate(IAsyncResult asyncResult)
-                {
-                    queryResults = dc.EndQuery(asyncResult);
-                },
-                null
-            );
+            var queryTask = dc.QueryAsync(query, CancellationToken.None);
 
-            EnqueueConditional(() => queryResults != null);
+            EnqueueConditional(() => queryTask.IsCompleted);
 
             EnqueueCallback(delegate
             {
+                var queryResults = queryTask.Result;
                 Assert.AreEqual(2, queryResults.Entities.Concat(queryResults.IncludedEntities).Count());
                 Assert.AreEqual(504, queryResults.TotalCount);
             });
@@ -347,75 +244,39 @@ namespace OpenRiaServices.DomainServices.Client.Test
     {
         private readonly Cities.CityData citiesData = new Cities.CityData();
 
-        protected override IAsyncResult BeginQueryCore(EntityQuery query, AsyncCallback callback, object userState)
+        protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
             // load test data and get query result
             IEnumerable<Entity> entities = GetQueryResult(query.QueryName, query.Parameters);
             if (query.Query != null)
             {
-                entities = RebaseQuery(entities.AsQueryable(), query.Query).Cast<Entity>();
+                entities = RebaseQuery(entities.AsQueryable(), query.Query).Cast<Entity>().ToList();
             }
 
-            MockAsyncResult ar = new MockAsyncResult(entities, userState, null);
-            callback.Invoke(ar);
-
-            return ar;
+            int entityCount = entities.Count();
+            QueryCompletedResult results = new QueryCompletedResult(entities, new Entity[0], entityCount, new ValidationResult[0]);
+            return TaskHelper.FromResult(results);
         }
 
-        protected override QueryCompletedResult EndQueryCore(IAsyncResult asyncResult)
-        {
-            MockAsyncResult ar = (MockAsyncResult)asyncResult;
-            int entityCount = ar.Entities.Count();
-            QueryCompletedResult results = new QueryCompletedResult(ar.Entities, new Entity[0], entityCount, new ValidationResult[0]);
-            return results;
-        }
-
-        protected override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             IEnumerable<ChangeSetEntry> submitOperations = changeSet.GetChangeSetEntries();
-            MockAsyncResult ar = new MockAsyncResult(null, userState, new object[] { changeSet, submitOperations, userState });
 
             // perform mock submit operations
-
-            callback.Invoke(ar);
-
-            return ar;
-        }
-
-        protected override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-        {
-            MockAsyncResult ar = (MockAsyncResult)asyncResult;
-            object[] stateParts = (object[])ar.InnerState;
-            EntityChangeSet changeSet = (EntityChangeSet)stateParts[0];
-            IEnumerable<ChangeSetEntry> submitOperations = (IEnumerable<ChangeSetEntry>)stateParts[1];
-
             SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
-
-            return submitResults;
+            return TaskHelper.FromResult(submitResults);
         }
 
-        protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
+        protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
-            MockAsyncResult ar = new MockAsyncResult(null, userState, new object[] { invokeArgs.OperationName, invokeArgs.ReturnType, invokeArgs.Parameters, userState });
-
+            object returnValue = null;
             // do the invoke and get the return value
             if (invokeArgs.OperationName == "Echo")
             {
-                ar.ReturnValue = "Echo: " + (string)invokeArgs.Parameters.Values.First();
+                returnValue = "Echo: " + (string)invokeArgs.Parameters.Values.First();
             }
 
-            callback.Invoke(ar);
-
-            return ar;
-        }
-
-        protected override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
-        {
-            MockAsyncResult ar = (MockAsyncResult)asyncResult;
-
-            InvokeCompletedResult invokeResults = new InvokeCompletedResult(ar.ReturnValue);
-
-            return invokeResults;
+            return TaskHelper.FromResult(new InvokeCompletedResult(returnValue));
         }
 
         /// <summary>
@@ -559,34 +420,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
         }
 
-        protected override IAsyncResult BeginQueryCore(EntityQuery query, AsyncCallback callback, object userState)
+        protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
-            return null;
+            return TaskHelper.FromResult((QueryCompletedResult)null);
         }
 
-        protected override QueryCompletedResult EndQueryCore(IAsyncResult asyncResult)
+        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
-            return null;
+            return TaskHelper.FromResult((SubmitCompletedResult)null);
         }
 
-        protected override IAsyncResult BeginSubmitCore(EntityChangeSet changeSet, AsyncCallback callback, object userState)
+        protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
-            return null;
-        }
-
-        protected override SubmitCompletedResult EndSubmitCore(IAsyncResult asyncResult)
-        {
-            return null;
-        }
-
-        protected override IAsyncResult BeginInvokeCore(InvokeArgs invokeArgs, AsyncCallback callback, object userState)
-        {
-            return null;
-        }
-
-        protected override InvokeCompletedResult EndInvokeCore(IAsyncResult asyncResult)
-        {
-            return null;
+            return TaskHelper.FromResult((InvokeCompletedResult)null);
         }
     }
 }

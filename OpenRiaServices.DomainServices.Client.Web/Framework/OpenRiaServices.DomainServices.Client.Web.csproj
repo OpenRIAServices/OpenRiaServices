@@ -53,9 +53,6 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs">
       <Link>Data\BinaryTypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\DomainClientAsyncResult.cs">
-      <Link>Data\DomainClientAsyncResult.cs</Link>
-    </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs">
       <Link>Data\TypeUtility.cs</Link>
     </Compile>

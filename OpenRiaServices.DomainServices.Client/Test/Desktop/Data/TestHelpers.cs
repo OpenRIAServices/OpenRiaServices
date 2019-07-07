@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private bool isInitialized;
         private bool isInitializing;
 
-        public TestDatabase(string databaseName) 
+        public TestDatabase(string databaseName)
         {
             this.databaseName = databaseName;
         }
@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // call the TestServices web service method to create the database 
                 TestServicesClient ts = new TestServicesClient();
                 SetAddress(ts);
-                ts.CreateNewDatabaseCompleted += delegate(object sender, AsyncCompletedEventArgs e)
+                ts.CreateNewDatabaseCompleted += delegate (object sender, AsyncCompletedEventArgs e)
                 {
                     if (e.Error != null)
                     {
@@ -81,13 +81,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 TestServicesClient ts = new TestServicesClient();
                 SetAddress(ts);
                 isInitialized = false;
-                ts.ReleaseNewDatabaseAsync(databaseName);    
+                ts.ReleaseNewDatabaseAsync(databaseName);
             }
         }
         #endregion
     }
 
-    public static class TestHelperMethods {
+    public static class TestHelperMethods
+    {
         /// <summary>
         /// Perform a submit on the specified context using the DomainClient directy. This bypasses all context operations,
         /// validation, etc.
@@ -99,19 +100,20 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
             Debug.Assert(!cs.IsEmpty, "No changes to submit!");
 
-            ctxt.DomainClient.BeginSubmit(cs,
-                delegate(IAsyncResult asyncResult)
-                {
-                    SubmitCompletedResult submitResults = ctxt.DomainClient.EndSubmit(asyncResult);
 
-                    SynchronizationContext syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+            SynchronizationContext syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+
+            ctxt.DomainClient.SubmitAsync(cs, CancellationToken.None)
+                .ContinueWith(task =>
+                {
+                    SubmitCompletedResult submitResults = task.GetAwaiter().GetResult();
                     syncContext.Post(
                         delegate
                         {
                             callback(submitResults);
                         },
                         null);
-                }, null);
+                });
         }
 
         /// <summary>
@@ -161,14 +163,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public static void AssertOperationSuccess(OperationBase operation)
         {
             string errorMsg = string.Empty;
-            if(operation.HasError)
+            if (operation.HasError)
             {
                 errorMsg = operation.Error.Message + " : " + operation.Error.StackTrace;
             }
             Assert.IsFalse(operation.HasError, errorMsg);
         }
 
-        public static T CloneEntity<T>(T entity) where T : Entity, new() {
+        public static T CloneEntity<T>(T entity) where T : Entity, new()
+        {
             T clone = new T();
             clone.ApplyState(entity.ExtractState());
             return clone;
@@ -179,17 +182,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         public static bool VerifyEntityState(IDictionary<string, object> expectedState, IDictionary<string, object> currentState)
         {
-            foreach (var item in currentState) {
+            foreach (var item in currentState)
+            {
                 object originalValue = expectedState[item.Key];
                 object currentValue = item.Value;
-                if (originalValue == null && currentValue == null) {
+                if (originalValue == null && currentValue == null)
+                {
                     continue;
                 }
                 if ((originalValue == null && currentValue != null) ||
-                    (currentValue == null && originalValue != null)) {
+                    (currentValue == null && originalValue != null))
+                {
                     return false;
                 }
-                if (!currentValue.Equals(originalValue)) {
+                if (!currentValue.Equals(originalValue))
+                {
                     return false;
                 }
             }
@@ -200,20 +207,26 @@ namespace OpenRiaServices.DomainServices.Client.Test
     /// <summary>
     /// Class that provides/caches database data without performing any remote queries.
     /// </summary>
-    public static class BaselineTestData {
+    public static class BaselineTestData
+    {
         private static IEnumerable<Product> products = null;
 
-        public static IEnumerable<Product> Products {
-            get {
-                if (products == null) {
+        public static IEnumerable<Product> Products
+        {
+            get
+            {
+                if (products == null)
+                {
                     products = LoadTestData<Product>(prodData).ToList();
                 }
                 return products;
             }
         }
 
-        private static IEnumerable<T> LoadTestData<T>(string data) {
-            try {
+        private static IEnumerable<T> LoadTestData<T>(string data)
+        {
+            try
+            {
                 Type dataType = null;
                 // the different fx serializers are deserializing into different types
 #if SILVERLIGHT
@@ -228,7 +241,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 object deserializedData = (((System.Collections.IDictionary)ser.ReadObject(ms))[typeof(T).Name]);
                 return ((IEnumerable<object>)deserializedData).Cast<T>();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 string msg = e.Message;
                 throw e;
             }

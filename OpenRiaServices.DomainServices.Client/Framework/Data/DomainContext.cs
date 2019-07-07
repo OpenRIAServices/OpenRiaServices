@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Client
         private int _activeLoadCount;
         private readonly DomainClient _domainClient;
         private EntityContainer _entityContainer;
-        private readonly SynchronizationContext _syncContext;
+        private readonly TaskScheduler _syncContextScheduler;
         private ValidationContext _validationContext;
         private bool _isSubmitting;
         private readonly Dictionary<string, bool> requiresValidationMap = new Dictionary<string, bool>();
@@ -50,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this._domainClient = domainClient;
-            this._syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+            this._syncContextScheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
         }
 
         /// <summary>
@@ -273,17 +273,17 @@ namespace OpenRiaServices.DomainServices.Client
                 changeSet = this.EntityContainer.GetChanges();
                 bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
 
-                IAsyncResult result = null;
                 Action<SubmitOperation> cancelAction = null;
+                CancellationToken cancellationToken = CancellationToken.None;
                 if (this.DomainClient.SupportsCancellation)
                 {
+                    var tcs = new CancellationTokenSource();
+                    cancellationToken = tcs.Token;
+
                     cancelAction = (op) =>
                     {
-                        if (result != null)
-                        {
-                            this.DomainClient.CancelSubmit(result);
-                        }
-
+                        tcs.Cancel();
+                        // TODO: Consider moving to callback below ?
                         this.IsSubmitting = false;
                         foreach (Entity entity in changeSet)
                         {
@@ -297,7 +297,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // Exit early if we have no changes or if there are validation errors
                 if (changeSet.IsEmpty || !validChangeset)
                 {
-                    this._syncContext.Post(delegate
+                    Task.Factory.StartNew(() =>
                     {
                         this.IsSubmitting = false;
 
@@ -314,7 +314,10 @@ namespace OpenRiaServices.DomainServices.Client
                                 submitOperation.Complete();
                             }
                         }
-                    }, null);
+                    }
+                    , CancellationToken.None
+                    , TaskCreationOptions.None
+                    , _syncContextScheduler);
                 }
                 else
                 {
@@ -324,18 +327,14 @@ namespace OpenRiaServices.DomainServices.Client
                         entity.IsSubmitting = true;
                     }
 
-                    result = this.DomainClient.BeginSubmit(
-                        changeSet,
-                        delegate(IAsyncResult asyncResult)
+                    this.DomainClient.SubmitAsync(changeSet, cancellationToken)
+                        .ContinueWith(submitTask =>
                         {
-                            this._syncContext.Post(
-                                delegate
-                                {
-                                    this.CompleteSubmitChanges(asyncResult);
-                                },
-                                null);
-                        },
-                        submitOperation);
+                            this.CompleteSubmitChanges(submitTask, submitOperation);
+                        }
+                        , CancellationToken.None
+                        , TaskContinuationOptions.NotOnCanceled
+                        , _syncContextScheduler);
                 }
             }
             catch
@@ -558,17 +557,18 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_InvalidEntityQueryDomainClient, query.QueryName));
             }
 
-            IAsyncResult result = null;
             Action<LoadOperation> cancelAction = null;
 
+            CancellationToken cancellationToken = default;
             if (this.DomainClient.SupportsCancellation)
             {
+
+                var cts = new CancellationTokenSource();
+                cancellationToken = cts.Token;
+
                 cancelAction = (op) =>
                 {
-                    if (result != null)
-                    {
-                        this.DomainClient.CancelQuery(result);
-                    }
+                    cts.Cancel();
 
                     // corresponding code in CompleteLoad ensures that
                     // decrement isn't called again for a canceled
@@ -582,7 +582,7 @@ namespace OpenRiaServices.DomainServices.Client
             LoadOperation loadOperation = (LoadOperation)createMethod.Invoke(
                 null, // Static method invocation.
                 new object[]
-                { 
+                {
                     query,
                     loadBehavior,
                     callback,
@@ -593,24 +593,20 @@ namespace OpenRiaServices.DomainServices.Client
             this.IncrementLoadCount();
 
             // Proceed with query
-            result = this.DomainClient.BeginQuery(
-                query,
-                delegate(IAsyncResult asyncResult)
+            this.DomainClient.QueryAsync(query, cancellationToken)
+                .ContinueWith(result =>
                 {
-                    this._syncContext.Post(
-                        delegate
-                        {
-                            this.CompleteLoad(asyncResult);
-                        }, null);
-                },
-                loadOperation);
+                    this.CompleteLoad(result, loadOperation);
+                }
+                , CancellationToken.None
+                , TaskContinuationOptions.NotOnCanceled
+                , _syncContextScheduler);
 
             return loadOperation;
         }
 
-        private void CompleteLoad(IAsyncResult asyncResult)
+        private void CompleteLoad(Task<QueryCompletedResult> result, LoadOperation loadOperation)
         {
-            LoadOperation loadOperation = (LoadOperation)asyncResult.AsyncState;
             IEnumerable<Entity> loadedEntities = null;
             IEnumerable<Entity> allLoadedEntities = null;
             int totalCount = DomainContext.TotalCountUndefined;
@@ -619,6 +615,7 @@ namespace OpenRiaServices.DomainServices.Client
             // no work to do.
             if (loadOperation.IsCanceled)
             {
+                // Loadcount is already decremented
                 return;
             }
 
@@ -628,7 +625,8 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 lock (this._syncRoot)
                 {
-                    results = this.DomainClient.EndQuery(asyncResult);
+                    // The task is known to be completed so this will never block
+                    results = result.GetAwaiter().GetResult();
 
                     // load the entities into the entity container
                     loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadOperation.LoadBehavior).Cast<Entity>();
@@ -839,12 +837,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Completes an event-based asynchronous <see cref="SubmitChanges()"/> operation.
         /// </summary>
-        /// <param name="asyncResult">The asynchronous result that identifies the underlying Load operation.</param>
-        private void CompleteSubmitChanges(IAsyncResult asyncResult)
+        private void CompleteSubmitChanges(Task<SubmitCompletedResult> submitTask, SubmitOperation submitOperation)
         {
-            SubmitOperation submitOperation = (SubmitOperation)asyncResult.AsyncState;
             IEnumerable<ChangeSetEntry> operationResults = null;
             Exception error = null;
+            Debug.Assert(submitTask.IsCompleted && !submitTask.IsCanceled);
 
             try
             {
@@ -853,7 +850,7 @@ namespace OpenRiaServices.DomainServices.Client
                     return;
                 }
 
-                SubmitCompletedResult submitResults = this.DomainClient.EndSubmit(asyncResult);
+                SubmitCompletedResult submitResults = submitTask.GetAwaiter().GetResult();
 
                 // If the request was successful, process the results
                 ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results.Cast<ChangeSetEntry>());
@@ -931,35 +928,31 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            IAsyncResult result = null;
             Action<InvokeOperation<TValue>> cancelAction = null;
-
+            CancellationToken cancellationToken = default;
             if (this.DomainClient.SupportsCancellation)
             {
+
+                var cts = new CancellationTokenSource();
+                cancellationToken = cts.Token;
+
                 cancelAction = (op) =>
                 {
-                    if (result != null)
-                    {
-                        this.DomainClient.CancelInvoke(result);
-                    }
+                    cts.Cancel();
                 };
             }
 
             InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, cancelAction);
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            result = this.DomainClient.BeginInvoke(
-                invokeArgs,
-                delegate(IAsyncResult asyncResult)
+            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                .ContinueWith(result =>
                 {
-                    this._syncContext.Post(
-                        delegate
-                        {
-                            this.CompleteInvoke(asyncResult);
-                        },
-                        null);
-                },
-                invokeOperation);
+                    this.CompleteInvoke(result, invokeOperation);
+                }
+                , CancellationToken.None
+                , TaskContinuationOptions.NotOnCanceled
+                , _syncContextScheduler);
 
             return invokeOperation;
         }
@@ -987,17 +980,16 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            IAsyncResult result = null;
             Action<InvokeOperation> cancelAction = null;
-
+            CancellationToken cancellationToken = default;
             if (this.DomainClient.SupportsCancellation)
             {
+                var cts = new CancellationTokenSource();
+                cancellationToken = cts.Token;
+
                 cancelAction = (op) =>
                 {
-                    if (result != null)
-                    {
-                        this.DomainClient.CancelInvoke(result);
-                    }
+                    cts.Cancel();
                 };
             }
 
@@ -1016,26 +1008,20 @@ namespace OpenRiaServices.DomainServices.Client
                 });
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            result = this.DomainClient.BeginInvoke(
-                invokeArgs,
-                delegate(IAsyncResult asyncResult)
+            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                .ContinueWith(result =>
                 {
-                    this._syncContext.Post(
-                        delegate
-                        {
-                            this.CompleteInvoke(asyncResult);
-                        },
-                        null);
-                },
-                invokeOperation);
+                    this.CompleteInvoke(result, invokeOperation);
+                }
+                , CancellationToken.None
+                , TaskContinuationOptions.NotOnCanceled
+                , _syncContextScheduler);
 
             return invokeOperation;
         }
 
-        private void CompleteInvoke(IAsyncResult asyncResult)
+        private void CompleteInvoke(Task<InvokeCompletedResult> invokeTask, InvokeOperation invokeOperation)
         {
-            InvokeOperation invokeOperation = (InvokeOperation)asyncResult.AsyncState;
-
             if (invokeOperation.IsCanceled)
             {
                 return;
@@ -1045,7 +1031,7 @@ namespace OpenRiaServices.DomainServices.Client
             InvokeCompletedResult results = null;
             try
             {
-                results = this.DomainClient.EndInvoke(asyncResult);
+                results = invokeTask.GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -1086,7 +1072,7 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual Task<InvokeResult> InvokeOperationAsync(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
-            CancellationToken cancellationToken = default (CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var tcs = new TaskCompletionSource<InvokeResult>();
 
@@ -1108,7 +1094,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The invoke operation.</returns>
         public virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
-            CancellationToken cancellationToken = default (CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var tcs = new TaskCompletionSource<InvokeResult<TValue>>();
 
@@ -1199,7 +1185,7 @@ namespace OpenRiaServices.DomainServices.Client
             // the user called the wrong context method on shared entity.
             foreach (Entity entity in changeSet.ModifiedEntities)
             {
-                foreach(var customMethod in entity.EntityActions)
+                foreach (var customMethod in entity.EntityActions)
                 {
                     try
                     {

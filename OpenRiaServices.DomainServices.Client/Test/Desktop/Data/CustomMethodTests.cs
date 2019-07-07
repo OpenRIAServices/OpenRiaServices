@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -142,7 +143,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             List<string> propChanged = new List<string>();
             Assert.IsFalse(_cities[0].HasValidationErrors);
             Assert.IsNotNull(_cities[0].ValidationErrors);
-            _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            _cities[0].PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
                 if (e.PropertyName != "ValidationErrors")
                 {
@@ -439,7 +440,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ExceptionHelper.ExpectArgumentException(delegate
             {
                 _cities[0].InvokeAction("");
-            }, string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty,"actionName"));
+            }, string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "actionName"));
         }
 
         [TestMethod]
@@ -467,20 +468,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             modifiedEntities.Add(_cities[2]);
             Assert.AreEqual(EntityState.Modified, _cities[1].EntityState);
             EntityChangeSet changeset = new EntityChangeSet(emptyList.AsReadOnly(), modifiedEntities.AsReadOnly(), emptyList.AsReadOnly());
-            SubmitCompletedResult submitResults = null;
-            client.BeginSubmit(
-                changeset,
-                delegate(IAsyncResult asyncResult)
-                {
-                    submitResults = client.EndSubmit(asyncResult);
-                },
-                null
-            );
+
+            var submitTask = client.SubmitAsync(changeset, CancellationToken.None);
 
             // wait for submit to complete
-            EnqueueConditional(() => submitResults != null);
+            EnqueueConditional(() => submitTask.IsCompleted);
             EnqueueCallback(delegate
             {
+                var submitResults = submitTask.GetAwaiter().GetResult();
+
                 Assert.AreEqual(1, submitResults.Results.Count());
                 Assert.AreEqual(1, submitResults.Results.Where(e => e.Operation == EntityOperationType.Update).Count());
 
@@ -514,32 +510,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // submit changeset with hand-crafted entities (without calling Invoke)
             modifiedEntities.Add(_cities[0]);
             EntityChangeSet changeset = new EntityChangeSet(emptyList.AsReadOnly(), modifiedEntities.AsReadOnly(), emptyList.AsReadOnly());
-            SubmitCompletedResult submitResults = null;
-            DomainOperationException expectedException = null;
 
+            var submitTask = client.SubmitAsync(changeset, CancellationToken.None);
+
+            EnqueueConditional(() => submitTask.IsCompleted);
             EnqueueCallback(delegate
             {
-                client.BeginSubmit(
-                    changeset,
-                    delegate(IAsyncResult asyncResult)
-                    {
-                        try
-                        {
-                            submitResults = client.EndSubmit(asyncResult);
-                        }
-                        catch (DomainOperationException e)
-                        {
-                            expectedException = e;
-                        }
-                    },
-                    null
-                );
-            });
-            EnqueueConditional(() => expectedException != null);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(submitResults);
-                Assert.AreEqual("This DomainService does not support operation 'Reject' for entity 'CityWithInfo'.", expectedException.Message);
+                Assert.IsTrue(submitTask.IsFaulted, "Should have exception");
+
+                var expectedException = (DomainOperationException)submitTask.Exception.InnerException;
+                Assert.AreEqual("This DomainService does not support operation 'Reject' for entity 'CityWithInfo'.", expectedException?.Message);
             });
 
             EnqueueTestComplete();
@@ -751,7 +731,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 Assert.AreNotEqual(firstRootCity, lastRootCity, "Expected first and last city to be different");
 
-                firstRootCity.PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+                firstRootCity.PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
                 {
                     bool isEntityBaseProperty = typeof(City).GetProperty(e.PropertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) == null;
                     if (!isEntityBaseProperty)
@@ -858,7 +838,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 refZipCode = zip.Code;
                 zip.ReassignZipCode(1, true);
 
-                newCity.PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+                newCity.PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
                 {
                     if (e.PropertyName != "IsReadOnly" && e.PropertyName != "HasChanges"
                         && e.PropertyName != "EntityState" && e.PropertyName != "ValidationErrors")
@@ -961,7 +941,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation submitOp = null;
             LoadOperation<Zip> loadOp = null;
             EventHandler completedDelegate = (sender, args) => completed = true;
-            
+
             CityDomainContext context = new CityDomainContext(TestURIs.Cities);
             loadOp = context.Load(context.GetZipsQuery(), false);
             loadOp.Completed += completedDelegate;
@@ -1091,7 +1071,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             City city = _rootCities[0]; // ensure we have a true base type City
 
             List<string> propChanged = new List<string>();
-            city.PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            city.PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
                 if (e.PropertyName.StartsWith("Can"))
                 {
@@ -1113,7 +1093,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // subscribe to property changed events on entity
             List<string> propChanged = new List<string>();
-            _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            _cities[0].PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
                 propChanged.Add(e.PropertyName);
             };
@@ -1143,7 +1123,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and invoke
-            _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            _cities[0].PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
                 propChanged.Add(e.PropertyName);
             };
@@ -1170,7 +1150,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsTrue(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and Remove
-            _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            _cities[0].PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
                 propChanged.Add(e.PropertyName);
             };
@@ -1201,7 +1181,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsFalse(_cities[0].CanInvokeAction("AssignCityZone"));
 
             // subscribe to property changed events on entity and call RejectChanges
-            _cities[0].PropertyChanged += delegate(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            _cities[0].PropertyChanged += delegate (object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
                 propChanged.Add(e.PropertyName);
             };
@@ -1957,7 +1937,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             typeVariation(complexObject, false,
                 CustomMethodTests.CreateRegisteredValidationResult(format1, typeof(MockComplexObject2)),
                 CustomMethodTests.CreateExpectedValidationResult(format1, typeof(MockComplexObject2), false, "NamedUpdateWithTypeValidation.complexObject.PlaceholderName"));
-            
+
             typeVariation(complexObject.Property1, true,
                 CustomMethodTests.CreateRegisteredValidationResult(format1, typeof(MockComplexObject2)),
                 CustomMethodTests.CreateExpectedValidationResult(format1, typeof(MockComplexObject2), false, "NamedUpdateWithTypeValidation.complexObject.Property1.PlaceholderName"));
@@ -2428,7 +2408,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // Basic error
             string errorMessage = string.Format(format1, memberName);
-            
+
             // Apply Test Validator transformation
             errorMessage = DynamicTestValidator.GetMemberError(errorMessage, memberName);
             string dottedPath = memberName;

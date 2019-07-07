@@ -10,15 +10,17 @@ using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
+using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
+using SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Behaviors;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
     using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
-    using System.Globalization;
-    using System.Threading;
-    using SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Behaviors;
+
 
     /// <summary>
     /// Tests <see cref="WebDomainClient&lt;TContract&gt;"/> members.
@@ -141,105 +143,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        public void EndInvoke_ThrowsOnBadAsyncResult()
-        {
-            IAsyncResult result;
-
-            // Null IAsyncResult
-            result = null;
-            ExceptionHelper.ExpectArgumentNullException(() => this.DomainClient.EndInvoke(result), "asyncResult");
-
-            // Unexpected IAsyncResult type 
-            result = new MockAsyncResult();
-            ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndInvoke(result), Resources.WrongAsyncResult, "asyncResult");
-
-            ChannelFactory<CityDomainContext.ICityDomainServiceContract> factory = CreateChannelFactory<CityDomainContext.ICityDomainServiceContract>();
-            MethodInfo endMethod = typeof(CityDomainContext.ICityDomainServiceContract).GetMethod("EndGetCities");
-
-            // TODO: This fails because S.SM.DS.Client.DomainClientAsyncResult != S.SM.DS.Web.DomainClientAsyncResult
-            //// IAsyncResult operation not complete
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateInvokeResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //ExceptionHelper.ExpectInvalidOperationException(() => this.DomainClient.EndInvoke(result), Resources.OperationNotComplete);
-
-            //// IAsyncResult from a different operation
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateQueryResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndInvoke(result), Resources.WrongAsyncResult, "asyncResult");
-
-            //// IAsyncResult from a different instance
-            //WebDomainClient<CityDomainContext.ICityDomainServiceContract> otherClient = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities);
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateInvokeResult(otherClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndInvoke(result), Resources.WrongAsyncResult, "asyncResult");
-        }
-
-        [TestMethod]
-        public void EndQuery_ThrowsOnBadAsyncResult()
-        {
-            IAsyncResult result;
-
-            // Null IAsyncResult
-            result = null;
-            ExceptionHelper.ExpectArgumentNullException(() => this.DomainClient.EndQuery(result), "asyncResult");
-
-            // Unexpected IAsyncResult type 
-            result = new MockAsyncResult();
-            ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndQuery(result), Resources.WrongAsyncResult, "asyncResult");
-
-            ChannelFactory<CityDomainContext.ICityDomainServiceContract> factory = CreateChannelFactory<CityDomainContext.ICityDomainServiceContract>();
-            MethodInfo endMethod = typeof(CityDomainContext.ICityDomainServiceContract).GetMethod("EndGetCities");
-
-            // TODO: This fails because S.SM.DS.Client.DomainClientAsyncResult != S.SM.DS.Web.DomainClientAsyncResult
-            //// IAsyncResult operation not complete
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateQueryResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null);
-            //ExceptionHelper.ExpectInvalidOperationException(() => this.DomainClient.EndQuery(result), Resources.OperationNotComplete);
-
-            //// IAsyncResult from a different operation
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateSubmitResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndQuery(result), Resources.WrongAsyncResult, "asyncResult");
-
-            //// IAsyncResult from a different instance
-            //WebDomainClient<CityDomainContext.ICityDomainServiceContract> otherClient = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities);
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateQueryResult(otherClient, factory.CreateChannel(), endMethod, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndQuery(result), Resources.WrongAsyncResult, "asyncResult");
-        }
-
-        [TestMethod]
-        public void EndSubmit_ThrowsOnBadAsyncResult()
-        {
-            IAsyncResult result;
-
-            // Null IAsyncResult
-            result = null;
-            ExceptionHelper.ExpectArgumentNullException(() => this.DomainClient.EndSubmit(result), "asyncResult");
-
-            // Unexpected IAsyncResult type 
-            result = new MockAsyncResult();
-            ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndSubmit(result), Resources.WrongAsyncResult, "asyncResult");
-
-            ChannelFactory<CityDomainContext.ICityDomainServiceContract> factory = CreateChannelFactory<CityDomainContext.ICityDomainServiceContract>();
-            MethodInfo endMethod = typeof(CityDomainContext.ICityDomainServiceContract).GetMethod("EndGetCities");
-
-            // TODO: This fails because S.SM.DS.Client.DomainClientAsyncResult != S.SM.DS.Web.DomainClientAsyncResult
-            //// IAsyncResult operation not complete
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateSubmitResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //ExceptionHelper.ExpectInvalidOperationException(() => this.DomainClient.EndSubmit(result), Resources.OperationNotComplete);
-
-            //// IAsyncResult from a different operation
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateInvokeResult(this.DomainClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndSubmit(result), Resources.WrongAsyncResult, "asyncResult");
-
-            //// IAsyncResult from a different instance
-            //WebDomainClient<CityDomainContext.ICityDomainServiceContract> otherClient = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities);
-            //result = WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>.CreateSubmitResult(otherClient, factory.CreateChannel(), endMethod, null, null, null, null);
-            //((WebDomainClientAsyncResult<CityDomainContext.ICityDomainServiceContract>)result).Complete();
-            //ExceptionHelper.ExpectArgumentException(() => this.DomainClient.EndSubmit(result), Resources.WrongAsyncResult, "asyncResult");
-        }
-
-        [TestMethod]
         [Asynchronous]
         public void Invoke_DefaultBehavior()
         {
@@ -249,11 +152,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 asyncResult = this.BeginInvokeRequest();
             });
             this.EnqueueConditional(() => asyncResult.IsCompleted && this.InvokeCompletedResults != null);
-            this.EnqueueCallback(() =>
-            {
-                // Validate that a second call to EndLoad throws
-                ExceptionHelper.ExpectInvalidOperationException(() => this.InvokeAsyncCallback(asyncResult), Resources.MethodCanOnlyBeInvokedOnce);
-            });
             this.EnqueueTestComplete();
         }
 
@@ -261,13 +159,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void Invoke_CancellationBehavior()
         {
-            IAsyncResult asyncResult = null;
+            Task<InvokeCompletedResult> asyncResult = null;
             this.EnqueueCallback(() =>
             {
                 asyncResult = this.BeginInvokeRequestAndCancel();
             });
-            this.EnqueueConditional(() => asyncResult.IsCompleted && this.Error != null);
-            this.EnqueueCallback(() => this.AssertInvokeCancelled(asyncResult));
+            this.EnqueueConditional(() => asyncResult.IsCompleted);
+            this.EnqueueCallback(() =>
+            {
+                Assert.IsTrue(asyncResult.IsCanceled, "Task should be cancelled");
+            });
             this.EnqueueTestComplete();
         }
 
@@ -281,11 +182,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 asyncResult = this.BeginQueryRequest();
             });
             this.EnqueueConditional(() => asyncResult.IsCompleted && this.QueryCompletedResults != null);
-            this.EnqueueCallback(() =>
-            {
-                // Validate that a second call to EndLoad throws
-                ExceptionHelper.ExpectInvalidOperationException(() => this.QueryAsyncCallback(asyncResult), Resources.MethodCanOnlyBeInvokedOnce);
-            });
             this.EnqueueTestComplete();
         }
 
@@ -293,15 +189,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void Query_CancellationBehavior()
         {
-            IAsyncResult asyncResult = null;
+            Task<QueryCompletedResult> asyncResult = null;
             this.EnqueueCallback(() =>
             {
                 asyncResult = this.BeginQueryRequestAndCancel();
             });
-            this.EnqueueConditional(() => asyncResult.IsCompleted && this.Error != null);
+            this.EnqueueConditional(() => asyncResult.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                this.AssertQueryCancelled(asyncResult);
+                Assert.IsTrue(asyncResult.IsCanceled, "Task should be cancelled");
             });
             this.EnqueueTestComplete();
         }
@@ -310,19 +206,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void Submit_DefaultBehavior()
         {
-            IAsyncResult asyncResult = null;
+            Task<SubmitCompletedResult> submitTask = this.BeginSubmitRequest();
+
+            this.EnqueueConditional(() => submitTask.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                asyncResult = this.BeginSubmitRequest();
-            });
-            this.EnqueueConditional(() => asyncResult.IsCompleted && this.SubmitCompletedResults != null);
-            this.EnqueueCallback(() =>
-            {
+                Assert.IsNotNull(this.SubmitCompletedResults, "Missing submit result");
                 // Validate that we got back all of our entity operations, even though the entity didn't get any new values on the server.
                 Assert.AreEqual(1, this.SubmitCompletedResults.Results.Count());
-
-                // Validate that a second call to EndLoad throws
-                ExceptionHelper.ExpectInvalidOperationException(() => this.SubmitAsyncCallback(asyncResult), Resources.MethodCanOnlyBeInvokedOnce);
             });
             this.EnqueueTestComplete();
         }
@@ -331,15 +222,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void Submit_CancellationBehavior()
         {
-            IAsyncResult asyncResult = null;
+            Task<SubmitCompletedResult> submitTask = null;
             this.EnqueueCallback(() =>
             {
-                asyncResult = this.BeginSubmitRequestAndCancel();
+                submitTask = this.BeginSubmitRequestAndCancel();
             });
-            this.EnqueueConditional(() => asyncResult.IsCompleted && this.Error != null);
+            this.EnqueueConditional(() => submitTask.IsCompleted);
             this.EnqueueCallback(() =>
             {
-                this.AssertSubmitCancelled(asyncResult);
+                Assert.IsTrue(submitTask.IsCanceled, "Task should be cancelled");
             });
             this.EnqueueTestComplete();
         }
@@ -367,7 +258,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsInstanceOfType(error.InnerException, typeof(CommunicationException));
 
                 this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2067)); // --> 2084, one over the max length
-                ExceptionHelper.ExpectException<InvalidOperationException>(() => 
+                ExceptionHelper.ExpectException<InvalidOperationException>(() =>
                     this.CityDomainContext.Load(this.CityDomainContext.GetCitiesQuery()));
             });
             this.EnqueueTestComplete();
@@ -449,7 +340,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             this.EnqueueTestComplete();
         }
-        
+
         private static void HandleError(OperationBase op, ref Exception error)
         {
             if (op.HasError)
@@ -459,132 +350,97 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
         }
 
-        private IAsyncResult BeginInvokeRequest(AsyncCallback callback)
+        private Task<InvokeCompletedResult> BeginInvokeRequest(CancellationToken cancellationToken = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add("msg", "foo");
 
             InvokeArgs invokeArgs = new InvokeArgs("Echo", typeof(string), parameters, true /*hasSideEffects*/);
-            var result = this.DomainClient.BeginInvoke(invokeArgs, callback, this.DomainClient);
+            var result = this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                .ContinueWith(task =>
+                {
+                    try
+                    {
+                        InvokeCompletedResult res = task.GetAwaiter().GetResult();
+                        this.InvokeCompletedResults = res;
+                        return res;
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Error = ex;
+                        throw;
+                    }
+                }
+                , TaskContinuationOptions.NotOnCanceled);
             this.AssertInProgress(result);
             return result;
         }
 
-        private IAsyncResult BeginInvokeRequest()
+        private Task<InvokeCompletedResult> BeginInvokeRequestAndCancel()
         {
-            return this.BeginInvokeRequest(this.InvokeAsyncCallback);
+            var cts = new CancellationTokenSource();
+            var task = this.BeginInvokeRequest(cts.Token);
+            cts.Cancel();
+            return task;
         }
 
-        private IAsyncResult BeginInvokeRequestAndCancel()
+        private Task<QueryCompletedResult> BeginQueryRequest(CancellationToken cancellationToken = default)
         {
-            var result = this.BeginInvokeRequest(this.InvokeAsyncCancelCallback);
-            this.DomainClient.CancelInvoke(result);
-            return result;
-        }
-
-        private IAsyncResult BeginQueryRequest(AsyncCallback callback)
-        {
-            var result = this.DomainClient.BeginQuery(new EntityQuery<Zip>(this.DomainClient, "GetZips", null, true, false), callback, this.DomainClient);
+            var result = this.DomainClient.QueryAsync(new EntityQuery<Zip>(this.DomainClient, "GetZips", null, true, false), cancellationToken);
             this.AssertInProgress(result);
-            return result;
+            return result.ContinueWith(task =>
+            {
+                try
+                {
+                    QueryCompletedResult res = task.GetAwaiter().GetResult();
+                    this.QueryCompletedResults = res;
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    this.Error = ex;
+                    throw;
+                }
+            }, TaskContinuationOptions.NotOnCanceled);
         }
 
-        private IAsyncResult BeginQueryRequest()
+        private Task<QueryCompletedResult> BeginQueryRequestAndCancel()
         {
-            return this.BeginQueryRequest(this.QueryAsyncCallback);
+            var cts = new CancellationTokenSource();
+            var task = this.BeginQueryRequest(cts.Token);
+            cts.Cancel();
+            return task;
         }
 
-        private IAsyncResult BeginQueryRequestAndCancel()
-        {
-            var result = this.BeginQueryRequest(this.QueryAsyncCancelCallback);
-            this.DomainClient.CancelQuery(result);
-            return result;
-        }
-
-        private IAsyncResult BeginSubmitRequest(AsyncCallback callback)
+        private Task<SubmitCompletedResult> BeginSubmitRequest(CancellationToken cancellationToken = default)
         {
             this.CityDomainContext.Cities.Add(new City() { Name = "TestCity", StateName = "ZZ" });
-            var result = this.DomainClient.BeginSubmit(this.CityDomainContext.EntityContainer.GetChanges(), callback, this.DomainClient);
+            var result = this.DomainClient.SubmitAsync(this.CityDomainContext.EntityContainer.GetChanges(), cancellationToken);
             this.AssertInProgress(result);
-            return result;
+
+            return result.ContinueWith(task =>
+            {
+                try
+                {
+                    SubmitCompletedResult res = task.GetAwaiter().GetResult();
+                    this.SubmitCompletedResults = res;
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    this.Error = ex;
+                    throw;
+                }
+            }
+            , TaskContinuationOptions.NotOnCanceled);
         }
 
-        private IAsyncResult BeginSubmitRequest()
+        private Task<SubmitCompletedResult> BeginSubmitRequestAndCancel()
         {
-            return this.BeginSubmitRequest(this.SubmitAsyncCallback);
-        }
-
-        private IAsyncResult BeginSubmitRequestAndCancel()
-        {
-            var result = this.BeginSubmitRequest(this.SubmitAsyncCancelCallback);
-            this.DomainClient.CancelSubmit(result);
-            return result;
-        }
-
-        private void AssertInvokeCancelled(IAsyncResult result)
-        {
-            AsyncResultBase asyncResultBase = result as AsyncResultBase;
-            Assert.IsNotNull(asyncResultBase, "Expected an instance of AsyncResultBase");
-            ExceptionHelper.ExpectInvalidOperationException(
-                () => this.DomainClient.EndInvoke(result),
-                Resources.OperationCancelled);
-        }
-
-        private void AssertQueryCancelled(IAsyncResult result)
-        {
-            AsyncResultBase asyncResultBase = result as AsyncResultBase;
-            Assert.IsNotNull(asyncResultBase, "Expected an instance of AsyncResultBase");
-            ExceptionHelper.ExpectInvalidOperationException(
-                () => this.DomainClient.EndQuery(result),
-                Resources.OperationCancelled);
-        }
-
-        private void AssertSubmitCancelled(IAsyncResult result)
-        {
-            AsyncResultBase asyncResultBase = result as AsyncResultBase;
-            Assert.IsNotNull(asyncResultBase, "Expected an instance of AsyncResultBase");
-            ExceptionHelper.ExpectInvalidOperationException(
-                () => this.DomainClient.EndSubmit(result),
-                Resources.OperationCancelled);
-        }
-
-        private void InvokeAsyncCallback(IAsyncResult result)
-        {
-            this.InvokeCompletedResults = this.DomainClient.EndInvoke(result);
-        }
-
-        private void InvokeAsyncCancelCallback(IAsyncResult result)
-        {
-            this.Error =
-              ExceptionHelper.ExpectInvalidOperationException(
-                  () => this.DomainClient.EndInvoke(result),
-                  Resources.OperationCancelled);
-        }
-
-        private void QueryAsyncCallback(IAsyncResult result)
-        {
-            this.QueryCompletedResults = this.DomainClient.EndQuery(result);
-        }
-
-        private void QueryAsyncCancelCallback(IAsyncResult result)
-        {
-            this.Error =
-              ExceptionHelper.ExpectInvalidOperationException(
-                  () => this.DomainClient.EndQuery(result),
-                  Resources.OperationCancelled);
-        }
-
-        private void SubmitAsyncCallback(IAsyncResult result)
-        {
-            this.SubmitCompletedResults = this.DomainClient.EndSubmit(result);
-        }
-
-        private void SubmitAsyncCancelCallback(IAsyncResult result)
-        {
-            this.Error =
-                ExceptionHelper.ExpectInvalidOperationException(
-                    () => this.DomainClient.EndSubmit(result),
-                    Resources.OperationCancelled);
+            var cts = new CancellationTokenSource();
+            var task = this.BeginSubmitRequest(cts.Token);
+            cts.Cancel();
+            return task;
         }
 
         private static Uri GenerateUriBase(int length)
@@ -605,8 +461,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 new ChannelFactory<CityDomainContext.ICityDomainServiceContract>(
                     new CustomBinding(
                         new PoxBinaryMessageEncodingBindingElement(),
-                        new HttpTransportBindingElement() { 
-                            ManualAddressing = true 
+                        new HttpTransportBindingElement()
+                        {
+                            ManualAddressing = true
                         }),
                     new EndpointAddress(
                         new Uri(uri.OriginalString + "/binary", UriKind.Absolute)));
@@ -627,35 +484,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         private void AssertInProgress(IAsyncResult asyncResult)
         {
-            AsyncResultBase asyncResultBase = asyncResult as AsyncResultBase;
-            Assert.IsNotNull(asyncResultBase, "Expected an instance of AsyncResultBase");
-            Assert.IsFalse(asyncResultBase.IsCompleted);
-            Assert.IsFalse(asyncResultBase.CompletedSynchronously);
-        }
-
-        private void AssertOperationCompleted(IAsyncResult asyncResult, bool cancelled)
-        {
-            AsyncResultBase asyncResultBase = asyncResult as AsyncResultBase;
-            Assert.IsNotNull(asyncResultBase, "Expected an instance of AsyncResultBase");
-            Assert.IsTrue(asyncResultBase.IsCompleted);
-            Assert.AreEqual(cancelled, asyncResultBase.CancellationRequested);
-            Assert.IsFalse(asyncResultBase.CompletedSynchronously);
-        }
-
-        /// <summary>
-        /// Creates a channel factory.
-        /// </summary>
-        /// <returns>The channel used to communicate with the server.</returns>
-        private ChannelFactory<TContract> CreateChannelFactory<TContract>()
-        {
-            TransportBindingElement transport = new HttpTransportBindingElement();
-
-            CustomBinding binding = new CustomBinding(
-                new BinaryMessageEncodingBindingElement(),
-                transport
-            );
-
-            return new ChannelFactory<TContract>(binding, new EndpointAddress(new Uri("http://localhost")));
+            Assert.IsNotNull(asyncResult, "Expected an instance of IAsyncResult");
+            Assert.IsFalse(asyncResult.IsCompleted);
+            Assert.IsFalse(asyncResult.CompletedSynchronously);
         }
     }
 
@@ -666,7 +497,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     public class WebDomainClientTests_Globalization : UnitTestBase
     {
         private CultureInfo _defaultCulture;
-        
+
         [TestInitialize]
         public void SetUp()
         {
