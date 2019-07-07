@@ -162,7 +162,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var entityQuery = new EntityQuery<Product>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), query);
             entityQuery.IncludeTotalCount = true;
 
-            var queryTask = dc.QueryAsync(entityQuery, );
+            var queryTask = dc.QueryAsync(entityQuery, CancellationToken.None);
 
             EnqueueConditional(delegate
             {
