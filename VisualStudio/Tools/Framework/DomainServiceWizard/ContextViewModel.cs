@@ -138,8 +138,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             // Raise a property change for our calculated properties
             // to force them to be re-evaluated by any UI bound to them
-            this.RaisePropertyChanged(nameof(IsMetadataClassGenerationAllowed));
-            this.RaisePropertyChanged(nameof(IsMetadataClassGenerationRequested));
+            this.RaisePropertyChanged(nameof(BusinessLogicViewModel.IsMetadataClassGenerationAllowed));
+            this.RaisePropertyChanged(nameof(BusinessLogicViewModel.IsMetadataClassGenerationRequested));
         }
 
         /// <summary>
