@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Client
             this.ErrorCode = errorCode;
         }
 
-#if !SILVERLIGHT && !NETSTANDARD
+#if !SILVERLIGHT
         /// <summary>
         /// Constructor that takes serialization info
         /// </summary>
