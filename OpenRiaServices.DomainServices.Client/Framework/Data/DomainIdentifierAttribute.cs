@@ -70,7 +70,7 @@ namespace OpenRiaServices.DomainServices
         }
 #endif
 
-#if !SILVERLIGHT && !PORTABLE && !NETSTANDARD
+#if !SILVERLIGHT && !PORTABLE
         /// <summary>
         /// Gets a unique identifier for this DomainIdentifierAttribute.
         /// </summary>
@@ -81,6 +81,6 @@ namespace OpenRiaServices.DomainServices
                 return this;
             }
         }
-#endif //!SILVERLIGHT && !PORTABLE && !NETSTANDARD
+#endif //!SILVERLIGHT && !PORTABLE
     }
 }

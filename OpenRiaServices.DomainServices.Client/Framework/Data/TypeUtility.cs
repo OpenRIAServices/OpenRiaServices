@@ -88,76 +88,6 @@ namespace OpenRiaServices.DomainServices
             typeof(Uri)
         };
 
-        #region FRAMEWORK_INDEPENDENT_REFLECTION
-#if REFLECTION_V2
-        public static IEnumerable<Attribute> GetCustomAttributes(this Type type, bool inherit)
-        {
-            return type.GetTypeInfo().GetCustomAttributes(inherit);
-        }
-
-        public static IEnumerable<Attribute> GetCustomAttributes(this Type type, Type attributeType, bool inherit)
-        {
-            return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit);
-        }
-#endif
-
-#if REFLECTION_V2
-        public static TypeInfo GetTypeInfo(this Type type)
-        {
-            return IntrospectionExtensions.GetTypeInfo(type);
-        }
-#else
-        public static Type GetTypeInfo(this Type type)
-        {
-            return type;
-        }
-#endif
-
-        public static bool IsGenericType(Type type)
-        {
-            return GetTypeInfo(type).IsGenericType;
-        }
-
-        public static Type GetBaseType(Type type)
-        {
-            return GetTypeInfo(type).BaseType;
-        }
-
-        public static bool IsEnum(Type type)
-        {
-            return GetTypeInfo(type).IsEnum;
-        }
-
-        public static bool IsInterface(Type type)
-        {
-            return GetTypeInfo(type).IsInterface;
-        }
-
-        public static bool IsPrimitive(Type type)
-        {
-            return GetTypeInfo(type).IsPrimitive;
-        }
-
-        public static bool IsAbstract(Type type)
-        {
-            return GetTypeInfo(type).IsAbstract;
-        }
-
-        public static bool IsValueType(Type type)
-        {
-            return GetTypeInfo(type).IsValueType;
-        }
-
-        public static Assembly GetAssembly(Type type)
-        {
-            return GetTypeInfo(type).Assembly;
-        }
-
-        public static bool IsAssignableFrom(this Type type, Type c)
-        {
-            return GetTypeInfo(type).IsAssignableFrom(GetTypeInfo(c));
-        }
-
         /// <summary>
         /// Determines if a specific attribute is defined on a property.
         /// </summary>
@@ -167,11 +97,7 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the attribute is defined, otherwise <c>false</c></returns>
         public static bool IsAttributeDefined(PropertyInfo property, Type attributeType, bool inherit)
         {
-#if REFLECTION_V2
-            return property.GetCustomAttributes(attributeType, inherit).Any();
-#else
             return property.IsDefined(attributeType, inherit);
-#endif
         }
 
         /// <summary>
@@ -183,14 +109,8 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the attribute is defined, otherwise <c>false</c></returns>
         public static bool IsAttributeDefined(Type type, Type attributeType, bool inherit)
         {
-#if REFLECTION_V2
-            return type.GetCustomAttributes(attributeType, inherit).Any();
-#else
             return type.IsDefined(attributeType, inherit);
-#endif
         }
-    
-        #endregion
 
         /// <summary>
         /// Returns <c>true</c> if the given type is a <see cref="Nullable"/>
@@ -199,7 +119,7 @@ namespace OpenRiaServices.DomainServices
         /// <returns><c>true</c> if the given type is a nullable type</returns>
         public static bool IsNullableType(Type type)
         {
-            return IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         /// <summary>
@@ -210,14 +130,14 @@ namespace OpenRiaServices.DomainServices
         public static bool IsTaskType(Type type)
         {
             return type == typeof(Task)
-                || (IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(Task<>));
+                || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>));
         }
 
         public static Type GetTaskReturnType(Type type)
         {
             if (type == typeof(Task))
                 return typeof(void);
-            else if (IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(Task<>))
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
                 return type.GetGenericArguments()[0];
             else
                 throw new ArgumentException("Type must be either Task, or Task<T>", "type");
@@ -275,7 +195,7 @@ namespace OpenRiaServices.DomainServices
         public static bool IsSupportedCollectionType(Type type)
         {
             if (type.IsArray ||
-               (IsGenericType(type) && type.GetGenericTypeDefinition() == typeof(IEnumerable<>)) ||
+               (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>)) ||
                (typeof(IList).IsAssignableFrom(type) && type.GetConstructor(EmptyTypes) != null))
             {
                 return true;
@@ -314,12 +234,12 @@ namespace OpenRiaServices.DomainServices
             type = GetNonNullableType(type);
 
             // primitive types (except IntPtr and UIntPtr) are supported
-            if (IsPrimitive(type) && type != typeof(IntPtr) && type != typeof(UIntPtr))
+            if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
             {
                 return true;
             }
 
-            if (IsEnum(type))
+            if (type.IsEnum)
             {
                 return true;
             }
@@ -359,7 +279,7 @@ namespace OpenRiaServices.DomainServices
                 return false;
             }
 #else
-            if (!type.IsVisible || TypeUtility.IsGenericType(type) || IsAbstract(type))
+            if (!type.IsVisible || type.IsGenericType || type.IsAbstract)
             {
                 return false;
             }
@@ -500,12 +420,12 @@ namespace OpenRiaServices.DomainServices
 
             while (genericType != null)
             {
-                if (IsInterface(genericTypeDefinition))
+                if (genericTypeDefinition.IsInterface)
                 {
                     bool interfaceMatched = false;
                     foreach (Type interfaceType in genericType.GetInterfaces().Concat(new[] { derivedType }))
                     {
-                        if (IsGenericType(interfaceType)  &&
+                        if (interfaceType.IsGenericType  &&
                             genericTypeDefinition == interfaceType.GetGenericTypeDefinition())
                         {
                             interfaceMatched = true;
@@ -520,13 +440,13 @@ namespace OpenRiaServices.DomainServices
                 }
                 else
                 {
-                    if (IsGenericType(genericType) &&
+                    if (genericType.IsGenericType &&
                         genericTypeDefinition == genericType.GetGenericTypeDefinition())
                     {
                         break;
                     }
                 }
-                genericType = GetBaseType(genericType);
+                genericType = genericType.BaseType;
             }
 
             return genericType != null;
@@ -542,7 +462,7 @@ namespace OpenRiaServices.DomainServices
             {
                 return typeof(IEnumerable<>).MakeGenericType(seqType.GetElementType());
             }
-            if (IsGenericType(seqType))
+            if (seqType.IsGenericType)
             {
                 foreach (Type arg in seqType.GetGenericArguments())
                 {
@@ -565,9 +485,9 @@ namespace OpenRiaServices.DomainServices
                     }
                 }
             }
-            if (GetBaseType(seqType) != null && GetBaseType(seqType) != typeof(object))
+            if (seqType.BaseType != null && seqType.BaseType != typeof(object))
             {
-                return FindIEnumerable(GetBaseType(seqType));
+                return FindIEnumerable(seqType.BaseType);
             }
             return null;
         }

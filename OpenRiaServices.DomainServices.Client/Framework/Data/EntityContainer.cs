@@ -437,7 +437,7 @@ namespace OpenRiaServices.DomainServices.Client
             Type rootType = null;
             if (!this._entityRootTypes.TryGetValue(entityType, out rootType))
             {
-                for (Type type = entityType; type != null; type = TypeUtility.GetBaseType(type))
+                for (Type type = entityType; type != null; type = type.BaseType)
                 {
                     if (this._entitySets.ContainsKey(type) || this._referencedEntitySets.ContainsKey(type))
                     {

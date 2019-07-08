@@ -66,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException(nameof(serviceContract));
             if (serviceUri == null)
                 throw new ArgumentNullException(nameof(serviceUri));
-            if (!TypeUtility.IsInterface(serviceContract))
+            if (!serviceContract.IsInterface)
                 throw new ArgumentException(Resource.DomainClientFactory_ServiceContractMustBeAnInterface, "serviceContract");
 
             // Compose absolute uri

@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (parameters[i] == null)
                 {
                     if (!TypeUtility.IsNullableType(parameterTypes[i])
-                        && TypeUtility.IsValueType(parameterTypes[i]))
+                        && parameterTypes[i].IsValueType)
                     {
                         return false;
                     }

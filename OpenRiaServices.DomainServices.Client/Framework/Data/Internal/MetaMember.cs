@@ -14,13 +14,11 @@ namespace OpenRiaServices.DomainServices.Client.Internal
     [DebuggerDisplay("Name = {Member.Name}")]
     public sealed class MetaMember
     {
-#if !NETSTANDARD1_3
         private static MethodInfo s_getterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
         private static MethodInfo s_setterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateSetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 
         private Func<object, object> _getter;
         private Action<object, object> _setter;
-#endif
 
         internal MetaMember(MetaType metaType, PropertyInfo property, bool isRoundtripEntity)
         {
@@ -138,15 +136,11 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// <returns>the value of the property</returns>
         public object GetValue(object instance)
         {
-#if NETSTANDARD1_3
-            return Member.GetValue(instance);
-#else
             if (_getter == null)
             {
                 _getter = CreateGetterDelegate(Member);
             }
             return _getter(instance);
-#endif
         }
 
         /// <summary>
@@ -157,15 +151,11 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// <returns>the value of the property</returns>
         public void SetValue(object instance, object value)
         {
-#if NETSTANDARD1_3
-            Member.SetValue(instance, value);
-#else
             if (_setter == null)
             {
                 _setter = CreateSetterDelegate(Member);
             }
             _setter(instance, value);
-#endif
         }
 
         /// <summary>
@@ -180,7 +170,6 @@ namespace OpenRiaServices.DomainServices.Client.Internal
         /// </summary>
         public bool IsComposition { get; }
 
-#if !NETSTANDARD1_3
         /// <summary>
         /// Helper method which creates a delegate which can be used to invoke a specific getter
         /// </summary>
@@ -233,7 +222,6 @@ namespace OpenRiaServices.DomainServices.Client.Internal
             // Add a wrapper which performs unboxing for the function
             return (object obj, object value) => setter((T)obj, (Tprop)value);
         }
-#endif
 
         private static bool CheckIfMergeableMember(MetaMember metaMember)
         {
