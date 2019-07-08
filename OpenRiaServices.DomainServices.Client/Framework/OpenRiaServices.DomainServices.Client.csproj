@@ -10,6 +10,10 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+  </ItemGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
