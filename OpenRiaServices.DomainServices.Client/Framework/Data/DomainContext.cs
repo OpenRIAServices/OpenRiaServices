@@ -1249,7 +1249,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             // Check for DomainClient in OpenRiaServices.DomainServices.Client.Web assembly
             var typeName = "OpenRiaServices.DomainServices.Client.WebDomainClientFactory, "
-                                    + TypeUtility.GetAssembly(typeof(DomainClient)).FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
             var webDomainClientFactoryType = Type.GetType(typeName);
             if (webDomainClientFactoryType != null)
                 return (IDomainClientFactory)Activator.CreateInstance(webDomainClientFactoryType);

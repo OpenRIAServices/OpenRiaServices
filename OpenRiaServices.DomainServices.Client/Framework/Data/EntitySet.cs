@@ -1248,7 +1248,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The created entity instance.</returns>
         protected override Entity CreateEntity()
         {
-            if (TypeUtility.IsAbstract(typeof(TEntity)))
+            if (typeof(TEntity).IsAbstract)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resources.Cannot_Create_Abstract_Entity, typeof(TEntity)));
             }
