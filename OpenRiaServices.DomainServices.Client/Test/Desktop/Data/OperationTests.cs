@@ -132,11 +132,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
+            Assert.AreSame(ex, expectedException);
+
+            // TODO: Add separate test with mock DomainClient which throws a specific exception
+            // and move the following checks there
+            /*
             Assert.IsNotNull(expectedException);
             Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed, "ThrowGeneralException", ex.Message), expectedException.Message);
             Assert.AreEqual(ex.StackTrace, expectedException.StackTrace);
             Assert.AreEqual(ex.Status, expectedException.Status);
             Assert.AreEqual(ex.ErrorCode, expectedException.ErrorCode);
+            */
 
             Assert.AreEqual(false, lo.IsErrorHandled);
 
@@ -144,13 +150,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, null);
-
+            ex = new DomainOperationException("expected", validationErrors);
+            
             try
             {
-                // TODO: Write corresponting test against "Load" which tests 
-                //Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "ThrowGeneralException"), expectedException.Message);
-
-                lo.Complete(new DomainOperationException("expected", validationErrors));
+                lo.Complete(ex);
             }
             catch (DomainOperationException e)
             {
@@ -158,9 +162,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual("expected", expectedException.Message);
-            }
+            Assert.AreSame(expectedException, ex);;
+            CollectionAssert.AreEqual(validationErrors, lo.ValidationErrors.ToList());
+        }
 
         /// <summary>
         /// Verify that Load operations that don't specify a callback to handle
