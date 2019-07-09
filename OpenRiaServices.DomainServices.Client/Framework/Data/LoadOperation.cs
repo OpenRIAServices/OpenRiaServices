@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="query">The query to load.</param>
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        internal LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState)
+        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState)
             : base(userState)
         {
             if (query == null)
@@ -36,34 +36,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
             this._query = query;
             this._loadBehavior = loadBehavior;
-        }
-
-        /// <summary>
-        /// Creates a strongly typed <see cref="LoadOperation"/> for the specified Type.
-        /// </summary>
-        /// <typeparam name="TEntity">The entity Type.</typeparam>
-        /// <param name="query">The query to load.</param>
-        /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
-        /// <param name="completeAction">Action to execute when the operation completes.</param>
-        /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled. If null, cancellation will not be supported.</param>
-        /// <returns>The operation instance created.</returns>
-        internal static LoadOperation Create<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
-            Action<LoadOperation> completeAction, object userState,
-            Action<LoadOperation> cancelAction) where TEntity : Entity
-        {
-            Action<LoadOperation<TEntity>> wrappedCompleteAction = null;
-            Action<LoadOperation<TEntity>> wrappedCancelAction = null;
-            if (completeAction != null)
-            {
-                wrappedCompleteAction = arg => completeAction(arg);
-            }
-            if (cancelAction != null)
-            {
-                wrappedCancelAction = arg => cancelAction(arg);
-            }
-
-            return new LoadOperation<TEntity>(query, loadBehavior, wrappedCompleteAction, userState, wrappedCancelAction);
         }
 
         /// <summary>
@@ -329,10 +301,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         protected override void InvokeCompleteAction()
         {
-            if (this._completeAction != null)
-            {
-                this._completeAction(this);
-            }
+            this._completeAction?.Invoke(this);
         }
     }
 }
