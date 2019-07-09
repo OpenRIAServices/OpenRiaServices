@@ -69,7 +69,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// The <see cref="DomainClientResult"/> for this operation.
         /// </summary>
-        protected new DomainClientResult Result
+        private protected new DomainClientResult Result
         {
             get
             {
@@ -159,18 +159,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                if (this.Result != null)
+                // return any errors if set, otherwise return an empty
+                // collection
+                if (this._validationErrors == null)
                 {
-                    return this.Result.ValidationErrors;
-                }
-                else
-                {
-                    // return any errors if set, otherwise return an empty
-                    // collection
-                    if (this._validationErrors == null)
-                    {
-                        this._validationErrors = new ValidationResult[0];
-                    }
+                    this._validationErrors = Enumerable.Empty<ValidationResult>();
                 }
                 return this._validationErrors;
             }
@@ -225,7 +218,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Update the observable result collections.
         /// </summary>
         /// <param name="result">The results of the completed load operation.</param>
-        protected virtual void UpdateResults(DomainClientResult result)
+        private protected virtual void UpdateResults(DomainClientResult result)
         {
             if (result == null)
             {
@@ -314,7 +307,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Update the observable result collections.
         /// </summary>
         /// <param name="result">The results of the completed load operation.</param>
-        protected override void UpdateResults(DomainClientResult result)
+        private protected override void UpdateResults(DomainClientResult result)
         {
             base.UpdateResults(result);
 

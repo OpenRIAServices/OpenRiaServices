@@ -145,7 +145,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the result of the async operation.
         /// </summary>
-        protected object Result
+        private protected object Result
         {
             get
             {

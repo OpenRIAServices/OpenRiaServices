@@ -110,7 +110,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// The <see cref="DomainClientResult"/> for this operation.
         /// </summary>
-        protected new DomainClientResult Result
+        private protected new DomainClientResult Result
         {
             get
             {
