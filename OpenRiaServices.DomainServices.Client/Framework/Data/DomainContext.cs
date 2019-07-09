@@ -551,7 +551,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                    if (loadTask.Exception != null)
                    {
-                       operation.Complete(loadTask.Exception.InnerException);
+                       operation.Complete(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
                    }
                    else
                    {
@@ -571,7 +571,7 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
         {
-            // TODO: cache the loadMethod
+            // TODO: cache the loadMethod ??
             var method = new Func<EntityQuery<Entity>, LoadBehavior, Action<LoadOperation<Entity>>, object, LoadOperation<Entity>>(this.Load);
             var loadMethod = method.Method.GetGenericMethodDefinition();
 
@@ -670,9 +670,9 @@ namespace OpenRiaServices.DomainServices.Client
                             results = result.GetAwaiter().GetResult();
 
                             // load the entities into the entity container
-                            loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior).Cast<Entity>();
+                            loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
 
-                            IEnumerable<Entity> loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior).Cast<Entity>();
+                            IEnumerable<Entity> loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
                             allLoadedEntities = loadedEntities.Concat(loadedIncludedEntities);
                             totalCount = results.TotalCount;
                         }
