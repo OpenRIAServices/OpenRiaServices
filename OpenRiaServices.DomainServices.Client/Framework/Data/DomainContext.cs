@@ -645,7 +645,13 @@ namespace OpenRiaServices.DomainServices.Client
             // Proceed with query
             var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
 
-            domainClientTask.ContinueWith((task, This) => ((DomainContext)This).DecrementLoadCount(), (object)this, CancellationToken.None, TaskContinuationOptions.OnlyOnCanceled, _syncContextScheduler);
+            // Decrement load count
+            domainClientTask.ContinueWith((task, This) => ((DomainContext)This).DecrementLoadCount()
+            , (object)this
+            , CancellationToken.None
+            , TaskContinuationOptions.OnlyOnCanceled | TaskContinuationOptions.AttachedToParent
+            , _syncContextScheduler);
+
             return domainClientTask.ContinueWith(result =>
                 {
                     IEnumerable<Entity> loadedEntities = null;
