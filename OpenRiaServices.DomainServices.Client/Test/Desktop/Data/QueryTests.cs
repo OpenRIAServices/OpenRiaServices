@@ -302,12 +302,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // immediately after calling cancel, IsLoading should be false
             Assert.IsTrue(cities.IsLoading);
             lo.Cancel();
-            //            Assert.IsFalse(cities.IsLoading);
 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
-                // TODO: Change logic
                 Assert.IsFalse(cities.IsLoading);
                 Assert.IsTrue(lo.IsCanceled);
                 Assert.IsFalse(lo.HasError);
@@ -2089,28 +2087,28 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     // [Ron] My single-proc machine generally has finished all the loads by the time
                     // the cancel is issued.  Using ThreadPool breaks this behavior.
                     ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
-            {
-                Product thisProduct = (Product)productObject;
-                lock (syncObject)
-                {
-                    Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
-            {
-                                        if (o.HasError)
-                                        {
-                                            o.MarkErrorAsHandled();
-                                        }
-                                    };
-                    lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), action, thisProduct.ProductID);
-                    loadOperations.Add(lo);
-
-            // When have asked for Product[5], issue a cancel.
-            Product[] products = tempCatalog.Products.ToArray();
-                    if (thisProduct.ProductID == products[5].ProductID)
                     {
-                        lo.Cancel();
-                    }
-                }
-            }, product);
+                        Product thisProduct = (Product)productObject;
+                        lock (syncObject)
+                        {
+                            Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
+                            {
+                                if (o.HasError)
+                                {
+                                    o.MarkErrorAsHandled();
+                                }
+                            };
+                            lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), action, thisProduct.ProductID);
+                            loadOperations.Add(lo);
+
+                            // When have asked for Product[5], issue a cancel.
+                            Product[] products = tempCatalog.Products.ToArray();
+                            if (thisProduct.ProductID == products[5].ProductID)
+                            {
+                                lo.Cancel();
+                            }
+                        }
+                    }, product);
                 }
             });
             EnqueueConditional(() => loadOperations.Count(p => p.IsComplete) == numberOfActiveLoadCalls);
