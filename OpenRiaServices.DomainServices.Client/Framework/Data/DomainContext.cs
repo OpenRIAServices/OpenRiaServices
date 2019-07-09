@@ -22,9 +22,6 @@ namespace OpenRiaServices.DomainServices.Client
     {
         internal const int TotalCountUndefined = -1;
 
-        private static MethodInfo createLoadOperationMethod = typeof(LoadOperation)
-                .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
-
         private static MethodInfo createInvokeOperationMethod = typeof(InvokeOperation)
                 .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -87,7 +84,7 @@ namespace OpenRiaServices.DomainServices.Client
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(value));
                 s_domainClientFactory = value;
             }
         }
@@ -373,7 +370,7 @@ namespace OpenRiaServices.DomainServices.Client
             TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
 
             var submitOp = this.SubmitChanges((res) => SetTaskResult(res, tcs, (op) => new SubmitResult(op.ChangeSet)), userState: null);
-            RegisterCancellationToken(cancellationToken, submitOp, tcs);
+            RegisterCancellationToken(cancellationToken, submitOp);
 
             return tcs.Task;
         }
@@ -389,9 +386,6 @@ namespace OpenRiaServices.DomainServices.Client
         private void SetTaskResult<TOperation, TResult>(TOperation operation, TaskCompletionSource<TResult> tcs, Func<TOperation, TResult> toResult)
             where TOperation : OperationBase
         {
-            //if (!operation.IsComplete)
-            //    throw new ArgumentException("The operation must have completed before calling SetTaskResult");
-
             if (operation.IsCanceled)
                 tcs.TrySetCanceled();
             else if (operation.HasError)
@@ -408,21 +402,19 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Registers the operation with the CancellationToken so that the operation is cancelled whenever the cancellation is requested.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="operation">The operation.</param>
-        /// <param name="tcs">The TaskCompletionSource used to create a task for the specified operation.</param>
-        private static void RegisterCancellationToken<TResult>(CancellationToken cancellationToken, OperationBase operation, TaskCompletionSource<TResult> tcs)
+        private static void RegisterCancellationToken(CancellationToken cancellationToken, OperationBase operation)
         {
-            if (cancellationToken.CanBeCanceled)
+            if (cancellationToken.CanBeCanceled && operation.CanCancel)
             {
-                cancellationToken.Register(() =>
+                cancellationToken.Register((state) =>
                 {
-                    if (operation.CanCancel)
-                        operation.Cancel();
-                    else
-                        tcs.TrySetCanceled();
-                });
+                    var op = (OperationBase)state;
+
+                    if (op.CanCancel)
+                        op.Cancel();
+                }, operation, useSynchronizationContext: true);
             }
         }
 
@@ -507,7 +499,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The load operation.</returns>
         public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
         {
-            return this.Load(query, LoadBehavior.KeepCurrent, callback, userState);
+            return this.Load<TEntity>(query, LoadBehavior.KeepCurrent, callback, userState);
         }
 
         /// <summary>
@@ -535,7 +527,6 @@ namespace OpenRiaServices.DomainServices.Client
                 };
             }
 
-            // create a strongly typed LoadOperation instance
             var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, cancelAction);
 
             LoadAsync(query, loadBehavior, cancellationToken)
@@ -562,7 +553,7 @@ namespace OpenRiaServices.DomainServices.Client
                }
                 , (object)loadOperation
                 , CancellationToken.None
-                , TaskContinuationOptions.None
+                , TaskContinuationOptions.NotOnCanceled
                 , _syncContextScheduler);
 
             return loadOperation;
@@ -571,14 +562,14 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
         {
-            // TODO: cache the loadMethod ??
+            // Get MethodInfo for Load<TEntity>(EntityQuery<TEntity>, LoadBehavior, Action<LoadOperation<TEntity>>, object, LoadOperation<TEntity>)
             var method = new Func<EntityQuery<Entity>, LoadBehavior, Action<LoadOperation<Entity>>, object, LoadOperation<Entity>>(this.Load);
             var loadMethod = method.Method.GetGenericMethodDefinition();
 
             try
             {
                 return (LoadOperation)loadMethod
-                    .MakeGenericMethod((Type)query.EntityType)
+                    .MakeGenericMethod(query.EntityType)
                     .Invoke(this, new object[]
                 {
                     query,
@@ -1078,7 +1069,7 @@ namespace OpenRiaServices.DomainServices.Client
             var tcs = new TaskCompletionSource<InvokeResult>();
 
             var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult()), tcs);
-            RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
+            RegisterCancellationToken(cancellationToken, invokeOperation);
 
             return tcs.Task;
         }
@@ -1100,7 +1091,7 @@ namespace OpenRiaServices.DomainServices.Client
             var tcs = new TaskCompletionSource<InvokeResult<TValue>>();
 
             var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult<TValue>(op.Value)), tcs);
-            RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
+            RegisterCancellationToken(cancellationToken, invokeOperation);
 
             return tcs.Task;
         }

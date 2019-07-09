@@ -25,13 +25,7 @@
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="System.Xml" />
-    <PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <DefineConstants>$(DefineConstants);NETSTANDARD;REFLECTION_V2</DefineConstants>
-    <NoWarn>$(NoWarn);CS0618</NoWarn>
-  </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
@@ -43,22 +37,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\AsyncResultBase.cs">
-      <Link>AsyncResultBase.cs</Link>
-    </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs">
-      <Link>Data\BinaryTypeUtility.cs</Link>
+      <Link>Utilities\BinaryTypeUtility.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs">
-      <Link>Data\TypeUtility.cs</Link>
+      <Link>Utilities\TypeUtility.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">
-      <Link>Data\ExceptionHandlingUtility.cs</Link>
+      <Link>Utilities\ExceptionHandlingUtility.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
       <Link>Web\Behaviors\WebHttpQueryStringConverter.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs">
       <Link>Data\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs</Link>
     </Compile>
   </ItemGroup>
