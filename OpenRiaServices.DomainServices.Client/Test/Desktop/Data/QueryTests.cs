@@ -203,13 +203,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Validate using an action so we can assert state for each of the 3 different
             // completion patterns; callback, event, and polling
-            Action<LoadOperation<A>> validate = (lo) =>
+            Action<Exception> validateException = (ex) =>
             {
-                Assert.IsNotNull(lo.Error);
-                DomainOperationException exception = (DomainOperationException)lo.Error;
+                Assert.IsNotNull(ex);
+                DomainOperationException exception = (DomainOperationException)ex;
                 Assert.AreEqual(typeof(DomainOperationException), exception.GetType());
                 Assert.AreEqual(OperationErrorStatus.ValidationFailed, exception.Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "QueryWithParamValidation"), exception.Message);
+                Assert.AreEqual(1, exception.ValidationErrors.Count(),
+                    "There should be 1 validation error.");
+                ValidationResult error = exception.ValidationErrors.Single();
+                Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
+            };
+            Action<LoadOperation<A>> validate = (lo) =>
+            {
+                Assert.IsNotNull(lo.Error);
+                validateException(lo.Error);
                 Assert.AreEqual(1, lo.ValidationErrors.Count(),
                     "There should be 1 validation error.");
                 ValidationResult error = lo.ValidationErrors.Single();
@@ -217,7 +226,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 lo.MarkErrorAsHandled();
             };
 
-            LoadOperation<A> op = ctxt.Load(ctxt.QueryWithParamValidationQuery(5, "ex"), validate, null);
+            var query = ctxt.QueryWithParamValidationQuery(5, "ex");
+            LoadOperation<A> op = ctxt.Load(query, validate, null);
             op.Completed += (sender, e) =>
             {
                 validate((LoadOperation<A>)sender);
@@ -232,38 +242,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 validate(op);
             });
 
-            EnqueueTestComplete();
-        }
-
-        /// <summary>
-        /// Verify that server side validation errors are propagated back to the
-        /// client for query operations.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void ServerValidation_QueryAsync()
-        {
-            TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
-
-            // Validate using an action so we can assert state for each of the 3 different
-            // completion patterns; callback, event, and polling
-            var loadTask = ctxt.LoadAsync(ctxt.QueryWithParamValidationQuery(5, "ex"));
-
-            EnqueueConditional(delegate
+            var loadTask = ctxt.LoadAsync(query);
+            EnqueueConditional(() => loadTask.IsCompleted);
+            EnqueueCallback(() =>
             {
-                return loadTask.IsCompleted;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(loadTask.Exception);
-                DomainOperationException exception = (DomainOperationException)loadTask.Exception.InnerException;
-                Assert.AreEqual(typeof(DomainOperationException), exception.GetType());
-                Assert.AreEqual(OperationErrorStatus.ValidationFailed, exception.Status);
-                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "QueryWithParamValidation"), exception.Message);
-                Assert.AreEqual(1, exception.ValidationErrors.Count(),
-                    "There should be 1 validation error.");
-                ValidationResult error = exception.ValidationErrors.Single();
-                Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
+                validateException(loadTask.Exception?.InnerException);
             });
 
             EnqueueTestComplete();
@@ -289,8 +272,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                // test null returning collection query
-                lo = ctxt.Load(ctxt.GetAsReturnNullQuery(), false);
+        // test null returning collection query
+        lo = ctxt.Load(ctxt.GetAsReturnNullQuery(), false);
             });
             EnqueueConditional(delegate
             {
@@ -319,13 +302,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // immediately after calling cancel, IsLoading should be false
             Assert.IsTrue(cities.IsLoading);
             lo.Cancel();
-//            Assert.IsFalse(cities.IsLoading);
+            //            Assert.IsFalse(cities.IsLoading);
 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
-                 // TODO: Change logic
-                Assert.IsFalse(cities.IsLoading);
+        // TODO: Change logic
+        Assert.IsFalse(cities.IsLoading);
                 Assert.IsTrue(lo.IsCanceled);
                 Assert.IsFalse(lo.HasError);
             });
@@ -350,8 +333,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 DataTests.Northwind.LTS.Product prod = nw.Products.Single();
                 Assert.AreEqual(5, prod.ProductID);
 
-                // next test a query that returns nothing
-                lo = nw.Load(nw.GetProductByIdQuery(-1), false);
+        // next test a query that returns nothing
+        lo = nw.Load(nw.GetProductByIdQuery(-1), false);
             });
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
@@ -378,10 +361,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 Assert.IsFalse(lo.HasError);
 
-                // subscribe to completed event AFTER completion. Verify
-                // that the callback is called immediately
-                lo.Completed += (s, e) =>
-                {
+        // subscribe to completed event AFTER completion. Verify
+        // that the callback is called immediately
+        lo.Completed += (s, e) =>
+{
                     callbackCalled = true;
                 };
 
@@ -437,8 +420,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(0, allEntitiesCollectionChangedArgs.Count);
                 Assert.IsFalse(totalCountChanged);
 
-                // now execute a query returning 3 entities
-                query = cities.GetCitiesQuery().Take(3);
+        // now execute a query returning 3 entities
+        query = cities.GetCitiesQuery().Take(3);
                 lo = cities.Load(query, false);
                 ((INotifyCollectionChanged)lo.Entities).CollectionChanged += entitiesCollectionChangedHandler;
                 ((INotifyCollectionChanged)lo.AllEntities).CollectionChanged += allEntitiesCollectionChangedHandler;
@@ -447,12 +430,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueConditional(() => lo.Entities.Count() == 3);
             EnqueueCallback(delegate
             {
-                // Entities : expect a Reset event and no Adds
-                Assert.AreEqual(1, entitiesCollectionChangedArgs.Count);
+        // Entities : expect a Reset event and no Adds
+        Assert.AreEqual(1, entitiesCollectionChangedArgs.Count);
                 Assert.AreEqual(3, lo.Entities.Count());
 
-                // AllEntities : expect a Reset event
-                Assert.AreEqual(1, allEntitiesCollectionChangedArgs.Count);
+        // AllEntities : expect a Reset event
+        Assert.AreEqual(1, allEntitiesCollectionChangedArgs.Count);
                 Assert.AreEqual(3, lo.AllEntities.Count());
 
                 Assert.IsTrue(totalCountChanged);
@@ -565,8 +548,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 LoadOperation<City> o = (LoadOperation<City>)s;
 
-                // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled);
+        // verify callback is called BEFORE the event is raised
+        Assert.IsTrue(callbackCalled);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
@@ -583,15 +566,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(completedCalled);
                 Assert.IsTrue(callbackCalled);
 
-                // verify state after completion
-                Assert.IsNull(lo.Error);
+        // verify state after completion
+        Assert.IsNull(lo.Error);
                 Assert.IsFalse(lo.HasError);
                 Assert.IsFalse(lo.IsCanceled);
                 Assert.IsTrue(lo.IsComplete);
                 Assert.IsFalse(lo.CanCancel);
 
-                // verify property change notifications and ordering
-                Assert.AreEqual(3, propChangeNotifications.Count);
+        // verify property change notifications and ordering
+        Assert.AreEqual(3, propChangeNotifications.Count);
                 Assert.AreEqual("IsComplete", propChangeNotifications[0]);
                 Assert.AreEqual("CanCancel", propChangeNotifications[1]);
                 Assert.AreEqual("TotalEntityCount", propChangeNotifications[2]);
@@ -657,8 +640,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 LoadOperation<City> o = (LoadOperation<City>)s;
 
-                // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled);
+        // verify callback is called BEFORE the event is raised
+        Assert.IsTrue(callbackCalled);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
@@ -669,8 +652,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             EnqueueCallback(() =>
             {
-                // cancel the load
-                Assert.IsFalse(lo.IsComplete);
+        // cancel the load
+        Assert.IsFalse(lo.IsComplete);
                 lo.Cancel();
                 Assert.IsFalse(lo.CanCancel);
             });
@@ -680,15 +663,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(completedCalled);
                 Assert.IsTrue(callbackCalled);
 
-                // verify state after completion
-                Assert.IsNull(lo.Error);
+        // verify state after completion
+        Assert.IsNull(lo.Error);
                 Assert.IsFalse(lo.HasError);
                 Assert.IsTrue(lo.IsCanceled);
                 Assert.IsTrue(lo.IsComplete);
                 Assert.IsFalse(lo.CanCancel);
 
-                // verify property change notifications and ordering
-                Assert.AreEqual(3, propChangeNotifications.Count);
+        // verify property change notifications and ordering
+        Assert.AreEqual(3, propChangeNotifications.Count);
                 Assert.AreEqual("IsCanceled", propChangeNotifications[0]);
                 Assert.AreEqual("CanCancel", propChangeNotifications[1]);
                 Assert.AreEqual("IsComplete", propChangeNotifications[2]);
@@ -757,8 +740,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 LoadOperation<Product> o = (LoadOperation<Product>)s;
 
-                // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled);
+        // verify callback is called BEFORE the event is raised
+        Assert.IsTrue(callbackCalled);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsTrue(o.HasError);
@@ -774,14 +757,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(completedCalled);
                 Assert.IsTrue(callbackCalled);
 
-                // verify state after completion
-                Assert.IsTrue(lo.HasError);
+        // verify state after completion
+        Assert.IsTrue(lo.HasError);
                 Assert.IsFalse(lo.IsCanceled);
                 Assert.IsTrue(lo.IsComplete);
                 Assert.IsFalse(lo.CanCancel);
 
-                // verify property change notifications and ordering
-                Assert.AreEqual(5, propChangeNotifications.Count);
+        // verify property change notifications and ordering
+        Assert.AreEqual(5, propChangeNotifications.Count);
                 Assert.AreEqual("IsErrorHandled", propChangeNotifications[0]);
                 Assert.AreEqual("Error", propChangeNotifications[1]);
                 Assert.AreEqual("HasError", propChangeNotifications[2]);
@@ -969,8 +952,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 Assert.IsNull(result.Error);
 
-                // Verify resulting graph structure
-                Assert.AreEqual(1, result.Entities.Count());
+        // Verify resulting graph structure
+        Assert.AreEqual(1, result.Entities.Count());
                 Assert.AreEqual(2, result.Entities.Cast<TestCycles>().Single().IncludedTs.Count);
                 Assert.AreEqual(63, result.AllEntities.Count());
             });
@@ -990,8 +973,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 Assert.IsNull(result.Error);
 
-                // Verify resulting graph structure
-                Assert.AreEqual(16, result.Entities.Count());
+        // Verify resulting graph structure
+        Assert.AreEqual(16, result.Entities.Count());
                 Assert.AreEqual(16, result.Entities.Cast<TestCycles>().First().IncludedTs.Count);
                 Assert.AreEqual(273, result.AllEntities.Count());
             });
@@ -1064,20 +1047,20 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 List<TestDomainServices.IncludesA> results = provider.IncludesAs.ToList();
 
-                // verify all projections
-                TestDomainServices.IncludesA a = results[0];
+        // verify all projections
+        TestDomainServices.IncludesA a = results[0];
                 Assert.AreEqual("BP1", a.BP1);
                 Assert.AreEqual("CP1", a.CP1);
                 Assert.AreEqual("DP2", a.DP2);
 
-                // verify projections in hierarchy with null links
-                a = results[1];
+        // verify projections in hierarchy with null links
+        a = results[1];
                 Assert.AreEqual("BP1", a.BP1);
                 Assert.AreEqual(null, a.CP1);
                 Assert.AreEqual(null, a.DP2);
 
-                // verify that projection properties are read-only
-                EditableAttribute editableAttribute = (EditableAttribute)a.GetType().GetProperty("BP1").GetCustomAttributes(typeof(EditableAttribute), false).Single();
+        // verify that projection properties are read-only
+        EditableAttribute editableAttribute = (EditableAttribute)a.GetType().GetProperty("BP1").GetCustomAttributes(typeof(EditableAttribute), false).Single();
                 Assert.IsFalse(editableAttribute.AllowEdit);
             });
 
@@ -1174,15 +1157,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 PurchaseOrderDetail detail = po.PurchaseOrderDetails.First();
                 Assert.AreEqual(po.PurchaseOrderID, detail.PurchaseOrderID);
 
-                // now set the detail's order ref to a new entity and verify
-                // FKs are synched properly
-                PurchaseOrder newOrder = orders[1];
+        // now set the detail's order ref to a new entity and verify
+        // FKs are synched properly
+        PurchaseOrder newOrder = orders[1];
                 detail.PurchaseOrder = newOrder;
                 Assert.AreEqual(newOrder.PurchaseOrderID, detail.PurchaseOrderID);
                 Assert.AreSame(newOrder, detail.PurchaseOrder);
 
-                // now set the detail's order ref to null
-                detail.PurchaseOrder = null;
+        // now set the detail's order ref to null
+        detail.PurchaseOrder = null;
                 Assert.AreEqual(0, detail.PurchaseOrderID);
                 Assert.AreEqual(null, detail.PurchaseOrder);
             });
@@ -1216,24 +1199,24 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                // Assert that the event args contains the cached value
-                List<Product> loadedProducts = lo.Entities.ToList();
+        // Assert that the event args contains the cached value
+        List<Product> loadedProducts = lo.Entities.ToList();
                 Product loadedProduct = loadedProducts.Single(p => p.ProductID == prod.ProductID);
                 Assert.AreSame(prod, loadedProduct);
 
                 Assert.AreEqual(5, catalog.Products.Count);
                 cachedProd = catalog.Products.Single(p => p.ProductID == prod.ProductID);
 
-                // Assert that the instances are equal and that
-                // our cached values haven't been overwritten
-                Assert.AreSame(prod, cachedProd);
+        // Assert that the instances are equal and that
+        // our cached values haven't been overwritten
+        Assert.AreSame(prod, cachedProd);
                 Assert.AreEqual("Red", cachedProd.Color);
             });
             EnqueueCallback(delegate
             {
-                // now issue a query for the same entity using
-                // LoadBehavior.RefreshCurrent
-                lo = catalog.Load(query, LoadBehavior.RefreshCurrent, false);
+        // now issue a query for the same entity using
+        // LoadBehavior.RefreshCurrent
+        lo = catalog.Load(query, LoadBehavior.RefreshCurrent, false);
             });
             EnqueueConditional(delegate
             {
@@ -1241,17 +1224,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                // Assert that the event args contains the cached value
-                List<Product> loadedProducts = lo.Entities.ToList();
+        // Assert that the event args contains the cached value
+        List<Product> loadedProducts = lo.Entities.ToList();
                 Product loadedProduct = loadedProducts.Single(p => p.ProductID == prod.ProductID);
                 Assert.AreSame(prod, loadedProduct);
 
                 Assert.AreEqual(5, catalog.Products.Count);
                 cachedProd = catalog.Products.Single(p => p.ProductID == prod.ProductID);
 
-                // Assert that the instances are equal and that
-                // our cached values HAVE been overwritten
-                Assert.AreSame(prod, cachedProd);
+        // Assert that the instances are equal and that
+        // our cached values HAVE been overwritten
+        Assert.AreSame(prod, cachedProd);
                 Assert.AreEqual("Black", cachedProd.Color);
             });
 
@@ -1599,12 +1582,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(orders.Count > 0);
                 PurchaseOrder order = orders.First();
 
-                // enumerate the PurchaseOrderDetails collection
-                Assert.IsTrue(order.PurchaseOrderDetails.Count() > 0);
+        // enumerate the PurchaseOrderDetails collection
+        Assert.IsTrue(order.PurchaseOrderDetails.Count() > 0);
                 PurchaseOrderDetail detail = order.PurchaseOrderDetails.First();
 
-                // verify the back reference
-                Assert.AreSame(order, detail.PurchaseOrder);
+        // verify the back reference
+        Assert.AreSame(order, detail.PurchaseOrder);
 
                 Product prod = detail.Product;
                 Assert.AreEqual(detail.ProductID, prod.ProductID);
@@ -1635,9 +1618,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                // call load again to verify that cancelled state is managed
-                // properly for a subsequent successfull query
-                lo = catalog.Load(query, false);
+        // call load again to verify that cancelled state is managed
+        // properly for a subsequent successfull query
+        lo = catalog.Load(query, false);
             });
             EnqueueConditional(delegate
             {
@@ -1837,16 +1820,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 Assert.AreSame(userState, lo.UserState);
 
-                // the LoadedEntities on the event args should equal all the loaded products
-                prodCount = catalog.Products.Count;
+        // the LoadedEntities on the event args should equal all the loaded products
+        prodCount = catalog.Products.Count;
                 Assert.IsTrue(prodCount > 0);
                 Assert.IsTrue(lo.Entities.Cast<Product>().OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.OrderBy(p => p.ProductID)));
 
-                // verify error is null
-                Assert.IsNull(lo.Error);
+        // verify error is null
+        Assert.IsNull(lo.Error);
 
-                // load another set of products
-                lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ListPrice < 1500), false);
+        // load another set of products
+        lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ListPrice < 1500), false);
             });
             EnqueueConditional(delegate
             {
@@ -1854,8 +1837,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                // the LoadedEntities on the event args should equal all the loaded products
-                Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
+        // the LoadedEntities on the event args should equal all the loaded products
+        Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
                 Assert.IsTrue(lo.Entities.Cast<Product>().OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.Where(p => p.ListPrice < 1500).OrderBy(p => p.ProductID)));
             });
 
@@ -1892,11 +1875,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(prodCount > 0);
                 Assert.IsTrue(lo.Entities.OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.OrderBy(p => p.ProductID)));
 
-                // verify error is null
-                Assert.IsNull(lo.Error);
+        // verify error is null
+        Assert.IsNull(lo.Error);
 
-                // load another set of products
-                query = catalog.GetProductsQuery().Where(p => p.ListPrice < 1500);
+        // load another set of products
+        query = catalog.GetProductsQuery().Where(p => p.ListPrice < 1500);
                 lo = catalog.Load(query, false);
             });
             EnqueueConditional(delegate
@@ -1905,8 +1888,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                // the LoadedEntities on the event args should equal all the loaded products
-                Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
+        // the LoadedEntities on the event args should equal all the loaded products
+        Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
                 Assert.IsTrue(lo.Entities.OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.Where(p => p.ListPrice < 1500).OrderBy(p => p.ProductID)));
             });
 
@@ -2043,17 +2026,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             AsyncCompletedEventArgs restartCompletedArgs = null;
             EnqueueCallback(delegate
             {
-                // Restart the server-side app to invalidate any caches.
-                TestServicesClient ts = new TestServicesClient();
+        // Restart the server-side app to invalidate any caches.
+        TestServicesClient ts = new TestServicesClient();
 
-                // TODO: We should move TestHelpers.cs into System.Common.Test and then call TestDatabase.SetAddress to reuse that code.
+        // TODO: We should move TestHelpers.cs into System.Common.Test and then call TestDatabase.SetAddress to reuse that code.
 #if SILVERLIGHT
                 ts.Endpoint.Address = new System.ServiceModel.EndpointAddress(
                     new Uri(
                         new Uri(System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped), UriKind.Absolute),
                         ts.Endpoint.Address.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)));
 #endif
-                ts.RestartAppCompleted += (s, e) => restartCompletedArgs = e;
+        ts.RestartAppCompleted += (s, e) => restartCompletedArgs = e;
                 ts.RestartAppAsync();
             });
             EnqueueConditional(() => restartCompletedArgs != null);
@@ -2102,11 +2085,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 foreach (var product in tempCatalog.Products)
                 {
-                    // Do this in separate threads to prevent this becoming a synchronous process.
-                    // [Ron] My single-proc machine generally has finished all the loads by the time
-                    // the cancel is issued.  Using ThreadPool breaks this behavior.
-                    ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
-                    {
+            // Do this in separate threads to prevent this becoming a synchronous process.
+            // [Ron] My single-proc machine generally has finished all the loads by the time
+            // the cancel is issued.  Using ThreadPool breaks this behavior.
+            ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
+    {
                         Product thisProduct = (Product)productObject;
                         lock (syncObject)
                         {
@@ -2120,8 +2103,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                             lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), action, thisProduct.ProductID);
                             loadOperations.Add(lo);
 
-                            // When have asked for Product[5], issue a cancel.
-                            Product[] products = tempCatalog.Products.ToArray();
+                    // When have asked for Product[5], issue a cancel.
+                    Product[] products = tempCatalog.Products.ToArray();
                             if (thisProduct.ProductID == products[5].ProductID)
                             {
                                 lo.Cancel();
@@ -2195,8 +2178,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                // Make sure we only loaded the product from our second load call.
-                Assert.IsNull(lo1.Error);
+        // Make sure we only loaded the product from our second load call.
+        Assert.IsNull(lo1.Error);
                 Assert.IsNull(lo2.Error);
                 Assert.IsTrue(lo1.IsCanceled, "Operation should've been cancelled.");
                 Assert.IsFalse(lo2.IsCanceled, "Operation should not have been cancelled.");
@@ -2487,8 +2470,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = ctxt.CreateQuery<Product>("NonExistentMethod", null, false, true);
             ValidateQueryException(ctxt, query, ex =>
             {
-                // REVIEW: Assert the error message.
-                Assert.IsNotNull(ex.InnerException as CommunicationException, "Expected CommunicationException");
+        // REVIEW: Assert the error message.
+        Assert.IsNotNull(ex.InnerException as CommunicationException, "Expected CommunicationException");
                 Assert.IsNotNull(ex.InnerException.InnerException as WebException, "Expected WebException");
             });
         }
