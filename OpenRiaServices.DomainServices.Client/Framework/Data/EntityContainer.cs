@@ -372,7 +372,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="entities">The entities to load</param>
         /// <returns>The set of entities loaded. In cases where entities in the set
         /// are already cached locally, the return set will contain the cached instances.</returns>
-        public IEnumerable LoadEntities(IEnumerable entities)
+        public IEnumerable<Entity> LoadEntities(IEnumerable<Entity> entities)
         {
             return this.LoadEntities(entities, LoadBehavior.KeepCurrent);
         }
@@ -384,7 +384,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to use</param>
         /// <returns>The set of entities loaded. In cases where entities in the set
         /// are already cached locally, the return set will contain the cached instances.</returns>
-        public IEnumerable LoadEntities(IEnumerable entities, LoadBehavior loadBehavior)
+        public IEnumerable<Entity> LoadEntities(IEnumerable<Entity> entities, LoadBehavior loadBehavior)
         {
             if (entities == null)
             {
@@ -396,7 +396,7 @@ namespace OpenRiaServices.DomainServices.Client
             // of results per type).  We group by root entity type so that all derived
             // entities belong to the same group.
             List<Entity> loadedEntities = new List<Entity>();
-            var entityGroups = entities.Cast<Entity>().GroupBy(p => (this.GetEntitySet(p.GetType())));
+            var entityGroups = entities.GroupBy(p => (this.GetEntitySet(p.GetType())));
             foreach (var group in entityGroups)
             {
                 EntitySet set = group.Key;
