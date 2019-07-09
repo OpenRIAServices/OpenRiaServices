@@ -640,7 +640,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (query == null)
             {
-                throw new ArgumentNullException("query");
+                throw new ArgumentNullException(nameof(query));
             }
 
             // verify the specified query was created by this DomainContext
@@ -649,22 +649,12 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_InvalidEntityQueryDomainClient, query.QueryName));
             }
 
-            // TODO: Call DecrementLoadCount on cancel
             this.IncrementLoadCount();
-
-            //// TODO: Do this or use separate task?
-            //if (cancellationToken.CanBeCanceled
-            //    && DomainClient.SupportsCancellation)
-            //{
-            //    cancellationToken.Register(This => ((DomainContext)This).DecrementLoadCount(), this);
-            //}
 
             // Proceed with query
             var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
 
-            // TODO: Pass object state
-            domainClientTask.ContinueWith(task => this.DecrementLoadCount(), TaskContinuationOptions.OnlyOnCanceled);
-
+            domainClientTask.ContinueWith((task, This) => ((DomainContext)This).DecrementLoadCount(), this, TaskContinuationOptions.OnlyOnCanceled);
             return domainClientTask.ContinueWith(result =>
                 {
                     IEnumerable<Entity> loadedEntities = null;
