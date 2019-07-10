@@ -645,13 +645,9 @@ namespace OpenRiaServices.DomainServices.Client
             // Proceed with query
             var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
 
-            // Decrement load count
-            domainClientTask.ContinueWith((task, This) => ((DomainContext)This).DecrementLoadCount()
-            , (object)this
-            , CancellationToken.None
-            , TaskContinuationOptions.OnlyOnCanceled | TaskContinuationOptions.AttachedToParent
-            , _syncContextScheduler);
-
+            // We dont want to cancel continuation based on original cancellationToken
+            // Since we must always decrement load count, use separate token to cancel continuation
+            var continueationCts = new CancellationTokenSource();
             return domainClientTask.ContinueWith(result =>
                 {
                     IEnumerable<Entity> loadedEntities = null;
@@ -673,6 +669,11 @@ namespace OpenRiaServices.DomainServices.Client
                             allLoadedEntities = loadedEntities.Concat(loadedIncludedEntities);
                             totalCount = results.TotalCount;
                         }
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        continueationCts.Cancel();
+                        throw new OperationCanceledException(continueationCts.Token);
                     }
                     catch (DomainException)
                     {
@@ -711,8 +712,8 @@ namespace OpenRiaServices.DomainServices.Client
                         return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
                     }
                 }
-                , CancellationToken.None
-                , TaskContinuationOptions.NotOnCanceled
+                , continueationCts.Token
+                , TaskContinuationOptions.None
                 , _syncContextScheduler);
         }
 
