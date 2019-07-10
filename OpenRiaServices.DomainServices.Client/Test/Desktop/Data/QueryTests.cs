@@ -362,9 +362,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // subscribe to completed event AFTER completion. Verify
                 // that the callback is called immediately
                 lo.Completed += (s, e) =>
-        {
-            callbackCalled = true;
-        };
+                {
+                    callbackCalled = true;
+                };
 
                 Assert.IsTrue(callbackCalled);
             });
@@ -2153,6 +2153,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 Assert.AreEqual(0, catalog.Products.Count);
                 Assert.IsTrue(lo.IsCanceled, "Operation should've been cancelled.");
+            });
+
+            var cts = new CancellationTokenSource();
+            var loadTask = catalog.LoadAsync(query, cts.Token);
+            cts.Cancel();
+
+            EnqueueConditional(() => loadTask.IsCompleted);
+            EnqueueCallback(() =>
+            {
+                Assert.IsTrue(loadTask.IsCanceled, "Task should be cancelled");
             });
             EnqueueTestComplete();
         }
