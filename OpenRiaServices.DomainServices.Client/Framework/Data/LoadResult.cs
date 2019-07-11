@@ -10,8 +10,6 @@ using System.Reflection;
 
 namespace OpenRiaServices.DomainServices.Client
 {
-
-
     /// <summary>
     /// The result of a sucessfully completed load operation
     /// </summary>
