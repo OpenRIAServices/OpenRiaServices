@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <summary>
     /// Represents an asynchronous load operation
     /// </summary>
-    public abstract class LoadOperation : OperationBase
+    public abstract class LoadOperation : OperationBase, ILoadResult
     {
         private ReadOnlyObservableLoaderCollection<Entity> _entities;
         private ReadOnlyObservableLoaderCollection<Entity> _allEntities;
@@ -39,37 +39,19 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// The <see cref="DomainClientResult"/> for this operation.
+        /// The <see cref="ILoadResult"/> for this operation.
         /// </summary>
-        private protected new DomainClientResult Result
-        {
-            get
-            {
-                return (DomainClientResult)base.Result;
-            }
-        }
+        private protected new ILoadResult Result => (ILoadResult)base.Result;
 
         /// <summary>
         /// The <see cref="EntityQuery"/> for this load operation.
         /// </summary>
-        public EntityQuery EntityQuery
-        {
-            get
-            {
-                return this._query;
-            }
-        }
+        public EntityQuery EntityQuery => this._query;
 
         /// <summary>
         /// The <see cref="LoadBehavior"/> for this load operation.
         /// </summary>
-        public LoadBehavior LoadBehavior
-        {
-            get
-            {
-                return this._loadBehavior;
-            }
-        }
+        public LoadBehavior LoadBehavior => this._loadBehavior;
 
         /// <summary>
         /// Gets all the top level entities loaded by the operation. The collection returned implements
@@ -82,7 +64,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._entities == null)
                 {
                     var resultEntities = this.Result != null ? this.Result.Entities : Enumerable.Empty<Entity>();
-                    this._entities = new ReadOnlyObservableLoaderCollection<Entity>(resultEntities);
+                    this._entities = AsReadOnlyObservableLoaderCollection(resultEntities);
                 }
                 return this._entities;
             }
@@ -100,7 +82,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._allEntities == null)
                 {
                     var resultEntities = this.Result != null ? this.Result.AllEntities : Enumerable.Empty<Entity>();
-                    this._allEntities = new ReadOnlyObservableLoaderCollection<Entity>(resultEntities);
+                    this._allEntities = AsReadOnlyObservableLoaderCollection(resultEntities);
                 }
                 return this._allEntities;
             }
@@ -111,18 +93,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// evaluation of the total server entity count requires the property <see cref="OpenRiaServices.DomainServices.Client.EntityQuery.IncludeTotalCount"/>
         /// on the query for the load operation to be set to <c>true</c>.
         /// </summary>
-        public int TotalEntityCount
-        {
-            get
-            {
-                if (this.Result != null)
-                {
-                    return this.Result.TotalEntityCount;
-                }
-
-                return 0;
-            }
-        }
+        public int TotalEntityCount => this.Result != null ? this.Result.TotalEntityCount : 0;
 
         /// <summary>
         /// Gets the validation errors.
@@ -138,35 +109,6 @@ namespace OpenRiaServices.DomainServices.Client
                     this._validationErrors = Enumerable.Empty<ValidationResult>();
                 }
                 return this._validationErrors;
-            }
-        }
-
-        /// <summary>
-        /// Successfully completes the load operation with the specified result.
-        /// </summary>
-        /// <param name="result">The result.</param>
-        internal void Complete(DomainClientResult result)
-        {
-            if (result == null)
-            {
-                throw new ArgumentNullException("result");
-            }
-
-            // before calling base, we need to update any cached
-            // observable collection results so the correct data
-            // is accessible in the completion callback
-            if (result.Entities.Any())
-            {
-                this.UpdateResults(result);
-            }
-
-            base.Complete(result);
-
-            // raise our property events after all base property
-            // events have been raised
-            if (result.Entities.Any())
-            {
-                this.RaisePropertyChanged(nameof(TotalEntityCount));
             }
         }
 
@@ -190,7 +132,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Update the observable result collections.
         /// </summary>
         /// <param name="result">The results of the completed load operation.</param>
-        private protected virtual void UpdateResults(DomainClientResult result)
+        private protected virtual void UpdateResults(ILoadResult result)
         {
             if (result == null)
             {
@@ -205,13 +147,20 @@ namespace OpenRiaServices.DomainServices.Client
             // observable collection
             this._allEntities?.Reset(result.AllEntities);
         }
+
+
+        private protected static ReadOnlyObservableLoaderCollection<TEntity> AsReadOnlyObservableLoaderCollection<TEntity>(IEnumerable<TEntity> resultEntities)
+        {
+            return resultEntities as ReadOnlyObservableLoaderCollection<TEntity> ?? new ReadOnlyObservableLoaderCollection<TEntity>(resultEntities);
+        }
     }
 
     /// <summary>
     /// Represents an asynchronous load operation
     /// </summary>
     /// <typeparam name="TEntity">The entity Type being loaded.</typeparam>
-    public sealed class LoadOperation<TEntity> : LoadOperation where TEntity : Entity
+    public sealed class LoadOperation<TEntity> : LoadOperation
+        where TEntity : Entity
     {
         private ReadOnlyObservableLoaderCollection<TEntity> _entities;
         private readonly Action<LoadOperation<TEntity>> _cancelAction;
@@ -237,13 +186,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// The <see cref="EntityQuery"/> for this load operation.
         /// </summary>
-        public new EntityQuery<TEntity> EntityQuery
-        {
-            get
-            {
-                return (EntityQuery<TEntity>)base.EntityQuery;
-            }
-        }
+        public new EntityQuery<TEntity> EntityQuery => (EntityQuery<TEntity>)base.EntityQuery;
 
         /// <summary>
         /// Gets all the entities loaded by the operation, including any
@@ -257,7 +200,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._entities == null)
                 {
                     var resultEntities = this.Result != null ? this.Result.Entities.Cast<TEntity>() : Enumerable.Empty<TEntity>();
-                    this._entities = new ReadOnlyObservableLoaderCollection<TEntity>(resultEntities);
+                    this._entities = AsReadOnlyObservableLoaderCollection(resultEntities);
                 }
 
                 return this._entities;
@@ -267,25 +210,19 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets a value indicating whether this operation supports cancellation.
         /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return (this._cancelAction != null);
-            }
-        }
+        protected override bool SupportsCancellation => (this._cancelAction != null);
 
         /// <summary>
         /// Update the observable result collections.
         /// </summary>
         /// <param name="result">The results of the completed load operation.</param>
-        private protected override void UpdateResults(DomainClientResult result)
+        private void UpdateResults(LoadResult<TEntity> result)
         {
-            base.UpdateResults(result);
+            base.UpdateResults((ILoadResult)result);
 
             // if the Entities property has been examined, update the backing
             // observable collection
-            this._entities?.Reset(result.Entities.Cast<TEntity>());
+            this._entities?.Reset(result.Entities);
         }
 
         /// <summary>
@@ -302,6 +239,40 @@ namespace OpenRiaServices.DomainServices.Client
         protected override void InvokeCompleteAction()
         {
             this._completeAction?.Invoke(this);
+        }
+
+        /// <summary>
+        /// The <see cref="LoadResult{TEntity}"/> for this operation.
+        /// </summary>
+        private new LoadResult<TEntity> Result => (LoadResult<TEntity>)base.Result;
+
+        /// <summary>
+        /// Successfully completes the load operation with the specified result.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        internal void Complete(LoadResult<TEntity> result)
+        {
+            if (result == null)
+            {
+                throw new ArgumentNullException("result");
+            }
+
+            // before calling base, we need to update any cached
+            // observable collection results so the correct data
+            // is accessible in the completion callback
+            if (result.Entities.Any())
+            {
+                this.UpdateResults(result);
+            }
+
+            base.Complete(result);
+
+            // raise our property events after all base property
+            // events have been raised
+            if (result.Entities.Any())
+            {
+                this.RaisePropertyChanged(nameof(TotalEntityCount));
+            }
         }
     }
 }

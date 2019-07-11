@@ -532,7 +532,7 @@ namespace OpenRiaServices.DomainServices.Client
             LoadAsync(query, loadBehavior, cancellationToken)
                 .ContinueWith((loadTask, state) =>
                {
-                   var operation = (LoadOperation)state;
+                   var operation = (LoadOperation<TEntity>)state;
                    // if the load operation has been canceled,
                    // no work to do.
                    if (operation.IsCanceled)
@@ -547,8 +547,7 @@ namespace OpenRiaServices.DomainServices.Client
                    else
                    {
                        var loadResult = loadTask.Result;
-                       var queryResult = DomainClientResult.CreateQueryResult(loadResult.Entities, loadResult.AllEntities, loadResult.TotalEntityCount, Enumerable.Empty<ValidationResult>());
-                       operation.Complete(queryResult);
+                       operation.Complete(loadResult);
                    }
                }
                 , (object)loadOperation
