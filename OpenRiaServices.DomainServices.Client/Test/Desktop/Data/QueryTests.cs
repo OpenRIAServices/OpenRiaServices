@@ -449,7 +449,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
             var query = cities.GetCitiesQuery().Take(3);
-            LoadOperation lo = cities.Load(query, false);
+            LoadOperation<City> lo = cities.Load(query, false);
 
             lo.Cancel();
 
@@ -466,7 +466,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 ExceptionHelper.ExpectInvalidOperationException(delegate
                 {
-                    lo.Complete(DomainClientResult.CreateQueryResult(new City[0], new City[0], 0, new ValidationResult[0]));
+                    lo.Complete(new LoadResult<City>(query, default(LoadBehavior), new City[0], new City[0], 0));
                 }, Resources.AsyncOperation_AlreadyCompleted);
 
                 lo = cities.Load(query, false);

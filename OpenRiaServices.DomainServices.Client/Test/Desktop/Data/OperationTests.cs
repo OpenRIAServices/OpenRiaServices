@@ -382,14 +382,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 throw new InvalidOperationException("Fnord!");
             };
 
-            LoadOperation lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, loCallback, null, loCallback);
+            var query = cities.GetCitiesQuery();
+            var loadBehaviour = LoadBehavior.MergeIntoCurrent;
+            LoadOperation<City> lo = new LoadOperation<City>(query, loadBehaviour, loCallback, null, loCallback);
 
             // verify completion callbacks that throw
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 try
                 {
-                    lo.Complete(DomainClientResult.CreateQueryResult(new Entity[0], new Entity[0], 0, new ValidationResult[0]));
+                    lo.Complete(new LoadResult<City>(query, loadBehaviour, new City[0], new Entity[0], 0));
                 }
                 catch (Exception ex)
                 {
