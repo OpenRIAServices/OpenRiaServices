@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private readonly Action<TestOperation> _completeAction;
 
         public TestOperation(Action<TestOperation> completeAction, object userState)
-            : base(userState)
+            : base(userState, false)
         {
             this._completeAction = completeAction;
         }
@@ -78,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, null);
+            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
 
             EventHandler action = (o, e) =>
             {
@@ -99,7 +99,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // verify that calling MarkAsHandled on an operation not in error
             // results in an exception
-            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, null);
+            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
             Assert.IsFalse(lo.HasError);
             Assert.IsTrue(lo.IsErrorHandled);
             ExceptionHelper.ExpectInvalidOperationException(delegate
@@ -118,7 +118,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, null);
+            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
@@ -149,7 +149,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // now test again with validation errors
             expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, null);
+            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
             ex = new DomainOperationException("expected", validationErrors);
             
             try
@@ -175,7 +175,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
-            InvokeOperation invoke = new InvokeOperation("Echo", null, null, null, null);
+            InvokeOperation invoke = new InvokeOperation("Echo", null, null, null, false);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
@@ -200,7 +200,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // now test again with validation errors
             expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            invoke = new InvokeOperation("Echo", null, null, null, null);
+            invoke = new InvokeOperation("Echo", null, null, null, false);
 
             try
             {
@@ -384,7 +384,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             var query = cities.GetCitiesQuery();
             var loadBehaviour = LoadBehavior.MergeIntoCurrent;
-            LoadOperation<City> lo = new LoadOperation<City>(query, loadBehaviour, loCallback, null, loCallback);
+            LoadOperation<City> lo = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
 
             // verify completion callbacks that throw
             ExceptionHelper.ExpectInvalidOperationException(delegate
@@ -402,7 +402,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }, "Fnord!");
 
             // verify cancellation callbacks for all fx operation types
-            lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, loCallback);
+            lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
+            lo.CancellationToken.Register(() => throw new InvalidOperationException("Fnord!"));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 lo.Cancel();
@@ -414,7 +415,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so.Cancel();
             }, "Fnord!");
 
-            InvokeOperation io = new InvokeOperation("Fnord", null, null, null, ioCallback);
+            InvokeOperation io = new InvokeOperation("Fnord", null, null, null, true);
+            io.CancellationToken.Register(() => throw new InvalidOperationException("Fnord!"));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 io.Cancel();

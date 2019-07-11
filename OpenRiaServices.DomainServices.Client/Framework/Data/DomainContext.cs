@@ -271,15 +271,10 @@ namespace OpenRiaServices.DomainServices.Client
                 bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
 
                 Action<SubmitOperation> cancelAction = null;
-                CancellationToken cancellationToken = CancellationToken.None;
                 if (this.DomainClient.SupportsCancellation)
                 {
-                    var tcs = new CancellationTokenSource();
-                    cancellationToken = tcs.Token;
-
                     cancelAction = (op) =>
                     {
-                        tcs.Cancel();
                         // TODO: Consider moving to callback below ?
                         this.IsSubmitting = false;
                         foreach (Entity entity in changeSet)
@@ -324,11 +319,12 @@ namespace OpenRiaServices.DomainServices.Client
                         entity.IsSubmitting = true;
                     }
 
-                    this.DomainClient.SubmitAsync(changeSet, cancellationToken)
-                        .ContinueWith(submitTask =>
+                    this.DomainClient.SubmitAsync(changeSet, submitOperation.CancellationToken)
+                        .ContinueWith((submitTask, state) =>
                         {
-                            this.CompleteSubmitChanges(submitTask, submitOperation);
+                            this.CompleteSubmitChanges(submitTask, (SubmitOperation)state);
                         }
+                        , submitOperation
                         , CancellationToken.None
                         , TaskContinuationOptions.NotOnCanceled
                         , _syncContextScheduler);
@@ -515,21 +511,9 @@ namespace OpenRiaServices.DomainServices.Client
         {
             Action<LoadOperation<TEntity>> cancelAction = null;
 
-            CancellationToken cancellationToken = default;
-            if (this.DomainClient.SupportsCancellation)
-            {
-                var cts = new CancellationTokenSource();
-                cancellationToken = cts.Token;
+            var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, DomainClient.SupportsCancellation);
 
-                cancelAction = (op) =>
-                {
-                    cts.Cancel();
-                };
-            }
-
-            var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, cancelAction);
-
-            LoadAsync(query, loadBehavior, cancellationToken)
+            LoadAsync(query, loadBehavior, loadOperation.CancellationToken)
                 .ContinueWith((loadTask, state) =>
                {
                    var operation = (LoadOperation<TEntity>)state;
@@ -540,19 +524,22 @@ namespace OpenRiaServices.DomainServices.Client
                        return;
                    }
 
-                   if (loadTask.Exception != null)
+                   if (loadTask.IsCanceled)
+                   {
+                       operation.SetCancelled();
+                   }
+                   else if (loadTask.Exception != null)
                    {
                        operation.Complete(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
                    }
                    else
                    {
-                       var loadResult = loadTask.Result;
-                       operation.Complete(loadResult);
+                       operation.Complete(loadTask.Result);
                    }
                }
                 , (object)loadOperation
                 , CancellationToken.None
-                , TaskContinuationOptions.NotOnCanceled
+                , TaskContinuationOptions.None
                 , _syncContextScheduler);
 
             return loadOperation;
@@ -926,24 +913,10 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            Action<InvokeOperation<TValue>> cancelAction = null;
-            CancellationToken cancellationToken = default;
-            if (this.DomainClient.SupportsCancellation)
-            {
-
-                var cts = new CancellationTokenSource();
-                cancellationToken = cts.Token;
-
-                cancelAction = (op) =>
-                {
-                    cts.Cancel();
-                };
-            }
-
-            InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, cancelAction);
+            InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, this.DomainClient.SupportsCancellation);
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+            this.DomainClient.InvokeAsync(invokeArgs, invokeOperation.CancellationToken)
                 .ContinueWith(result =>
                 {
                     this.CompleteInvoke(result, invokeOperation);
@@ -978,18 +951,6 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            Action<InvokeOperation> cancelAction = null;
-            CancellationToken cancellationToken = default;
-            if (this.DomainClient.SupportsCancellation)
-            {
-                var cts = new CancellationTokenSource();
-                cancellationToken = cts.Token;
-
-                cancelAction = (op) =>
-                {
-                    cts.Cancel();
-                };
-            }
 
             // create a strongly typed InvokeOperation instance
             MethodInfo createMethod = DomainContext.createInvokeOperationMethod
@@ -1002,11 +963,11 @@ namespace OpenRiaServices.DomainServices.Client
                     parameters,
                     callback,
                     userState,
-                    cancelAction
+                    DomainClient.SupportsCancellation
                 });
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+            this.DomainClient.InvokeAsync(invokeArgs, invokeOperation.CancellationToken)
                 .ContinueWith(result =>
                 {
                     this.CompleteInvoke(result, invokeOperation);

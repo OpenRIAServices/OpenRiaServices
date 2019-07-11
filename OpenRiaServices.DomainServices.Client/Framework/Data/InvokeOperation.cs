@@ -14,7 +14,6 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly string _operationName;
         private IDictionary<string, object> _parameters;
         private IEnumerable<ValidationResult> _validationErrors;
-        private readonly Action<InvokeOperation> _cancelAction;
         private readonly Action<InvokeOperation> _completeAction;
 
         /// <summary>
@@ -25,11 +24,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// if the operation takes no parameters.</param>
         /// <param name="completeAction">Optional action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled. If null, cancellation will not be supported.</param>
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         internal InvokeOperation(string operationName, IDictionary<string, object> parameters,
             Action<InvokeOperation> completeAction, object userState,
-            Action<InvokeOperation> cancelAction)
-            : base(userState)
+            bool supportCancellation)
+            : base(userState, supportCancellation)
         {
             if (string.IsNullOrEmpty(operationName))
             {
@@ -37,7 +36,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
             this._operationName = operationName;
             this._parameters = parameters;
-            this._cancelAction = cancelAction;
             this._completeAction = completeAction;
         }
 
@@ -68,17 +66,6 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Gets a value indicating whether this operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return (this._cancelAction != null);
-            }
-        }
-
-        /// <summary>
         /// Creates a strongly typed <see cref="InvokeOperation"/> for the specified Type.
         /// </summary>
         /// <typeparam name="TValue">The return value Type.</typeparam>
@@ -91,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The operation instance created.</returns>
         internal static InvokeOperation Create<TValue>(string operationName, IDictionary<string, object> parameters,
             Action<InvokeOperation> completeAction, object userState,
-            Action<InvokeOperation> cancelAction)
+            bool supportCancellation)
         {
             Action<InvokeOperation<TValue>> wrappedCompleteAction = null;
             Action<InvokeOperation<TValue>> wrappedCancelAction = null;
@@ -99,12 +86,9 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 wrappedCompleteAction = arg => completeAction(arg);
             }
-            if (cancelAction != null)
-            {
-                wrappedCancelAction = arg => cancelAction(arg);
-            }
+            
 
-            return new InvokeOperation<TValue>(operationName, parameters, wrappedCompleteAction, userState, wrappedCancelAction);
+            return new InvokeOperation<TValue>(operationName, parameters, wrappedCompleteAction, userState, supportCancellation);
         }
 
         /// <summary>
@@ -155,14 +139,6 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 return this._validationErrors;
             }
-        }
-
-        /// <summary>
-        /// Invokes the cancel callback.
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this._cancelAction(this);
         }
 
         /// <summary>
@@ -246,7 +222,6 @@ namespace OpenRiaServices.DomainServices.Client
     /// <typeparam name="TValue">The Type of the invoke return value.</typeparam>
     public sealed class InvokeOperation<TValue> : InvokeOperation
     {
-        private readonly Action<InvokeOperation<TValue>> _cancelAction;
         private readonly Action<InvokeOperation<TValue>> _completeAction;
 
         /// <summary>
@@ -256,25 +231,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="parameters">The parameters to the operation.</param>
         /// <param name="completeAction">Action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled.</param>
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         internal InvokeOperation(string operationName, IDictionary<string, object> parameters,
             Action<InvokeOperation<TValue>> completeAction, object userState,
-            Action<InvokeOperation<TValue>> cancelAction)
-            : base(operationName, parameters, /* completeAction */ null, /* userState */ userState, /* cancelAction */ null)
+            bool supportCancellation)
+            : base(operationName, parameters, /* completeAction */ null, /* userState */ userState, /* supportCancellation */ supportCancellation)
         {
-            this._cancelAction = cancelAction;
             this._completeAction = completeAction;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return (this._cancelAction != null);
-            }
         }
 
         /// <summary>
@@ -292,14 +255,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
         }
         
-        /// <summary>
-        /// Invokes the cancel callback.
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this._cancelAction(this);
-        }
-
         /// <summary>
         /// Invoke the completion callback.
         /// </summary>

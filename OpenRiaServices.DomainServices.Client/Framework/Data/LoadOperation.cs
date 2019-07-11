@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using OpenRiaServices.DomainServices.Client.Data;
 
 namespace OpenRiaServices.DomainServices.Client
@@ -27,8 +28,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="query">The query to load.</param>
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState)
-            : base(userState)
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
+        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState, bool supportCancellation)
+            : base(userState, supportCancellation)
         {
             if (query == null)
             {
@@ -148,6 +150,10 @@ namespace OpenRiaServices.DomainServices.Client
             this._allEntities?.Reset(result.AllEntities);
         }
 
+        private protected override void OnCancellationRequested()
+        {
+            // Prevent OperationBase from calling SetCancelled
+        }
 
         private protected static ReadOnlyObservableLoaderCollection<TEntity> AsReadOnlyObservableLoaderCollection<TEntity>(IEnumerable<TEntity> resultEntities)
         {
@@ -163,7 +169,6 @@ namespace OpenRiaServices.DomainServices.Client
         where TEntity : Entity
     {
         private ReadOnlyObservableLoaderCollection<TEntity> _entities;
-        private readonly Action<LoadOperation<TEntity>> _cancelAction;
         private readonly Action<LoadOperation<TEntity>> _completeAction;
 
         /// <summary>
@@ -173,13 +178,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="completeAction">Action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled.</param>
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
             Action<LoadOperation<TEntity>> completeAction, object userState,
-            Action<LoadOperation<TEntity>> cancelAction)
-            : base(query, loadBehavior, userState)
+            bool supportCancellation)
+            : base(query, loadBehavior, userState, supportCancellation)
         {
-            this._cancelAction = cancelAction;
             this._completeAction = completeAction;
         }
 
@@ -208,11 +212,6 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Gets a value indicating whether this operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation => (this._cancelAction != null);
-
-        /// <summary>
         /// Update the observable result collections.
         /// </summary>
         /// <param name="result">The results of the completed load operation.</param>
@@ -223,14 +222,6 @@ namespace OpenRiaServices.DomainServices.Client
             // if the Entities property has been examined, update the backing
             // observable collection
             this._entities?.Reset(result.Entities);
-        }
-
-        /// <summary>
-        /// Invokes the cancel callback.
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this._cancelAction(this);
         }
 
         /// <summary>

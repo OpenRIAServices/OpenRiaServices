@@ -299,16 +299,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = cities.GetCitiesQuery().Take(1);
             LoadOperation<City> lo = cities.Load(query, false);
 
-            // immediately after calling cancel, IsLoading should be false
             Assert.IsTrue(cities.IsLoading);
             lo.Cancel();
+            Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
-                Assert.IsFalse(cities.IsLoading);
-                Assert.IsTrue(lo.IsCanceled);
-                Assert.IsFalse(lo.HasError);
+                Assert.IsFalse(cities.IsLoading, "IsLoading should be false");
+                Assert.IsTrue(lo.IsCanceled, "operation should be canceled");
+                Assert.IsFalse(lo.HasError, "Cancelled operation should not have any error");
             });
 
             EnqueueTestComplete();
@@ -653,7 +653,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // cancel the load
                 Assert.IsFalse(lo.IsComplete);
                 lo.Cancel();
+
                 Assert.IsFalse(lo.CanCancel);
+                Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
             });
             EnqueueConditional(() => lo.IsComplete && callbackCalled && completedCalled);
             EnqueueCallback(delegate
@@ -1604,6 +1606,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = catalog.Load(query, false);
 
             lo.Cancel();
+            Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
             EnqueueConditional(delegate
             {
@@ -1643,6 +1646,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             object savedSender = null;
             int isLoadingEventCount = 0;
             bool loadCompleteDuringLoading = false;
+            bool? isLoadingDuringPropertyChange = null;
 
             Catalog catalog = CreateDomainContext();
 
@@ -1652,6 +1656,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             catalog.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 savedSender = sender;
+                isLoadingDuringPropertyChange = catalog.IsLoading;
                 if (catalog.IsLoading)
                 {
                     loadingEventArgs = e;
@@ -1676,6 +1681,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(loadCompleteDuringLoading);
                 Assert.AreEqual("IsLoading", loadingEventArgs.PropertyName);
                 Assert.AreSame(catalog, savedSender);  // verify sender
+                Assert.AreEqual(true, isLoadingDuringPropertyChange, "IsLoading should have been true");
             });
 
             EnqueueConditional(delegate ()
@@ -1687,6 +1693,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 Assert.AreEqual("IsLoading", loadedEventArgs.PropertyName);
                 Assert.AreEqual(2, isLoadingEventCount);
+                Assert.AreEqual(false, isLoadingDuringPropertyChange, "IsLoading should have been true");
             });
 
             EnqueueTestComplete();

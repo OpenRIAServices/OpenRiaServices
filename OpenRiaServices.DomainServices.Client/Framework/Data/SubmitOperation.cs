@@ -25,7 +25,7 @@ namespace OpenRiaServices.DomainServices.Client
         internal SubmitOperation(EntityChangeSet changeSet,
             Action<SubmitOperation> completeAction, object userState,
             Action<SubmitOperation> cancelAction)
-            : base(userState)
+            : base(userState, cancelAction != null)
         {
             if (changeSet == null)
             {
