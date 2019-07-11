@@ -219,8 +219,18 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this.EnsureNotCompleted();
+            if (this._cancellationTokenSource != null)
+            {
+                try
+                {
+                    this._cancellationTokenSource?.Cancel();
+                }
+                catch (AggregateException ex)
+                {
+                    throw ExceptionHandlingUtility.GetUnwrappedException(ex); ;
+                }
+            }
 
-            this._cancellationTokenSource?.Cancel();
             OnCancellationRequested();
         }
 
