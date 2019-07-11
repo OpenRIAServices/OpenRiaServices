@@ -452,13 +452,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation<City> lo = cities.Load(query, false);
 
             lo.Cancel();
-
-            ExceptionHelper.ExpectInvalidOperationException(delegate
+            EnqueueConditional(() => lo.IsComplete);
+            EnqueueCallback(delegate
             {
-                lo.Cancel();
-            }, Resources.AsyncOperation_AlreadyCompleted);
+                ExceptionHelper.ExpectInvalidOperationException(delegate
+                {
+                    lo.Cancel();
+                }, Resources.AsyncOperation_AlreadyCompleted);
 
-            lo = cities.Load(query, false);
+                lo = cities.Load(query, false);
+            }); 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
