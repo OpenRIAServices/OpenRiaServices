@@ -306,10 +306,7 @@ namespace OpenRiaServices.DomainServices.Server
                     try
                     {
                         result = queryDescription.Method.Invoke(this, parameters, out totalCount);
-
-                        // TODO: ValueTask support
                         // TODO: Should add support to a type with both result and count
-                        // Wait for result to be availible before unwrapping
                         if (queryDescription.Method.IsTaskAsync)
                         {
                             result = await queryDescription.Method.UnwrapTaskResult(result).ConfigureAwait(false);

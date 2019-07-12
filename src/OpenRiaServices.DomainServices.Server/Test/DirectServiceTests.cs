@@ -308,7 +308,6 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(service.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.Single(p => p.Name == "InvokeOperationWithParamValidation");
-            IEnumerable<ValidationResult> validationErrors;
             InvokeDescription invokeDescription = new InvokeDescription(method, new object[] { -3, "ABC", new TestDomainServices.CityWithCacheData() });
             var invokeResult = await service.InvokeAsync(invokeDescription);
 

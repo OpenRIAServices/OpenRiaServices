@@ -493,13 +493,13 @@ namespace OpenRiaServices.DomainServices
         }
 #endif
 
-            /// <summary>
-            /// Performs a check against an assembly to determine if it's a known
-            /// System assembly.
-            /// </summary>
-            /// <param name="assembly">The assembly to check.</param>
-            /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
-            internal static bool IsSystemAssembly(this Assembly assembly)
+        /// <summary>
+        /// Performs a check against an assembly to determine if it's a known
+        /// System assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly to check.</param>
+        /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
+        internal static bool IsSystemAssembly(this Assembly assembly)
         {
             return IsSystemAssembly(assembly.FullName);
         }
