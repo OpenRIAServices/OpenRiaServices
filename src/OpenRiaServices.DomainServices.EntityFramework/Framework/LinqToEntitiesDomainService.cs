@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 #else
 using System.Data;
 using System.Data.Objects;
@@ -129,7 +130,9 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         protected override ValueTask<int> CountAsync<T>(IQueryable<T> query)
         {
             // TODO: Provide flag to do it sync instead?
-            if (!DisableAsyncQuerySypport)
+            if (!DisableAsyncQuerySypport
+                // EF will throw if provider is not a IDbAsyncQueryProvider
+                && query.Provider is IDbAsyncQueryProvider)
                 return new ValueTask<int>(query.CountAsync());
             else
                 return new ValueTask<int>(query.Count());
@@ -138,7 +141,9 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         protected override ValueTask<IEnumerable> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount)
         {
             if (!DisableAsyncQuerySypport
-                && enumerable is IQueryable<T> query)
+                 // EF will throw if provider is not a IDbAsyncEnumerable
+                 && enumerable is IDbAsyncEnumerable<T>
+                 && enumerable is IQueryable<T> query)
             {
                 return new ValueTask<IEnumerable>(EnumerateAsync(query));
             }
@@ -149,6 +154,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
 
         private async Task<IEnumerable> EnumerateAsync<T>(IQueryable<T> query)
         {
+            // EF will throw if provider is not a IDbAsyncQueryProvider
             return await query.ToListAsync();
         }
 
