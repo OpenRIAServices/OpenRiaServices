@@ -89,8 +89,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         public bool IsCancellationRequested => this._cancellationTokenSource?.IsCancellationRequested == true;
 
+        /// <summary>
+        /// Gets a <see cref="System.Threading.CancellationToken"/> which is cancelled if 
+        /// when this operation is cancelled. 
+        /// It is valid if the operation support cancellation se constructor.
+        /// </summary>
         internal CancellationToken CancellationToken => this._cancellationTokenSource?.Token ?? CancellationToken.None;
-
 
         /// <summary>
         /// Gets a value indicating whether this operation is currently in a state
@@ -234,11 +238,15 @@ namespace OpenRiaServices.DomainServices.Client
             OnCancellationRequested();
         }
 
+        /// <summary>
+        /// Called when user calls <see cref="Cancel"/>, the default behaviour
+        /// is to mark the operation as completed as Cancelled, but can 
+        /// be overriden to prevent that.
+        /// </summary>
         private protected virtual void OnCancellationRequested()
         {
             SetCancelled();
         }
-
 
         /// <summary>
         /// Transition the operation into the Cancelled state
