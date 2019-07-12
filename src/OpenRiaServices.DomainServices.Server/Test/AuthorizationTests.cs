@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             MockDataService dataService = new MockDataService(user);
             cities.Initialize(new DomainServiceContext(dataService, DomainOperationType.Query));
             Exception expectedException = null;
-            DomainService.ServiceQueryResult result;
+            ServiceQueryResult result;
 
             try
             {
@@ -338,7 +338,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Attempting an Invoke operation marked with a custom authorization attribute is denied and allowed appropriately")]
-        public void Authorization_Custom_Authorization_On_Invoke()
+        public async Task Authorization_Custom_Authorization_On_Invoke()
         {
             // Specifically, the City data is marked so that no one can delete a Zip code
             // from WA unless their user name is WAGuy
@@ -376,12 +376,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 // verify that even top level exceptions go through
                 // the OnError handler
-                IEnumerable<ValidationResult> validationErrors;
                 UnauthorizedAccessException expectedException = null;
                 try
                 {
                     // cause a domain service not initialized exception
-                    cities.Invoke(new InvokeDescription(invokeOperation, new object[] { city }), out validationErrors);
+                    await cities.InvokeAsync(new InvokeDescription(invokeOperation, new object[] { city }));
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -405,12 +404,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 // verify that even top level exceptions go through
                 // the OnError handler
-                IEnumerable<ValidationResult> validationErrors;
                 UnauthorizedAccessException expectedException = null;
                 try
                 {
                     // cause a domain service not initialized exception
-                    cities.Invoke(new InvokeDescription(invokeOperation, new object[] { city }), out validationErrors);
+                    await cities.InvokeAsync(new InvokeDescription(invokeOperation, new object[] { city }));
                 }
                 catch (UnauthorizedAccessException e)
                 {

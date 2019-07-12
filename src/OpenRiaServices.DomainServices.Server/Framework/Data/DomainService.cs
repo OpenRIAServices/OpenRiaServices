@@ -259,29 +259,6 @@ namespace OpenRiaServices.DomainServices.Server
             this._serviceContext = context;
         }
 
-        public struct ServiceQueryResult
-        {
-            public ServiceQueryResult(IEnumerable result, int? totalResult)
-            {
-                Result = result;
-                TotalCount = totalResult ?? DomainService.TotalCountUndefined;
-                ValidationErrors = null;
-            }
-
-            public ServiceQueryResult(List<ValidationResult> validationErrors)
-            {
-                ValidationErrors = validationErrors.AsReadOnly();
-                TotalCount = DomainService.TotalCountUndefined;
-                Result = null;
-            }
-
-            public IEnumerable Result { get; }
-            public int TotalCount { get; }
-            public IReadOnlyCollection<ValidationResult> ValidationErrors { get; }
-
-            public bool HasValidationErrors => ValidationErrors != null;
-        }
-
         /// <summary>
         /// Performs the query operation indicated by the specified <see cref="QueryDescription"/>
         /// and returns the results. If the query returns a singleton, it should still be returned
@@ -335,8 +312,7 @@ namespace OpenRiaServices.DomainServices.Server
                         // Wait for result to be availible before unwrapping
                         if (queryDescription.Method.IsTaskAsync)
                         {
-                            await (Task)result;
-                            result = queryDescription.Method.UnwrapTaskResult(result);
+                            result = await queryDescription.Method.UnwrapTaskResult(result).ConfigureAwait(false);
                         }
                     }
                     catch (TargetInvocationException tie)
@@ -476,16 +452,10 @@ namespace OpenRiaServices.DomainServices.Server
         /// Invokes the specified invoke operation.
         /// </summary>
         /// <param name="invokeDescription">The description of the invoke operation to perform.</param>
-        /// <param name="validationErrors">An output parameter collection to which any validation errors 
         /// will be added. This will be set to <c>null</c> if no validation errors are encountered.</param>
         /// <returns>The return value of the invocation.</returns>
-        public virtual object Invoke(InvokeDescription invokeDescription, out IEnumerable<ValidationResult> validationErrors)
+        public virtual async ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription)
         {
-            object returnValue = null;
-            validationErrors = null;
-
-            List<ValidationResult> validationErrorsList = null;
-
             try
             {
                 if (invokeDescription == null)
@@ -497,24 +467,23 @@ namespace OpenRiaServices.DomainServices.Server
                 this.CheckOperationType(DomainOperationType.Invoke);
 
                 List<ValidationResult> errors = new List<ValidationResult>();
-
                 if (!this.ValidateMethodCall(invokeDescription.Method, invokeDescription.ParameterValues, errors))
                 {
-                    validationErrorsList = new List<ValidationResult>();
+                    var validationErrorsList = new List<ValidationResult>();
                     foreach (ValidationResult error in errors)
                     {
                         validationErrorsList.Add(new ValidationResult(error.ErrorMessage, error.MemberNames));
                     }
-                    validationErrors = validationErrorsList.AsReadOnly();
-                    return null;
+                    return new ServiceInvokeResult(validationErrorsList);
                 }
 
                 this.ServiceContext.Operation = invokeDescription.Method;
 
                 try
                 {
-                    returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
-                    returnValue = invokeDescription.Method.UnwrapTaskResult(returnValue);
+                    object returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
+                    returnValue = await invokeDescription.Method.UnwrapTaskResult(returnValue).ConfigureAwait(false);
+                    return new ServiceInvokeResult(returnValue);
                 }
                 catch (TargetInvocationException tie)
                 {
@@ -539,14 +508,9 @@ namespace OpenRiaServices.DomainServices.Server
             }
             catch (ValidationException e)
             {
-                if (validationErrorsList == null)
-                {
-                    validationErrorsList = new List<ValidationResult>();
-                }
-
+                var validationErrorsList = new List<ValidationResult>();
                 validationErrorsList.Add(new ValidationResult(e.ValidationResult.ErrorMessage, e.ValidationResult.MemberNames));
-                validationErrors = validationErrorsList.AsReadOnly();
-                return null;
+                return new ServiceInvokeResult(validationErrorsList);
             }
             catch (Exception e)
             {
@@ -570,8 +534,6 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 this.ServiceContext.Operation = null;
             }
-
-            return returnValue;
         }
 
         /// <summary>

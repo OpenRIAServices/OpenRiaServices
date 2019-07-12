@@ -93,17 +93,18 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
             /// <param name="inputs">Input parameters post conversion.</param>
             /// <param name="outputs">Optional out parameters.</param>
             /// <returns>Result of invocation.</returns>
+
             protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
             {
                 outputs = ServiceUtils.EmptyObjectArray;
 
-                IEnumerable<ValidationResult> validationErrors;
-                object result;
-
                 try
                 {
                     InvokeDescription description = new InvokeDescription(this.operation, inputs);
-                    result = ((DomainService)instance).Invoke(description, out validationErrors);
+                    // TODO: Verify it is completed or make async?
+                    var invokeResult = ((DomainService)instance).InvokeAsync(description).GetAwaiter().GetResult();
+                    DomainDataServiceException.HandleValidationErrors(invokeResult.ValidationErrors);
+                    return invokeResult.Result;
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -120,10 +121,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                         throw new DomainDataServiceException(Resource.DomainDataService_General_Error, ex);
                     }
                 }
-
-                DomainDataServiceException.HandleValidationErrors(validationErrors);
-
-                return result;
             }
 
             /// <summary>

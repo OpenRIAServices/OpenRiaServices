@@ -15,6 +15,7 @@ using Cities;
 using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
@@ -361,7 +362,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// for invoke operations.
         /// </summary>
         [TestMethod]
-        public void OnErrorHandling_Invoke()
+        public async Task OnErrorHandling_Invoke()
         {
             OnErrorDomainService ds = new OnErrorDomainService();
 
@@ -373,12 +374,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             // verify that even top level exceptions go through
             // the OnError handler
-            IEnumerable<ValidationResult> validationErrors;
             Exception expectedException = null;
             try
             {
                 // cause a domain service not initialized exception
-                ds.Invoke(new InvokeDescription(operation, new object[] { 1 }), out validationErrors);
+                await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 1 }));
             }
             catch (TargetInvocationException tie)
             {
@@ -396,7 +396,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             try
             {
                 // pass a null parameter
-                ds.Invoke(null, out validationErrors);
+                await ds.InvokeAsync(null);
             }
             catch (TargetInvocationException tie)
             {
@@ -415,7 +415,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Invoke(new InvokeDescription(operation, new object[] { 1 }), out validationErrors);
+                await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 1 }));
             }
             catch (TargetInvocationException tie)
             {
@@ -434,7 +434,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Invoke(new InvokeDescription(operation, new object[] { 1 }), out validationErrors);
+                await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 1 }));
             }
             catch (TargetInvocationException tie)
             {
@@ -451,9 +451,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             expectedException = null;
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
-            ds.Invoke(new InvokeDescription(operation, new object[] { 10 }), out validationErrors);
-            Assert.IsNotNull(validationErrors);
-            Assert.AreEqual(1, validationErrors.Count());
+            var invokeResult = await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 10 }));
+            Assert.IsNotNull(invokeResult.ValidationErrors);
+            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
             Assert.IsNull(ds.LastError);
         }
 

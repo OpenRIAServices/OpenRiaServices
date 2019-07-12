@@ -676,11 +676,11 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             OperationContext context = this.CreateOperationContext(DomainOperationType.Invoke);
 
             InvokeDescription invokeDescription = Utility.GetInvokeDescription(context, invokeOperation);
-            IEnumerable<ValidationResult> validationErrors;
 
-            TResult result = (TResult)context.DomainService.Invoke(invokeDescription, out validationErrors);
-
-            ErrorUtility.AssertNoValidationErrors(context, validationErrors);
+            // TODO: Remove blocking wait
+            var invokeResult = context.DomainService.InvokeAsync(invokeDescription).GetAwaiter().GetResult();
+            ErrorUtility.AssertNoValidationErrors(context, invokeResult.ValidationErrors);
+            TResult result = (TResult)invokeResult.Result;
 
             return result;
         }
@@ -701,11 +701,12 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             InvokeDescription invokeDescription = Utility.GetInvokeDescription(context, invokeOperation);
             IEnumerable<ValidationResult> validationErrors;
 
-            result = (TResult)context.DomainService.Invoke(invokeDescription, out validationErrors);
+            // TODO: Remove blocking wait
+            var invokeResult = context.DomainService.InvokeAsync(invokeDescription).GetAwaiter().GetResult();
+            result = (TResult)invokeResult.Result;
+            validationResults = invokeResult.HasValidationErrors ? invokeResult.ValidationErrors.ToList() : null;
 
-            validationResults = (validationErrors == null) ? null : validationErrors.ToList();
-
-            return (validationResults == null) || (validationResults.Count == 0);
+            return (!invokeResult.HasValidationErrors);
         }
 
         #endregion

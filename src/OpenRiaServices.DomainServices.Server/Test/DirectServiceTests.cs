@@ -22,6 +22,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace OpenRiaServices.DomainServices.Server.Test
 {
     using System.Security;
+    using System.Threading.Tasks;
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
     /// <summary>
@@ -177,7 +178,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             InvokeDescription id = new InvokeDescription(entry, null);
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
-                nw.Invoke(id, out var validationResults);
+                nw.InvokeAsync(id).GetAwaiter().GetResult();
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Submit, DomainOperationType.Invoke));
 
             nw = new TestDomainServices.EF.Northwind();
@@ -237,7 +238,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// Verify DomainServiceContext.Operation represents the currently executing operation.
         /// </summary>
         [TestMethod]
-        public void ServiceContext_CurrentOperation()
+        public async Task ServiceContext_CurrentOperation()
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ServiceContext_CurrentOperation_DomainService));
             ServiceContext_CurrentOperation_DomainService ds;
@@ -255,7 +256,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds = new ServiceContext_CurrentOperation_DomainService(DomainOperationType.Invoke);
             DomainOperationEntry invokeOp = dsd.GetInvokeOperation("Echo");
             Assert.IsNotNull(invokeOp);
-            ds.Invoke(new InvokeDescription(invokeOp, null), out var validationErrors);
+            await ds.InvokeAsync(new InvokeDescription(invokeOp, null));
             Assert.AreEqual(invokeOp, ServiceContext_CurrentOperation_DomainService.LastOperation);
             Assert.IsNull(ds.Context.Operation);
 
@@ -301,7 +302,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// <summary>
         /// Verify that method level validation occurs for invoke operations.
         [TestMethod]
-        public void ServerValidation_InvokeOperation()
+        public async Task ServerValidation_InvokeOperation()
         {
             TestDomainServices.TestProvider_Scenarios service = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.TestProvider_Scenarios>(DomainOperationType.Invoke);
 
@@ -309,16 +310,16 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.Single(p => p.Name == "InvokeOperationWithParamValidation");
             IEnumerable<ValidationResult> validationErrors;
             InvokeDescription invokeDescription = new InvokeDescription(method, new object[] { -3, "ABC", new TestDomainServices.CityWithCacheData() });
-            service.Invoke(invokeDescription, out validationErrors);
+            var invokeResult = await service.InvokeAsync(invokeDescription);
 
-            Assert.IsNotNull(validationErrors);
-            Assert.AreEqual(2, validationErrors.Count());
+            Assert.IsNotNull(invokeResult.ValidationErrors);
+            Assert.AreEqual(2, invokeResult.ValidationErrors.Count());
 
-            ValidationResult error = validationErrors.ElementAt(0);
+            ValidationResult error = invokeResult.ValidationErrors.ElementAt(0);
             Assert.AreEqual("The field a must be between 0 and 10.", error.ErrorMessage);
             Assert.AreEqual("a", error.MemberNames.Single());
 
-            error = validationErrors.ElementAt(1);
+            error = invokeResult.ValidationErrors.ElementAt(1);
             Assert.AreEqual("The field b must be a string with a maximum length of 2.", error.ErrorMessage);
             Assert.AreEqual("b", error.MemberNames.Single());
         }

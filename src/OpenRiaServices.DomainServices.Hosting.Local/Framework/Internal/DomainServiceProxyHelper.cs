@@ -139,18 +139,18 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             DomainService service = CreateDomainServiceInstance(domainService, context, domainServiceInstances);
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(service.GetType());
             DomainOperationEntry method = serviceDescription.GetInvokeOperation(name);
-            IEnumerable<ValidationResult> validationErrors;
 
             InvokeDescription invokeDescription = new InvokeDescription(method, parameters);
-            object result = service.Invoke(invokeDescription, out validationErrors);
-
-            if (validationErrors != null && validationErrors.Any())
+            // TODO: Look into removing this blocking Wait
+            var loadResult = service.InvokeAsync(invokeDescription)
+                .GetAwaiter().GetResult();
+            if (loadResult.HasValidationErrors)
             {
-                IEnumerable<ValidationResultInfo> operationErrors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames));
+                IEnumerable<ValidationResultInfo> operationErrors = loadResult.ValidationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames));
                 throw new OperationException(Resource.DomainServiceProxy_OperationError, operationErrors);
             }
 
-            return result;
+            return loadResult.Result;
         }
 
         /// <summary>

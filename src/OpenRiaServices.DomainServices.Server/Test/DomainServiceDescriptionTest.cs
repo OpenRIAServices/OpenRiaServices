@@ -3662,10 +3662,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             return base.Submit(changeSet);
         }
-        public override object Invoke(InvokeDescription invokeDescription, out IEnumerable<ValidationResult> validationErrors)
+        public override ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription)
         {
-            return base.Invoke(invokeDescription, out validationErrors);
+            return base.InvokeAsync(invokeDescription);
         }
+
         public override void Initialize(DomainServiceContext context)
         {
             base.Initialize(context);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -58,17 +59,25 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            //protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected async override Task<InvokeResult> InvokeCoreAsync(object instance, object[] inputs)
             {
-                outputs = ServiceUtility.EmptyObjectArray;
-
-                IEnumerable<ValidationResult> validationErrors;
-                object result;
-
                 try
                 {
                     InvokeDescription invokeDescription = new InvokeDescription(this.operation, inputs);
-                    result = ((DomainService)instance).Invoke(invokeDescription, out validationErrors);
+                    var invokeResult = await ((DomainService)instance).InvokeAsync(invokeDescription);
+                    if (invokeResult.HasValidationErrors)
+                    {
+                        throw ServiceUtility.CreateFaultException(invokeResult.ValidationErrors);
+                    }
+                    else
+                    {
+                        return new InvokeResult()
+                        {
+                            result = invokeResult.Result,
+                            outputs = ServiceUtility.EmptyObjectArray
+                        };
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -78,12 +87,6 @@ namespace OpenRiaServices.DomainServices.Hosting
                     }
                     throw ServiceUtility.CreateFaultException(ex);
                 }
-
-                if (validationErrors != null && validationErrors.Any())
-                {
-                    throw ServiceUtility.CreateFaultException(validationErrors);
-                }
-                return result;
             }
 
             protected override void ConvertInputs(object[] inputs)

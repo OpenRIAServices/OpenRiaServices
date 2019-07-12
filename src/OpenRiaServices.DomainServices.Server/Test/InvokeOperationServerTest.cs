@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.DomainServices.Client.Test;
 using TestDomainServices;
@@ -116,41 +117,39 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Invoking an invoke operation with invalid parameters")]
-        public void InvokeOperation_ServerValidationError()
+        public async Task InvokeOperation_ServerValidationError()
         {
             TestProvider_Scenarios provider = ServerTestHelper.CreateInitializedDomainService<TestProvider_Scenarios>(DomainOperationType.Invoke);
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(TestProvider_Scenarios));
             DomainOperationEntry incrementBid1ForAByMethod = serviceDescription.GetInvokeOperation("IncrementBid1ForABy");
             Assert.IsNotNull(incrementBid1ForAByMethod);
 
-            IEnumerable<ValidationResult> validationErrors;
             TestDomainServices.A inputA = new TestDomainServices.A()
             {
                 BID1 = 1
             };
-            object result = provider.Invoke(new InvokeDescription(incrementBid1ForAByMethod, new object[] { inputA, 2 }), out validationErrors);
-            Assert.IsNull(result);
-            Assert.IsNotNull(validationErrors);
-            Assert.AreEqual(2, validationErrors.Count());
-            Assert.AreEqual("The field delta must be between 5 and 10.", validationErrors.ElementAt(0).ErrorMessage);
-            Assert.AreEqual("The RequiredString field is required.", validationErrors.ElementAt(1).ErrorMessage);
+            var invokeResult = await provider.InvokeAsync(new InvokeDescription(incrementBid1ForAByMethod, new object[] { inputA, 2 }));
+            Assert.IsNull(invokeResult.Result);
+            Assert.IsNotNull(invokeResult.ValidationErrors);
+            Assert.AreEqual(2, invokeResult.ValidationErrors.Count);
+            Assert.AreEqual("The field delta must be between 5 and 10.", invokeResult.ValidationErrors.ElementAt(0).ErrorMessage);
+            Assert.AreEqual("The RequiredString field is required.", invokeResult.ValidationErrors.ElementAt(1).ErrorMessage);
         }
 
         [TestMethod]
         [Description("Invoking an invoke operation with invalid parameters")]
-        public void InvokeOperation_ServerValidationException()
+        public async Task InvokeOperation_ServerValidationException()
         {
             TestProvider_Scenarios provider = ServerTestHelper.CreateInitializedDomainService<TestProvider_Scenarios>(DomainOperationType.Invoke);
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(TestProvider_Scenarios));
             DomainOperationEntry throwValidationExceptionMethod = serviceDescription.GetInvokeOperation("ThrowValidationException");
             Assert.IsNotNull(throwValidationExceptionMethod);
 
-            IEnumerable<ValidationResult> validationErrors;
-            object result = provider.Invoke(new InvokeDescription(throwValidationExceptionMethod, new object[0]), out validationErrors);
-            Assert.IsNull(result);
-            Assert.IsNotNull(validationErrors);
-            Assert.AreEqual(1, validationErrors.Count());
-            Assert.AreEqual("Validation error.", validationErrors.ElementAt(0).ErrorMessage);
+            var invokeResult = await provider.InvokeAsync(new InvokeDescription(throwValidationExceptionMethod, new object[0]));
+            Assert.IsNull(invokeResult.Result);
+            Assert.IsNotNull(invokeResult.ValidationErrors);
+            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
+            Assert.AreEqual("Validation error.", invokeResult.ValidationErrors.ElementAt(0).ErrorMessage);
         }
     }
 }
