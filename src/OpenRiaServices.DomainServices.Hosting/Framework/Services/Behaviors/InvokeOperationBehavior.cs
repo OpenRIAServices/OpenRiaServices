@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
@@ -65,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 try
                 {
                     InvokeDescription invokeDescription = new InvokeDescription(this.operation, inputs);
-                    var invokeResult = await ((DomainService)instance).InvokeAsync(invokeDescription);
+                    ServiceInvokeResult invokeResult = await ((DomainService)instance).InvokeAsync(invokeDescription);
                     if (invokeResult.HasValidationErrors)
                     {
                         throw ServiceUtility.CreateFaultException(invokeResult.ValidationErrors);
@@ -74,6 +75,10 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         return invokeResult.Result;
                     }
+                }
+                catch(FaultException<DomainServiceFault>) // from validation error
+                {
+                    throw;
                 }
                 catch (Exception ex)
                 {

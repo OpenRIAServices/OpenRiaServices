@@ -91,11 +91,21 @@ namespace OpenRiaServices.DomainServices.Hosting
                     }
                 }
 
-                QueryResult<TEntity> result;
                 try
                 {
                     QueryOperationInvoker.SetOutputCachingPolicy(this.operation);
-                    result = await QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery);
+                    QueryResult<TEntity> result = await QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery);
+
+                    if (result.ValidationErrors != null && result.ValidationErrors.Any())
+                    {
+                        throw ServiceUtility.CreateFaultException(result.ValidationErrors);
+                    }
+
+                    return result;
+                }
+                catch (FaultException<DomainServiceFault>) // from validation error
+                {
+                    throw;
                 }
                 catch (Exception ex)
                 {
@@ -106,13 +116,6 @@ namespace OpenRiaServices.DomainServices.Hosting
                     QueryOperationInvoker.ClearOutputCachingPolicy();
                     throw ServiceUtility.CreateFaultException(ex);
                 }
-
-                if (result.ValidationErrors != null && result.ValidationErrors.Any())
-                {
-                    throw ServiceUtility.CreateFaultException(result.ValidationErrors);
-                }
-
-                return result;
             }
 
             protected override void ConvertInputs(object[] inputs)
