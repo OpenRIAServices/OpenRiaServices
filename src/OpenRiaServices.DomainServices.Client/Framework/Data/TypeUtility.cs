@@ -119,7 +119,12 @@ namespace OpenRiaServices.DomainServices
         public static bool IsTaskType(Type type)
         {
             return type == typeof(Task)
-                || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>));
+                || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+#if SERVERFX
+                || type == typeof(ValueTask)
+                || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ValueTask<>))
+#endif
+                ;
         }
 
         public static Type GetTaskReturnType(Type type)
@@ -128,6 +133,12 @@ namespace OpenRiaServices.DomainServices
                 return typeof(void);
             else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
                 return type.GetGenericArguments()[0];
+#if SERVERFX
+            if (type == typeof(ValueTask))
+                return typeof(void);
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ValueTask<>))
+                return type.GetGenericArguments()[0];
+#endif
             else
                 throw new ArgumentException("Type must be either Task, or Task<T>", "type");
         }
@@ -482,13 +493,13 @@ namespace OpenRiaServices.DomainServices
         }
 #endif
 
-        /// <summary>
-        /// Performs a check against an assembly to determine if it's a known
-        /// System assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly to check.</param>
-        /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
-        internal static bool IsSystemAssembly(this Assembly assembly)
+            /// <summary>
+            /// Performs a check against an assembly to determine if it's a known
+            /// System assembly.
+            /// </summary>
+            /// <param name="assembly">The assembly to check.</param>
+            /// <returns><c>true</c> if the assembly is known to be a system assembly, otherwise <c>false</c>.</returns>
+            internal static bool IsSystemAssembly(this Assembly assembly)
         {
             return IsSystemAssembly(assembly.FullName);
         }
