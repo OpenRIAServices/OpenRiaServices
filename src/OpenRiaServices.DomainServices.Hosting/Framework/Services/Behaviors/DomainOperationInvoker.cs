@@ -34,43 +34,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         public object Invoke(object instance, object[] inputs, out object[] outputs)
         {
-            string operationName = this.Name;
-            long startTicks = DiagnosticUtility.GetTicks();
-            try
-            {
-                DiagnosticUtility.OperationInvoked(operationName);
-
-                var domainService = this.GetDomainService(instance);
-
-                // invoke the operation and process the result
-                this.ConvertInputs(inputs);
-                var result = this.InvokeCore(domainService, inputs, out outputs);
-                result = this.ConvertReturnValue(result);
-
-                DiagnosticUtility.OperationCompleted(operationName, DiagnosticUtility.GetDuration(startTicks));
-                return result;
-            }
-            catch (FaultException)
-            {
-                DiagnosticUtility.OperationFaulted(operationName, DiagnosticUtility.GetDuration(startTicks));
-
-                // if the exception has already been transformed to a fault
-                // just rethrow it
-                throw;
-            }
-            catch (Exception ex)
-            {
-                if (ex.IsFatal())
-                {
-                    throw;
-                }
-                DiagnosticUtility.OperationFailed(operationName, DiagnosticUtility.GetDuration(startTicks));
-
-                // We need to ensure that any time an exception is thrown by the
-                // service it is transformed to a properly sanitized/configured
-                // fault exception.
-                throw ServiceUtility.CreateFaultException(ex);
-            }
+            throw new NotSupportedException();
         }
 
         protected virtual void ConvertInputs(object[] inputs)
@@ -82,16 +46,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             return returnValue;
         }
 
-        protected virtual object InvokeCore(object instance, object[] inputs, out object[] outputs)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
-        {
-            var result = InvokeCore(instance, inputs, out _);
-            return new ValueTask<object>(result);
-        }
+        protected abstract ValueTask<object> InvokeCoreAsync(object instance, object[] inputs);
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
@@ -106,12 +61,11 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         private async Task<object> InvokeAsync(object instance, object[] inputs)
         {
-            string operationName = this.Name;
             long startTicks = DiagnosticUtility.GetTicks();
 
             try
             {
-                DiagnosticUtility.OperationInvoked(operationName);
+                DiagnosticUtility.OperationInvoked(this.Name);
 
                 DomainService domainService = this.GetDomainService(instance);
 
@@ -120,13 +74,13 @@ namespace OpenRiaServices.DomainServices.Hosting
                 var result = await this.InvokeCoreAsync(domainService, inputs).ConfigureAwait(false);
                 result = this.ConvertReturnValue(result);
 
-                DiagnosticUtility.OperationCompleted(operationName, DiagnosticUtility.GetDuration(startTicks));
+                DiagnosticUtility.OperationCompleted(this.Name, DiagnosticUtility.GetDuration(startTicks));
 
                 return result;
             }
             catch (FaultException)
             {
-                DiagnosticUtility.OperationFaulted(operationName, DiagnosticUtility.GetDuration(startTicks));
+                DiagnosticUtility.OperationFaulted(this.Name, DiagnosticUtility.GetDuration(startTicks));
 
                 // if the exception has already been transformed to a fault
                 // just rethrow it
@@ -138,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 {
                     throw;
                 }
-                DiagnosticUtility.OperationFailed(operationName, DiagnosticUtility.GetDuration(startTicks));
+                DiagnosticUtility.OperationFailed(this.Name, DiagnosticUtility.GetDuration(startTicks));
 
                 // We need to ensure that any time an exception is thrown by the
                 // service it is transformed to a properly sanitized/configured

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -48,11 +49,11 @@ namespace OpenRiaServices.DomainServices.Hosting
                 }
             }
 
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            //protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
             {
                 DomainService domainService = (DomainService)instance;
                 IEnumerable<ChangeSetEntry> changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
-                outputs = ServiceUtility.EmptyObjectArray;
 
                 try
                 {
