@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <summary>
     /// Class representing the result of a <see cref="DomainClient"/> operation.
     /// </summary>
-    public sealed class DomainClientResult
+    internal sealed class DomainClientResult
     {
         private readonly int _totalEntityCount;
         private readonly ReadOnlyCollection<Entity> _entities;

@@ -25,7 +25,8 @@ namespace OpenRiaServices.Controls.DomainServices.Test
             this._submitChangesCallback = submitChangesCallback;
         }
 
-        public override LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
+
+        public override LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState)
         {
             if (this._loadCallback != null)
             {

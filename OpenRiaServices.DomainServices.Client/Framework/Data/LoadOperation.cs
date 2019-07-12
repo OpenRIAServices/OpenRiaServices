@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using OpenRiaServices.DomainServices.Client.Data;
 
 namespace OpenRiaServices.DomainServices.Client
@@ -12,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <summary>
     /// Represents an asynchronous load operation
     /// </summary>
-    public abstract class LoadOperation : OperationBase
+    public abstract class LoadOperation : OperationBase, ILoadResult
     {
         private ReadOnlyObservableLoaderCollection<Entity> _entities;
         private ReadOnlyObservableLoaderCollection<Entity> _allEntities;
@@ -27,8 +28,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="query">The query to load.</param>
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        internal LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState)
-            : base(userState)
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
+        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState, bool supportCancellation)
+            : base(userState, supportCancellation)
         {
             if (query == null)
             {
@@ -39,65 +41,19 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Creates a strongly typed <see cref="LoadOperation"/> for the specified Type.
+        /// The <see cref="ILoadResult"/> for this operation.
         /// </summary>
-        /// <typeparam name="TEntity">The entity Type.</typeparam>
-        /// <param name="query">The query to load.</param>
-        /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
-        /// <param name="completeAction">Action to execute when the operation completes.</param>
-        /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled. If null, cancellation will not be supported.</param>
-        /// <returns>The operation instance created.</returns>
-        internal static LoadOperation Create<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
-            Action<LoadOperation> completeAction, object userState,
-            Action<LoadOperation> cancelAction) where TEntity : Entity
-        {
-            Action<LoadOperation<TEntity>> wrappedCompleteAction = null;
-            Action<LoadOperation<TEntity>> wrappedCancelAction = null;
-            if (completeAction != null)
-            {
-                wrappedCompleteAction = arg => completeAction(arg);
-            }
-            if (cancelAction != null)
-            {
-                wrappedCancelAction = arg => cancelAction(arg);
-            }
-
-            return new LoadOperation<TEntity>(query, loadBehavior, wrappedCompleteAction, userState, wrappedCancelAction);
-        }
-
-        /// <summary>
-        /// The <see cref="DomainClientResult"/> for this operation.
-        /// </summary>
-        protected new DomainClientResult Result
-        {
-            get
-            {
-                return (DomainClientResult)base.Result;
-            }
-        }
+        private protected new ILoadResult Result => (ILoadResult)base.Result;
 
         /// <summary>
         /// The <see cref="EntityQuery"/> for this load operation.
         /// </summary>
-        public EntityQuery EntityQuery
-        {
-            get
-            {
-                return this._query;
-            }
-        }
+        public EntityQuery EntityQuery => this._query;
 
         /// <summary>
         /// The <see cref="LoadBehavior"/> for this load operation.
         /// </summary>
-        public LoadBehavior LoadBehavior
-        {
-            get
-            {
-                return this._loadBehavior;
-            }
-        }
+        public LoadBehavior LoadBehavior => this._loadBehavior;
 
         /// <summary>
         /// Gets all the top level entities loaded by the operation. The collection returned implements
@@ -110,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._entities == null)
                 {
                     var resultEntities = this.Result != null ? this.Result.Entities : Enumerable.Empty<Entity>();
-                    this._entities = new ReadOnlyObservableLoaderCollection<Entity>(resultEntities);
+                    this._entities = AsReadOnlyObservableLoaderCollection(resultEntities);
                 }
                 return this._entities;
             }
@@ -128,7 +84,7 @@ namespace OpenRiaServices.DomainServices.Client
                 if (this._allEntities == null)
                 {
                     var resultEntities = this.Result != null ? this.Result.AllEntities : Enumerable.Empty<Entity>();
-                    this._allEntities = new ReadOnlyObservableLoaderCollection<Entity>(resultEntities);
+                    this._allEntities = AsReadOnlyObservableLoaderCollection(resultEntities);
                 }
                 return this._allEntities;
             }
@@ -139,18 +95,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// evaluation of the total server entity count requires the property <see cref="OpenRiaServices.DomainServices.Client.EntityQuery.IncludeTotalCount"/>
         /// on the query for the load operation to be set to <c>true</c>.
         /// </summary>
-        public int TotalEntityCount
-        {
-            get
-            {
-                if (this.Result != null)
-                {
-                    return this.Result.TotalEntityCount;
-                }
-
-                return 0;
-            }
-        }
+        public int TotalEntityCount => this.Result != null ? this.Result.TotalEntityCount : 0;
 
         /// <summary>
         /// Gets the validation errors.
@@ -159,28 +104,144 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                if (this.Result != null)
+                // return any errors if set, otherwise return an empty
+                // collection
+                if (this._validationErrors == null)
                 {
-                    return this.Result.ValidationErrors;
-                }
-                else
-                {
-                    // return any errors if set, otherwise return an empty
-                    // collection
-                    if (this._validationErrors == null)
-                    {
-                        this._validationErrors = new ValidationResult[0];
-                    }
+                    this._validationErrors = Enumerable.Empty<ValidationResult>();
                 }
                 return this._validationErrors;
             }
         }
 
         /// <summary>
+        /// Completes the load operation with the specified error.
+        /// </summary>
+        /// <param name="error">The error.</param>
+        internal new void Complete(Exception error)
+        {
+            if (error is DomainOperationException doe
+                && doe.ValidationErrors.Any())
+            {
+                this._validationErrors = doe.ValidationErrors;
+                this.RaisePropertyChanged(nameof(ValidationErrors));
+            }
+
+            base.Complete(error);
+        }
+
+        /// <summary>
+        /// Update the observable result collections.
+        /// </summary>
+        /// <param name="result">The results of the completed load operation.</param>
+        private protected virtual void UpdateResults(ILoadResult result)
+        {
+            if (result == null)
+            {
+                throw new ArgumentNullException("result");
+            }
+
+            // if the Entities property has been examined, update the backing
+            // observable collection
+            this._entities?.Reset(result.Entities);
+
+            // if the AllEntities property has been examined, update the backing
+            // observable collection
+            this._allEntities?.Reset(result.AllEntities);
+        }
+
+        private protected override void OnCancellationRequested()
+        {
+            // Prevent OperationBase from calling SetCancelled
+        }
+
+        private protected static ReadOnlyObservableLoaderCollection<TEntity> AsReadOnlyObservableLoaderCollection<TEntity>(IEnumerable<TEntity> resultEntities)
+        {
+            return resultEntities as ReadOnlyObservableLoaderCollection<TEntity> ?? new ReadOnlyObservableLoaderCollection<TEntity>(resultEntities);
+        }
+    }
+
+    /// <summary>
+    /// Represents an asynchronous load operation
+    /// </summary>
+    /// <typeparam name="TEntity">The entity Type being loaded.</typeparam>
+    public sealed class LoadOperation<TEntity> : LoadOperation
+        where TEntity : Entity
+    {
+        private ReadOnlyObservableLoaderCollection<TEntity> _entities;
+        private readonly Action<LoadOperation<TEntity>> _completeAction;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoadOperation"/> class.
+        /// </summary>
+        /// <param name="query">The query to load.</param>
+        /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
+        /// <param name="completeAction">Action to execute when the operation completes.</param>
+        /// <param name="userState">Optional user state for the operation.</param>
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
+        internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
+            Action<LoadOperation<TEntity>> completeAction, object userState,
+            bool supportCancellation)
+            : base(query, loadBehavior, userState, supportCancellation)
+        {
+            this._completeAction = completeAction;
+        }
+
+        /// <summary>
+        /// The <see cref="EntityQuery"/> for this load operation.
+        /// </summary>
+        public new EntityQuery<TEntity> EntityQuery => (EntityQuery<TEntity>)base.EntityQuery;
+
+        /// <summary>
+        /// Gets all the entities loaded by the operation, including any
+        /// entities referenced by the top level entities. The collection returned implements
+        /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
+        /// </summary>
+        public new IEnumerable<TEntity> Entities
+        {
+            get
+            {
+                if (this._entities == null)
+                {
+                    var resultEntities = this.Result != null ? this.Result.Entities.Cast<TEntity>() : Enumerable.Empty<TEntity>();
+                    this._entities = AsReadOnlyObservableLoaderCollection(resultEntities);
+                }
+
+                return this._entities;
+            }
+        }
+
+        /// <summary>
+        /// Update the observable result collections.
+        /// </summary>
+        /// <param name="result">The results of the completed load operation.</param>
+        private void UpdateResults(LoadResult<TEntity> result)
+        {
+            base.UpdateResults((ILoadResult)result);
+
+            // if the Entities property has been examined, update the backing
+            // observable collection
+            this._entities?.Reset(result.Entities);
+        }
+
+        /// <summary>
+        /// Invoke the completion callback.
+        /// </summary>
+        protected override void InvokeCompleteAction()
+        {
+            this._completeAction?.Invoke(this);
+        }
+
+        /// <summary>
+        /// The <see cref="LoadResult{TEntity}"/> for this operation.
+        /// </summary>
+        private new LoadResult<TEntity> Result => (LoadResult<TEntity>)base.Result;
+
+        /// <summary>
         /// Successfully completes the load operation with the specified result.
         /// </summary>
         /// <param name="result">The result.</param>
-        internal void Complete(DomainClientResult result)
+        internal void Complete(LoadResult<TEntity> result)
         {
             if (result == null)
             {
@@ -202,174 +263,6 @@ namespace OpenRiaServices.DomainServices.Client
             if (result.Entities.Any())
             {
                 this.RaisePropertyChanged(nameof(TotalEntityCount));
-            }
-        }
-
-        /// <summary>
-        /// Completes the load operation with the specified error.
-        /// </summary>
-        /// <param name="error">The error.</param>
-        internal new void Complete(Exception error)
-        {
-            if (typeof(DomainException).IsAssignableFrom(error.GetType()))
-            {
-                // DomainExceptions should not be modified
-                base.Complete(error);
-                return;
-            }
-
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_LoadOperationFailed,
-                this.EntityQuery.QueryName, error.Message);
-
-            DomainOperationException domainOperationException = error as DomainOperationException;
-            if (domainOperationException != null)
-            {
-                error = new DomainOperationException(message, domainOperationException);
-            }
-            else
-            {
-                error = new DomainOperationException(message, error);
-            }
-
-            base.Complete(error);
-        }
-
-        /// <summary>
-        /// Completes the load operation with the specified validation errors.
-        /// </summary>
-        /// <param name="validationErrors">The validation errors.</param>
-        internal void Complete(IEnumerable<ValidationResult> validationErrors)
-        {
-            this._validationErrors = validationErrors;
-            this.RaisePropertyChanged(nameof(ValidationErrors));
-
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_LoadOperationFailed_Validation,
-                this.EntityQuery.QueryName);
-            DomainOperationException error = new DomainOperationException(message, validationErrors);
-
-            base.Complete(error);
-        }
-
-        /// <summary>
-        /// Update the observable result collections.
-        /// </summary>
-        /// <param name="result">The results of the completed load operation.</param>
-        protected virtual void UpdateResults(DomainClientResult result)
-        {
-            if (result == null)
-            {
-                throw new ArgumentNullException("result");
-            }
-
-            // if the Entities property has been examined, update the backing
-            // observable collection
-            this._entities?.Reset(result.Entities);
-
-            // if the AllEntities property has been examined, update the backing
-            // observable collection
-            this._allEntities?.Reset(result.AllEntities);
-        }
-    }
-
-    /// <summary>
-    /// Represents an asynchronous load operation
-    /// </summary>
-    /// <typeparam name="TEntity">The entity Type being loaded.</typeparam>
-    public sealed class LoadOperation<TEntity> : LoadOperation where TEntity : Entity
-    {
-        private ReadOnlyObservableLoaderCollection<TEntity> _entities;
-        private readonly Action<LoadOperation<TEntity>> _cancelAction;
-        private readonly Action<LoadOperation<TEntity>> _completeAction;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoadOperation"/> class.
-        /// </summary>
-        /// <param name="query">The query to load.</param>
-        /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
-        /// <param name="completeAction">Action to execute when the operation completes.</param>
-        /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled.</param>
-        internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
-            Action<LoadOperation<TEntity>> completeAction, object userState,
-            Action<LoadOperation<TEntity>> cancelAction)
-            : base(query, loadBehavior, userState)
-        {
-            this._cancelAction = cancelAction;
-            this._completeAction = completeAction;
-        }
-
-        /// <summary>
-        /// The <see cref="EntityQuery"/> for this load operation.
-        /// </summary>
-        public new EntityQuery<TEntity> EntityQuery
-        {
-            get
-            {
-                return (EntityQuery<TEntity>)base.EntityQuery;
-            }
-        }
-
-        /// <summary>
-        /// Gets all the entities loaded by the operation, including any
-        /// entities referenced by the top level entities. The collection returned implements
-        /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
-        /// </summary>
-        public new IEnumerable<TEntity> Entities
-        {
-            get
-            {
-                if (this._entities == null)
-                {
-                    var resultEntities = this.Result != null ? this.Result.Entities.Cast<TEntity>() : Enumerable.Empty<TEntity>();
-                    this._entities = new ReadOnlyObservableLoaderCollection<TEntity>(resultEntities);
-                }
-
-                return this._entities;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return (this._cancelAction != null);
-            }
-        }
-
-        /// <summary>
-        /// Update the observable result collections.
-        /// </summary>
-        /// <param name="result">The results of the completed load operation.</param>
-        protected override void UpdateResults(DomainClientResult result)
-        {
-            base.UpdateResults(result);
-
-            // if the Entities property has been examined, update the backing
-            // observable collection
-            this._entities?.Reset(result.Entities.Cast<TEntity>());
-        }
-
-        /// <summary>
-        /// Invokes the cancel callback.
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this._cancelAction(this);
-        }
-
-        /// <summary>
-        /// Invoke the completion callback.
-        /// </summary>
-        protected override void InvokeCompleteAction()
-        {
-            if (this._completeAction != null)
-            {
-                this._completeAction(this);
             }
         }
     }

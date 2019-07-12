@@ -14,11 +14,7 @@ using OpenRiaServices.DomainServices.Client.Test.Utilities;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
-#if SILVERLIGHT
-    using AsyncResultBase = SSmDsWeb::OpenRiaServices.DomainServices.Client.AsyncResultBase;
-#else
     using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
-#endif
 
     public class AuthenticationDomainClient : DomainClient
     {

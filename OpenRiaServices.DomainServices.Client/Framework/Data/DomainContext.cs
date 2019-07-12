@@ -22,9 +22,6 @@ namespace OpenRiaServices.DomainServices.Client
     {
         internal const int TotalCountUndefined = -1;
 
-        private static MethodInfo createLoadOperationMethod = typeof(LoadOperation)
-                .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
-
         private static MethodInfo createInvokeOperationMethod = typeof(InvokeOperation)
                 .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -87,7 +84,7 @@ namespace OpenRiaServices.DomainServices.Client
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException();
+                    throw new ArgumentNullException(nameof(value));
                 s_domainClientFactory = value;
             }
         }
@@ -274,15 +271,10 @@ namespace OpenRiaServices.DomainServices.Client
                 bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
 
                 Action<SubmitOperation> cancelAction = null;
-                CancellationToken cancellationToken = CancellationToken.None;
                 if (this.DomainClient.SupportsCancellation)
                 {
-                    var tcs = new CancellationTokenSource();
-                    cancellationToken = tcs.Token;
-
                     cancelAction = (op) =>
                     {
-                        tcs.Cancel();
                         // TODO: Consider moving to callback below ?
                         this.IsSubmitting = false;
                         foreach (Entity entity in changeSet)
@@ -327,11 +319,12 @@ namespace OpenRiaServices.DomainServices.Client
                         entity.IsSubmitting = true;
                     }
 
-                    this.DomainClient.SubmitAsync(changeSet, cancellationToken)
-                        .ContinueWith(submitTask =>
+                    this.DomainClient.SubmitAsync(changeSet, submitOperation.CancellationToken)
+                        .ContinueWith((submitTask, state) =>
                         {
-                            this.CompleteSubmitChanges(submitTask, submitOperation);
+                            this.CompleteSubmitChanges(submitTask, (SubmitOperation)state);
                         }
+                        , submitOperation
                         , CancellationToken.None
                         , TaskContinuationOptions.NotOnCanceled
                         , _syncContextScheduler);
@@ -373,7 +366,7 @@ namespace OpenRiaServices.DomainServices.Client
             TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
 
             var submitOp = this.SubmitChanges((res) => SetTaskResult(res, tcs, (op) => new SubmitResult(op.ChangeSet)), userState: null);
-            RegisterCancellationToken(cancellationToken, submitOp, tcs);
+            RegisterCancellationToken(cancellationToken, submitOp);
 
             return tcs.Task;
         }
@@ -389,9 +382,6 @@ namespace OpenRiaServices.DomainServices.Client
         private void SetTaskResult<TOperation, TResult>(TOperation operation, TaskCompletionSource<TResult> tcs, Func<TOperation, TResult> toResult)
             where TOperation : OperationBase
         {
-            //if (!operation.IsComplete)
-            //    throw new ArgumentException("The operation must have completed before calling SetTaskResult");
-
             if (operation.IsCanceled)
                 tcs.TrySetCanceled();
             else if (operation.HasError)
@@ -408,21 +398,19 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Registers the operation with the CancellationToken so that the operation is cancelled whenever the cancellation is requested.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="operation">The operation.</param>
-        /// <param name="tcs">The TaskCompletionSource used to create a task for the specified operation.</param>
-        private static void RegisterCancellationToken<TResult>(CancellationToken cancellationToken, OperationBase operation, TaskCompletionSource<TResult> tcs)
+        private static void RegisterCancellationToken(CancellationToken cancellationToken, OperationBase operation)
         {
-            if (cancellationToken.CanBeCanceled)
+            if (cancellationToken.CanBeCanceled && operation.CanCancel)
             {
-                cancellationToken.Register(() =>
+                cancellationToken.Register((state) =>
                 {
-                    if (operation.CanCancel)
-                        operation.Cancel();
-                    else
-                        tcs.TrySetCanceled();
-                });
+                    var op = (OperationBase)state;
+
+                    if (op.CanCancel)
+                        op.Cancel();
+                }, operation, useSynchronizationContext: true);
             }
         }
 
@@ -466,7 +454,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The load operation.</returns>
         public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, bool throwOnError) where TEntity : Entity
         {
-            return (LoadOperation<TEntity>)this.Load(query, LoadBehavior.KeepCurrent, throwOnError);
+            return this.Load<TEntity>(query, LoadBehavior.KeepCurrent, throwOnError);
         }
 
         /// <summary>
@@ -494,9 +482,7 @@ namespace OpenRiaServices.DomainServices.Client
                 };
             }
 
-            LoadOperation<TEntity> loadOperation = (LoadOperation<TEntity>)this.Load(query, loadBehavior, callback, null);
-
-            return (LoadOperation<TEntity>)loadOperation;
+            return this.Load<TEntity>(query, loadBehavior, callback, null);
         }
 
         /// <summary>
@@ -509,7 +495,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The load operation.</returns>
         public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
         {
-            return (LoadOperation<TEntity>)this.Load(query, LoadBehavior.KeepCurrent, callback, userState);
+            return this.Load<TEntity>(query, LoadBehavior.KeepCurrent, callback, userState);
         }
 
         /// <summary>
@@ -521,149 +507,70 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="callback">Optional callback to be called when the load operation completes.</param>
         /// <param name="userState">Optional user state.</param>
         /// <returns>The load operation.</returns>
-        public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
+        public virtual LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
         {
-            // since we can't cast delegates, we create a wrapper that does the
-            // necessary argument cast
-            Action<LoadOperation> callbackWrapper = null;
-            if (callback != null)
-            {
-                callbackWrapper = (lo) => callback((LoadOperation<TEntity>)lo);
-            }
+            Action<LoadOperation<TEntity>> cancelAction = null;
 
-            return (LoadOperation<TEntity>)this.Load((EntityQuery)query, loadBehavior, callbackWrapper, userState);
-        }
+            var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, DomainClient.SupportsCancellation);
 
-        /// <summary>
-        /// Initiates a load operation for the specified query.
-        /// </summary>
-        /// <param name="query">The query to invoke.</param>
-        /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to apply.</param>
-        /// <param name="callback">Optional callback to be called when the load operation completes. The callback must
-        /// be a delegate taking a single parameter that can accept an instance of the <see cref="LoadOperation"/> Type returned.</param>
-        /// <param name="userState">Optional user state.</param>
-        /// <returns>The load operation.</returns>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
-        {
-            if (query == null)
-            {
-                throw new ArgumentNullException("query");
-            }
+            LoadAsync(query, loadBehavior, loadOperation.CancellationToken)
+                .ContinueWith((loadTask, state) =>
+               {
+                   var operation = (LoadOperation<TEntity>)state;
+                   // if the load operation has been canceled,
+                   // no work to do.
+                   if (operation.IsCanceled)
+                   {
+                       return;
+                   }
 
-            // verify the specified query was created by this DomainContext
-            if (this.DomainClient != query.DomainClient)
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_InvalidEntityQueryDomainClient, query.QueryName));
-            }
-
-            Action<LoadOperation> cancelAction = null;
-
-            CancellationToken cancellationToken = default;
-            if (this.DomainClient.SupportsCancellation)
-            {
-
-                var cts = new CancellationTokenSource();
-                cancellationToken = cts.Token;
-
-                cancelAction = (op) =>
-                {
-                    cts.Cancel();
-
-                    // corresponding code in CompleteLoad ensures that
-                    // decrement isn't called again for a canceled
-                    // operation.
-                    this.DecrementLoadCount();
-                };
-            }
-
-            // create a strongly typed LoadOperation instance
-            MethodInfo createMethod = DomainContext.createLoadOperationMethod.MakeGenericMethod(query.EntityType);
-            LoadOperation loadOperation = (LoadOperation)createMethod.Invoke(
-                null, // Static method invocation.
-                new object[]
-                {
-                    query,
-                    loadBehavior,
-                    callback,
-                    userState,
-                    cancelAction
-                });
-
-            this.IncrementLoadCount();
-
-            // Proceed with query
-            this.DomainClient.QueryAsync(query, cancellationToken)
-                .ContinueWith(result =>
-                {
-                    this.CompleteLoad(result, loadOperation);
-                }
+                   if (loadTask.IsCanceled)
+                   {
+                       operation.SetCancelled();
+                   }
+                   else if (loadTask.Exception != null)
+                   {
+                       operation.Complete(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
+                   }
+                   else
+                   {
+                       operation.Complete(loadTask.Result);
+                   }
+               }
+                , (object)loadOperation
                 , CancellationToken.None
-                , TaskContinuationOptions.NotOnCanceled
+                , TaskContinuationOptions.None
                 , _syncContextScheduler);
 
             return loadOperation;
         }
 
-        private void CompleteLoad(Task<QueryCompletedResult> result, LoadOperation loadOperation)
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
         {
-            IEnumerable<Entity> loadedEntities = null;
-            IEnumerable<Entity> allLoadedEntities = null;
-            int totalCount = DomainContext.TotalCountUndefined;
+            // Get MethodInfo for Load<TEntity>(EntityQuery<TEntity>, LoadBehavior, Action<LoadOperation<TEntity>>, object, LoadOperation<TEntity>)
+            var method = new Func<EntityQuery<Entity>, LoadBehavior, Action<LoadOperation<Entity>>, object, LoadOperation<Entity>>(this.Load);
+            var loadMethod = method.Method.GetGenericMethodDefinition();
 
-            // if the load operation has been canceled,
-            // no work to do.
-            if (loadOperation.IsCanceled)
-            {
-                // Loadcount is already decremented
-                return;
-            }
-
-            Exception error = null;
-            QueryCompletedResult results = null;
             try
             {
-                lock (this._syncRoot)
+                return (LoadOperation)loadMethod
+                    .MakeGenericMethod(query.EntityType)
+                    .Invoke(this, new object[]
                 {
-                    // The task is known to be completed so this will never block
-                    results = result.GetAwaiter().GetResult();
-
-                    // load the entities into the entity container
-                    loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadOperation.LoadBehavior).Cast<Entity>();
-
-                    IEnumerable<Entity> loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadOperation.LoadBehavior).Cast<Entity>();
-                    allLoadedEntities = loadedEntities.Concat(loadedIncludedEntities);
-                    totalCount = results.TotalCount;
-                }
+                    query,
+                    loadBehavior,
+                    callback,
+                    userState
+                });
             }
-            catch (Exception ex)
+            catch (TargetInvocationException tie)
             {
-                if (ex.IsFatal())
+                if (tie.InnerException != null)
                 {
-                    throw;
+                    throw tie.InnerException;
                 }
-                error = ex;
-            }
-            finally
-            {
-                this.DecrementLoadCount();
-            }
-
-            if (error == null)
-            {
-                if (results.ValidationErrors.Any())
-                {
-                    loadOperation.Complete(results.ValidationErrors);
-                }
-                else
-                {
-                    DomainClientResult clientResult = DomainClientResult.CreateQueryResult(loadedEntities, allLoadedEntities, totalCount, results.ValidationErrors);
-                    loadOperation.Complete(clientResult);
-                }
-            }
-            else
-            {
-                loadOperation.Complete(error);
+                throw;
             }
         }
 
@@ -671,7 +578,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// Initiates a load operation for the specified query.
         /// </summary>
         /// <param name="query">The query to invoke.</param>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query)
             where TEntity : Entity
         {
@@ -683,7 +589,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="query">The query to invoke.</param>
         /// <param name="cancellationToken">cancellation token</param>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, CancellationToken cancellationToken)
             where TEntity : Entity
         {
@@ -707,15 +612,95 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="query">The query to invoke.</param>
         /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to apply.</param>
         /// <param name="cancellationToken">cancellation token</param>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
                 where TEntity : Entity
         {
-            var tcs = new TaskCompletionSource<LoadResult<TEntity>>();
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
 
-            var loadOp = this.Load(query, loadBehavior, (res) => SetTaskResult(res, tcs, (op) => new LoadResult<TEntity>(op)), userState: null);
-            RegisterCancellationToken(cancellationToken, loadOp, tcs);
-            return tcs.Task;
+            // verify the specified query was created by this DomainContext
+            if (this.DomainClient != query.DomainClient)
+            {
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_InvalidEntityQueryDomainClient, query.QueryName));
+            }
+
+            this.IncrementLoadCount();
+
+            // Proceed with query
+            var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
+
+            // We dont want to cancel continuation based on original cancellationToken
+            // Since we must always decrement load count, use separate token to cancel continuation
+            var continueationCts = new CancellationTokenSource();
+            return domainClientTask.ContinueWith(result =>
+                {
+                    IEnumerable<Entity> loadedEntities = null;
+                    IEnumerable<Entity> allLoadedEntities = null;
+                    int totalCount;
+
+                    QueryCompletedResult results = null;
+                    try
+                    {
+                        lock (this._syncRoot)
+                        {
+                            // The task is known to be completed so this will never block
+                            results = result.GetAwaiter().GetResult();
+
+                            // load the entities into the entity container
+                            loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
+
+                            IEnumerable<Entity> loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
+                            allLoadedEntities = loadedEntities.Concat(loadedIncludedEntities);
+                            totalCount = results.TotalCount;
+                        }
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        continueationCts.Cancel();
+                        throw new OperationCanceledException(continueationCts.Token);
+                    }
+                    catch (DomainException)
+                    {
+                        // DomainExceptions should not be modified
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.IsFatal())
+                        {
+                            throw;
+                        }
+
+                        string message = string.Format(CultureInfo.CurrentCulture,
+                            Resource.DomainContext_LoadOperationFailed,
+                            query.QueryName, ex.Message);
+
+                        throw ex is DomainOperationException domainOperationException
+                            ? new DomainOperationException(message, domainOperationException)
+                            : new DomainOperationException(message, ex);
+                    }
+                    finally
+                    {
+                        this.DecrementLoadCount();
+                    }
+
+                    if (results.ValidationErrors.Any())
+                    {
+                        string message = string.Format(CultureInfo.CurrentCulture,
+      Resource.DomainContext_LoadOperationFailed_Validation,
+      query.QueryName);
+                        throw new DomainOperationException(message, results.ValidationErrors);
+                    }
+                    else
+                    {
+                        return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
+                    }
+                }
+                , continueationCts.Token
+                , TaskContinuationOptions.None
+                , _syncContextScheduler);
         }
 
         /// <summary>
@@ -928,24 +913,10 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            Action<InvokeOperation<TValue>> cancelAction = null;
-            CancellationToken cancellationToken = default;
-            if (this.DomainClient.SupportsCancellation)
-            {
-
-                var cts = new CancellationTokenSource();
-                cancellationToken = cts.Token;
-
-                cancelAction = (op) =>
-                {
-                    cts.Cancel();
-                };
-            }
-
-            InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, cancelAction);
+            InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, this.DomainClient.SupportsCancellation);
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+            this.DomainClient.InvokeAsync(invokeArgs, invokeOperation.CancellationToken)
                 .ContinueWith(result =>
                 {
                     this.CompleteInvoke(result, invokeOperation);
@@ -980,18 +951,6 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("returnType");
             }
 
-            Action<InvokeOperation> cancelAction = null;
-            CancellationToken cancellationToken = default;
-            if (this.DomainClient.SupportsCancellation)
-            {
-                var cts = new CancellationTokenSource();
-                cancellationToken = cts.Token;
-
-                cancelAction = (op) =>
-                {
-                    cts.Cancel();
-                };
-            }
 
             // create a strongly typed InvokeOperation instance
             MethodInfo createMethod = DomainContext.createInvokeOperationMethod
@@ -1004,11 +963,11 @@ namespace OpenRiaServices.DomainServices.Client
                     parameters,
                     callback,
                     userState,
-                    cancelAction
+                    DomainClient.SupportsCancellation
                 });
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+            this.DomainClient.InvokeAsync(invokeArgs, invokeOperation.CancellationToken)
                 .ContinueWith(result =>
                 {
                     this.CompleteInvoke(result, invokeOperation);
@@ -1077,7 +1036,7 @@ namespace OpenRiaServices.DomainServices.Client
             var tcs = new TaskCompletionSource<InvokeResult>();
 
             var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult()), tcs);
-            RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
+            RegisterCancellationToken(cancellationToken, invokeOperation);
 
             return tcs.Task;
         }
@@ -1099,7 +1058,7 @@ namespace OpenRiaServices.DomainServices.Client
             var tcs = new TaskCompletionSource<InvokeResult<TValue>>();
 
             var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult<TValue>(op.Value)), tcs);
-            RegisterCancellationToken(cancellationToken, invokeOperation, tcs);
+            RegisterCancellationToken(cancellationToken, invokeOperation);
 
             return tcs.Task;
         }

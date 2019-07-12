@@ -448,7 +448,11 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 catch (CommunicationException) when (cancellationToken.IsCancellationRequested)
                 {
+#if SILVERLIGHT || NET45
                     taskCompletionSource.SetCanceled();
+#else
+                    taskCompletionSource.TrySetCanceled(cancellationToken);
+#endif
                 }
                 catch (Exception ex)
                 {

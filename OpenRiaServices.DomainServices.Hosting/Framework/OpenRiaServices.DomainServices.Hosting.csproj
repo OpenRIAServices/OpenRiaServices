@@ -26,7 +26,6 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\QueryResult.cs" Link="Services\QueryResult.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\ServiceQuery.cs" Link="Services\ServiceQuery.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
     <Compile Update="Services\Resource.Designer.cs">
       <AutoGen>True</AutoGen>

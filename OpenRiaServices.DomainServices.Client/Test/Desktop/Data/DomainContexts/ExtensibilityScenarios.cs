@@ -22,19 +22,18 @@ namespace Cities
             this.InvokeOperationCalled = true;
             return base.InvokeOperation(operationName, returnType, parameters, hasSideEffects, callback, userState);
         }
-        
+
         public override InvokeOperation<TValue> InvokeOperation<TValue>(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation<TValue>> callback, object userState)
         {
             this.InvokeOperationGenericCalled = true;
             return base.InvokeOperation<TValue>(operationName, returnType, parameters, hasSideEffects, callback, userState);
         }
-        
-        public override LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
+
+        public override LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState)
         {
             this.LoadCalled = true;
             return base.Load(query, loadBehavior, callback, userState);
         }
-
         public override SubmitOperation SubmitChanges(Action<SubmitOperation> callback, object userState)
         {
             this.SubmitChangesCalled = true;

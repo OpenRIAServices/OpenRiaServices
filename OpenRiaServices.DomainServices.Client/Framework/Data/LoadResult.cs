@@ -14,8 +14,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// The result of a sucessfully completed load operation
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity loaded.</typeparam>
-    public class LoadResult<TEntity> : IEnumerable<TEntity>, ICollection
-        where TEntity : Entity
+    public class LoadResult<TEntity> : IEnumerable<TEntity>, ICollection, ILoadResult where TEntity : Entity
     {
         private readonly ReadOnlyCollection<TEntity> _loadedEntites;
 
@@ -25,18 +24,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="loadOperation">The load operation which have been completed.</param>
         /// <exception cref="System.ArgumentException">load operation must have been completed successfully</exception>
         public LoadResult(LoadOperation<TEntity> loadOperation)
+           : this(loadOperation.EntityQuery, loadOperation.LoadBehavior, loadOperation.Entities, loadOperation.AllEntities, loadOperation.TotalEntityCount)
         {
             if (loadOperation.IsCanceled || loadOperation.HasError || !loadOperation.IsComplete)
                 throw new ArgumentException(Resources.OperationNotComplete);
-
-            // LoadOperation.Entities is a ReadOnlyObservableCollection which inherit ReadOnlyCollection
-            _loadedEntites = (ReadOnlyCollection<TEntity>)loadOperation.Entities;
-
-            EntityQuery = loadOperation.EntityQuery; 
-            AllEntities = loadOperation.AllEntities;
-            
-            TotalEntityCount = loadOperation.TotalEntityCount;
-            LoadBehavior = loadOperation.LoadBehavior;
         }
 
         /// <summary>
@@ -49,13 +40,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="totalEntityCount">The total entity count.</param>
         public LoadResult(EntityQuery<TEntity> query, LoadBehavior loadBehavior, IEnumerable<TEntity> entities, IEnumerable<Entity> allEntities, int totalEntityCount)
         {
-            _loadedEntites = (entities as ReadOnlyCollection<TEntity>) ?? new ReadOnlyCollection<TEntity>(entities.ToList());
+            _loadedEntites = (entities as Data.ReadOnlyObservableLoaderCollection<TEntity>) ?? new Data.ReadOnlyObservableLoaderCollection<TEntity>(entities.ToList());
 
             EntityQuery = query;
-            LoadBehavior = loadBehavior;            
-            AllEntities = allEntities;            
+            LoadBehavior = loadBehavior;
+            AllEntities = allEntities;
             TotalEntityCount = totalEntityCount;
-            
         }
 
         /// <summary>
@@ -119,6 +109,9 @@ namespace OpenRiaServices.DomainServices.Client
         protected object SyncRoot { get { return ((ICollection)_loadedEntites).SyncRoot; } }
         object ICollection.SyncRoot { get { return this.SyncRoot; } }
 
+
+        IEnumerable<Entity> ILoadResult.Entities => this.Entities;
+
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
@@ -127,7 +120,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </returns>
         protected IEnumerator<TEntity> GetEnumerator() { return _loadedEntites.GetEnumerator(); }
         IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator() { return GetEnumerator(); }
-        
+
         [SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "Protected function for IEnumerable<T> already exist")]
         IEnumerator IEnumerable.GetEnumerator() { return this.GetEnumerator(); }
         #endregion

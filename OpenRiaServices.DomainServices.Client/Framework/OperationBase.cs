@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -18,14 +19,21 @@ namespace OpenRiaServices.DomainServices.Client
         private PropertyChangedEventHandler _propChangedHandler;
         private EventHandler _completedEventHandler;
         private bool _isErrorHandled;
+        private readonly CancellationTokenSource _cancellationTokenSource;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationBase"/> class.
         /// </summary>
         /// <param name="userState">Optional user state.</param>
-        protected OperationBase(object userState)
+        /// <param name="supportCancellation"><c>true</c> to setup cancellationTokenSource and use that to handle cancellation</param>
+        protected OperationBase(object userState, bool supportCancellation)
         {
             this._userState = userState;
+            if (supportCancellation)
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
         }
 
         /// <summary>
@@ -72,9 +80,21 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return false;
+                return this._cancellationTokenSource != null;
             }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether Cancel has been called on this operation.
+        /// </summary>
+        public bool IsCancellationRequested => this._cancellationTokenSource?.IsCancellationRequested == true;
+
+        /// <summary>
+        /// Gets a <see cref="System.Threading.CancellationToken"/> which is cancelled if 
+        /// when this operation is cancelled. 
+        /// It is valid if the operation support cancellation se constructor.
+        /// </summary>
+        internal CancellationToken CancellationToken => this._cancellationTokenSource?.Token ?? CancellationToken.None;
 
         /// <summary>
         /// Gets a value indicating whether this operation is currently in a state
@@ -89,7 +109,8 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 // can be canceled if cancellation is supported and
                 // the operation hasn't already completed
-                return this.SupportsCancellation && !this._completed;
+                // and Cancel has not already been cancelled
+                return this.SupportsCancellation && !this._completed && !IsCancellationRequested;
             }
         }
 
@@ -145,7 +166,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the result of the async operation.
         /// </summary>
-        protected object Result
+        private protected object Result
         {
             get
             {
@@ -202,7 +223,36 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this.EnsureNotCompleted();
+            if (this._cancellationTokenSource != null)
+            {
+                try
+                {
+                    this._cancellationTokenSource?.Cancel();
+                }
+                catch (AggregateException ex)
+                {
+                    throw ExceptionHandlingUtility.GetUnwrappedException(ex); ;
+                }
+            }
 
+            OnCancellationRequested();
+        }
+
+        /// <summary>
+        /// Called when user calls <see cref="Cancel"/>, the default behaviour
+        /// is to mark the operation as completed as Cancelled, but can 
+        /// be overriden to prevent that.
+        /// </summary>
+        private protected virtual void OnCancellationRequested()
+        {
+            SetCancelled();
+        }
+
+        /// <summary>
+        /// Transition the operation into the Cancelled state
+        /// </summary>
+        internal protected void SetCancelled()
+        {
             // must flag completion before callbacks or events are raised
             this._completed = true;
             this._canceled = true;
@@ -213,10 +263,7 @@ namespace OpenRiaServices.DomainServices.Client
             // callback is called even for a canceled operation
             this.InvokeCompleteAction();
 
-            if (this._completedEventHandler != null)
-            {
-                this._completedEventHandler(this, EventArgs.Empty);
-            }
+            this._completedEventHandler?.Invoke(this, EventArgs.Empty);
 
             this.RaisePropertyChanged(nameof(IsCanceled));
             this.RaisePropertyChanged(nameof(CanCancel));

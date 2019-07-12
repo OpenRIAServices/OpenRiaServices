@@ -203,13 +203,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Validate using an action so we can assert state for each of the 3 different
             // completion patterns; callback, event, and polling
-            Action<LoadOperation<A>> validate = (lo) =>
+            Action<Exception> validateException = (ex) =>
             {
-                Assert.IsNotNull(lo.Error);
-                DomainOperationException exception = (DomainOperationException)lo.Error;
+                Assert.IsNotNull(ex);
+                DomainOperationException exception = (DomainOperationException)ex;
                 Assert.AreEqual(typeof(DomainOperationException), exception.GetType());
                 Assert.AreEqual(OperationErrorStatus.ValidationFailed, exception.Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "QueryWithParamValidation"), exception.Message);
+                Assert.AreEqual(1, exception.ValidationErrors.Count(),
+                    "There should be 1 validation error.");
+                ValidationResult error = exception.ValidationErrors.Single();
+                Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
+            };
+            Action<LoadOperation<A>> validate = (lo) =>
+            {
+                Assert.IsNotNull(lo.Error);
+                validateException(lo.Error);
                 Assert.AreEqual(1, lo.ValidationErrors.Count(),
                     "There should be 1 validation error.");
                 ValidationResult error = lo.ValidationErrors.Single();
@@ -217,7 +226,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 lo.MarkErrorAsHandled();
             };
 
-            LoadOperation<A> op = ctxt.Load(ctxt.QueryWithParamValidationQuery(5, "ex"), validate, null);
+            var query = ctxt.QueryWithParamValidationQuery(5, "ex");
+            LoadOperation<A> op = ctxt.Load(query, validate, null);
             op.Completed += (sender, e) =>
             {
                 validate((LoadOperation<A>)sender);
@@ -230,6 +240,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 validate(op);
+            });
+
+            var loadTask = ctxt.LoadAsync(query);
+            EnqueueConditional(() => loadTask.IsCompleted);
+            EnqueueCallback(() =>
+            {
+                validateException(loadTask.Exception?.InnerException);
             });
 
             EnqueueTestComplete();
@@ -282,15 +299,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = cities.GetCitiesQuery().Take(1);
             LoadOperation<City> lo = cities.Load(query, false);
 
-            // immediately after calling cancel, IsLoading should be false
             Assert.IsTrue(cities.IsLoading);
             lo.Cancel();
-            Assert.IsFalse(cities.IsLoading);
+            Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
-                Assert.IsFalse(lo.HasError);
+                Assert.IsFalse(cities.IsLoading, "IsLoading should be false");
+                Assert.IsTrue(lo.IsCanceled, "operation should be canceled");
+                Assert.IsFalse(lo.HasError, "Cancelled operation should not have any error");
             });
 
             EnqueueTestComplete();
@@ -431,16 +449,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
             var query = cities.GetCitiesQuery().Take(3);
-            LoadOperation lo = cities.Load(query, false);
+            LoadOperation<City> lo = cities.Load(query, false);
 
             lo.Cancel();
-
-            ExceptionHelper.ExpectInvalidOperationException(delegate
+            EnqueueConditional(() => lo.IsComplete);
+            EnqueueCallback(delegate
             {
-                lo.Cancel();
-            }, Resources.AsyncOperation_AlreadyCompleted);
+                ExceptionHelper.ExpectInvalidOperationException(delegate
+                {
+                    lo.Cancel();
+                }, Resources.AsyncOperation_AlreadyCompleted);
 
-            lo = cities.Load(query, false);
+                lo = cities.Load(query, false);
+            }); 
             EnqueueConditional(() => lo.IsComplete);
             EnqueueCallback(delegate
             {
@@ -448,7 +469,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 ExceptionHelper.ExpectInvalidOperationException(delegate
                 {
-                    lo.Complete(DomainClientResult.CreateQueryResult(new City[0], new City[0], 0, new ValidationResult[0]));
+                    lo.Complete(new LoadResult<City>(query, default(LoadBehavior), new City[0], new City[0], 0));
                 }, Resources.AsyncOperation_AlreadyCompleted);
 
                 lo = cities.Load(query, false);
@@ -635,7 +656,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // cancel the load
                 Assert.IsFalse(lo.IsComplete);
                 lo.Cancel();
+
                 Assert.IsFalse(lo.CanCancel);
+                Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
             });
             EnqueueConditional(() => lo.IsComplete && callbackCalled && completedCalled);
             EnqueueCallback(delegate
@@ -869,7 +892,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(entity.URL.AbsoluteUri.Contains(@"$where"));
             });
             EnqueueTestComplete();
-        }       
+        }
 
         [TestMethod]
         [Asynchronous]
@@ -970,7 +993,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
 
             var query = nw.GetOrderDetailsQuery().Take(5);
-            Action<LoadOperation<DataTests.Northwind.LTS.Order_Detail>> action = delegate(LoadOperation<DataTests.Northwind.LTS.Order_Detail> o)
+            Action<LoadOperation<DataTests.Northwind.LTS.Order_Detail>> action = delegate (LoadOperation<DataTests.Northwind.LTS.Order_Detail> o)
             {
                 if (o.HasError)
                 {
@@ -1083,7 +1106,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             string styleFilter = "W ";
             int listChangeNotifications = 0;
 
-            ((INotifyCollectionChanged)catalog.Products).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            ((INotifyCollectionChanged)catalog.Products).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
                 listChangeNotifications += 1;
             };
@@ -1452,7 +1475,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void TestMethodWithParameters_NullableTypes()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
-            TimeSpan?[] nullableTimeSpans = 
+            TimeSpan?[] nullableTimeSpans =
             {
                 TimeSpan.FromSeconds(5),
                 null,
@@ -1586,6 +1609,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = catalog.Load(query, false);
 
             lo.Cancel();
+            Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
             EnqueueConditional(delegate
             {
@@ -1625,15 +1649,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
             object savedSender = null;
             int isLoadingEventCount = 0;
             bool loadCompleteDuringLoading = false;
+            bool? isLoadingDuringPropertyChange = null;
 
             Catalog catalog = CreateDomainContext();
 
             Assert.IsFalse(catalog.IsLoading);
             Assert.IsFalse(this.IsLoadComplete);
 
-            catalog.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            catalog.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 savedSender = sender;
+                isLoadingDuringPropertyChange = catalog.IsLoading;
                 if (catalog.IsLoading)
                 {
                     loadingEventArgs = e;
@@ -1648,27 +1674,29 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            EnqueueConditional(delegate()
+            EnqueueConditional(delegate ()
             {
                 return loadingEventArgs != null;
             });
 
-            EnqueueCallback(delegate()
+            EnqueueCallback(delegate ()
             {
                 Assert.IsFalse(loadCompleteDuringLoading);
                 Assert.AreEqual("IsLoading", loadingEventArgs.PropertyName);
                 Assert.AreSame(catalog, savedSender);  // verify sender
+                Assert.AreEqual(true, isLoadingDuringPropertyChange, "IsLoading should have been true");
             });
 
-            EnqueueConditional(delegate()
+            EnqueueConditional(delegate ()
             {
                 return lo.IsComplete;
             });
 
-            EnqueueCallback(delegate()
+            EnqueueCallback(delegate ()
             {
                 Assert.AreEqual("IsLoading", loadedEventArgs.PropertyName);
                 Assert.AreEqual(2, isLoadingEventCount);
+                Assert.AreEqual(false, isLoadingDuringPropertyChange, "IsLoading should have been true");
             });
 
             EnqueueTestComplete();
@@ -1783,7 +1811,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             Catalog catalog = CreateDomainContext();
 
-            Action<LoadOperation<Product>> action = delegate(LoadOperation<Product> o)
+            Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
             {
                 if (o.HasError)
                 {
@@ -1834,7 +1862,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             object userState = this;
 
             var query = catalog.GetProductsQuery().Where(p => p.ListPrice > 2000);
-            Action<LoadOperation<Product>> action = delegate(LoadOperation<Product> o)
+            Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
             {
                 if (o.HasError)
                 {
@@ -1974,7 +2002,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
             Catalog catalog = CreateDomainContext();
 
-            Action<LoadOperation<Product>> action = delegate(LoadOperation<Product> o)
+            Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
             {
                 if (o.HasError)
                 {
@@ -2013,7 +2041,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 #if SILVERLIGHT
                 ts.Endpoint.Address = new System.ServiceModel.EndpointAddress(
                     new Uri(
-                        new Uri( System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped), UriKind.Absolute),
+                        new Uri(System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped), UriKind.Absolute),
                         ts.Endpoint.Address.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)));
 #endif
                 ts.RestartAppCompleted += (s, e) => restartCompletedArgs = e;
@@ -2068,12 +2096,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     // Do this in separate threads to prevent this becoming a synchronous process.
                     // [Ron] My single-proc machine generally has finished all the loads by the time
                     // the cancel is issued.  Using ThreadPool breaks this behavior.
-                    ThreadPool.QueueUserWorkItem((WaitCallback)delegate(object productObject)
+                    ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
                     {
                         Product thisProduct = (Product)productObject;
                         lock (syncObject)
                         {
-                            Action<LoadOperation<Product>> action = delegate(LoadOperation<Product> o)
+                            Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
                             {
                                 if (o.HasError)
                                 {
@@ -2116,27 +2144,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void TestLoadException_NonexistentQuery()
-        {
-            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
-
-            var query = new EntityQuery<Product>(ctxt.DomainClient, "NonExistentMethod", null, false, true).Where(p => p.ProductID == 1);
-            LoadOperation lo = ctxt.Load(query, false);
-
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                // REVIEW: Assert the error message.
-                Assert.IsNotNull(lo.Error);
-            });
-            EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
         public void TestLoad_Cancel()
         {
             Catalog catalog = CreateDomainContext();
@@ -2157,6 +2164,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(0, catalog.Products.Count);
                 Assert.IsTrue(lo.IsCanceled, "Operation should've been cancelled.");
             });
+
+            var cts = new CancellationTokenSource();
+            var loadTask = catalog.LoadAsync(query, cts.Token);
+            cts.Cancel();
+
+            EnqueueConditional(() => loadTask.IsCompleted);
+            EnqueueCallback(() =>
+            {
+                Assert.IsTrue(loadTask.IsCanceled, "Task should be cancelled");
+            });
             EnqueueTestComplete();
         }
 
@@ -2168,7 +2185,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo1 = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == 1), LoadBehavior.RefreshCurrent, false);
             LoadOperation lo2 = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == 2), LoadBehavior.RefreshCurrent, false);
-            
+
             Assert.IsTrue(lo1.CanCancel, "Cancellation should be supported.");
             Assert.IsTrue(lo2.CanCancel, "Cancellation should be supported.");
 
@@ -2240,7 +2257,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 var results = queryTask.Result;
-                List <City> cities = results.Entities.Concat(results.IncludedEntities).Cast<City>().ToList();
+                List<City> cities = results.Entities.Concat(results.IncludedEntities).Cast<City>().ToList();
                 Assert.IsTrue(cities.Count > 0);
             });
             EnqueueTestComplete();
@@ -2287,7 +2304,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 EntityTypes = new Type[] { typeof(Zip) }
             };
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), CancellationToken.None);
-;
+            ;
             EnqueueConditional(() => queryTask.IsCompleted);
             EnqueueCallback(delegate
             {
@@ -2430,25 +2447,18 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void TestServerExceptions_GeneralException()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
-
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = ctxt.Load(query, false);
+            ValidateQueryException(ctxt, query, ValidateGeneralException);
 
-            EnqueueConditional(delegate
+            void ValidateGeneralException(Exception exception)
             {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                DomainOperationException ex = (DomainOperationException)lo.Error;
+                var ex = (DomainOperationException)exception;
                 Assert.IsNotNull(ex);
                 // domain operation entry invocation exceptions other than DomainService/DomainOperationEntryExceptions get turned into generic ServerError status
                 Assert.AreEqual(OperationErrorStatus.ServerError, ex.Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed, "ThrowGeneralException", "Athewmay Arelschay"), ex.Message);
                 Assert.IsTrue(ex.StackTrace.Contains("ThrowGeneralException"));
-            });
-
-            EnqueueTestComplete();
+            }
         }
 
         /// <summary>
@@ -2460,23 +2470,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void TestServerExceptions_DataOperationException()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
-
             var query = ctxt.CreateQuery<Product>("ThrowDataOperationException", null, false, true);
-            LoadOperation lo = ctxt.Load(query, false);
-
-            EnqueueConditional(delegate
+            ValidateQueryException(ctxt, query, ex =>
             {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                DomainException dpe = (DomainException)lo.Error;
+                DomainException dpe = (DomainException)ex;
                 Assert.IsNotNull(dpe);
                 Assert.AreEqual(777, dpe.ErrorCode);
                 Assert.AreEqual("Athewmay Arelschay", dpe.Message);
             });
-
-            EnqueueTestComplete();
         }
 
         [TestMethod]
@@ -2484,23 +2485,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void TestServerExceptions_QueryOnNonExistentMethod()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
-
             var query = ctxt.CreateQuery<Product>("NonExistentMethod", null, false, true);
-            LoadOperation lo = ctxt.Load(query, false);
-
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
+            ValidateQueryException(ctxt, query, ex =>
             {
                 // REVIEW: Assert the error message.
-                Assert.IsNotNull(lo.Error);
-                Assert.IsNotNull(lo.Error.InnerException as CommunicationException, "Expected CommunicationException");
-                Assert.IsNotNull(lo.Error.InnerException.InnerException as WebException, "Expected WebException");
+                Assert.IsNotNull(ex.InnerException as CommunicationException, "Expected CommunicationException");
+                Assert.IsNotNull(ex.InnerException.InnerException as WebException, "Expected WebException");
             });
-
-            EnqueueTestComplete();
         }
 
         [TestMethod]
@@ -2672,7 +2663,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueTestComplete();
         }
-        
+
         private static Dictionary<TType, TType> CreateDictionary<TType>(TType seed)
         {
             return CreateDictionary(seed, seed);
@@ -2690,6 +2681,30 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return (a.Select(ak => new KeyValuePair<string, string>(ak.Key.ToString(), ak.Value.ToString()))
                         .Intersect(b.Select(bk => new KeyValuePair<string, string>(bk.Key.ToString(), bk.Value.ToString())))
                             .Count() == a.Count);
+        }
+
+        private void ValidateQueryException(TestDataContext ctxt, EntityQuery<Product> query, Action<Exception> validateException)
+        {
+            LoadOperation lo = ctxt.Load(query, false);
+            EnqueueConditional(delegate
+            {
+                return lo.IsComplete;
+            });
+            base.EnqueueCallback(delegate
+            {
+                Assert.IsNotNull(lo.Error, "Load should have resulted in exception");
+                validateException(lo.Error);
+            });
+
+            var loadTask = ctxt.LoadAsync(query);
+            base.EnqueueConditional(() => loadTask.IsCompleted);
+            base.EnqueueCallback(delegate
+            {
+                Assert.IsNotNull(loadTask.Exception, "LoadASync should have resulted in exception");
+                validateException(loadTask.Exception?.InnerException);
+            });
+
+            EnqueueTestComplete();
         }
     }
 

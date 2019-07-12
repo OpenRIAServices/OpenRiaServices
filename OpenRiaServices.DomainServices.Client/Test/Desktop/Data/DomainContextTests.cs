@@ -200,6 +200,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 var query = this.CityDomainContext.GetCitiesQuery();
                 this.LoadOperation = this.CityDomainContext.Load(query);
                 Assert.IsTrue(this.CityDomainContext.LoadCalled);
+                Assert.IsTrue(this.CityDomainContext.LoadAsyncCalled);
             });
 
             this.EnqueueCallback(() =>
@@ -232,7 +233,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 var query = this.CityDomainContext.GetCitiesQuery();
                 this.CityDomainContext.LoadAsync(query);                
                 Assert.IsTrue(this.CityDomainContext.LoadAsyncCalled);
-                Assert.IsTrue(this.CityDomainContext.LoadCalled, "LoadAsync should invoke Load");
+                Assert.IsFalse(this.CityDomainContext.LoadCalled, "LoadAsync should invoke Load");
             });
 
             this.EnqueueCallback(() =>

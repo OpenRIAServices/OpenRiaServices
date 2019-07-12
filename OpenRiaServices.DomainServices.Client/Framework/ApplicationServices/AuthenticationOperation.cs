@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <param name="service">The service this operation will use to implement Begin, Cancel, and End</param>
         /// <param name="userState">Optional user state.</param>
         internal AuthenticationOperation(AuthenticationService service, object userState) :
-            base(userState)
+            base(userState, false)
         {
             Debug.Assert(service != null, "The service cannot be null.");
             this._service = service;
