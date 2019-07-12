@@ -17,18 +17,18 @@
       The package also includes a targets file and tools assembly that provides build-time validation of your DomainService classes.
     </description>
     <summary>Open RIA Services - Server-side assemblies, configuration, and build targets.</summary>
-    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases
-
-4.5.1:
-* Improved startup performance
-* Improved performance for first request
-</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
+    <copyright>2019 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net46" />
-    </frameworkAssemblies>
+    </frameworkAssemblies>	
+	<dependencies>
+		<group targetFramework="net46">
+			<dependency id="System.Threading.Tasks.Extensions" version="4.5.3"/>
+		</group>
+	</dependencies>
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
