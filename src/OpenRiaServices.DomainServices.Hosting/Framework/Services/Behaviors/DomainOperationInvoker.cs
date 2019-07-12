@@ -12,12 +12,6 @@ namespace OpenRiaServices.DomainServices.Hosting
     {
         private readonly DomainOperationType operationType;
 
-        protected struct InvokeResult
-        {
-            public object result;
-            public object[] outputs;
-        }
-
         public DomainOperationInvoker(DomainOperationType operationType)
         {
             this.operationType = operationType;
@@ -93,11 +87,10 @@ namespace OpenRiaServices.DomainServices.Hosting
             throw new NotImplementedException();
         }
 
-        protected virtual Task<InvokeResult> InvokeCoreAsync(object instance, object[] inputs)
+        protected virtual ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
         {
-            InvokeResult invokeResult;
-            invokeResult.result = InvokeCore(instance, inputs, out invokeResult.outputs);
-            return Task.FromResult(invokeResult);
+            var result = InvokeCore(instance, inputs, out _);
+            return new ValueTask<object>(result);
         }
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
@@ -107,13 +100,11 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         public object InvokeEnd(object instance, out object[] outputs, IAsyncResult result)
         {
-            var invokeResult = TaskExtensions.EndApm<InvokeResult>(result);
-
-            outputs = invokeResult.outputs;
-            return invokeResult.result;
+            outputs = ServiceUtility.EmptyObjectArray;
+            return TaskExtensions.EndApm<object>(result);
         }
 
-        private async Task<InvokeResult> InvokeAsync(object instance, object[] inputs)
+        private async Task<object> InvokeAsync(object instance, object[] inputs)
         {
             string operationName = this.Name;
             long startTicks = DiagnosticUtility.GetTicks();
@@ -126,12 +117,12 @@ namespace OpenRiaServices.DomainServices.Hosting
 
                 // invoke the operation and process the result
                 this.ConvertInputs(inputs);
-                var invokeResult = await this.InvokeCoreAsync(domainService, inputs).ConfigureAwait(false);
-                invokeResult.result = this.ConvertReturnValue(invokeResult.result);
+                var result = await this.InvokeCoreAsync(domainService, inputs).ConfigureAwait(false);
+                result = this.ConvertReturnValue(result);
 
                 DiagnosticUtility.OperationCompleted(operationName, DiagnosticUtility.GetDuration(startTicks));
 
-                return invokeResult;
+                return result;
             }
             catch (FaultException)
             {

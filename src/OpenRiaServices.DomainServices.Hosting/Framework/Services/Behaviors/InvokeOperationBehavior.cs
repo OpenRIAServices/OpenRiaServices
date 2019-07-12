@@ -60,7 +60,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
 
             //protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
-            protected async override Task<InvokeResult> InvokeCoreAsync(object instance, object[] inputs)
+            protected async override ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
             {
                 try
                 {
@@ -72,11 +72,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     }
                     else
                     {
-                        return new InvokeResult()
-                        {
-                            result = invokeResult.Result,
-                            outputs = ServiceUtility.EmptyObjectArray
-                        };
+                        return invokeResult.Result;
                     }
                 }
                 catch (Exception ex)

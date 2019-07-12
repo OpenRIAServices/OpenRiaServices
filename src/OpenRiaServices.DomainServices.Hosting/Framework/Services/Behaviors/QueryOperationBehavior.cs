@@ -78,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            protected override async Task<InvokeResult> InvokeCoreAsync(object instance, object[] inputs)
+            protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
             {
                 ServiceQuery serviceQuery = null;
                 QueryAttribute queryAttribute = (QueryAttribute)this.operation.OperationAttribute;
@@ -112,11 +112,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     throw ServiceUtility.CreateFaultException(result.ValidationErrors);
                 }
 
-                return new InvokeResult()
-                {
-                    result = result,
-                    outputs = ServiceUtility.EmptyObjectArray,
-                };
+                return result;
             }
 
             protected override void ConvertInputs(object[] inputs)
