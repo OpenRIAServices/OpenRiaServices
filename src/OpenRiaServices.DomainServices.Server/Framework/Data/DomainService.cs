@@ -539,8 +539,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         /// <param name="changeSet">The changeset to submit</param>
         /// <returns>True if the submit was successful, false otherwise.</returns>
-        public virtual bool Submit(ChangeSet changeSet)
+        public virtual async Task<bool> SubmitAsync(ChangeSet changeSet)
         {
+            //TODO: Consider using ValueTask here for consistency 
             try
             {
                 if (changeSet == null)
@@ -553,26 +554,26 @@ namespace OpenRiaServices.DomainServices.Server
                 this.CheckOperationType(DomainOperationType.Submit);
                 this.ResolveOperations();
 
-                if (!this.AuthorizeChangeSet())
+                if (!await this.AuthorizeChangeSetAsync().ConfigureAwait(false))
                 {
                     // Don't try to save if there were any errors.
                     return false;
                 }
 
                 // Before invoking any operations, validate the entire changeset
-                if (!this.ValidateChangeSet())
+                if (!await this.ValidateChangeSetAsync().ConfigureAwait(false))
                 {
                     return false;
                 }
 
                 // Now that we're validated, proceed to invoke the domain operation entries.
-                if (!this.ExecuteChangeSet())
+                if (!await this.ExecuteChangeSetAsync().ConfigureAwait(false))
                 {
                     return false;
                 }
 
                 // persist the changes
-                if (!this.PersistChangeSetInternal())
+                if (!await this.PersistChangeSetAsyncInternal().ConfigureAwait(false))
                 {
                     return false;
                 }
@@ -790,7 +791,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// Verifies the user is authorized to submit the current <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> is authorized, false otherwise.</returns>
-        protected virtual bool AuthorizeChangeSet()
+        protected virtual async Task<bool> AuthorizeChangeSetAsync()
         {
             foreach (ChangeSetEntry op in this.ChangeSet.ChangeSetEntries)
             {
@@ -822,7 +823,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// in the <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns><c>True</c> if all operations in the <see cref="ChangeSet"/> passed validation, <c>false</c> otherwise.</returns>
-        protected virtual bool ValidateChangeSet()
+        protected virtual async Task<bool> ValidateChangeSetAsync()
         {
             // Perform validation on the each of the operations.
             return ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
@@ -832,7 +833,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// This method invokes the <see cref="DomainOperationEntry"/> for each operation in the current <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was processed successfully, false otherwise.</returns>
-        protected virtual bool ExecuteChangeSet()
+        protected virtual async Task<bool> ExecuteChangeSetAsync()
         {
             this.InvokeCudOperations();
             this.InvokeCustomOperations();
@@ -855,7 +856,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// Any errors should be set on the individual <see cref="ChangeSetEntry"/>s in the <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        protected virtual bool PersistChangeSet() { return true; }
+        protected virtual Task<bool> PersistChangeSetAsync() { return Task.FromResult(true); }
 
         /// <summary>
         /// For all operations in the current changeset, validate that the operation exists, and
@@ -1045,17 +1046,17 @@ namespace OpenRiaServices.DomainServices.Server
         }
 
         /// <summary>
-        /// This method invokes the user overridable <see cref="PersistChangeSet"/> method wrapping the call
-        /// with the appropriate exception handling logic. All framework calls to <see cref="PersistChangeSet"/>
+        /// This method invokes the user overridable <see cref="PersistChangeSetAsync"/> method wrapping the call
+        /// with the appropriate exception handling logic. All framework calls to <see cref="PersistChangeSetAsync"/>
         /// must go through this method. Some data sources have their own validation hook points,
         /// so if a <see cref="ValidationException"/> is thrown at that level, we want to capture it.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        private bool PersistChangeSetInternal()
+        private async ValueTask<bool> PersistChangeSetAsyncInternal()
         {
             try
             {
-                this.PersistChangeSet();
+                await this.PersistChangeSetAsync();
             }
             catch (ValidationException e)
             {

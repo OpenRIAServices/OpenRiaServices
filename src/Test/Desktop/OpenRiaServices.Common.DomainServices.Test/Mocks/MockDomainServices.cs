@@ -2079,7 +2079,7 @@ namespace TestDomainServices
             return null;
         }
 
-        protected override bool PersistChangeSet()
+        protected override Task<bool> PersistChangeSetAsync()
         {
             // Below is some test code to generate concurrency conflicts based
             // on client input
@@ -2095,7 +2095,7 @@ namespace TestDomainServices
                 }
             }
 
-            return base.PersistChangeSet();
+            return base.PersistChangeSetAsync();
         }
     }
 

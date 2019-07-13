@@ -206,7 +206,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 UnauthorizedAccessException exception = null;
                 try
                 {
-                    ChangeSetProcessor.Process(cities, entries);
+                    await ChangeSetProcessor.ProcessAsync(cities, entries);
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -232,7 +232,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 Exception exception = null;
                 try
                 {
-                    ChangeSetProcessor.Process(cities, entries);
+                    await ChangeSetProcessor.ProcessAsync(cities, entries);
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -290,7 +290,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 UnauthorizedAccessException exception = null;
                 try
                 {
-                    ChangeSetProcessor.Process(cities, entries);
+                    await ChangeSetProcessor.ProcessAsync(cities, entries);
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -326,7 +326,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 Exception exception = null;
                 try
                 {
-                    ChangeSetProcessor.Process(cities, entries);
+                    await ChangeSetProcessor.ProcessAsync(cities, entries);
                 }
                 catch (UnauthorizedAccessException ex)
                 {

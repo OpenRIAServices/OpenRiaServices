@@ -164,16 +164,16 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// concurrency errors are processed.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        protected override bool PersistChangeSet()
+        protected override Task<bool> PersistChangeSetAsync()
         {
             return this.InvokeSaveChanges(true);
         }
 
-        private bool InvokeSaveChanges(bool retryOnConflict)
+        private async Task<bool> InvokeSaveChanges(bool retryOnConflict)
         {
             try
             {
-                this.ObjectContext.SaveChanges();
+               await this.ObjectContext.SaveChangesAsync();
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -206,7 +206,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return this.InvokeSaveChanges(/* retryOnConflict */ false);
+                    return await this.InvokeSaveChanges(/* retryOnConflict */ false);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

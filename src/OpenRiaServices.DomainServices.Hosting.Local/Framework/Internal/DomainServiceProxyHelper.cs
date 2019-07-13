@@ -112,7 +112,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
 
             ChangeSet changeSet = new ChangeSet(new[] { changeSetEntry });
 
-            service.Submit(changeSet);
+            service.SubmitAsync(changeSet);
 
             if (changeSetEntry.HasError)
             {

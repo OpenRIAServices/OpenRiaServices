@@ -8,6 +8,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.EntityFramework
@@ -112,9 +113,9 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// concurrency errors are processed.
         /// </summary>
         /// <returns><c>True</c> if the <see cref="ChangeSet"/> was persisted successfully, <c>false</c> otherwise.</returns>
-        protected override bool PersistChangeSet()
+        protected override Task<bool> PersistChangeSetAsync()
         {
-            return this.InvokeSaveChanges(true);
+            return this.InvokeSaveChangesAsync(true);
         }
 
         /// <summary>
@@ -156,11 +157,11 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// </summary>
         /// <param name="retryOnConflict">Flag indicating whether to retry after resolving conflicts.</param>
         /// <returns><c>true</c> if saved successfully and <c>false</c> otherwise.</returns>
-        private bool InvokeSaveChanges(bool retryOnConflict)
+        private async Task<bool> InvokeSaveChangesAsync(bool retryOnConflict)
         {
             try
             {
-                this.DbContext.SaveChanges();
+                await this.DbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -193,7 +194,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return this.InvokeSaveChanges(/* retryOnConflict */ false);
+                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

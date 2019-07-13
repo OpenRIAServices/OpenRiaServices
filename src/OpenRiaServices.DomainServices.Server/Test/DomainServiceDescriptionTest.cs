@@ -3658,10 +3658,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
             return base.QueryAsync(queryDescription);
         }
 
-        public override bool Submit(ChangeSet changeSet)
+        public override Task<bool> SubmitAsync(ChangeSet changeSet)
         {
-            return base.Submit(changeSet);
+            return base.SubmitAsync(changeSet);
         }
+
         public override ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription)
         {
             return base.InvokeAsync(invokeDescription);

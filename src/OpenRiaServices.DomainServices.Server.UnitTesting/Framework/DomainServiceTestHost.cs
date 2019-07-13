@@ -645,7 +645,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
         private static void SubmitChangeSetCore(OperationContext context, ChangeSet changeSet)
         {
-            context.DomainService.Submit(changeSet);
+            context.DomainService.SubmitAsync(changeSet);
 
             ErrorUtility.AssertNoChangeSetErrors(context, changeSet);
         }
@@ -659,7 +659,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         /// <param name="validationResults">The validation errors that occurred</param>
         private static bool TrySubmitChangeSetCore(OperationContext context, ChangeSet changeSet, out IList<ValidationResult> validationResults)
         {
-            context.DomainService.Submit(changeSet);
+            context.DomainService.SubmitAsync(changeSet);
 
             validationResults = GetValidationResults(changeSet);
             return !changeSet.HasError;

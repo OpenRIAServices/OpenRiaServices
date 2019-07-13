@@ -72,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             ChangeSet changeset = new ChangeSet(changeSetEntries);
             DomainMethod_ValidProvider_MultipleMethods myTestProvider = ServerTestHelper.CreateInitializedDomainService<DomainMethod_ValidProvider_MultipleMethods>(DomainOperationType.Submit);
-            myTestProvider.Submit(changeset);
+            myTestProvider.SubmitAsync(changeset);
 
             // check that the domain services have invoked the domain method correctly by checking the internal variables set
             Assert.AreEqual<string>("ProcessCity_", myTestProvider.Invoked);
@@ -105,7 +105,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             ChangeSet changeset = new ChangeSet(changeSetEntries);
             DomainMethod_ValidProvider_MultipleMethods myTestProvider = ServerTestHelper.CreateInitializedDomainService<DomainMethod_ValidProvider_MultipleMethods>(DomainOperationType.Submit);
-            myTestProvider.Submit(changeset);
+            myTestProvider.SubmitAsync(changeset);
 
             // check that the domain services have invoked the domain method correctly by checking the internal variables set
             Assert.AreEqual<string>("ProcessCounty_ProcessCity_", myTestProvider.Invoked);

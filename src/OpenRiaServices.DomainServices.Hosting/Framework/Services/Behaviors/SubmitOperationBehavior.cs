@@ -57,7 +57,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
                 try
                 {
-                    return ChangeSetProcessor.Process(domainService, changeSetEntries);
+                    return await ChangeSetProcessor.ProcessAsync(domainService, changeSetEntries);
                 }
                 catch (Exception ex)
                 {

@@ -194,7 +194,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             OperationDescription operationDesc = ServiceUtility.CreateBasicOperationDescription(declaringContract, ServiceUtility.SubmitOperationName);
 
             // Propagate behaviors.
-            MethodInfo submitMethod = declaringContract.ContractType.GetMethod("Submit");
+            MethodInfo submitMethod = declaringContract.ContractType.GetMethod( nameof(DomainService.SubmitAsync));
             foreach (IOperationBehavior behavior in submitMethod.GetCustomAttributes(/* inherit */ true).OfType<IOperationBehavior>())
             {
                 operationDesc.Behaviors.Add(behavior);

@@ -9,6 +9,7 @@ using System.Reflection;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Server;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -23,11 +24,15 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="domainService">The domain service that will process the changeset.</param>
         /// <param name="changeSetEntries">The change set entries to be processed.</param>
         /// <returns>Collection of results from the submit operation.</returns>
-        public static IEnumerable<ChangeSetEntry> Process(DomainService domainService, IEnumerable<ChangeSetEntry> changeSetEntries)
+        internal static async ValueTask<IEnumerable<ChangeSetEntry>> ProcessAsync(DomainService domainService, IEnumerable<ChangeSetEntry> changeSetEntries)
         {
+            // TODO:
+            // Consider making logic extensible (move to domainservice?)
             ChangeSet changeSet = CreateChangeSet(changeSetEntries);
             
-            domainService.Submit(changeSet);
+            // TODO:
+            // * Remove this method and "manually inline" the code where used
+            await domainService.SubmitAsync(changeSet);
 
             // Process the submit results and build the result list to be sent back
             // to the client

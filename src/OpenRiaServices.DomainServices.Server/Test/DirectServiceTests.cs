@@ -80,7 +80,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                     entries.Add(new ChangeSetEntry(j, newCity, null, DomainOperation.Insert));
                 }
 
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries);
 
                 Assert.IsFalse(entries.Any(p => p.HasError));
             }
@@ -110,7 +110,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                     entries.Add(new ChangeSetEntry(j, e, null, DomainOperation.Insert));
                 }
 
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries);
 
                 Assert.IsFalse(entries.Any(p => p.HasError));
             }
@@ -193,7 +193,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             });
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
-                nw.Submit(cs);
+                nw.SubmitAsync(cs).GetAwaiter().GetResult();
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Query, DomainOperationType.Submit));
         }
 
@@ -264,7 +264,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds = new ServiceContext_CurrentOperation_DomainService(DomainOperationType.Submit);
             DomainOperationEntry insertOp = dsd.GetSubmitMethod(typeof(ServiceContext_CurrentOperation_Entity), DomainOperation.Insert);
             Assert.IsNotNull(insertOp);
-            ds.Submit(new ChangeSet(new ChangeSetEntry[] {
+            await ds.SubmitAsync(new ChangeSet(new ChangeSetEntry[] {
                 new ChangeSetEntry() { 
                     Entity = new ServiceContext_CurrentOperation_Entity() { Key = 1 },
                     Operation = DomainOperation.Insert

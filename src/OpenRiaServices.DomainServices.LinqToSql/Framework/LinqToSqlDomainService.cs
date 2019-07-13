@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data.Linq;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 using ChangeSet = OpenRiaServices.DomainServices.Server.ChangeSet;
 
@@ -95,7 +96,7 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         /// </remarks>
         /// </summary>
         /// <returns>Returns <c>true</c> if the <see cref="ChangeSet"/> was persisted successfully, <c>false</c> otherwise.</returns>
-        protected override bool PersistChangeSet()
+        protected override async Task<bool> PersistChangeSetAsync()
         {
             return this.InvokeSubmitChanges(true);
         }
