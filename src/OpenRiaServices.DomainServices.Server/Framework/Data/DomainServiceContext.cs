@@ -11,8 +11,6 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     public class DomainServiceContext : IServiceProvider
     {
-        private DomainOperationEntry _operation;
-        private readonly DomainOperationType _operationType;
         private IServiceContainer _serviceContainer;
         private readonly IServiceProvider _serviceProvider;
 
@@ -22,15 +20,26 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="serviceProvider">A service provider.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
         public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
+            : this(serviceProvider, operationType, (IPrincipal)serviceProvider?.GetService(typeof(IPrincipal)))
+        {
+            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DomainServiceContext class
+        /// </summary>
+        /// <param name="serviceProvider">A service provider.</param>
+        /// <param name="operationType">The type of operation that is being executed.</param>
+        public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType, IPrincipal user)
         {
             if (serviceProvider == null)
             {
                 throw new ArgumentNullException("serviceProvider");
             }
             this._serviceProvider = serviceProvider;
-            this._operationType = operationType;
+            this.OperationType = operationType;
+            this.User = user;
         }
-
         /// <summary>
         /// Copy constructor that creates a new context of the specified type copying
         /// the rest of the context from the provided instance.
@@ -44,45 +53,24 @@ namespace OpenRiaServices.DomainServices.Server
                 throw new ArgumentNullException("serviceContext");
             }
             this._serviceProvider = serviceContext._serviceProvider;
-            this._operationType = operationType;
+            this.OperationType = operationType;
+            this.User = (IPrincipal)_serviceProvider.GetService(typeof(IPrincipal));
         }
 
         /// <summary>
         /// Gets the operation that is being executed.
         /// </summary>
-        public DomainOperationEntry Operation
-        {
-            get
-            {
-                return this._operation;
-            }
-            internal set
-            {
-                this._operation = value;
-            }
-        }
+        public DomainOperationEntry Operation { get; internal set; }
 
         /// <summary>
         /// Gets the type of operation that is being executed.
         /// </summary>
-        public DomainOperationType OperationType
-        {
-            get
-            {
-                return this._operationType;
-            }
-        }
+        public DomainOperationType OperationType { get; }
 
         /// <summary>
         /// The user for this context instance.
         /// </summary>
-        public IPrincipal User
-        {
-            get
-            {
-                return (IPrincipal)this._serviceProvider.GetService(typeof(IPrincipal));
-            }
-        }
+        public IPrincipal User { get; }
 
         #region IServiceProvider Members
 
@@ -96,7 +84,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         /// <param name="serviceType">The type of the service needed.</param>
         /// <returns>An instance of that service or null if it is not available.</returns>
-        public object GetService(Type serviceType)
+        public virtual object GetService(Type serviceType)
         {
             object service = null;
 

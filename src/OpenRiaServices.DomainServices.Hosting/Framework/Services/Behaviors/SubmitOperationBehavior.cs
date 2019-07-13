@@ -48,9 +48,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     return ServiceUtility.SubmitOperationName;
                 }
             }
-
-            //protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
-            protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
+            protected override async ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
                 DomainService domainService = (DomainService)instance;
                 IEnumerable<ChangeSetEntry> changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
@@ -65,7 +63,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         throw;
                     }
-                    throw ServiceUtility.CreateFaultException(ex);
+                    throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
             }
 

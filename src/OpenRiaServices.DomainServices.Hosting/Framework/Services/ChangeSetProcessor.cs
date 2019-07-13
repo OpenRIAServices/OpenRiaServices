@@ -36,7 +36,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // Process the submit results and build the result list to be sent back
             // to the client
-            return GetSubmitResults(changeSet);
+            return GetSubmitResults(changeSet, domainService.GetDisableStackTraces());
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         /// <param name="changeSet">The change set processed.</param>
         /// <returns>The results list.</returns>
-        private static List<ChangeSetEntry> GetSubmitResults(ChangeSet changeSet)
+        private static List<ChangeSetEntry> GetSubmitResults(ChangeSet changeSet, bool isCustomErrorEnabled)
         {
             List<ChangeSetEntry> results = new List<ChangeSetEntry>();
             foreach (ChangeSetEntry changeSetEntry in changeSet.ChangeSetEntries)
@@ -57,8 +57,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     // if customErrors is turned on, clear out the stacktrace.
                     // This is an additional step here so that ValidationResultInfo
                     // and DomainService can remain agnostic to http-concepts
-                    HttpContext context = HttpContext.Current;
-                    if (context != null && context.IsCustomErrorEnabled)
+                    if (isCustomErrorEnabled)
                     {
                         if (changeSetEntry.ValidationErrors != null)
                         {

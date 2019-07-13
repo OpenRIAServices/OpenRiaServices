@@ -469,8 +469,9 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// This method will also trace the exception if tracing is enabled.
         /// </remarks>
         /// <param name="validationErrors">The collection of errors to process.</param>
+        /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>An exception representing the validation errors.</returns>
-        internal static FaultException<DomainServiceFault> CreateFaultException(IEnumerable<ValidationResult> validationErrors)
+        internal static FaultException<DomainServiceFault> CreateFaultException(IEnumerable<ValidationResult> validationErrors, bool hideStackTrace)
         {
             Debug.Assert(validationErrors != null, "validationErrors is null.");
 
@@ -479,10 +480,9 @@ namespace OpenRiaServices.DomainServices.Hosting
             fault.OperationErrors = errors;
 
             // if custom errors is turned on, clear out the stacktrace.
-            HttpContext context = HttpContext.Current;
             foreach (ValidationResultInfo error in errors)
             {
-                if (context != null && context.IsCustomErrorEnabled)
+                if (hideStackTrace)
                 {
                     error.StackTrace = null;
                 }
@@ -500,13 +500,12 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// This method will also trace the exception if tracing is enabled.
         /// </remarks>
         /// <param name="e">The exception that was caught.</param>
+        /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>The exception to return.</returns>
-        internal static FaultException<DomainServiceFault> CreateFaultException(Exception e)
+        internal static FaultException<DomainServiceFault> CreateFaultException(Exception e, bool hideStackTrace)
         {
             Debug.Assert(!e.IsFatal(), "Fatal exception passed in");
             DomainServiceFault fault = new DomainServiceFault();
-
-            HttpContext context = HttpContext.Current;
 
             // Unwrap any TargetInvocationExceptions to get the real exception.
             e = ExceptionHandlingUtility.GetUnwrappedException(e);
@@ -534,7 +533,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     fault.ErrorCode = dpe.ErrorCode;
                     fault.ErrorMessage = FormatExceptionMessage(dpe);
                     fault.IsDomainException = true;
-                    if (context != null && context.IsCustomErrorEnabled == false)
+                    if (hideStackTrace == false)
                     {
                         // also send the stack trace if custom errors is disabled
                         fault.StackTrace = dpe.StackTrace;
@@ -560,7 +559,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // set error code. Also set error message if custom errors is disabled
             fault.ErrorCode = errorCode;
-            if (context != null && !context.IsCustomErrorEnabled)
+            if (hideStackTrace == false)
             {
                 fault.ErrorMessage = FormatExceptionMessage(e);
                 fault.StackTrace = e.StackTrace;

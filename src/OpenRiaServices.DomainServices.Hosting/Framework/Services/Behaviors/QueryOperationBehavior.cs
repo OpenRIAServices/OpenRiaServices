@@ -78,10 +78,13 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
+            protected override async ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
                 ServiceQuery serviceQuery = null;
                 QueryAttribute queryAttribute = (QueryAttribute)this.operation.OperationAttribute;
+                // httpContext is lost on await so need to save it for later ise
+                HttpContext httpContext = HttpContext.Current;
+
                 if (queryAttribute.IsComposable)
                 {
                     object value;
@@ -93,12 +96,12 @@ namespace OpenRiaServices.DomainServices.Hosting
 
                 try
                 {
-                    QueryOperationInvoker.SetOutputCachingPolicy(this.operation);
+                    QueryOperationInvoker.SetOutputCachingPolicy(httpContext, this.operation);
                     QueryResult<TEntity> result = await QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery);
 
                     if (result.ValidationErrors != null && result.ValidationErrors.Any())
                     {
-                        throw ServiceUtility.CreateFaultException(result.ValidationErrors);
+                        throw ServiceUtility.CreateFaultException(result.ValidationErrors, disableStackTraces);
                     }
 
                     return result;
@@ -113,8 +116,8 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         throw;
                     }
-                    QueryOperationInvoker.ClearOutputCachingPolicy();
-                    throw ServiceUtility.CreateFaultException(ex);
+                    QueryOperationInvoker.ClearOutputCachingPolicy(httpContext);
+                    throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
             }
 
@@ -130,9 +133,8 @@ namespace OpenRiaServices.DomainServices.Hosting
             /// <summary>
             /// Clears the output cache policy.
             /// </summary>
-            private static void ClearOutputCachingPolicy()
+            private static void ClearOutputCachingPolicy(HttpContext context)
             {
-                HttpContext context = HttpContext.Current;
                 if (context == null)
                 {
                     return;
@@ -144,15 +146,10 @@ namespace OpenRiaServices.DomainServices.Hosting
             /// <summary>
             /// Sets the output cache policy for the specified domain operation entry.
             /// </summary>
+            /// <param name="context">Current HttpContext</param>
             /// <param name="domainOperationEntry">The domain operation entry we need to define the cache policy for.</param>
-            private static void SetOutputCachingPolicy(DomainOperationEntry domainOperationEntry)
+            private static void SetOutputCachingPolicy(HttpContext context, DomainOperationEntry domainOperationEntry)
             {
-                HttpContext context = HttpContext.Current;
-                if (context == null)
-                {
-                    return;
-                }
-
                 if (QueryOperationInvoker.SupportsCaching(context, domainOperationEntry))
                 {
                     OutputCacheAttribute outputCacheInfo = QueryOperationInvoker.GetOutputCacheInformation(domainOperationEntry);

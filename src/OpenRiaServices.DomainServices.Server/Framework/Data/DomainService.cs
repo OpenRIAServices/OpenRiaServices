@@ -82,7 +82,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Gets the active <see cref="DomainServiceContext"/> for this <see cref="DomainService"/>.
         /// </summary>
-        protected DomainServiceContext ServiceContext
+        public DomainServiceContext ServiceContext
         {
             get
             {
