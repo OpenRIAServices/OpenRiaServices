@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         public static bool GetDisableStackTraces(this DomainService domainService)
         {
-            return ((WcfDomainServiceContext)domainService.ServiceContext).DisableStackTraces;
+            return (domainService.ServiceContext as WcfDomainServiceContext)?.DisableStackTraces ?? true;
         }
     }
 }

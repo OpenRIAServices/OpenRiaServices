@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="serviceProvider">A service provider.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
         public WcfDomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
-            : base(serviceProvider, operationType, GetPrincipal())
+            : base(serviceProvider, operationType)
         {
             _httpContext = HttpContext.Current;
 
@@ -57,14 +57,6 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
 
             return base.GetService(serviceType);
-        }
-
-        private static IPrincipal GetPrincipal()
-        {
-            if (HttpContext.Current != null)
-                return HttpContext.Current.User;
-            else
-                return OperationContext.Current.ClaimsPrincipal;
         }
     }
 }
