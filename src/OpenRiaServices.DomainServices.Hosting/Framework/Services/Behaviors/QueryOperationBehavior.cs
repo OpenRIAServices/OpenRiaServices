@@ -150,6 +150,9 @@ namespace OpenRiaServices.DomainServices.Hosting
             /// <param name="domainOperationEntry">The domain operation entry we need to define the cache policy for.</param>
             private static void SetOutputCachingPolicy(HttpContext context, DomainOperationEntry domainOperationEntry)
             {
+                if (context == null)
+                    return;
+
                 if (QueryOperationInvoker.SupportsCaching(context, domainOperationEntry))
                 {
                     OutputCacheAttribute outputCacheInfo = QueryOperationInvoker.GetOutputCacheInformation(domainOperationEntry);

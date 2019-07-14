@@ -36,5 +36,22 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             return ((Task<T>)asyncResult).GetAwaiter().GetResult();
         }
+
+        public static IAsyncResult BeginApm<T>(ValueTask<T> task,
+                                    AsyncCallback callback,
+                                    object state)
+        {
+            if(task.IsCompletedSuccessfully)
+            {
+                var tcs = new TaskCompletionSource<T>(state);
+                tcs.TrySetResult(task.Result);
+                callback.Invoke(tcs.Task);
+                return tcs.Task;
+            }
+            else
+            {
+                return BeginApm<T>(task.AsTask(), callback, state);
+            }
+        }
     }
 }

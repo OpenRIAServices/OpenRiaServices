@@ -62,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             return TaskExtensions.EndApm<object>(result);
         }
 
-        private async Task<object> InvokeAsync(object instance, object[] inputs)
+        private async ValueTask<object> InvokeAsync(object instance, object[] inputs)
         {
             long startTicks = DiagnosticUtility.GetTicks();
             bool disableStackTraces = true;
