@@ -9,9 +9,9 @@ variables:
 steps:
 
 - task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 5.0.2'
+  displayName: 'Use NuGet 5.1.0'
   inputs:
-    versionSpec: 5.0.2
+    versionSpec: 5.1.0
     
 - task: GitVersion@4
   displayName: GitVersion
