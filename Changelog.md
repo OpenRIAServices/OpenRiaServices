@@ -1,3 +1,10 @@
+# 4.6.2
+
+## Client
+
+1. Add transport (OpenRiaServices.DomainServices.Client.Web) to netstandard 2.0 nuget.
+  This provides the SoapDomainClientFactory for netstandard / netcoreapp assemblies.
+   
 # 4.6.1
 
 ## Client
