@@ -19,7 +19,7 @@
     <PackageReference Include="SilverlightToolkit-Testing" Version="5.2011.12.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
