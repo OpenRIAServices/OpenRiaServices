@@ -10,9 +10,7 @@ namespace OpenRiaServices.DomainServices.Serialization
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
-#if !PORTABLE
     [Browsable(false)]
-#endif
     [DataContract(/*Name= "KeyValueOfstringArrayOfanyTypety7Ep6D1",*/ Namespace = "http://schemas.microsoft.com/2003/10/Serialization/Arrays")]
     public struct KeyValue<TKey, TValue>
     {

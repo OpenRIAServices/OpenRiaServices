@@ -369,9 +369,7 @@ namespace OpenRiaServices.DomainServices.Client
             var isRemovedInHashSet = this.EntitiesHashSet.Remove(entity);
             Debug.Assert(isRemoved == isRemovedInHashSet
                 , "The entity should be present in both Entities and EntitiesHashSet"
-#if !PORTABLE
                 , "Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet
-#endif
             );
             return isRemoved;
         }
