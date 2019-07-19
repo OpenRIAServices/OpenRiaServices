@@ -60,18 +60,7 @@ namespace OpenRiaServices.DomainServices
         /// <summary>
         /// Represents an empty array of type <see href="System.Type" />
         /// </summary>
-#if PORTABLE
-        public static Type[] EmptyTypes
-        {
-            get 
-            {
-                return s_emptyTypes;
-            }
-        }
-        private static Type[] s_emptyTypes = new Type[0];
-#else
         public static Type[] EmptyTypes { get { return Type.EmptyTypes; } }
-#endif
 
 #if !WIZARD
         // list of "simple" types we will always accept for

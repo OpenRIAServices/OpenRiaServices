@@ -57,11 +57,7 @@ namespace OpenRiaServices.DomainServices
 
         private static bool IsFatalExceptionType(Exception exception)
         {
-            if (
-#if !PORTABLE
-                (exception is ThreadAbortException) ||
-#endif
-
+            if ((exception is ThreadAbortException) ||
 #if SILVERLIGHT
                 (exception is OutOfMemoryException)
 #else

@@ -16,7 +16,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// <see cref="Application.ApplicationLifetimeObjects"/> (Silverlight specific).
     /// </remarks>
     public abstract class WebContextBase : INotifyPropertyChanged
-#if SILVERLIGHT && !PORTABLE
+#if SILVERLIGHT
         , IApplicationService, IApplicationLifetimeAware
 #endif
     {
@@ -183,7 +183,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
         #endregion
 
-#if SILVERLIGHT && !PORTABLE
+#if SILVERLIGHT
         #region IApplicationService Members
 
         /// <summary>

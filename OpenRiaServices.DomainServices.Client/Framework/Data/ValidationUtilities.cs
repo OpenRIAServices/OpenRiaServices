@@ -37,15 +37,7 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("instance");
             }
 
-#if !PORTABLE
             ValidationContext context = new ValidationContext(instance, parentContext, parentContext != null ? parentContext.Items : null);
-#else
-            ValidationContext context = new ValidationContext(instance, parentContext?.Items);
-            if (parentContext != null)
-            {
-                context.InitializeServiceProvider(type => parentContext.GetService(type));
-            }
-#endif
             return context;
         }
 
@@ -70,21 +62,13 @@ namespace OpenRiaServices.DomainServices.Client
                 int parameterLength = (parameters == null) ? 0 : parameters.Length;
                 if (parameterLength == 0)
                 {
-#if !PORTABLE
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound_ZeroParams, instanceType, methodName));
-#else
-                    throw new MissingMemberException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound_ZeroParams, instanceType, methodName));
-#endif
                 }
                 else
                 {
                     // convert parameter types into a string of this format e.g. ('string', null, 'int')
                     string[] parameterTypes = parameters.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
-#if !PORTABLE
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
-#else
-                    throw new MissingMemberException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
-#endif
                 }
             }
 

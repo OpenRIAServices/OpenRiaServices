@@ -568,11 +568,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 // Get application assembly so we can start searching for web context type there
                 Assembly applicationAssembly =
-#if PORTABLE
-                    // just return an assembly, internal will probably be wrong but 
-                    // as long as internal is non null we will try to load domain context by name
-                    Assembly.GetCallingAssembly();
-#elif SILVERLIGHT
+#if SILVERLIGHT
                     Application.Current.GetType().Assembly;
 #else
                     Assembly.GetEntryAssembly();

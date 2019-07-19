@@ -1164,11 +1164,7 @@ namespace OpenRiaServices.DomainServices.Client
                         // Validate the method exists.
                         ValidationUtilities.GetMethod(this, customMethod.Name, parameters);
                     }
-#if PORTABLE
-                    catch (MissingMemberException innerException)
-#else
                     catch (MissingMethodException innerException)
-#endif
                     {
                         throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_NamedUpdateMethodDoesNotExist, customMethod.Name, entity.GetType(), this.GetType()), innerException);
                     }
