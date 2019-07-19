@@ -52,14 +52,6 @@
     <DefineConstants>$(DefineConstants),SILVERLIGHT=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
-    <TargetFrameworkIdentifier>.NETPortable</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile47</TargetFrameworkProfile>
-    <LanguageTargets>$(MSBuildExtensionsPath)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets</LanguageTargets>
-    <DefineConstants>$(DefineConstants);PORTABLE;PORTABLE47;SILVERLIGHT</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'sl5' ">
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -69,15 +61,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <HintPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.DataAnnotations.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'portable40-net45+sl5+win8' ">
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows" />
   </ItemGroup>
 
   <!-- Enable source link, we really only want this for framework assemblies and CI builds
