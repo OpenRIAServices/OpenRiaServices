@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// Default <see cref="DomainClient"/> implementation using WCF
     /// </summary>
     /// <typeparam name="TContract">The contract type.</typeparam>
-    public sealed class WebDomainClient<TContract> : DomainClient where TContract : class
+    public class WebDomainClient<TContract> : DomainClient where TContract : class
     {
         internal const string QueryPropertyName = "DomainServiceQuery";
         internal const string IncludeTotalCountPropertyName = "DomainServiceIncludeTotalCount";
@@ -414,7 +414,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="callback">callback responsible for casting return value and epr method error handling</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for requesting cancellation</param>
         /// <returns>A <see cref="Task{TResult}"/> which will contain the result of the operation, exception or be cancelled</returns>
-        private static Task<TResult> CallServiceOperation<TResult>(TContract channel, string operationName,
+        protected virtual Task<TResult> CallServiceOperation<TResult>(TContract channel, string operationName,
             IDictionary<string, object> parameters,
             Func<object, IAsyncResult, TResult> callback, CancellationToken cancellationToken)
         {
