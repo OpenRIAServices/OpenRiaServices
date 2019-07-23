@@ -8,6 +8,7 @@ using Cities;
 using OpenRiaServices.DomainServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
@@ -41,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             try
             {
-                result = await cities.QueryAsync(new QueryDescription(getZipsIfAuthenticated));
+                result = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfAuthenticated), CancellationToken.None);
             }
             catch (UnauthorizedAccessException e)
             {
@@ -61,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             try
             {
                 user.IsAuthenticated = false;
-                result = await cities.QueryAsync(new QueryDescription(getZipsIfAuthenticated));
+                result = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfAuthenticated), CancellationToken.None);
             }
             catch (UnauthorizedAccessException e)
             {
@@ -72,7 +73,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // we're authenticated, so this should succeed
             expectedException = null;
             user.IsAuthenticated = true;
-            result = await cities.QueryAsync(new QueryDescription(getZipsIfAuthenticated));
+            result = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfAuthenticated), CancellationToken.None);
             Assert.IsNotNull(result.Result);
 
             // authenticated, but not in role, so we should fail
@@ -84,7 +85,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             cities.Initialize(new WcfDomainServiceContext(dataService, DomainOperationType.Query));
             try
             {
-                result = await cities.QueryAsync(new QueryDescription(getZipsIfInRole));
+                result = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfInRole), CancellationToken.None);
             }
             catch (UnauthorizedAccessException e)
             {
@@ -98,13 +99,13 @@ namespace OpenRiaServices.DomainServices.Server.Test
             user.IsAuthenticated = true;
             dataService = new MockDataService(user);
             cities.Initialize(new WcfDomainServiceContext(dataService, DomainOperationType.Query));
-            result = await cities.QueryAsync(new QueryDescription(getZipsIfInRole));
+            result = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfInRole), CancellationToken.None);
             Assert.IsNotNull(result);
         }
 
         [TestMethod]
         [Description("Accessing a query with a custom authorization attribute is denied and allowed appropriately")]
-        public void Authorization_Custom_Authorization_On_Query()
+        public async Task Authorization_Custom_Authorization_On_Query()
         {
             CityDomainService cities = new CityDomainService();
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(CityDomainService));
@@ -121,8 +122,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             try
             {
                 user.IsAuthenticated = false;
-                result = cities.QueryAsync(new QueryDescription(getZipsIfUser))
-                    .GetAwaiter().GetResult().Result;
+                result = (await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfUser), CancellationToken.None)).Result;
             }
             catch (UnauthorizedAccessException e)
             {
@@ -140,8 +140,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
             cities.Initialize(new WcfDomainServiceContext(dataService, DomainOperationType.Query));
             try
             {
-                result = cities.QueryAsync(new QueryDescription(getZipsIfUser))
-                    .GetAwaiter().GetResult().Result;
+                result = (await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfUser), CancellationToken.None))
+                    .Result;
             }
             catch (UnauthorizedAccessException e)
             {
@@ -156,8 +156,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             user.IsAuthenticated = true;
             dataService = new MockDataService(user);
             cities.Initialize(new WcfDomainServiceContext(dataService, DomainOperationType.Query));
-            var queryResult = cities.QueryAsync(new QueryDescription(getZipsIfUser))
-                .GetAwaiter().GetResult();
+            var queryResult = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfUser), CancellationToken.None);
             Assert.IsNotNull(queryResult.Result);
             Assert.IsNull(queryResult.ValidationErrors);
             Assert.IsTrue(queryResult.Result.OfType<Zip>().Any(), "Expected non-zero number of zip codes returned");
@@ -184,7 +183,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 // Now prepare for a query to find a Zip in WA
                 ctxt = new WcfDomainServiceContext(new MockDataService(notWaGuy), DomainOperationType.Query);
                 cities.Initialize(ctxt);
-                IEnumerable result = (await cities.QueryAsync(new QueryDescription(getZipsQuery))).Result;
+                IEnumerable result = (await cities.QueryAsync<Zip>(new QueryDescription(getZipsQuery), CancellationToken.None)).Result;
 
                 zip = result.OfType<Zip>().FirstOrDefault(z => z.StateName == "WA");
                 Assert.IsNotNull(zip, "Could not find a zip code in WA");
@@ -263,7 +262,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 DomainServiceContext ctxt = new WcfDomainServiceContext(new MockDataService(notWaGuy), DomainOperationType.Query);
                 cities.Initialize(ctxt);
 
-                IEnumerable result = (await cities.QueryAsync(new QueryDescription(getCitiesQuery))).Result;
+                IEnumerable result = (await cities.QueryAsync<City>(new QueryDescription(getCitiesQuery), CancellationToken.None)).Result;
 
                 city = result.OfType<City>().FirstOrDefault(z => z.StateName == "WA");
                 Assert.IsNotNull(city, "Could not find a city in WA");
@@ -359,8 +358,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 DomainServiceContext ctxt = new WcfDomainServiceContext(new MockDataService(notWaGuy), DomainOperationType.Query);
                 cities.Initialize(ctxt);
 
-                IEnumerable result = cities.QueryAsync(new QueryDescription(getCitiesQuery))
-                    .GetAwaiter().GetResult().Result;
+                IEnumerable result = (await cities.QueryAsync<City>(new QueryDescription(getCitiesQuery), CancellationToken.None)).Result;
 
                 city = result.OfType<City>().FirstOrDefault(z => z.StateName == "WA");
                 Assert.IsNotNull(city, "Could not find a city in WA");
@@ -380,7 +378,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 try
                 {
                     // cause a domain service not initialized exception
-                    await cities.InvokeAsync(new InvokeDescription(invokeOperation, new object[] { city }));
+                    await cities.InvokeAsync(new InvokeDescription(invokeOperation, new object[] { city }), CancellationToken.None);
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -408,7 +406,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 try
                 {
                     // cause a domain service not initialized exception
-                    await cities.InvokeAsync(new InvokeDescription(invokeOperation, new object[] { city }));
+                    await cities.InvokeAsync(new InvokeDescription(invokeOperation, new object[] { city }), CancellationToken.None);
                 }
                 catch (UnauthorizedAccessException e)
                 {

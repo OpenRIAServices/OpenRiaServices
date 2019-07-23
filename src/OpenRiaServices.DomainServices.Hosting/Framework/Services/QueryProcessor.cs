@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
@@ -36,8 +38,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // invoke the query operation
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameters, includeTotalCount, query);
-            var res = await domainService.QueryAsync(queryDescription);
-
+            var res = await domainService.QueryAsync<TEntity>(queryDescription,  CancellationToken.None);
 
             if (res.HasValidationErrors)
             {

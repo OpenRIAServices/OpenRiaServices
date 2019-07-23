@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
@@ -66,7 +67,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 try
                 {
                     InvokeDescription invokeDescription = new InvokeDescription(this.operation, inputs);
-                    ServiceInvokeResult invokeResult = await instance.InvokeAsync(invokeDescription);
+                    ServiceInvokeResult invokeResult = await instance.InvokeAsync(invokeDescription, CancellationToken.None);
                     if (invokeResult.HasValidationErrors)
                     {
                         throw ServiceUtility.CreateFaultException(invokeResult.ValidationErrors, disableStackTrace);

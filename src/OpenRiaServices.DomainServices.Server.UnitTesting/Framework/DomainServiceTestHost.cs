@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
+using System.Threading;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Server.UnitTesting
@@ -516,7 +517,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
 
             QueryDescription queryDescription = Utility.GetQueryDescription(context, queryOperation);
 
-            var queryTask = context.DomainService.QueryAsync(queryDescription);
+            var queryTask = context.DomainService.QueryAsync<TEntity>(queryDescription, CancellationToken.None);
             // TODO: Remove blocking wait
             var queryResult = queryTask.GetAwaiter().GetResult();
             ErrorUtility.AssertNoValidationErrors(context, queryResult.ValidationErrors);
@@ -541,7 +542,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             QueryDescription queryDescription = Utility.GetQueryDescription(context, queryOperation);
             IEnumerable<ValidationResult> validationErrors;
 
-            var queryTask = context.DomainService.QueryAsync(queryDescription);
+            var queryTask = context.DomainService.QueryAsync<TEntity>(queryDescription, CancellationToken.None);
             // TODO: Remove blocking wait
             var queryResult = queryTask.GetAwaiter().GetResult();
             IEnumerable entities = queryResult.Result;
@@ -645,7 +646,9 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
         private static void SubmitChangeSetCore(OperationContext context, ChangeSet changeSet)
         {
-            context.DomainService.SubmitAsync(changeSet);
+            // TODO: Remove blocking await
+            context.DomainService.SubmitAsync(changeSet, CancellationToken.None)
+                .GetAwaiter().GetResult(); ;
 
             ErrorUtility.AssertNoChangeSetErrors(context, changeSet);
         }
@@ -659,7 +662,8 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         /// <param name="validationResults">The validation errors that occurred</param>
         private static bool TrySubmitChangeSetCore(OperationContext context, ChangeSet changeSet, out IList<ValidationResult> validationResults)
         {
-            context.DomainService.SubmitAsync(changeSet);
+            context.DomainService.SubmitAsync(changeSet, CancellationToken.None)
+                .GetAwaiter().GetResult();
 
             validationResults = GetValidationResults(changeSet);
             return !changeSet.HasError;
@@ -678,7 +682,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             InvokeDescription invokeDescription = Utility.GetInvokeDescription(context, invokeOperation);
 
             // TODO: Remove blocking wait
-            var invokeResult = context.DomainService.InvokeAsync(invokeDescription).GetAwaiter().GetResult();
+            var invokeResult = context.DomainService.InvokeAsync(invokeDescription, CancellationToken.None).GetAwaiter().GetResult();
             ErrorUtility.AssertNoValidationErrors(context, invokeResult.ValidationErrors);
             TResult result = (TResult)invokeResult.Result;
 
@@ -697,12 +701,10 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         private bool TryInvokeCore<TResult>(Expression invokeOperation, out TResult result, out IList<ValidationResult> validationResults)
         {
             OperationContext context = this.CreateOperationContext(DomainOperationType.Invoke);
-
             InvokeDescription invokeDescription = Utility.GetInvokeDescription(context, invokeOperation);
-            IEnumerable<ValidationResult> validationErrors;
 
             // TODO: Remove blocking wait
-            var invokeResult = context.DomainService.InvokeAsync(invokeDescription).GetAwaiter().GetResult();
+            var invokeResult = context.DomainService.InvokeAsync(invokeDescription, CancellationToken.None).GetAwaiter().GetResult();
             result = (TResult)invokeResult.Result;
             validationResults = invokeResult.HasValidationErrors ? invokeResult.ValidationErrors.ToList() : null;
 

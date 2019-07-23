@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices;
 using OpenRiaServices.DomainServices.Hosting;
@@ -149,7 +150,7 @@ namespace TestDomainServices
         /// <summary>
         /// Overridden to do some pre-validation of the changeset
         /// </summary>
-        protected override Task<bool> ExecuteChangeSetAsync()
+        protected override ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
         {
             foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(p => p.Entity.GetType() == typeof(Parent)))
             {
@@ -167,7 +168,7 @@ namespace TestDomainServices
                 }
             }
 
-            return base.ExecuteChangeSetAsync();
+            return base.ExecuteChangeSetAsync(cancellationToken);
         }
 
         /// <summary>

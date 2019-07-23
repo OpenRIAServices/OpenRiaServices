@@ -7,6 +7,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel.Description;
+    using System.Threading;
     using OpenRiaServices.DomainServices.Server;
 
     #endregion
@@ -106,7 +107,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 IEnumerable<TEntity> result;
                 try
                 {
-                    var queryTask  = ((DomainService)instance).QueryAsync(queryDesc);
+                    var queryTask  = ((DomainService)instance).QueryAsync<TEntity>(queryDesc, CancellationToken.None);
                     var queryResult = queryTask.ConfigureAwait(false).GetAwaiter().GetResult();
                     validationErrors = queryResult.ValidationErrors;
                     result = (IEnumerable<TEntity>)queryResult.Result;

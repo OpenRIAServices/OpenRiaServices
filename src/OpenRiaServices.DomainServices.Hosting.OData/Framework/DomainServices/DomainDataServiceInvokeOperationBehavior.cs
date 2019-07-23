@@ -7,6 +7,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel.Description;
+    using System.Threading;
     using OpenRiaServices.DomainServices.Server;
 
     #endregion
@@ -102,7 +103,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 {
                     InvokeDescription description = new InvokeDescription(this.operation, inputs);
                     // TODO: Verify it is completed or make async?
-                    var invokeResult = ((DomainService)instance).InvokeAsync(description).GetAwaiter().GetResult();
+                    var invokeResult = ((DomainService)instance).InvokeAsync(description, CancellationToken.None).GetAwaiter().GetResult();
                     DomainDataServiceException.HandleValidationErrors(invokeResult.ValidationErrors);
                     return invokeResult.Result;
                 }

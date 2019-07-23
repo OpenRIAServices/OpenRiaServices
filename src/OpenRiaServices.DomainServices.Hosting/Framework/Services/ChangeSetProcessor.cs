@@ -10,6 +10,7 @@ using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -32,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             
             // TODO:
             // * Remove this method and "manually inline" the code where used
-            await domainService.SubmitAsync(changeSet);
+            await domainService.SubmitAsync(changeSet, CancellationToken.None);
 
             // Process the submit results and build the result list to be sent back
             // to the client

@@ -3653,19 +3653,19 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainService_BaseMethodOverrides : DomainService
     {
-        public override ValueTask<ServiceQueryResult> QueryAsync(QueryDescription queryDescription)
+        public override ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
-            return base.QueryAsync(queryDescription);
+            return base.QueryAsync<T>(queryDescription, cancellationToken);
         }
 
-        public override Task<bool> SubmitAsync(ChangeSet changeSet)
+        public override Task<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
         {
-            return base.SubmitAsync(changeSet);
+            return base.SubmitAsync(changeSet, cancellationToken);
         }
 
-        public override ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription)
+        public override ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription, CancellationToken cancellationToken)
         {
-            return base.InvokeAsync(invokeDescription);
+            return base.InvokeAsync(invokeDescription, cancellationToken);
         }
 
         public override void Initialize(DomainServiceContext context)

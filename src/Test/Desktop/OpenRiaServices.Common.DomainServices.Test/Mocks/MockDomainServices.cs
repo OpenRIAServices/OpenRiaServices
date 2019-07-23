@@ -18,6 +18,7 @@ using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.DomainServices.LinqToSql;
 using TestDomainServices.Saleテ;
 using System.Threading.Tasks;
+using System.Threading;
 
 [assembly: ContractNamespace("http://TestNamespace/ForNoClrNamespace")]
 
@@ -122,9 +123,9 @@ namespace TestDomainServices
     {
         private static Cities.CityData s_cities = new Cities.CityData();
 
-        protected override int Count<T>(IQueryable<T> query)
+        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            return query.Count();
+            return new ValueTask<int>(query.Count());
         }
 
         public IEnumerable<Cities.City> GetCities()
@@ -936,7 +937,7 @@ namespace TestDomainServices
 
         private string query = string.Empty;
 
-        public override ValueTask<ServiceQueryResult> QueryAsync(QueryDescription queryDescription)
+        public override ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
             if (queryDescription.Method.Name == "GetRoundtripQueryEntities" && queryDescription.Query != null)
             {
@@ -944,7 +945,7 @@ namespace TestDomainServices
                 this.query = queryDescription.Query.ToString();
             }
 
-            return base.QueryAsync(queryDescription);
+            return base.QueryAsync<T>(queryDescription, cancellationToken);
         }
 
         public IQueryable<RoundtripQueryEntity> GetRoundtripQueryEntities()
@@ -2079,7 +2080,7 @@ namespace TestDomainServices
             return null;
         }
 
-        protected override Task<bool> PersistChangeSetAsync()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
             // Below is some test code to generate concurrency conflicts based
             // on client input
@@ -2095,7 +2096,7 @@ namespace TestDomainServices
                 }
             }
 
-            return base.PersistChangeSetAsync();
+            return base.PersistChangeSetAsync(cancellationToken);
         }
     }
 

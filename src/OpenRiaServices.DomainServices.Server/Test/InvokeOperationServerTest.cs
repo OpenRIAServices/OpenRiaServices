@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.DomainServices.Client.Test;
@@ -128,7 +129,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             {
                 BID1 = 1
             };
-            var invokeResult = await provider.InvokeAsync(new InvokeDescription(incrementBid1ForAByMethod, new object[] { inputA, 2 }));
+            var invokeResult = await provider.InvokeAsync(new InvokeDescription(incrementBid1ForAByMethod, new object[] { inputA, 2 }), CancellationToken.None);
             Assert.IsNull(invokeResult.Result);
             Assert.IsNotNull(invokeResult.ValidationErrors);
             Assert.AreEqual(2, invokeResult.ValidationErrors.Count);
@@ -145,7 +146,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry throwValidationExceptionMethod = serviceDescription.GetInvokeOperation("ThrowValidationException");
             Assert.IsNotNull(throwValidationExceptionMethod);
 
-            var invokeResult = await provider.InvokeAsync(new InvokeDescription(throwValidationExceptionMethod, new object[0]));
+            var invokeResult = await provider.InvokeAsync(new InvokeDescription(throwValidationExceptionMethod, new object[0]), CancellationToken.None);
             Assert.IsNull(invokeResult.Result);
             Assert.IsNotNull(invokeResult.ValidationErrors);
             Assert.AreEqual(1, invokeResult.ValidationErrors.Count);

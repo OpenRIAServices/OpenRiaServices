@@ -7,8 +7,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices;
 using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
 namespace OpenRiaServices.DomainServices.Server
@@ -24,10 +24,7 @@ namespace OpenRiaServices.DomainServices.Server
         internal const int TotalCountUndefined = -1;
         private const int TotalCountEqualsResultSetCount = -2;
 
-        private static IDomainServiceFactory domainServiceFactory;
-        private static MethodInfo countMethod = typeof(DomainService).GetMethod(nameof(DomainService.CountAsync), BindingFlags.NonPublic | BindingFlags.Instance);
-        private static MethodInfo enumerateMethod = typeof(DomainService).GetMethod(nameof(DomainService.EnumerateAsync), BindingFlags.NonPublic | BindingFlags.Instance);
-        private static ConcurrentDictionary<Type, Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>> enumerateMethodMap = new ConcurrentDictionary<Type, Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>>();
+        private static IDomainServiceFactory s_domainServiceFactory;
 
         private ChangeSet _changeSet;
         private DomainServiceContext _serviceContext;
@@ -51,16 +48,16 @@ namespace OpenRiaServices.DomainServices.Server
         {
             get
             {
-                if (DomainService.domainServiceFactory == null)
+                if (DomainService.s_domainServiceFactory == null)
                 {
-                    DomainService.domainServiceFactory = new DefaultDomainServiceFactory();
+                    DomainService.s_domainServiceFactory = new DefaultDomainServiceFactory();
                 }
 
-                return DomainService.domainServiceFactory;
+                return DomainService.s_domainServiceFactory;
             }
             set
             {
-                DomainService.domainServiceFactory = value;
+                DomainService.s_domainServiceFactory = value;
             }
         }
 
@@ -264,12 +261,14 @@ namespace OpenRiaServices.DomainServices.Server
         /// and returns the results. If the query returns a singleton, it should still be returned
         /// as an <see cref="IEnumerable"/> containing the single result.
         /// </summary>
-        /// <param name="queryDescription">The description of the query to perform.</param>
+        /// <param name="queryDescription">The description of the query to perform.
         /// any paging applied to it.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The query results. May be null if there are no query results.</returns>
-        public async virtual ValueTask<ServiceQueryResult> QueryAsync(QueryDescription queryDescription)
+        public async virtual ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
             IEnumerable enumerableResult = null;
+            IReadOnlyCollection<T> enumeratedResult = null;
             List<ValidationResult> validationErrorList = null;
             int totalCount;
 
@@ -306,7 +305,6 @@ namespace OpenRiaServices.DomainServices.Server
                     try
                     {
                         result = queryDescription.Method.Invoke(this, parameters, out totalCount);
-                        // TODO: Should add support to a type with both result and count
                         if (queryDescription.Method.IsTaskAsync)
                         {
                             result = await queryDescription.Method.UnwrapTaskResult(result).ConfigureAwait(false);
@@ -348,6 +346,8 @@ namespace OpenRiaServices.DomainServices.Server
                     this.ServiceContext.Operation = null;
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 // One or more results were returned. If the result is enumerable, compose
                 // any specified query operators, otherwise just return the singleton instance.
                 enumerableResult = result as IEnumerable;
@@ -361,7 +361,7 @@ namespace OpenRiaServices.DomainServices.Server
                         enumerableResult = QueryComposer.Compose(enumerableResult.AsQueryable(), queryDescription.Query);
                         if (totalCount == DomainService.TotalCountUndefined)
                         {
-                            totalCount = await this.GetTotalCountForQuery(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false);
+                            totalCount = await this.GetTotalCountForQuery<T>(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false, cancellationToken);
                         }
                     }
                     else if (totalCount == DomainService.TotalCountUndefined)
@@ -375,17 +375,17 @@ namespace OpenRiaServices.DomainServices.Server
                     {
                         if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                         {
-                            totalCount = await this.GetTotalCountForQuery(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true);
+                            totalCount = await this.GetTotalCountForQuery<T>(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true, cancellationToken);
                         }
 
                         enumerableResult = limitedResults;
                     }
 
                     // Enumerate the query.
-                    enumerableResult = await CallEnumerateAsync(queryDescription.Method.AssociatedType, enumerableResult);
+                    enumeratedResult = await EnumerateAsync<T>(enumerableResult, DomainService.DefaultEstimatedQueryResultCount, cancellationToken);
                     if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                     {
-                        totalCount = ((ICollection)enumerableResult).Count;
+                        totalCount = enumeratedResult.Count;
                     }
                 }
                 else
@@ -393,9 +393,7 @@ namespace OpenRiaServices.DomainServices.Server
                     // create a strongly typed array for the singleton return
                     if (result != null)
                     {
-                        Array array = Array.CreateInstance(queryDescription.Method.ReturnType, 1);
-                        array.SetValue(result, 0);
-                        enumerableResult = array;
+                        enumeratedResult = new T[] { (T)result };
                     }
                 }
             }
@@ -418,31 +416,7 @@ namespace OpenRiaServices.DomainServices.Server
                 throw;
             }
 
-            return new ServiceQueryResult(enumerableResult, totalCount);
-        }
-
-        // TODO: ValueTask + ICollection / IReadOnlyCollecion<> result
-        private async ValueTask<ICollection> CallEnumerateAsync(Type entityType, IEnumerable enumerableResult)
-        {
-            Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>> enumerateMethod = DomainService.enumerateMethodMap.GetOrAdd(entityType, type =>
-             {
-                 MethodInfo concreteEnumerateMethod = DomainService.enumerateMethod.MakeGenericMethod(type);
-                 return (DomainService ds, IEnumerable en, int c) =>
-                 {
-                     try
-                     {
-                         return (ValueTask<IEnumerable>)concreteEnumerateMethod.Invoke(ds, new object[] { en, c });
-                     }
-                     catch (TargetInvocationException tie)
-                     {
-                         if (tie.InnerException != null)
-                             throw tie.InnerException;
-                         throw;
-                     }
-                 };
-                 //return (Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>)Delegate.CreateDelegate(typeof(Func<DomainService, IEnumerable, int, ValueTask<IEnumerable>>), null, concreteEnumerateMethod);
-             });
-            return (ICollection)await enumerateMethod(this, enumerableResult, DomainService.DefaultEstimatedQueryResultCount);
+            return new ServiceQueryResult(enumeratedResult, totalCount);
         }
 
         /// <summary>
@@ -450,8 +424,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         /// <param name="invokeDescription">The description of the invoke operation to perform.</param>
         /// will be added. This will be set to <c>null</c> if no validation errors are encountered.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The return value of the invocation.</returns>
-        public virtual async ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription)
+        public virtual async ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription, CancellationToken cancellationToken)
         {
             try
             {
@@ -476,25 +451,19 @@ namespace OpenRiaServices.DomainServices.Server
 
                 this.ServiceContext.Operation = invokeDescription.Method;
 
+                cancellationToken.ThrowIfCancellationRequested();
                 try
                 {
                     object returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
-                    returnValue = await invokeDescription.Method.UnwrapTaskResult(returnValue).ConfigureAwait(false);
+                    if (invokeDescription.Method.IsTaskAsync)
+                    {
+                        returnValue = await invokeDescription.Method.UnwrapTaskResult(returnValue).ConfigureAwait(false);
+                    }
                     return new ServiceInvokeResult(returnValue);
                 }
                 catch (TargetInvocationException tie)
                 {
                     Exception e = ExceptionHandlingUtility.GetUnwrappedException(tie);
-                    if (e is ValidationException)
-                    {
-                        throw e;
-                    }
-
-                    throw;
-                }
-                catch (AggregateException ae)
-                {
-                    Exception e = ExceptionHandlingUtility.GetUnwrappedException(ae);
                     if (e is ValidationException)
                     {
                         throw e;
@@ -538,8 +507,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// the corresponding domain operations for each.
         /// </summary>
         /// <param name="changeSet">The changeset to submit</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the submit was successful, false otherwise.</returns>
-        public virtual async Task<bool> SubmitAsync(ChangeSet changeSet)
+        public virtual async Task<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
         {
             //TODO: Consider using ValueTask here for consistency 
             try
@@ -554,26 +524,27 @@ namespace OpenRiaServices.DomainServices.Server
                 this.CheckOperationType(DomainOperationType.Submit);
                 this.ResolveOperations();
 
-                if (!await this.AuthorizeChangeSetAsync().ConfigureAwait(false))
+                if (!this.AuthorizeChangeSet())
                 {
                     // Don't try to save if there were any errors.
                     return false;
                 }
 
                 // Before invoking any operations, validate the entire changeset
-                if (!await this.ValidateChangeSetAsync().ConfigureAwait(false))
+                if (!await this.ValidateChangeSet(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
                 // Now that we're validated, proceed to invoke the domain operation entries.
-                if (!await this.ExecuteChangeSetAsync().ConfigureAwait(false))
+                if (!await this.ExecuteChangeSetAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
 
                 // persist the changes
-                if (!await this.PersistChangeSetAsyncInternal().ConfigureAwait(false))
+                if (!await this.PersistChangeSetAsyncInternal(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
@@ -759,24 +730,11 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         /// <typeparam name="T">The element <see cref="Type"/> of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total result count if total-counts are supported; -1 otherwise.</returns>
-        protected virtual int Count<T>(IQueryable<T> query)
+        protected virtual ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            // TODO: Obsolete or remove
-            return DomainService.TotalCountUndefined;
-        }
-
-        /// <summary>
-        /// Gets the result count for the specified <see cref="IQueryable&lt;T&gt;" />. <see cref="DomainService" />s should 
-        /// override this method to implement support for total-counts of paged result-sets. Overrides shouldn't 
-        /// call the base method.
-        /// </summary>
-        /// <typeparam name="T">The element <see cref="Type"/> of the query.</typeparam>
-        /// <param name="query">The query for which the count should be returned.</param>
-        /// <returns>The total result count if total-counts are supported; -1 otherwise.</returns>
-        protected virtual ValueTask<int> CountAsync<T>(IQueryable<T> query)
-        {
-            return new ValueTask<int>(Count(query));
+            return new ValueTask<int>(DomainService.TotalCountUndefined);
         }
 
         /// <summary>
@@ -791,7 +749,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// Verifies the user is authorized to submit the current <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> is authorized, false otherwise.</returns>
-        protected virtual async Task<bool> AuthorizeChangeSetAsync()
+        protected virtual bool AuthorizeChangeSet()
         {
             foreach (ChangeSetEntry op in this.ChangeSet.ChangeSetEntries)
             {
@@ -823,22 +781,23 @@ namespace OpenRiaServices.DomainServices.Server
         /// in the <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns><c>True</c> if all operations in the <see cref="ChangeSet"/> passed validation, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> ValidateChangeSetAsync()
+        protected virtual ValueTask<bool> ValidateChangeSet(CancellationToken cancellationToken)
         {
             // Perform validation on the each of the operations.
-            return ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
+            var result = ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
+            return new ValueTask<bool>(result);
         }
 
         /// <summary>
         /// This method invokes the <see cref="DomainOperationEntry"/> for each operation in the current <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was processed successfully, false otherwise.</returns>
-        protected virtual async Task<bool> ExecuteChangeSetAsync()
+        protected virtual ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
         {
             this.InvokeCudOperations();
             this.InvokeCustomOperations();
 
-            return !this.ChangeSet.HasError;
+            return new ValueTask<bool>(!this.ChangeSet.HasError);
         }
 
         /// <summary>
@@ -855,8 +814,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// have been invoked. This method should commit the changes as necessary to the data store.
         /// Any errors should be set on the individual <see cref="ChangeSetEntry"/>s in the <see cref="ChangeSet"/>.
         /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        protected virtual Task<bool> PersistChangeSetAsync() { return Task.FromResult(true); }
+        protected virtual ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken) { return new ValueTask<bool>(true); }
 
         /// <summary>
         /// For all operations in the current changeset, validate that the operation exists, and
@@ -954,8 +914,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="queryDescription">The query description.</param>
         /// <param name="queryable">The query.</param>
         /// <param name="skipPagingCheck"><c>true</c> if the paging check can be skipped; <c>false</c> otherwise.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total count.</returns>
-        private ValueTask<int> GetTotalCountForQuery(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck)
+        private ValueTask<int> GetTotalCountForQuery<T>(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck, CancellationToken cancellationToken)
         {
             // Only try to get the total count if the query description requested it.
             if (!queryDescription.IncludeTotalCount)
@@ -964,18 +925,7 @@ namespace OpenRiaServices.DomainServices.Server
             IQueryable totalCountQuery = queryable;
             if (skipPagingCheck || QueryComposer.TryComposeWithoutPaging(queryable, out totalCountQuery))
             {
-                try
-                {
-                    return (ValueTask<int>)countMethod.MakeGenericMethod(totalCountQuery.ElementType).Invoke(this, new object[] { totalCountQuery });
-                }
-                catch (TargetInvocationException ex)
-                {
-                    if (ex.InnerException != null)
-                    {
-                        throw ex.InnerException;
-                    }
-                    throw;
-                }
+                return CountAsync<T>((IQueryable<T>)totalCountQuery, cancellationToken);
             }
             else
             {
@@ -1052,11 +1002,11 @@ namespace OpenRiaServices.DomainServices.Server
         /// so if a <see cref="ValidationException"/> is thrown at that level, we want to capture it.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        private async ValueTask<bool> PersistChangeSetAsyncInternal()
+        private async Task<bool> PersistChangeSetAsyncInternal(CancellationToken cancellationToken)
         {
             try
             {
-                await this.PersistChangeSetAsync();
+                await this.PersistChangeSetAsync(cancellationToken);
             }
             catch (ValidationException e)
             {
@@ -1294,24 +1244,21 @@ namespace OpenRiaServices.DomainServices.Server
         /// <typeparam name="T">The element type of the enumerable.</typeparam>
         /// <param name="enumerable">The enumerable to enumerate.</param>
         /// <param name="estimatedResultCount">The estimated number of items the enumerable will yield.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
-        protected virtual ValueTask<IEnumerable> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount)
+        protected virtual ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            // TODO: Consider different type signature
-
             // No need to enumerate arrays.
-            T[] array = enumerable as T[];
-            if (array != null)
+            if (enumerable is T[] array)
             {
-                return new ValueTask<IEnumerable>(array);
+                return new ValueTask<IReadOnlyCollection<T>>(array);
             }
 
-            ICollection<T> collection = enumerable as ICollection<T>;
-            if (collection != null)
+            if (enumerable is ICollection<T> collection)
             {
                 array = new T[collection.Count];
                 collection.CopyTo(array, 0);
-                return new ValueTask<IEnumerable>(array);
+                return new ValueTask<IReadOnlyCollection<T>>(array);
             }
 
             var list = new List<T>(estimatedResultCount);
@@ -1319,7 +1266,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 list.Add(item);
             }
-            return new ValueTask<IEnumerable>(list);
+            return new ValueTask<IReadOnlyCollection<T>>(list);
         }
 
         #region Nested Types

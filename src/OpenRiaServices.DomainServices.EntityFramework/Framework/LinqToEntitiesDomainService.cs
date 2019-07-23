@@ -12,6 +12,7 @@ using System.Data;
 using System.Data.Objects;
 #endif
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
@@ -119,43 +120,38 @@ namespace OpenRiaServices.DomainServices.EntityFramework
             base.Dispose(disposing);
         }
 
-        protected bool DisableAsyncQuerySypport { get; set; }
-
         /// <summary>
         /// Gets the number of rows in an <see cref="IQueryable&lt;T&gt;" />.
         /// </summary>
         /// <typeparam name="T">The element Type of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total number of rows.</returns>
-        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query)
+        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            // TODO: Provide flag to do it sync instead?
-            if (!DisableAsyncQuerySypport
-                // EF will throw if provider is not a IDbAsyncQueryProvider
-                && query.Provider is IDbAsyncQueryProvider)
-                return new ValueTask<int>(query.CountAsync());
-            else
-                return new ValueTask<int>(query.Count());
+            return QueryHelper.CountAsync(query, cancellationToken);
         }
 
-        protected override ValueTask<IEnumerable> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount)
+        /// <summary>
+        /// Enumerates the specified enumerable to guarantee eager execution. 
+        /// If possible code similar to <c>ToListAsync</c> is used, but with optimizations to start with a larger initial capacity
+        /// </summary>
+        /// <typeparam name="T">The element type of the enumerable.</typeparam>
+        /// <param name="enumerable">The enumerable to enumerate.</param>
+        /// <param name="estimatedResultCount">The estimated number of items the enumerable will yield.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
+        /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
+        protected override ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            if (!DisableAsyncQuerySypport
-                 // EF will throw if provider is not a IDbAsyncEnumerable
-                 && enumerable is IDbAsyncEnumerable<T>
-                 && enumerable is IQueryable<T> query)
+            // EF will throw if provider is not a IDbAsyncEnumerable
+            if (enumerable is IDbAsyncEnumerable<T> asyncEnumerable)
             {
-                return new ValueTask<IEnumerable>(EnumerateAsync(query));
+                return QueryHelper.EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
             }
             else
-
-                return base.EnumerateAsync<T>(enumerable, estimatedResultCount);
-        }
-
-        private async Task<IEnumerable> EnumerateAsync<T>(IQueryable<T> query)
-        {
-            // EF will throw if provider is not a IDbAsyncQueryProvider
-            return await query.ToListAsync();
+            {
+                return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
+            }
         }
 
         /// <summary>
@@ -163,17 +159,18 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// have been invoked. All changes are committed to the ObjectContext, and any resulting optimistic
         /// concurrency errors are processed.
         /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        protected override Task<bool> PersistChangeSetAsync()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
-            return this.InvokeSaveChanges(true);
+            return new ValueTask<bool>(this.InvokeSaveChanges(true, cancellationToken));
         }
 
-        private async Task<bool> InvokeSaveChanges(bool retryOnConflict)
+        private async Task<bool> InvokeSaveChanges(bool retryOnConflict, CancellationToken cancellationToken)
         {
             try
             {
-               await this.ObjectContext.SaveChangesAsync();
+                await this.ObjectContext.SaveChangesAsync(cancellationToken);
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -206,7 +203,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return await this.InvokeSaveChanges(/* retryOnConflict */ false);
+                    return await this.InvokeSaveChanges(/* retryOnConflict */ false, cancellationToken);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

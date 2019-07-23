@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
@@ -101,11 +103,35 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// </summary>
         /// <typeparam name="T">The element Type of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total number of rows.</returns>
-        protected override int Count<T>(IQueryable<T> query)
+        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            return query.Count();
+            return QueryHelper.CountAsync(query, cancellationToken);
         }
+
+        /// <summary>
+        /// Enumerates the specified enumerable to guarantee eager execution. 
+        /// If possible code similar to <c>ToListAsync</c> is used, but with optimizations to start with a larger initial capacity
+        /// </summary>
+        /// <typeparam name="T">The element type of the enumerable.</typeparam>
+        /// <param name="enumerable">The enumerable to enumerate.</param>
+        /// <param name="estimatedResultCount">The estimated number of items the enumerable will yield.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
+        /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
+        protected override ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
+        {
+            // EF will throw if provider is not a IDbAsyncEnumerable
+            if (enumerable is IDbAsyncEnumerable<T> asyncEnumerable)
+            {
+                return QueryHelper.EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
+            }
+            else
+            {
+                return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
+            }
+        }
+
 
         /// <summary>
         /// This method is called to finalize changes after all the operations in the specified changeset
@@ -113,9 +139,9 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// concurrency errors are processed.
         /// </summary>
         /// <returns><c>True</c> if the <see cref="ChangeSet"/> was persisted successfully, <c>false</c> otherwise.</returns>
-        protected override Task<bool> PersistChangeSetAsync()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
-            return this.InvokeSaveChangesAsync(true);
+            return new ValueTask<bool>(this.InvokeSaveChangesAsync(true, cancellationToken));
         }
 
         /// <summary>
@@ -157,11 +183,11 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// </summary>
         /// <param name="retryOnConflict">Flag indicating whether to retry after resolving conflicts.</param>
         /// <returns><c>true</c> if saved successfully and <c>false</c> otherwise.</returns>
-        private async Task<bool> InvokeSaveChangesAsync(bool retryOnConflict)
+        private async Task<bool> InvokeSaveChangesAsync(bool retryOnConflict, CancellationToken cancellationToken)
         {
             try
             {
-                await this.DbContext.SaveChangesAsync();
+                await this.DbContext.SaveChangesAsync(cancellationToken);
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -194,7 +220,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false);
+                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false, cancellationToken);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

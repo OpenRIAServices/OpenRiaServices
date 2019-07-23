@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data.Linq;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 using ChangeSet = OpenRiaServices.DomainServices.Server.ChangeSet;
@@ -70,9 +71,9 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         /// <typeparam name="T">The element Type of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
         /// <returns>The total number of rows.</returns>
-        protected override int Count<T>(IQueryable<T> query)
+        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            return query.Count();
+            return new ValueTask<int>(query.Count());
         }
 
         /// <summary>
@@ -96,9 +97,9 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         /// </remarks>
         /// </summary>
         /// <returns>Returns <c>true</c> if the <see cref="ChangeSet"/> was persisted successfully, <c>false</c> otherwise.</returns>
-        protected override async Task<bool> PersistChangeSetAsync()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
-            return this.InvokeSubmitChanges(true);
+            return new ValueTask<bool>(this.InvokeSubmitChanges(true));
         }
 
         private bool InvokeSubmitChanges(bool retryOnConflict)

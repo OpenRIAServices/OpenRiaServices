@@ -5,6 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting.Local
@@ -14,6 +17,9 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
     /// </summary>
     internal static class DomainServiceProxyHelper
     {
+        static readonly MethodInfo s_queryAsync = typeof(DomainService).GetMethod(nameof(DomainService.QueryAsync));
+
+
         /// <summary>
         /// Helper method performs a query operation against a given proxy instance.
         /// </summary>
@@ -52,7 +58,8 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameterValues);
 
             // TODO: Look into removing this blocking Wait
-            var queryResult = service.QueryAsync(queryDescription)
+            var actualMethod = s_queryAsync.MakeGenericMethod(queryDescription.Method.AssociatedType);
+            var queryResult = ((ValueTask<ServiceQueryResult>)actualMethod.Invoke(service, new object[] { queryDescription, CancellationToken.None }))
                 .GetAwaiter().GetResult();
 
             validationErrors = queryResult.ValidationErrors;
@@ -112,7 +119,8 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
 
             ChangeSet changeSet = new ChangeSet(new[] { changeSetEntry });
 
-            service.SubmitAsync(changeSet);
+            service.SubmitAsync(changeSet, CancellationToken.None)
+                .GetAwaiter().GetResult();
 
             if (changeSetEntry.HasError)
             {
@@ -142,7 +150,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
 
             InvokeDescription invokeDescription = new InvokeDescription(method, parameters);
             // TODO: Look into removing this blocking Wait
-            var loadResult = service.InvokeAsync(invokeDescription)
+            var loadResult = service.InvokeAsync(invokeDescription, CancellationToken.None)
                 .GetAwaiter().GetResult();
             if (loadResult.HasValidationErrors)
             {

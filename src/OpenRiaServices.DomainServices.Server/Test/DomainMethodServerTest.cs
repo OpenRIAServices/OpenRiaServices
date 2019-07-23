@@ -6,6 +6,8 @@ using System.Linq;
 using OpenRiaServices.DomainServices.Client.Test;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
@@ -58,7 +60,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Verify that calling submit with a domain method invocation in the changeset will invoke the method methods accordingly")]
-        public void DomainService_CallSubmitDirectly()
+        public async Task DomainService_CallSubmitDirectly()
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(DomainMethod_ValidProvider_MultipleMethods));
             List<ChangeSetEntry> changeSetEntries = new List<ChangeSetEntry>();
@@ -72,7 +74,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             ChangeSet changeset = new ChangeSet(changeSetEntries);
             DomainMethod_ValidProvider_MultipleMethods myTestProvider = ServerTestHelper.CreateInitializedDomainService<DomainMethod_ValidProvider_MultipleMethods>(DomainOperationType.Submit);
-            myTestProvider.SubmitAsync(changeset);
+            await myTestProvider.SubmitAsync(changeset, CancellationToken.None);
 
             // check that the domain services have invoked the domain method correctly by checking the internal variables set
             Assert.AreEqual<string>("ProcessCity_", myTestProvider.Invoked);
@@ -82,7 +84,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Verify that calling submit with 2 domain method invocations in the changeset will invoke the method methods accordingly")]
-        public void DomainService_CallSubmitWithMultipleInvocations()
+        public async Task DomainService_CallSubmitWithMultipleInvocationsAsync()
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(DomainMethod_ValidProvider_MultipleMethods));
             List<ChangeSetEntry> changeSetEntries = new List<ChangeSetEntry>();
@@ -105,7 +107,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             ChangeSet changeset = new ChangeSet(changeSetEntries);
             DomainMethod_ValidProvider_MultipleMethods myTestProvider = ServerTestHelper.CreateInitializedDomainService<DomainMethod_ValidProvider_MultipleMethods>(DomainOperationType.Submit);
-            myTestProvider.SubmitAsync(changeset);
+            await myTestProvider.SubmitAsync(changeset, CancellationToken.None);
 
             // check that the domain services have invoked the domain method correctly by checking the internal variables set
             Assert.AreEqual<string>("ProcessCounty_ProcessCity_", myTestProvider.Invoked);
