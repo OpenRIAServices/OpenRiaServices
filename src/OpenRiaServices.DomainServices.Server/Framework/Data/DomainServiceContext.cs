@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Globalization;
 using System.Security.Principal;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Server
 {
@@ -60,6 +61,11 @@ namespace OpenRiaServices.DomainServices.Server
         /// The user for this context instance.
         /// </summary>
         public IPrincipal User { get; }
+
+        /// <summary>
+        /// <see cref="CancellationToken"/> which may be used by hosting layer to request cancellation.
+        /// </summary>
+        public CancellationToken CancellationToken { get; internal set; }
 
         #region IServiceProvider Members
 
