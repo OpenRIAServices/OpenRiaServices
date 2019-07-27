@@ -2,56 +2,75 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
     static class TaskExtensions
     {
-        /// <summary>
-        /// Helper method to convert from Task async method to "APM" (IAsyncResult with Begin/End calls)
-        /// Copied from 
-        /// https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/interop-with-other-asynchronous-patterns-and-types#TapToApm
-        /// </summary>
-        public static IAsyncResult BeginApm<T>(Task<T> task,
-                                    AsyncCallback callback,
-                                    object state)
-        {
-            var tcs = new TaskCompletionSource<T>(state);
-            task.ContinueWith(t =>
-            {
-                if (t.IsFaulted)
-                    tcs.TrySetException(t.Exception.InnerExceptions);
-                else if (t.IsCanceled)
-                    tcs.TrySetCanceled();
-                else
-                    tcs.TrySetResult(t.Result);
-
-                callback?.Invoke(tcs.Task);
-            }, TaskScheduler.Default);
-            return tcs.Task;
-        }
-
         public static T EndApm<T>(IAsyncResult asyncResult)
         {
-            return ((Task<T>)asyncResult).GetAwaiter().GetResult();
+            return ((AsyncResult<T>)asyncResult).GetResult();
         }
 
+        /// <summary>
+        /// Helper method to convert from Task async method to "APM" (IAsyncResult with Begin/End calls)
+        /// </summary>
         public static IAsyncResult BeginApm<T>(ValueTask<T> task,
                                     AsyncCallback callback,
                                     object state)
         {
-            if(task.IsCompletedSuccessfully)
+
+            var result = new AsyncResult<T>(task, callback, state);
+            if (result.CompletedSynchronously)
             {
-                var tcs = new TaskCompletionSource<T>(state);
-                tcs.TrySetResult(task.Result);
-                callback.Invoke(tcs.Task);
-                return tcs.Task;
+                result.ExecuteCallback();
+                return result;
             }
             else
             {
-                return BeginApm<T>(task.AsTask(), callback, state);
+                task.AsTask()
+                    .ContinueWith((res, asyncResult) =>
+                {
+                    ((AsyncResult<T>)asyncResult).ExecuteCallback();
+                },
+                result,
+                CancellationToken.None,
+                TaskContinuationOptions.None,
+                TaskScheduler.Default);
             }
+
+            return result;
+        }
+
+        private class AsyncResult<T> : IAsyncResult
+        {
+            private readonly ValueTask<T> _task;
+            private readonly object _asyncState;
+            private readonly AsyncCallback _asyncCallback;
+
+            public AsyncResult(ValueTask<T> task, AsyncCallback asyncCallback, object asyncState)
+            {
+                _task = task;
+                _asyncCallback = asyncCallback;
+                _asyncState = asyncState;
+                CompletedSynchronously = task.IsCompleted;
+            }
+
+            public T GetResult() => _task.GetAwaiter().GetResult();
+
+            // Calls the async callback with this
+            public void ExecuteCallback() => _asyncCallback(this);
+
+            #region IAsyncResult implementation forwarded to Task implementation
+            object IAsyncResult.AsyncState => _asyncState;
+            WaitHandle IAsyncResult.AsyncWaitHandle => !CompletedSynchronously ? ((IAsyncResult)_task.AsTask()).AsyncWaitHandle : throw new NotImplementedException();
+
+            public bool CompletedSynchronously { get; }
+            bool IAsyncResult.IsCompleted => _task.IsCompleted;
+            #endregion
+
         }
     }
 }
