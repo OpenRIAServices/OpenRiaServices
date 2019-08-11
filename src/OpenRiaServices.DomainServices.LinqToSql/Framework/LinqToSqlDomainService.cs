@@ -70,6 +70,7 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         /// </summary>
         /// <typeparam name="T">The element Type of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
+        /// <param name="cancellationToken">unused</param>
         /// <returns>The total number of rows.</returns>
         protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {

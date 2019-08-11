@@ -102,7 +102,6 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 try
                 {
                     InvokeDescription description = new InvokeDescription(this.operation, inputs);
-                    // TODO: Verify it is completed or make async?
                     var invokeResult = ((DomainService)instance).InvokeAsync(description, CancellationToken.None).GetAwaiter().GetResult();
                     DomainDataServiceException.HandleValidationErrors(invokeResult.ValidationErrors);
                     return invokeResult.Result;

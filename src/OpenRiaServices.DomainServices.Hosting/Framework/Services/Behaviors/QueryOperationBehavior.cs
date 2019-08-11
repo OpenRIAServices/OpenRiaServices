@@ -97,7 +97,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 try
                 {
                     QueryOperationInvoker.SetOutputCachingPolicy(httpContext, this.operation);
-                    QueryResult<TEntity> result = await QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery);
+                    QueryResult<TEntity> result = await QueryProcessor.Process<TEntity>(instance, this.operation, inputs, serviceQuery);
 
                     if (result.ValidationErrors != null && result.ValidationErrors.Any())
                     {

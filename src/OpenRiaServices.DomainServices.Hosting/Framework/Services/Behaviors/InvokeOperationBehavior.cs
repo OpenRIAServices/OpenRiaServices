@@ -61,8 +61,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            //protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
-            protected async override ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTrace)
+            protected async override ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
                 try
                 {
@@ -70,7 +69,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     ServiceInvokeResult invokeResult = await instance.InvokeAsync(invokeDescription, CancellationToken.None);
                     if (invokeResult.HasValidationErrors)
                     {
-                        throw ServiceUtility.CreateFaultException(invokeResult.ValidationErrors, disableStackTrace);
+                        throw ServiceUtility.CreateFaultException(invokeResult.ValidationErrors, disableStackTraces);
                     }
                     else
                     {
@@ -87,7 +86,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         throw;
                     }
-                    throw ServiceUtility.CreateFaultException(ex, disableStackTrace);
+                    throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
             }
 

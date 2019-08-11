@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             // TODO:
             // Consider making logic extensible (move to domainservice?)
             ChangeSet changeSet = CreateChangeSet(changeSetEntries);
-            
+
             // TODO:
             // * Remove this method and "manually inline" the code where used
             await domainService.SubmitAsync(changeSet, CancellationToken.None);
@@ -45,8 +45,9 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// be sent back to the client.
         /// </summary>
         /// <param name="changeSet">The change set processed.</param>
+        /// <param name="disableStackTraces">true to omit sending stack traces to clients (the secure approach)</param>
         /// <returns>The results list.</returns>
-        private static List<ChangeSetEntry> GetSubmitResults(ChangeSet changeSet, bool isCustomErrorEnabled)
+        private static List<ChangeSetEntry> GetSubmitResults(ChangeSet changeSet, bool disableStackTraces)
         {
             List<ChangeSetEntry> results = new List<ChangeSetEntry>();
             foreach (ChangeSetEntry changeSetEntry in changeSet.ChangeSetEntries)
@@ -58,14 +59,11 @@ namespace OpenRiaServices.DomainServices.Hosting
                     // if customErrors is turned on, clear out the stacktrace.
                     // This is an additional step here so that ValidationResultInfo
                     // and DomainService can remain agnostic to http-concepts
-                    if (isCustomErrorEnabled)
+                    if (disableStackTraces && changeSetEntry.ValidationErrors != null)
                     {
-                        if (changeSetEntry.ValidationErrors != null)
+                        foreach (ValidationResultInfo error in changeSetEntry.ValidationErrors.Where(e => e.StackTrace != null))
                         {
-                            foreach (ValidationResultInfo error in changeSetEntry.ValidationErrors.Where(e => e.StackTrace != null))
-                            {
-                                error.StackTrace = null;
-                            }
+                            error.StackTrace = null;
                         }
                     }
                 }

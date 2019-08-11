@@ -375,7 +375,6 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="domainService">The <see cref="DomainService"/> instance the operation is being invoked on.</param>
         /// <param name="parameters">The parameters to pass to the method.</param>
         /// <returns>The return value of the invoked method.</returns>
-        // TODO; Change into "InvokeAsync" and return ValueTask<object>
         public abstract object Invoke(DomainService domainService, object[] parameters);
 
         /// <summary>

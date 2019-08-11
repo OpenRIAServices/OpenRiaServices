@@ -182,6 +182,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// Called by PersistChangeSet method to save the changes to the database.
         /// </summary>
         /// <param name="retryOnConflict">Flag indicating whether to retry after resolving conflicts.</param>
+        /// <param name="cancellationToken"></param>
         /// <returns><c>true</c> if saved successfully and <c>false</c> otherwise.</returns>
         private async Task<bool> InvokeSaveChangesAsync(bool retryOnConflict, CancellationToken cancellationToken)
         {

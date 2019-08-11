@@ -648,7 +648,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         {
             // TODO: Remove blocking await
             context.DomainService.SubmitAsync(changeSet, CancellationToken.None)
-                .GetAwaiter().GetResult(); ;
+                .GetAwaiter().GetResult();
 
             ErrorUtility.AssertNoChangeSetErrors(context, changeSet);
         }

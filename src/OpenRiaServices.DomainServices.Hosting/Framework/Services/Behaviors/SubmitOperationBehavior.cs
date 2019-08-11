@@ -50,12 +50,11 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
             protected override async ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
-                DomainService domainService = (DomainService)instance;
                 IEnumerable<ChangeSetEntry> changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
 
                 try
                 {
-                    return await ChangeSetProcessor.ProcessAsync(domainService, changeSetEntries);
+                    return await ChangeSetProcessor.ProcessAsync(instance, changeSetEntries);
                 }
                 catch (Exception ex)
                 {

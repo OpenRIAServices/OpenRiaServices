@@ -533,7 +533,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     fault.ErrorCode = dpe.ErrorCode;
                     fault.ErrorMessage = FormatExceptionMessage(dpe);
                     fault.IsDomainException = true;
-                    if (hideStackTrace == false)
+                    if (!hideStackTrace)
                     {
                         // also send the stack trace if custom errors is disabled
                         fault.StackTrace = dpe.StackTrace;
@@ -559,7 +559,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // set error code. Also set error message if custom errors is disabled
             fault.ErrorCode = errorCode;
-            if (hideStackTrace == false)
+            if (!hideStackTrace)
             {
                 fault.ErrorMessage = FormatExceptionMessage(e);
                 fault.StackTrace = e.StackTrace;
