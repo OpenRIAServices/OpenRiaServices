@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Server {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -92,33 +92,6 @@ namespace OpenRiaServices.DomainServices.Server {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user returned from {0}.CreateUser() cannot be null..
-        /// </summary>
-        internal static string ApplicationServices_CreateUserCannotBeNull {
-            get {
-                return ResourceManager.GetString("ApplicationServices_CreateUserCannotBeNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The user returned from {0}.GetUser(IIdentity) or {0}.GetAnonymousUser() cannot be null..
-        /// </summary>
-        internal static string ApplicationServices_GetUserCannotBeNull {
-            get {
-                return ResourceManager.GetString("ApplicationServices_GetUserCannotBeNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login and Logout can only be invoked for Forms authentication..
-        /// </summary>
-        internal static string ApplicationServices_LoginLogoutOnlyForForms {
-            get {
-                return ResourceManager.GetString("ApplicationServices_LoginLogoutOnlyForForms", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The AuthenticationServiceAttribute can only be applied to DomainServices that implement the IAuthentication&lt;&gt; interface..
         /// </summary>
         internal static string ApplicationServices_MustBeIAuth {
@@ -164,47 +137,11 @@ namespace OpenRiaServices.DomainServices.Server {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A profile property does not exist for {0}..
-        /// </summary>
-        internal static string ApplicationServices_ProfilePropertyDoesNotExist {
-            get {
-                return ResourceManager.GetString("ApplicationServices_ProfilePropertyDoesNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The profile property is ReadOnly for {0}..
-        /// </summary>
-        internal static string ApplicationServices_ProfilePropertyReadOnly {
-            get {
-                return ResourceManager.GetString("ApplicationServices_ProfilePropertyReadOnly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The profile property type of {0} is different from the property type..
-        /// </summary>
-        internal static string ApplicationServices_ProfilePropertyTypeMismatch {
-            get {
-                return ResourceManager.GetString("ApplicationServices_ProfilePropertyTypeMismatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to There was a failure using the default &apos;{0}Provider&apos;. Please make sure it is configured correctly. {1}.
         /// </summary>
         internal static string ApplicationServices_ProviderError {
             get {
                 return ResourceManager.GetString("ApplicationServices_ProviderError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The user cannot be updated. Users are only allowed to modify their own profile..
-        /// </summary>
-        internal static string ApplicationServices_UnauthorizedUpdate {
-            get {
-                return ResourceManager.GetString("ApplicationServices_UnauthorizedUpdate", resourceCulture);
             }
         }
     }

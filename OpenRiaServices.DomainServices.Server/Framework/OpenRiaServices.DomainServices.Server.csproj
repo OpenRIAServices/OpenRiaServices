@@ -8,8 +8,6 @@
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
@@ -41,6 +39,10 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.DomainServices.Server</CustomToolNamespace>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

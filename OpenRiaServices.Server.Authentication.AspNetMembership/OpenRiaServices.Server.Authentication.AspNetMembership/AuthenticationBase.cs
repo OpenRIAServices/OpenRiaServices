@@ -12,6 +12,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Profile;
 using System.Web.Security;
+using Resources = OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Resources;
 
 namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 {
