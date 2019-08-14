@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
-using DbContextModels.AdventureWorks;
+//using DbContextModels.AdventureWorks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;

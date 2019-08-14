@@ -6,7 +6,11 @@
     <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\ServerTestHelper.cs" Link="Shared\ServerTestHelper.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\MockUser.cs" Link="Shared\MockUser.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\MockDataService.cs" Link="Shared\MockDataService.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
   </ItemGroup>
   <ItemGroup>
@@ -14,7 +18,7 @@
       <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -23,21 +27,8 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Client.Test\Data\DomainIdentifierAttributeTests.cs" Link="DomainIdentifierAttributeTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj" />
-    <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj">
-      <Aliases>global,OpenRiaServicesDomainServicesHosting</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Server.csproj">
-      <Aliases>global,SystemWebDomainServices</Aliases>
-    </ProjectReference>
+    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.csproj" />
   </ItemGroup>
 </Project>

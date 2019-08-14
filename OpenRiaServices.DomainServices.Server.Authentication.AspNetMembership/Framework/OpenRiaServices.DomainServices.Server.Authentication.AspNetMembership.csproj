@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <RootNamespace>OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

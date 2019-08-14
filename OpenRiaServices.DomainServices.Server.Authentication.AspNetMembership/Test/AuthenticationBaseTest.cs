@@ -8,6 +8,7 @@ using OpenRiaServices.DomainServices.Server.Test;
 using System.Web.Profile;
 using System.Web.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;
 
 namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 {

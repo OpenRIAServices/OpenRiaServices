@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 
 namespace OpenRiaServices.DomainServices.Server.Test
@@ -36,7 +37,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // create a fully functional, authenticated test context
             MockUser mockUser = new MockUser("test_user");
             mockUser.IsAuthenticated = true;
-            MockDataService dataService = new MockDataService(mockUser);
+
+            var user = new GenericPrincipal(new GenericIdentity("test_user"), null);
+            MockDataService dataService = new MockDataService(user);
             DomainServiceContext operationContext = new DomainServiceContext(dataService, operationType);
 
             provider.Initialize(operationContext);

@@ -136,6 +136,10 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbDomainClients", "OpenRiaS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\Client.External.Test\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{8F117F6B-6A2F-403B-9500-1D383151E769}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership", "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.csproj", "{B2183838-A948-47FD-8AB4-E8E7C5CD4477}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test", "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership\Test\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test.csproj", "{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -330,6 +334,14 @@ Global
 		{8F117F6B-6A2F-403B-9500-1D383151E769}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F117F6B-6A2F-403B-9500-1D383151E769}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F117F6B-6A2F-403B-9500-1D383151E769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2183838-A948-47FD-8AB4-E8E7C5CD4477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2183838-A948-47FD-8AB4-E8E7C5CD4477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2183838-A948-47FD-8AB4-E8E7C5CD4477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2183838-A948-47FD-8AB4-E8E7C5CD4477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -394,6 +406,8 @@ Global
 		{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{8F117F6B-6A2F-403B-9500-1D383151E769} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
+		{B2183838-A948-47FD-8AB4-E8E7C5CD4477} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}
