@@ -2,7 +2,7 @@
 using System.Security.Principal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     /// <summary>
     /// Tests <see cref="UserBase"/> members.

@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     /// <summary>
     /// Tests <see cref="ProfileUsageAttribute"/> members.
@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             string alias = "alias";
             bool isExcluded = true;
 
-            ProfileUsageAttribute attribute = new ProfileUsageAttribute();
+            var attribute = new ProfileUsageAttribute();
 
             Assert.IsTrue(string.IsNullOrEmpty(attribute.Alias),
                 "Aliases should be null or empty by default.");

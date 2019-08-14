@@ -6,7 +6,7 @@ using System.Security.Principal;
 
 [assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "OpenRiaServices.DomainServices.Server.ApplicationServices.UserBase.#System.Security.Principal.IPrincipal.Identity", Justification = "Low use so explicitly withheld from the API")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "OpenRiaServices.DomainServices.Server.ApplicationServices.UserBase.#System.Security.Principal.IIdentity.AuthenticationType", Justification = "Low use so explicitly withheld from the API")]
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership
 {
     /// <summary>
     /// Base class for user entities that has properties for passing principal values to the client.
@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         [Exclude]
         public bool IsAuthenticated
         {
-            get { return !string.IsNullOrEmpty(this.Name); }
+            get { return !string.IsNullOrEmpty(Name); }
         }
 
         /// <summary>
@@ -83,11 +83,11 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// </returns>
         public bool IsInRole(string role)
         {
-            if (this.Roles == null)
+            if (Roles == null)
             {
                 return false;
             }
-            return this.Roles.Contains(role);
+            return Roles.Contains(role);
         }
 
         #endregion

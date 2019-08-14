@@ -8,9 +8,8 @@ using OpenRiaServices.DomainServices.Server.Test;
 using System.Web.Profile;
 using System.Web.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     /// <summary>
     /// Summary description for AuthenticationBaseTest
@@ -36,77 +35,77 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 
             public bool ValidateUserMock(string username, string password)
             {
-                return this.ValidateUser(username, password);
+                return ValidateUser(username, password);
             }
 
             protected override bool ValidateUser(string username, string password)
             {
-                this.WasValidateUserInvoked = true;
+                WasValidateUserInvoked = true;
                 return base.ValidateUser(username, password);
             }
 
             public void IssueAuthenticationTokenMock(IPrincipal principal, bool isPersistent)
             {
-                this.IssueAuthenticationToken(principal, isPersistent);
+                IssueAuthenticationToken(principal, isPersistent);
             }
 
             protected override void IssueAuthenticationToken(IPrincipal principal, bool isPersistent)
             {
-                this.WasIssueAuthenticationTokenInvoked = true;
+                WasIssueAuthenticationTokenInvoked = true;
             }
 
             public void ClearAuthenticationTokenMock()
             {
-                this.ClearAuthenticationToken();
+                ClearAuthenticationToken();
             }
 
             protected override void ClearAuthenticationToken()
             {
-                this.WasClearAuthenticationTokenInvoked = true;
+                WasClearAuthenticationTokenInvoked = true;
             }
 
             public MockUser GetAuthenticatedUserMock(IPrincipal principal)
             {
-                return this.GetAuthenticatedUser(principal);
+                return GetAuthenticatedUser(principal);
             }
 
             protected override MockUser GetAuthenticatedUser(IPrincipal principal)
             {
-                this.WasGetAuthenticatedUserInvoked = true;
+                WasGetAuthenticatedUserInvoked = true;
                 return base.GetAuthenticatedUser(principal);
             }
 
             public MockUser GetAnonymousUserMock()
             {
-                this.WasGetAnonymousUserInvoked = true;
+                WasGetAnonymousUserInvoked = true;
                 return base.GetAnonymousUser();
             }
 
             protected override MockUser GetAnonymousUser()
             {
-                this.WasGetAnonymousUserInvoked = true;
+                WasGetAnonymousUserInvoked = true;
                 return base.GetAnonymousUser();
             }
 
             public MockUser CreateUserMock()
             {
-                return this.CreateUser();
+                return CreateUser();
             }
 
             protected override MockUser CreateUser()
             {
-                this.WasCreateUserInvoked = true;
+                WasCreateUserInvoked = true;
                 return base.CreateUser();
             }
 
             public void UpdateUserCoreMock(MockUser user)
             {
-                this.UpdateUserCore(user);
+                UpdateUserCore(user);
             }
 
             protected override void UpdateUserCore(MockUser user)
             {
-                this.WasUpdateUserCoreInvoked = true;
+                WasUpdateUserCoreInvoked = true;
                 base.UpdateUserCore(user);
             }
         }
@@ -123,9 +122,9 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         [Description("Tests that Login returns an empty enumerable on failure.")]
         public void LoginFailure()
         {
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(null);
+            SetUserInProviders(null);
             MockUser user = provider.Login(string.Empty, string.Empty, false, null);
 
             Assert.IsNull(user,
@@ -140,12 +139,12 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void LoginAndGetUser()
         {
             MockUser mockUser = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
             MockUser user = provider.Login(mockUser.Name, mockUser.Name, false, null);
 
-            AuthenticationBaseTest.CompareUsers(mockUser, user, true);
+            CompareUsers(mockUser, user, true);
         }
 
         [TestMethod]
@@ -153,12 +152,12 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void Logout()
         {
             MockUser mockUser = MockUser.CreateDefaultUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
             MockUser user = provider.Logout();
 
-            AuthenticationBaseTest.CompareUsers(mockUser, user, true);
+            CompareUsers(mockUser, user, true);
         }
 
         // [TestMethod] The security demand prevents us from actually testing this
@@ -167,12 +166,12 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         {
             MockUser original = MockUser.CreateDefaultUser();
             MockUser user = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(original);
+            SetUserInProviders(original);
             provider.UpdateUser(user);
 
-            AuthenticationBaseTest.CompareUsers(user, original, false);
+            CompareUsers(user, original, false);
         }
 
         [TestMethod]
@@ -193,10 +192,10 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void ValidateUser()
         {
             MockUser mockUser = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
             // Failure
-            AuthenticationBaseTest.SetUserInProviders(null);
+            SetUserInProviders(null);
             MockUser user = provider.Login(string.Empty, string.Empty, false, null);
 
             Assert.IsTrue(provider.WasValidateUserInvoked,
@@ -210,7 +209,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             provider.WasValidateUserInvoked = false;
 
             // Success
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
             user = provider.Login(mockUser.Name, mockUser.Name, false, null);
 
             Assert.IsTrue(provider.WasValidateUserInvoked,
@@ -227,10 +226,10 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void IssueAuthenticationToken()
         {
             MockUser mockUser = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
             // Failure
-            AuthenticationBaseTest.SetUserInProviders(null);
+            SetUserInProviders(null);
             MockUser user = provider.Login(string.Empty, string.Empty, false, null);
 
             Assert.IsFalse(provider.WasIssueAuthenticationTokenInvoked,
@@ -239,7 +238,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             provider.WasIssueAuthenticationTokenInvoked = false;
 
             // Success
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
             user = provider.Login(mockUser.Name, mockUser.Name, false, null);
 
             Assert.IsTrue(provider.WasIssueAuthenticationTokenInvoked,
@@ -251,10 +250,10 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void ClearAuthenticationToken()
         {
             MockUser mockUser = MockUser.CreateDefaultUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
             // Failure
-            AuthenticationBaseTest.SetUserInProviders(null);
+            SetUserInProviders(null);
             MockUser user = provider.Logout();
 
             Assert.IsTrue(provider.WasClearAuthenticationTokenInvoked,
@@ -266,9 +265,9 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void GetAuthenticatedUser()
         {
             MockUser mockUser = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
 
             // Login
             MockUser user = provider.Login(mockUser.Name, mockUser.Name, false, null);
@@ -281,8 +280,8 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             // GetUser will always invoke GetAnonymousUser when testing
 
             // Login (and GetUser. See explanation on LoginAndGetUser) should return the same value as GetUser(IIdentity)
-            AuthenticationBaseTest.CompareUsers(mockUser, provider.GetAuthenticatedUserMock(mockUser), true);
-            AuthenticationBaseTest.CompareUsers(mockUser, user, true);
+            CompareUsers(mockUser, provider.GetAuthenticatedUserMock(mockUser), true);
+            CompareUsers(mockUser, user, true);
         }
 
         [TestMethod]
@@ -290,9 +289,9 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void GetAnonymousUser()
         {
             MockUser mockUser = MockUser.CreateDefaultUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
 
             // Logout
             MockUser userL = provider.Logout();
@@ -311,16 +310,16 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             provider.WasGetAnonymousUserInvoked = false;
 
             // Logout should return the same value as GetAnonymousUser
-            AuthenticationBaseTest.CompareUsers(mockUser, provider.GetAnonymousUserMock(), true);
-            AuthenticationBaseTest.CompareUsers(mockUser, userL, true);
-            AuthenticationBaseTest.CompareUsers(mockUser, userGU, true);
+            CompareUsers(mockUser, provider.GetAnonymousUserMock(), true);
+            CompareUsers(mockUser, userL, true);
+            CompareUsers(mockUser, userGU, true);
         }
 
         [TestMethod]
         [Description("Tests that GetUser throws when GetUser(IIdentity) returns null.")]
         public void GetUserThrowsOnNull()
         {
-            InvalidAuthentication provider = new InvalidAuthentication();
+            var provider = new InvalidAuthentication();
 
             ExceptionHelper.ExpectException<InvalidOperationException>(
                 () => provider.GetUser());
@@ -331,9 +330,9 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void CreateUser()
         {
             MockUser mockUser = MockUser.CreateDefaultUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(mockUser);
+            SetUserInProviders(mockUser);
 
             // GetUser(IIdentity)
             MockUser userGUM = provider.GetAuthenticatedUserMock(mockUser);
@@ -361,12 +360,12 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         {
             MockUser original = MockUser.CreateDefaultUser();
             MockUser user = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
-            AuthenticationBaseTest.SetUserInProviders(original);
+            SetUserInProviders(original);
             provider.UpdateUserCoreMock(user);
 
-            AuthenticationBaseTest.CompareUsers(user, original, false);
+            CompareUsers(user, original, false);
 
             // These tests are only valid when we can call SetUser directly
             //MockUser originalUU = MockUser.CreateDefaultUser();
@@ -385,12 +384,12 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void ConvertSqlExceptions()
         {
             MockUser mockUser = MockUser.CreateInitializedUser();
-            MockAuthentication provider = new MockAuthentication();
+            var provider = new MockAuthentication();
 
             SqlException sqlEx = null;
             try
             {
-                using (SqlConnection badConnection = new SqlConnection("Data Source=Nosource"))
+                using (var badConnection = new SqlConnection("Data Source=Nosource"))
                 {
                     badConnection.Open();
                 }

@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Web.Profile;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     public class MockProfileProvider : ProfileProvider
     {
@@ -69,19 +69,19 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 
         public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
         {
-            if (this.Error != null)
+            if (Error != null)
             {
-                throw this.Error;
+                throw Error;
             }
-            SettingsPropertyValueCollection spvc = new SettingsPropertyValueCollection();
-            if (this.User == null)
+            var spvc = new SettingsPropertyValueCollection();
+            if (User == null)
             {
                 return spvc;
             }
             foreach (SettingsProperty prop in collection)
             {
-                SettingsPropertyValue propValue = new SettingsPropertyValue(prop);
-                propValue.PropertyValue = typeof(MockUser).GetProperty(prop.Name).GetValue(this.User, null);
+                var propValue = new SettingsPropertyValue(prop);
+                propValue.PropertyValue = typeof(MockUser).GetProperty(prop.Name).GetValue(User, null);
                 spvc.Add(propValue);
             }
 
@@ -90,17 +90,17 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 
         public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
         {
-            if (this.Error != null)
+            if (Error != null)
             {
-                throw this.Error;
+                throw Error;
             }
-            if (this.User == null)
+            if (User == null)
             {
                 return;
             }
             foreach (SettingsPropertyValue propValue in collection)
             {
-                typeof(MockUser).GetProperty(propValue.Name).SetValue(this.User, propValue.PropertyValue, null);
+                typeof(MockUser).GetProperty(propValue.Name).SetValue(User, propValue.PropertyValue, null);
             }
         }
     }

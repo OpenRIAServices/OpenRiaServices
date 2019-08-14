@@ -8,10 +8,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Server;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.Authentication
 {
     /// <summary>
     /// <see cref="CodeProcessor"/> implementation that sets the base class of both the
@@ -52,10 +50,10 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         {
             // Make sure the provider extends IAuthentication<T>
             Type genericDomainServiceType;
-            AuthenticationCodeProcessor.CheckIAuthentication(domainServiceDescription, out genericDomainServiceType);
+            CheckIAuthentication(domainServiceDescription, out genericDomainServiceType);
 
             Type userEntityType = genericDomainServiceType.GetGenericArguments()[0];
-            AuthenticationCodeProcessor.CheckIUser(userEntityType);
+            CheckIUser(userEntityType);
 
             // Implement IPrincipal and IIdentity in the user type
             CodeTypeDeclaration entityTypeDeclaration;
@@ -63,9 +61,9 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 
             if (entityTypeDeclaration != null)
             {
-                CodeTypeReference identityInterfaceTypeReference =
+                var identityInterfaceTypeReference =
                     new CodeTypeReference(typeof(IIdentity)) { Options = CodeTypeReferenceOptions.GlobalReference };
-                CodeTypeReference principalInterfaceTypeReference =
+                var principalInterfaceTypeReference =
                     new CodeTypeReference(typeof(IPrincipal)) { Options = CodeTypeReferenceOptions.GlobalReference };
 
                 entityTypeDeclaration.BaseTypes.Add(identityInterfaceTypeReference);
@@ -74,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 ////
                 //// private string IIdentity.AuthenticationType
                 ////
-                CodeMemberProperty authenticationTypeProperty = new CodeMemberProperty()
+                var authenticationTypeProperty = new CodeMemberProperty()
                 {
                     Attributes = MemberAttributes.Private | MemberAttributes.Final,
                     HasGet = true,
@@ -94,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 ////
                 //// public bool IsAuthenticated
                 ////
-                CodeMemberProperty isAuthenticatedProperty = new CodeMemberProperty()
+                var isAuthenticatedProperty = new CodeMemberProperty()
                 {
                     Attributes = MemberAttributes.Public | MemberAttributes.Final,
                     HasGet = true,
@@ -116,7 +114,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                                     "Name")))));
 
                 isAuthenticatedProperty.Comments.AddRange(
-                    AuthenticationCodeProcessor.GetDocComments(Resources.ApplicationServices_CommentIsAuth));
+                    GetDocComments(Resources.ApplicationServices_CommentIsAuth));
                 isAuthenticatedProperty.ImplementationTypes.Add(identityInterfaceTypeReference);
                 entityTypeDeclaration.Members.Add(isAuthenticatedProperty);
 
@@ -124,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 //// private string IIdentity.Name
                 ////
                 // VB Codegen requires us to implement a ReadOnly version of Name as well
-                CodeMemberProperty namePropertyExp = new CodeMemberProperty()
+                var namePropertyExp = new CodeMemberProperty()
                 {
                     Attributes = MemberAttributes.Private | MemberAttributes.Final,
                     HasGet = true,
@@ -145,7 +143,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 ////
                 //// private IIdentity IPrincipal.Identity
                 ////
-                CodeMemberProperty identityProperty = new CodeMemberProperty()
+                var identityProperty = new CodeMemberProperty()
                 {
                     Attributes = MemberAttributes.Private | MemberAttributes.Final,
                     HasGet = true,
@@ -164,7 +162,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 ////
                 //// public bool IsInRole(string role)
                 ////
-                CodeMemberMethod isInRoleMethod = new CodeMemberMethod()
+                var isInRoleMethod = new CodeMemberMethod()
                 {
                     Attributes = MemberAttributes.Public | MemberAttributes.Final,
                     Name = "IsInRole",
@@ -180,7 +178,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 //     return false;
                 // }
                 // return this.Roles.Contains(role);
-                CodeConditionStatement ifRolesNullStatement = new CodeConditionStatement();
+                var ifRolesNullStatement = new CodeConditionStatement();
                 ifRolesNullStatement.Condition = new CodeBinaryOperatorExpression(
                     new CodePropertyReferenceExpression(
                         new CodeThisReferenceExpression(),
@@ -204,7 +202,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                             new CodeVariableReferenceExpression("role"))));
 
                 isInRoleMethod.Comments.AddRange(
-                    AuthenticationCodeProcessor.GetDocComments(Resources.ApplicationServices_CommentIsInRole));
+                    GetDocComments(Resources.ApplicationServices_CommentIsInRole));
                 isInRoleMethod.ImplementationTypes.Add(principalInterfaceTypeReference);
                 entityTypeDeclaration.Members.Add(isInRoleMethod);
 
@@ -236,7 +234,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
             {
                 providerTypeDeclaration.BaseTypes.Clear();
                 providerTypeDeclaration.BaseTypes.Add(
-                    new CodeTypeReference(AuthenticationCodeProcessor.AuthenticationDomainContextBaseName)
+                    new CodeTypeReference(AuthenticationDomainContextBaseName)
                     {
                         Options = CodeTypeReferenceOptions.GlobalReference
                     });
@@ -256,7 +254,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 throw new ArgumentNullException("resourceComment");
             }
 
-            CodeCommentStatementCollection commentCollection = new CodeCommentStatementCollection();
+            var commentCollection = new CodeCommentStatementCollection();
             foreach (string comment in resourceComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
             {
                 commentCollection.Add(new CodeCommentStatement(comment, true));
@@ -299,16 +297,16 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 switch (doe.Name)
                 {
                     case "Login":
-                        implementsLogin = AuthenticationCodeProcessor.CheckIAuthenticationLogin(doe, userType);
+                        implementsLogin = CheckIAuthenticationLogin(doe, userType);
                         break;
                     case "Logout":
-                        implementsLogout = AuthenticationCodeProcessor.CheckIAuthenticationLogout(doe, userType);
+                        implementsLogout = CheckIAuthenticationLogout(doe, userType);
                         break;
                     case "GetUser":
-                        implementsGetUser = AuthenticationCodeProcessor.CheckIAuthenticationGetUser(doe, userType);
+                        implementsGetUser = CheckIAuthenticationGetUser(doe, userType);
                         break;
                     case "UpdateUser":
-                        implementsUpdateUser = AuthenticationCodeProcessor.CheckIAuthenticationUpdateUser(doe, userType);
+                        implementsUpdateUser = CheckIAuthenticationUpdateUser(doe, userType);
                         break;
                     default:
                         break;
@@ -344,11 +342,11 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
             {
                 implementsLogin = false;
             }
-            if ((doe.Parameters.Count() != 4) ||
-                (doe.Parameters[0].ParameterType != typeof(string)) ||
-                (doe.Parameters[1].ParameterType != typeof(string)) ||
-                (doe.Parameters[2].ParameterType != typeof(bool)) ||
-                (doe.Parameters[3].ParameterType != typeof(string)))
+            if (doe.Parameters.Count() != 4 ||
+                doe.Parameters[0].ParameterType != typeof(string) ||
+                doe.Parameters[1].ParameterType != typeof(string) ||
+                doe.Parameters[2].ParameterType != typeof(bool) ||
+                doe.Parameters[3].ParameterType != typeof(string))
             {
                 implementsLogin = false;
             }
@@ -408,7 +406,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
             {
                 implementsGetUser = false;
             }
-            
+
             return implementsGetUser;
         }
 
@@ -432,12 +430,12 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
             {
                 implementsUpdateUser = false;
             }
-            if ((doe.Parameters.Count() != 1) ||
-                (doe.Parameters[0].ParameterType != userType))
+            if (doe.Parameters.Count() != 1 ||
+                doe.Parameters[0].ParameterType != userType)
             {
                 implementsUpdateUser = false;
             }
-            
+
             return implementsUpdateUser;
         }
 
@@ -488,7 +486,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                                     user.Name));
                             }
                             PropertyInfo namePropertyInfo = user.GetProperty("Name");
-                            if ((namePropertyInfo != null) && (namePropertyInfo.GetSetMethod() == null))
+                            if (namePropertyInfo != null && namePropertyInfo.GetSetMethod() == null)
                             {
                                 break;
                             }
@@ -510,7 +508,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                                     property.Name, user.Name));
                             }
                             PropertyInfo rolesPropertyInfo = user.GetProperty("Roles");
-                            if ((rolesPropertyInfo != null) && (rolesPropertyInfo.GetSetMethod() == null))
+                            if (rolesPropertyInfo != null && rolesPropertyInfo.GetSetMethod() == null)
                             {
                                 break;
                             }

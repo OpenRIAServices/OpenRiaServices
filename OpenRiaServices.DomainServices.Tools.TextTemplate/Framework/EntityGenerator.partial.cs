@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
     using System.Security.Principal;
     using OpenRiaServices.DomainServices;
     using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Server.ApplicationServices;
+    using OpenRiaServices.DomainServices.Server.Authentication;
 
     /// <summary>
     /// Proxy generator for an entity.

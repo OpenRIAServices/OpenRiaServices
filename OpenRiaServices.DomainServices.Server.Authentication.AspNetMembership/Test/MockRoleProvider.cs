@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Security;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     public class MockRoleProvider : RoleProvider
     {
@@ -74,15 +74,15 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 
         public override string[] GetRolesForUser(string username)
         {
-            if (this.Error != null)
+            if (Error != null)
             {
-                throw this.Error;
+                throw Error;
             }
-            if (this.User == null)
+            if (User == null)
             {
                 return new string[0];
             }
-            return this.User.Roles.ToArray();
+            return User.Roles.ToArray();
         }
     }
 }

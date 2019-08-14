@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.ApplicationServices;
+using OpenRiaServices.DomainServices.Server.Authentication;
 
 namespace OpenRiaServices.DomainServices.Tools
 {

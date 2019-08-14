@@ -6,7 +6,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
     using System.Linq;
     using OpenRiaServices.DomainServices;
     using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Server.ApplicationServices;
+    using OpenRiaServices.DomainServices.Server.Authentication;
 
     /// <summary>
     /// C# generator for the WebContext class.
