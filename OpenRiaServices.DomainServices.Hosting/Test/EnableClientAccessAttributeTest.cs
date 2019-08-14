@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using OpenRiaServices.DomainServices.Server.ApplicationServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.DomainServices.Hosting.UnitTests
