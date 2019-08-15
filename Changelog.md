@@ -1,3 +1,9 @@
+# 4.6.3
+
+## Client
+
+1. Fixed exception when saving new entities in Silverlight (#167)
+
 # 4.6.2
 
 ## Client
