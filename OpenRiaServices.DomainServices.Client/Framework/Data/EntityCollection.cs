@@ -715,8 +715,19 @@ namespace OpenRiaServices.DomainServices.Client
                     this.EntityRemoved?.Invoke(this, new EntityCollectionChangedEventArgs<TEntity>(entity));
                     break;
             }
-
+            
+#if SILVERLIGHT
+            if (action == NotifyCollectionChangedAction.Reset)
+            {
+                this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action));
+            }
+            else
+            {
+                this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action, entity, startingIndex));
+            }
+#else
             this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action, entity, startingIndex));
+#endif
             this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
         }
 
@@ -741,7 +752,18 @@ namespace OpenRiaServices.DomainServices.Client
                     break;
             }
 
+#if SILVERLIGHT
+            if (action == NotifyCollectionChangedAction.Reset)
+            {
+                this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action));
+            }
+            else
+            {
+                this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action, entities, startingIndex));
+            }
+#else
             this._collectionChangedEventHandler?.Invoke(this, new NotifyCollectionChangedEventArgs(action, entities, startingIndex));
+#endif
             this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
         }
 
