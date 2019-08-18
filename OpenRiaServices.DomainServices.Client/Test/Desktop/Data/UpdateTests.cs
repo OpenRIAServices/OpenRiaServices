@@ -364,9 +364,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [Asynchronous]
         public void CompositionDelete()
         {
+            Northwind submitCtx = CreateDomainContext();
             Northwind ctxt = CreateDomainContext();
             Region region = null;
+            Region savedRegion = null;
             List<Territory> deleted = new List<Territory>();
+            SubmitOperation submitOperation = null;
 
             EnqueueConditional(delegate
             {
@@ -374,7 +377,36 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Load(ctxt.GetRegionsQuery());
+                int newRegionId = GetUniqueRegionID();
+                // Setup data
+                savedRegion = new Region
+                {
+                    RegionID = newRegionId,
+                    RegionDescription = "Happy Ville"
+                };
+                savedRegion.Territories.Add(new Territory
+                {
+                    TerritoryID = GetUniqueTerritoryID(),
+                    TerritoryDescription = "Desc1"
+                });
+                savedRegion.Territories.Add(new Territory
+                {
+                    TerritoryID = GetUniqueTerritoryID(),
+                    TerritoryDescription = "Desc2"
+                });
+
+                submitCtx.Regions.Add(savedRegion);
+                submitOperation = submitCtx.SubmitChanges();
+            });
+            EnqueueConditional(delegate
+            {
+                return submitOperation.IsComplete;
+            });
+            EnqueueCallback(delegate
+            {
+                Assert.AreEqual(null, submitOperation.Error, "submit should be successfull");
+
+                Load(ctxt.GetRegionsQuery().Where(r => r.RegionID == savedRegion.RegionID));
             });
             EnqueueConditional(delegate
             {
