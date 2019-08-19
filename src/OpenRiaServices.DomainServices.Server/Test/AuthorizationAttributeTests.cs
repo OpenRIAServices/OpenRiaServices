@@ -276,7 +276,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             // This custom method will deny an entity containing "Fred" and will
             // deny with a message coming from outside normal AuthAttr values
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             [TestAuthorization(ExpectedOperation="CustomUpdate", ExpectedOperationType="Update", DenyInstanceValue = "Fred", DenyMessage="uhuh")]
             public void CustomUpdate(AuthorizationTestEntity entity) { }
 

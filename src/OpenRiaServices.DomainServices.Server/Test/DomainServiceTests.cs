@@ -2259,7 +2259,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             this.ChangeSet.Associate(customer, dataCustomer, (c, s) => c.Name = s.FirstName + " " + s.LastName);
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomCustomerUpdate(PresentationCustomer customer, bool triggerError)
         {
             // Retrieve the DAL customer
@@ -2361,12 +2361,12 @@ namespace OpenRiaServices.DomainServices.Server.Test
         public IEnumerable<DomainServiceInsertCustom_Entity> GetEntities() { return null; }
         public void InsertEntity(DomainServiceInsertCustom_Entity entity) { }
         public void UpdateEntity(DomainServiceInsertCustom_Entity entity) { }
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateEntityWithInt(DomainServiceInsertCustom_Entity entity,
             [CustomValidation(typeof(AlwaysFailValidator), "Validate")] int i) { }
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateEntityWithObject(DomainServiceInsertCustom_Entity entity, DomainServiceInsertCustom_Validated_Object obj) { }
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateEntityWithCollection(DomainServiceInsertCustom_Entity entity, IEnumerable<DomainServiceInsertCustom_Validated_Object> objs) { }
     }
 

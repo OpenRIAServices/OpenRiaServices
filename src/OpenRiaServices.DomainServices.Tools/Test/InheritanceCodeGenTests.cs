@@ -1930,13 +1930,13 @@ namespace Inheritance.Tests
         public void InsertIt(Inherit_Basic_Root entity) { }
         public void UpdateIt(Inherit_Basic_Root entity) { }
         public void DeleteIt(Inherit_Basic_Root entity) { }
-        [Update(UsingCustomMethod=true)]
+        [EntityAction]
         public void CustomIt(Inherit_Basic_Root entity, bool flag) { }
 
         public void InsertIt(Inherit_Basic_Derived entity) { }
         public void UpdateIt(Inherit_Basic_Derived entity) { }
         public void DeleteIt(Inherit_Basic_Derived entity) { }
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomItDerived(Inherit_Basic_Derived entity, int value) { }
     }
     #endregion // Inherit_Basic_CUD
@@ -2251,7 +2251,7 @@ namespace Inheritance.Tests
     //
     public class Inherit_No_Root_Custom_DomainService : GenericDomainService<Inherit_Basic_Root>
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomIt(Inherit_Basic_Derived entity, string stringValue) { }
     }
     #endregion // Inherit_No_Root_Custom
@@ -2264,9 +2264,9 @@ namespace Inheritance.Tests
     //
     public class Inherit_Custom_Overload_DomainService : GenericDomainService<Inherit_Basic_Root>
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomIt(Inherit_Basic_Root entity, bool flag) { }
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomIt(Inherit_Basic_Derived entity, bool flag) { }
     }
     #endregion // Inherit_Custom_Overload

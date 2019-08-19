@@ -2264,13 +2264,6 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 "There should be 1 update operation named UpdateA.");
             Assert.IsNotNull(d.DomainOperationEntries.Single(doe => (doe.Operation == DomainOperation.Custom) && (doe.Name == "CustomUpdateA")),
                 "There should be 1 custom update operation named CustomUpdateA.");
-
-            UpdateAttribute attr = new UpdateAttribute();
-            Assert.IsFalse(attr.UsingCustomMethod,
-                "UsingCustomMethod should be false by default.");
-            attr.UsingCustomMethod = true;
-            Assert.IsTrue(attr.UsingCustomMethod,
-                "UsingCustomMethod should now be true.");
         }
 
         [TestMethod]
@@ -3568,7 +3561,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         // Invalid : can't have a custom update operation for a child
         // unless one exists for parent as well
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomUpdate(Child child)
         {
         }
@@ -3894,10 +3887,10 @@ namespace OpenRiaServices.DomainServices.Server.Test
     {
         public IEnumerable<A> GetAs() { return null; }
 
-        [Update(UsingCustomMethod = false)]
+        [Update]
         public void UpdateA(A a) { }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void CustomUpdateA(A a) { }
     }
 
@@ -3915,7 +3908,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
     public class Mock_CG_Custom_Entity_Excluded_Concurrency_Property_DomainService : DomainServiceDescriptionTest.GenericDomainService<Mock_CG_Entity_Excluded_Concurrency_Property>
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void Update(Mock_CG_Entity_Excluded_Concurrency_Property entity)
         {
         }

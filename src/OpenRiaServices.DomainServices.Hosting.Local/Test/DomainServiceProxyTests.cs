@@ -881,7 +881,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 
             #region Custom methods
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void CustomMethod(MockEntity entity)
             {
                 var parameters = new Dictionary<string, object>();
@@ -894,7 +894,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
                 }
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public void CustomMethodWithParams(MockEntity entity, long param1, IEnumerable<string> param2, Dictionary<byte, string> param3, Uri param4)
             {
                 var parameters = new Dictionary<string, object>();

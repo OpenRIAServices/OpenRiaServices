@@ -4957,8 +4957,8 @@ namespace TestDomainServices
                 return new[] { new CalculatorValueOldCodeGen() { Key = 1 } }.AsQueryable();
             }
 
-#pragma warning disable 618 // Service should work with the "old" approach with [Update(UsingCustomMethod = true)]
-            [Update(UsingCustomMethod = true)]
+#pragma warning disable 618 // Service should work with the "old" approach with [EntityAction]
+            [EntityAction]
             public void AddTwice(CalculatorValueOldCodeGen value, decimal rhs)
             {
                 value.Value += 2*rhs;

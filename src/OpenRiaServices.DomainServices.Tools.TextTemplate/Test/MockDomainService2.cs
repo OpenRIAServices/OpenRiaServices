@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
             return int32Enum;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void DMTypeTestCityAndInt32Enum(SpecialTypesEntity city, SharedInt32Enum int32Enum)
         {
         }
@@ -43,7 +43,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
             return null;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void DMTypeTestCityAndInt32Enum(@namespace city, SharedInt32Enum int32Enum)
         {
         }

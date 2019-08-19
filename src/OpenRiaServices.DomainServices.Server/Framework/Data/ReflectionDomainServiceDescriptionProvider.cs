@@ -164,17 +164,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
             else if (operation.Attributes[typeof(UpdateAttribute)] != null)
             {
-                // disable obsolete warning here
-#pragma warning disable 0618
-                if (((UpdateAttribute)operation.Attributes[typeof(UpdateAttribute)]).UsingCustomMethod)
-#pragma warning restore 0618
-                {
-                    operationType = DomainOperation.Custom;
-                }
-                else
-                {
-                    operationType = DomainOperation.Update;
-                }
+                operationType = DomainOperation.Update;
             }
             else if (operation.Attributes[typeof(EntityActionAttribute)] != null)
             {
