@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         }
 
-        protected static TestDatabase TestDatabase
+        public static TestDatabase TestDatabase
         {
             get
             {
@@ -3795,14 +3795,6 @@ TestContext testContext
             // ensure that our isolation DB has been created once and only once
             // at the test fixture level
             TestDatabase.Initialize();
-        }
-
-        [AssemblyCleanup]
-        public static void AssemblyCleanup()
-        {
-            // make sure our test database is removed on the server after all unit tests
-            // have been run
-            ((IDisposable)TestDatabase).Dispose();
         }
 
         /// <summary>

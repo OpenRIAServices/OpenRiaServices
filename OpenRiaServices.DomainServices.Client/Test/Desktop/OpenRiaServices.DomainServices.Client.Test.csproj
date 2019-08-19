@@ -17,6 +17,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Management" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="WindowsBase" />
@@ -132,20 +133,24 @@
     <None Include="Service References\Services\TestServices.xsd" />
     <None Include="Service References\Services\TestServices1.wsdl" />
     <None Include="Service References\Services\TestServices1.xsd" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\Services\TestServices.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\Services\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\Services\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Service References\Services\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
+    <Content Include="ClientTestProjectPath.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
+    <Message Text="Writing project path" />
+    <WriteLinesToFile File="ClientTestProjectPath.txt" Lines="$(MSBuildProjectDirectory)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
+
 </Project>
