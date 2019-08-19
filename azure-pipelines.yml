@@ -78,16 +78,7 @@ steps:
    
    .\Setup-TestDatabases.ps1
    
-   $port = 60002
-   $iisExpressExe = "c:\Program Files (x86)\IIS Express\iisexpress.exe"
-   $path = (Resolve-path "Test\WebsiteFullTrust")
-   Write-Host $path
-   Write-host "Starting site on port: $port"
-   $params = "/port:$port /path:$path"
-   $command = """$iisExpressExe"" $params"
-   cmd /c start cmd /k "$command"
- 
-  displayName: 'Setup database and Start test webserver'
+  displayName: 'Setup database'
 
 - task: VSTest@2
   displayName: 'Run tests'
