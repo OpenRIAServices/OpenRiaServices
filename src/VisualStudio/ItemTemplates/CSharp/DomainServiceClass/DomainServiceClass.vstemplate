@@ -33,7 +33,7 @@
   <WizardData>
     <packages repository="extension"
           repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C009">
-      <package id="OpenRiaServices.Server" version = "4.5.1"/>
+      <package id="OpenRiaServices.Server" version = "4.6.0"/>
     </packages>
   </WizardData>
 </VSTemplate>
