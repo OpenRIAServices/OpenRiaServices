@@ -3,9 +3,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Management;
+using System.Security;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Common.Test
 {
     public class IISExpressWebserver
     {
@@ -72,7 +73,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
 
                 }
-
             }
             catch (Exception)
             {
@@ -110,9 +110,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
         }
 
+        [SecuritySafeCritical]
         private static string GetCommandLine(Process processs)
         {
-            ManagementObjectSearcher commandLineSearcher = new ManagementObjectSearcher(
+            var commandLineSearcher = new ManagementObjectSearcher(
                 $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {processs.Id}");
             foreach (ManagementObject commandLineObject in commandLineSearcher.Get())
             {

@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Common.Test;
 
 namespace OpenRiaServices.DomainServices.Hosting.OData.Test
 {
@@ -21,48 +22,31 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         private static int localPortNumber = -1;
 
         /// <summary>Local web server process.</summary>
-        private static Process process;
+        private static IISExpressWebserver s_webserver;
 
         /// <summary>Path to which files will be written to.</summary>
         private static string targetPhysicalPath;
 
-        private static bool IsIISexpress => string.Equals(process?.ProcessName, "iisexpress", StringComparison.OrdinalIgnoreCase);
-
         /// <summary>Performs cleanup and ensures that there are no active web servers.</summary>
         public static void Cleanup()
         {
-            if (process != null)
+            if (s_webserver != null)
             {
                 // The local web server does not respond to CloseMainWindow.
                 Trace.WriteLine("Closing web server process...");
 
-                if (!process.HasExited)
+                try
                 {
-                    try
-                    {
-                        if (IsIISexpress)
-                        {
-                            process.StandardInput.WriteLine("Q");
-                            process.WaitForExit(1 * 1000); // wait 1 secs.
-                        }
-
-                        if (!process.HasExited)
-                        {
-                            process.Kill();
-                            process.WaitForExit(60 * 1000); // wait 60 secs.
-                        }
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        Trace.WriteLine("Unable to kill local web server process.");
-                    }
+                    s_webserver.Stop();
                 }
-
-                process.Dispose();
-                process = null;
-
-                localPortNumber = -1;
+                catch (InvalidOperationException)
+                {
+                    Trace.WriteLine("Unable to kill local web server process.");
+                }
             }
+
+            s_webserver = null;
+            localPortNumber = -1;
         }
 
         /// <summary>
@@ -286,7 +270,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
             File.WriteAllText(Path.Combine(physicalPath, "web.config"), configContents);
 
             string physicalBinPath = Path.Combine(physicalPath, "bin");
-            System.Data.Test.Astoria.IOUtil.EnsureEmptyDirectoryExists(physicalBinPath);
+            IOUtil.EnsureEmptyDirectoryExists(physicalBinPath);
 
             // Copy all dlls to the bin folder since the are not gac'ed.
             foreach (string filter in new[] { "*.dll", "*.pdb" })
@@ -302,67 +286,11 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         /// <summary>Starts an instance of the local web server.</summary>
         public static void StartWebServer()
         {
-            if (process == null)
+            if (s_webserver == null)
             {
-                string serverPath = FindWebServerPath();
-                string portNumberText = LocalPortNumber.ToString(CultureInfo.InvariantCulture);
-                string arguments = "/port:" + portNumberText +
-                    " /path:\"" + LocalWebServerHelper.TargetPhysicalPath + "\"";
-
-                Trace.WriteLine("Starting web server:  \"" + serverPath + "\" " + arguments);
-
-                if (Path.GetFileNameWithoutExtension(serverPath) == "iisexpress")
-                {
-                    var startInfo = new ProcessStartInfo();
-                    startInfo.FileName = serverPath;
-                    startInfo.Arguments = arguments;
-                    startInfo.RedirectStandardInput = true;
-                    startInfo.RedirectStandardOutput = true;
-                    startInfo.UseShellExecute = false;
-                    startInfo.CreateNoWindow = true;
-
-                    process = Process.Start(startInfo);
-
-                    // Wait for IIS start
-                    string str;
-                    while ((str = process.StandardOutput.ReadLine()) != null)
-                    {
-                        if (str.Contains("IIS Express is running")
-                            || str.Contains("'Q'"))
-                            return;
-                    }
-
-                    throw new Exception("Failed to start IIS express");
-                }
-                else
-                {
-                    process = Process.Start(serverPath, arguments);
-                    process.WaitForInputIdle();
-                }
-
+                s_webserver = new IISExpressWebserver();
+                s_webserver.Start(LocalWebServerHelper.TargetPhysicalPath, LocalWebServerHelper.LocalPortNumber);
             }
-        }
-
-        /// <summary>
-        /// Helper method to find where the local web server binary is available from.
-        /// </summary>
-        /// <returns>The path to a local WebDev.WebServer.exe file.</returns>
-        private static string FindWebServerPath()
-        {
-            string[] searchPaths = new[]
-            {
-                @"%programfiles%\Common Files\microsoft shared\DevServer\10.0\WebDev.WebServer40.exe",
-                @"%programfiles%\IIS Express\iisexpress.exe",
-            };
-
-            foreach (var candidate in searchPaths)
-            {
-                string path = System.Environment.ExpandEnvironmentVariables(candidate);
-                if (File.Exists(path))
-                    return path;
-            }
-
-            throw new InvalidOperationException("Unable to find web server in ano of\n" + string.Join("\n", searchPaths));
         }
     }
 }

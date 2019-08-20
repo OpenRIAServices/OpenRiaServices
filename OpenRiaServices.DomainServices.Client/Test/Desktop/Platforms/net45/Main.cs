@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Common.Test;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
