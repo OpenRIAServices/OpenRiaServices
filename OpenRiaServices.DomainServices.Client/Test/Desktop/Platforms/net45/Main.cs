@@ -56,15 +56,27 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
 
-        private static bool IsWebServerRunning(string commandlineArguments)
+        private static bool ShouldStartNewWebserverProcess(string commandlineArguments, string port)
         {
-            foreach(var process in Process.GetProcessesByName("iisexpress"))
+            foreach (var process in Process.GetProcessesByName("iisexpress"))
             {
                 var commandline = GetCommandLine(process);
                 if (commandline.Contains(commandlineArguments))
+                {
+                    // Process was left from another test session.
+                    // Kill it so we can start a new with redirected intput/output
+                    process.Kill();
+                    process.WaitForExit();
                     return true;
+                }
+                // TODO: Fix this condition, it probably dont work now
+                else if (commandline.Contains(port))
+                {
+                    // return true and do nothing if different command line (started by user/vs)
+                    return false;
+                }
             }
-            return false;
+            return true;
         }
 
         private static void StartWebServer()
@@ -75,13 +87,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
-            string iisexpress = System.Environment.ExpandEnvironmentVariables(@"%programfiles%\IIS Express\iisexpress.exe");
+            string iisexpress = Environment.ExpandEnvironmentVariables(@"%programfiles%\IIS Express\iisexpress.exe");
 
             string portNumberText = "60002";
             string arguments = $"/port:{portNumberText} /path:\"{webSitePath}\"";
 
             // only start webserver if it is not already running
-            if (!IsWebServerRunning(arguments))
+            if (ShouldStartNewWebserverProcess(arguments, portNumberText))
             {
                 var startInfo = new ProcessStartInfo();
                 startInfo.FileName = iisexpress;
@@ -93,16 +105,50 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 s_iisProcess = Process.Start(startInfo);
 
-                // Wait for IIS start
                 string str;
                 while ((str = s_iisProcess.StandardOutput.ReadLine()) != null)
                 {
                     if (str.Contains("IIS Express is running")
                         || str.Contains("'Q'"))
+                    {
+                        // Wait for IIS start.
+                        /*var webRequest = HttpWebRequest.CreateHttp("http://localhost:60002/Cities-CityDomainService.svc");
+                        var response = webRequest.GetResponse();
+                        string responseText;
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                            responseText = reader.ReadToEnd();
+                        */
+
+                        new Thread(ProcessIISStandardOutput)
+                            .Start();
+
                         return;
+                    }
+
                 }
 
                 throw new Exception("Failed to start IIS express");
+            }
+        }
+
+        private static void ProcessIISStandardOutput()
+        {
+            try
+            {
+                // Reade from standard output so the buffer doesnt get full and
+                // process pauses
+                string str;
+                while (!s_iisProcess.HasExited &&
+                    (str = s_iisProcess.StandardOutput.ReadLine()) != null)
+                {
+
+                }
+
+            }
+            catch (Exception)
+            {
+                if (!s_iisProcess.HasExited)
+                    throw;
             }
         }
 
