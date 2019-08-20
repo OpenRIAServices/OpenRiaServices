@@ -46,6 +46,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Test\Website\Web
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj", "{7B2AB186-E78E-402A-843F-705D77179E06}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FB928CDD-D223-4921-B97D-EB16EEE7D2AA} = {FB928CDD-D223-4921-B97D-EB16EEE7D2AA}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Controls.DomainServices.Test", "OpenRiaServices.Controls.DomainServices\Test\OpenRiaServices.Controls.DomainServices.Test.csproj", "{D2041ACB-8E1D-49A0-B29E-27B27F3D3A9D}"
 EndProject

@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj" />
   </ItemGroup>
   <ItemGroup>
