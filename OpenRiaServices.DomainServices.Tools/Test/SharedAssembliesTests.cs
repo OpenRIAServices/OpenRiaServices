@@ -23,14 +23,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "SAT")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedAssemblies service locates shared types between projects")]
         [TestMethod]
         public void SharedAssemblies_Types()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("SAT", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths(string.Empty, out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
@@ -54,14 +54,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.AssertNoErrorsOrWarnings(logger);
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "SAT")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedAssemblies service locates shared methods between projects")]
         [TestMethod]
         public void SharedAssemblies_Methods()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("SAT", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths(string.Empty, out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
@@ -83,7 +83,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "SAT")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedAssemblies matches mscorlib types and methods")]
         [WorkItem(723391)]  // XElement entry below is regression for this
         [TestMethod]
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string projectPath = null;
             string outputPath = null;
 
-            TestHelper.GetProjectPaths("SAT", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths(string.Empty, out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
@@ -138,7 +138,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
 
 
-        [DeploymentItem(@"ProjectPath.txt", "SAT")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedAssemblies service logs an info message for nonexistent assembly file")]
         [TestMethod]
         public void SharedAssemblies_Logs_Message_NonExistent_Assembly()
@@ -162,7 +162,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             TestHelper.AssertContainsMessages(logger, message);
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "SAT")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedAssemblies service logs an info message for bad image format assembly file")]
         [TestMethod]
         public void SharedAssemblies_Logs_Message_BadImageFormat_Assembly()
