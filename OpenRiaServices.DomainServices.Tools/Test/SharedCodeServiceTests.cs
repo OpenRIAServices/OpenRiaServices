@@ -62,14 +62,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "STS1")]
+        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared types between projects")]
         [TestMethod]
         public void SharedCodeService_Types()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("STS1", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
             ConsoleLogger logger = new ConsoleLogger();

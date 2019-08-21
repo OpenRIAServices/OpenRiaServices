@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>sl5</TargetFrameworks>
+    <TargetFrameworks>net45</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
@@ -9,10 +10,6 @@
     <Reference Include="System.Windows" />
     <Reference Include="mscorlib" />
     <Reference Include="system" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />

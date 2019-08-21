@@ -87,6 +87,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("SharedAssemblies matches mscorlib types and methods")]
         [WorkItem(723391)]  // XElement entry below is regression for this
         [TestMethod]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore] // Add this test for all other target frameworks where client is different from server 
         public void SharedAssemblies_Matches_MsCorLib()
         {
             Type[] sharedTypes = new Type[] {
