@@ -1,35 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>sl5</TargetFrameworks>
+    <TargetFramework>net45</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;VBTests</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
     <NoWarn>108</NoWarn>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Client.Test.Vb</AssemblyName>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="SilverlightToolkit-Testing" Version="5.2011.12.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
   </ItemGroup>
-  
   <ItemGroup>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Extensions" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.ServiceModel.Web.Extensions" />
-    <Reference Include="System.Windows" />
-    <Reference Include="mscorlib" />
-    <Reference Include="system" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Browser" />
-    <Reference Include="System.Xml.Linq, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   
   <ItemGroup>
@@ -48,6 +41,8 @@
     <Compile Include="..\Desktop\Data\ServerSideAsyncTests.cs">
       <Link>OpenRiaServices.DomainServices.Client\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
+    <Compile Include="..\Desktop\Main.cs" Link="Main.cs" />
+    <Compile Include="..\Desktop\TestUris.cs" Link="TestUris.cs" />
     <Compile Update="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -68,7 +63,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   
   <ItemGroup>
@@ -87,4 +81,16 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\Services\" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Include="ClientTestProjectPath.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
+    <Message Text="Writing project path" />
+    <WriteLinesToFile File="ClientTestProjectPath.txt" Lines="$(MSBuildProjectDirectory)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
 </Project>

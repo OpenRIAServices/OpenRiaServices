@@ -35,23 +35,31 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
+#if !VBTests
             // make sure our test database is removed on the server after all unit tests
             // have been run
             ((IDisposable)UpdateTests.TestDatabase).Dispose();
-
+#endif
             s_webServer?.Stop();
         }
 
         private static void StartWebServer()
         {
             string projectPath = File.ReadAllLines("ClientTestProjectPath.txt")[0];
+#if VBTests_sd
+            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\..\..\Test\Website"));
+#else
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\..\..\Test\WebsiteFullTrust"));
-
+#endif
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
             s_webServer = new IISExpressWebserver();
+#if VBTests
+            s_webServer.Start(webSitePath, 60000);
+#else
             s_webServer.Start(webSitePath, 60002);
+#endif
         }
     }
 }
