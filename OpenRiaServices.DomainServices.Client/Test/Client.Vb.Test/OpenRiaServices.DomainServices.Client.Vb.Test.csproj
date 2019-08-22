@@ -6,7 +6,6 @@
     <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
     <NoWarn>108</NoWarn>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Client.Test.Vb</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
