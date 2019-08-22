@@ -223,11 +223,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
 
         /// <summary>
-        /// Extract the list of assemblies both generated and referenced by SilverlightClient.
+        /// Extract the list of assemblies both generated and referenced by Client.
         /// Not coincidently, this list is what a client project needs to reference.
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetSilverlightClientAssemblies(string relativeTestDir)
+        public static List<string> GetClientAssemblies(string relativeTestDir)
         {
             string projectPath = string.Empty;  // path to current project
             string outputPath = string.Empty;   // output path for current project, used to infer output path of test project
@@ -244,16 +244,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)
-            List<string> assemblies = 
-                MsBuildHelper.GetReferenceAssemblies(testProjectFile);
+            List<string> assemblies =  MsBuildHelper.GetReferenceAssemblies(testProjectFile);
             string outputAssembly = MsBuildHelper.GetOutputAssembly(testProjectFile);
             if (!string.IsNullOrEmpty(outputAssembly))
             {
                 assemblies.Add(outputAssembly);
             }
-
-            // add other required SL assemblies
-            assemblies.Add(Path.Combine(GetSilverlightSdkInstallPath(), "Libraries\\Client\\System.Xml.Linq.dll"));
 
             return assemblies;
         }

@@ -152,9 +152,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     }
                     else
                     {
-                        // fallback to silverlight since that what client 
-                        // projects currently should use
-                        project.SetGlobalProperty("TargetFramework", "sl5");
+                        // fallback to net45
+                        project.SetGlobalProperty("TargetFramework", "net45");
                     }
                 }
             }
