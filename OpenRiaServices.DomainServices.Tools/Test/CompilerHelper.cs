@@ -184,7 +184,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// </summary>
         private static PortableExecutableReference GetVisualBasicReference()
         {
-            return LoadReference(Path.Combine(GetSilverlightSdkReferenceAssembliesPath(), "Microsoft.VisualBasic.dll"));
+            return LoadReference(typeof(int).Assembly.Location.Replace("mscorlib", "Microsoft.VisualBasic"));
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)
-            List<string> assemblies =  MsBuildHelper.GetReferenceAssemblies(testProjectFile);
+            List<string> assemblies = MsBuildHelper.GetReferenceAssemblies(testProjectFile);
             string outputAssembly = MsBuildHelper.GetOutputAssembly(testProjectFile);
             if (!string.IsNullOrEmpty(outputAssembly))
             {
@@ -252,50 +252,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
 
             return assemblies;
-        }
 
-        /// <summary>
-        /// Returns the path to the Silverlight SDK reference assemblies directory.
-        /// </summary>
-        /// <returns>The reference assemblies path for Silverlight.</returns>
-        internal static string GetSilverlightSdkReferenceAssembliesPath()
-        {
-            try
-            {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SDKs\Silverlight\" + SLVER + @"\ReferenceAssemblies"))
-                {
-                    if (key != null)
-                    {
-                        return (string)key.GetValue("SLRuntimeInstallPath");
-                    }
-                }
-            }
-            catch
-            {
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the path to the Silverlight SDK install directory.
-        /// </summary>
-        /// <returns>The SDK install path for Silverlight.</returns>
-        internal static string GetSilverlightSdkInstallPath()
-        {
-            try
-            {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SDKs\Silverlight\" + SLVER + @"\Install Path"))
-                {
-                    if (key != null)
-                    {
-                        return (string)key.GetValue("Install Path");
-                    }
-                }
-            }
-            catch
-            {
-            }
-            return null;
         }
     }
 }
