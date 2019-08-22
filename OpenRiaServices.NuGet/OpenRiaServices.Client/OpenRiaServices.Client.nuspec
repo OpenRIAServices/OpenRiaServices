@@ -2,14 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>OpenRiaServices.Client</id>
-        <version>4.6.0-preview1</version>
-        <title>Open RIA Services Client, Code Generator, and MVVM Support</title>
+        <version>5.0.0</version>
+        <title>Open RIA Services Full Client</title>
         <authors>Outercurve RIA Services</authors>
         <owners>Outercurve</owners>
         <license type="expression">Apache-2.0</license>
         <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>OpenRiaServices.Client is the full OpenRiaServices client for wpf/silverlight and portable libraries in a single package.</description>
+        <description>OpenRiaServices.Client is the full OpenRiaServices client including code generation in a single package.</description>
         <summary>Open RIA Services - Full client</summary>
         <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
         <copyright>2018 Outercurve Foundation</copyright>
@@ -19,11 +19,6 @@
             <group>
                 <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
                 <dependency id="OpenRiaServices.Client.CodeGen" version="$version$"/>
-            </group>
-            <group targetFramework="sl50">
-                <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
-                <dependency id="OpenRiaServices.Silverlight.CodeGen" version="$version$"/>
-                <dependency id="OpenRiaServices.ViewModel" version="$version$"/>
             </group>
         </dependencies>
     </metadata>

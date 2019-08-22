@@ -156,5 +156,4 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
-/VisualStudio/Tools/Test/DomainServiceToolsPath.txt
-/OpenRiaServices.DomainServices.Client/Test/Desktop/ClientTestProjectPath.txt
+*Path.txt

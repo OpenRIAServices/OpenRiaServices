@@ -5,6 +5,9 @@ public static class TestURIs
 #if SILVERLIGHT
     public static readonly Uri RootURI = System.Windows.Browser.HtmlPage.Document.DocumentUri;
     public static readonly Uri CatalogDataServiceURI = new Uri(System.Windows.Browser.HtmlPage.Document.DocumentUri, "/Services/CatalogDataService.svc");
+#elif VBTests
+    public static readonly Uri RootURI = new Uri("http://localhost:60000/");
+    public static readonly Uri CatalogDataServiceURI = new Uri("http://localhost:60000/Services/CatalogDataService.svc");
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:60002/");
     public static readonly Uri CatalogDataServiceURI = new Uri("http://localhost:60002/Services/CatalogDataService.svc");

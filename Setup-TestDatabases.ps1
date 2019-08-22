@@ -108,7 +108,7 @@ echo "Copying northwind database to websites"
 Take-Offline "Northwind"
 $mdf = (join-path $DatabaseFolder Northwind.mdf)
 $ldf = (join-path $DatabaseFolder Northwind.ldf)
-foreach($website in "Test\WebsiteFullTrust", "Test\Website")
+foreach($website in "Test\WebsiteFullTrust")
 {
     $templateDir = Join-Path $RepositoryRoot "$website\App_Data\Templates\"
     if (-not (Test-Path $templateDir))

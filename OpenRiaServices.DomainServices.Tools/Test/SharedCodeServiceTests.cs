@@ -62,14 +62,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "STS1")]
+        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared types between projects")]
         [TestMethod]
         public void SharedCodeService_Types()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("STS1", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
             ConsoleLogger logger = new ConsoleLogger();
@@ -103,14 +103,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "STS2")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedCodeService locates shared properties between projects")]
         [TestMethod]
         public void SharedCodeService_Properties()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("STS2", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
             ConsoleLogger logger = new ConsoleLogger();
@@ -125,14 +125,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
 
-        [DeploymentItem(@"ProjectPath.txt", "STS4")]
+        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared methods between projects")]
         [TestMethod]
         public void SharedCodeService_Methods()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("STS4", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
             ConsoleLogger logger = new ConsoleLogger();
@@ -154,14 +154,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "STS5")]
+        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared ctors between projects")]
         [TestMethod]
         public void SharedCodeService_Ctors()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("STS5", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
 
             ConsoleLogger logger = new ConsoleLogger();

@@ -601,6 +601,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <returns>The set of Silverlight runtime and SDK paths</returns>
         public static IEnumerable<string> GetSilverlightPaths(decimal silverlightVersion)
         {
+            // TODO: Cleanup this method
+
+            // This returns net framework search directory instead
+            return new List<string>()
+            {
+                Path.GetDirectoryName(typeof(int).Assembly.Location)
+            };
+
             if (CodeGenHelper.silverlightPaths == null)
             {
                 CodeGenHelper.silverlightPaths = new List<string>();

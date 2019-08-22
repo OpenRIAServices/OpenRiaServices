@@ -89,13 +89,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AllTests.html" />
     <Content Include="App_Data\Templates\Northwind.ldf">
       <DependentUpon>Northwind.mdf</DependentUpon>
     </Content>
     <Content Include="App_Data\Templates\Northwind.mdf" />
     <Content Include="Cities-CityDomainService.svc" />
-    <Content Include="CodeCoverageTests.html" />
     <Content Include="Global.asax" />
     <Content Include="Services\Cities-CityDomainService.svc" />
     <Content Include="Services\TestServices.svc" />
@@ -104,12 +102,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Website\Providers\TestMembershipProvider.cs">
-      <Link>Providers\TestMembershipProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Website\Providers\TestRoleProvider.cs">
-      <Link>Providers\TestRoleProvider.cs</Link>
-    </Compile>
+    <Compile Include="Providers\TestMembershipProvider.cs" />
+    <Compile Include="Providers\TestRoleProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -152,9 +146,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="ClientBin\System.Test.xap" />
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -607,7 +607,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             string providerName = providerType.FullName.Replace('.', '-');
             
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(string.Format("{0}{1}.svc/{2}?{3}", TestURIs.RootURI.ToString(), providerName, dataMethodName, queryString));
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(string.Format("{0}{1}.svc/{2}?{3}", "http://localhost:60002/", providerName, dataMethodName, queryString));
             using (WebResponse response = request.GetResponse())
             {
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))

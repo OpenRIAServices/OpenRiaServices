@@ -23,7 +23,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\DomainIdentifierAttributeTests.cs" Link="DomainIdentifierAttributeTests.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Test\Client.Test\Data\DomainIdentifierAttributeTests.cs" Link="DomainIdentifierAttributeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" />
