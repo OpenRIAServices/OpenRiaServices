@@ -10,7 +10,7 @@
     <_GetChildProjectCopyToOutputDirectoryItems>false</_GetChildProjectCopyToOutputDirectoryItems>
   </PropertyGroup>
   <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
-    <WriteLinesToFile File="DomainServiceToolsPath.txt" Lines="$(MSBuildProjectFullPath)" Overwrite="true" />
+    <WriteLinesToFile File="DomainServiceToolsPath.txt" Lines="$(MSBuildProjectFullPath)" Overwrite="true" WriteOnlyWhenDifferent="true" />
   </Target>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
@@ -34,7 +34,7 @@
     <None Remove="Baselines\web.config" />
     <None Remove="DomainServiceToolsPath.txt" />
     <Content Include="DomainServiceToolsPath.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
