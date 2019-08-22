@@ -580,7 +580,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 }
                 catch (Exception ex)
                 {
-                    this.EnqueueCallback(() => { throw ex; });
+                    Console.WriteLine("TestTemplate cought exception {0}", ex);
+                    var exception = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex);
+                    this.EnqueueCallback(() => { exception.Throw();  });
                 }
 
                 testCompleted = true;
