@@ -66,13 +66,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     if (!assemblies.Contains(assemblyPath))
                         assemblies.Add(assemblyPath);
                 }
-
-                foreach (var reference in project.ProjectInstance.GetItems("ProjectReference"))
+                
+                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
                 {
-                    string otherProjectPath = GetFullPath(projectPath, reference);
-                    // Project references recursively extract references
-                    string outputAssembly = GetOutputAssembly(otherProjectPath);
-
+                    string outputAssembly = GetFullPath(projectPath, reference);
+                    
                     if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
                         assemblies.Add(outputAssembly);
                 }
