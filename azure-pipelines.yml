@@ -88,7 +88,6 @@ steps:
      VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*Test.dll
      !VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
      !**\obj\**
-     !**\sl5\**
 
     runOnlyImpactedTests: false
     runInParallel: true
