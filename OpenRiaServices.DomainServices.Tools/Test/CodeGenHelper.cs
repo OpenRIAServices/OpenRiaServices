@@ -521,6 +521,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <returns>The Silverlight platform runtime folder or null if it cannot be found.</returns>
         public static string GetSilverlightRuntimeDirectory(decimal silverlightVersion)
         {
+            return Path.GetDirectoryName(typeof(string).Assembly.Location);
+
             string runtimePath = null;
             try
             {
@@ -538,18 +540,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
             }
             return runtimePath;
-        }
-
-        /// <summary>
-        /// Gets the full path of the Silverlight SDK folder.
-        /// This implementation is taken verbatim from Microsoft.Silverlight.Build.Tasks
-        /// and is what normally set $(TargetFrameworkSDKDirectory)
-        /// during a build of a Silverlight project
-        /// </summary>
-        /// <returns>The Silverlight SDK folder or null if it cannot be found.</returns>
-        public static string GetSilverlightSDKDirectory()
-        {
-            return CodeGenHelper.GetSilverlightSDKDirectory(CodeGenHelper.SilverlightVersionToTest);
         }
 
         /// <summary>
