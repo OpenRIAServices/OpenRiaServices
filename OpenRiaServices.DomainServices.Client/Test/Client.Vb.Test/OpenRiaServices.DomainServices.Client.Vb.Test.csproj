@@ -25,23 +25,23 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\DomainContextTestBase.cs">
-      <Link>OpenRiaServices.DomainServices.Client\Data\DomainContextTestBase.cs</Link>
+    <Compile Include="..\Client.Test\Data\DomainContextTestBase.cs">
+      <Link>Client.Test\Data\DomainContextTestBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\QueryTests.cs">
-      <Link>OpenRiaServices.DomainServices.Client\Data\QueryTests.cs</Link>
+    <Compile Include="..\Client.Test\Data\QueryTests.cs">
+      <Link>Client.Test\Data\QueryTests.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Test\Desktop\Data\TestDataContext.cs">
-      <Link>OpenRiaServices.DomainServices.Client\Data\TestDataContext.cs</Link>
+    <Compile Include="..\Client.Test\Data\TestDataContext.cs">
+      <Link>Client.Test\Data\TestDataContext.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\Data\OperationErrorTest.cs">
+    <Compile Include="..\Client.Test\Data\OperationErrorTest.cs">
       <Link>OperationErrorTest.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\Data\ServerSideAsyncTests.cs">
-      <Link>OpenRiaServices.DomainServices.Client\Data\ServerSideAsyncTests.cs</Link>
+    <Compile Include="..\Client.Test\Data\ServerSideAsyncTests.cs">
+      <Link>Client.Test\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\Main.cs" Link="Main.cs" />
-    <Compile Include="..\Desktop\TestUris.cs" Link="TestUris.cs" />
+    <Compile Include="..\Client.Test\Main.cs" Link="Main.cs" />
+    <Compile Include="..\Client.Test\TestUris.cs" Link="TestUris.cs" />
     <Compile Update="Service References\Services\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -72,7 +72,7 @@
     <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\SilverlightVbDomainClients\SilverlightVbDomainClients.vbproj" />
+    <ProjectReference Include="..\VbDomainClients\VbDomainClients.vbproj" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

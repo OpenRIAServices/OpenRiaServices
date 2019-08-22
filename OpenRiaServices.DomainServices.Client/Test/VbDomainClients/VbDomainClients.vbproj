@@ -4,7 +4,6 @@
     <DefineTrace>true</DefineTrace>
     <RootNamespace />
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyName>OpenRiaServices.DomainServices.Hosting.Test.SilverlightVbDataClients</AssemblyName>
     <TargetFramework>net45</TargetFramework>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>

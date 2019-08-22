@@ -40,11 +40,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.DomainServices.Test", "Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj", "{AA5C3992-1C78-4751-8E1C-421A34FD7E76}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Desktop\OpenRiaServices.DomainServices.Client.Test.csproj", "{7B2AB186-E78E-402A-843F-705D77179E06}"
-	ProjectSection(ProjectDependencies) = postProject
-		{FB928CDD-D223-4921-B97D-EB16EEE7D2AA} = {FB928CDD-D223-4921-B97D-EB16EEE7D2AA}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Test", "OpenRiaServices.DomainServices.Server\Test\OpenRiaServices.DomainServices.Server.Test.csproj", "{CDEDEFB0-D36F-4367-B611-977099403B60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib\ClientClassLib.csproj", "{3AB9EA3C-D906-4930-AC3D-B4773F929D99}"
@@ -52,8 +47,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib\ServerClassLib.csproj", "{FE9777B2-ED24-4464-9D35-42A628B00EF7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib2\ClientClassLib2.csproj", "{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}"
-EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "SilverlightVbDomainClients", "OpenRiaServices.DomainServices.Client\Test\SilverlightVbDomainClients\SilverlightVbDomainClients.vbproj", "{A1407522-0D18-4D64-A5B9-8E5C569AAA51}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
 EndProject
@@ -82,8 +75,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeLoadExceptionProject", "Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj", "{2265A098-F256-418D-9D11-9FD6561E8D42}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\DesktopExternal\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.TextTemplate", "OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
 EndProject
@@ -139,6 +130,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeGen", "CodeGen", "{6B0A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Vb.Test", "OpenRiaServices.DomainServices.Client\Test\Client.Vb.Test\OpenRiaServices.DomainServices.Client.Vb.Test.csproj", "{4E62015B-4084-4E39-9112-44224C1EB9BC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Client.Test\OpenRiaServices.DomainServices.Client.Test.csproj", "{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}"
+EndProject
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbDomainClients", "OpenRiaServices.DomainServices.Client\Test\VbDomainClients\VbDomainClients.vbproj", "{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\Client.External.Test\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{8F117F6B-6A2F-403B-9500-1D383151E769}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,10 +174,6 @@ Global
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B2AB186-E78E-402A-843F-705D77179E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B2AB186-E78E-402A-843F-705D77179E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B2AB186-E78E-402A-843F-705D77179E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B2AB186-E78E-402A-843F-705D77179E06}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDEDEFB0-D36F-4367-B611-977099403B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDEDEFB0-D36F-4367-B611-977099403B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDEDEFB0-D36F-4367-B611-977099403B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -197,10 +190,6 @@ Global
 		{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1407522-0D18-4D64-A5B9-8E5C569AAA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1407522-0D18-4D64-A5B9-8E5C569AAA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1407522-0D18-4D64-A5B9-8E5C569AAA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1407522-0D18-4D64-A5B9-8E5C569AAA51}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -257,10 +246,6 @@ Global
 		{2265A098-F256-418D-9D11-9FD6561E8D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2265A098-F256-418D-9D11-9FD6561E8D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2265A098-F256-418D-9D11-9FD6561E8D42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D3AE529-961A-47FD-834B-7893FE6FF479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D3AE529-961A-47FD-834B-7893FE6FF479}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D3AE529-961A-47FD-834B-7893FE6FF479}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -333,6 +318,18 @@ Global
 		{4E62015B-4084-4E39-9112-44224C1EB9BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E62015B-4084-4E39-9112-44224C1EB9BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E62015B-4084-4E39-9112-44224C1EB9BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F117F6B-6A2F-403B-9500-1D383151E769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F117F6B-6A2F-403B-9500-1D383151E769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F117F6B-6A2F-403B-9500-1D383151E769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F117F6B-6A2F-403B-9500-1D383151E769}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -350,12 +347,10 @@ Global
 		{AD7E4B98-337B-4855-BD1E-E34F938CA71A} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{AFEA4CCA-4B98-4551-B75F-93D1A084C817} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{AA5C3992-1C78-4751-8E1C-421A34FD7E76} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{7B2AB186-E78E-402A-843F-705D77179E06} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{CDEDEFB0-D36F-4367-B611-977099403B60} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{3AB9EA3C-D906-4930-AC3D-B4773F929D99} = {D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}
 		{FE9777B2-ED24-4464-9D35-42A628B00EF7} = {D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}
 		{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805} = {D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}
-		{A1407522-0D18-4D64-A5B9-8E5C569AAA51} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC} = {D7CCEF04-E0FC-46A5-AE7F-4FAE8BE20D54}
 		{0EE13EF8-BD66-4095-926C-A81B6350F8EA} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{7E3F2770-7A6C-4D56-9040-C16966BB6A1B} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
@@ -370,7 +365,6 @@ Global
 		{F572B235-A989-47F5-A36F-51091E976743} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88} = {6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30}
 		{2265A098-F256-418D-9D11-9FD6561E8D42} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{1D05F725-F0B5-4F1E-98ED-3701CF2C46C1} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 		{1D3AE529-961A-47FD-834B-7893FE6FF479} = {96D29745-0D96-4959-AB96-8FBEDC8AB485}
 		{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332} = {6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30}
 		{72137DB5-8A91-4FF8-A292-5F6E73A66CD6} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
@@ -397,6 +391,9 @@ Global
 		{C8814DD1-905D-41F8-B587-99FD85524F8B} = {546DB9D1-BA54-499A-854D-00D8A311B56A}
 		{6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{4E62015B-4084-4E39-9112-44224C1EB9BC} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
+		{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
+		{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
+		{8F117F6B-6A2F-403B-9500-1D383151E769} = {8D64085D-DABC-4228-85E3-F337DFA7D55E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}
