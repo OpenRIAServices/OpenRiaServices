@@ -16,12 +16,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
     using System.Linq;
     using OpenRiaServices.DomainServices.Server;
     using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server.ApplicationServices;
     using OpenRiaServices.DomainServices.Tools.TextTemplate;
     using OpenRiaServices.DomainServices.Tools;
     using OpenRiaServices.DomainServices;
     using System.Reflection;
-    
+    using OpenRiaServices.DomainServices.Server.Authentication;
+
     /// <summary>
     /// Class to produce the template output
     /// </summary>

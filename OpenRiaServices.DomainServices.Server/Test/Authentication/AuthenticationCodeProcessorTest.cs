@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.ApplicationServices;
 using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.DomainServices.Server.Authentication;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Test.Authentication
 {
     /// <summary>
     /// Tests <see cref="AuthenticationCodeProcessor"/> codegen with a barrage of negative tests.
@@ -20,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         public void UserWithExplicitNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithExplicitName.Auth>());
+                Generate<UserWithExplicitName.Auth>());
         }
 
         [TestMethod]
@@ -28,56 +27,56 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         {
             // TODO: Figure out what check is required.
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithGetName.Auth>());
+                Generate<UserWithGetName.Auth>());
         }
 
         [TestMethod]
         public void UserWithSetNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithSetName.Auth>());
+                Generate<UserWithSetName.Auth>());
         }
 
         [TestMethod]
         public void UserWithIntNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithIntName.Auth>());
+                Generate<UserWithIntName.Auth>());
         }
 
         [TestMethod]
         public void UserWithExcludedNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithExcludedName.Auth>());
+                Generate<UserWithExcludedName.Auth>());
         }
 
         [TestMethod]
         public void UserWithNonDataMemberNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithNonDataMemberName.Auth>());
+                Generate<UserWithNonDataMemberName.Auth>());
         }
 
         [TestMethod]
         public void UserWithIgnoredDataMemeberNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithIgnoredDataMemeberName.Auth>());
+                Generate<UserWithIgnoredDataMemeberName.Auth>());
         }
 
         [TestMethod]
         public void UserWithNonKeyNameThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithNonKeyName.Auth>());
+                Generate<UserWithNonKeyName.Auth>());
         }
 
         [TestMethod]
         public void UserWithExplicitRolesThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithExplicitRoles.Auth>());
+                Generate<UserWithExplicitRoles.Auth>());
         }
 
         [TestMethod]
@@ -85,126 +84,126 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         {
             // TODO: Figure out what check is required.
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithGetRoles.Auth>());
+                Generate<UserWithGetRoles.Auth>());
         }
 
         [TestMethod]
         public void UserWithSetRolesThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithSetRoles.Auth>());
+                Generate<UserWithSetRoles.Auth>());
         }
 
         [TestMethod]
         public void UserWithIntRolesThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithIntRoles.Auth>());
+                Generate<UserWithIntRoles.Auth>());
         }
 
         [TestMethod]
         public void UserWithExcludedRolesThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithExcludedRoles.Auth>());
+                Generate<UserWithExcludedRoles.Auth>());
         }
 
         [TestMethod]
         public void UserWithNonDataMemberRolesThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithNonDataMemberRoles.Auth>());
+                Generate<UserWithNonDataMemberRoles.Auth>());
         }
 
         [TestMethod]
         public void UserWithIgnoredDataMemeberRolesThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<UserWithIgnoredDataMemeberRoles.Auth>());
+                Generate<UserWithIgnoredDataMemeberRoles.Auth>());
         }
 
         [TestMethod]
         public void ServiceWithExplicitLoginThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithExplicitLogin>());
+                Generate<ServiceWithExplicitLogin>());
         }
 
         [TestMethod]
         public void ServiceWithNonUserLoginThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithNonUserLogin>());
+                Generate<ServiceWithNonUserLogin>());
         }
 
         [TestMethod]
         public void ServiceWithNoParameterLoginThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithNoParameterLogin>());
+                Generate<ServiceWithNoParameterLogin>());
         }
 
         [TestMethod]
         public void ServiceWithWrongParameterLoginThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithWrongParameterLogin>());
+                Generate<ServiceWithWrongParameterLogin>());
         }
 
         [TestMethod]
         public void ServiceWithExplicitLogoutThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithExplicitLogout>());
+                Generate<ServiceWithExplicitLogout>());
         }
 
         [TestMethod]
         public void ServiceWithNonUserLogoutThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithNonUserLogout>());
+                Generate<ServiceWithNonUserLogout>());
         }
 
         [TestMethod]
         public void ServiceWithParameterLogoutThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithParameterLogout>());
+                Generate<ServiceWithParameterLogout>());
         }
 
         [TestMethod]
         public void ServiceWithExplicitGetUserThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithExplicitGetUser>());
+                Generate<ServiceWithExplicitGetUser>());
         }
 
         [TestMethod]
         public void ServiceWithNonUserGetUserThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithNonUserGetUser>());
+                Generate<ServiceWithNonUserGetUser>());
         }
 
         [TestMethod]
         public void ServiceWithParameterGetUserThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithParameterGetUser>());
+                Generate<ServiceWithParameterGetUser>());
         }
 
         [TestMethod]
         public void ServiceWithExplicitUpdateUserThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithExplicitUpdateUser>());
+                Generate<ServiceWithExplicitUpdateUser>());
         }
 
         [TestMethod]
         public void ServiceWithNonUserUpdateUserThrows()
         {
             ExceptionHelper.ExpectException<InvalidOperationException>(() =>
-                AuthenticationCodeProcessorTest.Generate<ServiceWithNonUserUpdateUser>());
+                Generate<ServiceWithNonUserUpdateUser>());
         }
 
         private static void Generate<T>()
@@ -267,7 +266,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             string IUser.Name { get; set; }
             public IEnumerable<string> Roles { get; set; }
 
-            public class Auth : AcpDomainService<UserWithExplicitName> {}
+            public class Auth : AcpDomainService<UserWithExplicitName> { }
         }
 
         // Cannot explicitly implement Name and redefine it without a setter
@@ -288,7 +287,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
             [Key]
             public int Key { get; set; }
 
-            public string Name { set {} }
+            public string Name { set { } }
 
             string IUser.Name { get; set; }
             public IEnumerable<string> Roles { get; set; }
@@ -381,7 +380,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         {
             [Key]
             public string Name { get; set; }
-            public IEnumerable<string> Roles { set {} }
+            public IEnumerable<string> Roles { set { } }
 
             IEnumerable<string> IUser.Roles { get; set; }
 

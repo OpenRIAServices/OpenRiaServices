@@ -13,7 +13,7 @@ using System.Web.Configuration;
 using System.Web.Profile;
 using System.Web.Security;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership
 {
     /// <summary>
     /// <see cref="DomainService"/> that encapsulates the authentication domain.
@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 
         private static readonly IEnumerable<string> DefaultRoles = new string[0];
         private static readonly IPrincipal DefaultPrincipal =
-            new GenericPrincipal(new GenericIdentity(string.Empty), AuthenticationBase<T>.DefaultRoles.ToArray());
+            new GenericPrincipal(new GenericIdentity(string.Empty), DefaultRoles.ToArray());
 
         #endregion
 
@@ -85,11 +85,11 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 
             // We're creating a new profile so this algorithm works with both Login and
             // Logout where the current principal and Profile have not been updated.
-            ProfileBase profile = ProfileBase.Create(user.Name);
+            var profile = ProfileBase.Create(user.Name);
 
             foreach (PropertyInfo property in user.GetType().GetProperties())
             {
-                if (!property.CanWrite || !AuthenticationBase<T>.IsInProfile(property) || property.GetIndexParameters().Length > 0)
+                if (!property.CanWrite || !IsInProfile(property) || property.GetIndexParameters().Length > 0)
                 {
                     // Skip this property if it is not writable or in the profile or is an indexer property
                     continue;
@@ -97,7 +97,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 
                 try
                 {
-                    property.SetValue(user, profile.GetPropertyValue(AuthenticationBase<T>.GetProfileAlias(property)), null);
+                    property.SetValue(user, profile.GetPropertyValue(GetProfileAlias(property)), null);
                 }
                 catch (System.Data.SqlClient.SqlException ex)
                 {
@@ -115,7 +115,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                         string.Format(
                             CultureInfo.InvariantCulture,
                             Resources.ApplicationServices_ProfilePropertyDoesNotExist,
-                            AuthenticationBase<T>.GetProfileAlias(property)),
+                            GetProfileAlias(property)),
                         e);
                 }
             }
@@ -148,14 +148,14 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
             // We're using the current Profile since we've verified it matches the current
             // principal and it allows us to leverage the auto-save feature. When testing,
             // however, we'll need to create a new one.
-            ProfileBase profile = AuthenticationBase<T>.GetProfileBase(user.Name);
+            ProfileBase profile = GetProfileBase(user.Name);
 
             foreach (PropertyInfo property in user.GetType().GetProperties())
             {
                 if (!property.CanRead ||
                     !property.CanWrite ||
-                    !AuthenticationBase<T>.IsInProfile(property) ||
-                    AuthenticationBase<T>.IsReadOnly(property) ||
+                    !IsInProfile(property) ||
+                    IsReadOnly(property) ||
                     property.GetIndexParameters().Length > 0)
                 {
                     // Skip this property if it is not readable, in the profile, is readonly or is an indexer property
@@ -164,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 
                 try
                 {
-                    profile.SetPropertyValue(AuthenticationBase<T>.GetProfileAlias(property), property.GetValue(user, null));
+                    profile.SetPropertyValue(GetProfileAlias(property), property.GetValue(user, null));
                 }
                 catch (SettingsPropertyNotFoundException e)
                 {
@@ -172,7 +172,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                         string.Format(
                             CultureInfo.InvariantCulture,
                             Resources.ApplicationServices_ProfilePropertyDoesNotExist,
-                            AuthenticationBase<T>.GetProfileAlias(property)),
+                            GetProfileAlias(property)),
                         e);
                 }
                 catch (SettingsPropertyIsReadOnlyException e)
@@ -181,7 +181,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                         string.Format(
                             CultureInfo.InvariantCulture,
                             Resources.ApplicationServices_ProfilePropertyReadOnly,
-                            AuthenticationBase<T>.GetProfileAlias(property)),
+                            GetProfileAlias(property)),
                         e);
                 }
                 catch (SettingsPropertyWrongTypeException e)
@@ -190,7 +190,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                         string.Format(
                             CultureInfo.InvariantCulture,
                             Resources.ApplicationServices_ProfilePropertyTypeMismatch,
-                            AuthenticationBase<T>.GetProfileAlias(property)),
+                            GetProfileAlias(property)),
                         e);
                 }
             }
@@ -247,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         {
             bool isInProfile = true;
 
-            ProfileUsageAttribute usageAttribute = AuthenticationBase<T>.GetProfileUsage(propertyInfo);
+            ProfileUsageAttribute usageAttribute = GetProfileUsage(propertyInfo);
             if (usageAttribute != null)
             {
                 isInProfile = !usageAttribute.IsExcluded;
@@ -272,7 +272,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         {
             string profileAlias = propertyInfo.Name;
 
-            ProfileUsageAttribute usageAttribute = AuthenticationBase<T>.GetProfileUsage(propertyInfo);
+            ProfileUsageAttribute usageAttribute = GetProfileUsage(propertyInfo);
             if (usageAttribute != null)
             {
                 if (!string.IsNullOrEmpty(usageAttribute.Alias))
@@ -299,7 +299,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 propertyInfo.GetCustomAttributes(typeof(EditableAttribute), false)
                     .Cast<EditableAttribute>().FirstOrDefault();
 
-            return (editableAttribute != null && !editableAttribute.AllowEdit);
+            return editableAttribute != null && !editableAttribute.AllowEdit;
         }
 
         /// <summary>
@@ -310,11 +310,11 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         private static IPrincipal GetPrincipal()
         {
             HttpContext context = HttpContext.Current;
-            if ((context != null) && (context.User != null))
+            if (context != null && context.User != null)
             {
                 return context.User;
             }
-            return AuthenticationBase<T>.DefaultPrincipal;
+            return DefaultPrincipal;
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         private static ProfileBase GetProfileBase(string userName)
         {
             HttpContext context = HttpContext.Current;
-            if ((context != null) && (context.Profile != null))
+            if (context != null && context.Profile != null)
             {
                 return context.Profile;
             }
@@ -359,7 +359,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                         ex);
                 }
             }
-            return AuthenticationBase<T>.DefaultRoles;
+            return DefaultRoles;
         }
 
         #endregion
@@ -387,19 +387,19 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// <seealso cref="GetUser()"/>
         public T Login(string userName, string password, bool isPersistent, string customData)
         {
-            AuthenticationBase<T>.CheckAuthenticationMode();
+            CheckAuthenticationMode();
 
-            if (this.ValidateUser(userName, password))
+            if (ValidateUser(userName, password))
             {
                 IPrincipal principal = new GenericPrincipal(
                         new GenericIdentity(userName, "Forms"),
-                        AuthenticationBase<T>.DefaultRoles.ToArray());
+                        DefaultRoles.ToArray());
 
-                this.IssueAuthenticationToken(principal, isPersistent);
-                
-                return this.GetUserCore(principal);
+                IssueAuthenticationToken(principal, isPersistent);
+
+                return GetUserCore(principal);
             }
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -419,11 +419,11 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// <seealso cref="GetUser()"/>
         public T Logout()
         {
-            AuthenticationBase<T>.CheckAuthenticationMode();
+            CheckAuthenticationMode();
 
-            this.ClearAuthenticationToken();
+            ClearAuthenticationToken();
 
-            return this.GetUserCore(AuthenticationBase<T>.DefaultPrincipal);
+            return GetUserCore(DefaultPrincipal);
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "This DataOperation.Select operation must be a method.")]
         public T GetUser()
         {
-            return this.GetUserCore(AuthenticationBase<T>.GetPrincipal());
+            return GetUserCore(GetPrincipal());
         }
 
         /// <summary>
@@ -464,26 +464,26 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// </para>
         /// </remarks>
         /// <param name="user">The updated user</param>
-        /// <exception cref="System.UnauthorizedAccessException"> is thrown if the authenticated 
+        /// <exception cref="UnauthorizedAccessException"> is thrown if the authenticated 
         /// user does not have the correct permissions to update the profile.
         /// </exception>
         /// <seealso cref="ProfileUsageAttribute"/>
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity",
             Justification = "It shouldn't be a security concern that user.Name is a mutable property. Our goal " +
-                            "here is establish that the profile we are about to write to is the one associated " + 
+                            "here is establish that the profile we are about to write to is the one associated " +
                             "with the current authenticated principal.")]
         public void UpdateUser(T user)
         {
             // Ensure the user data that will be modified represents the currently
             // authenticated identity 
-            if (this.ServiceContext.User == null 
-                || this.ServiceContext.User.Identity == null 
-                || !String.Equals(this.ServiceContext.User.Identity.Name, user.Name, StringComparison.Ordinal))
+            if (ServiceContext.User == null
+                || ServiceContext.User.Identity == null
+                || !string.Equals(ServiceContext.User.Identity.Name, user.Name, StringComparison.Ordinal))
             {
                 throw new UnauthorizedAccessException(Resources.ApplicationServices_UnauthorizedUpdate);
             }
 
-            this.UpdateUserCore(user);
+            UpdateUserCore(user);
         }
 
         /// <summary>
@@ -510,7 +510,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                 throw new DomainException(string.Format(
                     CultureInfo.InvariantCulture,
                     Resources.ApplicationServices_ProviderError,
-                    "Membership", ex.Message), 
+                    "Membership", ex.Message),
                     ex);
             }
         }
@@ -562,11 +562,11 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
 
             if (principal.Identity.IsAuthenticated)
             {
-                user = this.GetAuthenticatedUser(principal);
+                user = GetAuthenticatedUser(principal);
             }
             else
             {
-                user = this.GetAnonymousUser();
+                user = GetAnonymousUser();
             }
 
             if (user == null)
@@ -575,7 +575,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                     string.Format(
                         CultureInfo.InvariantCulture,
                         Resources.ApplicationServices_GetUserCannotBeNull,
-                        this.GetType()));
+                        GetType()));
             }
 
             return user;
@@ -599,7 +599,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// <seealso cref="GetUser()"/>
         protected virtual T GetAuthenticatedUser(IPrincipal principal)
         {
-            return this.GetUserImpl(principal);
+            return GetUserImpl(principal);
         }
 
         /// <summary>
@@ -620,7 +620,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Remaining a method for similarity to GetUser(IIdentity)")]
         protected virtual T GetAnonymousUser()
         {
-            return this.GetUserImpl(AuthenticationBase<T>.DefaultPrincipal);
+            return GetUserImpl(DefaultPrincipal);
         }
 
         /// <summary>
@@ -634,7 +634,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// <returns>The user for the specified principal</returns>
         private T GetUserImpl(IPrincipal principal)
         {
-            T user = this.CreateUser();
+            T user = CreateUser();
 
             if (user == null)
             {
@@ -642,13 +642,13 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
                     string.Format(
                         CultureInfo.InvariantCulture,
                         Resources.ApplicationServices_CreateUserCannotBeNull,
-                        this.GetType()));
+                        GetType()));
             }
 
             user.Name = principal.Identity.Name;
-            user.Roles = AuthenticationBase<T>.GetRoles(user.Name);
+            user.Roles = GetRoles(user.Name);
 
-            AuthenticationBase<T>.GetProfile(user);
+            GetProfile(user);
 
             return user;
         }
@@ -682,7 +682,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// <param name="user">The updated user data</param>
         protected virtual void UpdateUserCore(T user)
         {
-            AuthenticationBase<T>.UpdateProfile(user);
+            UpdateProfile(user);
         }
 
         #endregion

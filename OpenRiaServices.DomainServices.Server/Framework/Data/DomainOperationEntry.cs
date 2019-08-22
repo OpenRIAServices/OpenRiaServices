@@ -8,8 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using System.Xml;
 
 namespace OpenRiaServices.DomainServices.Server
 {

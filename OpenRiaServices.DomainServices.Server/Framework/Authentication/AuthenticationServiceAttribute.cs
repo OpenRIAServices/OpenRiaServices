@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices
+namespace OpenRiaServices.DomainServices.Server.Authentication
 {
     /// <summary>
     /// Attribute that marks a <see cref="DomainService"/> as an authentication service.
@@ -17,8 +17,8 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices
         /// </summary>
         public AuthenticationServiceAttribute() : base("Authentication")
         {
-            this.CodeProcessor = typeof(AuthenticationCodeProcessor);
-            this.IsApplicationService = true;
+            CodeProcessor = typeof(AuthenticationCodeProcessor);
+            IsApplicationService = true;
         }
     }
 }

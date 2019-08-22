@@ -1,6 +1,4 @@
-﻿using OpenRiaServices.DomainServices.Server;
-
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices
+﻿namespace OpenRiaServices.DomainServices.Server.Authentication
 {
     /// <summary>
     /// An interface for a <see cref="DomainService"/> that encapsulates the authentication domain. A

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Security;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     public class MockMembershipProvider : MembershipProvider
     {
@@ -163,15 +163,15 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
 
         public override bool ValidateUser(string username, string password)
         {
-            if (this.Error != null)
+            if (Error != null)
             {
-                throw this.Error;
+                throw Error;
             }
-            if (this.User == null)
+            if (User == null)
             {
                 return false;
             }
-            return (this.User.Name == username) && (this.User.Name == password);
+            return User.Name == username && User.Name == password;
         }
     }
 }

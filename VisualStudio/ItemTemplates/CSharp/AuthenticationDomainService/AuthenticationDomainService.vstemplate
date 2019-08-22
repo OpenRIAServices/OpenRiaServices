@@ -1,7 +1,7 @@
 ﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
   <TemplateData>
     <DefaultName>AuthenticationDomainService.cs</DefaultName>
-    <Name>Authentication Domain Service</Name>
+    <Name>Authentication Domain Service (Asp.Net Membership)</Name>
     <Description>Open RIA Services Authentication Domain Service</Description>
     <ProjectType>CSharp</ProjectType>
     <TemplateGroupID>Web</TemplateGroupID>
@@ -31,7 +31,8 @@
   <WizardData>
     <packages repository="extension"
           repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C009">
-      <package id="OpenRiaServices.Server" version = "4.5.1"/>
+      <package id="OpenRiaServices.Server" version = "4.6.0"/>
+      <package id="OpenRiaServices.Server.Authentication.AspNetMembership" version = "4.6.0"/>
     </packages>
   </WizardData>
 </VSTemplate>

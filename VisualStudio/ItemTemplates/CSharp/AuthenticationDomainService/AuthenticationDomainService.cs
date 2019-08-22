@@ -1,11 +1,12 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.ApplicationServices;
+using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;
 
 namespace $rootnamespace$
 {

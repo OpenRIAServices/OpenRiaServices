@@ -120,6 +120,10 @@
       <Project>{063022B7-FAF8-43FB-B605-30A5F29910C1}</Project>
       <Name>OpenRiaServices.DomainServices.Hosting.Endpoint</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.csproj">
+      <Project>{b2183838-a948-47fd-8ab4-e8e7c5cd4477}</Project>
+      <Name>OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
       <Name>OpenRiaServices.DomainServices.Tools</Name>

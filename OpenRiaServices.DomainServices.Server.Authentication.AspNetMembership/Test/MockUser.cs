@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
+namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
 {
     public class MockUserBase : UserBase
     {
@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainServices.Server.ApplicationServices.Test
         // would work on the server, it won't for shared properties and should be easier in the primary scenario.
         public bool UserInt32IsGreaterThan10
         {
-            get { return this.UserInt32 > 10; }
+            get { return UserInt32 > 10; }
         }
 
         // The profile provider will return the value of AliasedString for UserStringAliased

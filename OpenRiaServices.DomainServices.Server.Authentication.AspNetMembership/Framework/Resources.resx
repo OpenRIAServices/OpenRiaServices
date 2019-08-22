@@ -117,41 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApplicationServices_CommentIsAuth" xml:space="preserve">
-    <value>&lt;summary&gt;
-Gets a value indicating whether the identity is authenticated.
-&lt;/summary&gt;
-&lt;remarks&gt;
-This value is &lt;c&gt;true&lt;/c&gt; if &lt;see cref="Name"/&gt; is not &lt;c&gt;null&lt;/c&gt; or empty.
-&lt;/remarks&gt;</value>
+  <data name="ApplicationServices_CreateUserCannotBeNull" xml:space="preserve">
+    <value>The user returned from {0}.CreateUser() cannot be null.</value>
   </data>
-  <data name="ApplicationServices_CommentIsInRole" xml:space="preserve">
-    <value>&lt;summary&gt;
-Return whether the principal is in the role.
-&lt;/summary&gt;
-&lt;remarks&gt;
-Returns whether the specified role is contained in the roles.
-This implementation is case sensitive.
-&lt;/remarks&gt;
-&lt;param name="role"&gt;The name of the role for which to check membership.&lt;/param&gt;
-&lt;returns&gt;Whether the principal is in the role.&lt;/returns&gt;</value>
+  <data name="ApplicationServices_GetUserCannotBeNull" xml:space="preserve">
+    <value>The user returned from {0}.GetUser(IIdentity) or {0}.GetAnonymousUser() cannot be null.</value>
   </data>
-  <data name="ApplicationServices_MustBeIAuth" xml:space="preserve">
-    <value>The AuthenticationServiceAttribute can only be applied to DomainServices that implement the IAuthentication&lt;&gt; interface.</value>
+  <data name="ApplicationServices_LoginLogoutOnlyForForms" xml:space="preserve">
+    <value>Login and Logout can only be invoked for Forms authentication.</value>
   </data>
-  <data name="ApplicationServices_MustBeIAuthImpl" xml:space="preserve">
-    <value>The {0} type must not implement IAuthentication&lt;&gt; explicitly and each method must be included in the generated context.</value>
+  <data name="ApplicationServices_ProfilePropertyDoesNotExist" xml:space="preserve">
+    <value>A profile property does not exist for {0}.</value>
   </data>
-  <data name="ApplicationServices_MustBeIUser" xml:space="preserve">
-    <value>The {0} type must not implement IUser explicitly.</value>
+  <data name="ApplicationServices_ProfilePropertyReadOnly" xml:space="preserve">
+    <value>The profile property is ReadOnly for {0}.</value>
   </data>
-  <data name="ApplicationServices_MustBeSerializable" xml:space="preserve">
-    <value>The {0} member in {1} must be included in the generated entity.</value>
-  </data>
-  <data name="ApplicationServices_NameMustBeAKey" xml:space="preserve">
-    <value>The Name property in {0} must be marked with the KeyAttribute.</value>
+  <data name="ApplicationServices_ProfilePropertyTypeMismatch" xml:space="preserve">
+    <value>The profile property type of {0} is different from the property type.</value>
   </data>
   <data name="ApplicationServices_ProviderError" xml:space="preserve">
     <value>There was a failure using the default '{0}Provider'. Please make sure it is configured correctly. {1}</value>
+  </data>
+  <data name="ApplicationServices_UnauthorizedUpdate" xml:space="preserve">
+    <value>The user cannot be updated. Users are only allowed to modify their own profile.</value>
   </data>
 </root>
