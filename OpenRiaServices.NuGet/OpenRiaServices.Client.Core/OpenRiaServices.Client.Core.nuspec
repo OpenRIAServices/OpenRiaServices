@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Client.Core</id>
-    <version>4.5.5</version>
+    <version>5.0.0</version>
     <title>Open RIA Services Client</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -23,13 +23,12 @@
         <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
 		<dependency id="System.ServiceModel.Http" version="4.5.3" />
       </group>
-      <group targetFramework="sl5" />
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="sl5, net45" />
-      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl5, net45" />
-      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="sl5, net45" />
-      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="sl5, net45" />
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="net45" />
     </frameworkAssemblies>
   </metadata>
   <files>
@@ -41,15 +40,7 @@
     <file src="..\..\bin\Release\netstandard2.0\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\netstandard2.0\OpenRiaServices.DomainServices.Client.Web.pdb" />
     <file src="..\..\bin\Release\netstandard2.0\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\netstandard2.0\OpenRiaServices.DomainServices.Client.Web.xml" />
 
-    <!-- Silverlight binaries -->
-    <file src="..\..\bin\Release\sl5\OpenRiaServices.DomainServices.Client.dll" target="lib\sl5\OpenRiaServices.DomainServices.Client.dll" />
-    <file src="..\..\bin\Release\sl5\OpenRiaServices.DomainServices.Client.pdb" target="lib\sl5\OpenRiaServices.DomainServices.Client.pdb" />
-    <file src="..\..\bin\Release\sl5\OpenRiaServices.DomainServices.Client.xml" target="lib\sl5\OpenRiaServices.DomainServices.Client.xml" />
-    <file src="..\..\bin\Release\sl5\OpenRiaServices.DomainServices.Client.Web.dll" target="lib\sl5\OpenRiaServices.DomainServices.Client.Web.dll" />
-    <file src="..\..\bin\Release\sl5\OpenRiaServices.DomainServices.Client.Web.pdb" target="lib\sl5\OpenRiaServices.DomainServices.Client.Web.pdb" />
-    <file src="..\..\bin\Release\sl5\OpenRiaServices.DomainServices.Client.Web.xml" target="lib\sl5\OpenRiaServices.DomainServices.Client.Web.xml" />
-
-    <!-- Desktop binaries -->
+   <!-- Desktop binaries -->
     <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Client.dll" target="lib\net45\OpenRiaServices.DomainServices.Client.dll" />
     <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Client.pdb" target="lib\net45\OpenRiaServices.DomainServices.Client.pdb" />
     <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Client.xml" target="lib\net45\OpenRiaServices.DomainServices.Client.xml" />
