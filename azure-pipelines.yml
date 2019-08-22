@@ -17,34 +17,6 @@ steps:
   inputs:
     preferBundledVersion: true
 
-- powershell: |
-   [string]$RepositoryRoot = "$(Build.SourcesDirectory)"
-   
-   $url = "https://download.microsoft.com/download/3/A/3/3A35179D-5C87-4D0A-91EB-BF5FEDC601A4/sdk/silverlight_sdk.exe"
-   $fileName = "silverlight_5_sdk.exe"
-   $fullPath = (join-path $RepositoryRoot $fileName)
-   
-   if (Test-Path $fullPath)
-   {
-     echo "'$fileName' already downloading, reusing it"
-   }
-   else
-   {
-     echo "Downloading Silverlight sdk"
-     Measure-Command {  (New-Object System.Net.WebClient).DownloadFile($url, $fullPath) }
-     echo "Downloaded Silverlight sdk"
-   }
-   
-   dir $fullPath
-   echo "Installing Silverlight 5 SDK"
-   "executing $fullPath /q  /norestart"
-   
-   & $fullPath "/q"  "/norestart"
-   
-   echo "Success  = '$?'"
-
-  displayName: 'Download and install Silverlight 5 SDK'
-
 - task: NuGetCommand@2
   displayName: 'NuGet restore RiaServices.sln'
   inputs:
