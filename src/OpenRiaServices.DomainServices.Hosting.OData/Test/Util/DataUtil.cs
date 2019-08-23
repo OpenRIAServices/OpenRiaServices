@@ -4,6 +4,7 @@ namespace System.Data.Test.Astoria
     
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Entity.Core.EntityClient;
     using System.Data.SqlClient;
     using System.Diagnostics;
     using System.IO;
@@ -57,7 +58,7 @@ namespace System.Data.Test.Astoria
         /// <returns>The connection string to be used with <see cref="System.Data.EntityClient.EntityConnection"/>.</returns>
         public static string BuildEntityConnection(string modelDirectory, string baseModelName, string connectionString)
         {
-            System.Data.EntityClient.EntityConnectionStringBuilder builder = new System.Data.EntityClient.EntityConnectionStringBuilder();
+            EntityConnectionStringBuilder builder = new EntityConnectionStringBuilder();
             builder.Metadata =
                 Path.Combine(modelDirectory, baseModelName + ".csdl") + "|" +
                 Path.Combine(modelDirectory, baseModelName + ".msl") + "|" +

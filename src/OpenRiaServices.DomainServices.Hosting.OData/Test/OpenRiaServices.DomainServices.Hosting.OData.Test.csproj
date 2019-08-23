@@ -4,6 +4,16 @@
     <GenerateAssemblyRefs>true</GenerateAssemblyRefs>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Models\Northwind.edmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Models\Northwind.edmx">
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting.OData.Test.Models</CustomToolNamespace>
+      <LastGenOutput>Northwind.Designer.cs</LastGenOutput>
+      <Generator>EntityModelCodeGenerator</Generator>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
   </ItemGroup>
   <ItemGroup>
@@ -12,8 +22,6 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.IdentityModel" />
@@ -26,25 +34,32 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework.EF4\Framework\OpenRiaServices.DomainServices.EntityFramework.EF4.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Model files. -->
-    <Compile Update="Models\Northwind.Designer.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Update="Models\Northwind.cs">
       <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind.edmx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Northwind.tt</DependentUpon>
     </Compile>
-    <!-- Utility files. -->
+    <Compile Update="Models\Northwind.Designer.cs">
+      <DependentUpon>Northwind.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Models\Northwind.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Northwind.Designer.cs</LastGenOutput>
-    </EntityDeploy>
+    <None Update="Models\Northwind.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Northwind.edmx</DependentUpon>
+      <LastGenOutput>Northwind.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>
