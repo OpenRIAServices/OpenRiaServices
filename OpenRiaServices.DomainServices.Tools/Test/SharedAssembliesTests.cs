@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            SharedAssemblies sa = new SharedAssemblies(assemblies, CodeGenHelper.GetSilverlightPaths(), logger);
+            SharedAssemblies sa = new SharedAssemblies(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
 
             Type sharedType = sa.GetSharedType(typeof(TestEntity).AssemblyQualifiedName);
             Assert.IsNotNull(sharedType, "Expected TestEntity type to be shared");
@@ -66,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            SharedAssemblies sa = new SharedAssemblies(assemblies, CodeGenHelper.GetSilverlightPaths(), logger);
+            SharedAssemblies sa = new SharedAssemblies(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
 
             MethodBase sharedMethod = sa.GetSharedMethod(typeof(TestValidator).AssemblyQualifiedName, "IsValid", new string[] { typeof(TestEntity).AssemblyQualifiedName, typeof(ValidationContext).AssemblyQualifiedName });
             Assert.IsNotNull(sharedMethod, "Expected TestValidator.IsValid to be shared");
@@ -113,7 +113,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            SharedAssemblies sa = new SharedAssemblies(assemblies, CodeGenHelper.GetSilverlightPaths(), logger);
+            SharedAssemblies sa = new SharedAssemblies(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
 
             foreach (Type t in sharedTypes)
             {
@@ -145,7 +145,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             ConsoleLogger logger = new ConsoleLogger();
             string file = "DoesNotExist.dll";
-            SharedAssemblies sa = new SharedAssemblies(new string[] { file }, CodeGenHelper.GetSilverlightPaths(), logger);
+            SharedAssemblies sa = new SharedAssemblies(new string[] { file }, CodeGenHelper.GetClientAssemblyPaths(), logger);
 
             Type sharedType = sa.GetSharedType(typeof(TestEntity).AssemblyQualifiedName);
             Assert.IsNull(sharedType, "Should not have detected any shared type.");
@@ -172,7 +172,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             File.WriteAllText(assemblyFileName, "neener neener neener");
 
             ConsoleLogger logger = new ConsoleLogger();
-            SharedAssemblies sa = new SharedAssemblies(new string[] { assemblyFileName }, CodeGenHelper.GetSilverlightPaths(), logger);
+            SharedAssemblies sa = new SharedAssemblies(new string[] { assemblyFileName }, CodeGenHelper.GetClientAssemblyPaths(), logger);
 
             Type sharedType = sa.GetSharedType(typeof(TestEntity).AssemblyQualifiedName);
             Assert.IsNull(sharedType, "Should not have detected any shared type.");
