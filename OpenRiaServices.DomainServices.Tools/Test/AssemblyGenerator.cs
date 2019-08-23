@@ -112,7 +112,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 if (this._referenceAssemblies == null)
                 {
-                    this._referenceAssemblies = CompilerHelper.GetSilverlightClientAssemblies(this._relativeTestDir);
+                    this._referenceAssemblies = CompilerHelper.GetClientAssemblies(this._relativeTestDir);
                 }
                 return this._referenceAssemblies;
             }

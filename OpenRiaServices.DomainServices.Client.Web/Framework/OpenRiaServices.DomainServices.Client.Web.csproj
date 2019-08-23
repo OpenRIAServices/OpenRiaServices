@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>4.0.0</VersionPrefix>
-    <TargetFrameworks>net45;sl5;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <PackageTags>WCF;RIA;Services;RIAServices;Silverlight;OpenRiaServices</PackageTags>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -10,21 +10,6 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.5.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'sl5' ">
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.ComponentModel.DataAnnotations" Private="false" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.ServiceModel.Web.Extensions" Private="false" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Browser" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">

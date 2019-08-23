@@ -14,21 +14,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
     public static class CodeGenHelper
     {
-        // Computed list of SL framework and SDK paths
-        private static List<string> silverlightPaths;
-
-        /// <summary>
-        /// Gets the Silverlight Version to be used for unit tests.
-        /// </summary>
-        /// <returns>The version of Silverlight to be tested.</returns>
-        internal static decimal SilverlightVersionToTest
-        {
-            get
-            {
-                return 5.0m;
-            }
-        }
-
         public static void AssertGenerated(string generatedCode, string expected)
         {
             string normalizedGenerated = TestHelper.NormalizeWhitespace(generatedCode);
@@ -258,11 +243,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         internal static SharedCodeService CreateSharedCodeService(string clientProjectPath, ILoggingService logger)
         {
-            return CodeGenHelper.CreateSharedCodeService(clientProjectPath, logger, CodeGenHelper.SilverlightVersionToTest);
-        }
-
-        internal static SharedCodeService CreateSharedCodeService(string clientProjectPath, ILoggingService logger, decimal silverlightVersion)
-        {
             List<string> sourceFiles = CodeGenHelper.ClientClassLibSourceFiles(clientProjectPath);
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
@@ -270,7 +250,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 SharedSourceFiles = sourceFiles.ToArray(),
                 ClientAssemblies = assemblies.ToArray(),
-                ClientAssemblyPathsNormalized = CodeGenHelper.GetSilverlightPaths(silverlightVersion).ToArray()
+                ClientAssemblyPathsNormalized = CodeGenHelper.GetClientAssemblyPaths()
             };
 
             SharedCodeService sts = new SharedCodeService(parameters, logger);
@@ -393,7 +373,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             task.ClientProjectPath = clientProjectPath;
             task.ClientReferenceAssemblies = MsBuildHelper.AsTaskItems(CodeGenHelper.ClientClassLibReferences(clientProjectPath, includeClientOutputAssembly)).ToArray();
             task.ClientSourceFiles = MsBuildHelper.AsTaskItems(CodeGenHelper.ClientClassLibSourceFiles(clientProjectPath)).ToArray();
-            task.ClientFrameworkPath = CodeGenHelper.GetSilverlightRuntimeDirectory();
+            task.ClientFrameworkPath = CodeGenHelper.GetClientRuntimeDirectory();
 
             // Generate the code to our deployment directory
             string tempFolder = CodeGenHelper.GenerateTempFolder();
@@ -441,7 +421,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             task.ServerProjectPath = serverProjectPath;
             task.ServerAssemblies = new TaskItem[] { new TaskItem(CodeGenHelper.ServerClassLibOutputAssembly(task.ServerProjectPath)) };
             task.ServerReferenceAssemblies = MsBuildHelper.AsTaskItems(CodeGenHelper.ServerClassLibReferences(task.ServerProjectPath)).ToArray();
-            task.ClientFrameworkPath = CodeGenHelper.GetSilverlightRuntimeDirectory();
+            task.ClientFrameworkPath = CodeGenHelper.GetClientRuntimeDirectory();
 
             // Generate the code to our deployment directory
             string tempFolder = CodeGenHelper.GenerateTempFolder();
@@ -508,124 +488,24 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         /// <summary>
         /// Gets the full path of the Silverlight runtime framework folder.
         /// </summary>
+        /// 
         /// <returns>The Silverlight platform runtime folder or null if it cannot be found.</returns>
-        public static string GetSilverlightRuntimeDirectory()
+        public static string GetClientRuntimeDirectory()
         {
-            return CodeGenHelper.GetSilverlightRuntimeDirectory(CodeGenHelper.SilverlightVersionToTest);
+            return Path.GetDirectoryName(typeof(string).Assembly.Location);
         }
 
         /// <summary>
-        /// Gets the full path of the Silverlight runtime framework folder.
+        /// Previously returned the set of Silverlight runtime and SDK paths
         /// </summary>
-        /// <param name="silverlightVersion">The version of Silverlight to target for code gen</param>
-        /// <returns>The Silverlight platform runtime folder or null if it cannot be found.</returns>
-        public static string GetSilverlightRuntimeDirectory(decimal silverlightVersion)
+        /// <returns>Path to client assemblies (currently net framework assembly path)</returns>
+        public static string[] GetClientAssemblyPaths()
         {
-            string runtimePath = null;
-            try
-            {
-                string name = string.Format(System.Globalization.CultureInfo.InvariantCulture, @"Software\Microsoft\Microsoft SDKs\Silverlight\v{0:0.0}\ReferenceAssemblies", silverlightVersion);
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(name))
-                {
-                    if (key != null)
-                    {
-                        runtimePath = (string)key.GetValue("SLRuntimeInstallPath");
-                    }
-                    return runtimePath;
-                }
-            }
-            catch (System.Security.SecurityException)
-            {
-            }
-            return runtimePath;
-        }
-
-        /// <summary>
-        /// Gets the full path of the Silverlight SDK folder.
-        /// This implementation is taken verbatim from Microsoft.Silverlight.Build.Tasks
-        /// and is what normally set $(TargetFrameworkSDKDirectory)
-        /// during a build of a Silverlight project
-        /// </summary>
-        /// <returns>The Silverlight SDK folder or null if it cannot be found.</returns>
-        public static string GetSilverlightSDKDirectory()
-        {
-            return CodeGenHelper.GetSilverlightSDKDirectory(CodeGenHelper.SilverlightVersionToTest);
-        }
-
-        /// <summary>
-        /// Gets the full path of the Silverlight SDK folder.
-        /// This implementation is taken verbatim from Microsoft.Silverlight.Build.Tasks
-        /// and is what normally set $(TargetFrameworkSDKDirectory)
-        /// during a build of a Silverlight project
-        /// </summary>
-        /// <param name="silverlightVersion">The version of Silverlight to target for code gen</param>
-        /// <returns>The Silverlight SDK folder or null if it cannot be found.</returns>
-        public static string GetSilverlightSDKDirectory(decimal silverlightVersion)
-        {
-            string sdkPath = null;
-            try
-            {
-                string name = string.Format(System.Globalization.CultureInfo.InvariantCulture, @"Software\Microsoft\Microsoft SDKs\Silverlight\v{0:0.0}\AssemblyFoldersEx\Silverlight SDK Client Libraries", silverlightVersion);
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(name))
-                {
-                    if (key != null)
-                    {
-                        string keyValue = (string)key.GetValue(null);
-                        if (!string.IsNullOrEmpty(keyValue) && Directory.Exists(keyValue))
-                        {
-                            sdkPath = keyValue;
-                        }
-                    }
-                    return sdkPath;
-                }
-            }
-            catch (System.Security.SecurityException)
-            {
-            }
-            return sdkPath;
-        }
-
-        /// <summary>
-        /// Returns the set of Silverlight runtime and SDK paths
-        /// </summary>
-        /// <returns>The set of Silverlight runtime and SDK paths</returns>
-        public static IEnumerable<string> GetSilverlightPaths()
-        {
-            return CodeGenHelper.GetSilverlightPaths(CodeGenHelper.SilverlightVersionToTest);
-        }
-
-        /// <summary>
-        /// Returns the set of Silverlight runtime and SDK paths
-        /// </summary>
-        /// <param name="silverlightVersion">The version of Silverlight to target for code gen</param>
-        /// <returns>The set of Silverlight runtime and SDK paths</returns>
-        public static IEnumerable<string> GetSilverlightPaths(decimal silverlightVersion)
-        {
-            // TODO: Cleanup this method
-
             // This returns net framework search directory instead
-            return new List<string>()
+            return new string[]
             {
                 Path.GetDirectoryName(typeof(int).Assembly.Location)
             };
-
-            if (CodeGenHelper.silverlightPaths == null)
-            {
-                CodeGenHelper.silverlightPaths = new List<string>();
-                string s = GetSilverlightRuntimeDirectory(silverlightVersion);
-                if (!string.IsNullOrEmpty(s))
-                {
-                    CodeGenHelper.silverlightPaths.Add(s);
-                }
-
-                // The SDK path is optional -- okay to unit test without it
-                s = GetSilverlightSDKDirectory(silverlightVersion);
-                if (!string.IsNullOrEmpty(s) && Directory.Exists(s))
-                {
-                    CodeGenHelper.silverlightPaths.Add(s);
-                }
-            }
-            return CodeGenHelper.silverlightPaths;
         }
 
         /// <summary>

@@ -761,7 +761,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             // TODO: (ron M3) Solve inability to get right MSBuild after checkin
             // First see if we compile
-            List<string> referenceAssemblies = CompilerHelper.GetSilverlightClientAssemblies(codeGenOptions.RelativeDeployDir);
+            List<string> referenceAssemblies = CompilerHelper.GetClientAssemblies(codeGenOptions.RelativeDeployDir);
             List<string> files = new List<string>();
 
             files.Add(generatedFileName);
