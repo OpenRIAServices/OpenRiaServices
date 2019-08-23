@@ -2031,28 +2031,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             const int numberOfActiveLoadCalls = 10;
             Catalog catalog = new Catalog(this.ServiceUri);
 
-            AsyncCompletedEventArgs restartCompletedArgs = null;
-            EnqueueCallback(delegate
-            {
-                // Restart the server-side app to invalidate any caches.
-                TestServicesClient ts = new TestServicesClient();
-
-                // TODO: We should move TestHelpers.cs into System.Common.Test and then call TestDatabase.SetAddress to reuse that code.
-#if SILVERLIGHT
-                ts.Endpoint.Address = new System.ServiceModel.EndpointAddress(
-                    new Uri(
-                        new Uri(System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped), UriKind.Absolute),
-                        ts.Endpoint.Address.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)));
-#endif
-                ts.RestartAppCompleted += (s, e) => restartCompletedArgs = e;
-                ts.RestartAppAsync();
-            });
-            EnqueueConditional(() => restartCompletedArgs != null);
-
             List<LoadOperation> loadOps = new List<LoadOperation>();
-            for (int i = 0, skip = 0; i < numberOfActiveLoadCalls; i++, skip += 5)
+            for (int i = 0; i < numberOfActiveLoadCalls; i++)
             {
-                loadOps.Add(catalog.Load(catalog.GetProductsQuery().Skip(skip).Take(5), false));
+                loadOps.Add(catalog.Load(catalog.GetProductsQuery().Skip(i * 5).Take(5), false));
             }
             EnqueueConditional(() => loadOps.All(p => p.IsComplete));
             EnqueueCallback(delegate
