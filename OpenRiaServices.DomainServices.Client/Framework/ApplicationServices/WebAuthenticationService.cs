@@ -516,6 +516,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private void HandleOperationComplete(OperationBase operation)
         {
             WebAsyncResult result = ((WebAsyncResult)operation.UserState);
+
+            // If the submic callback is executed before the BeginMethod has set InnerOparation
+            // then do so here before calling Complete. 
+            // Since there is a race condition otherwise 
+            if (result.InnerOperation == null)
+            {
+                result.InnerOperation = operation;
+            }
+
             if (operation.HasError)
             {
                 operation.MarkErrorAsHandled();
