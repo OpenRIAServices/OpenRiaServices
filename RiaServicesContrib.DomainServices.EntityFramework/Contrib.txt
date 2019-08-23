@@ -1,1 +1,0 @@
-The Contrib folder holds projects that reference Microsoft's WCF RIA Services.

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.EntityFramework</id>
+    <version>4.6.0-preview1</version>
+    <title>Open RIA Services support for Entity Framework 6+</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      OpenRiaServices.EntityFramework provides the DbDomainService and LinqToEntities classes which can be used to create Domain Service classes for use with a DbContext or ObjectContext from the EntityFramework package.
+
+      This package supports versions of EntityFramework starting with EF 6.0.1
+    </description>
+    <summary>Open RIA Services - Entity Framework 6 support with DbDomainService and LinqToEntitiesDomainService</summary>
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
+    <copyright>2018 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
+    <dependencies>
+      <dependency id="EntityFramework" version="6.0.1" />
+      <dependency id="OpenRiaServices.Server" version="$version$"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.EntityFramework.dll" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.dll" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.EntityFramework.pdb" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.pdb" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.EntityFramework.xml" target="lib\net45\OpenRiaServices.DomainServices.EntityFramework.xml" />
+  </files>
+</package>

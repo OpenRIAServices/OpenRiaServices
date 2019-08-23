@@ -1,7 +1,7 @@
 
 param($RepositoryRoot = "$PSScriptRoot", $SqlServer = "(localdb)\MSSQLLocalDB", [switch]$UseSqlCmd = $false)
 
-$DatabaseFolder = join-path $RepositoryRoot "Test/Databases"
+$DatabaseFolder = join-path $RepositoryRoot "src/Test/Databases"
 
 # Verify SqlServer or SQLPS module is installed
 if (-not $UseSqlCmd)
@@ -108,7 +108,7 @@ echo "Copying northwind database to websites"
 Take-Offline "Northwind"
 $mdf = (join-path $DatabaseFolder Northwind.mdf)
 $ldf = (join-path $DatabaseFolder Northwind.ldf)
-foreach($website in "Test\WebsiteFullTrust")
+foreach($website in "src\Test\WebsiteFullTrust")
 {
     $templateDir = Join-Path $RepositoryRoot "$website\App_Data\Templates\"
     if (-not (Test-Path $templateDir))
