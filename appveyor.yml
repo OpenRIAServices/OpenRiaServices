@@ -7,26 +7,17 @@ init:
 - cmd: git lfs uninstall
 before_build:
 - ps: >-
-    nuget restore RiaServices.sln
+    nuget restore src\RiaServices.sln
 build:
-  project: RiaServices.sln
+  project: src\RiaServices.sln
   parallel: true
   verbosity: minimal
 after_build:
 - ps: >-
-    OpenRiaServices.NuGet/Pack-All.ps1 -Version ("4.5.0-rc1-{0:D4}" -f [int]$env:APPVEYOR_BUILD_NUMBER)
-
-    # Remove signed packages for normal build and the other way around
-
-    if ($env:CONFIGURATION -eq "Release") {dir OpenRiaServices.NuGet\bin\*.nupkg | where {$_.Name -match "OpenRiaServices.Signed"} | del }
-    
-    if ($env:CONFIGURATION -eq "Signed") { dir OpenRiaServices.NuGet\bin\*.nupkg | where {-not ($_.Name -match "OpenRiaServices.Signed")} | del}
+    NuGet/Pack-All.ps1 -Version ("4.5.0-rc1-{0:D4}" -f [int]$env:APPVEYOR_BUILD_NUMBER)
 artifacts:
-- path: 'OpenRiaServices.NuGet\bin\*.nupkg'
+- path: 'NuGet\bin\*.nupkg'
 before_test:
 - ps: >-
     .\Setup-TestDatabases.ps1 -UseSqlCmd
-    
-    start-process 'C:\Program Files (x86)\IIS Express\iisexpress.exe' -ArgumentList "/port:60002","/path:Test\WebsiteFullTrust\" -PassThru
-# Not all test are currently passing, remove the following to run them
 test: off 

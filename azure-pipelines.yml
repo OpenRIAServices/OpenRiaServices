@@ -4,7 +4,7 @@ pool:
 variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
-  Solution: 'RiaServices.sln'
+  Solution: 'src\RiaServices.sln'
 
 steps:
 
@@ -34,7 +34,7 @@ steps:
     extraProperties: |
      # Additional properties that will be passed to the scanner, 
      # Put one key=value per line, example:
-     sonar.exclusions=VisualStudio/ItemTemplates/**,VisualStudio/Templates/**;
+     sonar.exclusions=src\VisualStudio/ItemTemplates/**,src\VisualStudio/Templates/**;
 
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
@@ -57,8 +57,8 @@ steps:
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
-     VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*Test.dll
-     !VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
+     src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*Test.dll
+     !src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
      !**\obj\**
 
     runOnlyImpactedTests: false
@@ -80,7 +80,7 @@ steps:
   displayName: 'NuGet pack'
   inputs:
     command: pack
-    packagesToPack: 'OpenRiaServices.NuGet\OpenRiaServices.*\*.nuspec;!OpenRiaServices.NuGet\OpenRiaServices.EntityTools\**;!OpenRiaServices.NuGet\OpenRiaServices.WebForms\**;!OpenRiaServices.NuGet\OpenRiaServices.WindowsAzure\**'
+    packagesToPack: 'NuGet\OpenRiaServices.*\*.nuspec'
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
     packDestination: '$(Build.ArtifactStagingDirectory)' 
@@ -92,9 +92,9 @@ steps:
   inputs:
     SourceFolder: '$(build.sourcesdirectory)'
     Contents: |
-     VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
-     VisualStudio\Installer\publishManifest.json
-     VisualStudio\Installer\overview.md
+     src\VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
+     src\VisualStudio\Installer\publishManifest.json
+     src\VisualStudio\Installer\overview.md
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 

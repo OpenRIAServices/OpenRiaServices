@@ -22,6 +22,6 @@
     </metadata>
     <files>
         <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
-        <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
+        <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
     </files>
 </package>

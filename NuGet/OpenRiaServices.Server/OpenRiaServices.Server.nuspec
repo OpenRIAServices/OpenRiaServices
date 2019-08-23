@@ -34,12 +34,12 @@
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.dll" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.pdb" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.xml" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Server.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.dll" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Server.pdb" target="lib\net45\OpenRiaServices.DomainServices.Server.pdb" />
-    <file src="..\..\bin\Release\net45\OpenRiaServices.DomainServices.Server.xml" target="lib\net45\OpenRiaServices.DomainServices.Server.xml" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net45\OpenRiaServices.DomainServices.Hosting.dll" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net45\OpenRiaServices.DomainServices.Hosting.pdb" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net45\OpenRiaServices.DomainServices.Hosting.xml" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Server.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.dll" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Server.pdb" target="lib\net45\OpenRiaServices.DomainServices.Server.pdb" />
+    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Server.xml" target="lib\net45\OpenRiaServices.DomainServices.Server.xml" />
     </files>
 </package>
