@@ -170,13 +170,13 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
             DomainOperationEntry entry = dsd.GetQueryMethod(nameof(TestDomainServices.EF.Northwind.GetOrderDetails));
             QueryDescription qd = new QueryDescription(entry);
-            await ExceptionHelper.ExpectException<InvalidOperationException>(() =>
+            await ExceptionHelper.ExpectExceptionAsync<InvalidOperationException>(() =>
             {
                 return nw.QueryAsync<NorthwindModel.Order_Detail>(qd, CancellationToken.None).AsTask();
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Submit, DomainOperationType.Query));
 
             InvokeDescription id = new InvokeDescription(entry, null);
-            await ExceptionHelper.ExpectException<InvalidOperationException>(() =>
+            await ExceptionHelper.ExpectExceptionAsync<InvalidOperationException>(() =>
             {
                 return nw.InvokeAsync(id, CancellationToken.None).AsTask();
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Submit, DomainOperationType.Invoke));
@@ -191,9 +191,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
                     Operation = DomainOperation.Insert
                 }
             });
-            await ExceptionHelper.ExpectException<InvalidOperationException>(() =>
+            await ExceptionHelper.ExpectExceptionAsync<InvalidOperationException>(async ()=>
             {
-                return (Task)nw.SubmitAsync(cs, CancellationToken.None);
+                await nw.SubmitAsync(cs, CancellationToken.None);
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Query, DomainOperationType.Submit));
         }
 
@@ -352,7 +352,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.First(p => p.Name == "GetEntities" && p.Operation == DomainOperation.Query);
             QueryDescription qd = new QueryDescription(method, new object[0]);
-            await ExceptionHelper.ExpectException<Exception>(async () =>
+            await ExceptionHelper.ExpectExceptionAsync<Exception>(async () =>
             {
                 try
                 {

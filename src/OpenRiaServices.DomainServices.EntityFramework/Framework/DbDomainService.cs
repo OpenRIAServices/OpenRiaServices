@@ -188,7 +188,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             try
             {
-                await this.DbContext.SaveChangesAsync(cancellationToken);
+                await this.DbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -221,7 +221,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false, cancellationToken);
+                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false, cancellationToken).ConfigureAwait(false);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

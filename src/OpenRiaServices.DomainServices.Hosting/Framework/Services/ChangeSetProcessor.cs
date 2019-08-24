@@ -29,11 +29,10 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             // TODO:
             // Consider making logic extensible (move to domainservice?)
-            ChangeSet changeSet = CreateChangeSet(changeSetEntries);
+            // * Remove this method and "manually inline" the code where used?
 
-            // TODO:
-            // * Remove this method and "manually inline" the code where used
-            await domainService.SubmitAsync(changeSet, CancellationToken.None);
+            ChangeSet changeSet = CreateChangeSet(changeSetEntries);
+            await domainService.SubmitAsync(changeSet, CancellationToken.None).ConfigureAwait(false);
 
             // Process the submit results and build the result list to be sent back
             // to the client

@@ -163,7 +163,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 (DomainDataServiceContractBehavior.DomainDataServiceInstanceInfo)instance;
 
             IServiceProvider serviceProvider = (IServiceProvider)OperationContext.Current.Host;
-            DomainServiceContext context = new DomainServiceContext(serviceProvider, this.operationType);
+            DomainServiceContext context = new WcfDomainServiceContext(serviceProvider, this.operationType);
 
             try
             {

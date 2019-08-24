@@ -106,8 +106,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 IEnumerable<TEntity> result;
                 try
                 {
-                    var queryTask  = ((DomainService)instance).QueryAsync<TEntity>(queryDesc, CancellationToken.None);
-                    var queryResult = await queryTask.ConfigureAwait(false);
+                    var queryResult = await ((DomainService)instance).QueryAsync<TEntity>(queryDesc, CancellationToken.None).ConfigureAwait(false);
                     validationErrors = queryResult.ValidationErrors;
                     result = (IEnumerable<TEntity>)queryResult.Result;
                 }

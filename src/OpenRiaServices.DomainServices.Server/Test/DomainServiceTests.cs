@@ -200,15 +200,13 @@ namespace OpenRiaServices.DomainServices.Server.Test
         [WorkItem(688352)]
         public async Task Query_ResultLimit()
         {
-            Func<string, int, Task<QueryResult<Cities.City>>> executeQuery = async (queryName, pageSize) =>
+            Func<string, int, Task<QueryResult<Cities.City>>> executeQueryAsync = async (queryName, pageSize) =>
             {
                 ResultLimitDomainService ds = new ResultLimitDomainService();
-
                 DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Query);
                 ds.Initialize(dsc);
 
                 DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(ResultLimitDomainService));
-
                 IQueryable<City> filter = null;
 
                 if (pageSize > -1)
@@ -218,7 +216,6 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 DomainOperationEntry queryOperation = desc.GetQueryMethod(queryName);
                 QueryDescription query = new QueryDescription(queryOperation, new object[0], true, filter);
-                ;
                 var queryResult = await ds.QueryAsync<City>(query, CancellationToken.None);
                 return new QueryResult<City>()
                 {
@@ -227,27 +224,27 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 };
             };
 
-            var allResults = await executeQuery("GetCities", -1);
+            var allResults = await executeQueryAsync("GetCities", -1);
             int totalCities = allResults.Results.Count();
 
             // Verify that ResultLimit=0 is the same as not having a ResultLimit at all.
-            var results = await executeQuery("GetCities0", -1);
+            var results = await executeQueryAsync("GetCities0", -1);
             Assert.AreEqual(totalCities, results.Results.Count(), "Expected to get back all cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=-1 is the same as not having a ResultLimit at all.
-            results = await executeQuery("GetCitiesM1", -1);
+            results = await executeQueryAsync("GetCitiesM1", -1);
             Assert.AreEqual(totalCities, results.Results.Count(), "Expected to get back all cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=10 gives us back only the first 10 cities.
-            results = await executeQuery("GetCities10", -1);
+            results = await executeQueryAsync("GetCities10", -1);
             Assert.AreEqual(10, results.Results.Count());
             Assert.IsTrue(results.Results.SequenceEqual(allResults.Results.Take(10)), "Expected the first 10 cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=10 with a page size of 2 gives us back only the first 2 cities, and it gives us back the proper total count.
-            results = await executeQuery("GetCities10", 2);
+            results = await executeQueryAsync("GetCities10", 2);
             Assert.AreEqual(2, results.Results.Count());
             Assert.IsTrue(results.Results.SequenceEqual(allResults.Results.Take(2)), "Expected the first 2 cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
@@ -2061,11 +2058,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
             return new ValueTask<bool>(!this.ChangeSet.HasError);
         }
 
-        protected override async ValueTask<bool> ValidateChangeSet(CancellationToken cancellationToken)
+        protected override async ValueTask<bool> ValidateChangeSetAsync(CancellationToken cancellationToken)
         {
             ValidateCount++;
 
-            await base.ValidateChangeSet(cancellationToken);
+            await base.ValidateChangeSetAsync(cancellationToken);
 
             return IsValid;
         }

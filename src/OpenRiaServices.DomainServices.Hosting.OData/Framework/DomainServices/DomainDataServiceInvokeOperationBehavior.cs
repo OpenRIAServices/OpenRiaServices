@@ -97,12 +97,11 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
 
             protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
             {
+                ServiceInvokeResult invokeResult;
                 try
                 {
                     InvokeDescription description = new InvokeDescription(this.operation, inputs);
-                    var invokeResult = await ((DomainService)instance).InvokeAsync(description, CancellationToken.None);
-                    DomainDataServiceException.HandleValidationErrors(invokeResult.ValidationErrors);
-                    return invokeResult.Result;
+                    invokeResult = await ((DomainService)instance).InvokeAsync(description, CancellationToken.None);
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -119,6 +118,10 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                         throw new DomainDataServiceException(Resource.DomainDataService_General_Error, ex);
                     }
                 }
+
+                // This will throw if there are any validation erros
+                DomainDataServiceException.HandleValidationErrors(invokeResult.ValidationErrors);
+                return invokeResult.Result;
             }
 
             /// <summary>

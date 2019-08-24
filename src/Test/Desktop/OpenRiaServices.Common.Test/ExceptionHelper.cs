@@ -85,7 +85,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
 
 #if !SILVERLIGHT
-        private static Task ExecuteDelegate(AsyncDelegate asyncDelegate)
+        private static Task ExecuteDelegateAsync(AsyncDelegate asyncDelegate)
         {
             try
             {
@@ -99,19 +99,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
         }
 
-        public static Task<TException> ExpectException<TException>(AsyncDelegate asyncDel) where TException : Exception
+        public static Task<TException> ExpectExceptionAsync<TException>(AsyncDelegate asyncDel) where TException : Exception
         {
-            return ExecuteDelegate(asyncDel)
+            return ExecuteDelegateAsync(asyncDel)
                 .ContinueWith(res =>
                 {
                     return ExpectException<TException>(() => res.GetAwaiter().GetResult(), false);
                 });
         }
 
-        public static Task<TException> ExpectException<TException>(AsyncDelegate del, string exceptionMessage)
+        public static Task<TException> ExpectExceptionAsync<TException>(AsyncDelegate del, string exceptionMessage)
                                                        where TException : Exception
         {
-            var task = ExpectException<TException>(del);
+            var task = ExpectExceptionAsync<TException>(del);
             // Only check exception message on English build and OS, since some exception messages come from the OS
             // and will be in the native language.
             if (UnitTestHelper.EnglishBuildAndOS)

@@ -170,7 +170,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             try
             {
-                await this.ObjectContext.SaveChangesAsync(cancellationToken);
+                await this.ObjectContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -203,7 +203,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return await this.InvokeSaveChanges(/* retryOnConflict */ false, cancellationToken);
+                    return await this.InvokeSaveChanges(/* retryOnConflict */ false, cancellationToken).ConfigureAwait(false);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

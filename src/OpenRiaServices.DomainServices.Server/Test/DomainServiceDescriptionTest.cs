@@ -3658,7 +3658,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             return base.QueryAsync<T>(queryDescription, cancellationToken);
         }
 
-        public override Task<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
+        public override ValueTask<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
         {
             return base.SubmitAsync(changeSet, cancellationToken);
         }

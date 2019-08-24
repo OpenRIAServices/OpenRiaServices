@@ -11,9 +11,6 @@ namespace OpenRiaServices.DomainServices.Hosting
     internal abstract class DomainOperationInvoker : IOperationInvoker
     {
         private readonly DomainOperationType operationType;
-        private readonly int isCustomErrorEnabled = 0;
-
-        protected bool IsCustomErrorEnabled => isCustomErrorEnabled != 0;
 
         public DomainOperationInvoker(DomainOperationType operationType)
         {

@@ -361,7 +361,7 @@ namespace OpenRiaServices.DomainServices.Server
                         enumerableResult = QueryComposer.Compose(enumerableResult.AsQueryable(), queryDescription.Query);
                         if (totalCount == DomainService.TotalCountUndefined)
                         {
-                            totalCount = await this.GetTotalCountForQuery<T>(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false, cancellationToken);
+                            totalCount = await this.GetTotalCountForQueryAsync<T>(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false, cancellationToken).ConfigureAwait(false);
                         }
                     }
                     else if (totalCount == DomainService.TotalCountUndefined)
@@ -375,14 +375,14 @@ namespace OpenRiaServices.DomainServices.Server
                     {
                         if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                         {
-                            totalCount = await this.GetTotalCountForQuery<T>(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true, cancellationToken);
+                            totalCount = await this.GetTotalCountForQueryAsync<T>(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true, cancellationToken).ConfigureAwait(false);
                         }
 
                         enumerableResult = limitedResults;
                     }
 
                     // Enumerate the query.
-                    enumeratedResult = await EnumerateAsync<T>(enumerableResult, DomainService.DefaultEstimatedQueryResultCount, cancellationToken);
+                    enumeratedResult = await EnumerateAsync<T>(enumerableResult, DomainService.DefaultEstimatedQueryResultCount, cancellationToken).ConfigureAwait(false);
                     if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                     {
                         totalCount = enumeratedResult.Count;
@@ -450,8 +450,6 @@ namespace OpenRiaServices.DomainServices.Server
                 }
 
                 this.ServiceContext.Operation = invokeDescription.Method;
-
-                cancellationToken.ThrowIfCancellationRequested();
                 try
                 {
                     object returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
@@ -509,9 +507,8 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="changeSet">The changeset to submit</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the submit was successful, false otherwise.</returns>
-        public virtual async Task<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
+        public virtual async ValueTask<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
         {
-            //TODO: Consider using ValueTask here for consistency 
             try
             {
                 if (changeSet == null)
@@ -531,7 +528,7 @@ namespace OpenRiaServices.DomainServices.Server
                 }
 
                 // Before invoking any operations, validate the entire changeset
-                if (!await this.ValidateChangeSet(cancellationToken).ConfigureAwait(false))
+                if (!await this.ValidateChangeSetAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
@@ -781,7 +778,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// in the <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns><c>True</c> if all operations in the <see cref="ChangeSet"/> passed validation, <c>false</c> otherwise.</returns>
-        protected virtual ValueTask<bool> ValidateChangeSet(CancellationToken cancellationToken)
+        protected virtual ValueTask<bool> ValidateChangeSetAsync(CancellationToken cancellationToken)
         {
             // Perform validation on the each of the operations.
             var result = ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
@@ -916,7 +913,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="skipPagingCheck"><c>true</c> if the paging check can be skipped; <c>false</c> otherwise.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total count.</returns>
-        private ValueTask<int> GetTotalCountForQuery<T>(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck, CancellationToken cancellationToken)
+        private ValueTask<int> GetTotalCountForQueryAsync<T>(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck, CancellationToken cancellationToken)
         {
             // Only try to get the total count if the query description requested it.
             if (!queryDescription.IncludeTotalCount)
@@ -1256,9 +1253,18 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (enumerable is ICollection<T> collection)
             {
-                array = new T[collection.Count];
-                collection.CopyTo(array, 0);
-                return new ValueTask<IReadOnlyCollection<T>>(array);
+                // readonlyCollection is covariant so type checking is much slower, but if it is a collection
+                // if will probably also be a IReadOnlyCollection so we dont have to allocate at all
+                if (collection is IReadOnlyCollection<T> readonlyCollection)
+                {
+                    return new ValueTask<IReadOnlyCollection<T>>(readonlyCollection);
+                }
+                else
+                {
+                    array = new T[collection.Count];
+                    collection.CopyTo(array, 0);
+                    return new ValueTask<IReadOnlyCollection<T>>(array);
+                }
             }
 
             var list = new List<T>(estimatedResultCount);
