@@ -429,6 +429,9 @@
   <data name="RequiresRoleAttribute_MustSpecifyRole" xml:space="preserve">
     <value>One or more roles must be specified.</value>
   </data>
+  <data name="ValidationErrorsCannotBeEmpty" xml:space="preserve">
+    <value>No validation errors specified</value>
+  </data>
   <data name="ValidationUtilities_AmbiguousMatch" xml:space="preserve">
     <value>Ambiguous match for method '{0}'.</value>
   </data>

@@ -423,7 +423,6 @@ namespace OpenRiaServices.DomainServices.Server
         /// Invokes the specified invoke operation.
         /// </summary>
         /// <param name="invokeDescription">The description of the invoke operation to perform.</param>
-        /// will be added. This will be set to <c>null</c> if no validation errors are encountered.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The return value of the invocation.</returns>
         public virtual async ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription, CancellationToken cancellationToken)
