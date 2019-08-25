@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         // keyed by entity type, returns a bool that indicates whether a query result of that type requires flattening
         private static ConcurrentDictionary<Type, bool> requiresFlatteningByType = new ConcurrentDictionary<Type, bool>();
 
-        public async static ValueTask<QueryResult<TEntity>> Process<TEntity>(DomainService domainService, DomainOperationEntry queryOperation, object[] parameters, ServiceQuery serviceQuery)
+        public static async ValueTask<QueryResult<TEntity>> ProcessAsync<TEntity>(DomainService domainService, DomainOperationEntry queryOperation, object[] parameters, ServiceQuery serviceQuery)
         {
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(domainService.GetType());
 

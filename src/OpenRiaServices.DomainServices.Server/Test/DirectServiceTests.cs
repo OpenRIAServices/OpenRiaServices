@@ -65,7 +65,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
 
         [TestMethod]
-        public void TestDirectChangeset_Cities()
+        public async Task TestDirectChangeset_Cities()
         {
             for (int i = 0; i < 100; i++)
             {
@@ -80,14 +80,14 @@ namespace OpenRiaServices.DomainServices.Server.Test
                     entries.Add(new ChangeSetEntry(j, newCity, null, DomainOperation.Insert));
                 }
 
-                ChangeSetProcessor.ProcessAsync(ds, entries);
+                await ChangeSetProcessor.ProcessAsync(ds, entries);
 
                 Assert.IsFalse(entries.Any(p => p.HasError));
             }
         }
 
         [TestMethod]
-        public void TestDirectChangeset_Simple()
+        public async Task TestDirectChangeset_Simple()
         {
             for (int i = 0; i < 100; i++)
             {
@@ -110,7 +110,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                     entries.Add(new ChangeSetEntry(j, e, null, DomainOperation.Insert));
                 }
 
-                ChangeSetProcessor.ProcessAsync(ds, entries);
+                await ChangeSetProcessor.ProcessAsync(ds, entries);
 
                 Assert.IsFalse(entries.Any(p => p.HasError));
             }
@@ -133,7 +133,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// </summary>
         [TestMethod]
         [TestCategory("DatabaseTest")]
-        public void DomainService_DirectQuery()
+        public async Task DomainService_DirectQuery()
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
 
@@ -150,8 +150,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 new ServiceQueryPart("take", "1")
             };
 
-            QueryResult<AdventureWorksModel.PurchaseOrder> result = QueryProcessor.Process<AdventureWorksModel.PurchaseOrder>(service, queryOperation, new object[0], serviceQuery)
-                .GetAwaiter().GetResult();
+            QueryResult<AdventureWorksModel.PurchaseOrder> result = await QueryProcessor.ProcessAsync<AdventureWorksModel.PurchaseOrder>(service, queryOperation, new object[0], serviceQuery);
 
             Assert.AreEqual(1, result.RootResults.Count());
         }
