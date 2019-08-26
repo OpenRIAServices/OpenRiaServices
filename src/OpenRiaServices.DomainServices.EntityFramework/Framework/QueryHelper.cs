@@ -25,7 +25,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
             using (var enumerator = asyncEnumerable.GetAsyncEnumerator())
             {
                 List<T> result = new List<T>(capacity: estimatedResultCount);
-                while (await enumerator.MoveNextAsync(cancellationToken))
+                while (await enumerator.MoveNextAsync(cancellationToken).ConfigureAwait(false))
                 {
                     result.Add(enumerator.Current);
                 }

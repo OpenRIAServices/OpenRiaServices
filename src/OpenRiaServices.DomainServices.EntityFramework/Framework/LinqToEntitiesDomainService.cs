@@ -163,10 +163,10 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
         protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
-            return new ValueTask<bool>(this.InvokeSaveChanges(true, cancellationToken));
+            return new ValueTask<bool>(this.InvokeSaveChangesAsync(true, cancellationToken));
         }
 
-        private async Task<bool> InvokeSaveChanges(bool retryOnConflict, CancellationToken cancellationToken)
+        private async Task<bool> InvokeSaveChangesAsync(bool retryOnConflict, CancellationToken cancellationToken)
         {
             try
             {
@@ -203,7 +203,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return await this.InvokeSaveChanges(/* retryOnConflict */ false, cancellationToken).ConfigureAwait(false);
+                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false, cancellationToken).ConfigureAwait(false);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

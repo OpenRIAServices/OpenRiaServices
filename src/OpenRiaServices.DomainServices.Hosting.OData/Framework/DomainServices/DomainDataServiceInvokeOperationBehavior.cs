@@ -101,7 +101,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 try
                 {
                     InvokeDescription description = new InvokeDescription(this.operation, inputs);
-                    invokeResult = await ((DomainService)instance).InvokeAsync(description, CancellationToken.None);
+                    invokeResult = await ((DomainService)instance).InvokeAsync(description, CancellationToken.None).ConfigureAwait(false);
                 }
                 catch (UnauthorizedAccessException ex)
                 {
