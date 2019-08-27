@@ -151,7 +151,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     else
                     {
                         // fallback to net45
-                        project.SetGlobalProperty("TargetFramework", "net45");
+                        project.SetGlobalProperty("TargetFramework", "net46");
                     }
                 }
             }
