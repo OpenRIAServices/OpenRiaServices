@@ -2,7 +2,7 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>OpenRiaServices.DomainServices.Hosting.Test</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />

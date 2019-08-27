@@ -4,7 +4,7 @@
     <DefineConstants>$(DefineConstants);SERVERFX;WIZARD;DBCONTEXT;VS14</DefineConstants>
     <AssemblyName>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0</AssemblyName>
     <VsVersion Condition=" '$(VsVersion)' == '' ">14.0</VsVersion>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>

@@ -3,7 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>OpenRiaServices.DomainServices.Tools.Test.T4Generator</RootNamespace>
     <AssemblyName>OpenRiaServices.DomainServices.Tools.Test.T4Generator</AssemblyName>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />

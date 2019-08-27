@@ -2,7 +2,7 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>SERVERFX;LINQTOSQL;$(DefineConstants)</DefineConstants>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
