@@ -172,18 +172,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="key.snk" />
-    <Content Include="Packages\microsoft.aspnet.providers.1.2.0.nupkg">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Packages\microsoft.aspnet.providers.core.1.1.0.nupkg">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Packages\SilverlightToolkit-Core.4.2010.4.nupkg">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Packages\SilverlightToolkit-Data.4.2010.4.nupkg">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -279,6 +267,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Packages\" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
