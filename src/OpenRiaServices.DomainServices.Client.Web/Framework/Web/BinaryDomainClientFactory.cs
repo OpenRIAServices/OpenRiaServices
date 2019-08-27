@@ -1,0 +1,109 @@
+﻿using System;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using OpenRiaServices.DomainServices.Client.Web.Behaviors;
+
+namespace OpenRiaServices.DomainServices.Client.Web
+{
+    /// <summary>
+    /// For connecting to services using the /soap endpoint based on <see cref="BasicHttpBinding"/>.
+    /// <para>Set <see cref="DomainContext.DomainClientFactory"/> to an instance of this class
+    /// in order for newly created <see cref="DomainContext"/> implementations to use the soap endpoint.
+    /// </para>
+    /// </summary>
+    public class BinaryDomainClientFactory : WcfDomainClientFactory
+    {
+        private const string EndpointSuffix = "/binary2";
+        private readonly SoapEndpointBehavior _soapBehavior;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryDomainClientFactory" /> class.
+        /// </summary>
+        public BinaryDomainClientFactory()
+        {
+            _soapBehavior = new SoapEndpointBehavior(this);
+        }
+
+        /// <summary>
+        /// Creates a channel factory for use by a DomainClient to communicate with the server using SOAP endpoint.
+        /// </summary>
+        /// <param name="endpoint">Absolute service URI without protocol suffix such as "/binary"</param>
+        /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
+        /// <returns>The channel used to communicate with the server.</returns>
+        protected internal override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
+        {
+            var factory = base.CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
+
+            try
+            {
+#if SILVERLIGHT
+                factory.Endpoint.Behaviors.Add(_soapBehavior);
+#else
+                factory.Endpoint.EndpointBehaviors.Add(_soapBehavior);
+#endif
+                return factory;
+            }
+            catch
+            {
+                ((IDisposable)factory)?.Dispose();
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Appends "/soap" to the endpoint in order to connect to the soap endpoint
+        /// </summary>
+        /// <param name="endpoint">base endpoint (service uri)</param>
+        /// <param name="requiresSecureEndpoint">not used</param>
+        /// <returns>endpoint usefull to connect to soap endpoint of the service</returns>
+        protected override EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
+        {
+            return new EndpointAddress(new Uri(endpoint.OriginalString + EndpointSuffix, UriKind.Absolute));
+        }
+
+        /// <summary>
+        /// Generates a <see cref="BasicHttpBinding"/> which is configured to speak to the
+        /// "soap" endpoint
+        /// </summary>
+        /// <param name="endpoint">Absolute service URI without protocol suffix such as "/soap" or "/binary"</param>
+        /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
+        /// <returns>A <see cref="Binding"/> which is compatible with soap endpoint</returns>
+        protected override Binding CreateBinding(Uri endpoint, bool requiresSecureEndpoint)
+        {
+            var encoding = new BinaryMessageEncodingBindingElement()
+            {
+
+            };
+
+            //ServiceUtility.SetReaderQuotas(encoding.ReaderQuotas);
+
+            HttpTransportBindingElement transport;
+            if (endpoint.Scheme.Equals(Uri.UriSchemeHttps))
+            {
+                transport = new HttpsTransportBindingElement();
+            }
+            else if (requiresSecureEndpoint)
+            {
+                throw new InvalidOperationException("use https to connect to secure endpoint");
+            }
+            else
+            {
+                transport = new HttpTransportBindingElement();
+            }
+
+            transport.MaxReceivedMessageSize = int.MaxValue;
+
+            CustomBinding binding = new CustomBinding(encoding, transport);
+
+// TODO:
+/*
+#if SILVERLIGHT
+            binding.EnableHttpCookieContainer =  CookieContainer != null;
+#else
+            binding.AllowCookies = CookieContainer != null;
+#endif
+*/
+            return binding;
+        }
+    }
+}
