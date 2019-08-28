@@ -46,8 +46,9 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             var noneComboBoxItem = new ComboBoxItem { DataContext = null, Content = "<No Project Set>" };
             //load our combobox items
             this.Projects.Items.Add(noneComboBoxItem);
+
             //add all the other projects too
-            foreach (var i in _dte.Solution.GetSupportedChildProjects().Where(p => p != _project))
+            foreach (var i in _dte.Solution.GetSupportedChildProjects().OrderBy(p => p?.Name).Where(p => p != _project))
             {
                 this.Projects.Items.Add(new ComboBoxItem { DataContext = i, Content = i.Name });
             }
