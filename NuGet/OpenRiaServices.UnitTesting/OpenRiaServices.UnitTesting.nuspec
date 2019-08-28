@@ -20,8 +20,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Server.UnitTesting.dll" target="lib\net45\OpenRiaServices.DomainServices.Server.UnitTesting.dll" />
-    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" target="lib\net45\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" />
-    <file src="..\..\src\bin\Release\net45\OpenRiaServices.DomainServices.Server.UnitTesting.xml" target="lib\net45\OpenRiaServices.DomainServices.Server.UnitTesting.xml" />
+    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.UnitTesting.dll" target="lib\net46\OpenRiaServices.DomainServices.Server.UnitTesting.dll" />
+    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" target="lib\net46\OpenRiaServices.DomainServices.Server.UnitTesting.pdb" />
+    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.UnitTesting.xml" target="lib\net46\OpenRiaServices.DomainServices.Server.UnitTesting.xml" />
   </files>
 </package>
