@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// <param name="endpoint">Absolute service URI without protocol suffix such as "/binary"</param>
         /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
         /// <returns>The channel used to communicate with the server.</returns>
-        protected internal override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
+        protected override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
         {
             var factory = base.CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
 

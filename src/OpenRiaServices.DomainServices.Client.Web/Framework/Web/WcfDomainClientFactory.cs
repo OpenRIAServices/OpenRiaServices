@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
 namespace OpenRiaServices.DomainServices.Client.Web
@@ -97,8 +98,43 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// </remarks>
         /// <param name="endpoint">Absolute service URI without protocol suffix such as "/binary"</param>
         /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
+        /// <param name="domainClient">the domainclient which request the channel factory</param>
         /// <returns>The channel used to communicate with the server.</returns>
-        internal protected virtual ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
+        internal ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint, WebDomainClient<TContract> domainClient)
+            where TContract : class
+        {
+            // TODO: Add cache of initialised ChannelFactory instances
+            ChannelFactory<TContract> channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
+            try
+            {
+                foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
+                {
+                    foreach (Type knownType in domainClient.KnownTypes)
+                    {
+                        op.KnownTypes.Add(knownType);
+                    }
+                }
+            }
+            catch
+            {
+                ((IDisposable)channelFactory)?.Dispose();
+                throw;
+            }
+
+            return channelFactory;
+        }
+
+
+        /// <summary>
+        /// Creates a channel factory for use by a DomainClient to communicate with the server.
+        /// </summary>
+        /// <remarks>
+        ///  This is not used if a ChannelFactory was passed to the ctor of the <see cref="WebDomainClient{TContract}"/>
+        /// </remarks>
+        /// <param name="endpoint">Absolute service URI without protocol suffix such as "/binary"</param>
+        /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
+        /// <returns>The channel used to communicate with the server.</returns>
+        protected virtual ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
         {
             ChannelFactory<TContract> factory = null;
 
