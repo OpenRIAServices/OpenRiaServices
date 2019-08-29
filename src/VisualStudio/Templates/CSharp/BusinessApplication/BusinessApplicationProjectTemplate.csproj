@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BusinessApplicationProjectTemplate</RootNamespace>
     <AssemblyName>BusinessApplicationProjectTemplate</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -107,8 +107,8 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="BusinessApplication.vstemplate">
-		<OutputSubPath>Open Ria Services</OutputSubPath>
-	</VSTemplate>
+      <OutputSubPath>Open Ria Services</OutputSubPath>
+    </VSTemplate>
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessApplication.csproj" />

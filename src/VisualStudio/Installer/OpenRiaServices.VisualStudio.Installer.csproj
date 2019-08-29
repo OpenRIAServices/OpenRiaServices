@@ -17,7 +17,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.VisualStudio.Installer</RootNamespace>
     <AssemblyName>OpenRiaServices.VisualStudio.Installer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
     <TargetFrameworkProfile />
     <!--prevent build server errors about to long path on deployment to experimental instance-->
