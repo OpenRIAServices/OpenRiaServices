@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using OpenRiaServices.DomainServices.Client;
 
-namespace OpenRiaServices.Data.DomainServices
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Builder that can be used to compose and apply a query to existing
@@ -37,7 +37,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="requestTotalItemCount">whether to request the total item count</param>
         public QueryBuilder(bool requestTotalItemCount)
         {
-            this.RequestTotalItemCount = requestTotalItemCount;
+            RequestTotalItemCount = requestTotalItemCount;
         }
 
         #endregion
@@ -71,19 +71,19 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("keySelector");
             }
 
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.OrderBy(keySelector) :
                     entityQueryReplay(entityQuery).OrderBy(keySelector);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     queryable.OrderBy(keySelector) :
                     queryableReplay(queryable).OrderBy(keySelector);
             };
@@ -107,19 +107,19 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("keySelector");
             }
 
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.OrderByDescending(keySelector) :
                     entityQueryReplay(entityQuery).OrderByDescending(keySelector);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     queryable.OrderByDescending(keySelector) :
                     queryableReplay(queryable).OrderByDescending(keySelector);
             };
@@ -143,19 +143,19 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("selector");
             }
 
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.Select(selector) :
                     entityQueryReplay(entityQuery).Select(selector);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     queryable.Select(selector) :
                     queryableReplay(queryable).Select(selector);
             };
@@ -170,19 +170,19 @@ namespace OpenRiaServices.Data.DomainServices
         /// <returns>The composed query builder</returns>
         public QueryBuilder<T> Skip(int count)
         {
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.Skip(count) :
                     entityQueryReplay(entityQuery).Skip(count);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     queryable.Skip(count) :
                     queryableReplay(queryable).Skip(count);
             };
@@ -197,19 +197,19 @@ namespace OpenRiaServices.Data.DomainServices
         /// <returns>The composed query builder</returns>
         public QueryBuilder<T> Take(int count)
         {
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.Take(count) :
                     entityQueryReplay(entityQuery).Take(count);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     queryable.Take(count) :
                     queryableReplay(queryable).Take(count);
             };
@@ -233,19 +233,19 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("keySelector");
             }
 
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.ThenBy(keySelector) :
                     entityQueryReplay(entityQuery).ThenBy(keySelector);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     ((IOrderedQueryable<T>)queryable).ThenBy(keySelector) :
                     ((IOrderedQueryable<T>)queryableReplay(queryable)).ThenBy(keySelector);
             };
@@ -269,19 +269,19 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("keySelector");
             }
 
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
             {
-                return (entityQueryReplay == null) ?
+                return entityQueryReplay == null ?
                     entityQuery.ThenByDescending(keySelector) :
                     entityQueryReplay(entityQuery).ThenByDescending(keySelector);
             };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
             {
-                return (queryableReplay == null) ?
+                return queryableReplay == null ?
                     ((IOrderedQueryable<T>)queryable).ThenByDescending(keySelector) :
                     ((IOrderedQueryable<T>)queryableReplay(queryable)).ThenByDescending(keySelector);
             };
@@ -304,23 +304,23 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("predicate");
             }
 
-            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = this._entityQueryReplay;
-            Func<IQueryable<T>, IQueryable<T>> queryableReplay = this._queryableReplay;
+            Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
+            Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
 
-            this._entityQueryReplay = (entityQuery) =>
+            _entityQueryReplay = (entityQuery) =>
                 {
-                    return (entityQueryReplay == null) ?
+                    return entityQueryReplay == null ?
                         entityQuery.Where(predicate) :
                         entityQueryReplay(entityQuery).Where(predicate);
                 };
 
-            this._queryableReplay = (queryable) =>
+            _queryableReplay = (queryable) =>
                 {
-                    return (queryableReplay == null) ?
+                    return queryableReplay == null ?
                         queryable.Where(predicate) :
                         queryableReplay(queryable).Where(predicate);
                 };
-            
+
             return this;
         }
 
@@ -343,10 +343,10 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("entityQuery");
             }
 
-            entityQuery.IncludeTotalCount = this.RequestTotalItemCount;
-            if (this._entityQueryReplay != null)
+            entityQuery.IncludeTotalCount = RequestTotalItemCount;
+            if (_entityQueryReplay != null)
             {
-                entityQuery = this._entityQueryReplay(entityQuery);
+                entityQuery = _entityQueryReplay(entityQuery);
             }
             return entityQuery;
         }
@@ -366,7 +366,7 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("enumerable");
             }
 
-            return this.ApplyTo(enumerable.AsQueryable());
+            return ApplyTo(enumerable.AsQueryable());
         }
 
         /// <summary>
@@ -384,9 +384,9 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("queryable");
             }
 
-            if (this._queryableReplay != null)
+            if (_queryableReplay != null)
             {
-                queryable = this._queryableReplay(queryable);
+                queryable = _queryableReplay(queryable);
             }
             return queryable;
         }
@@ -406,7 +406,7 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("collection");
             }
 
-            return new ObservableCollection<T>(this.ApplyTo((IEnumerable<T>)collection));
+            return new ObservableCollection<T>(ApplyTo((IEnumerable<T>)collection));
         }
 
         #endregion
