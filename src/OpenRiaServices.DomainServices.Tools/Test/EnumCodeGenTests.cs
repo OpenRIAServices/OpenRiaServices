@@ -691,11 +691,11 @@ namespace EnumGen.Tests
         public IQueryable<Enum_Basic_Entity> GetEntityWithNullableEnum(QueryEnumArg? enumVal) { return null; }
 
         // A named update method should be able to take an enum param
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void EnumNamedUpate(Enum_Basic_Entity entity, NamedEnumArg enumVal) { }
 
         // A named update method should be able to take a nullable enum param
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void EnumNamedUpateNullable(Enum_Basic_Entity entity, NamedEnumArg? enumVal) { }
 
         // An invoke should be able to take and return enums -- and cause their generation
@@ -780,7 +780,7 @@ namespace EnumGen.Tests
     // Named update with enum we cannot propagate
     public class Enum_System_Named_DomainService : GenericDomainService<Enum_Basic_Entity>
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void EnumNamedUpate(Enum_Basic_Entity entity, FileAttributes enumVal) { }
     }
 

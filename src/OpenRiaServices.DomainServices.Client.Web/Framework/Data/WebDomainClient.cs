@@ -28,10 +28,8 @@ namespace OpenRiaServices.DomainServices.Client
         internal const string IncludeTotalCountPropertyName = "DomainServiceIncludeTotalCount";
 
         private ChannelFactory<TContract> _channelFactory;
-        private WcfDomainClientFactory _webDomainClientFactory;
-        private IEnumerable<Type> _knownTypes;
+        private IReadOnlyList<Type> _knownTypes;
         private Uri _serviceUri;
-        private bool _initializedFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebDomainClient&lt;TContract&gt;"/> class.
@@ -40,8 +38,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="serviceUri"/>
         /// is null.
         /// </exception>
-        public WebDomainClient(Uri serviceUri)
-            : this(serviceUri, /* usesHttps */ false, (WcfDomainClientFactory)null)
+        internal WebDomainClient(Uri serviceUri)
+            : this(serviceUri, /* usesHttps */ false, CreateDefaultDomainClientFactory())
         {
         }
 
@@ -58,30 +56,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// <exception cref="ArgumentException"> is thrown if <paramref name="serviceUri"/>
         /// is absolute and <paramref name="usesHttps"/> is true.
         /// </exception>
-        public WebDomainClient(Uri serviceUri, bool usesHttps)
-            : this(serviceUri, usesHttps, (WcfDomainClientFactory)null)
+        internal WebDomainClient(Uri serviceUri, bool usesHttps)
+            : this(serviceUri, usesHttps, CreateDefaultDomainClientFactory())
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WebDomainClient&lt;TContract&gt;"/> class.
-        /// </summary>
-        /// <param name="serviceUri">The domain service Uri</param>
-        /// <param name="usesHttps">A value indicating whether the client should contact
-        /// the service using an HTTP or HTTPS scheme.
-        /// </param>
-        /// <param name="channelFactory">The channel factory that creates channels to communicate with the server.</param>
-        /// <exception cref="ArgumentNullException"> is thrown if <paramref name="serviceUri"/>
-        /// is null.
-        /// </exception>
-        /// <exception cref="ArgumentException"> is thrown if <paramref name="serviceUri"/>
-        /// is absolute and <paramref name="usesHttps"/> is true.
-        /// </exception>
-        [Obsolete("Use constructor taking a WcfDomainClientFactory instead")]
-        public WebDomainClient(Uri serviceUri, bool usesHttps, ChannelFactory<TContract> channelFactory)
-         : this(serviceUri, usesHttps, (WcfDomainClientFactory)null)
-        {
-            this._channelFactory = channelFactory;
         }
 
         /// <summary>
@@ -105,6 +82,9 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("serviceUri");
             }
 
+            if (domainClientFactory == null)
+                throw new ArgumentNullException(nameof(domainClientFactory));
+
 #if !SILVERLIGHT
             if (!serviceUri.IsAbsoluteUri)
             {
@@ -115,7 +95,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this._serviceUri = serviceUri;
             this.UsesHttps = usesHttps;
-            _webDomainClientFactory = domainClientFactory;
+            this.WebDomainClientFactory = domainClientFactory;
 
 #if SILVERLIGHT
             // The domain client should not be initialized at design time
@@ -123,6 +103,16 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 this.Initialize();
             }
+#endif
+        }
+
+        private static WcfDomainClientFactory CreateDefaultDomainClientFactory()
+        {
+
+#if NETSTANDARD
+            return new SoapDomainClientFactory();
+#else
+            return new WebDomainClientFactory();
 #endif
         }
 
@@ -157,23 +147,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets the <see cref="WcfDomainClientFactory"/> used to create this instance, with fallback to
         /// a new <see cref="WebDomainClientFactory"/> in case it was created manually without using a DomainClientFactory.
         /// </summary>
-        private WcfDomainClientFactory WebDomainClientFactory
-        {
-            get
-            {
-                return _webDomainClientFactory
-#if NETSTANDARD
-                    ?? (_webDomainClientFactory = new SoapDomainClientFactory());
-#else
-                    ?? (_webDomainClientFactory = new WebDomainClientFactory());
-#endif
-            }
-        }
+        private WcfDomainClientFactory WebDomainClientFactory { get; }
 
         /// <summary>
         /// Gets the list of known types.
         /// </summary>
-        private IEnumerable<Type> KnownTypes
+        internal IReadOnlyList<Type> KnownTypes
         {
             get
             {
@@ -213,20 +192,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
                 if (this._channelFactory == null)
                 {
-                    // TODO: Add overload where KnownTypes are passed in
-                    this._channelFactory = WebDomainClientFactory.CreateChannelFactory<TContract>(_serviceUri, UsesHttps);
-                }
-
-                if (!this._initializedFactory)
-                {
-                    foreach (OperationDescription op in this._channelFactory.Endpoint.Contract.Operations)
-                    {
-                        foreach (Type knownType in this.KnownTypes)
-                        {
-                            op.KnownTypes.Add(knownType);
-                        }
-                    }
-                    this._initializedFactory = true;
+                    this._channelFactory = WebDomainClientFactory.CreateChannelFactory<TContract>(_serviceUri, UsesHttps, this);
                 }
 
                 return this._channelFactory;
@@ -474,9 +440,9 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Method to invoke to get result of invocation started by <see cref="CallServiceOperation{TResult}(TContract, string, IDictionary{string, object}, Func{TContract, IAsyncResult, TResult}, CancellationToken)"/>
+        /// Method to invoke to get result of invocation started by <see cref="CallServiceOperation"/>
         /// </summary>
-        /// <param name="channel">should be first parameter supplied in callback supplied to <see cref="CallServiceOperation{TResult}(TContract, string, IDictionary{string, object}, Func{TContract, IAsyncResult, TResult}, CancellationToken)"/></param>
+        /// <param name="channel">should be first parameter supplied in callback supplied to <see cref="CallServiceOperation"/></param>
         /// <param name="asyncResult">should be second parameter supplied in callback supplied to <see cref="CallServiceOperation" /> </param>
         /// <returns>result of service call</returns>
         private static object EndServiceOperationCall(object channel, IAsyncResult asyncResult)

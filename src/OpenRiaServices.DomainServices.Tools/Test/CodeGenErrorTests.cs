@@ -526,7 +526,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 throw new NotImplementedException();
             }
 
-            [Update(UsingCustomMethod = true)]
+            [EntityAction]
             public int ReturnInt(Mock_CG_MinimalEntity e)
             {
                 throw new NotImplementedException();

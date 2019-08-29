@@ -195,9 +195,9 @@ namespace Cities
         }
         #endregion
 
-#pragma warning disable 618 // Service should work with the "old" approach with [Update(UsingCustomMethod = true)]
+#pragma warning disable 618 // Service should work with the "old" approach with [EntityAction]
         #region Domain Methods
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [CustomValidation(typeof(CityMethodValidator), "ValidateMethod")]
         public void AssignCityZone(City city, string zoneName)
         {
@@ -214,21 +214,21 @@ namespace Cities
 
         // this method is to demonstrate parameterless domain method, which uses a server state to 
         // update some properties on the city entity
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void AutoAssignCityZone(City city)
         {
             city.ZoneID++;
             city.ZoneName = string.Format("Auto_Zone{0}", city.ZoneID.ToString());
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [RequiresUserForState("WAGuy", "WA", ErrorMessage="Only one user is authorized to execute operation '{0}', and it isn't you.")]
         public void AssignCityZoneIfAuthorized(City city, string zoneName)
         {
             this.AssignCityZone(city, zoneName);
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [CustomValidation(typeof(ZipValidator), "IsZipValid", ErrorMessage = "Zip codes cannot have matching city and state names")]
         public void ReassignZipCode(Zip zip,
                                     [Range(-9999, 9999)] int offset,
@@ -242,7 +242,7 @@ namespace Cities
         }
 
         // domain method that throws ValidationException
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         [CustomValidation(typeof(ThrowExValidator), "IsThrowExValid")]
         public void ThrowException(Zip zip, string scenario)
         {
@@ -269,7 +269,7 @@ namespace Cities
 
         // Custom method for CityWithInfo to update Info and to
         // update the edit history as well.
-        [Update(UsingCustomMethod=true)]
+        [EntityAction]
         public void SetCityInfo(CityWithInfo cityWithInfo, string info)
         {
             cityWithInfo.Info = info;
@@ -339,7 +339,7 @@ namespace Cities
             this.DeleteCity(city);
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void TouchHistory(CityWithEditHistory city, string touchString)
         {
             city.EditHistory = "touch=" + touchString;

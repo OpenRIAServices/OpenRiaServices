@@ -454,32 +454,47 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.CreateDomainContext(TestURIs.Cities);
         }
 
-        private void CreateDomainContext(Uri uri)
+        // Class to testthe channel factory extensibility.
+        class CustomDomainClientFactory : Web.WcfDomainClientFactory
         {
-            // Do not remove this code; it's used to test the channel factory extensibility.
-            ChannelFactory<CityDomainContext.ICityDomainServiceContract> factory =
-                new ChannelFactory<CityDomainContext.ICityDomainServiceContract>(
-                    new CustomBinding(
+            protected override Binding CreateBinding(Uri endpoint, bool requiresSecureEndpoint)
+            {
+                return new CustomBinding(
                         new PoxBinaryMessageEncodingBindingElement(),
                         new HttpTransportBindingElement()
                         {
                             ManualAddressing = true
-                        }),
-                    new EndpointAddress(
-                        new Uri(uri.OriginalString + "/binary", UriKind.Absolute)));
-            factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
+                        });
+            }
+
+            protected override EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
             {
-                DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
-            });
+                return new EndpointAddress(
+                        new Uri(endpoint.OriginalString + "/binary", UriKind.Absolute));
+            }
+
+            protected override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
+            {
+                var factory = base.CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
+                factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
+                {
+                    DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
+                });
+                return factory;
+            }
+        }
+
+        private void CreateDomainContext(Uri uri)
+        {
+            // Do not remove this code; it's used to test the channel factory extensibility.
+            var factory = new CustomDomainClientFactory();
 
             this.CityDomainContext =
                 new CityDomainContext(
-#pragma warning disable CS0618 // We are intentionally using constructor which is intended to be removed
-                    new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(uri, usesHttps: false, channelFactory: factory)
+                    new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(uri, usesHttps: false, factory)
                     {
                         EntityTypes = new List<Type>() { typeof(City), typeof(Zip) }
                     });
-#pragma warning restore CS0618 // We are intentionally using constructor which is intended to be removed
         }
 
         private void AssertInProgress(IAsyncResult asyncResult)

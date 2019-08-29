@@ -528,7 +528,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return null;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void UpdateMethod(DummyEntityForCustomMethodTest t, Address t1)
         {
         }

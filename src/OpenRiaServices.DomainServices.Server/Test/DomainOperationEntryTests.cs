@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             [Update]
             public void UpdateMethod(DomainOperationEntryTestEntity entity) { }
 
-            [Update(UsingCustomMethod=true)]
+            [EntityAction]
             public void CustomMethod(DomainOperationEntryTestEntity entity) { }
 
             [Delete]

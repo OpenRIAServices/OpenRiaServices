@@ -549,7 +549,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Query]
         public IEnumerable<SharedScenarios_LeafEntityA> GetProperty() { return null; }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ChangeA1(SharedScenarios_LeafEntityA a, int intProp)
         {
         }
@@ -561,7 +561,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Query]
         public IEnumerable<SharedScenarios_LeafEntityA> GetProperty() { return null; }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ChangeA2(SharedScenarios_LeafEntityA a, bool boolProp)
         {
         }
@@ -578,7 +578,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Query]
         public IEnumerable<SharedScenarios_LeafEntityA> GetProperty() { return null; }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ChangeA1(SharedScenarios_LeafEntityA a, int intProp, bool boolProp)
         {
         }

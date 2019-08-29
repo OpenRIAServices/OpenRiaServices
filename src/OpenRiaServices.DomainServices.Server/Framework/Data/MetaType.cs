@@ -19,8 +19,8 @@ namespace OpenRiaServices.DomainServices.Server
     [DebuggerDisplay("Type = {_type.Name}")]
     internal sealed class MetaType
     {
-        private static ConcurrentDictionary<Type, MetaType> _metaTypes = new ConcurrentDictionary<Type, MetaType>();
-
+        private static readonly ConcurrentDictionary<Type, MetaType> s_metaTypes = new ConcurrentDictionary<Type, MetaType>();
+        private static readonly Func<Type, MetaType> s_createMetaType = (t) => new MetaType(t);
         private readonly Dictionary<PropertyDescriptor, IncludeAttribute[]> _projectionMemberMap = new Dictionary<PropertyDescriptor, IncludeAttribute[]>();
         private bool _requiresValidation;
         private readonly PropertyDescriptorCollection _includedAssociations;
@@ -41,7 +41,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             Debug.Assert(!TypeUtility.IsPredefinedType(type), "Should never attempt to create a MetaType for a base type.");
 
-            return _metaTypes.GetOrAdd(type, (t) => { return new MetaType(type); });
+            return s_metaTypes.GetOrAdd(type, s_createMetaType);
         }
 
         private MetaType(Type type)

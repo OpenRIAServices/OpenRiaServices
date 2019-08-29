@@ -10,10 +10,5 @@ namespace OpenRiaServices.DomainServices.Server
         AllowMultiple = false, Inherited = true)]
     public sealed class UpdateAttribute : Attribute
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether the method is a custom update operation.
-        /// </summary>
-        [Obsolete("Use EntityActionAttribute to specify 'CustomMethods'")]
-        public bool UsingCustomMethod { get; set; }
     }
 }

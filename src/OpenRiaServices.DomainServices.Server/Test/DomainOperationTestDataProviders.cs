@@ -13,14 +13,14 @@ namespace OpenRiaServices.DomainServices.Server.Test
         public string Invoked { get; set; }
         public byte[] InputData { get; set; }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, byte[] data)
         {
             this.Invoked += "ProcessCity_";
             this.InputData = data;
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCounty(County county)
         {
             this.Invoked += "ProcessCounty_";
@@ -35,12 +35,12 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_ValidProvider_SameNameDiffEntities : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void Approve(City city, string param1, string param2)
         {
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void Approve(County county, bool flag)
         {
         }
@@ -60,7 +60,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             return this._cityData.Cities.AsQueryable();
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void Approve(City city)
         {
         }
@@ -68,7 +68,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_DupNameAcrossProviders2 : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void Approve(City city)
         {
         }
@@ -78,12 +78,12 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_MethodOverloads : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city)
         {
         }
 
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, string data)
         {
         }
@@ -93,7 +93,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_InvalidReturnType : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public string ProcessCity(City city)
         {
             return null;
@@ -104,7 +104,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_FirstArgNonEntity : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(string name)
         {
         }
@@ -114,7 +114,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_ArgOfTypeObject : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, object objArg)
         {
         }
@@ -124,7 +124,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_ArgOfTypeIntPtr : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, IntPtr intPtrArg)
         {
         }
@@ -134,7 +134,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_ArgOfComplexTypeIEnumerable : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, IEnumerable<City> ienumerableArg)
         {
         }
@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_ArgOfComplexTypeList : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, List<City> listArg)
         {
         }
@@ -154,7 +154,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_ArgOfTypeUIntPtr : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, UIntPtr uintPtrArg)
         {
         }
@@ -164,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_Parameterless : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity()
         {
         }
@@ -174,7 +174,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainMethod_InvalidProvider_MultipleEntities : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void ProcessCity(City city, County county)
         {
         }
@@ -411,7 +411,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
     public class DomainMethod_InvalidProvider_ComnplexParams : CityDomainService
     {
-        [Update(UsingCustomMethod = true)]
+        [EntityAction]
         public void LinkTo(County entity, County prototype)
         {
         }

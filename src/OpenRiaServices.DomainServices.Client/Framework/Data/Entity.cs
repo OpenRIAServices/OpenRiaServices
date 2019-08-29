@@ -105,15 +105,6 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     var metaType = MetaType.GetMetaType(this.GetType());
                     this._metaType = metaType;
-
-                    if (!metaType.IsLegacyEntityActionsDiscovered)
-                    {
-                        // Trigger entities using old code generation to call UpdateActionState for all Entity Actions
-#pragma warning disable 618
-                        this.OnActionStateChanged();
-#pragma warning restore 618
-                        metaType.IsLegacyEntityActionsDiscovered = true;
-                    }
                 }
 
                 return this._metaType;
@@ -423,19 +414,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets or sets the custom method invocation on this entity (if any)
         /// while bypassing lots of the validation (this is only used by the old tests)
         /// </summary>
-        [Obsolete("Use EntityActions instead")]
         internal EntityAction CustomMethodInvocation
         {
-            get
-            {
-                if (this._customMethodInvocations == null)
-                    return null;
-                else
-                    return _customMethodInvocations.SingleOrDefault();
-            }
             set
             {
-                if (CustomMethodInvocation != value)
+                var currentInvocation = _customMethodInvocations?.SingleOrDefault();
+                if (currentInvocation != value)
                 {
                     bool wasReadOnly = this.IsReadOnly;
 
@@ -1383,56 +1367,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             return ValidationUtilities.CreateValidationContext(this, parentContext);
-        }
-
-        /// <summary>
-        /// Method called when the invoked action state changes for this entity. 
-        /// </summary>
-        /// <remarks>
-        /// This method is called when the state of CanInvoke changes.
-        /// </remarks>
-        [Obsolete("OnActionStateChanged is no longer used, make sure to update your version of OpenRiaServices Code Generation")]
-        protected virtual void OnActionStateChanged()
-        {
-            // no op if not overriden
-        }
-
-        /// <summary>
-        /// Called within the context of an <see cref="OnActionStateChanged"/> override, this
-        /// method will raise the appropriate property changed notifications for the properties
-        /// corresponding to a custom method.
-        /// </summary>
-        /// <param name="name">The custom method name.</param>
-        /// <param name="canInvokePropertyName">The name of the "CanInvoke" guard property for the
-        /// custom method.</param>
-        /// <param name="isInvokedPropertyName">The name of the "IsInvoked" property for the
-        /// custom method.</param>
-        [Obsolete("UpdateActionState is no longer used, make sure to update your version of OpenRiaServices Code Generation")]
-        protected void UpdateActionState(string name, string canInvokePropertyName, string isInvokedPropertyName)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-            if (string.IsNullOrEmpty(canInvokePropertyName))
-            {
-                throw new ArgumentNullException("canInvokePropertyName");
-            }
-            if (string.IsNullOrEmpty(isInvokedPropertyName))
-            {
-                throw new ArgumentNullException("isInvokedPropertyName");
-            }
-
-            var metaType = MetaType;
-            if (!metaType.IsLegacyEntityActionsDiscovered)
-            {
-                metaType.TryAddLegacyEntityAction(name, canInvokePropertyName, isInvokedPropertyName);
-            }
-            else
-            {
-                // For the current implementation, we always raise the CanInvoke change notification
-                this.RaisePropertyChanged(canInvokePropertyName);
-            }
         }
 
         /// <summary>

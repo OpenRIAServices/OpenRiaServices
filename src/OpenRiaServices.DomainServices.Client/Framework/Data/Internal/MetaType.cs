@@ -322,31 +322,5 @@ namespace OpenRiaServices.DomainServices.Client.Internal
 
             return false;
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether entity actions for code using code gen before version 4.4.0
-        /// has been discovered.
-        /// </summary>
-        internal bool IsLegacyEntityActionsDiscovered { get; set; }
-
-        /// <summary>
-        /// Add's a EntityAction with the given name and property names.
-        /// This method is only used when discovering EntityActions for code which has used the code gen 
-        /// before version 4.4.0.
-        /// </summary>
-        /// <param name="name">The name of the entity action.</param>
-        /// <param name="canInvokePropertyName">Name of the can invoke property.</param>
-        /// <param name="isInvokedPropertyName">Name of the is invoked property.</param>
-        internal void TryAddLegacyEntityAction(string name, string canInvokePropertyName, string isInvokedPropertyName)
-        {
-            if (!_customUpdateMethods.ContainsKey(name))
-            {
-                _customUpdateMethods.Add(name, new EntityActionAttribute(name)
-                {
-                    CanInvokePropertyName = canInvokePropertyName,
-                    IsInvokedPropertyName = isInvokedPropertyName,
-                });
-            }
-        }
     }
 }
