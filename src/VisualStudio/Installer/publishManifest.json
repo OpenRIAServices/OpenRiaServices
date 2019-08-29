@@ -21,7 +21,7 @@
   "private": false, // Specifies whether or not the extension should be public when uploaded. Defaults to false.
   "qna": true, // Specifies whether or not the extension should have a Q&A section. Defaults to true.
   "repo": "https://github.com/OpenRIAServices/OpenRiaServices", // Not required.
-  "asetFiles": [
+  "assetFiles": [
 	{
 		"pathOnDisk": "assets/images/ManageOpenRiaServicesProjectLinkContextMenu.png",
 		"targetPath": "images/ManageOpenRiaServicesProjectLinkContextMenu.png"
