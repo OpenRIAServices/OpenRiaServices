@@ -94,7 +94,7 @@ steps:
     Contents: |
      src\VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
      src\VisualStudio\Installer\publishManifest.json
-     src\VisualStudio\Installer\overview.md
+     src\VisualStudio\Installer\assets\*
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
