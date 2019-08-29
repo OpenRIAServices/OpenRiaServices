@@ -11,15 +11,24 @@
       "RIA",
       "OpenRia",
       "DomainServices",
-
       "WCF Ria Services"
     ],
 
   },
-  "overview": "overview.md", // Path to the "readme" file that gets uploaded to the Marketplace. Required.
+  "overview": "assets/overview.md", // Path to the "readme" file that gets uploaded to the Marketplace. Required.
   "priceCategory": "free", // Either "free", "trial", or "paid". Defaults to "free".
   "publisher": "OpenRiaServices", // The name of the publisher. Required.
   "private": false, // Specifies whether or not the extension should be public when uploaded. Defaults to false.
   "qna": true, // Specifies whether or not the extension should have a Q&A section. Defaults to true.
-  "repo": "https://github.com/OpenRIAServices/OpenRiaServices" // Not required.
+  "repo": "https://github.com/OpenRIAServices/OpenRiaServices", // Not required.
+  "asetFiles": [
+	{
+		"pathOnDisk": "assets/images/ManageOpenRiaServicesProjectLinkContextMenu.png",
+		"targetPath": "images/ManageOpenRiaServicesProjectLinkContextMenu.png"
+	},
+	{
+		"pathOnDisk": "assets/images/ManageOpenRiaServicesProjectLink.png",
+		"targetPath": "images/ManageOpenRiaServicesProjectLink.png"
+	}
+  ]
 }

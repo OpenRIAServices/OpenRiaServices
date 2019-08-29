@@ -8,7 +8,6 @@
 For 4.6.0+</Description>
         <MoreInfo>https://github.com/OpenRIAServices/OpenRiaServices/</MoreInfo>
         <Icon>DomainServiceClass.10.0.ico</Icon>
-        <Tags>OpenRiaServices Open WCF RIA Services RiaServices Tooling Templates</Tags>
         <Preview>true</Preview>
     </Metadata>
     <Installation>
