@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using OpenRiaServices.DomainServices.Client;
 
-namespace OpenRiaServices.Data.DomainServices
+namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Observable list of entities. This list stays in sync with its <see cref="Source"/>
@@ -12,7 +11,7 @@ namespace OpenRiaServices.Data.DomainServices
     /// </summary>
     /// <remarks>
     /// All items added or removed from this list will also be added or removed from the
-    /// backing <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/>.
+    /// backing <see cref="EntitySet{T}"/>.
     /// </remarks>
     /// <typeparam name="T">The entity type of this list</typeparam>
     public class EntityList<T> : ObservableCollection<T>, ICollectionChangedListener where T : Entity
@@ -35,7 +34,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// Initializes a new instance of the <see cref="EntityList{T}"/>
         /// </summary>
         /// <param name="entitySet">The
-        /// <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/> that backs this list. All
+        /// <see cref="EntitySet{T}"/> that backs this list. All
         /// items added or removed from this list will also be added or removed from the backing
         /// <see cref="EntitySet"/>.
         /// </param>
@@ -49,7 +48,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <paramref name="source"/>
         /// </summary>
         /// <param name="entitySet">The
-        /// <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/> that backs this list. All
+        /// <see cref="EntitySet{T}"/> that backs this list. All
         /// items added or removed from this list will also be added or removed from the backing
         /// <see cref="EntitySet"/>.
         /// </param>
@@ -61,11 +60,11 @@ namespace OpenRiaServices.Data.DomainServices
                 throw new ArgumentNullException("entitySet");
             }
 
-            this._entitySet = entitySet;
-            this._weakCollectionChangedLister =
-                WeakCollectionChangedListener.CreateIfNecessary(this._entitySet, this);
+            _entitySet = entitySet;
+            _weakCollectionChangedLister =
+                WeakCollectionChangedListener.CreateIfNecessary(_entitySet, this);
 
-            this.Source = source;
+            Source = source;
         }
 
         #endregion
@@ -73,15 +72,15 @@ namespace OpenRiaServices.Data.DomainServices
         #region Properties
 
         /// <summary>
-        /// Gets or sets the backing <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/>
+        /// Gets or sets the backing <see cref="EntitySet{T}"/>
         /// </summary>
         /// <remarks>
         /// All items added or removed from this list will also be added or removed from the
-        /// backing <see cref="OpenRiaServices.DomainServices.Client.EntitySet{T}"/>.
+        /// backing <see cref="EntitySet{T}"/>.
         /// </remarks>
         public EntitySet<T> EntitySet
         {
-            get { return this._entitySet; }
+            get { return _entitySet; }
         }
 
         /// <summary>
@@ -96,35 +95,35 @@ namespace OpenRiaServices.Data.DomainServices
         {
             get
             {
-                return this._source;
+                return _source;
             }
 
             set
             {
-                if ((value is EntitySet) || (value is EntityCollection<T>))
+                if (value is EntitySet || value is EntityCollection<T>)
                 {
                     throw new ArgumentException(Resources.NoESorEC, "value");
                 }
 
-                if (this._source != value)
+                if (_source != value)
                 {
                     // It's ok to use standard event subscription here since we anticipate
                     // the lifetimes of the EntityList and source will be about equal
-                    INotifyCollectionChanged notifyingSource = this._source as INotifyCollectionChanged;
+                    var notifyingSource = _source as INotifyCollectionChanged;
                     if (notifyingSource != null)
                     {
-                        notifyingSource.CollectionChanged -= this.OnSourceCollectionChanged;
+                        notifyingSource.CollectionChanged -= OnSourceCollectionChanged;
                     }
 
-                    this._source = value;
+                    _source = value;
 
-                    notifyingSource = this._source as INotifyCollectionChanged;
+                    notifyingSource = _source as INotifyCollectionChanged;
                     if (notifyingSource != null)
                     {
-                        notifyingSource.CollectionChanged += this.OnSourceCollectionChanged;
+                        notifyingSource.CollectionChanged += OnSourceCollectionChanged;
                     }
 
-                    this.UpdateAndIgnoreReentrance(obj => this.ResetToSource(), null);
+                    UpdateAndIgnoreReentrance(obj => ResetToSource(), null);
                 }
             }
         }
@@ -140,19 +139,19 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="obj">The parameter to pass to the action</param>
         private void UpdateAndIgnoreReentrance(Action<object> updateAction, object obj)
         {
-            if (this._updating)
+            if (_updating)
             {
                 return;
             }
 
             try
             {
-                this._updating = true;
+                _updating = true;
                 updateAction(obj);
             }
             finally
             {
-                this._updating = false;
+                _updating = false;
             }
         }
 
@@ -161,15 +160,15 @@ namespace OpenRiaServices.Data.DomainServices
         /// </summary>
         private void ResetToSource()
         {
-            this._entities.Clear();
-            this.Clear();
+            _entities.Clear();
+            Clear();
 
-            if (this.Source != null)
+            if (Source != null)
             {
-                foreach (T entity in this.Source)
+                foreach (T entity in Source)
                 {
-                    this._entities.Add(entity);
-                    this.Add(entity);
+                    _entities.Add(entity);
+                    Add(entity);
                 }
             }
         }
@@ -183,7 +182,7 @@ namespace OpenRiaServices.Data.DomainServices
         {
             if (item.EntityState == EntityState.Detached)
             {
-                this.UpdateAndIgnoreReentrance(this.AddToEntitySet, item);
+                UpdateAndIgnoreReentrance(AddToEntitySet, item);
             }
             base.InsertItem(index, item);
         }
@@ -194,7 +193,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="obj">The entity to add</param>
         private void AddToEntitySet(object obj)
         {
-            this.EntitySet.Add((T)obj);
+            EntitySet.Add((T)obj);
         }
 
         /// <summary>
@@ -206,7 +205,7 @@ namespace OpenRiaServices.Data.DomainServices
             T item = this[index];
             if (item.EntityState != EntityState.Detached)
             {
-                this.UpdateAndIgnoreReentrance(this.RemoveFromEntitySet, item);
+                UpdateAndIgnoreReentrance(RemoveFromEntitySet, item);
             }
             base.RemoveItem(index);
         }
@@ -217,7 +216,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="obj">The entity to remove</param>
         private void RemoveFromEntitySet(object obj)
         {
-            this.EntitySet.Remove((T)obj);
+            EntitySet.Remove((T)obj);
         }
 
         /// <summary>
@@ -227,7 +226,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="e">The event args</param>
         private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.UpdateAndIgnoreReentrance(this.HandleSourceCollectionChanged, e);
+            UpdateAndIgnoreReentrance(HandleSourceCollectionChanged, e);
         }
 
         /// <summary>
@@ -236,7 +235,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="obj">The collection changed event args</param>
         private void HandleSourceCollectionChanged(object obj)
         {
-            NotifyCollectionChangedEventArgs e = (NotifyCollectionChangedEventArgs)obj;
+            var e = (NotifyCollectionChangedEventArgs)obj;
 
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -244,8 +243,8 @@ namespace OpenRiaServices.Data.DomainServices
                 int index = e.NewStartingIndex;
                 foreach (T item in e.NewItems)
                 {
-                    this._entities.Add(item);
-                    this.Insert(index++, item);
+                    _entities.Add(item);
+                    Insert(index++, item);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -253,8 +252,8 @@ namespace OpenRiaServices.Data.DomainServices
                 // Remove the old items
                 foreach (T item in e.OldItems)
                 {
-                    this._entities.Remove(item);
-                    this.RemoveAt(e.OldStartingIndex);
+                    _entities.Remove(item);
+                    RemoveAt(e.OldStartingIndex);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Replace)
@@ -262,21 +261,21 @@ namespace OpenRiaServices.Data.DomainServices
                 // Remove the old items
                 foreach (T item in e.OldItems)
                 {
-                    this._entities.Remove(item);
-                    this.RemoveAt(e.OldStartingIndex);
+                    _entities.Remove(item);
+                    RemoveAt(e.OldStartingIndex);
                 }
 
                 // And add the new ones
                 foreach (T item in e.NewItems)
                 {
                     int index = e.NewStartingIndex;
-                    this._entities.Add(item);
-                    this.Insert(index++, item);
+                    _entities.Add(item);
+                    Insert(index++, item);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                this.ResetToSource();
+                ResetToSource();
             }
         }
 
@@ -288,7 +287,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="e">The event args</param>
         private void OnEntitySetCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.UpdateAndIgnoreReentrance(this.HandleEntitySetCollectionChanged, e);
+            UpdateAndIgnoreReentrance(HandleEntitySetCollectionChanged, e);
         }
 
         /// <summary>
@@ -302,16 +301,16 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="obj">The collection changed event args</param>
         private void HandleEntitySetCollectionChanged(object obj)
         {
-            NotifyCollectionChangedEventArgs e = (NotifyCollectionChangedEventArgs)obj;
+            var e = (NotifyCollectionChangedEventArgs)obj;
 
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 // Add the new entities if they are in the source collection
                 foreach (T item in e.NewItems)
                 {
-                    if (this._entities.Contains(item))
+                    if (_entities.Contains(item))
                     {
-                        this.Add(item);
+                        Add(item);
                     }
                 }
             }
@@ -320,7 +319,7 @@ namespace OpenRiaServices.Data.DomainServices
                 // Remove the old entities
                 foreach (T item in e.OldItems)
                 {
-                    this.Remove(item);
+                    Remove(item);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Replace)
@@ -328,28 +327,28 @@ namespace OpenRiaServices.Data.DomainServices
                 // Remove the old entities
                 foreach (T item in e.OldItems)
                 {
-                    this.Remove(item);
+                    Remove(item);
                 }
 
                 // And add the new entities if they are in the source collection
                 foreach (T item in e.NewItems)
                 {
-                    if (this._entities.Contains(item))
+                    if (_entities.Contains(item))
                     {
-                        this.Add(item);
+                        Add(item);
                     }
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 // Reset and add entities if they are in the source collection
-                this.Clear();
+                Clear();
 
-                foreach (T item in this.EntitySet)
+                foreach (T item in EntitySet)
                 {
-                    if (this._entities.Contains(item))
+                    if (_entities.Contains(item))
                     {
-                        this.Add(item);
+                        Add(item);
                     }
                 }
             }
@@ -367,7 +366,7 @@ namespace OpenRiaServices.Data.DomainServices
         /// <param name="e">The event args</param>
         void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.OnEntitySetCollectionChanged(sender, e);
+            OnEntitySetCollectionChanged(sender, e);
         }
 
         #endregion
