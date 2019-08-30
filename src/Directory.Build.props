@@ -6,16 +6,19 @@
     <IsFrameworkProject Condition="'$(IsTestProject)' != 'true' and !$(MSBuildProjectFile.Contains('.VisualStudio.')) ">true</IsFrameworkProject>
 
     <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
-    
+
     <!-- Use csharp 7.3 for all projects -->
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">7.3</LangVersion>
-   
+
     <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
 
     <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputPath>
     <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies Condition="'$(IsFrameworkProject)' == 'true'">false</CopyLocalLockFileAssemblies>
 
+    <AssemblyVersion>4.0.0</AssemblyVersion>
+    <Company>Outercurve Foundation</Company>
+    <Product>Open RIA Services</Product>
     <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -32,42 +35,14 @@
     -->
     <DebugType>pdbonly</DebugType>
     <DebugType Condition=" $(TargetFramework.StartsWith('netstandard')) ">portable</DebugType>
-    
-  </PropertyGroup>
-  
-  <!-- Add Silverlight build support -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' ">
-    <NugetTargetMoniker>Silverlight,Version=v5.0</NugetTargetMoniker>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-  </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' and '$(MSBuildProjectExtension)' == '.csproj' ">
-    <LanguageTargets>$(MSBuildProgramFiles32)\MSBuild\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets</LanguageTargets>
-    <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'sl5' and '$(MSBuildProjectExtension)' == '.vbproj' ">
-    <LanguageTargets>$(MSBuildProgramFiles32)\MSBuild\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.VisualBasic.targets</LanguageTargets>
-    <DefineConstants>$(DefineConstants),SILVERLIGHT=1</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'sl5' ">
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.ComponentModel.DataAnnotations">
-      <HintPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.ComponentModel.DataAnnotations.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <!-- Enable source link, we really only want this for framework assemblies and CI builds
   -->
   <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
-    
+
   </ItemGroup>
-  
+
 </Project>

@@ -57,9 +57,4 @@
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'!='sl5'">
-    <Compile Remove="Platforms\sl5\**\*.cs" />
-    <None Include="Platforms\sl5\**\*.cs" />
-  </ItemGroup>
-
 </Project>
