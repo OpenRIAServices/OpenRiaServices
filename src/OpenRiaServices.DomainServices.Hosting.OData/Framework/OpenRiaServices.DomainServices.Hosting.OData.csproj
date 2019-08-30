@@ -26,6 +26,8 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="Utils\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utils\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\WcfDomainServiceContext.cs" Link="Utils\WcfDomainServiceContext.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="DomainServices\TypeDescriptorExtensions.cs" />
     <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

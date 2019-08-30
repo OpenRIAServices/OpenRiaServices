@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -58,17 +61,13 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected async override ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
-                outputs = ServiceUtility.EmptyObjectArray;
-
-                IEnumerable<ValidationResult> validationErrors;
-                object result;
-
+                ServiceInvokeResult invokeResult;
                 try
                 {
                     InvokeDescription invokeDescription = new InvokeDescription(this.operation, inputs);
-                    result = ((DomainService)instance).Invoke(invokeDescription, out validationErrors);
+                    invokeResult = await instance.InvokeAsync(invokeDescription, CancellationToken.None).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -76,14 +75,17 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         throw;
                     }
-                    throw ServiceUtility.CreateFaultException(ex);
+                    throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
 
-                if (validationErrors != null && validationErrors.Any())
+                if (invokeResult.HasValidationErrors)
                 {
-                    throw ServiceUtility.CreateFaultException(validationErrors);
+                    throw ServiceUtility.CreateFaultException(invokeResult.ValidationErrors, disableStackTraces);
                 }
-                return result;
+                else
+                {
+                    return invokeResult.Result;
+                }
             }
 
             protected override void ConvertInputs(object[] inputs)

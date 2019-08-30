@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 #if DBCONTEXT
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 #else
 using System.Data;
 using System.Data.Objects;
 #endif
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.EntityFramework
@@ -121,10 +125,33 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// </summary>
         /// <typeparam name="T">The element Type of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total number of rows.</returns>
-        protected override int Count<T>(IQueryable<T> query)
+        protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            return query.Count();
+            return QueryHelper.CountAsync(query, cancellationToken);
+        }
+
+        /// <summary>
+        /// Enumerates the specified enumerable to guarantee eager execution. 
+        /// If possible code similar to <c>ToListAsync</c> is used, but with optimizations to start with a larger initial capacity
+        /// </summary>
+        /// <typeparam name="T">The element type of the enumerable.</typeparam>
+        /// <param name="enumerable">The enumerable to enumerate.</param>
+        /// <param name="estimatedResultCount">The estimated number of items the enumerable will yield.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
+        /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
+        protected override ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
+        {
+            // EF will throw if provider is not a IDbAsyncEnumerable
+            if (enumerable is IDbAsyncEnumerable<T> asyncEnumerable)
+            {
+                return QueryHelper.EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
+            }
+            else
+            {
+                return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
+            }
         }
 
         /// <summary>
@@ -132,17 +159,18 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// have been invoked. All changes are committed to the ObjectContext, and any resulting optimistic
         /// concurrency errors are processed.
         /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        protected override bool PersistChangeSet()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
-            return this.InvokeSaveChanges(true);
+            return new ValueTask<bool>(this.InvokeSaveChangesAsync(true, cancellationToken));
         }
 
-        private bool InvokeSaveChanges(bool retryOnConflict)
+        private async Task<bool> InvokeSaveChangesAsync(bool retryOnConflict, CancellationToken cancellationToken)
         {
             try
             {
-                this.ObjectContext.SaveChanges();
+                await this.ObjectContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -175,7 +203,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
                     }
 
                     // If all conflicts were resolved attempt a resubmit
-                    return this.InvokeSaveChanges(/* retryOnConflict */ false);
+                    return await this.InvokeSaveChangesAsync(/* retryOnConflict */ false, cancellationToken).ConfigureAwait(false);
                 }
 
                 // if the conflict wasn't resolved, call the error handler

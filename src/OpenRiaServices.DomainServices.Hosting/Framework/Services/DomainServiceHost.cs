@@ -77,7 +77,10 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             if (serviceType == typeof(IPrincipal))
             {
-                return HttpContext.Current.User;
+                if (HttpContext.Current != null)
+                    return HttpContext.Current.User;
+                else
+                    return OperationContext.Current.ClaimsPrincipal;
             }
 
             if (serviceType == typeof(HttpContext))

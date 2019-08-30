@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Dispatcher;
+using System.Threading.Tasks;
+using System.Web;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -19,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -32,46 +34,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         public object Invoke(object instance, object[] inputs, out object[] outputs)
         {
-            string operationName = this.Name;
-            long startTicks = DateTime.UtcNow.Ticks;
-            object result = null;
-            DomainService domainService = null;
-            try
-            {
-                DiagnosticUtility.OperationInvoked(operationName);
-
-                domainService = this.GetDomainService(instance);
-
-                // invoke the operation and process the result
-                this.ConvertInputs(inputs);
-                result = this.InvokeCore(domainService, inputs, out outputs);
-                result = this.ConvertReturnValue(result);
-
-                DiagnosticUtility.OperationCompleted(operationName, DiagnosticUtility.GetDuration(startTicks));
-            }
-            catch (FaultException)
-            {
-                DiagnosticUtility.OperationFaulted(operationName, DiagnosticUtility.GetDuration(startTicks));
-
-                // if the exception has already been transformed to a fault
-                // just rethrow it
-                throw;
-            }
-            catch (Exception ex)
-            {
-                if (ex.IsFatal())
-                {
-                    throw;
-                }
-                DiagnosticUtility.OperationFailed(operationName, DiagnosticUtility.GetDuration(startTicks));
-
-                // We need to ensure that any time an exception is thrown by the
-                // service it is transformed to a properly sanitized/configured
-                // fault exception.
-                throw ServiceUtility.CreateFaultException(ex);
-            }
-
-            return result;
+            throw new NotSupportedException();
         }
 
         protected virtual void ConvertInputs(object[] inputs)
@@ -83,16 +46,61 @@ namespace OpenRiaServices.DomainServices.Hosting
             return returnValue;
         }
 
-        protected abstract object InvokeCore(object instance, object[] inputs, out object[] outputs);
+        protected abstract ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces);
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
-            throw new NotSupportedException();
+            return TaskExtensions.BeginApm(InvokeAsync(instance, inputs), callback, state);
         }
 
         public object InvokeEnd(object instance, out object[] outputs, IAsyncResult result)
         {
-            throw new NotSupportedException();
+            outputs = ServiceUtility.EmptyObjectArray;
+            return TaskExtensions.EndApm<object>(result);
+        }
+
+        private async ValueTask<object> InvokeAsync(object instance, object[] inputs)
+        {
+            long startTicks = DiagnosticUtility.GetTicks();
+            bool disableStackTraces = true;
+
+            try
+            {
+                DiagnosticUtility.OperationInvoked(this.Name);
+
+                DomainService domainService = this.GetDomainService(instance);
+                disableStackTraces = domainService.GetDisableStackTraces();
+
+                // invoke the operation and process the result
+                this.ConvertInputs(inputs);
+                var result = await this.InvokeCoreAsync(domainService, inputs, disableStackTraces).ConfigureAwait(false);
+                result = this.ConvertReturnValue(result);
+
+                DiagnosticUtility.OperationCompleted(this.Name, DiagnosticUtility.GetDuration(startTicks));
+
+                return result;
+            }
+            catch (FaultException)
+            {
+                DiagnosticUtility.OperationFaulted(this.Name, DiagnosticUtility.GetDuration(startTicks));
+
+                // if the exception has already been transformed to a fault
+                // just rethrow it
+                throw;
+            }
+            catch (Exception ex)
+            {
+                if (ex.IsFatal())
+                {
+                    throw;
+                }
+                DiagnosticUtility.OperationFailed(this.Name, DiagnosticUtility.GetDuration(startTicks));
+
+                // We need to ensure that any time an exception is thrown by the
+                // service it is transformed to a properly sanitized/configured
+                // fault exception.
+                throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
+            }
         }
 
         private DomainService GetDomainService(object instance)
@@ -102,7 +110,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
 
             IServiceProvider serviceProvider = (IServiceProvider)OperationContext.Current.Host;
-            DomainServiceContext context = new DomainServiceContext(serviceProvider, this.operationType);
+            WcfDomainServiceContext context = new WcfDomainServiceContext(serviceProvider, this.operationType);
 
             try
             {
@@ -114,10 +122,10 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 if (tie.InnerException != null)
                 {
-                    throw ServiceUtility.CreateFaultException(tie.InnerException);
+                    throw ServiceUtility.CreateFaultException(tie.InnerException, context.DisableStackTraces);
                 }
 
-                throw ServiceUtility.CreateFaultException(tie);
+                throw ServiceUtility.CreateFaultException(tie, context.DisableStackTraces);
             }
             catch (Exception ex)
             {
@@ -125,7 +133,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 {
                     throw;
                 }
-                throw ServiceUtility.CreateFaultException(ex);
+                throw ServiceUtility.CreateFaultException(ex, context.DisableStackTraces);
             }
         }
     }

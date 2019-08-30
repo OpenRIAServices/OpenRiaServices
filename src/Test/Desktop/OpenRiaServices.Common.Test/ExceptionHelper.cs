@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
 #if !SILVERLIGHT
 using System.Web;
 #endif
@@ -12,6 +13,7 @@ using System.Web;
 namespace OpenRiaServices.DomainServices.Client.Test
 {
     public delegate void GenericDelegate();
+    public delegate Task AsyncDelegate();
 
     [DebuggerStepThrough]
     [System.Security.SecuritySafeCritical]  // Because our assembly is [APTCA] and we are used from partial trust tests
@@ -80,6 +82,50 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             return ExpectException<TException>(del, false);
         }
+
+
+#if !SILVERLIGHT
+        private static Task ExecuteDelegateAsync(AsyncDelegate asyncDelegate)
+        {
+            try
+            {
+                return asyncDelegate();
+            }
+            catch (Exception ex)
+            {
+                var tcs = new TaskCompletionSource<int>();
+                tcs.SetException(ex);
+                return tcs.Task;
+            }
+        }
+
+        public static Task<TException> ExpectExceptionAsync<TException>(AsyncDelegate asyncDel) where TException : Exception
+        {
+            return ExecuteDelegateAsync(asyncDel)
+                .ContinueWith(res =>
+                {
+                    return ExpectException<TException>(() => res.GetAwaiter().GetResult(), false);
+                });
+        }
+
+        public static Task<TException> ExpectExceptionAsync<TException>(AsyncDelegate del, string exceptionMessage)
+                                                       where TException : Exception
+        {
+            var task = ExpectExceptionAsync<TException>(del);
+            // Only check exception message on English build and OS, since some exception messages come from the OS
+            // and will be in the native language.
+            if (UnitTestHelper.EnglishBuildAndOS)
+            {
+                task = task.ContinueWith(res =>
+                {
+                    var ex = res.GetAwaiter().GetResult();
+                    Assert.AreEqual(exceptionMessage, ex.Message, "Incorrect exception message.");
+                    return ex;
+                });
+            }
+            return task;
+        }
+#endif
 
         public static TException ExpectException<TException>(GenericDelegate del, bool allowDerivedExceptions)
             where TException : Exception

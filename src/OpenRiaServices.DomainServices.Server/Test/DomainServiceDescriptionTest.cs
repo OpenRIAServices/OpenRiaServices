@@ -29,8 +29,9 @@ using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Dom
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
+    using System.Threading.Tasks;
     using MetaType = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.MetaType;
-    
+
 
     /// <summary>
     /// DomainServiceDescription tests
@@ -3652,18 +3653,21 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainService_BaseMethodOverrides : DomainService
     {
-        public override IEnumerable Query(QueryDescription queryDescription, out IEnumerable<ValidationResult> validationErrors, out int totalCount)
+        public override ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
-            return base.Query(queryDescription, out validationErrors, out totalCount);
+            return base.QueryAsync<T>(queryDescription, cancellationToken);
         }
-        public override bool Submit(ChangeSet changeSet)
+
+        public override ValueTask<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
         {
-            return base.Submit(changeSet);
+            return base.SubmitAsync(changeSet, cancellationToken);
         }
-        public override object Invoke(InvokeDescription invokeDescription, out IEnumerable<ValidationResult> validationErrors)
+
+        public override ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription, CancellationToken cancellationToken)
         {
-            return base.Invoke(invokeDescription, out validationErrors);
+            return base.InvokeAsync(invokeDescription, cancellationToken);
         }
+
         public override void Initialize(DomainServiceContext context)
         {
             base.Initialize(context);

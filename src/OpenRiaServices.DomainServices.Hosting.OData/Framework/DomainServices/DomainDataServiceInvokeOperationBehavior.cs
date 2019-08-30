@@ -7,6 +7,8 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel.Description;
+    using System.Threading;
+    using System.Threading.Tasks;
     using OpenRiaServices.DomainServices.Server;
 
     #endregion
@@ -52,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <param name="dispatchOperation">The run-time object that exposes customization properties for the operation described by operationDescription.</param>
         public void ApplyDispatchBehavior(OperationDescription operationDescription, System.ServiceModel.Dispatcher.DispatchOperation dispatchOperation)
         {
-                dispatchOperation.Invoker = new DomainDataServiceInvokeOperationInvoker(this.operation);
+            dispatchOperation.Invoker = new DomainDataServiceInvokeOperationInvoker(this.operation);
         }
 
         /// <summary>
@@ -91,19 +93,15 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
             /// </summary>
             /// <param name="instance">Instance to invoke the invoker against.</param>
             /// <param name="inputs">Input parameters post conversion.</param>
-            /// <param name="outputs">Optional out parameters.</param>
             /// <returns>Result of invocation.</returns>
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+
+            protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
             {
-                outputs = ServiceUtils.EmptyObjectArray;
-
-                IEnumerable<ValidationResult> validationErrors;
-                object result;
-
+                ServiceInvokeResult invokeResult;
                 try
                 {
                     InvokeDescription description = new InvokeDescription(this.operation, inputs);
-                    result = ((DomainService)instance).Invoke(description, out validationErrors);
+                    invokeResult = await ((DomainService)instance).InvokeAsync(description, CancellationToken.None).ConfigureAwait(false);
                 }
                 catch (UnauthorizedAccessException ex)
                 {
@@ -121,9 +119,9 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                     }
                 }
 
-                DomainDataServiceException.HandleValidationErrors(validationErrors);
-
-                return result;
+                // This will throw if there are any validation erros
+                DomainDataServiceException.HandleValidationErrors(invokeResult.ValidationErrors);
+                return invokeResult.Result;
             }
 
             /// <summary>

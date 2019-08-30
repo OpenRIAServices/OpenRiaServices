@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Server
         private readonly Type _domainServiceType;
         private bool? _requiresValidation;
         private bool? _requiresAuthorization;
-        private Func<object, object> _unwrapTaskResultFunc;
+        private Func<object, ValueTask<object>> _unwrapTaskResultFunc;
 
         /// <summary>
         /// Initializes a new instance of the DomainOperationEntry class
@@ -463,10 +463,10 @@ namespace OpenRiaServices.DomainServices.Server
             }
         }
 
-        internal object UnwrapTaskResult(object result)
+        internal ValueTask<object> UnwrapTaskResult(object result)
         {
             if (!IsTaskAsync)
-                return result;
+                return new ValueTask<object>(result);
 
             if (_unwrapTaskResultFunc == null)
             {
@@ -474,7 +474,7 @@ namespace OpenRiaServices.DomainServices.Server
                     _unwrapTaskResultFunc = UnwrapVoidResult;
                 else
                 {
-                    _unwrapTaskResultFunc = (Func<object, object>)Delegate.CreateDelegate(typeof(Func<object, object>),
+                    _unwrapTaskResultFunc = (Func<object, ValueTask<object>>)Delegate.CreateDelegate(typeof(Func<object, ValueTask<object>>),
                                                     typeof(DomainOperationEntry).GetMethod(nameof(UnwrapGenericResult), BindingFlags.Static | BindingFlags.NonPublic)
                                                     .MakeGenericMethod(this.ReturnType));
                 }
@@ -482,22 +482,30 @@ namespace OpenRiaServices.DomainServices.Server
             return _unwrapTaskResultFunc(result);
         }
 
-        private static object UnwrapVoidResult(object result)
+        private static async ValueTask<object> UnwrapVoidResult(object result)
         {
             if(result == null)
                 throw new InvalidOperationException("Task method returned null");
 
-            ((Task) result).Wait();
+            if (result is Task t)
+                await t.ConfigureAwait(false);
+
+            if (result is ValueTask vt)
+                await vt.ConfigureAwait(false);
+
             return null;
         }
 
 #pragma warning disable S1144 // Unused private types or members should be removed, this is used by reflection
-        private static object UnwrapGenericResult<T>(object result)
+        private static async ValueTask<object> UnwrapGenericResult<T>(object result)
         {
             if(result == null)
                 throw new InvalidOperationException("Task method returned null");
 
-            return ((Task<T>) result).Result;
+            if (result is Task<T> t)
+                return await t.ConfigureAwait(false);
+            else
+                return await ((ValueTask<T>)result).ConfigureAwait(false);
         }
 #pragma warning restore S1144 // Unused private types or members should be removed
 

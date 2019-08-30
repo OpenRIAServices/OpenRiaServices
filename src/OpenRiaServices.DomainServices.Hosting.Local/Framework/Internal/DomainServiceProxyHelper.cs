@@ -5,6 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting.Local
@@ -14,6 +17,9 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
     /// </summary>
     internal static class DomainServiceProxyHelper
     {
+        static readonly MethodInfo s_queryAsync = typeof(DomainService).GetMethod(nameof(DomainService.QueryAsync));
+
+
         /// <summary>
         /// Helper method performs a query operation against a given proxy instance.
         /// </summary>
@@ -47,12 +53,17 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
                 throw new InvalidOperationException(errorMessage);
             }
 
-            int totalCount;
             IEnumerable<ValidationResult> validationErrors;
             object[] parameterValues = parameters ?? new object[0];
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameterValues);
 
-            IEnumerable result = service.Query(queryDescription, out validationErrors, out totalCount);
+            // TODO: Look into removing this blocking Wait
+            var actualMethod = s_queryAsync.MakeGenericMethod(queryDescription.Method.AssociatedType);
+            var queryResult = ((ValueTask<ServiceQueryResult>)actualMethod.Invoke(service, new object[] { queryDescription, CancellationToken.None }))
+                .GetAwaiter().GetResult();
+
+            validationErrors = queryResult.ValidationErrors;
+            var result = queryResult.Result;
 
             if (validationErrors != null && validationErrors.Any())
             {
@@ -108,7 +119,8 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
 
             ChangeSet changeSet = new ChangeSet(new[] { changeSetEntry });
 
-            service.Submit(changeSet);
+            service.SubmitAsync(changeSet, CancellationToken.None)
+                .GetAwaiter().GetResult();
 
             if (changeSetEntry.HasError)
             {
@@ -135,18 +147,18 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             DomainService service = CreateDomainServiceInstance(domainService, context, domainServiceInstances);
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(service.GetType());
             DomainOperationEntry method = serviceDescription.GetInvokeOperation(name);
-            IEnumerable<ValidationResult> validationErrors;
 
             InvokeDescription invokeDescription = new InvokeDescription(method, parameters);
-            object result = service.Invoke(invokeDescription, out validationErrors);
-
-            if (validationErrors != null && validationErrors.Any())
+            // TODO: Look into removing this blocking Wait
+            var loadResult = service.InvokeAsync(invokeDescription, CancellationToken.None)
+                .GetAwaiter().GetResult();
+            if (loadResult.HasValidationErrors)
             {
-                IEnumerable<ValidationResultInfo> operationErrors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames));
+                IEnumerable<ValidationResultInfo> operationErrors = loadResult.ValidationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames));
                 throw new OperationException(Resource.DomainServiceProxy_OperationError, operationErrors);
             }
 
-            return result;
+            return loadResult.Result;
         }
 
         /// <summary>

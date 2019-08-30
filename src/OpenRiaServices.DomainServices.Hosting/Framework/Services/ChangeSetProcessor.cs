@@ -9,6 +9,8 @@ using System.Reflection;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Server;
 using System.Web;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -23,15 +25,18 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="domainService">The domain service that will process the changeset.</param>
         /// <param name="changeSetEntries">The change set entries to be processed.</param>
         /// <returns>Collection of results from the submit operation.</returns>
-        public static IEnumerable<ChangeSetEntry> Process(DomainService domainService, IEnumerable<ChangeSetEntry> changeSetEntries)
+        internal static async ValueTask<IEnumerable<ChangeSetEntry>> ProcessAsync(DomainService domainService, IEnumerable<ChangeSetEntry> changeSetEntries)
         {
+            // TODO:
+            // Consider making logic extensible (move to domainservice?)
+            // * Remove this method and "manually inline" the code where used?
+
             ChangeSet changeSet = CreateChangeSet(changeSetEntries);
-            
-            domainService.Submit(changeSet);
+            await domainService.SubmitAsync(changeSet, CancellationToken.None).ConfigureAwait(false);
 
             // Process the submit results and build the result list to be sent back
             // to the client
-            return GetSubmitResults(changeSet);
+            return GetSubmitResults(changeSet, domainService.GetDisableStackTraces());
         }
 
         /// <summary>
@@ -39,8 +44,9 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// be sent back to the client.
         /// </summary>
         /// <param name="changeSet">The change set processed.</param>
+        /// <param name="disableStackTraces">true to omit sending stack traces to clients (the secure approach)</param>
         /// <returns>The results list.</returns>
-        private static List<ChangeSetEntry> GetSubmitResults(ChangeSet changeSet)
+        private static List<ChangeSetEntry> GetSubmitResults(ChangeSet changeSet, bool disableStackTraces)
         {
             List<ChangeSetEntry> results = new List<ChangeSetEntry>();
             foreach (ChangeSetEntry changeSetEntry in changeSet.ChangeSetEntries)
@@ -52,15 +58,11 @@ namespace OpenRiaServices.DomainServices.Hosting
                     // if customErrors is turned on, clear out the stacktrace.
                     // This is an additional step here so that ValidationResultInfo
                     // and DomainService can remain agnostic to http-concepts
-                    HttpContext context = HttpContext.Current;
-                    if (context != null && context.IsCustomErrorEnabled)
+                    if (disableStackTraces && changeSetEntry.ValidationErrors != null)
                     {
-                        if (changeSetEntry.ValidationErrors != null)
+                        foreach (ValidationResultInfo error in changeSetEntry.ValidationErrors.Where(e => e.StackTrace != null))
                         {
-                            foreach (ValidationResultInfo error in changeSetEntry.ValidationErrors.Where(e => e.StackTrace != null))
-                            {
-                                error.StackTrace = null;
-                            }
+                            error.StackTrace = null;
                         }
                     }
                 }

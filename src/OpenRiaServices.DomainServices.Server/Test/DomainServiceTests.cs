@@ -15,6 +15,8 @@ using Cities;
 using OpenRiaServices.DomainServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Server.Test
 {
@@ -70,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ChangeSetEntry entry = new ChangeSetEntry();
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, new ChangeSetEntry[] { entry });
+                ChangeSetProcessor.ProcessAsync(ds, new ChangeSetEntry[] { entry }).GetAwaiter().GetResult();
             },
             string.Format(CultureInfo.CurrentCulture, Resource.InvalidChangeSet, Resource.InvalidChangeSet_NullEntity));
 
@@ -80,7 +82,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = new City(), Id = 1 });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             },
             string.Format(CultureInfo.CurrentCulture, Resource.InvalidChangeSet, Resource.InvalidChangeSet_DuplicateId));
 
@@ -91,7 +93,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = new City(), Id = 1, Associations = associations });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             }, string.Format(Resource.InvalidChangeSet,
                 string.Format(Resource.InvalidChangeSet_InvalidAssociationMember, typeof(City), "invalid")));
 
@@ -102,7 +104,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = new City(), Id = 1, Associations = associations });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             }, string.Format(Resource.InvalidChangeSet,
                 string.Format(Resource.InvalidChangeSet_InvalidAssociationMember, typeof(City), "StateName")));
 
@@ -113,7 +115,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = new City(), Id = 1, Associations = associations });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             }, string.Format(Resource.InvalidChangeSet,
                 string.Format(Resource.InvalidChangeSet_AssociatedIdsCannotBeNull, typeof(City).FullName, "ZipCodes")));
 
@@ -125,7 +127,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = new City(), Id = 2 });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             }, string.Format(Resource.InvalidChangeSet,
                 string.Format(Resource.InvalidChangeSet_AssociatedIdNotInChangeset, 9, typeof(City).FullName, "ZipCodes")));
 
@@ -134,7 +136,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = new City(), OriginalEntity = new Zip(), Id = 1 });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             }, string.Format(Resource.InvalidChangeSet, Resource.InvalidChangeSet_MustBeSameType));
 
             entries.Clear();
@@ -143,7 +145,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             entries.Add(new ChangeSetEntry { Entity = entity, Id = 2 });
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ChangeSetProcessor.Process(ds, entries);
+                ChangeSetProcessor.ProcessAsync(ds, entries).GetAwaiter().GetResult();
             },
             string.Format(CultureInfo.CurrentCulture, Resource.InvalidChangeSet, Resource.InvalidChangeSet_DuplicateEntity));
         }
@@ -164,19 +166,16 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
             QueryDescription query = new QueryDescription(queryOperation, new object[0], /* includeTotalCount */ true, new Zip[0].AsQueryable().Where(z => z.Code == 98052));
 
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
-            ExceptionHelper.ExpectArgumentException(delegate
-            {
-                ds.Query(query, out validationErrors, out totalCount);
-            }, "Expression of type 'System.Linq.EnumerableQuery`1[Cities.City]' cannot be used for parameter of type 'System.Linq.IQueryable`1[Cities.Zip]' of method 'System.Linq.IQueryable`1[Cities.Zip] Where[Zip](System.Linq.IQueryable`1[Cities.Zip], System.Linq.Expressions.Expression`1[System.Func`2[Cities.Zip,System.Boolean]])'");
+            ExceptionHelper.ExpectArgumentException(() =>  
+                ds.QueryAsync<City>(query, CancellationToken.None).GetAwaiter().GetResult()
+            , "Expression of type 'System.Linq.EnumerableQuery`1[Cities.City]' cannot be used for parameter of type 'System.Linq.IQueryable`1[Cities.Zip]' of method 'System.Linq.IQueryable`1[Cities.Zip] Where[Zip](System.Linq.IQueryable`1[Cities.Zip], System.Linq.Expressions.Expression`1[System.Func`2[Cities.Zip,System.Boolean]])'");
         }
 
         /// <summary>
         /// Verify that DomainService.Query executes IQueryables eagerly.
         /// </summary>
         [TestMethod]
-        public void Query_ExecutesEagerly()
+        public async Task Query_ExecutesEagerly()
         {
             CachedQueryResultsDomainService ds = new CachedQueryResultsDomainService();
 
@@ -188,9 +187,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
             QueryDescription query = new QueryDescription(queryOperation, new object[0]);
 
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
-            IEnumerable results = ds.Query(query, out validationErrors, out totalCount);
+            IEnumerable results = (await ds.QueryAsync<City>(query, CancellationToken.None)).Result;
             Assert.IsTrue(ds.ExecutedQuery, "Query wasn't executed eagerly.");
         }
 
@@ -201,17 +198,15 @@ namespace OpenRiaServices.DomainServices.Server.Test
         [TestMethod]
         [Description("Verify that DomainService.Query composes Take(resultLimit) on top of query results when a result limit is set on the query operation.")]
         [WorkItem(688352)]
-        public void Query_ResultLimit()
+        public async Task Query_ResultLimit()
         {
-            Func<string, int, QueryResult<Cities.City>> executeQuery = (queryName, pageSize) =>
+            Func<string, int, Task<QueryResult<Cities.City>>> executeQueryAsync = async (queryName, pageSize) =>
             {
                 ResultLimitDomainService ds = new ResultLimitDomainService();
-
                 DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Query);
                 ds.Initialize(dsc);
 
                 DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(ResultLimitDomainService));
-
                 IQueryable<City> filter = null;
 
                 if (pageSize > -1)
@@ -221,38 +216,35 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 DomainOperationEntry queryOperation = desc.GetQueryMethod(queryName);
                 QueryDescription query = new QueryDescription(queryOperation, new object[0], true, filter);
-
-                IEnumerable<ValidationResult> validationErrors;
-                int totalCount;
-                IEnumerable<Cities.City> queryResults = (IEnumerable<Cities.City>)ds.Query(query, out validationErrors, out totalCount);
+                var queryResult = await ds.QueryAsync<City>(query, CancellationToken.None);
                 return new QueryResult<City>()
                 {
-                    Results = queryResults,
-                    TotalCount = totalCount
+                    Results = (IEnumerable<Cities.City>)queryResult.Result,
+                    TotalCount = queryResult.TotalCount
                 };
             };
 
-            var allResults = executeQuery("GetCities", -1);
+            var allResults = await executeQueryAsync("GetCities", -1);
             int totalCities = allResults.Results.Count();
 
             // Verify that ResultLimit=0 is the same as not having a ResultLimit at all.
-            var results = executeQuery("GetCities0", -1);
+            var results = await executeQueryAsync("GetCities0", -1);
             Assert.AreEqual(totalCities, results.Results.Count(), "Expected to get back all cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=-1 is the same as not having a ResultLimit at all.
-            results = executeQuery("GetCitiesM1", -1);
+            results = await executeQueryAsync("GetCitiesM1", -1);
             Assert.AreEqual(totalCities, results.Results.Count(), "Expected to get back all cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=10 gives us back only the first 10 cities.
-            results = executeQuery("GetCities10", -1);
+            results = await executeQueryAsync("GetCities10", -1);
             Assert.AreEqual(10, results.Results.Count());
             Assert.IsTrue(results.Results.SequenceEqual(allResults.Results.Take(10)), "Expected the first 10 cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=10 with a page size of 2 gives us back only the first 2 cities, and it gives us back the proper total count.
-            results = executeQuery("GetCities10", 2);
+            results = await executeQueryAsync("GetCities10", 2);
             Assert.AreEqual(2, results.Results.Count());
             Assert.IsTrue(results.Results.SequenceEqual(allResults.Results.Take(2)), "Expected the first 2 cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
@@ -263,7 +255,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// for Query operations.
         /// </summary>
         [TestMethod]
-        public void OnErrorHandling_Query()
+        public async Task OnErrorHandling_Query()
         {
             OnErrorDomainService ds = new OnErrorDomainService();
 
@@ -278,13 +270,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             // verify that even top level exceptions go through
             // the OnError handler
-            IEnumerable<ValidationResult> validationErrors;
-            int totalCount;
             Exception expectedException = null;
             try
             {
                 // cause a context not initialized exception
-                ds.Query(query, out validationErrors, out totalCount);
+                await ds.QueryAsync<City>(query, CancellationToken.None);
             }
             catch (InvalidOperationException e)
             {
@@ -299,7 +289,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Query(query, out validationErrors, out totalCount);
+                await ds.QueryAsync<City>(query, CancellationToken.None);
             }
             catch (TargetInvocationException tie)
             {
@@ -316,10 +306,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             expectedException = null;
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
-            IEnumerable enumerable = null;
             try
             {
-                enumerable = ds.Query(queryDeferredException, out validationErrors, out totalCount);
+                await ds.QueryAsync<City>(queryDeferredException, CancellationToken.None);
             }
             catch (TargetInvocationException tie)
             {
@@ -338,7 +327,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                foreach (var entity in ds.Query(query, out validationErrors, out totalCount))
+                foreach (var entity in (await ds.QueryAsync<City>(query, CancellationToken.None)).Result)
                 {
                 }
             }
@@ -358,8 +347,10 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
             query = new QueryDescription(queryOperation, new object[] { 50 });
-            ds.Query(query, out validationErrors, out totalCount);
-            Assert.AreEqual(1, validationErrors.Count());
+            var queryResult = await ds.QueryAsync<City>(query, CancellationToken.None);
+            
+            Assert.IsTrue(queryResult.HasValidationErrors, "Should have validation errors");
+            Assert.AreEqual(1, queryResult.ValidationErrors.Count());
             Assert.IsNull(ds.LastError);
         }
 
@@ -368,7 +359,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// for invoke operations.
         /// </summary>
         [TestMethod]
-        public void OnErrorHandling_Invoke()
+        public async Task OnErrorHandling_Invoke()
         {
             OnErrorDomainService ds = new OnErrorDomainService();
 
@@ -380,12 +371,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             // verify that even top level exceptions go through
             // the OnError handler
-            IEnumerable<ValidationResult> validationErrors;
             Exception expectedException = null;
             try
             {
                 // cause a domain service not initialized exception
-                ds.Invoke(new InvokeDescription(operation, new object[] { 1 }), out validationErrors);
+                await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 1 }), CancellationToken.None);
             }
             catch (TargetInvocationException tie)
             {
@@ -403,7 +393,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             try
             {
                 // pass a null parameter
-                ds.Invoke(null, out validationErrors);
+                await ds.InvokeAsync(null, CancellationToken.None);
             }
             catch (TargetInvocationException tie)
             {
@@ -422,7 +412,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Invoke(new InvokeDescription(operation, new object[] { 1 }), out validationErrors);
+                await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 1 }), CancellationToken.None);
             }
             catch (TargetInvocationException tie)
             {
@@ -441,7 +431,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Invoke(new InvokeDescription(operation, new object[] { 1 }), out validationErrors);
+                await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 1 }), CancellationToken.None);
             }
             catch (TargetInvocationException tie)
             {
@@ -458,9 +448,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
             expectedException = null;
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
-            ds.Invoke(new InvokeDescription(operation, new object[] { 10 }), out validationErrors);
-            Assert.IsNotNull(validationErrors);
-            Assert.AreEqual(1, validationErrors.Count());
+            var invokeResult = await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 10 }), CancellationToken.None);
+            Assert.IsNotNull(invokeResult.ValidationErrors);
+            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
             Assert.IsNull(ds.LastError);
         }
 
@@ -469,7 +459,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// for submit.
         /// </summary>
         [TestMethod]
-        public void OnErrorHandling_Submit()
+        public async Task OnErrorHandling_Submit()
         {
             OnErrorDomainService ds = new OnErrorDomainService();
 
@@ -501,7 +491,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             try
             {
                 // cause a domain service not initialize exception
-                ds.Submit(cs);
+                await ds.SubmitAsync(cs, CancellationToken.None);
             }
             catch (InvalidOperationException e)
             {
@@ -515,7 +505,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             try
             {
                 // pass a null parameter
-                ds.Submit(null);
+                await ds.SubmitAsync(null, CancellationToken.None);
             }
             catch (ArgumentNullException e)
             {
@@ -530,7 +520,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Submit(cs);
+                await ds.SubmitAsync(cs, CancellationToken.None);
             }
             catch (Exception e)
             {
@@ -545,7 +535,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds.Initialize(dsc);
             try
             {
-                ds.Submit(cs);
+                await ds.SubmitAsync(cs, CancellationToken.None);
             }
             catch (Exception e)
             {
@@ -559,7 +549,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ds = new OnErrorDomainService();
             ds.Initialize(dsc);
             ((City)updateOperation.Entity).StateName = "ASDF"; // Too long
-            ds.Submit(cs);
+            await ds.SubmitAsync(cs, CancellationToken.None);
             Assert.IsTrue(cs.HasError);
             Assert.AreEqual(1, cs.ChangeSetEntries.Count(p => p.HasError));
             Assert.IsNull(ds.LastError);
@@ -596,7 +586,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         }
 
         [TestMethod]
-        public void Bug594068_PersistChangesErrorHandling()
+        public async Task Bug594068_PersistChangesErrorHandling()
         {
             ErrorTestDomainService ds = new ErrorTestDomainService();
             DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
@@ -622,7 +612,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // Verify that the validation exception is handled and is associated
             // with the right ChangeSetEntry
             ChangeSet cs = new ChangeSet(new ChangeSetEntry[] { updateOp });
-            ds.Submit(cs);
+            await ds.SubmitAsync(cs, CancellationToken.None);
             ChangeSetEntry resultOp = cs.ChangeSetEntries.First();
             Assert.IsTrue(resultOp.HasError);
             var error = resultOp.ValidationErrors.Single();
@@ -791,7 +781,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         /// If the method returns false, the changeset is not processed.
         /// </summary>
         [TestMethod]
-        public void ProviderOverrides_ValidateChangeset()
+        public async Task ProviderOverrides_ValidateChangesetAsync()
         {
             TestDomainService_OverloadTests dp = null;
             TestEntity e = new TestEntity
@@ -811,7 +801,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             // verify success for valid changeset
             dp = new TestDomainService_OverloadTests();
-            dp.Submit(cs);
+            await dp.SubmitAsync(cs, CancellationToken.None);
             Assert.AreEqual(1, dp.ValidateCount);
             Assert.AreEqual(1, dp.UpdateCount);
             Assert.AreEqual(1, dp.SubmitCount);
@@ -819,7 +809,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // verify that if validation fails, the changeset isn't processed
             dp = new TestDomainService_OverloadTests();
             dp.IsValid = false;
-            dp.Submit(cs);
+            await dp.SubmitAsync(cs, CancellationToken.None);
             Assert.AreEqual(1, dp.ValidateCount);
             Assert.AreEqual(0, dp.UpdateCount);
             Assert.AreEqual(0, dp.SubmitCount);
@@ -830,7 +820,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         public void ValidateOperations_Invalid_Update()
         {
             Zip updatedZip = new Zip() { Code = -1, FourDigit = -1 };
-            
+
             ChangeSetEntry operation = new ChangeSetEntry();
             operation.DomainOperationEntry = _domainServiceDescription.GetSubmitMethod(typeof(Zip), DomainOperation.Update);
             operation.Operation = DomainOperation.Update;
@@ -892,7 +882,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation1.Entity = entity1;
             customUpdateOperation1.Operation = DomainOperation.Insert;
             customUpdateOperation1.DomainOperationEntry = insert;
-            customUpdateOperation1.EntityActions = new EntityActionCollection { {"UpdateEntityWithInt", new object[] { 1 } }};
+            customUpdateOperation1.EntityActions = new EntityActionCollection { { "UpdateEntityWithInt", new object[] { 1 } } };
 
             // Custom update arrives with an updated entity.
             // This ensures complex type deep validation is respected.
@@ -908,7 +898,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             customUpdateOperation3.Entity = entity2;
             customUpdateOperation3.Operation = DomainOperation.None;
             customUpdateOperation3.DomainOperationEntry = null;
-            
+
             List<DomainServiceInsertCustom_Validated_Object> param = new List<DomainServiceInsertCustom_Validated_Object>();
             param.Add(new DomainServiceInsertCustom_Validated_Object());
             customUpdateOperation3.EntityActions = new EntityActionCollection { { "UpdateEntityWithCollection", new object[] { param } } };
@@ -1065,7 +1055,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             success = DomainService.ValidateOperations(new ChangeSetEntry[] { update }, dsd, null);
             Assert.IsFalse(success);
         }
-        
+
         [TestMethod]
         [Description("Calling ValidateOperations with domain method that fails validation")]
         public void ValidateOperations_Invalid_DomainMethod()
@@ -1243,7 +1233,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Verifies the behavior of ChangeSet.Associate() in end-to-end DomainService scenarios.")]
-        public void DomainService_AssociatedEntities_ChangePropagation()
+        public async Task DomainService_AssociatedEntities_ChangePropagationAsync()
         {
             var context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Query);
             var service = new DomainService_AssociatedEntities();
@@ -1252,9 +1242,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             service.Initialize(context);
 
-            var totalCount = 0;
-            IEnumerable<ValidationResult> validationErrors;
-            var result = (IEnumerable<PresentationCustomer>)service.Query(new QueryDescription(queryOp), out validationErrors, out totalCount);
+            var result = (IEnumerable<PresentationCustomer>)(await service.QueryAsync<PresentationCustomer>(new QueryDescription(queryOp), CancellationToken.None)).Result;
             var pmEntity1 = result.Single(p => p.ID == 1);
 
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
@@ -1267,7 +1255,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             service.Initialize(context);
             var updateOp = new ChangeSetEntry() { Entity = pmEntity1, Operation = DomainOperation.Update, HasMemberChanges = true };
             var changeSet = new ChangeSet(new[] { updateOp });
-            service.Submit(changeSet);
+            await service.SubmitAsync(changeSet, CancellationToken.None);
 
             Assert.AreEqual("UpdatedFirst1 UpdatedLast1", pmEntity1.Name);
             Assert.AreEqual("Value1.1", pmEntity1.Message);
@@ -1275,7 +1263,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Verifies that the ChangeSet.Replace method works even if called from a Associate transformation.")]
-        public void DomainService_AssociatedEntities_ReplaceInTransform()
+        public async Task DomainService_AssociatedEntities_ReplaceInTransform()
         {
             var context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Query);
             var service = new DomainService_AssociatedEntities();
@@ -1284,9 +1272,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             service.Initialize(context);
 
-            var totalCount = 0;
-            IEnumerable<ValidationResult> validationErrors;
-            var result = (IEnumerable<PresentationCustomer>)service.Query(new QueryDescription(queryOp), out validationErrors, out totalCount);
+            var result = (IEnumerable<PresentationCustomer>)
+                (await service.QueryAsync<PresentationCustomer>(new QueryDescription(queryOp), CancellationToken.None))
+                .Result;
             var pmEntity1 = result.Single(p => p.ID == 1);
 
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
@@ -1303,7 +1291,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             };
             var changeSet = new ChangeSet(new[] { customOp });
             pmEntity1.Message = "ReplaceInTransform";
-            service.Submit(changeSet);
+            await service.SubmitAsync(changeSet, CancellationToken.None);
 
             // No changes
             var entityInChangeSet = customOp.Entity as PresentationCustomer;
@@ -1316,7 +1304,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
         [TestMethod]
         [Description("Verifies that the expected exception is raised when a change conflict occurs and the entity in conflict is not contained in the changeset.")]
-        public void DomainService_ChangeConflict_EntityNotInChangeSet()
+        public async Task DomainService_ChangeConflict_EntityNotInChangeSet()
         {
             var context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Query);
             var service = new DomainService_AssociatedEntities();
@@ -1325,9 +1313,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             service.Initialize(context);
 
-            var totalCount = 0;
-            IEnumerable<ValidationResult> validationErrors;
-            var result = (IEnumerable<PresentationCustomer>)service.Query(new QueryDescription(queryOp), out validationErrors, out totalCount);
+
+            var result = (IEnumerable<PresentationCustomer>)(await service.QueryAsync<PresentationCustomer>(new QueryDescription(queryOp), CancellationToken.None)).Result;
             var pmEntity1 = result.Single(p => p.ID == 1);
 
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
@@ -1346,7 +1333,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             pmEntity1.Message = "UseEntityNotInChangeSet";
 
             ExceptionHelper.ExpectArgumentException(
-                () => service.Submit(changeSet),
+                () => service.SubmitAsync(changeSet, CancellationToken.None).GetAwaiter().GetResult(),
                 Resource.ChangeSet_ChangeSetEntryNotFound,
                 "entity");
         }
@@ -2002,7 +1989,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             throw new ValidationException("Invalid City Update!", null, city);
         }
 
-        protected override bool PersistChangeSet()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
             // verify that validation exceptions thrown from PersistChangeSet
             // are handled by the framework properly
@@ -2054,7 +2041,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             UpdateCount++;
         }
 
-        protected override bool PersistChangeSet()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
             SubmitCount++;
 
@@ -2068,21 +2055,21 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 updateOperation.ConflictMembers = null;
             }
 
-            return !this.ChangeSet.HasError;
+            return new ValueTask<bool>(!this.ChangeSet.HasError);
         }
 
-        protected override bool ValidateChangeSet()
+        protected override async ValueTask<bool> ValidateChangeSetAsync(CancellationToken cancellationToken)
         {
             ValidateCount++;
 
-            base.ValidateChangeSet();
+            await base.ValidateChangeSetAsync(cancellationToken);
 
             return IsValid;
         }
 
-        protected override bool ExecuteChangeSet()
+        protected override ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
         {
-            return base.ExecuteChangeSet();
+            return base.ExecuteChangeSetAsync(cancellationToken);
         }
     }
 
@@ -2223,7 +2210,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     public class DomainService_AssociatedEntities : DomainService
     {
         private readonly IEnumerable<DataStoreCustomer> customers =
-            new[] 
+            new[]
             {
                 new DataStoreCustomer() { ID = 1, FirstName = "First1", LastName = "Last1", Message = "Value1" },
                 new DataStoreCustomer() { ID = 2, FirstName = "First2", LastName = "Last2", Message = "Value2" },
@@ -2302,7 +2289,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 });
         }
 
-        protected override bool PersistChangeSet()
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
             // Check if we should fake an optimistic concurrency exception and 
             // return conflict members
@@ -2319,7 +2306,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 }
             }
 
-            return !this.ChangeSet.HasError;
+            return new ValueTask<bool>(!this.ChangeSet.HasError);
         }
     }
 

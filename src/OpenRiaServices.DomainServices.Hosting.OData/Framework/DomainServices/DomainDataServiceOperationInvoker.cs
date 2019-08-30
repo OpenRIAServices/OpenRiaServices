@@ -1,17 +1,16 @@
 using System;
 using System.ServiceModel;
+using TaskExtensions = OpenRiaServices.DomainServices.Hosting.TaskExtensions;
+using System.ComponentModel;
+using System.Net;
+using System.Reflection;
+using System.ServiceModel.Dispatcher;
+using OpenRiaServices.DomainServices.Server;
+using System.Web;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Hosting.OData
 {
-    #region Namespaces
-    using System.ComponentModel;
-    using System.Net;
-    using System.Reflection;
-    using System.ServiceModel.Dispatcher;
-    using OpenRiaServices.DomainServices.Server;
-    using System.Web;
-
-    #endregion
 
     /// <summary>Base class for all operation invokers supported on the domain data service endpoint.</summary>
     internal abstract class DomainDataServiceOperationInvoker : IOperationInvoker
@@ -29,13 +28,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <summary>
         /// Gets a value that specifies whether the Invoke or InvokeBegin method is called by the dispatcher.
         /// </summary>
-        public bool IsSynchronous
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsSynchronous => false;
 
         /// <summary>
         /// Returns an array of parameter objects.
@@ -43,14 +36,18 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <returns>The parameters that are to be used as arguments to the operation.</returns>
         public abstract object[] AllocateInputs();
 
+        object IOperationInvoker.Invoke(object instance, object[] inputs, out object[] outputs)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Returns an object and a set of output objects from an instance and set of input objects. 
         /// </summary>
         /// <param name="instance">The object to be invoked.</param>
         /// <param name="inputs">The inputs to the method.</param>
-        /// <param name="outputs">The outputs from the method.</param>
         /// <returns>The return value.</returns>
-        public object Invoke(object instance, object[] inputs, out object[] outputs)
+        public async ValueTask<object> InvokeAsync(object instance, object[] inputs)
         {
             object result = null;
             DomainService domainService = null;
@@ -65,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
 
                 // Obtain the result.
                 this.ConvertInputs(inputs);
-                result = this.InvokeCore(domainService, inputs, out outputs);
+                result = await this.InvokeCoreAsync(domainService, inputs).ConfigureAwait(false);
                 result = this.ConvertReturnValue(result);
             }
             catch (DomainDataServiceException)
@@ -112,34 +109,20 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// </summary>
         /// <param name="instance">Instance to invoke the invoker against.</param>
         /// <param name="inputs">Input parameters post conversion.</param>
-        /// <param name="outputs">Optional out parameters.</param>
         /// <returns>Result of invocation.</returns>
-        protected abstract object InvokeCore(object instance, object[] inputs, out object[] outputs);
+        protected abstract ValueTask<object> InvokeCoreAsync(object instance, object[] inputs);
 
-        /// <summary>
-        /// An asynchronous implementation of the Invoke method.
-        /// </summary>
-        /// <param name="instance">The object to be invoked.</param>
-        /// <param name="inputs">The inputs to the method.</param>
-        /// <param name="callback">The asynchronous callback object.</param>
-        /// <param name="state">Associated state data.</param>
-        /// <returns>A System.IAsyncResult used to complete the asynchronous call.</returns>
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
-            throw new NotSupportedException();
+            return TaskExtensions.BeginApm(InvokeAsync(instance, inputs), callback, state);
         }
 
-        /// <summary>
-        /// The asynchronous end method.
-        /// </summary>
-        /// <param name="instance">The object invoked.</param>
-        /// <param name="outputs">The outputs from the method.</param>
-        /// <param name="result">The System.IAsyncResult object.</param>
-        /// <returns>The return value.</returns>
         public object InvokeEnd(object instance, out object[] outputs, IAsyncResult result)
         {
-            throw new NotSupportedException();
+            outputs = ServiceUtils.EmptyObjectArray;
+            return TaskExtensions.EndApm<object>(result);
         }
+
 
         /// <summary>
         /// Validate the current request.
@@ -180,7 +163,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
                 (DomainDataServiceContractBehavior.DomainDataServiceInstanceInfo)instance;
 
             IServiceProvider serviceProvider = (IServiceProvider)OperationContext.Current.Host;
-            DomainServiceContext context = new DomainServiceContext(serviceProvider, this.operationType);
+            DomainServiceContext context = new WcfDomainServiceContext(serviceProvider, this.operationType);
 
             try
             {

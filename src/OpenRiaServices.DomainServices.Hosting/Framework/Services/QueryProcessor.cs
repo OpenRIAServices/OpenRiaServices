@@ -6,6 +6,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -20,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         // keyed by entity type, returns a bool that indicates whether a query result of that type requires flattening
         private static ConcurrentDictionary<Type, bool> requiresFlatteningByType = new ConcurrentDictionary<Type, bool>();
 
-        public static QueryResult<TEntity> Process<TEntity>(DomainService domainService, DomainOperationEntry queryOperation, object[] parameters, ServiceQuery serviceQuery, out IEnumerable<ValidationResult> validationErrors, out int totalCount)
+        public static async ValueTask<QueryResult<TEntity>> ProcessAsync<TEntity>(DomainService domainService, DomainOperationEntry queryOperation, object[] parameters, ServiceQuery serviceQuery)
         {
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(domainService.GetType());
 
@@ -35,7 +38,14 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // invoke the query operation
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameters, includeTotalCount, query);
-            IEnumerable<TEntity> results = (IEnumerable<TEntity>)domainService.Query(queryDescription, out validationErrors, out totalCount);
+            var res = await domainService.QueryAsync<TEntity>(queryDescription,  CancellationToken.None);
+
+            if (res.HasValidationErrors)
+            {
+                return new QueryResult<TEntity>(res.ValidationErrors);
+            }
+            IEnumerable<TEntity> results = (IEnumerable<TEntity>)res.Result;
+            int totalCount = res.TotalCount;
 
             // Performance optimization: if there are no included associations, we can assume we don't need to flatten.
             if (!QueryProcessor.RequiresFlattening(domainServiceDescription, typeof(TEntity)))

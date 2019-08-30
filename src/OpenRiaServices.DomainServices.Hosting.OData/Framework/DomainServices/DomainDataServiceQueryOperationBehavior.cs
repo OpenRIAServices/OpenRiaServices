@@ -7,6 +7,8 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.ServiceModel.Description;
+    using System.Threading;
+    using System.Threading.Tasks;
     using OpenRiaServices.DomainServices.Server;
 
     #endregion
@@ -92,22 +94,21 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
             /// </summary>
             /// <param name="instance">Instance to invoke the invoker against.</param>
             /// <param name="inputs">Input parameters post conversion.</param>
-            /// <param name="outputs">Optional out parameters.</param>
             /// <returns>Result of invocation.</returns>
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected override async ValueTask<object> InvokeCoreAsync(object instance, object[] inputs)
             {
-                outputs = ServiceUtils.EmptyObjectArray;
-
+                
                 // DEVNOTE(wbasheer): Need to perform query composition here for query options, potentially
                 // need to inject the query options in the message properties somewhere.
                 QueryDescription queryDesc = new QueryDescription(this.operation, inputs);
 
                 IEnumerable<ValidationResult> validationErrors;
-                int totalCount;
                 IEnumerable<TEntity> result;
                 try
                 {
-                    result = (IEnumerable<TEntity>)((DomainService)instance).Query(queryDesc, out validationErrors, out totalCount);
+                    var queryResult = await ((DomainService)instance).QueryAsync<TEntity>(queryDesc, CancellationToken.None).ConfigureAwait(false);
+                    validationErrors = queryResult.ValidationErrors;
+                    result = (IEnumerable<TEntity>)queryResult.Result;
                 }
                 catch (UnauthorizedAccessException ex)
                 {

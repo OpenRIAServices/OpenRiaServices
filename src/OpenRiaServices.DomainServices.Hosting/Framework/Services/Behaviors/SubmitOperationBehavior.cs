@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -47,16 +48,13 @@ namespace OpenRiaServices.DomainServices.Hosting
                     return ServiceUtility.SubmitOperationName;
                 }
             }
-
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected override async ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
-                DomainService domainService = (DomainService)instance;
                 IEnumerable<ChangeSetEntry> changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
-                outputs = ServiceUtility.EmptyObjectArray;
 
                 try
                 {
-                    return ChangeSetProcessor.Process(domainService, changeSetEntries);
+                    return await ChangeSetProcessor.ProcessAsync(instance, changeSetEntries);
                 }
                 catch (Exception ex)
                 {
@@ -64,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         throw;
                     }
-                    throw ServiceUtility.CreateFaultException(ex);
+                    throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
             }
 

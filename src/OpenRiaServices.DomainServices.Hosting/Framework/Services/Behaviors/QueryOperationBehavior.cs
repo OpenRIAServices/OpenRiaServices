@@ -11,6 +11,7 @@ using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -77,12 +78,13 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return new object[this.operation.Parameters.Count];
             }
 
-            protected override object InvokeCore(object instance, object[] inputs, out object[] outputs)
+            protected override async ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
-                outputs = ServiceUtility.EmptyObjectArray;
-
                 ServiceQuery serviceQuery = null;
                 QueryAttribute queryAttribute = (QueryAttribute)this.operation.OperationAttribute;
+                // httpContext is lost on await so need to save it for later ise
+                HttpContext httpContext = HttpContext.Current;
+
                 if (queryAttribute.IsComposable)
                 {
                     object value;
@@ -92,13 +94,11 @@ namespace OpenRiaServices.DomainServices.Hosting
                     }
                 }
 
-                IEnumerable<ValidationResult> validationErrors;
-                int totalCount;
                 QueryResult<TEntity> result;
                 try
                 {
-                    QueryOperationInvoker.SetOutputCachingPolicy(this.operation);
-                    result = QueryProcessor.Process<TEntity>((DomainService)instance, this.operation, inputs, serviceQuery, out validationErrors, out totalCount);
+                    QueryOperationInvoker.SetOutputCachingPolicy(httpContext, this.operation);
+                    result = await QueryProcessor.ProcessAsync<TEntity>(instance, this.operation, inputs, serviceQuery);
                 }
                 catch (Exception ex)
                 {
@@ -106,13 +106,14 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         throw;
                     }
-                    QueryOperationInvoker.ClearOutputCachingPolicy();
-                    throw ServiceUtility.CreateFaultException(ex);
+                    QueryOperationInvoker.ClearOutputCachingPolicy(httpContext);
+                    throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
 
-                if (validationErrors != null && validationErrors.Any())
+
+                if (result.ValidationErrors != null && result.ValidationErrors.Any())
                 {
-                    throw ServiceUtility.CreateFaultException(validationErrors);
+                    throw ServiceUtility.CreateFaultException(result.ValidationErrors, disableStackTraces);
                 }
 
                 return result;
@@ -130,9 +131,8 @@ namespace OpenRiaServices.DomainServices.Hosting
             /// <summary>
             /// Clears the output cache policy.
             /// </summary>
-            private static void ClearOutputCachingPolicy()
+            private static void ClearOutputCachingPolicy(HttpContext context)
             {
-                HttpContext context = HttpContext.Current;
                 if (context == null)
                 {
                     return;
@@ -144,14 +144,12 @@ namespace OpenRiaServices.DomainServices.Hosting
             /// <summary>
             /// Sets the output cache policy for the specified domain operation entry.
             /// </summary>
+            /// <param name="context">Current HttpContext</param>
             /// <param name="domainOperationEntry">The domain operation entry we need to define the cache policy for.</param>
-            private static void SetOutputCachingPolicy(DomainOperationEntry domainOperationEntry)
+            private static void SetOutputCachingPolicy(HttpContext context, DomainOperationEntry domainOperationEntry)
             {
-                HttpContext context = HttpContext.Current;
                 if (context == null)
-                {
                     return;
-                }
 
                 if (QueryOperationInvoker.SupportsCaching(context, domainOperationEntry))
                 {

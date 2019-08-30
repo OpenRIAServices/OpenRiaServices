@@ -100,9 +100,14 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
         }
 
+        public static long GetTicks()
+        {
+            return DateTime.UtcNow.Ticks;
+        }
+
         public static long GetDuration(long startTicks)
         {
-            return (long)new TimeSpan(DateTime.UtcNow.Ticks - startTicks).TotalMilliseconds;
+            return (long)new TimeSpan(GetTicks() - startTicks).TotalMilliseconds;
         }
 
         private static string GetCallerInfo()

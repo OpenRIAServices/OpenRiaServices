@@ -7,8 +7,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices;
 using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
 
 namespace OpenRiaServices.DomainServices.Server
@@ -24,10 +24,7 @@ namespace OpenRiaServices.DomainServices.Server
         internal const int TotalCountUndefined = -1;
         private const int TotalCountEqualsResultSetCount = -2;
 
-        private static IDomainServiceFactory domainServiceFactory;
-        private static MethodInfo countMethod = typeof(DomainService).GetMethod(nameof(DomainService.Count), BindingFlags.NonPublic | BindingFlags.Instance);
-        private static MethodInfo enumerateMethod = typeof(DomainService).GetMethod(nameof(DomainService.Enumerate), BindingFlags.NonPublic | BindingFlags.Static);
-        private static ConcurrentDictionary<Type, Func<IEnumerable, int, IEnumerable>> enumerateMethodMap = new ConcurrentDictionary<Type, Func<IEnumerable, int, IEnumerable>>();
+        private static IDomainServiceFactory s_domainServiceFactory;
 
         private ChangeSet _changeSet;
         private DomainServiceContext _serviceContext;
@@ -51,16 +48,16 @@ namespace OpenRiaServices.DomainServices.Server
         {
             get
             {
-                if (DomainService.domainServiceFactory == null)
+                if (DomainService.s_domainServiceFactory == null)
                 {
-                    DomainService.domainServiceFactory = new DefaultDomainServiceFactory();
+                    DomainService.s_domainServiceFactory = new DefaultDomainServiceFactory();
                 }
 
-                return DomainService.domainServiceFactory;
+                return DomainService.s_domainServiceFactory;
             }
             set
             {
-                DomainService.domainServiceFactory = value;
+                DomainService.s_domainServiceFactory = value;
             }
         }
 
@@ -82,7 +79,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Gets the active <see cref="DomainServiceContext"/> for this <see cref="DomainService"/>.
         /// </summary>
-        protected DomainServiceContext ServiceContext
+        public DomainServiceContext ServiceContext
         {
             get
             {
@@ -264,18 +261,16 @@ namespace OpenRiaServices.DomainServices.Server
         /// and returns the results. If the query returns a singleton, it should still be returned
         /// as an <see cref="IEnumerable"/> containing the single result.
         /// </summary>
-        /// <param name="queryDescription">The description of the query to perform.</param>
-        /// <param name="validationErrors">Output parameter that will contain any validation errors encountered. If no validation
-        /// errors are encountered, this will be set to <c>null</c>.</param>
-        /// <param name="totalCount">Returns the total number of results based on the specified query, but without 
+        /// <param name="queryDescription">The description of the query to perform.
         /// any paging applied to it.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The query results. May be null if there are no query results.</returns>
-        public virtual IEnumerable Query(QueryDescription queryDescription, out IEnumerable<ValidationResult> validationErrors, out int totalCount)
+        public async virtual ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
             IEnumerable enumerableResult = null;
+            IReadOnlyCollection<T> enumeratedResult = null;
             List<ValidationResult> validationErrorList = null;
-
-            validationErrors = null;
+            int totalCount;
 
             try
             {
@@ -299,10 +294,7 @@ namespace OpenRiaServices.DomainServices.Server
                         validationErrorList.Add(new ValidationResult(error.ErrorMessage, error.MemberNames));
                     }
 
-                    validationErrors = validationErrorList.AsReadOnly();
-                    totalCount = DomainService.TotalCountUndefined;
-
-                    return null;
+                    return new ServiceQueryResult(validationErrorList);
                 }
 
                 object result = null;
@@ -313,7 +305,10 @@ namespace OpenRiaServices.DomainServices.Server
                     try
                     {
                         result = queryDescription.Method.Invoke(this, parameters, out totalCount);
-                        result = queryDescription.Method.UnwrapTaskResult(result);
+                        if (queryDescription.Method.IsTaskAsync)
+                        {
+                            result = await queryDescription.Method.UnwrapTaskResult(result).ConfigureAwait(false);
+                        }
                     }
                     catch (TargetInvocationException tie)
                     {
@@ -344,16 +339,14 @@ namespace OpenRiaServices.DomainServices.Server
                     }
 
                     validationErrorList.Add(new ValidationResult(vex.ValidationResult.ErrorMessage, vex.ValidationResult.MemberNames));
-
-                    validationErrors = validationErrorList.AsReadOnly();
-                    totalCount = DomainService.TotalCountUndefined;
-
-                    return null;
+                    return new ServiceQueryResult(validationErrorList);
                 }
                 finally
                 {
                     this.ServiceContext.Operation = null;
                 }
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 // One or more results were returned. If the result is enumerable, compose
                 // any specified query operators, otherwise just return the singleton instance.
@@ -368,7 +361,7 @@ namespace OpenRiaServices.DomainServices.Server
                         enumerableResult = QueryComposer.Compose(enumerableResult.AsQueryable(), queryDescription.Query);
                         if (totalCount == DomainService.TotalCountUndefined)
                         {
-                            totalCount = this.GetTotalCountForQuery(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false);
+                            totalCount = await this.GetTotalCountForQueryAsync<T>(queryDescription, (IQueryable)enumerableResult, /* skipPagingCheck */ false, cancellationToken).ConfigureAwait(false);
                         }
                     }
                     else if (totalCount == DomainService.TotalCountUndefined)
@@ -382,22 +375,17 @@ namespace OpenRiaServices.DomainServices.Server
                     {
                         if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                         {
-                            totalCount = this.GetTotalCountForQuery(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true);
+                            totalCount = await this.GetTotalCountForQueryAsync<T>(queryDescription, enumerableResult.AsQueryable(), /* skipPagingCheck */ true, cancellationToken).ConfigureAwait(false);
                         }
 
                         enumerableResult = limitedResults;
                     }
 
                     // Enumerate the query.
-                    Func<IEnumerable, int, IEnumerable> enumerateMethod = DomainService.enumerateMethodMap.GetOrAdd(queryDescription.Method.AssociatedType, type =>
-                    {
-                        MethodInfo concreteEnumerateMethod = DomainService.enumerateMethod.MakeGenericMethod(type);
-                        return (Func<IEnumerable, int, IEnumerable>)Delegate.CreateDelegate(typeof(Func<IEnumerable, int, IEnumerable>), concreteEnumerateMethod);
-                    });
-                    enumerableResult = enumerateMethod(enumerableResult, DomainService.DefaultEstimatedQueryResultCount);
+                    enumeratedResult = await EnumerateAsync<T>(enumerableResult, DomainService.DefaultEstimatedQueryResultCount, cancellationToken).ConfigureAwait(false);
                     if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                     {
-                        totalCount = ((Array)enumerableResult).Length;
+                        totalCount = enumeratedResult.Count;
                     }
                 }
                 else
@@ -405,9 +393,7 @@ namespace OpenRiaServices.DomainServices.Server
                     // create a strongly typed array for the singleton return
                     if (result != null)
                     {
-                        Array array = Array.CreateInstance(queryDescription.Method.ReturnType, 1);
-                        array.SetValue(result, 0);
-                        enumerableResult = array;
+                        enumeratedResult = new T[] { (T)result };
                     }
                 }
             }
@@ -430,23 +416,17 @@ namespace OpenRiaServices.DomainServices.Server
                 throw;
             }
 
-            return enumerableResult;
+            return new ServiceQueryResult(enumeratedResult, totalCount);
         }
 
         /// <summary>
         /// Invokes the specified invoke operation.
         /// </summary>
         /// <param name="invokeDescription">The description of the invoke operation to perform.</param>
-        /// <param name="validationErrors">An output parameter collection to which any validation errors 
-        /// will be added. This will be set to <c>null</c> if no validation errors are encountered.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The return value of the invocation.</returns>
-        public virtual object Invoke(InvokeDescription invokeDescription, out IEnumerable<ValidationResult> validationErrors)
+        public virtual async ValueTask<ServiceInvokeResult> InvokeAsync(InvokeDescription invokeDescription, CancellationToken cancellationToken)
         {
-            object returnValue = null;
-            validationErrors = null;
-
-            List<ValidationResult> validationErrorsList = null;
-
             try
             {
                 if (invokeDescription == null)
@@ -458,24 +438,25 @@ namespace OpenRiaServices.DomainServices.Server
                 this.CheckOperationType(DomainOperationType.Invoke);
 
                 List<ValidationResult> errors = new List<ValidationResult>();
-
                 if (!this.ValidateMethodCall(invokeDescription.Method, invokeDescription.ParameterValues, errors))
                 {
-                    validationErrorsList = new List<ValidationResult>();
+                    var validationErrorsList = new List<ValidationResult>();
                     foreach (ValidationResult error in errors)
                     {
                         validationErrorsList.Add(new ValidationResult(error.ErrorMessage, error.MemberNames));
                     }
-                    validationErrors = validationErrorsList.AsReadOnly();
-                    return null;
+                    return new ServiceInvokeResult(validationErrorsList);
                 }
 
                 this.ServiceContext.Operation = invokeDescription.Method;
-
                 try
                 {
-                    returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
-                    returnValue = invokeDescription.Method.UnwrapTaskResult(returnValue);
+                    object returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
+                    if (invokeDescription.Method.IsTaskAsync)
+                    {
+                        returnValue = await invokeDescription.Method.UnwrapTaskResult(returnValue).ConfigureAwait(false);
+                    }
+                    return new ServiceInvokeResult(returnValue);
                 }
                 catch (TargetInvocationException tie)
                 {
@@ -487,27 +468,12 @@ namespace OpenRiaServices.DomainServices.Server
 
                     throw;
                 }
-                catch (AggregateException ae)
-                {
-                    Exception e = ExceptionHandlingUtility.GetUnwrappedException(ae);
-                    if (e is ValidationException)
-                    {
-                        throw e;
-                    }
-
-                    throw;
-                }
             }
             catch (ValidationException e)
             {
-                if (validationErrorsList == null)
-                {
-                    validationErrorsList = new List<ValidationResult>();
-                }
-
+                var validationErrorsList = new List<ValidationResult>();
                 validationErrorsList.Add(new ValidationResult(e.ValidationResult.ErrorMessage, e.ValidationResult.MemberNames));
-                validationErrors = validationErrorsList.AsReadOnly();
-                return null;
+                return new ServiceInvokeResult(validationErrorsList);
             }
             catch (Exception e)
             {
@@ -531,8 +497,6 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 this.ServiceContext.Operation = null;
             }
-
-            return returnValue;
         }
 
         /// <summary>
@@ -540,8 +504,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// the corresponding domain operations for each.
         /// </summary>
         /// <param name="changeSet">The changeset to submit</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the submit was successful, false otherwise.</returns>
-        public virtual bool Submit(ChangeSet changeSet)
+        public virtual async ValueTask<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
         {
             try
             {
@@ -562,19 +527,20 @@ namespace OpenRiaServices.DomainServices.Server
                 }
 
                 // Before invoking any operations, validate the entire changeset
-                if (!this.ValidateChangeSet())
+                if (!await this.ValidateChangeSetAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
                 // Now that we're validated, proceed to invoke the domain operation entries.
-                if (!this.ExecuteChangeSet())
+                if (!await this.ExecuteChangeSetAsync(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
 
                 // persist the changes
-                if (!this.PersistChangeSetInternal())
+                if (!await this.PersistChangeSetAsyncInternal(cancellationToken).ConfigureAwait(false))
                 {
                     return false;
                 }
@@ -589,7 +555,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw;
                 }
-                Exception exceptionToReport =  ExceptionHandlingUtility.GetUnwrappedException(e);
+                Exception exceptionToReport = ExceptionHandlingUtility.GetUnwrappedException(e);
                 DomainServiceErrorInfo error = new DomainServiceErrorInfo(exceptionToReport);
                 this.OnError(error);
 
@@ -728,7 +694,7 @@ namespace OpenRiaServices.DomainServices.Server
                             else if (((EntityActionAttribute)customMethodOperation.OperationAttribute).AllowMultipleInvocations == false)
                             {
                                 throw new InvalidOperationException(
-                                    string.Format(Resource.DomainService_MultipleEntityActionsNotAllowedFor, 
+                                    string.Format(Resource.DomainService_MultipleEntityActionsNotAllowedFor,
                                                 operation.Entity.GetType().Name,
                                                 action.Key));
                             }
@@ -760,10 +726,11 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         /// <typeparam name="T">The element <see cref="Type"/> of the query.</typeparam>
         /// <param name="query">The query for which the count should be returned.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total result count if total-counts are supported; -1 otherwise.</returns>
-        protected virtual int Count<T>(IQueryable<T> query)
+        protected virtual ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            return DomainService.TotalCountUndefined;
+            return new ValueTask<int>(DomainService.TotalCountUndefined);
         }
 
         /// <summary>
@@ -810,22 +777,23 @@ namespace OpenRiaServices.DomainServices.Server
         /// in the <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns><c>True</c> if all operations in the <see cref="ChangeSet"/> passed validation, <c>false</c> otherwise.</returns>
-        protected virtual bool ValidateChangeSet()
+        protected virtual ValueTask<bool> ValidateChangeSetAsync(CancellationToken cancellationToken)
         {
             // Perform validation on the each of the operations.
-            return ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
+            var result = ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
+            return new ValueTask<bool>(result);
         }
 
         /// <summary>
         /// This method invokes the <see cref="DomainOperationEntry"/> for each operation in the current <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was processed successfully, false otherwise.</returns>
-        protected virtual bool ExecuteChangeSet()
+        protected virtual ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
         {
             this.InvokeCudOperations();
             this.InvokeCustomOperations();
 
-            return !this.ChangeSet.HasError;
+            return new ValueTask<bool>(!this.ChangeSet.HasError);
         }
 
         /// <summary>
@@ -842,8 +810,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// have been invoked. This method should commit the changes as necessary to the data store.
         /// Any errors should be set on the individual <see cref="ChangeSetEntry"/>s in the <see cref="ChangeSet"/>.
         /// </summary>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        protected virtual bool PersistChangeSet() { return true; }
+        protected virtual ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken) { return new ValueTask<bool>(true); }
 
         /// <summary>
         /// For all operations in the current changeset, validate that the operation exists, and
@@ -941,37 +910,23 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="queryDescription">The query description.</param>
         /// <param name="queryable">The query.</param>
         /// <param name="skipPagingCheck"><c>true</c> if the paging check can be skipped; <c>false</c> otherwise.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The total count.</returns>
-        private int GetTotalCountForQuery(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck)
+        private ValueTask<int> GetTotalCountForQueryAsync<T>(QueryDescription queryDescription, IQueryable queryable, bool skipPagingCheck, CancellationToken cancellationToken)
         {
-            int totalCount = DomainService.TotalCountUndefined;
-
             // Only try to get the total count if the query description requested it.
-            if (queryDescription.IncludeTotalCount)
-            {
-                IQueryable totalCountQuery = queryable;
-                if (skipPagingCheck || QueryComposer.TryComposeWithoutPaging(queryable, out totalCountQuery))
-                {
-                    try
-                    {
-                        totalCount = (int)countMethod.MakeGenericMethod(totalCountQuery.ElementType).Invoke(this, new object[] { totalCountQuery });
-                    }
-                    catch (TargetInvocationException ex)
-                    {
-                        if (ex.InnerException != null)
-                        {
-                            throw ex.InnerException;
-                        }
-                        throw;
-                    }
-                }
-                else
-                {
-                    totalCount = DomainService.TotalCountEqualsResultSetCount;
-                }
-            }
+            if (!queryDescription.IncludeTotalCount)
+                return new ValueTask<int>(DomainService.TotalCountUndefined);
 
-            return totalCount;
+            IQueryable totalCountQuery = queryable;
+            if (skipPagingCheck || QueryComposer.TryComposeWithoutPaging(queryable, out totalCountQuery))
+            {
+                return CountAsync<T>((IQueryable<T>)totalCountQuery, cancellationToken);
+            }
+            else
+            {
+                return new ValueTask<int>(DomainService.TotalCountEqualsResultSetCount);
+            }
         }
 
         /// <summary>
@@ -1037,17 +992,17 @@ namespace OpenRiaServices.DomainServices.Server
         }
 
         /// <summary>
-        /// This method invokes the user overridable <see cref="PersistChangeSet"/> method wrapping the call
-        /// with the appropriate exception handling logic. All framework calls to <see cref="PersistChangeSet"/>
+        /// This method invokes the user overridable <see cref="PersistChangeSetAsync"/> method wrapping the call
+        /// with the appropriate exception handling logic. All framework calls to <see cref="PersistChangeSetAsync"/>
         /// must go through this method. Some data sources have their own validation hook points,
         /// so if a <see cref="ValidationException"/> is thrown at that level, we want to capture it.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was persisted successfully, false otherwise.</returns>
-        private bool PersistChangeSetInternal()
+        private async Task<bool> PersistChangeSetAsyncInternal(CancellationToken cancellationToken)
         {
             try
             {
-                this.PersistChangeSet();
+                await this.PersistChangeSetAsync(cancellationToken);
             }
             catch (ValidationException e)
             {
@@ -1285,53 +1240,38 @@ namespace OpenRiaServices.DomainServices.Server
         /// <typeparam name="T">The element type of the enumerable.</typeparam>
         /// <param name="enumerable">The enumerable to enumerate.</param>
         /// <param name="estimatedResultCount">The estimated number of items the enumerable will yield.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
-        private static IEnumerable Enumerate<T>(IEnumerable enumerable, int estimatedResultCount)
+        protected virtual ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
             // No need to enumerate arrays.
-            T[] array = enumerable as T[];
-            if (array != null)
+            if (enumerable is T[] array)
             {
-                return array;
+                return new ValueTask<IReadOnlyCollection<T>>(array);
             }
 
-            ICollection<T> collection = enumerable as ICollection<T>;
-            if (collection != null)
+            if (enumerable is ICollection<T> collection)
             {
-                array = new T[collection.Count];
-                collection.CopyTo(array, 0);
-                return array;
+                // readonlyCollection is covariant so type checking is much slower, but if it is a collection
+                // if will probably also be a IReadOnlyCollection so we dont have to allocate at all
+                if (collection is IReadOnlyCollection<T> readonlyCollection)
+                {
+                    return new ValueTask<IReadOnlyCollection<T>>(readonlyCollection);
+                }
+                else
+                {
+                    array = new T[collection.Count];
+                    collection.CopyTo(array, 0);
+                    return new ValueTask<IReadOnlyCollection<T>>(array);
+                }
             }
 
-            int index = 0;
-            array = new T[estimatedResultCount];
-
+            var list = new List<T>(estimatedResultCount);
             foreach (T item in enumerable)
             {
-                if (array.Length == index)
-                {
-                    Array.Resize(ref array, index * 2);
-                }
-
-                array[index++] = item;
+                list.Add(item);
             }
-
-            // Our array is full, so we can return it as-is.
-            if (array.Length == index)
-            {
-                return array;
-            }
-
-            // There were no items, so return an empty array.
-            if (index == 0)
-            {
-                return new T[0];
-            }
-
-            // Resize the array based on the number of elements in it.
-            Array.Resize(ref array, index);
-
-            return array;
+            return new ValueTask<IReadOnlyCollection<T>>(list);
         }
 
         #region Nested Types
