@@ -19,8 +19,8 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />

@@ -18,7 +18,7 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 2. Remove old target frameworks
 * Remove netstandard13 (#160)
 * Remove portable class library TargetFramework (#164)
-* Remove Silverlight (#174, #175
+* Remove Silverlight (#174, #175 ..)
 * .Net Framework 4.5 requirement is replaced by 4.6 (will be 4.6.1+)
 3. Move *EntityList* and *QueryBuilder* from OpenRiaServices...Data namespace to OpenRiaServices...Client namespace (#182)
 4. Dont allocate PropertyChangedEventArgs if not needed (#155)   
@@ -30,6 +30,8 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 7. Make WebDomainClient non sealed (#166) *non breaking*
    Make CallServiceOperation virtual so that the invoke behaviour can be modified in derived classes.
    This should simplify adding bearer based authentication 
+8. Change from IEnumerable to IReadOnlyCollection in a few places (#183)
+  * Mostly *ValidationErrors* properties and for IEntityCollection
 
 *Behaviour changes*
 1. Base DomainContext.Load on DomainContext.LoadAsync instead of other way around

@@ -14,11 +14,11 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public abstract class EntityContainer : IRevertibleChangeTracking, INotifyPropertyChanged
     {
-        private readonly IDictionary<Type, EntitySet> _entitySets;
-        private readonly IDictionary<Type, EntitySet> _referencedEntitySets;
-        private readonly IDictionary<string, Type> _entityTypeMap;
+        private readonly Dictionary<Type, EntitySet> _entitySets;
+        private readonly Dictionary<Type, EntitySet> _referencedEntitySets;
+        private readonly Dictionary<string, Type> _entityTypeMap;
         private int _dirtySetCount;
-        private readonly IDictionary<Type, Type> _entityRootTypes;
+        private readonly Dictionary<Type, Type> _entityRootTypes;
         private ValidationContext _validationContext;
 
         /// <summary>
@@ -46,17 +46,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the collection of <see cref="EntitySet"/>s in this <see cref="EntityContainer"/>.
         /// </summary>
-        public IEnumerable<EntitySet> EntitySets
-        {
-            get
-            {
-                // return all entity sets
-                foreach (EntitySet entitySet in this._entitySets.Values)
-                {
-                    yield return entitySet;
-                }
-            }
-        }
+        public IReadOnlyCollection<EntitySet> EntitySets => this._entitySets.Values;
 
         /// <summary>
         /// Gets or sets the optional <see cref="ValidationContext"/> to use for all
@@ -372,7 +362,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="entities">The entities to load</param>
         /// <returns>The set of entities loaded. In cases where entities in the set
         /// are already cached locally, the return set will contain the cached instances.</returns>
-        public IEnumerable<Entity> LoadEntities(IEnumerable<Entity> entities)
+        public IReadOnlyCollection<Entity> LoadEntities(IEnumerable<Entity> entities)
         {
             return this.LoadEntities(entities, LoadBehavior.KeepCurrent);
         }
@@ -384,7 +374,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to use</param>
         /// <returns>The set of entities loaded. In cases where entities in the set
         /// are already cached locally, the return set will contain the cached instances.</returns>
-        public IEnumerable<Entity> LoadEntities(IEnumerable<Entity> entities, LoadBehavior loadBehavior)
+        public IReadOnlyCollection<Entity> LoadEntities(IEnumerable<Entity> entities, LoadBehavior loadBehavior)
         {
             if (entities == null)
             {

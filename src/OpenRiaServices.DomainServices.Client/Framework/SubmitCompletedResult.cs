@@ -49,7 +49,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets the <see cref="ChangeSetEntry"/> results that were returned
         /// from the DomainService.
         /// </summary>
-        public IEnumerable<ChangeSetEntry> Results
+        public IReadOnlyCollection<ChangeSetEntry> Results
         {
             get
             {

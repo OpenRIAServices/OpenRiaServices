@@ -13,13 +13,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// entities referenced by the top level entities. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        IEnumerable<Entity> AllEntities { get; }
+        IReadOnlyCollection<Entity> AllEntities { get; }
 
         /// <summary>
         ///  /// Gets all the top level entities loaded by the operation. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        IEnumerable<Entity> Entities { get; }
+        IReadOnlyCollection<Entity> Entities { get; }
 
         /// <summary>
         /// Gets the total server entity count for the query used by this operation. Automatic

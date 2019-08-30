@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the validation errors.
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationErrors
+        public IReadOnlyCollection<ValidationResult> ValidationErrors
         {
             get
             {
