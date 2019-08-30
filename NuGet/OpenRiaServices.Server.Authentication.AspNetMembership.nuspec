@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership</id>
+    <version>5.0.0-preview1</version>
+    <title>OpenRiaServices.Server Asp.Net Membership Authentication</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      This package provides support for Authenticating via Asp.Net Membership via the *AuthenticationBase* base class.
+	  The types were previously part of OpenRiaServices.Server but has now moved to a separate namespace and nuget package.
+
+Common Types:
+* AuthenticationBase
+* UserBase
+* ProfileUsageAttribute
+    </description>
+    <summary>Open RIA Services - Asp.Net Authentication support.</summary>
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
+    <copyright>2019 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices Authentication Membership</tags>
+	<dependencies>
+		<group targetFramework="net46">
+			<dependency id="OpenRiaServices.Server" version="$version$"/>
+		</group>
+	</dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.dll" target="lib\net46\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.dll" />
+    <file src="..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.pdb" target="lib\net46\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.pdb" />
+    <file src="..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.xml" target="lib\net46\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.xml" />
+    </files>
+</package>

@@ -80,7 +80,7 @@ steps:
   displayName: 'NuGet pack'
   inputs:
     command: pack
-    packagesToPack: 'NuGet\OpenRiaServices.*\*.nuspec'
+    packagesToPack: 'NuGet\**\*.nuspec'
     versioningScheme: byEnvVar
     versionEnvVar: GitVersion.NuGetVersion
     packDestination: '$(Build.ArtifactStagingDirectory)' 
