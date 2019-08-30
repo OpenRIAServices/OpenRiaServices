@@ -366,7 +366,7 @@ namespace OpenRiaServices.DomainServices.Client
             TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
 
             var submitOp = this.SubmitChanges((res) => SetTaskResult(res, tcs, (op) => new SubmitResult(op.ChangeSet)), userState: null);
-            RegisterCancellationToken(cancellationToken, submitOp);
+            RegisterCancellationToken(submitOp, cancellationToken);
 
             return tcs.Task;
         }
@@ -398,9 +398,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Registers the operation with the CancellationToken so that the operation is cancelled whenever the cancellation is requested.
         /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="operation">The operation.</param>
-        private static void RegisterCancellationToken(CancellationToken cancellationToken, OperationBase operation)
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private static void RegisterCancellationToken(OperationBase operation, CancellationToken cancellationToken)
         {
             if (cancellationToken.CanBeCanceled && operation.CanCancel)
             {
@@ -1036,7 +1036,7 @@ namespace OpenRiaServices.DomainServices.Client
             var tcs = new TaskCompletionSource<InvokeResult>();
 
             var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult()), tcs);
-            RegisterCancellationToken(cancellationToken, invokeOperation);
+            RegisterCancellationToken(invokeOperation, cancellationToken);
 
             return tcs.Task;
         }
@@ -1058,7 +1058,7 @@ namespace OpenRiaServices.DomainServices.Client
             var tcs = new TaskCompletionSource<InvokeResult<TValue>>();
 
             var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult<TValue>(op.Value)), tcs);
-            RegisterCancellationToken(cancellationToken, invokeOperation);
+            RegisterCancellationToken(invokeOperation, cancellationToken);
 
             return tcs.Task;
         }

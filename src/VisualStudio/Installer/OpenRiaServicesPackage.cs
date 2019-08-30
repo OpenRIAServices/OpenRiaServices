@@ -71,10 +71,10 @@ namespace OpenRiaServices.VisualStudio.Installer
             SetupBindingRedirectForOldZipTemplates();
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
 
-            await base.InitializeAsync(cancellationToken, progress);
+            await base.InitializeAsync(cancellationToken, progress).ConfigureAwait(false);
 
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            _mcs = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+            _mcs = await GetServiceAsync(typeof(IMenuCommandService)).ConfigureAwait(true) as OleMenuCommandService;
             if (null != _mcs)
             {
                 CommandID menuCommandID = new CommandID(GuidList.guidVisualStudio_MenuExtensionCmdSet, (int)PkgCmdIDList.cmdidLinkOpenRiaServicesProject);

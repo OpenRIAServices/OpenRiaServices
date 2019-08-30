@@ -70,7 +70,7 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets the total server entity count for the query used by this operation. Automatic
-        /// evaluation of the total server entity count requires the property <see cref="OpenRiaServices.DomainServices.Client.EntityQuery.IncludeTotalCount"/>
+        /// evaluation of the total server entity count requires the property <see cref="Client.EntityQuery.IncludeTotalCount"/>
         /// on the query for the load operation to be set to <c>true</c>.
         /// </summary>
         public int TotalEntityCount { get; private set; }
@@ -90,22 +90,22 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Copies Entities to an array (implements ICollection.CopyTo)
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.ICollection" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="array">The one-dimensional <see cref="Array" /> that is the destination of the elements copied from <see cref="ICollection" />. The <see cref="Array" /> must have zero-based indexing.</param>
         /// <param name="index">The zero-based index in <paramref name="array" /> at which copying begins.</param>
         protected void CopyTo(Array array, int index) { ((ICollection)_loadedEntites).CopyTo(array, index); }
         void ICollection.CopyTo(Array array, int index) { this.CopyTo(array, index); }
 
         /// <summary>
-        /// Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection" /> is synchronized (thread safe).
+        /// Gets a value indicating whether access to the <see cref="ICollection" /> is synchronized (thread safe).
         /// </summary>
-        /// <returns>true if access to the <see cref="T:System.Collections.ICollection" /> is synchronized (thread safe); otherwise, false.</returns>
+        /// <returns>true if access to the <see cref="ICollection" /> is synchronized (thread safe); otherwise, false.</returns>
         protected bool IsSynchronized { get { return ((ICollection)_loadedEntites).IsSynchronized; } }
         bool ICollection.IsSynchronized { get { return this.IsSynchronized; } }
 
         /// <summary>
-        /// Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection" />.
+        /// Gets an object that can be used to synchronize access to the <see cref="ICollection" />.
         /// </summary>
-        /// <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection" />.</returns>
+        /// <returns>An object that can be used to synchronize access to the <see cref="ICollection" />.</returns>
         protected object SyncRoot { get { return ((ICollection)_loadedEntites).SyncRoot; } }
         object ICollection.SyncRoot { get { return this.SyncRoot; } }
 
@@ -116,7 +116,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// A <see cref="IEnumerable{TEntity}" /> that can be used to iterate through the collection.
         /// </returns>
         protected IEnumerator<TEntity> GetEnumerator() { return _loadedEntites.GetEnumerator(); }
         IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator() { return GetEnumerator(); }

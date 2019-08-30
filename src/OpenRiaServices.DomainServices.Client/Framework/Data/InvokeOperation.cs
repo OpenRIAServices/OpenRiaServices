@@ -74,14 +74,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// if the operation takes no parameters.</param>
         /// <param name="completeAction">Optional action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="cancelAction">Action to execute when the operation is canceled. If null, cancellation will not be supported.</param>
+        /// <param name="supportCancellation"><c>rtue</c> to enable cancellation support</param>
         /// <returns>The operation instance created.</returns>
         internal static InvokeOperation Create<TValue>(string operationName, IDictionary<string, object> parameters,
             Action<InvokeOperation> completeAction, object userState,
             bool supportCancellation)
         {
             Action<InvokeOperation<TValue>> wrappedCompleteAction = null;
-            Action<InvokeOperation<TValue>> wrappedCancelAction = null;
             if (completeAction != null)
             {
                 wrappedCompleteAction = arg => completeAction(arg);

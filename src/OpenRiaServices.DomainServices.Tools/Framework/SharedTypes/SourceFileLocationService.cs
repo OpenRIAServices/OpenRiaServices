@@ -43,7 +43,7 @@
         /// </param>
         internal SourceFileLocationService(IEnumerable<ISourceFileProviderFactory> providerFactories, FilenameMap filenameMap)
         {
-            Debug.Assert(providerFactories != null && providerFactories.Count() > 0, "providerFactories are required");
+            Debug.Assert(providerFactories != null && providerFactories.Any(), "providerFactories are required");
             Debug.Assert(filenameMap != null, "filenameMap is required");
 
             this._filenameMap = filenameMap;

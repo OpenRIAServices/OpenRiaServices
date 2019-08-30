@@ -93,7 +93,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 bool ruleSectionStarted = false;
                 foreach (TypePropertyMetadata field in this.Properties)
                 {
-                    if (field.ValidationRules.Count<TypePropertyValidationRuleMetadata>() > 0)
+                    if (field.ValidationRules.Any())
                     {
                         if (!ruleSectionStarted)
                         {
@@ -126,7 +126,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 foreach (TypePropertyMetadata property in this.Properties)
                 {
                     bool currentFieldMessageSectionStarted = false;
-                    if (property.ValidationRules.Count<TypePropertyValidationRuleMetadata>() > 0)
+                    if (property.ValidationRules.Any())
                     {
                         foreach (TypePropertyValidationRuleMetadata rule in property.ValidationRules)
                         {

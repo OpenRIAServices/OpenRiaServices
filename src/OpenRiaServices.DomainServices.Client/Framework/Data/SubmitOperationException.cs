@@ -13,7 +13,9 @@ namespace OpenRiaServices.DomainServices.Client
 #if !SILVERLIGHT
     [Serializable]
 #endif
+#pragma warning disable CA1032 // Implement standard exception constructors
     public class SubmitOperationException : DomainOperationException
+#pragma warning restore CA1032 // Implement standard exception constructors
     {
         private readonly EntityChangeSet _changeSet;
         private readonly ReadOnlyCollection<Entity> _entitiesInError;

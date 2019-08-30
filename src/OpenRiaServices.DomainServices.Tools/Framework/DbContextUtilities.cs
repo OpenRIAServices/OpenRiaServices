@@ -203,7 +203,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 if (currType.IsGenericType && DbContextUtilities.CompareWithSystemType(currType, DbContextUtilities.DbDomainServiceTypeName))
                 {
                     Type[] typeArgs = currType.GetGenericArguments();
-                    if (typeArgs != null && typeArgs.Count() > 0)
+                    if (typeArgs != null && typeArgs.Any())
                     {
                         dbContextType = typeArgs[0];
                     }

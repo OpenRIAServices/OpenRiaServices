@@ -118,6 +118,7 @@ namespace System.Linq.Dynamic
 
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors", Justification = "Exception is intended to only be used by the dynamic parser.")]
     [SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Justification = "Exception is intended to only be used by the dynamic parser.")]
+    [SuppressMessage("Design", "CA1064:Exceptions should be public", Justification = "Only used by parser")]
     internal class ParseException : Exception
     {
         public ParseException(string message, int position)

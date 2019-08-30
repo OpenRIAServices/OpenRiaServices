@@ -85,7 +85,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="associatedEntities">Collection of associated entities</param>
         private static void SetAssociationMember(object entity, PropertyDescriptor associationProperty, IEnumerable<object> associatedEntities)
         {
-            if (associatedEntities.Count() == 0)
+            if (!associatedEntities.Any())
             {
                 return;
             }

@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainServices.Client
             // See if there are existing errors for the property
             IEnumerable<ValidationResult> existingErrors = this.Where(r => r.MemberNames.Intersect(affectedMembers).Any());
 
-            if (existingErrors.Count() > 0 || newResults.Count() > 0)
+            if (existingErrors.Any() || newResults.Any())
             {
                 // Capture the existing errors that are unrelated to the specified property, making sure
                 // to enumerate the results before we clear our items

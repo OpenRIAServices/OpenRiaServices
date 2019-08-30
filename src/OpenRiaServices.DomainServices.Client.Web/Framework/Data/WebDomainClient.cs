@@ -420,7 +420,9 @@ namespace OpenRiaServices.DomainServices.Client
                     taskCompletionSource.TrySetCanceled(cancellationToken);
 #endif
                 }
+#pragma warning disable CA1031 // Do not catch general exception types, we "rethrow it via task
                 catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
                 {
                     taskCompletionSource.SetException(ex);
                 }
