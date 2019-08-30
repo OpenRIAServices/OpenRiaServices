@@ -19,10 +19,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="propertyName">The property whose errors have changed.</param>
         private void RaiseValidationErrorsChanged(string propertyName)
         {
-            if (this._errorsChangedHandler != null)
-            {
-                this._errorsChangedHandler(this, new DataErrorsChangedEventArgs(propertyName));
-            }
+            this._errorsChangedHandler?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
         /// <summary>
         /// Explicitly implement the <see cref="INotifyDataErrorInfo.ErrorsChanged"/> event.

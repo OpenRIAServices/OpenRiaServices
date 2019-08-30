@@ -504,10 +504,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="propertyName">The name of the property.</param>
         private void RaisePropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #region IDisposable Members

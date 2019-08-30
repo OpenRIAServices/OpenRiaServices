@@ -2216,10 +2216,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -2537,10 +2534,7 @@ namespace TestDomainServices
         {
             base.OnPropertyChanged(propertyName);
 
-            if (this.TestPropertyChangedCallback != null)
-            {
-                this.TestPropertyChangedCallback(new PropertyChangedEventArgs(propertyName));
-            }
+            this.TestPropertyChangedCallback?.Invoke(new PropertyChangedEventArgs(propertyName));
         }
 
         protected override void ValidateProperty(ValidationContext validationContext, object value)
@@ -2554,10 +2548,7 @@ namespace TestDomainServices
 
             base.ValidateProperty(validationContext, value);
 
-            if (this.TestValidatePropertyCallback != null)
-            {
-                this.TestValidatePropertyCallback(validationContext, value);
-            }
+            this.TestValidatePropertyCallback?.Invoke(validationContext, value);
         }
     }
 

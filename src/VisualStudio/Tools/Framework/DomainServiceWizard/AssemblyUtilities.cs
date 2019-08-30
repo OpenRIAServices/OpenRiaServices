@@ -56,10 +56,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     ex is BadImageFormatException ||
                     ex is System.Security.SecurityException)
                 {
-                    if (logger != null)
-                    {
-                        logger(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_Failed_Load, assemblyFileName, ex.Message));
-                    }
+                    logger?.Invoke(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_Failed_Load, assemblyFileName, ex.Message));
                 }
                 else
                 {
@@ -162,10 +159,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     ex is ReflectionTypeLoadException)
                 {
                     // Show a warning message so user knows we have an issue
-                    if (logger != null)
-                    {
-                        logger(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_Failed_Get_Types, assembly.FullName, ex.Message));
-                    }
+                    logger?.Invoke(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_Failed_Get_Types, assembly.FullName, ex.Message));
                     return Array.Empty<Type>();
                 }
 

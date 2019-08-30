@@ -498,10 +498,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
     }

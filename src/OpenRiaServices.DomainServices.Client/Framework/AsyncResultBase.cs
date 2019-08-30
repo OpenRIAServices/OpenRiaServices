@@ -173,10 +173,7 @@ namespace OpenRiaServices.DomainServices.Client
                 this._isCompleted = true;
             }
 
-            if (this._callback != null)
-            {
-                this._callback(this);
-            }
+            this._callback?.Invoke(this);
         }
 
         /// <summary>

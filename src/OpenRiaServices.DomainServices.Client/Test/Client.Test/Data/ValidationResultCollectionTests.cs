@@ -601,26 +601,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         protected override void OnCollectionChanged()
         {
-            if (this._collectionChanged != null)
-            {
-                this._collectionChanged();
-            }
+            this._collectionChanged?.Invoke();
         }
 
         protected override void OnHasErrorsChanged()
         {
-            if (this._hasErrorsChanged != null)
-            {
-                this._hasErrorsChanged();
-            }
+            this._hasErrorsChanged?.Invoke();
         }
 
         protected override void OnPropertyErrorsChanged(string propertyName)
         {
-            if (this._propertyErrorsChanged != null)
-            {
-                this._propertyErrorsChanged(propertyName);
-            }
+            this._propertyErrorsChanged?.Invoke(propertyName);
         }
     }
 }

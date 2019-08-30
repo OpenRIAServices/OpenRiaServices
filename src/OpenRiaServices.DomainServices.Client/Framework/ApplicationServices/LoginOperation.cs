@@ -101,10 +101,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </summary>
         protected override void InvokeCompleteAction()
         {
-            if (this._completeAction != null)
-            {
-                this._completeAction(this);
-            }
+            this._completeAction?.Invoke(this);
         }
 
         #endregion

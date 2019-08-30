@@ -1547,11 +1547,7 @@ After:
 
             private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
             {
-                NotifyCollectionChangedEventHandler handler = this.CollectionChanged;
-                if (handler != null)
-                {
-                    handler(this, e);
-                }
+                this.CollectionChanged?.Invoke(this, e);
             }
 
             private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

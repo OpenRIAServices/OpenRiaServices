@@ -376,11 +376,8 @@ namespace OpenRiaServices.DomainServices.Client
                     RaiseCanInvokeChanged();
                 }
 
-                if (this._setChangedCallback != null)
-                {
-                    // invoke all registered callbacks (this is a multicast delegate)
-                    this._setChangedCallback();
-                }
+                // invoke all registered callbacks (this is a multicast delegate)
+                this._setChangedCallback?.Invoke();
             }
         }
 

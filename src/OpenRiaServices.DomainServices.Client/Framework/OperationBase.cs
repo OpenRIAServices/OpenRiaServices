@@ -294,10 +294,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.InvokeCompleteAction();
 
-            if (this._completedEventHandler != null)
-            {
-                this._completedEventHandler(this, EventArgs.Empty);
-            }
+            this._completedEventHandler?.Invoke(this, EventArgs.Empty);
 
             this.RaisePropertyChanged(nameof(IsComplete));
             if (prevCanCancel == true)
@@ -328,10 +325,7 @@ namespace OpenRiaServices.DomainServices.Client
             // callback is called even in error case
             this.InvokeCompleteAction();
 
-            if (this._completedEventHandler != null)
-            {
-                this._completedEventHandler(this, EventArgs.Empty);
-            }
+            this._completedEventHandler?.Invoke(this, EventArgs.Empty);
 
             this.RaisePropertyChanged(nameof(Error));
             this.RaisePropertyChanged(nameof(HasError));

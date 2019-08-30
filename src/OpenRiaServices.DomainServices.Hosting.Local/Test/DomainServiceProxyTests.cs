@@ -945,16 +945,13 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 
             private void OnOperationInvoked(string operationName, Dictionary<string, object> parameters)
             {
-                if (MockDomainService.OperationInvoked != null)
-                {
-                    MockDomainService.OperationInvoked(
-                        this,
-                        new OperationInvokedEventArgs()
-                        {
-                            Name = operationName,
-                            Parameters = parameters
-                        });
-                }
+                MockDomainService.OperationInvoked?.Invoke(
+    this,
+    new OperationInvokedEventArgs()
+    {
+        Name = operationName,
+        Parameters = parameters
+    });
             }
         }
 

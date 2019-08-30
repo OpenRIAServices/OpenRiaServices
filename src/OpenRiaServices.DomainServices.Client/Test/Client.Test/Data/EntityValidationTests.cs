@@ -1012,10 +1012,7 @@ namespace Cities
 
         protected override void ValidateProperty(ValidationContext context, object value)
         {
-            if (this.ValidatePropertyCallback != null)
-            {
-                this.ValidatePropertyCallback(context);
-            }
+            this.ValidatePropertyCallback?.Invoke(context);
 
             if (this.ThrowValidationExceptions)
             {
@@ -1034,10 +1031,7 @@ namespace Cities
 
         public static ValidationResult ValidateCity(City entity, ValidationContext validationContext)
         {
-            if (entity.ValidateCityCallback != null)
-            {
-                entity.ValidateCityCallback(validationContext);
-            }
+            entity.ValidateCityCallback?.Invoke(validationContext);
 
             // Increment our call counter
             ++entity.ValidateCityCallCount;
