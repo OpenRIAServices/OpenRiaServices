@@ -33,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             ISharedCodeService sts = new MockSharedCodeService(
                     new Type[] { typeof(Mock_CG_Attr_Entity_Shared_Key) },
                     new MethodInfo[] {  typeof(Mock_CG_Attr_Entity_Shared_Key).GetProperty("K2").GetGetMethod() },
-                    new string[0]);
+                    Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Entity_Shared_Key_DomainService) }, logger, sts);
             Assert.IsTrue(!string.IsNullOrEmpty(generatedCode));

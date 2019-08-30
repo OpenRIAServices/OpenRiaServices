@@ -2,6 +2,7 @@
 using System.Linq;
 using OpenRiaServices.DomainServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
@@ -12,7 +13,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies GeneratedCode ctor")]
         public void GeneratedCode_ctor()
         {
-            GeneratedCode gc = new GeneratedCode("", new string[0]);
+            GeneratedCode gc = new GeneratedCode("", Array.Empty<string>());
             Assert.AreEqual(string.Empty, gc.SourceCode);
             Assert.IsNotNull(gc.References);
             Assert.AreEqual(0, gc.References.Count());
@@ -31,7 +32,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             GeneratedCode gc;
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                gc = new GeneratedCode(null, new string[0]);
+                gc = new GeneratedCode(null, Array.Empty<string>());
             }, "sourceCode");
 
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate

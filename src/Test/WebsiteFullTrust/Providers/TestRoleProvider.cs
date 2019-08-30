@@ -88,7 +88,7 @@ public class TestRoleProvider : RoleProvider
         }
         else
         {
-            return new string[0];
+            return Array.Empty<string>();
         }
     }
 }

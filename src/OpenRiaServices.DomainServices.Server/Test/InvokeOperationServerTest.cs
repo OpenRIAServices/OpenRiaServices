@@ -146,7 +146,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainOperationEntry throwValidationExceptionMethod = serviceDescription.GetInvokeOperation("ThrowValidationException");
             Assert.IsNotNull(throwValidationExceptionMethod);
 
-            var invokeResult = await provider.InvokeAsync(new InvokeDescription(throwValidationExceptionMethod, new object[0]), CancellationToken.None);
+            var invokeResult = await provider.InvokeAsync(new InvokeDescription(throwValidationExceptionMethod, Array.Empty<object>()), CancellationToken.None);
             Assert.IsNull(invokeResult.Result);
             Assert.IsNotNull(invokeResult.ValidationErrors);
             Assert.AreEqual(1, invokeResult.ValidationErrors.Count);

@@ -134,7 +134,7 @@ namespace OpenRiaServices.DomainServices.Client
                     // collection
                     if (this._validationErrors == null)
                     {
-                        this._validationErrors = new ValidationResult[0];
+                        this._validationErrors = Array.Empty<ValidationResult>();
                     }
                 }
                 return this._validationErrors;

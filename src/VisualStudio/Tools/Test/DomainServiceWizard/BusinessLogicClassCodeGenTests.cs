@@ -40,14 +40,14 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for an empty model")]
         public void BusinessLogicClass_CodeGen_Empty_CSharp()
         {
-            this.ValidateCodeGen("C#", null, "Empty_DomainService", new string[0]);
+            this.ValidateCodeGen("C#", null, "Empty_DomainService", Array.Empty<string>());
         }
 
         [TestMethod]
         [Description("Verifies VB codegen baseline for BusinessLogicClass for an empty model")]
         public void BusinessLogicClass_CodeGen_Empty_VB()
         {
-            this.ValidateCodeGen("VB", null, "Empty_DomainService", new string[0]);
+            this.ValidateCodeGen("VB", null, "Empty_DomainService", Array.Empty<string>());
         }
 
         [TestMethod]
@@ -291,7 +291,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             string className = bizLogicFileBase;
             string assemblyName = (contextType == null) ? "NoAssembly" : contextType.Assembly.GetName().Name;
 
-            Type[] contextTypes = (contextType == null) ? new Type[0] : new Type[] { contextType };
+            Type[] contextTypes = (contextType == null) ? Array.Empty<Type>() : new Type[] { contextType };
 
             using (BusinessLogicViewModel model = new BusinessLogicViewModel(projectDir, className, language, rootNamespace, assemblyName, contextTypes, /* IVsHelp object */ null))
             {

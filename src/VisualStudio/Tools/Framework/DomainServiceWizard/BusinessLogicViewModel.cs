@@ -432,7 +432,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             }
             else
             {
-                return new GeneratedCode(string.Empty, new string[0]);
+                return new GeneratedCode(string.Empty, Array.Empty<string>());
             }
         }
 

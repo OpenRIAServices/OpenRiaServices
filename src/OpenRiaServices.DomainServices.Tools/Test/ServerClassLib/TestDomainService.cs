@@ -13,7 +13,7 @@ namespace ServerClassLib
     {
         public IEnumerable<TestEntity> GetTestEntities()
         {
-            return new TestEntity[0];
+            return Array.Empty<TestEntity>();
         }
 
         public void CustomUpdateTestEntity(TestEntity entity, TestComplexType complexType)

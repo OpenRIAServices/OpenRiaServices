@@ -131,9 +131,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             // Create a shared type service that says the entity's attribute is "shared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
-                    new Type[0],
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<Type>(),
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Shared_DomainService)}, logger, mockSts);
 

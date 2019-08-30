@@ -309,13 +309,13 @@ namespace OpenRiaServices.DomainServices.Server
                 return entityCustomMethods.Values.ToList();
             }
 
-            return new DomainOperationEntry[0];
+            return Array.Empty<DomainOperationEntry>();
         }
 
         /// <summary>
         /// Gets the submit method for the specified entity type and <see cref="DomainOperation"/>
         /// </summary>
-        /// <param name="entityType">The entity type</param>
+        /// <param name="entityType">The entity type</param>ad of new
         /// <param name="operation">The <see cref="DomainOperation"/> type to get the method for. Must be
         /// an Insert, Update or Delete operation.</param>
         /// <returns>The method if it exists, otherwise null</returns>

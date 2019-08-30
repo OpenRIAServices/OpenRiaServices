@@ -161,7 +161,7 @@ namespace TestDomainServices
         [Query]
         public IQueryable<Product> GetProducts()
         {
-            return (new Product[0]).AsQueryable();
+            return (Array.Empty<Product>()).AsQueryable();
         }
     }
 
@@ -193,7 +193,7 @@ namespace TestDomainServices
         [Query]
         public IQueryable<Product> GetProducts()
         {
-            return (new Product[0]).AsQueryable();
+            return (Array.Empty<Product>()).AsQueryable();
         }
     }
 
@@ -207,7 +207,7 @@ namespace TestDomainServices
         [Query]
         public IQueryable<Product> GetProducts()
         {
-            return (new Product[0]).AsQueryable();
+            return (Array.Empty<Product>()).AsQueryable();
         }
     }
 
@@ -221,7 +221,7 @@ namespace TestDomainServices
         [Query]
         public IQueryable<Product> GetProducts()
         {
-            return (new Product[0]).AsQueryable();
+            return (Array.Empty<Product>()).AsQueryable();
         }
     }
 
@@ -235,7 +235,7 @@ namespace TestDomainServices
         [Query]
         public IQueryable<Product> GetProducts()
         {
-            return (new Product[0]).AsQueryable();
+            return (Array.Empty<Product>()).AsQueryable();
         }
     }
 
@@ -277,19 +277,19 @@ namespace TestDomainServices
         [Query]
         public IQueryable<Product> GetProducts()
         {
-            return (new Product[0]).AsQueryable();
+            return (Array.Empty<Product>()).AsQueryable();
         }
 
         [Query]
         public IQueryable<PurchaseOrder> GetPurchaseOrders()
         {
-            return (new PurchaseOrder[0]).AsQueryable();
+            return (Array.Empty<PurchaseOrder>()).AsQueryable();
         }
 
         [Query]
         public IQueryable<PurchaseOrderDetail> GetPurchaseOrderDetails()
         {
-            return (new PurchaseOrderDetail[0]).AsQueryable();
+            return (Array.Empty<PurchaseOrderDetail>()).AsQueryable();
         }
     }
 
@@ -1438,7 +1438,7 @@ namespace TestDomainServices
         [Query]
         public IEnumerable<B> GetBs()
         {
-            return new B[0];
+            return Array.Empty<B>();
         }
 
         [Update]
@@ -1461,7 +1461,7 @@ namespace TestDomainServices
         [Query]
         public IEnumerable<C> GetCs()
         {
-            return new C[0];
+            return Array.Empty<C>();
         }
 
         [Insert]
@@ -3898,7 +3898,7 @@ namespace TestDomainServices
                     DateTimeProp = DateTime.MinValue,
                     TimeSpanProp = TimeSpan.MinValue,
                     DateTimeOffsetProp = DateTimeOffset.MinValue,
-                    StringsProp = new string[0],
+                    StringsProp = Array.Empty<string>(),
                     IntsProp = new int[] { 4, 2 },
                     EnumsProp = new TestEnum[] { TestEnum.Value0, TestEnum.Value1 },
                     DateTimesCollectionProp = new List<DateTime>() { DateTime.Now, DateTime.Now },

@@ -193,7 +193,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 CodeVariableDeclarationStatement paramsDef = new CodeVariableDeclarationStatement(
                     dictionaryTypeReference,
                     "parameters",
-                    new CodeObjectCreateExpression(dictionaryTypeReference, new CodeExpression[0]));
+                    new CodeObjectCreateExpression(dictionaryTypeReference, Array.Empty<CodeExpression>()));
                 method.Statements.Add(paramsDef);
             }
             foreach (DomainOperationParameter paramInfo in operationParameters)
@@ -339,7 +339,7 @@ namespace OpenRiaServices.DomainServices.Tools
             method.Statements.Add(validateMethodCall);
 
             var invokeMethod = (invokeKind == InvokeKind.Async) ? "InvokeOperationAsync" : "InvokeOperation";
-            var typeParameters = (domainOperationEntry.ReturnType == typeof(void)) ? new CodeTypeReference[0] : new[] { operationReturnType };
+            var typeParameters = (domainOperationEntry.ReturnType == typeof(void)) ? Array.Empty<CodeTypeReference>() : new[] { operationReturnType };
             var invokeMethodReference = new CodeMethodReferenceExpression(new CodeThisReferenceExpression(), invokeMethod, typeParameters);
 
             CodeExpression invokeCall = new CodeMethodInvokeExpression(invokeMethodReference, invokeParams.ToArray());

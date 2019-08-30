@@ -16,7 +16,7 @@ namespace ServerClassLib
     {
         public IEnumerable<TestEntity2> GetTestEntities()
         {
-            return new TestEntity2[0];
+            return Array.Empty<TestEntity2>();
         }
     }
 }

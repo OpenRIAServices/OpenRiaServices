@@ -264,7 +264,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             BusinessLogicContext context = this._contexts.Single(c => c.ContextData.ID == contextData.ID);
             return (context) != null
                         ? context.GenerateMetadataClasses(this.Language, rootNamespace, optionalSuffix)
-                        : new GeneratedCode(string.Empty, new string[0]);
+                        : new GeneratedCode(string.Empty, Array.Empty<string>());
         }
 
         public bool IsMetadataGenerationRequired(ContextData contextData)

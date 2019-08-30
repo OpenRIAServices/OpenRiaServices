@@ -180,7 +180,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
     {
         public IQueryable<MyDomainService_Entity> GetEntities()
         {
-            return new MyDomainService_Entity[0].AsQueryable();
+            return Array.Empty<MyDomainService_Entity>().AsQueryable();
         }
     }
 

@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     internal static class ServiceUtils
     {
         /// <summary>Empty object array.</summary>
-        internal static readonly object[] EmptyObjectArray = new object[0];
+        internal static readonly object[] EmptyObjectArray = Array.Empty<object>();
 
         /// <summary>Default contract namespace.</summary>
         internal const string DefaultNamespace = "http://tempuri.org/";

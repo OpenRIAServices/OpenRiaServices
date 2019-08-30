@@ -5,6 +5,7 @@ using System.Linq;
 using OpenRiaServices.DomainServices.Client;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -139,7 +140,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void NonComposableQuery()
         {
             EntityQuery<City> citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, false);
-            IQueryable<City> queryable = new City[0].AsQueryable();
+            IQueryable<City> queryable = Array.Empty<City>().AsQueryable();
 
             string expectedMessage = string.Format(Resource.EntityQuery_NotComposable, "City", "GetCities");
 
@@ -206,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             ExceptionHelper.ExpectArgumentNullException(delegate
             {
-                EntityQuery<City> citiesQuery = new EntityQuery<City>(null, new City[0].AsQueryable().Where(p => p.StateName == "Toledo"));
+                EntityQuery<City> citiesQuery = new EntityQuery<City>(null, Array.Empty<City>().AsQueryable().Where(p => p.StateName == "Toledo"));
             }, "baseQuery");
 
             ExceptionHelper.ExpectArgumentNullException(delegate

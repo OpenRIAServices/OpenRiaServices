@@ -2753,7 +2753,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var obj = new MixedType()
             {
                 ID = "X",
-                IntsProp = new int[0],
+                IntsProp = Array.Empty<int>(),
                 StringsProp = new string[] { "hello" }
             };
             mixedTypes.Attach(obj);

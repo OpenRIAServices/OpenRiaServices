@@ -25,8 +25,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Create a shared type service that says the entity's attribute is "shared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
                     new Type[] {typeof(Mock_CG_Attr_Gen_Type), typeof(Mock_CG_Attr_Gen_TestAttribute)},
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_Attr_Gen_DomainService) }, mockSts);
             TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(Mock_CG_Attr_Gen_Type))]");
@@ -39,8 +39,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Create a shared type service that says the entity's attribute is "shared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
                     new Type[] { typeof(System.ComponentModel.BindableAttribute) },
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_Attr_Entity_Bindable_DomainService) }, new ConsoleLogger(), mockSts, /*useFullNames*/ false);
             TestHelper.AssertGeneratedCodeContains(generatedCode, "[Bindable(true, BindingDirection.TwoWay)]");
@@ -58,8 +58,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Create a shared type service that says the entity's attribute is "unshared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
                     new Type[] {typeof(Mock_CG_Attr_Gen_Type)},
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
             mockSts.AddUnsharedType(typeof(Mock_CG_Attr_Gen_TestAttribute));
 
             string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Gen_DomainService) }, logger, mockSts);
@@ -89,8 +89,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Create a shared type service that says the entity's attribute is "unknowable" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
                     new Type[] {typeof(Mock_CG_Attr_Gen_Type)},
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
             mockSts.AddUnknowableType(typeof(Mock_CG_Attr_Gen_TestAttribute));
 
             string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Gen_DomainService) }, logger, mockSts);
@@ -119,8 +119,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Create a shared type service that says the entity's attribute is "shared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
                     new Type[] { typeof(Mock_CG_Attr_Gen_TestAttribute) },
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
             // Explicitly make the typeof() ref in the attribute say it is unshared
             mockSts.AddUnsharedType(typeof(Mock_CG_Attr_Gen_Type));
 
@@ -145,8 +145,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Create a shared type service that says the entity's attribute is "shared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
                     new Type[] { typeof(Mock_CG_Attr_Gen_TestAttribute) },
-                    new MethodBase[0],
-                    new string[0]);
+                    Array.Empty<MethodBase>(),
+                    Array.Empty<string>());
             // Explicitly make the typeof() ref in the attribute say it is unshared
             mockSts.AddUnknowableType(typeof(Mock_CG_Attr_Gen_Type));
 

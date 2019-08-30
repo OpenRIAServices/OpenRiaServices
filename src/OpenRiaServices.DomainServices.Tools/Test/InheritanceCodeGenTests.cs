@@ -109,7 +109,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                                                     typeof(Inherit_Basic_Derived));
 
                     // check for default ctor
-                    ConstructorInfo ctor = rootType.GetConstructor(new Type[0]);
+                    ConstructorInfo ctor = rootType.GetConstructor(Array.Empty<Type>());
                     Assert.IsNotNull(ctor);
                     Assert.AreEqual(rootType, ctor.DeclaringType, "Root ctor should have been declared in root");
 
@@ -131,7 +131,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     AssertHasButDoesNotDeclareMembers(derivedType, "TheKey", "GetIdentity", "RootProperty");
 
                     // check for default ctor
-                    ctor = derivedType.GetConstructor(new Type[0]);
+                    ctor = derivedType.GetConstructor(Array.Empty<Type>());
                     Assert.IsNotNull(ctor);
                     Assert.AreEqual(derivedType, ctor.DeclaringType, "Derived ctor should have been declared in derived type");
 
@@ -896,7 +896,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                                                     typeof(Inherit_Buddy_Derived2));
 
                     // check for default ctor
-                    ConstructorInfo ctor = rootType.GetConstructor(new Type[0]);
+                    ConstructorInfo ctor = rootType.GetConstructor(Array.Empty<Type>());
                     Assert.IsNotNull(ctor);
                     Assert.AreEqual(rootType, ctor.DeclaringType, "Root ctor should have been declared in root");
 
@@ -918,7 +918,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     AssertHasButDoesNotDeclareMembers(derived1Type, "TheKey", "GetIdentity", "RootProperty");
 
                     // check for default ctor
-                    ctor = derived1Type.GetConstructor(new Type[0]);
+                    ctor = derived1Type.GetConstructor(Array.Empty<Type>());
                     Assert.IsNotNull(ctor);
                     Assert.AreEqual(derived1Type, ctor.DeclaringType, "Derived ctor should have been declared in derived type");
 
@@ -940,7 +940,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     AssertHasButDoesNotDeclareMembers(derived2Type, "TheKey", "GetIdentity", "RootProperty", "Derived1Property");
 
                     // check for default ctor
-                    ctor = derived2Type.GetConstructor(new Type[0]);
+                    ctor = derived2Type.GetConstructor(Array.Empty<Type>());
                     Assert.IsNotNull(ctor);
                     Assert.AreEqual(derived2Type, ctor.DeclaringType, "Derived ctor should have been declared in derived type");
 
@@ -1249,7 +1249,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     AssertDeclaresMembers(rootType, "TheKey", "GetIdentity");
 
                     // check for default ctor
-                    ConstructorInfo ctor = rootType.GetConstructor(new Type[0]);
+                    ConstructorInfo ctor = rootType.GetConstructor(Array.Empty<Type>());
                     Assert.IsNull(ctor, "Did not expect to find public ctor on abstract root");
 
                     string[] expectedAbstracts = new string[] {

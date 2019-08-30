@@ -73,7 +73,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         public override System.Reflection.ConstructorInfo[] GetConstructors(System.Reflection.BindingFlags bindingAttr)
         {
-            return new ConstructorInfo[0];
+            return Array.Empty<ConstructorInfo>();
         }
 
         public override Type GetElementType()
@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         public override System.Reflection.EventInfo[] GetEvents(System.Reflection.BindingFlags bindingAttr)
         {
-            return new EventInfo[0];
+            return Array.Empty<EventInfo>();
         }
 
         public override System.Reflection.FieldInfo GetField(string name, System.Reflection.BindingFlags bindingAttr)
@@ -98,7 +98,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         public override System.Reflection.FieldInfo[] GetFields(System.Reflection.BindingFlags bindingAttr)
         {
-            return new FieldInfo[0];
+            return Array.Empty<FieldInfo>();
         }
 
         public override Type GetInterface(string name, bool ignoreCase)
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         public override Type[] GetInterfaces()
         {
-            return new Type[0];
+            return Array.Empty<Type>();
         }
 
         public override System.Reflection.MemberInfo[] GetMembers(System.Reflection.BindingFlags bindingAttr)
@@ -128,12 +128,12 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         public override Type[] GetNestedTypes(System.Reflection.BindingFlags bindingAttr)
         {
-            return new Type[0];
+            return Array.Empty<Type>();
         }
 
         public override System.Reflection.PropertyInfo[] GetProperties(System.Reflection.BindingFlags bindingAttr)
         {
-            return new PropertyInfo[0];
+            return Array.Empty<PropertyInfo>();
         }
 
         public override object InvokeMember(string name, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, object target, object[] args, System.Reflection.ParameterModifier[] modifiers, System.Globalization.CultureInfo culture, string[] namedParameters)
@@ -158,12 +158,12 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         public override object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         public override object[] GetCustomAttributes(bool inherit)
         {
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         public override bool IsDefined(Type attributeType, bool inherit)

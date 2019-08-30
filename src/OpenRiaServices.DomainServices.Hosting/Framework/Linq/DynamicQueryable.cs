@@ -1089,7 +1089,7 @@ namespace System.Linq.Dynamic
         {
             ValidateToken(TokenId.OpenParen, Resource.OpenParenExpected);
             NextToken();
-            Expression[] args = token.id != TokenId.CloseParen ? ParseArguments() : new Expression[0];
+            Expression[] args = token.id != TokenId.CloseParen ? ParseArguments() : Array.Empty<Expression>();
             ValidateToken(TokenId.CloseParen, Resource.CloseParenOrCommaExpected);
             NextToken();
             return args;

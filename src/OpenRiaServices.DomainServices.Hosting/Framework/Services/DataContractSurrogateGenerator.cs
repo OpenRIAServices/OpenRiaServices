@@ -120,7 +120,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             // If the AppDomain is running in medium trust, this attribute won't have any effect.
             CustomAttributeBuilder safeCriticalAttrBuilder = new CustomAttributeBuilder(
                 typeof(SecuritySafeCriticalAttribute).GetConstructor(Type.EmptyTypes),
-                new object[0]);
+                Array.Empty<object>());
             typeBuilder.SetCustomAttribute(safeCriticalAttrBuilder);
 
             Type actualParentType;
@@ -180,7 +180,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 getUnderlyingObjectMethodBuilder.SetCustomAttribute(
                     new CustomAttributeBuilder(
                         typeof(SecuritySafeCriticalAttribute).GetConstructor(Type.EmptyTypes),
-                        new object[0]));
+                        Array.Empty<object>()));
 
                 ILGenerator getUnderlyingObjectMethodGenerator = getUnderlyingObjectMethodBuilder.GetILGenerator();
 
@@ -272,7 +272,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             onDeserializingMethodBuilder.SetCustomAttribute(
                 new CustomAttributeBuilder(
                     typeof(OnDeserializingAttribute).GetConstructor(Type.EmptyTypes),
-                    new object[0]));
+                    Array.Empty<object>()));
 
             // _$wrapper = new Entity();
             onDeserializingMethodGenerator.Emit(OpCodes.Ldarg_0);
@@ -686,13 +686,13 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 securityAttribute = new CustomAttributeBuilder(
                        typeof(AllowPartiallyTrustedCallersAttribute).GetConstructor(Type.EmptyTypes),
-                       new object[0]);
+                       Array.Empty<object>());
             }
             else
             {
                 securityAttribute = new CustomAttributeBuilder(
                         typeof(SecurityTransparentAttribute).GetConstructor(Type.EmptyTypes),
-                        new object[0]);
+                        Array.Empty<object>());
             }
 
             AssemblyBuilder assemblyBuilder = myDomain.DefineDynamicAssembly(
@@ -799,7 +799,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
 
             return new CustomAttributeBuilder(
-                type.GetConstructor(Type.EmptyTypes), new object[0],
+                type.GetConstructor(Type.EmptyTypes), Array.Empty<object>(),
                 propertyInfos.ToArray(), propertyValues.ToArray());
         }
     }

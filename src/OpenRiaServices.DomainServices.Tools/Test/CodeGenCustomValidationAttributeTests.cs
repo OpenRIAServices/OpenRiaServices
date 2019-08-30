@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                     new Type[] {typeof(Mock_CG_Attr_Validator)},
                     new MethodBase[] {  typeof(Mock_CG_Attr_Validator).GetMethod("IsValid"),
                                         typeof(Mock_CG_Attr_Validator).GetMethod("IsValid2") },
-                    new string[0]);
+                    Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_Attr_Entity_Multiple_DomainService) }, sts);
             TestHelper.AssertGeneratedCodeContains(generatedCode, 

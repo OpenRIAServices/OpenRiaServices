@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             }
 
             IEnumerable<ValidationResult> validationErrors;
-            object[] parameterValues = parameters ?? new object[0];
+            object[] parameterValues = parameters ?? Array.Empty<object>();
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameterValues);
 
             // TODO: Look into removing this blocking Wait

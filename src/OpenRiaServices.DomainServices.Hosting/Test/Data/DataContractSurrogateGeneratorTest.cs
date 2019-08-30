@@ -625,7 +625,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
         private readonly Action<object, T> _setter;
 
         public MockPropertyDescriptor(string name, Type declaringType, Func<object, T> getter, Action<object, T> setter)
-            : base(name, new Attribute[0])
+            : base(name, Array.Empty<Attribute>())
         {
             this._name = name;
             this._declaringType = declaringType;

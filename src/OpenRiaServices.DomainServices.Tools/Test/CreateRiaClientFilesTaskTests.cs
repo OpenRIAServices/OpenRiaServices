@@ -94,8 +94,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF1", /*includeClientOutputAssembly*/ false);
 
-                task.ServerAssemblies = new TaskItem[0];
-                task.ServerReferenceAssemblies = new TaskItem[0];
+                task.ServerAssemblies = Array.Empty<TaskItem>();
+                task.ServerReferenceAssemblies = Array.Empty<TaskItem>();
                 task.GenerateClientProxies();
 
                 ITaskItem[] generatedFiles = task.OutputFiles.ToArray();
@@ -123,7 +123,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF2", /*includeClientOutputAssembly*/ false);
                 task.ServerAssemblies = MsBuildHelper.AsTaskItems(new string[] { "NotExist.dll" }).ToArray();
-                task.ServerReferenceAssemblies = new TaskItem[0];
+                task.ServerReferenceAssemblies = Array.Empty<TaskItem>();
 
                 task.GenerateClientProxies();
  

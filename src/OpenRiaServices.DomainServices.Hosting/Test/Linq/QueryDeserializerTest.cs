@@ -38,7 +38,7 @@ namespace System.Linq.Dynamic.UnitTests
         [Description("Verify that we check constructor access, for instance disallowing a string constructor that takes a char and a length")]
         public void TestConstructorAccessChecked()
         {
-            IQueryable<EntityWithExcludedMember> queryable = new EntityWithExcludedMember[0].AsQueryable();
+            IQueryable<EntityWithExcludedMember> queryable = Array.Empty<EntityWithExcludedMember>().AsQueryable();
 
             List<ServiceQueryPart> queryParts = new List<ServiceQueryPart>()
             {
@@ -62,7 +62,7 @@ namespace System.Linq.Dynamic.UnitTests
 
         private static void AccessMember(Type entityType, string memberToAccess)
         {
-            IQueryable<EntityWithExcludedMember> queryable = new EntityWithExcludedMember[0].AsQueryable();
+            IQueryable<EntityWithExcludedMember> queryable = Array.Empty<EntityWithExcludedMember>().AsQueryable();
 
             List<ServiceQueryPart> queryParts = new List<ServiceQueryPart>()
             {

@@ -125,7 +125,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public static IEnumerable<Assembly> GetReferencedAssemblies(Assembly assembly, Action<string> logger)
         {
             System.Diagnostics.Debug.Assert(assembly != null, "assembly cannot be null");
-            AssemblyName[] assemblyNames = (assembly == null) ? new AssemblyName[0] : assembly.GetReferencedAssemblies();
+            AssemblyName[] assemblyNames = (assembly == null) ? Array.Empty<AssemblyName>() : assembly.GetReferencedAssemblies();
             List<Assembly> assemblies = new List<Assembly>();
             foreach (AssemblyName assemblyName in assemblyNames)
             {
@@ -150,7 +150,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             Type[] types = null;
             try
             {
-                types = (assembly == null) ? new Type[0] : assembly.GetExportedTypes();
+                types = (assembly == null) ? Array.Empty<Type>() : assembly.GetExportedTypes();
             }
             catch (Exception ex)
             {
@@ -166,7 +166,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     {
                         logger(string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_Failed_Get_Types, assembly.FullName, ex.Message));
                     }
-                    return new Type[0];
+                    return Array.Empty<Type>();
                 }
 
                 // All other exceptions rethrow

@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="returnValue">The value returned from the server.</param>
         public InvokeCompletedResult(object returnValue)
-            : this(returnValue, new ValidationResult[0])
+            : this(returnValue, Array.Empty<ValidationResult>())
         {
         }
 

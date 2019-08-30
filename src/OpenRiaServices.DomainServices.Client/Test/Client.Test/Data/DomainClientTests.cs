@@ -154,7 +154,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 EntityTypes = new Type[] { typeof(Product) }
             };
 
-            var query = from p in new Product[0].AsQueryable()
+            var query = from p in Array.Empty<Product>().AsQueryable()
                         where p.Weight < 10.5M
                         orderby p.Weight
                         select p;
@@ -219,7 +219,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 EntityTypes = new Type[] { typeof(Product), typeof(PurchaseOrder), typeof(PurchaseOrderDetail) }
             };
 
-            var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), new PurchaseOrder[0].AsQueryable().Take(2));
+            var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), Array.Empty<PurchaseOrder>().AsQueryable().Take(2));
             query.IncludeTotalCount = true;
 
             var queryTask = dc.QueryAsync(query, CancellationToken.None);
@@ -254,7 +254,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             int entityCount = entities.Count();
-            QueryCompletedResult results = new QueryCompletedResult(entities, new Entity[0], entityCount, new ValidationResult[0]);
+            QueryCompletedResult results = new QueryCompletedResult(entities, Array.Empty<Entity>(), entityCount, Array.Empty<ValidationResult>());
             return TaskHelper.FromResult(results);
         }
 

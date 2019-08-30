@@ -216,7 +216,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                return this.Query ?? new TEntity[0].AsQueryable();
+                return this.Query ?? Array.Empty<TEntity>().AsQueryable();
             }
         }
     }

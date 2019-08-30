@@ -502,19 +502,19 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         [Query(IsDefault = true)]
         public IQueryable<Person> GetPersons()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
 
         [Invoke]
         public IEnumerable<Person> GetPersonsInvoke()
         {
-            return (new Person[0]).AsEnumerable();
+            return (Array.Empty<Person>()).AsEnumerable();
         }
 
         [Query]
         public IQueryable<Person> GetPersonsQuery()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
     }
 
@@ -547,19 +547,19 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         [Query(IsDefault = true)]
         public IQueryable<Person> GetPersons()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
 
         [Invoke]
         public IEnumerable<Person> GetPersonsInvoke()
         {
-            return (new Person[0]).AsEnumerable();
+            return (Array.Empty<Person>()).AsEnumerable();
         }
 
         [Query]
         public IQueryable<Person> GetPersonsQuery()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
     }
 
@@ -570,47 +570,47 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         [RequiresAuthentication()]
         public IQueryable<Person> GetPersons()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
 
         [Invoke]
         [RequiresAuthentication()]
         public IEnumerable<Person> GetPersonsInvokeAuth()
         {
-            return (new Person[0]).AsEnumerable();
+            return (Array.Empty<Person>()).AsEnumerable();
         }
 
         [Query]
         [RequiresAuthentication()]
         public IQueryable<Person> GetPersonsQueryAuth()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
 
         [Invoke]
         [RequiresRole("Admin")]
         public IEnumerable<Person> GetPersonsInvokeRole()
         {
-            return (new Person[0]).AsEnumerable();
+            return (Array.Empty<Person>()).AsEnumerable();
         }
 
         [Query]
         [RequiresRole("Admin")]
         public IQueryable<Person> GetPersonsQueryRole()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
 
         [Invoke]
         public IEnumerable<Person> GetPersonsInvoke()
         {
-            return (new Person[0]).AsEnumerable();
+            return (Array.Empty<Person>()).AsEnumerable();
         }
 
         [Query]
         public IQueryable<Person> GetPersonsQuery()
         {
-            return (new Person[0]).AsQueryable();
+            return (Array.Empty<Person>()).AsQueryable();
         }
     }
 
@@ -635,25 +635,25 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
         [Query(IsDefault = true)]
         public IQueryable<VisibleEntityType> GetVisibleEntitiesQuery()
         {
-            return (new VisibleEntityType[0]).AsQueryable();
+            return (Array.Empty<VisibleEntityType>()).AsQueryable();
         }
 
         [Invoke]
         public IEnumerable<VisibleEntityType> GetVisibleEntitiesInvoke()
         {
-            return (new VisibleEntityType[0]).AsQueryable();
+            return (Array.Empty<VisibleEntityType>()).AsQueryable();
         }
 
         [Query]
         public IQueryable<VisibleEntityBase> GetNonVisibleEntitiesQuery()
         {
-            return (new VisibleEntityBase[0]).AsQueryable();
+            return (Array.Empty<VisibleEntityBase>()).AsQueryable();
         }
 
         [Invoke]
         public IEnumerable<VisibleEntityBase> GetNonVisibleEntitiesInvoke()
         {
-            return (new VisibleEntityBase[0]).AsQueryable();
+            return (Array.Empty<VisibleEntityBase>()).AsQueryable();
         }
 
         [Insert]
@@ -874,8 +874,8 @@ namespace OpenRiaServices.DomainServices.Hosting.OData.Test
             Type xmlWriterStreamType = typeof(DomainDataServiceErrorHandler).GetNestedType("DelegateBodyWriter", BindingFlags.NonPublic).GetNestedType("XmlWriterStream", BindingFlags.NonPublic);
             XmlDictionaryWriter writer = XmlDictionaryWriter.CreateTextWriter(new MemoryStream());
             object xmlWriterStream = xmlWriterStreamType.InvokeMember("XmlWriterStream", BindingFlags.CreateInstance | BindingFlags.NonPublic | BindingFlags.Instance, null, null, new object[] { writer });
-            Assert.IsFalse((bool)xmlWriterStreamType.InvokeMember("CanRead", BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty, null, xmlWriterStream, new object[0]));
-            Assert.IsTrue((bool)xmlWriterStreamType.InvokeMember("CanWrite", BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty, null, xmlWriterStream, new object[0]));
+            Assert.IsFalse((bool)xmlWriterStreamType.InvokeMember("CanRead", BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty, null, xmlWriterStream, Array.Empty<object>()));
+            Assert.IsTrue((bool)xmlWriterStreamType.InvokeMember("CanWrite", BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty, null, xmlWriterStream, Array.Empty<object>()));
             var testCases = new Action[]
             {
                 () => xmlWriterStreamType.InvokeMember("Length", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, xmlWriterStream, null),

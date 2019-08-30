@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("DomainServiceCatalog ctors work properly")]
         public void DomainServiceCatalog_Ctors()
         {
-            IEnumerable<string> empty = new string[0];
+            IEnumerable<string> empty = Array.Empty<string>();
             ConsoleLogger logger = new ConsoleLogger();
 
             // Ctor taking assemblies -- null arg tests

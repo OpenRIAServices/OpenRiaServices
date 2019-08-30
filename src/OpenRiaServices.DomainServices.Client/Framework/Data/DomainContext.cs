@@ -1115,7 +1115,7 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentNullException("methodName");
             }
 
-            object[] paramValues = parameters != null ? parameters.Values.ToArray() : new object[0];
+            object[] paramValues = parameters != null ? parameters.Values.ToArray() : Array.Empty<object>();
             if (!this.MethodRequiresValidation(methodName, paramValues))
             {
                 // method validation is expensive, so skip it if we can

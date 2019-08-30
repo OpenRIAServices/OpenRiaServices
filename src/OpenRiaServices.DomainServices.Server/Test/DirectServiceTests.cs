@@ -150,7 +150,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 new ServiceQueryPart("take", "1")
             };
 
-            QueryResult<AdventureWorksModel.PurchaseOrder> result = await QueryProcessor.ProcessAsync<AdventureWorksModel.PurchaseOrder>(service, queryOperation, new object[0], serviceQuery);
+            QueryResult<AdventureWorksModel.PurchaseOrder> result = await QueryProcessor.ProcessAsync<AdventureWorksModel.PurchaseOrder>(service, queryOperation, Array.Empty<object>(), serviceQuery);
 
             Assert.AreEqual(1, result.RootResults.Count());
         }
@@ -350,7 +350,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.First(p => p.Name == "GetEntities" && p.Operation == DomainOperation.Query);
-            QueryDescription qd = new QueryDescription(method, new object[0]);
+            QueryDescription qd = new QueryDescription(method, Array.Empty<object>());
             await ExceptionHelper.ExpectExceptionAsync<Exception>(async () =>
             {
                 try

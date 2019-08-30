@@ -141,10 +141,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 CodeMemberShareKind shareKind = sts.GetMethodShareKind(typeof(TestValidator).AssemblyQualifiedName, "IsValid", new string[] { typeof(TestEntity).AssemblyQualifiedName, typeof(ValidationContext).AssemblyQualifiedName });
                 Assert.AreEqual(CodeMemberShareKind.SharedByReference, shareKind, "Expected TestValidator.IsValid to be shared by reference");
 
-                shareKind = sts.GetMethodShareKind(typeof(TestEntity).AssemblyQualifiedName, "ServerAndClientMethod", new string[0]);
+                shareKind = sts.GetMethodShareKind(typeof(TestEntity).AssemblyQualifiedName, "ServerAndClientMethod", Array.Empty<string>());
                 Assert.AreEqual(CodeMemberShareKind.SharedByReference, shareKind, "Expected TestValidator.ServerAndClientMethod to be shared by reference");
 
-                shareKind = sts.GetMethodShareKind(typeof(TestEntity).AssemblyQualifiedName, "ServerMethod", new string[0]);
+                shareKind = sts.GetMethodShareKind(typeof(TestEntity).AssemblyQualifiedName, "ServerMethod", Array.Empty<string>());
                 Assert.AreEqual(CodeMemberShareKind.NotShared, shareKind, "Expected TestValidator.ServerMethod not to be shared");
 
                 shareKind = sts.GetMethodShareKind(typeof(TestValidatorServer).AssemblyQualifiedName, "IsValid", new string[] { typeof(TestEntity).AssemblyQualifiedName, typeof(ValidationContext).AssemblyQualifiedName });

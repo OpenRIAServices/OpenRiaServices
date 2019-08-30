@@ -183,7 +183,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 // set ValidationErrors to null after setting it to a valid collection, verify HasValidationErrors is updated and change notification is raised
                 _cities[0].ValidationResultCollection.ReplaceErrors(listWithOneError);
-                _cities[0].ValidationResultCollection.ReplaceErrors(new ValidationResult[0]);
+                _cities[0].ValidationResultCollection.ReplaceErrors(Array.Empty<ValidationResult>());
             });
 
             EnqueueConditional(() => propChanged.Contains("HasValidationErrors"));

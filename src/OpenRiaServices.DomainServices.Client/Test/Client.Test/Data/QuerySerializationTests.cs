@@ -123,25 +123,25 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
 
             // Has flags against constant
-            IQueryable<EntityWithEnums> q1 = new EntityWithEnums[0].AsQueryable();
+            IQueryable<EntityWithEnums> q1 = Array.Empty<EntityWithEnums>().AsQueryable();
             q1 = q1.Where(p => p.EnumProp1.HasFlag(QuerySerialisationEnum.A));
             IQueryable<EntityWithEnums> q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
             CollectionAssert.AreEquivalent(q2.ToList(), new [] { entities[0], entities[1], entities[3],});
 
             // Has flags against integer constant
-            q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = Array.Empty<EntityWithEnums>().AsQueryable();
             q1 = q1.Where(p => p.EnumProp1.HasFlag((QuerySerialisationEnum)(2)));
             q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
             CollectionAssert.AreEquivalent(q2.ToList(), new[] { entities[2], entities[3], entities[4] });
 
             //  Has flags against member constant
-            q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = Array.Empty<EntityWithEnums>().AsQueryable();
             q1 = q1.Where(p => p.EnumProp1.HasFlag(p.EnumProp2));
             q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
             CollectionAssert.AreEquivalent(q2.ToList(), entities.Where(e => e.EnumProp1.HasFlag(e.EnumProp2)).ToList());
 
 
-            q1 = new EntityWithEnums[0].AsQueryable();
+            q1 = Array.Empty<EntityWithEnums>().AsQueryable();
             q1 = q1.Where(p => p.EnumProp2.HasFlag(p.EnumProp1));
             q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
             CollectionAssert.AreEquivalent(q2.ToList(), entities.Where(e => e.EnumProp2.HasFlag(e.EnumProp1)).ToList());
@@ -490,11 +490,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             Assert.IsTrue(typeof(Employee).GetProperty("ManagerID").PropertyType == typeof(Nullable<int>));
 
-            IQueryable<Employee> query = new Employee[0].AsQueryable().Where(p => p.ManagerID == 1);
+            IQueryable<Employee> query = Array.Empty<Employee>().AsQueryable().Where(p => p.ManagerID == 1);
             IQueryable<Employee> query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
-            query = new Employee[0].AsQueryable().Where(p => p.ManagerID == null);
+            query = Array.Empty<Employee>().AsQueryable().Where(p => p.ManagerID == null);
             query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
             Assert.AreEqual(1, query2.Count());
         }
@@ -504,7 +504,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             Employee[] employees = new Employee[] { new Employee { EmployeeID = 1 } };
 
-            IQueryable<Employee> query = new Employee[0].AsQueryable().Where(p => p.EmployeeID == LocalMethod(p.EmployeeID));
+            IQueryable<Employee> query = Array.Empty<Employee>().AsQueryable().Where(p => p.EmployeeID == LocalMethod(p.EmployeeID));
             IQueryable<Employee> query2 = null;
             NotSupportedException expectedException = null;
             try
@@ -519,7 +519,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // test an unsupported static method
             expectedException = null;
-            query = new Employee[0].AsQueryable().AsQueryable().Where(p => p.EmployeeID == LocalStaticMethod(p.EmployeeID));
+            query = Array.Empty<Employee>().AsQueryable().AsQueryable().Where(p => p.EmployeeID == LocalStaticMethod(p.EmployeeID));
             try
             {
                 query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
@@ -672,7 +672,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public void BitwiseOperatorsNotSupported()
         {
-            IQueryable<Product> prodQuery = new Product[0].AsQueryable();
+            IQueryable<Product> prodQuery = Array.Empty<Product>().AsQueryable();
 
             // Bitwise NOT not supported
             NotSupportedException expectedException = null;
@@ -774,7 +774,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Test inline DateTime, verifying that the date's kind is preserved
             DateTime dt = new DateTime(2002, 3, 3);
             Expression<Func<PurchaseOrder, bool>> predicate = p => p.OrderDate < new DateTime(2002, 3, 3);
-            IQueryable<PurchaseOrder> query = new PurchaseOrder[0].AsQueryable().Where(predicate);
+            IQueryable<PurchaseOrder> query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
             Assert.IsTrue(queryParts[0].Expression.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString())));
             IQueryable<PurchaseOrder> resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
@@ -783,7 +783,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Test member access of DateTime (funcletized local accessor)
             predicate = p => dt > p.OrderDate;
-            query = new PurchaseOrder[0].AsQueryable().Where(predicate);
+            query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.IsTrue(queryParts[0].Expression.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString())));
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
@@ -791,7 +791,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Verify DateTime.Now, DateTime.Today, etc. are treated as remote expressions
             predicate = p => p.OrderDate < DateTime.Now;
-            query = new PurchaseOrder[0].AsQueryable().Where(predicate);
+            query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.IsTrue(queryParts[0].Expression.Contains("DateTime.Now"));
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
@@ -800,7 +800,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Test DateTime with time components specified
             dt = new DateTime(2002, 3, 3, 4, 4, 4, 4);
             predicate = p => p.OrderDate < dt;
-            query = new PurchaseOrder[0].AsQueryable().Where(predicate);
+            query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.IsTrue(queryParts[0].Expression.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString())));
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
@@ -810,7 +810,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Verify that the DayOfWeek enumeration can be used. It is evaluated locally to an int,
             // and promoted to the enum type on the server
             predicate = p => p.OrderDate.DayOfWeek == DayOfWeek.Sunday;
-            query = new PurchaseOrder[0].AsQueryable().Where(predicate);
+            query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.IsTrue(queryParts[0].Expression.Contains("OrderDate.DayOfWeek==0"));
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
@@ -820,7 +820,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // TODO : currently DateTime constructions involving non-local expressions
             // are not supported
             predicate = p => p.OrderDate < new DateTime(p.OrderDate.Year, p.OrderDate.Month, 3);
-            query = new PurchaseOrder[0].AsQueryable().Where(predicate);
+            query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             NotSupportedException expectedException = null;
             try
             {
@@ -871,7 +871,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void TestUnsupportedSequenceMethods()
         {
             NotSupportedException expectedException = null;
-            IQueryable<Product> query = (from p in new Product[0].AsQueryable() select p).Reverse();
+            IQueryable<Product> query = (from p in Array.Empty<Product>().AsQueryable() select p).Reverse();
             try
             {
                 List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
@@ -892,26 +892,26 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public void TestQuery_VerifyQueryNotEvaluatedLocally()
         {
-            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(new PurchaseOrder[0].AsQueryable().Take(2));
+            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(Array.Empty<PurchaseOrder>().AsQueryable().Take(2));
             Assert.AreEqual(1, queryParts.Count);
 
             // make sure that local IQueryables other than the root are evaluated locally
             int[] ints = new int[] { 1, 2 };
             IQueryable<int> intsQueryable = ints.AsQueryable();
-            queryParts = QuerySerializer.Serialize(new PurchaseOrder[0].AsQueryable().Where(p => p.PurchaseOrderID > intsQueryable.Count()).Take(intsQueryable.Count()));
+            queryParts = QuerySerializer.Serialize(Array.Empty<PurchaseOrder>().AsQueryable().Where(p => p.PurchaseOrderID > intsQueryable.Count()).Take(intsQueryable.Count()));
             Assert.AreEqual(2, queryParts.Count);
 
             queryParts = QuerySerializer.Serialize(ProdQuery(5).Where(p => p.PurchaseOrderID > intsQueryable.Count()).Take(intsQueryable.Count()));
             Assert.AreEqual(2, queryParts.Count);
 
             // verify query with no query operators is handled properly
-            queryParts = QuerySerializer.Serialize(new PurchaseOrder[0].AsQueryable());
+            queryParts = QuerySerializer.Serialize(Array.Empty<PurchaseOrder>().AsQueryable());
             Assert.AreEqual(0, queryParts.Count);
         }
 
         private IQueryable<PurchaseOrder> ProdQuery(int x)
         {
-            return new PurchaseOrder[0].AsQueryable();
+            return Array.Empty<PurchaseOrder>().AsQueryable();
         }
 
         [TestMethod]
@@ -1037,7 +1037,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // empty select is supported
             IQueryable query;
-            query = from p in new Product[0].AsQueryable()
+            query = from p in Array.Empty<Product>().AsQueryable()
                     select p;
 
             query = (IQueryable<Product>)RoundtripQuery(query, BaselineTestData.Products.AsQueryable());
@@ -1045,7 +1045,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(BaselineTestData.Products.Count(), query.Cast<object>().Count());
 
             // projections are not supported
-            query = from p in new Product[0].AsQueryable()
+            query = from p in Array.Empty<Product>().AsQueryable()
                     select new
                     {
                         p.Name,
@@ -1064,7 +1064,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNotNull(expectedException);
 
             // Verify expected exception for unsupported SelectMany
-            query = new PurchaseOrder[0].AsQueryable().SelectMany(p => p.PurchaseOrderDetails);
+            query = Array.Empty<PurchaseOrder>().AsQueryable().SelectMany(p => p.PurchaseOrderDetails);
             expectedException = null;
             try
             {

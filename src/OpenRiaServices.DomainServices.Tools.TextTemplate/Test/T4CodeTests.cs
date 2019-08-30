@@ -243,7 +243,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 UseFullTypeNames = false
             };
             ConsoleLogger consoleLogger = new ConsoleLogger();
-            MockSharedCodeService mockSharedCodeService = new MockSharedCodeService(new Type[0], new MethodBase[0], new string[0]);
+            MockSharedCodeService mockSharedCodeService = new MockSharedCodeService(Array.Empty<Type>(), Array.Empty<MethodBase>(), Array.Empty<string>());
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(consoleLogger, mockSharedCodeService);
             ClientCodeGenerator generator = (ClientCodeGenerator)new VBTestClientCodeGenerator();
             DomainServiceCatalog domainServiceCatalog = new DomainServiceCatalog(domainServiceTypes, consoleLogger);

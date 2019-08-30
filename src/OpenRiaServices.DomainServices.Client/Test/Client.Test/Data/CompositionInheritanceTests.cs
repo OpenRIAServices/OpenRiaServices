@@ -361,7 +361,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         if (assocProp.GetCustomAttributes(typeof(CompositionAttribute), false).Any())
                         {
                             // if there are original ids for this association, capture them
-                            int[] origAssocIds = new int[0];
+                            int[] origAssocIds = Array.Empty<int>();
                             if (op.OriginalAssociations != null)
                             {
                                 if (op.OriginalAssociations.ContainsKey(assoc.Key))

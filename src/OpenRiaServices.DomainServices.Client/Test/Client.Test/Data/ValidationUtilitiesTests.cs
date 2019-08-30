@@ -338,7 +338,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Test
             ValTestClass vtc = new ValTestClass();
             ValidationContext context = ValidationUtilities.CreateValidationContext(vtc, null);
 
-            object[] parameters = new object[0]; // actually requires 2 params
+            object[] parameters = Array.Empty<object>(); // actually requires 2 params
 
             // IsValid entry point
             ExceptionHelper.ExpectException<MissingMethodException>(delegate()

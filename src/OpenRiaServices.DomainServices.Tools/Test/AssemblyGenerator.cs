@@ -91,7 +91,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 if (this._mockSharedCodeService == null)
                 {
-                    this._mockSharedCodeService = new MockSharedCodeService(new Type[0], new MethodBase[0], new string[0]);
+                    this._mockSharedCodeService = new MockSharedCodeService(Array.Empty<Type>(), Array.Empty<MethodBase>(), Array.Empty<string>());
                 }
                 return this._mockSharedCodeService;
             }

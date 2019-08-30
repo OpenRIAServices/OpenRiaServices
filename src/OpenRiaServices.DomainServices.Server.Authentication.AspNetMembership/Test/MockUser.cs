@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
@@ -46,7 +47,7 @@ namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.
             return new MockUser()
             {
                 Name = string.Empty,
-                Roles = new string[0],
+                Roles = Array.Empty<string>(),
             };
         }
 

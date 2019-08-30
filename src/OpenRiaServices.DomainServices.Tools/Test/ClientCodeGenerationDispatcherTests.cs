@@ -327,7 +327,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[0];
+                string[] compositionAssemblies = Array.Empty<string>();
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, typeof(T4DomainServiceClientCodeGenerator).AssemblyQualifiedName);
                 Assert.IsNotNull(generator, "the dispatcher did not find the code generator");
@@ -359,7 +359,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[0];
+                string[] compositionAssemblies = Array.Empty<string>();
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, codeGeneratorName);
                 Assert.IsNull(generator, "the dispatcher should not find the code generator");
@@ -385,7 +385,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[0];
+                string[] compositionAssemblies = Array.Empty<string>();
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, codeGeneratorName);
                 Assert.IsNull(generator, "the dispatcher should not find the code generator");
@@ -440,7 +440,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
                 // Disable MEF for this test
-                string[] compositionAssemblies = new string[0];
+                string[] compositionAssemblies = Array.Empty<string>();
 
                 // And use FQN instead
                 string codeGeneratorName = typeof(MockCodeGenerator).AssemblyQualifiedName;

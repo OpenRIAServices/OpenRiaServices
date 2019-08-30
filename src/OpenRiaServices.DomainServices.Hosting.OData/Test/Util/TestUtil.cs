@@ -225,7 +225,7 @@
         }
 
         /// <summary>A zero-length object array.</summary>
-        public static readonly object[] EmptyObjectArray = new object[0];
+        public static readonly object[] EmptyObjectArray = Array.Empty<object>();
 
         private class StaticValueRestorer : IDisposable
         {

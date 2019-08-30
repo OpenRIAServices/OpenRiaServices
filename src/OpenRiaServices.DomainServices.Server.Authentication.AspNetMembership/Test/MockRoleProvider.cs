@@ -80,7 +80,7 @@ namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.
             }
             if (User == null)
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
             return User.Roles.ToArray();
         }

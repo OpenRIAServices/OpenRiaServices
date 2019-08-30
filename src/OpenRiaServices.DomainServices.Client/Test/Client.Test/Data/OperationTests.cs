@@ -391,7 +391,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 try
                 {
-                    lo.Complete(new LoadResult<City>(query, loadBehaviour, new City[0], new Entity[0], 0));
+                    lo.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
                 }
                 catch (Exception ex)
                 {

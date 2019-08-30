@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 if(assemblyName.IsOpenRiaAssembly() && assemblyName.IsSigned())
                 {
                     var unsignedName = new AssemblyName(assemblyName.FullName);
-                    unsignedName.SetPublicKeyToken(new byte[0]);
+                    unsignedName.SetPublicKeyToken(Array.Empty<byte>());
                     assemblyNames[unsignedName.FullName] = assembly;
                 }
             }

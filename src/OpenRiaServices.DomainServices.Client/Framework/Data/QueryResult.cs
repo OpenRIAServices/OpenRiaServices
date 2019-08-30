@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -132,7 +133,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The root results.</returns>
         public override IEnumerable<object> GetRootResults()
         {
-            return (this.RootResults ?? new T[0]).Cast<object>();
+            return (this.RootResults ?? Array.Empty<T>()).Cast<object>();
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The included results.</returns>
         public override IEnumerable<object> GetIncludedResults()
         {
-            return this.IncludedResults ?? new object[0];
+            return this.IncludedResults ?? Array.Empty<object>();
         }
     }
 }

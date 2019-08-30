@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             }
             this._logger = logger;
             this._assemblyFileNames = new List<string>(assemblyFileNames);
-            this._assemblySearchPaths = assemblySearchPaths ?? new string[0];
+            this._assemblySearchPaths = assemblySearchPaths ?? Array.Empty<string>();
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             Type sharedType = this.GetSharedType(typeName);
             if (sharedType != null)
             {
-                CodeMemberKey key = CodeMemberKey.CreateMethodKey(typeName, methodName, parameterTypeNames == null ? new string[0] : parameterTypeNames.ToArray());
+                CodeMemberKey key = CodeMemberKey.CreateMethodKey(typeName, methodName, parameterTypeNames == null ? Array.Empty<string>() : parameterTypeNames.ToArray());
                 sharedMethod = this.FindSharedMethodOrConstructor(sharedType, key);
             }
 

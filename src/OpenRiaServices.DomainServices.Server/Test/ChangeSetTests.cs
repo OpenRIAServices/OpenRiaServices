@@ -57,7 +57,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             }, Resource.ChangeSet_ChangeSetEntryNotFound, "entity");
 
             // test where the changeset is empty
-            cs = new ChangeSet(new ChangeSetEntry[0]);
+            cs = new ChangeSet(Array.Empty<ChangeSetEntry>());
             ExceptionHelper.ExpectArgumentException(delegate
             {
                 cs.GetAssociatedChanges(new Parent(), p => p.Children);

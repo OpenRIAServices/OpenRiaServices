@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership
     {
         #region Static fields
 
-        private static readonly IEnumerable<string> DefaultRoles = new string[0];
+        private static readonly IEnumerable<string> DefaultRoles = Array.Empty<string>();
         private static readonly IPrincipal DefaultPrincipal =
             new GenericPrincipal(new GenericIdentity(string.Empty), DefaultRoles.ToArray());
 

@@ -90,7 +90,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private void ValidateElementType<T>()
         {
             T x = default(T);
-            T[] xArray = new T[0];
+            T[] xArray = Array.Empty<T>();
             IEnumerable<T> ie = new List<T>();
             MyGenericClass<T> genericGeneric = new MyGenericClass<T>();
 

@@ -980,7 +980,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             ReflectionDomainServiceDescriptionProvider provider = new ReflectionDomainServiceDescriptionProvider(typeof(SingletonQueryMethod_ValidScenarios));
             DomainServiceDescription description = provider.GetDescription();
-            TestDomainOperationEntry entry = new TestDomainOperationEntry(typeof(CityDomainService), "GetCities", DomainOperation.Query, typeof(City), new DomainOperationParameter[0], AttributeCollection.Empty);
+            TestDomainOperationEntry entry = new TestDomainOperationEntry(typeof(CityDomainService), "GetCities", DomainOperation.Query, typeof(City), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty);
 
             ExceptionHelper.ExpectArgumentException(delegate
             {
@@ -1217,8 +1217,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             DomainServiceDescription description = new DomainServiceDescription(typeof(DSDTestServiceA));
 
-            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B1", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
-            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B2", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
+            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B1", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
+            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B2", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
 
             // expect exceptions when using an uninitialized description
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
@@ -1241,7 +1241,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             // verify that once a description has been initialized, it can no longer be modified
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
             {
-                description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B3", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
+                description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B3", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
             },
             Resource.DomainServiceDescription_InvalidUpdate);
         }
@@ -2699,9 +2699,9 @@ namespace OpenRiaServices.DomainServices.Server.Test
                     }
                   },
                     
-                  new PropertyMetadata() {Name="CityName", Attributes=new AttributeMetadata[0] },
-                  new PropertyMetadata() {Name="CountyName", Attributes=new AttributeMetadata[0] },
-                  new PropertyMetadata() {Name="StateName", Attributes=new AttributeMetadata[0] }
+                  new PropertyMetadata() {Name="CityName", Attributes=Array.Empty<AttributeMetadata>() },
+                  new PropertyMetadata() {Name="CountyName", Attributes=Array.Empty<AttributeMetadata>() },
+                  new PropertyMetadata() {Name="StateName", Attributes=Array.Empty<AttributeMetadata>() }
                 }
               }
           };
@@ -3118,8 +3118,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             DomainServiceDescription description = base.GetDescription();
 
-            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "A1", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
-            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "A2", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
+            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "A1", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
+            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "A2", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
 
             return description;
         }
@@ -3143,8 +3143,8 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
             DomainServiceDescription description = base.GetDescription();
 
-            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B1", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
-            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B2", DomainOperation.Query, typeof(IEnumerable<County>), new DomainOperationParameter[0], AttributeCollection.Empty));
+            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B1", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
+            description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, "B2", DomainOperation.Query, typeof(IEnumerable<County>), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
 
             return description;
         }
@@ -3186,7 +3186,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, string.Format("Update{0}", cudField.FieldType.Name), DomainOperation.Update, typeof(void), parameters, AttributeCollection.Empty));
 
                 // add virtual query method
-                description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, string.Format("Get{0}", cudField.Name), DomainOperation.Query, typeof(IEnumerable<>).MakeGenericType(cudField.FieldType), new DomainOperationParameter[0], AttributeCollection.Empty));
+                description.AddOperation(new TestDomainOperationEntry(description.DomainServiceType, string.Format("Get{0}", cudField.Name), DomainOperation.Query, typeof(IEnumerable<>).MakeGenericType(cudField.FieldType), Array.Empty<DomainOperationParameter>(), AttributeCollection.Empty));
             }
 
             return description;

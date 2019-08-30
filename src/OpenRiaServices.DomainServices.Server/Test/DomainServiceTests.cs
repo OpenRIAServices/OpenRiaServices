@@ -164,7 +164,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(CityDomainService));
 
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
-            QueryDescription query = new QueryDescription(queryOperation, new object[0], /* includeTotalCount */ true, new Zip[0].AsQueryable().Where(z => z.Code == 98052));
+            QueryDescription query = new QueryDescription(queryOperation, Array.Empty<object>(), /* includeTotalCount */ true, Array.Empty<Zip>().AsQueryable().Where(z => z.Code == 98052));
 
             ExceptionHelper.ExpectArgumentException(() =>  
                 ds.QueryAsync<City>(query, CancellationToken.None).GetAwaiter().GetResult()
@@ -185,7 +185,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(CachedQueryResultsDomainService));
 
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
-            QueryDescription query = new QueryDescription(queryOperation, new object[0]);
+            QueryDescription query = new QueryDescription(queryOperation, Array.Empty<object>());
 
             IEnumerable results = (await ds.QueryAsync<City>(query, CancellationToken.None)).Result;
             Assert.IsTrue(ds.ExecutedQuery, "Query wasn't executed eagerly.");
@@ -211,11 +211,11 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
                 if (pageSize > -1)
                 {
-                    filter = new City[0].AsQueryable().Take(pageSize);
+                    filter = Array.Empty<City>().AsQueryable().Take(pageSize);
                 }
 
                 DomainOperationEntry queryOperation = desc.GetQueryMethod(queryName);
-                QueryDescription query = new QueryDescription(queryOperation, new object[0], true, filter);
+                QueryDescription query = new QueryDescription(queryOperation, Array.Empty<object>(), true, filter);
                 var queryResult = await ds.QueryAsync<City>(query, CancellationToken.None);
                 return new QueryResult<City>()
                 {
@@ -266,7 +266,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             QueryDescription query = new QueryDescription(queryOperation, new object[] { 1 });
 
             DomainOperationEntry queryOperationDeferredException = desc.GetQueryMethod("GetCitiesDeferredException");
-            QueryDescription queryDeferredException = new QueryDescription(queryOperationDeferredException, new object[0]);
+            QueryDescription queryDeferredException = new QueryDescription(queryOperationDeferredException, Array.Empty<object>());
 
             // verify that even top level exceptions go through
             // the OnError handler
@@ -854,7 +854,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             ChangeSetEntry customUpdateOperation = new ChangeSetEntry();
             customUpdateOperation.Entity = invalidCity;
-            customUpdateOperation.EntityActions = new EntityActionCollection { { "CityCustomMethod", new object[0] } };
+            customUpdateOperation.EntityActions = new EntityActionCollection { { "CityCustomMethod", Array.Empty<object>() } };
 
             // pass an update and a custom update, and make sure the custom update is processed.
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { updateOperation, customUpdateOperation }, domainServiceDescription, null);

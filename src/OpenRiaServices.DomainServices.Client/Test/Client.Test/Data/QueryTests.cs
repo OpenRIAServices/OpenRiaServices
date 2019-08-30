@@ -469,7 +469,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 ExceptionHelper.ExpectInvalidOperationException(delegate
                 {
-                    lo.Complete(new LoadResult<City>(query, default(LoadBehavior), new City[0], new City[0], 0));
+                    lo.Complete(new LoadResult<City>(query, default(LoadBehavior), Array.Empty<City>(), Array.Empty<City>(), 0));
                 }, Resources.AsyncOperation_AlreadyCompleted);
 
                 lo = cities.Load(query, false);

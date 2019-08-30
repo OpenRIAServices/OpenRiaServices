@@ -6,7 +6,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
     internal class ServiceProviderStub : IServiceProvider
     {
         private const string DefaultName = "UserStub";
-        private static readonly string[] DefaultRoles = new string[0];
+        private static readonly string[] DefaultRoles = Array.Empty<string>();
 
         private readonly IPrincipal _user;
 

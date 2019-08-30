@@ -328,7 +328,7 @@ namespace OpenRiaServices.DomainServices.Tools
                     // If the user specified search paths, honor those.
                     // If the user did not specify anything, use the default Silverlight paths
                     this._clientAssemblyPathsNormalized = (taskItems == null)
-                                                            ? new string[0]
+                                                            ? Array.Empty<string>()
                                                             : this.NormalizedTaskItems(taskItems, this.ClientProjectDirectory)
                                                                 .ToArray();
                 }
@@ -1374,7 +1374,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (items == null)
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
 
             return items.Select<ITaskItem, string>(ti => this.GetFullPathRelativeToDirectory(ti.ItemSpec, directory));

@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         internal const string SubmitOperationName = "SubmitChanges";
         internal const string ServiceFileExtension = ".svc";
 
-        internal static readonly object[] EmptyObjectArray = new object[0];
+        internal static readonly object[] EmptyObjectArray = Array.Empty<object>();
 
         private static readonly object _inspectorLock = new object();
         private static AuthenticationSchemes _authenticationSchemes = AuthenticationSchemes.None;

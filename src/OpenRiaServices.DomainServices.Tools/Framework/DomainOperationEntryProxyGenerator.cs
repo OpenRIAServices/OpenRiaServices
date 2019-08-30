@@ -247,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Tools
             // this.EntityContainer.GetEntitySet<entityType>()
             // ----------------------------------------------------------------
             var methodRef = new CodeMethodReferenceExpression(entityContainerProperty, "GetEntitySet", genericParameters);
-            var methodCall = new CodeMethodInvokeExpression(methodRef, new CodeExpression[0]);
+            var methodCall = new CodeMethodInvokeExpression(methodRef, Array.Empty<CodeExpression>());
 
             // ----------------------------------------------------------------
             // return this.EntityContainer.GetEntitySet<entityType>()
@@ -328,7 +328,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 CodeVariableDeclarationStatement paramsDef = new CodeVariableDeclarationStatement(
                     dictionaryTypeReference,
                     "parameters",
-                    new CodeObjectCreateExpression(dictionaryTypeReference, new CodeExpression[0]));
+                    new CodeObjectCreateExpression(dictionaryTypeReference, Array.Empty<CodeExpression>()));
                 queryMethod.Statements.Add(paramsDef);
             }
             foreach (DomainOperationParameter paramInfo in domainOperationEntryParameters)

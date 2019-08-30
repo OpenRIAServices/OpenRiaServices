@@ -72,11 +72,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assert.IsNotNull(sharedMethod, "Expected TestValidator.IsValid to be shared");
             Assert.IsTrue(sharedMethod.DeclaringType.Assembly.Location.Contains("ClientClassLib"), "Expected to find method in client class lib");
 
-            sharedMethod = sa.GetSharedMethod(typeof(TestEntity).AssemblyQualifiedName, "ServerAndClientMethod", new string[0]);
+            sharedMethod = sa.GetSharedMethod(typeof(TestEntity).AssemblyQualifiedName, "ServerAndClientMethod", Array.Empty<string>());
             Assert.IsNotNull(sharedMethod, "Expected TestEntity.ServerAndClientMethod to be shared");
             Assert.IsTrue(sharedMethod.DeclaringType.Assembly.Location.Contains("ClientClassLib"), "Expected to find method in client class lib");
 
-            sharedMethod = sa.GetSharedMethod(typeof(TestValidator).AssemblyQualifiedName, "ServertMethod", new string[0]);
+            sharedMethod = sa.GetSharedMethod(typeof(TestValidator).AssemblyQualifiedName, "ServertMethod", Array.Empty<string>());
             Assert.IsNull(sharedMethod, "Expected TestValidator.ServerMethod not to be shared");
 
             TestHelper.AssertNoErrorsOrWarnings(logger);

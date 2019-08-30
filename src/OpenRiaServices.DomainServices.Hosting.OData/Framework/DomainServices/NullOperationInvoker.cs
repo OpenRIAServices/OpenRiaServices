@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <returns>The parameters that are to be used as arguments to the operation.</returns>
         public object[] AllocateInputs()
         {
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
         /// <returns>The return value.</returns>
         public object Invoke(object instance, object[] inputs, out object[] outputs)
         {
-            outputs = new object[0];
+            outputs = Array.Empty<object>();
             return new object();
         }
 

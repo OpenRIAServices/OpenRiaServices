@@ -391,12 +391,12 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
             MethodBase method = propertyInfo.GetGetMethod();
 
-            return GetMethodShareKind(typeName, method.Name, new string[0]);
+            return GetMethodShareKind(typeName, method.Name, Array.Empty<string>());
         }
 
         public CodeMemberShareKind GetMethodShareKind(string typeName, string methodName, IEnumerable<string> parameterTypeNames)
         {
-            CodeMemberKey key = CodeMemberKey.CreateMethodKey(typeName, methodName, parameterTypeNames == null ? new string[0] : parameterTypeNames.ToArray());
+            CodeMemberKey key = CodeMemberKey.CreateMethodKey(typeName, methodName, parameterTypeNames == null ? Array.Empty<string>() : parameterTypeNames.ToArray());
             if (this._sharedMethods.Contains(key))
             {
                 return CodeMemberShareKind.SharedByReference;

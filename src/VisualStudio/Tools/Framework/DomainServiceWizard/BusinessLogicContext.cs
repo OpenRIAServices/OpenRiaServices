@@ -228,7 +228,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <returns>An unsorted list of entities</returns>
         protected virtual IEnumerable<BusinessLogicEntity> CreateEntities()
         {
-            return new BusinessLogicEntity[0];
+            return Array.Empty<BusinessLogicEntity>();
         }
 
         /// <summary>

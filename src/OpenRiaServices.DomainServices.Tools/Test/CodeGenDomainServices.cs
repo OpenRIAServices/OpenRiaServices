@@ -122,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_MultipleDomainServices()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default codegen
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_MP", "MultipleProviderScenarios.g",
@@ -135,7 +135,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_MultipleDomainServices_FullTypes()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_FullTypes", "MultipleProviderScenarios.g",
@@ -147,7 +147,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_EFDbCtxDomainServices()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default codegen
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFDbContext", "EFDbContextScenarios.g",
@@ -159,7 +159,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_EFDbCtxDomainServices_FullTypes()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFDbContextScenarios.g",
@@ -171,7 +171,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_EFCFDomainServices()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default codegen
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFCFDbContext", "EFCFDbContextScenarios.g",
@@ -183,7 +183,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_EFCFDomainServices_FullTypes()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFCFDbContext_FullTypes", "EFCFDbContextScenarios.g",
@@ -195,7 +195,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_LTSNorthwindScenarios()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_LTSNW", "LTSNorthwindScenarios.g",
@@ -208,7 +208,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("Validates baseline of simple inheritance model using LTS model")]
         public void TestClientCodegen_EF_Inheritance()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_EF_Inheritance", "EF_Inheritance.g",
@@ -221,7 +221,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("Validates baseline of simple inheritance model using LTS model")]
         public void TestClientCodegen_LTS_Inheritance()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_LTS_Inheritance", "LTS_Inheritance.g",
@@ -233,7 +233,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_IncludeScenarios()
         {
-            string[] sharedFiles = new string[0];
+            string[] sharedFiles = Array.Empty<string>();
 
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_Include", "IncludeScenariosTestProvider.g",
@@ -254,7 +254,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             // Default
             TestHelper.ValidateLanguageCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_Inherit", "InheritanceScenarios1.g",
-                typeof(TestDomainServices.TestProvider_Inheritance1), "C#", new string[0], false));
+                typeof(TestDomainServices.TestProvider_Inheritance1), "C#", Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_Inherit_FullTypes")]
@@ -271,7 +271,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             // Full type names
             TestHelper.ValidateLanguageCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_Inherit_FullTypes", "InheritanceScenarios1.g",
-                typeof(TestDomainServices.TestProvider_Inheritance1), "C#", new string[0], true));
+                typeof(TestDomainServices.TestProvider_Inheritance1), "C#", Array.Empty<string>(), true));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_INTF")]
@@ -301,7 +301,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             // Default
             TestHelper.ValidateLanguageCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_Secure", "RequiresSecureEndpointScenarios.g",
-                typeof(TestDomainServices.TestService_RequiresSecureEndpoint), "C#", new string[0], false));
+                typeof(TestDomainServices.TestService_RequiresSecureEndpoint), "C#", Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios")]
@@ -427,7 +427,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void TestClientCodeGen_AttributeThrowing()
         {
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_3", "AttributeThrowing.g",
-                typeof(TestDomainServices.AttributeThrowingDomainService), string.Empty, new string[0], false));
+                typeof(TestDomainServices.AttributeThrowingDomainService), string.Empty, Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_4")]
@@ -438,7 +438,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_4", "VBRootNamespaceScenarios.g",
-                new Type[] { typeof(VBRootNamespaceTest.VBRootNamespaceTestDomainService), typeof(VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner), typeof(VBRootNamespaceTest2.VBRootNamespaceTestDomainService2) }, "VB", new string[0], "VBRootNamespaceTest", false));
+                new Type[] { typeof(VBRootNamespaceTest.VBRootNamespaceTestDomainService), typeof(VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner), typeof(VBRootNamespaceTest2.VBRootNamespaceTestDomainService2) }, "VB", Array.Empty<string>(), "VBRootNamespaceTest", false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_5")]
@@ -450,7 +450,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_5", "VBRootNamespaceScenarios.g",
                 new Type[] { typeof(VBRootNamespaceTest.VBRootNamespaceTestDomainService), typeof(VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner), typeof(VBRootNamespaceTest2.VBRootNamespaceTestDomainService2), typeof(VBRootNamespaceTest3.VBRootNamespaceTestDomainService3) }, 
-                "VB", new string[0], "VBRootNamespaceTest", true));
+                "VB", Array.Empty<string>(), "VBRootNamespaceTest", true));
         }
 
         [DeploymentItem(@"Baselines\Default\Cities", "CG_Cities")]
@@ -500,7 +500,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void TestCatalogLTSClientProxies()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_CATLTS", "Catalog_LTS.g", typeof(TestDomainServices.LTS.Catalog), new string[0], false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_CATLTS", "Catalog_LTS.g", typeof(TestDomainServices.LTS.Catalog), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\LTS", "CG_NWLTS")]
@@ -509,7 +509,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void TestNorthwindLTSClientProxies()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_NWLTS", "Northwind_LTS.g", typeof(TestDomainServices.LTS.Northwind), new string[0], false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_NWLTS", "Northwind_LTS.g", typeof(TestDomainServices.LTS.Northwind), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
@@ -518,7 +518,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void TestNorthwindEFClientProxies()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EF.g", typeof(TestDomainServices.EF.Northwind), new string[0], false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EF.g", typeof(TestDomainServices.EF.Northwind), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\EF", "CG_CATEF")]
@@ -528,7 +528,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void TestCatalogEFClientProxies()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEF", "Catalog_EF.g", typeof(TestDomainServices.EF.Catalog), new string[0], false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEF", "Catalog_EF.g", typeof(TestDomainServices.EF.Catalog), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\EF", "CG_CATEFDbCtx")]
@@ -538,7 +538,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void TestCatalogEFDbCtxClientProxies()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFDbCtx.g", typeof(TestDomainServices.DbCtx.Catalog), new string[0], false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFDbCtx.g", typeof(TestDomainServices.DbCtx.Catalog), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]
@@ -555,7 +555,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             };
 
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_CONFLICT_RESOLUTION", "ConflictResolution.EntityConflicts.g", providerTypes, null, new string[0], false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_CONFLICT_RESOLUTION", "ConflictResolution.EntityConflicts.g", providerTypes, null, Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_CONFLICT_RESOLUTION_FullTypes")]
@@ -572,7 +572,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             };
 
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_CONFLICT_RESOLUTION_FullTypes", "ConflictResolution.EntityConflicts.g", providerTypes, null, new string[0], true));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_CONFLICT_RESOLUTION_FullTypes", "ConflictResolution.EntityConflicts.g", providerTypes, null, Array.Empty<string>(), true));
         }
 
         [TestMethod]

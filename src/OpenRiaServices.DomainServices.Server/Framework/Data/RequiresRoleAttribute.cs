@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
             else
             {
-                this._roles = new ReadOnlyCollection<string>(new string[0]);
+                this._roles = new ReadOnlyCollection<string>(Array.Empty<string>());
             }
         }
 
@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
             else
             {
-                this._roles = new ReadOnlyCollection<string>(new string[0]);
+                this._roles = new ReadOnlyCollection<string>(Array.Empty<string>());
             }
         }
 

@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assert.AreEqual(2, sourceInfo.Column, "Wrong Column for type level sourceInfo");
 
             // Validate base ctor
-            MethodBase methodBase = typeof(SourceInfoTestClass).GetConstructor(new Type[0]);
+            MethodBase methodBase = typeof(SourceInfoTestClass).GetConstructor(Array.Empty<Type>());
             Assert.IsNotNull(methodBase, "Could not find base ctor");
             attributes = methodBase.GetCustomAttributes(false);
             sourceInfo = SourceInfo.GetSourceInfoFromAttributes(attributes);
@@ -55,7 +55,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assert.AreEqual(4, sourceInfo.Column, "Wrong Column for ctor level sourceInfo");
 
             // Validate derived ctor
-            methodBase = typeof(SourceInfoDerivedTestClass).GetConstructor(new Type[0]);
+            methodBase = typeof(SourceInfoDerivedTestClass).GetConstructor(Array.Empty<Type>());
             Assert.IsNotNull(methodBase, "Could not find derived ctor");
             attributes = methodBase.GetCustomAttributes(false);
             sourceInfo = SourceInfo.GetSourceInfoFromAttributes(attributes);

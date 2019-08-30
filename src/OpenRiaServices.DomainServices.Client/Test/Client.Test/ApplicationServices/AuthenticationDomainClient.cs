@@ -222,11 +222,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                     QueryCompletedResult results;
                     if (user == null)
                     {
-                        results = new QueryCompletedResult(new MockUser[0], new Entity[0], 0, new ValidationResult[0]);
+                        results = new QueryCompletedResult(Array.Empty<MockUser>(), Array.Empty<Entity>(), 0, Array.Empty<ValidationResult>());
                     }
                     else
                     {
-                        results = new QueryCompletedResult(new MockUser[] { user }, new Entity[0], 1, new ValidationResult[0]);
+                        results = new QueryCompletedResult(new MockUser[] { user }, Array.Empty<Entity>(), 1, Array.Empty<ValidationResult>());
                     }
 
                     tcs.SetResult(results);

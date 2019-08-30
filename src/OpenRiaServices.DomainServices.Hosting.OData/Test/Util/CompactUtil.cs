@@ -52,7 +52,7 @@
         /// </summary>
         public CompactUtil(params string[] files)
         {
-            this.files = files ?? new string[0];
+            this.files = files ?? Array.Empty<string>();
         }
 
         /// <summary>Directory and subdirectory on which to act.</summary>

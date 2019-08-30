@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void NoAuthenticationServices()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext0.g", Type.EmptyTypes, null, new string[0], "RootNamespace", new ConsoleLogger(), true, false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext0.g", Type.EmptyTypes, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void NoAuthenticationServices_FullTypes()
         {
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext0.g", Type.EmptyTypes, null, new string[0], "RootNamespace", new ConsoleLogger(), true, true));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext0.g", Type.EmptyTypes, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, true));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void NoAuthenticationServices_FullTypes_NoRootNamespace()
         {
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext3.g", Type.EmptyTypes, "VB", new string[0], string.Empty, new ConsoleLogger(), true, true));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext3.g", Type.EmptyTypes, "VB", Array.Empty<string>(), string.Empty, new ConsoleLogger(), true, true));
         }
 
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
@@ -52,7 +52,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void OneAuthenticationService()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, new string[0], "RootNamespace", new ConsoleLogger(), true, false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
@@ -62,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public void OneAuthenticationService_FullTypes()
         {
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, new string[0], "RootNamespace", new ConsoleLogger(), true, true));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, true));
         }
 
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
@@ -75,7 +75,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Type[] types = new Type[] { typeof(AuthenticationService1), typeof(AuthenticationService2) };
 
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext2.g", types, null, new string[0], "RootNamespace", logger, true, false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext2.g", types, null, Array.Empty<string>(), "RootNamespace", logger, true, false));
             Assert.IsTrue(logger.InfoMessages.Any(
                 s => s.Contains(Resource.WebContext_ManyAuthServices.Substring(0, 20))),
                 "There should be a message when multiple authentication services are detected.");
@@ -91,7 +91,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Type[] types = new Type[] { typeof(AuthenticationService1), typeof(AuthenticationService2) };
 
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext2.g", types, null, new string[0], "RootNamespace", logger, true, true));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext2.g", types, null, Array.Empty<string>(), "RootNamespace", logger, true, true));
             Assert.IsTrue(logger.InfoMessages.Any(
                 s => s.Contains(Resource.WebContext_ManyAuthServices.Substring(0, 20))),
                 "There should be a message when multiple authentication services are detected.");

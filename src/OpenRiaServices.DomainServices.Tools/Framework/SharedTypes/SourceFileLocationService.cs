@@ -229,7 +229,7 @@
                 provider.Dispose();
             }
 
-            this._providers = new ISourceFileProvider[0];
+            this._providers = Array.Empty<ISourceFileProvider>();
         }
 
         #endregion

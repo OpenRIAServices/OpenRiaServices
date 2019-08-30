@@ -59,8 +59,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             {
                 BusinessLogicData bld = new BusinessLogicData()
                 {
-                    AssemblyPaths = new string[0],
-                    ReferenceAssemblyPaths = new string[0],
+                    AssemblyPaths = Array.Empty<string>(),
+                    ReferenceAssemblyPaths = Array.Empty<string>(),
                     ContextTypeNames = new string[] { typeof(string).AssemblyQualifiedName },
                     Language = "C#"
                 };
@@ -80,7 +80,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         public void BusinessLogicModel_Reports_Invalid_Assembly()
         {
             string assemblyFileName = Path.GetTempFileName();
-            this.BusinessLogicModel_Reports_Invalid_Assembly(assemblyFileName, new string[] { assemblyFileName }, new string[0]);
+            this.BusinessLogicModel_Reports_Invalid_Assembly(assemblyFileName, new string[] { assemblyFileName }, Array.Empty<string>());
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         public void BusinessLogicModel_Reports_Invalid_Reference_Assembly()
         {
             string assemblyFileName = Path.GetTempFileName();
-            this.BusinessLogicModel_Reports_Invalid_Assembly(assemblyFileName, new string[0], new string[] { assemblyFileName });
+            this.BusinessLogicModel_Reports_Invalid_Assembly(assemblyFileName, Array.Empty<string>(), new string[] { assemblyFileName });
         }
 
         private void BusinessLogicModel_Reports_Invalid_Assembly(string assemblyFileName, string[] assemblyPaths, string[] referenceAssemblyPaths)
@@ -100,7 +100,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 {
                     AssemblyPaths = assemblyPaths,
                     ReferenceAssemblyPaths = referenceAssemblyPaths,
-                    ContextTypeNames = new string[0],
+                    ContextTypeNames = Array.Empty<string>(),
                     Language = "C#"
                 };
 

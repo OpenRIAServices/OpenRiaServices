@@ -47,7 +47,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (this._parameterValues == null)
                 {
-                    this._parameterValues = new object[0];
+                    this._parameterValues = Array.Empty<object>();
                 }
                 return this._parameterValues;
             }

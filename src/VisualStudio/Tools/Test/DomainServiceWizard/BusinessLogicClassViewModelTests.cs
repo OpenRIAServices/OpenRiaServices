@@ -22,7 +22,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             string tempFolder = UnitTestHelper.CreateTempFolder();
             try
             {
-                using (BusinessLogicViewModel model = new BusinessLogicViewModel(tempFolder, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null))
+                using (BusinessLogicViewModel model = new BusinessLogicViewModel(tempFolder, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null))
                 {
                     Assert.AreEqual(tempFolder, model.ProjectDirectory);
                     Assert.AreEqual("FooClass", model.ClassName);
@@ -180,45 +180,45 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             // ProjectDirectory cannot be empty
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel(null, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel(null, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "projectDirectory");
 
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel(string.Empty, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel(string.Empty, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "projectDirectory");
 
             // Classname cannot be empty
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", null, "C#", "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", null, "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "className");
 
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", string.Empty, "C#", "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", string.Empty, "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "className");
 
             // Language cannot be empty
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", null, "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", null, "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "language");
 
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", string.Empty, "ARootNamespace", "AnAssemblyName", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", string.Empty, "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "language");
 
             // AssemblyName cannot be empty
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", "C#", "ARootNamespace", null, new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", "C#", "ARootNamespace", null, Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "assemblyName");
 
             ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
             {
-                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", "C#", "ARootNamespace", "", new Type[0], /* IVsHelp object */ null);
+                BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", "C#", "ARootNamespace", "", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "assemblyName");
 
             // Contexts cannot be null
