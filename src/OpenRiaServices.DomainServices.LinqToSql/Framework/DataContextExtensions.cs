@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             // Only way currently to determine if an entity is attached

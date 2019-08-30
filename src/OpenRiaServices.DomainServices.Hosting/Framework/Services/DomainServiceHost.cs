@@ -37,12 +37,12 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (baseAddresses == null)
             {
-                throw new ArgumentNullException("baseAddresses");
+                throw new ArgumentNullException(nameof(baseAddresses));
             }
 
             EnableClientAccessAttribute att = (EnableClientAccessAttribute)TypeDescriptor.GetAttributes(domainServiceType)[typeof(EnableClientAccessAttribute)];
@@ -72,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             if (serviceType == null)
             {
-                throw new ArgumentNullException("serviceType");
+                throw new ArgumentNullException(nameof(serviceType));
             }
 
             if (serviceType == typeof(IPrincipal))

@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainOperationEntry == null)
             {
-                throw new ArgumentNullException("domainOperationEntry");
+                throw new ArgumentNullException(nameof(domainOperationEntry));
             }
 
             this._domainOperationEntry = domainOperationEntry;

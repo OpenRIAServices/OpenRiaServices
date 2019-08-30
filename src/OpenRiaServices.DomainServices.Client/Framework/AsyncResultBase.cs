@@ -129,13 +129,13 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (asyncResult == null)
             {
-                throw new ArgumentNullException("asyncResult");
+                throw new ArgumentNullException(nameof(asyncResult));
             }
 
             TAsyncResult asyncResultBase = asyncResult as TAsyncResult;
             if (asyncResultBase == null)
             {
-                throw new ArgumentException(Resources.WrongAsyncResult, "asyncResult");
+                throw new ArgumentException(Resources.WrongAsyncResult, nameof(asyncResult));
             }
 
             if (asyncResultBase.CancellationRequested)

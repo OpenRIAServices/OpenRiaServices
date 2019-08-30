@@ -214,7 +214,14 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
+
+/* Unmerged change from project 'OpenRiaServices.DomainServices.Client (netstandard2.0)'
+Before:
                 throw new ArgumentNullException("entity");
+After:
+                throw new ArgumentNullException("entity));
+*/
+                throw new ArgumentNullException(nameof(entity));
             }
 
             if (this.IsSourceExternal)
@@ -286,7 +293,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             if (entity == this._detachingEntity)
@@ -851,7 +858,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     throw new ArgumentException(
                         string.Format(CultureInfo.CurrentCulture, Resource.MustBeAnEntity, "value"),
-                        "value");
+                        nameof(value));
                 }
 
                 this._addedEntities.Add(entity);

@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         {
             if (assemblyFileNames == null)
             {
-                throw new ArgumentNullException("assemblyFileNames");
+                throw new ArgumentNullException(nameof(assemblyFileNames));
             }
             this._logger = logger;
             this._assemblyFileNames = new List<string>(assemblyFileNames);

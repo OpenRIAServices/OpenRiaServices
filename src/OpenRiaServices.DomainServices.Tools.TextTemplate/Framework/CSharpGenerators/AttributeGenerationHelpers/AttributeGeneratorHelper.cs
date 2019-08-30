@@ -197,7 +197,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
         {
             if (attributeType == null)
             {
-                throw new ArgumentNullException("attributeType");
+                throw new ArgumentNullException(nameof(attributeType));
             }
 
             ICustomAttributeBuilder cab = null;

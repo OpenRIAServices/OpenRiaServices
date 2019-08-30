@@ -105,7 +105,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (!typeof(Attribute).IsAssignableFrom(attributeType))
             {
-                throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, Resource.Type_Must_Be_Attribute, attributeType.Name), "attributeType");
+                throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, Resource.Type_Must_Be_Attribute, attributeType.Name), nameof(attributeType));
             }
 
             CodeTypeReference attribute = GetTypeReference(attributeType, codeGenerator, referencingType, true);
@@ -479,7 +479,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (string.IsNullOrEmpty(typeFullName))
             {
-                throw new ArgumentNullException("typeFullName");
+                throw new ArgumentNullException(nameof(typeFullName));
             }
 
             string typeName = typeFullName;
@@ -806,7 +806,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (resourceComment == null)
             {
-                throw new ArgumentNullException("resourceComment");
+                throw new ArgumentNullException(nameof(resourceComment));
             }
 
             CodeCommentStatementCollection commentCollection = new CodeCommentStatementCollection();
@@ -831,7 +831,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (string.IsNullOrEmpty(typeName))
             {
-                throw new ArgumentNullException("typeName");
+                throw new ArgumentNullException(nameof(typeName));
             }
 
             if (isVisualBasic || (containingNamespace == null))

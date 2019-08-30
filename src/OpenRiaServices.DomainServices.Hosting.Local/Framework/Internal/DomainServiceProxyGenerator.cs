@@ -68,26 +68,26 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
         {
             if (domainServiceContract == null)
             {
-                throw new ArgumentNullException("domainServiceContract");
+                throw new ArgumentNullException(nameof(domainServiceContract));
             }
 
             if (domainService == null)
             {
-                throw new ArgumentNullException("domainService");
+                throw new ArgumentNullException(nameof(domainService));
             }
 
             // Verify 'domainServiceContract' is actually a public interface.
             if (!domainServiceContract.IsInterface || (!domainServiceContract.IsPublic && !domainServiceContract.IsNestedPublic))
             {
                 string message = string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceProxyGenerator_ExpectedPublicType, domainServiceContract);
-                throw new ArgumentException(message, "domainServiceContract");
+                throw new ArgumentException(message, nameof(domainServiceContract));
             }
 
             // Verify 'domainService' is actually a public type.
             if (!domainService.IsPublic && !domainService.IsNestedPublic)
             {
                 string message = string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceProxyGenerator_ExpectedPublicType, domainService);
-                throw new ArgumentException(message, "domainService");
+                throw new ArgumentException(message, nameof(domainService));
             }
 
             // Create a new context

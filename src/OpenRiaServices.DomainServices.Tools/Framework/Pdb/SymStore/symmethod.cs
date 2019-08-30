@@ -77,7 +77,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             // We should not wrap null instances
             if (unmanagedMethod == null)
-                throw new ArgumentNullException("unmanagedMethod");
+                throw new ArgumentNullException(nameof(unmanagedMethod));
 
             m_unmanagedMethod = unmanagedMethod;
         }

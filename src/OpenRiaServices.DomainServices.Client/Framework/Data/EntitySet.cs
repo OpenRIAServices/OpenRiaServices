@@ -43,11 +43,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
             if (!typeof(Entity).IsAssignableFrom(entityType))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Type_Not_Entity, entityType), "entityType");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Type_Not_Entity, entityType), nameof(entityType));
             }
 
             this._entityType = entityType;
@@ -251,11 +251,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
             if (!this._entityType.IsAssignableFrom(entity.GetType()))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.EntitySet_Wrong_Type, this._entityType, entity.GetType()), "entity");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.EntitySet_Wrong_Type, this._entityType, entity.GetType()), nameof(entity));
             }
         }
 
@@ -661,7 +661,14 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
+
+/* Unmerged change from project 'OpenRiaServices.DomainServices.Client (netstandard2.0)'
+Before:
                 throw new ArgumentNullException("entity");
+After:
+                throw new ArgumentNullException("entity));
+*/
+                throw new ArgumentNullException(nameof(entity));
             }
 
             this.EnsureEntityType(entity);
@@ -866,7 +873,7 @@ namespace OpenRiaServices.DomainServices.Client
                 identity = keyValues[0];
                 if (identity == null)
                 {
-                    throw new ArgumentNullException("keyValues", Resource.EntityKey_CannotBeNull);
+                    throw new ArgumentNullException(nameof(keyValues), Resource.EntityKey_CannotBeNull);
                 }
             }
             else
@@ -1038,15 +1045,15 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (container == null)
                 {
-                    throw new ArgumentNullException("container");
+                    throw new ArgumentNullException(nameof(container));
                 }
                 if (entity == null)
                 {
-                    throw new ArgumentNullException("entity");
+                    throw new ArgumentNullException(nameof(entity));
                 }
                 if (action == null)
                 {
-                    throw new ArgumentNullException("action");
+                    throw new ArgumentNullException(nameof(action));
                 }
 
                 new AddAttachInferrer(container, action).Visit(entity);
@@ -1426,7 +1433,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     throw new ArgumentException(
                         string.Format(CultureInfo.CurrentCulture, Resource.MustBeAnEntity, "value"),
-                        "value");
+                        nameof(value));
                 }
 
                 this.Source.Add(entity);
@@ -1486,7 +1493,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     if ((index < 0) || (index >= this.Source.Count))
                     {
-                        throw new ArgumentOutOfRangeException("index");
+                        throw new ArgumentOutOfRangeException(nameof(index));
                     }
                     return this.Source.List[index];
                 }

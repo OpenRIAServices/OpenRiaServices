@@ -530,7 +530,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
             
             PropertyChangedEventHandler handler = this._propertyChangedEventHandler;

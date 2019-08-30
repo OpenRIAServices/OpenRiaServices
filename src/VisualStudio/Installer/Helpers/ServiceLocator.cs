@@ -19,7 +19,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
 
             PackageServiceProvider = provider;

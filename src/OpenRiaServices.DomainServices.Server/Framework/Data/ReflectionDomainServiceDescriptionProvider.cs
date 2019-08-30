@@ -403,7 +403,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (methodInfo == null)
                 {
-                    throw new ArgumentNullException("methodInfo");
+                    throw new ArgumentNullException(nameof(methodInfo));
                 }
 
                 // Generic methods aren’t supported, and will be caught during DomainServiceDescription validation.

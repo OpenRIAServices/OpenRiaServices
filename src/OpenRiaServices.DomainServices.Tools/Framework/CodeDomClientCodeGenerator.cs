@@ -74,17 +74,17 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (host == null)
             {
-                throw new ArgumentNullException("host");
+                throw new ArgumentNullException(nameof(host));
             }
 
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
             if (descriptions == null)
             {
-                throw new ArgumentNullException("descriptions");
+                throw new ArgumentNullException(nameof(descriptions));
             }
 
             // Initialize all the instance variables
@@ -554,13 +554,13 @@ namespace OpenRiaServices.DomainServices.Tools
             // A null is not acceptable
             if (clientProxyCodeGenerationOptions == null)
             {
-                throw new ArgumentNullException("clientProxyCodeGenerationOptions");
+                throw new ArgumentNullException(nameof(clientProxyCodeGenerationOptions));
             }
 
             // The language property may not be null.
             if (String.IsNullOrEmpty(clientProxyCodeGenerationOptions.Language))
             {
-                throw new ArgumentException(Resource.Null_Language_Property, "clientProxyCodeGenerationOptions");
+                throw new ArgumentException(Resource.Null_Language_Property, nameof(clientProxyCodeGenerationOptions));
             }
         }
 

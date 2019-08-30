@@ -40,12 +40,12 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (message == null)
             {
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (sourceMemberNames == null)
             {
-                throw new ArgumentNullException("sourceMemberNames");
+                throw new ArgumentNullException(nameof(sourceMemberNames));
             }
 
             this._message = message;
@@ -64,12 +64,12 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (message == null)
             {
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (sourceMemberNames == null)
             {
-                throw new ArgumentNullException("sourceMemberNames");
+                throw new ArgumentNullException(nameof(sourceMemberNames));
             }
 
             this._message = message;

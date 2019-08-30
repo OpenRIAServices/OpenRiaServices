@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (serviceProvider == null)
             {
-                throw new ArgumentNullException("serviceProvider");
+                throw new ArgumentNullException(nameof(serviceProvider));
             }
             this._serviceProvider = serviceProvider;
             this.OperationType = operationType;
@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (serviceContext == null)
             {
-                throw new ArgumentNullException("serviceContext");
+                throw new ArgumentNullException(nameof(serviceContext));
             }
             this._serviceProvider = serviceContext._serviceProvider;
             this.OperationType = operationType;
@@ -182,7 +182,7 @@ namespace OpenRiaServices.DomainServices.Server
                     {
                         if (this._services.ContainsKey(serviceType))
                         {
-                            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceContextServiceContainer_ItemAlreadyExists, serviceType), "serviceType");
+                            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceContextServiceContainer_ItemAlreadyExists, serviceType), nameof(serviceType));
                         }
 
                         this._services.Add(serviceType, callback);
@@ -218,7 +218,7 @@ namespace OpenRiaServices.DomainServices.Server
                     {
                         if (this._services.ContainsKey(serviceType))
                         {
-                            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceContextServiceContainer_ItemAlreadyExists, serviceType), "serviceType");
+                            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceContextServiceContainer_ItemAlreadyExists, serviceType), nameof(serviceType));
                         }
 
                         this._services.Add(serviceType, serviceInstance);
@@ -279,7 +279,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (serviceType == null)
                 {
-                    throw new ArgumentNullException("serviceType");
+                    throw new ArgumentNullException(nameof(serviceType));
                 }
 
                 object service = null;

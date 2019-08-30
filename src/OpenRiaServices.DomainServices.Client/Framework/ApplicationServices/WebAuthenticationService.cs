@@ -173,7 +173,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
             if (parameters == null)
             {
-                throw new ArgumentNullException("parameters");
+                throw new ArgumentNullException(nameof(parameters));
             }
 
             WebAsyncResult result = new WebAsyncResult(callback, state);

@@ -46,7 +46,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             this._domainServiceType = domainServiceType;
@@ -60,7 +60,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (baseDescription == null)
             {
-                throw new ArgumentNullException("baseDescription");
+                throw new ArgumentNullException(nameof(baseDescription));
             }
 
             this._domainServiceType = baseDescription._domainServiceType;
@@ -197,12 +197,12 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (operation == null)
             {
-                throw new ArgumentNullException("operation");
+                throw new ArgumentNullException(nameof(operation));
             }
 
             if (operation.DomainServiceType != this.DomainServiceType)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_IncompatibleOperationParentType, operation.Name, this.DomainServiceType, operation.DomainServiceType), "operation");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_IncompatibleOperationParentType, operation.Name, this.DomainServiceType, operation.DomainServiceType), nameof(operation));
             }
 
             if (!this._operationEntries.Contains(operation))
@@ -263,7 +263,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
             if (string.IsNullOrEmpty(methodName))
             {
@@ -300,7 +300,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
 
             Dictionary<string, DomainOperationEntry> entityCustomMethods = null;
@@ -325,13 +325,13 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
             if ((operation != DomainOperation.Insert) &&
                 (operation != DomainOperation.Update) &&
                 (operation != DomainOperation.Delete))
             {
-                throw new ArgumentOutOfRangeException("operation");
+                throw new ArgumentOutOfRangeException(nameof(operation));
             }
 
             for (Type baseType = entityType; baseType != typeof(object) && baseType != null; baseType = baseType.BaseType)
@@ -363,7 +363,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
 
             List<PropertyDescriptor> assocList = null;
@@ -425,7 +425,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
 
             EnsureInitialized();
@@ -458,7 +458,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
 
             EnsureInitialized();
@@ -483,7 +483,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (domainServiceType.IsAbstract
@@ -1026,7 +1026,7 @@ namespace OpenRiaServices.DomainServices.Server
             string errorMessage;
             if (!IsValidEntityType(entityType, out errorMessage))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Invalid_Entity_Type, entityType.Name, errorMessage), "entityType");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Invalid_Entity_Type, entityType.Name, errorMessage), nameof(entityType));
             }
 
             this._entityTypes.Add(entityType);
@@ -1944,14 +1944,14 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
 
             if (operationType != DomainOperation.Insert &&
                 operationType != DomainOperation.Update &&
                 operationType != DomainOperation.Delete)
             {
-                throw new ArgumentOutOfRangeException("operationType");
+                throw new ArgumentOutOfRangeException(nameof(operationType));
             }
 
             HashSet<Type> visited = new HashSet<Type>();

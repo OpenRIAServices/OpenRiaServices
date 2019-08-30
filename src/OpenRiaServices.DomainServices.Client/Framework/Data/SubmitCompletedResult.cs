@@ -23,11 +23,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (changeSet == null)
             {
-                throw new ArgumentNullException("changeSet");
+                throw new ArgumentNullException(nameof(changeSet));
             }
             if (operationResults == null)
             {
-                throw new ArgumentNullException("operationResults");
+                throw new ArgumentNullException(nameof(operationResults));
             }
 
             this._changeSet = changeSet;

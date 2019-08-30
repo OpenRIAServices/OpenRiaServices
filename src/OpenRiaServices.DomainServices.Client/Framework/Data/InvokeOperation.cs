@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(operationName))
             {
-                throw new ArgumentNullException("operationName");
+                throw new ArgumentNullException(nameof(operationName));
             }
             this._operationName = operationName;
             this._parameters = parameters;

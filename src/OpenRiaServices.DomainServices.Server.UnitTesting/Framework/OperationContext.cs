@@ -13,15 +13,15 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         {
             if (domainServiceContext == null)
             {
-                throw new ArgumentNullException("domainServiceContext");
+                throw new ArgumentNullException(nameof(domainServiceContext));
             }
             if (domainService == null)
             {
-                throw new ArgumentNullException("domainService");
+                throw new ArgumentNullException(nameof(domainService));
             }
             if (domainServiceDescription == null)
             {
-                throw new ArgumentNullException("domainServiceDescription");
+                throw new ArgumentNullException(nameof(domainServiceDescription));
             }
 
             this._domainServiceContext = domainServiceContext;

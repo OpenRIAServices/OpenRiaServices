@@ -17,11 +17,11 @@ namespace OpenRiaServices.DomainServices.Tools.Validation
         {
             if (assemblies == null)
             {
-                throw new ArgumentNullException("assemblies");
+                throw new ArgumentNullException(nameof(assemblies));
             }
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             // Just creating an instance of the DomainServiceCatalog will locate all the DomainServices in the specified

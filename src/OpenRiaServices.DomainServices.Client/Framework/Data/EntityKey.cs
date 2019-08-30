@@ -47,13 +47,13 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (keyValues == null)
             {
-                throw new ArgumentNullException("keyValues");
+                throw new ArgumentNullException(nameof(keyValues));
             }
 
             int keyLength = keyValues.Length;
             if (keyLength == 0)
             {
-                throw new ArgumentException(Resource.EntityKey_EmptyKeyMembers, "keyValues");
+                throw new ArgumentException(Resource.EntityKey_EmptyKeyMembers, nameof(keyValues));
             }
 
             object keyValue;
@@ -90,7 +90,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value", Resource.EntityKey_CannotBeNull);
+                throw new ArgumentNullException(nameof(value), Resource.EntityKey_CannotBeNull);
             }
         }
 
@@ -122,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (sb == null)
             {
-                throw new ArgumentNullException("sb");
+                throw new ArgumentNullException(nameof(sb));
             }
             if (value == null)
             {
@@ -204,7 +204,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (other == null)
             {
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             }
             return EqualityComparer<T>.Default.Equals(this._v, other._v);
         }
@@ -279,7 +279,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (other == null)
             {
-                throw new ArgumentNullException("other");
+                throw new ArgumentNullException(nameof(other));
             }
             return EqualityComparer<T1>.Default.Equals(this._v1, other._v1) &&
                    EqualityComparer<T2>.Default.Equals(this._v2, other._v2);

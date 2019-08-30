@@ -152,7 +152,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainOperationEntry == null)
             {
-                throw new ArgumentNullException("domainOperationEntry");
+                throw new ArgumentNullException(nameof(domainOperationEntry));
             }
 
             // A null entity is not permitted in a Submit.
@@ -161,7 +161,7 @@ namespace OpenRiaServices.DomainServices.Server
             // Metadata requests are always null.
             if (entity == null && this.ServiceContext.OperationType == DomainOperationType.Submit)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             // Quick return if there is no authorization to perform
@@ -245,7 +245,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (this._serviceContext != null)
@@ -276,7 +276,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (queryDescription == null)
                 {
-                    throw new ArgumentNullException("queryDescription");
+                    throw new ArgumentNullException(nameof(queryDescription));
                 }
 
                 this.EnsureInitialized();
@@ -431,7 +431,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (invokeDescription == null)
                 {
-                    throw new ArgumentNullException("invokeDescription");
+                    throw new ArgumentNullException(nameof(invokeDescription));
                 }
 
                 this.EnsureInitialized();
@@ -512,7 +512,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (changeSet == null)
                 {
-                    throw new ArgumentNullException("changeSet");
+                    throw new ArgumentNullException(nameof(changeSet));
                 }
                 this._changeSet = changeSet;
 
@@ -1293,7 +1293,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     throw new ArgumentException(
                         string.Format(CultureInfo.CurrentCulture, Resource.DomainService_Factory_InvalidDomainServiceType, domainServiceType),
-                        "domainServiceType");
+                        nameof(domainServiceType));
                 }
 
                 DomainService domainService = null;
@@ -1323,7 +1323,7 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (domainService == null)
                 {
-                    throw new ArgumentNullException("domainService");
+                    throw new ArgumentNullException(nameof(domainService));
                 }
                 domainService.Dispose();
             }

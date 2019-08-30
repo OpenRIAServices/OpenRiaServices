@@ -25,15 +25,15 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             if (objectSet == null)
             {
-                throw new ArgumentNullException("objectSet");
+                throw new ArgumentNullException(nameof(objectSet));
             }
             if (current == null)
             {
-                throw new ArgumentNullException("current");
+                throw new ArgumentNullException(nameof(current));
             }
             if (original == null)
             {
-                throw new ArgumentNullException("original");
+                throw new ArgumentNullException(nameof(original));
             }
 
             // Attach the entity if it is not already attached, or if it is already
@@ -70,11 +70,11 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             if (objectSet == null)
             {
-                throw new ArgumentNullException("objectSet");
+                throw new ArgumentNullException(nameof(objectSet));
             }
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             ObjectContext context = objectSet.Context;

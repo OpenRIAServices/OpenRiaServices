@@ -31,12 +31,12 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (assembliesToLoad == null)
             {
-                throw new ArgumentNullException("assembliesToLoad");
+                throw new ArgumentNullException(nameof(assembliesToLoad));
             }
 
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             this._logger = logger;
@@ -58,12 +58,12 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             this._logger = logger;
@@ -81,12 +81,12 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (domainServiceTypes == null)
             {
-                throw new ArgumentNullException("domainServiceTypes");
+                throw new ArgumentNullException(nameof(domainServiceTypes));
             }
 
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             this._logger = logger;

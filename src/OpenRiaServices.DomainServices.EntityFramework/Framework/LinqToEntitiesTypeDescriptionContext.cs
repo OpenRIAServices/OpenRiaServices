@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             if (contextType == null)
             {
-                throw new ArgumentNullException("contextType");
+                throw new ArgumentNullException(nameof(contextType));
             }
             this._contextType = contextType;
         }

@@ -39,7 +39,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             if (serviceHost == null)
             {
-                throw new ArgumentNullException("serviceHost");
+                throw new ArgumentNullException(nameof(serviceHost));
             }
 
             if (this.Parameters["maxEntries"] != null)
@@ -99,7 +99,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 if (endpointDispatcher == null)
                 {
-                    throw new ArgumentNullException("endpointDispatcher");
+                    throw new ArgumentNullException(nameof(endpointDispatcher));
                 }
 
                 endpointDispatcher.DispatchRuntime.SynchronizationContext = null;

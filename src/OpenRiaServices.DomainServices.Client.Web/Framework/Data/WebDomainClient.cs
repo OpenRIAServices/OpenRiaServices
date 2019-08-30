@@ -79,7 +79,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (serviceUri == null)
             {
-                throw new ArgumentNullException("serviceUri");
+                throw new ArgumentNullException(nameof(serviceUri));
             }
 
             if (domainClientFactory == null)
@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (!serviceUri.IsAbsoluteUri)
             {
                 // Relative URIs currently only supported on Silverlight
-                throw new ArgumentException(OpenRiaServices.DomainServices.Client.Resource.DomainContext_InvalidServiceUri, "serviceUri");
+                throw new ArgumentException(OpenRiaServices.DomainServices.Client.Resource.DomainContext_InvalidServiceUri, nameof(serviceUri));
             }
 #endif
 

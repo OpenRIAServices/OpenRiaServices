@@ -56,7 +56,7 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (this._dataContextType == null)

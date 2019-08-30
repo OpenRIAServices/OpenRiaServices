@@ -1116,7 +1116,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             this.OnDataMemberChanged();
@@ -1213,7 +1213,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             this.OnDataMemberChanging();
@@ -1268,7 +1268,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             if (this.IsDeserializing || this.IsApplyingState)
@@ -1292,7 +1292,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (metaMember == null)
             {
                 throw new ArgumentException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, this.MetaType.Type.Name, propertyName), "propertyName");
+                    string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, this.MetaType.Type.Name, propertyName), nameof(propertyName));
             }
 
             if (metaMember.EditableAttribute != null && !metaMember.EditableAttribute.AllowEdit &&
@@ -1336,7 +1336,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (validationContext == null)
             {
-                throw new ArgumentNullException("validationContext");
+                throw new ArgumentNullException(nameof(validationContext));
             }
 
             List<ValidationResult> validationResults = new List<ValidationResult>();
@@ -1556,7 +1556,7 @@ namespace OpenRiaServices.DomainServices.Client
         private void UndoAction(EntityAction action, bool throwIfSubmitting)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             // verify that the action can currently be invoked
             if (throwIfSubmitting && this.IsSubmitting)

@@ -55,7 +55,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             context.BindingParameters.Add(this);
@@ -90,7 +90,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return context.CanBuildInnerChannelFactory<TChannel>();
@@ -101,7 +101,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             context.BindingParameters.Add(this);
@@ -112,7 +112,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             return context.CanBuildInnerChannelListener<TChannel>();
@@ -129,7 +129,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (readerQuotas == null)
                 {
-                    throw new ArgumentNullException("readerQuotas");
+                    throw new ArgumentNullException(nameof(readerQuotas));
                 }
                 this._readerQuotas = readerQuotas;
             }
@@ -168,11 +168,11 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (messageVersion == null)
                 {
-                    throw new ArgumentNullException("messageVersion");
+                    throw new ArgumentNullException(nameof(messageVersion));
                 }
                 if (readerQuotas == null)
                 {
-                    throw new ArgumentNullException("readerQuotas");
+                    throw new ArgumentNullException(nameof(readerQuotas));
                 }
                 this._readerQuotas = readerQuotas;
                 this._messageVersion = messageVersion;
@@ -206,7 +206,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (bufferManager == null)
                 {
-                    throw new ArgumentNullException("bufferManager");
+                    throw new ArgumentNullException(nameof(bufferManager));
                 }
 
                 ThrowIfIncorrectContentType(contentType);
@@ -222,7 +222,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (stream == null)
                 {
-                    throw new ArgumentNullException("stream");
+                    throw new ArgumentNullException(nameof(stream));
                 }
 
                 ThrowIfIncorrectContentType(contentType);
@@ -238,17 +238,17 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (message == null)
                 {
-                    throw new ArgumentNullException("message");
+                    throw new ArgumentNullException(nameof(message));
                 }
 
                 if (bufferManager == null)
                 {
-                    throw new ArgumentNullException("bufferManager");
+                    throw new ArgumentNullException(nameof(bufferManager));
                 }
 
                 if (maxMessageSize < 0)
                 {
-                    throw new ArgumentOutOfRangeException("maxMessageSize");
+                    throw new ArgumentOutOfRangeException(nameof(maxMessageSize));
                 }
 
                 this.ThrowIfInvalidMessageVersion(message);
@@ -271,12 +271,12 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (message == null)
                 {
-                    throw new ArgumentNullException("message");
+                    throw new ArgumentNullException(nameof(message));
                 }
 
                 if (stream == null)
                 {
-                    throw new ArgumentNullException("stream");
+                    throw new ArgumentNullException(nameof(stream));
                 }
 
                 this.ThrowIfInvalidMessageVersion(message);
@@ -670,7 +670,7 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         if (stream == null)
                         {
-                            throw new ArgumentNullException("stream");
+                            throw new ArgumentNullException(nameof(stream));
                         }
 
                         lock (this.ThisLock)

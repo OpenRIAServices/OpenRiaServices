@@ -48,11 +48,11 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
         {
             if (workspace == null)
             {
-                throw new ArgumentNullException("workspace");
+                throw new ArgumentNullException(nameof(workspace));
             }
             if (clrType == null)
             {
-                throw new ArgumentNullException("clrType");
+                throw new ArgumentNullException(nameof(clrType));
             }
 
             if (clrType.IsPrimitive || clrType == typeof(object))
@@ -102,11 +102,11 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             ObjectStateEntry stateEntry = null;

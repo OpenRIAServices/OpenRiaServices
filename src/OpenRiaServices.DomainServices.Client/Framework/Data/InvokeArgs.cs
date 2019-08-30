@@ -25,11 +25,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(operationName))
             {
-                throw new ArgumentNullException("operationName");
+                throw new ArgumentNullException(nameof(operationName));
             }
             if (returnType == null)
             {
-                throw new ArgumentNullException("returnType");
+                throw new ArgumentNullException(nameof(returnType));
             }
 
             this._operationName = operationName;

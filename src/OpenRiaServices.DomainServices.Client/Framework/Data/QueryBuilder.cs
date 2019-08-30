@@ -68,7 +68,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
@@ -104,7 +104,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
@@ -140,7 +140,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (selector == null)
             {
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             }
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
@@ -230,7 +230,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
@@ -266,7 +266,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
@@ -301,7 +301,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (predicate == null)
             {
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             }
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
@@ -340,7 +340,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entityQuery == null)
             {
-                throw new ArgumentNullException("entityQuery");
+                throw new ArgumentNullException(nameof(entityQuery));
             }
 
             entityQuery.IncludeTotalCount = RequestTotalItemCount;
@@ -363,7 +363,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (enumerable == null)
             {
-                throw new ArgumentNullException("enumerable");
+                throw new ArgumentNullException(nameof(enumerable));
             }
 
             return ApplyTo(enumerable.AsQueryable());
@@ -381,7 +381,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (queryable == null)
             {
-                throw new ArgumentNullException("queryable");
+                throw new ArgumentNullException(nameof(queryable));
             }
 
             if (_queryableReplay != null)
@@ -403,7 +403,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (collection == null)
             {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
 
             return new ObservableCollection<T>(ApplyTo((IEnumerable<T>)collection));

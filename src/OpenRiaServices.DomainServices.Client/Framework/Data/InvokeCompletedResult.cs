@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (validationErrors == null)
             {
-                throw new ArgumentNullException("validationErrors");
+                throw new ArgumentNullException(nameof(validationErrors));
             }
 
             this._returnValue = returnValue;

@@ -61,7 +61,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (this._objectContextType == null)

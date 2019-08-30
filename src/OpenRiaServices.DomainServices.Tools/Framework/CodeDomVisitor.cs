@@ -17,7 +17,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (codeCompileUnit == null)
             {
-                throw new ArgumentNullException("codeCompileUnit");
+                throw new ArgumentNullException(nameof(codeCompileUnit));
             }
 
             this.VisitBase(codeCompileUnit);

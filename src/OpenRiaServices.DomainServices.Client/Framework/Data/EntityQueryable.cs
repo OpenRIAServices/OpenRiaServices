@@ -23,11 +23,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
             if (!source.IsComposable)
             {
@@ -48,11 +48,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
             if (!source.IsComposable)
             {
@@ -72,7 +72,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (!source.IsComposable)
             {
@@ -92,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (!source.IsComposable)
             {
@@ -113,11 +113,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
             if (!source.IsComposable)
             {
@@ -138,11 +138,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (keySelector == null)
             {
-                throw new ArgumentNullException("keySelector");
+                throw new ArgumentNullException(nameof(keySelector));
             }
             if (!source.IsComposable)
             {
@@ -162,11 +162,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (predicate == null)
             {
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             }
             if (!source.IsComposable)
             {
@@ -187,11 +187,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             if (selector == null)
             {
-                throw new ArgumentNullException("selector");
+                throw new ArgumentNullException(nameof(selector));
             }
             return new EntityQuery<TEntity>(source, Queryable.Select<TEntity, TEntity>(source.QueryRoot, selector));
         }

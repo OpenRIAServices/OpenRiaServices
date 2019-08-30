@@ -200,7 +200,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (item == null)
             {
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
             }
 
             IEnumerable<string> propertiesAffected = item.MemberNames;
@@ -322,7 +322,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (item == null)
             {
-                throw new ArgumentNullException("item");
+                throw new ArgumentNullException(nameof(item));
             }
 
             IEnumerable<string> propertiesAffected = item.MemberNames;

@@ -56,7 +56,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             if (document == null)
             {
-                throw new ArgumentNullException("document");
+                throw new ArgumentNullException(nameof(document));
             }
             m_unmanagedDocument = document;
         }

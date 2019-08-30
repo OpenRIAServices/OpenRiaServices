@@ -23,15 +23,15 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (addedEntities == null)
             {
-                throw new ArgumentNullException("addedEntities");
+                throw new ArgumentNullException(nameof(addedEntities));
             }
             if (modifiedEntities == null)
             {
-                throw new ArgumentNullException("modifiedEntities");
+                throw new ArgumentNullException(nameof(modifiedEntities));
             }
             if (removedEntities == null)
             {
-                throw new ArgumentNullException("removedEntities");
+                throw new ArgumentNullException(nameof(removedEntities));
             }
 
             this._addedEntities = addedEntities;

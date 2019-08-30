@@ -62,7 +62,7 @@ namespace System.Linq.Dynamic
             {
                 if (domainServiceDescription == null)
                 {
-                    throw new ArgumentNullException("domainServiceDescription");
+                    throw new ArgumentNullException(nameof(domainServiceDescription));
                 }
 
                 this.domainServiceDescription = domainServiceDescription;

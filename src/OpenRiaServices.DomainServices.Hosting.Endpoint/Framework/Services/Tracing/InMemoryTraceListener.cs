@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("value", Resx.MaxEntriesMustBePositiveInteger);
+                    throw new ArgumentOutOfRangeException(nameof(value), Resx.MaxEntriesMustBePositiveInteger);
                 }
                 maxEntries = value;
             }
@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             if (message == null)
             {
-                throw new ArgumentNullException("message");
+                throw new ArgumentNullException(nameof(message));
             }
 
             currentEntry = currentEntry == null ? message : currentEntry + message;

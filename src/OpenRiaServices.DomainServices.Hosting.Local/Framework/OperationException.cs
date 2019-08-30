@@ -61,7 +61,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
         {
             if (operationError == null)
             {
-                throw new ArgumentNullException("operationError");
+                throw new ArgumentNullException(nameof(operationError));
             }
         }
 
@@ -76,7 +76,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
         {
             if (operationErrors == null)
             {
-                throw new ArgumentNullException("operationErrors");
+                throw new ArgumentNullException(nameof(operationErrors));
             }
 
             this._data.OperationErrors = operationErrors.ToArray();

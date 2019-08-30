@@ -62,7 +62,7 @@
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             //  Get the list of members for this type
@@ -86,7 +86,7 @@
         {
             if (memberInfo == null)
             {
-                throw new ArgumentNullException("memberInfo");
+                throw new ArgumentNullException(nameof(memberInfo));
             }
 
             // Either load the members or retrieve them from the cache.

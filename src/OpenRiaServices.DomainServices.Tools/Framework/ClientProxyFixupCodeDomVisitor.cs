@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (options == null)
             {
-                throw new ArgumentNullException("options");
+                throw new ArgumentNullException(nameof(options));
             }
 
             this._options = options;

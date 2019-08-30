@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainServiceDescriptionProviderType == null)
             {
-                throw new ArgumentNullException("domainServiceDescriptionProviderType");
+                throw new ArgumentNullException(nameof(domainServiceDescriptionProviderType));
             }
 
             this._domainServiceDescriptionProviderType = domainServiceDescriptionProviderType;
@@ -59,12 +59,12 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (!typeof(DomainService).IsAssignableFrom(domainServiceType))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidType, domainServiceType.FullName, typeof(DomainService).FullName), "domainServiceType");
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidType, domainServiceType.FullName, typeof(DomainService).FullName), nameof(domainServiceType));
             }
 
             if (!typeof(DomainServiceDescriptionProvider).IsAssignableFrom(this._domainServiceDescriptionProviderType))

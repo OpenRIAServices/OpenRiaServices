@@ -22,12 +22,12 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         {
             if (string.IsNullOrEmpty(currentDirectory))
             {
-                throw new ArgumentNullException("currentDirectory");
+                throw new ArgumentNullException(nameof(currentDirectory));
             }
 
             if (string.IsNullOrEmpty(pathToMakeRelative))
             {
-                throw new ArgumentNullException("pathToMakeRelative");
+                throw new ArgumentNullException(nameof(pathToMakeRelative));
             }
 
             currentDirectory = Path.GetFullPath(currentDirectory);

@@ -74,7 +74,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
             }
             else
             {
-                throw new ArgumentException("Invalid format", "symFormat");
+                throw new ArgumentException("Invalid format", nameof(symFormat));
             }
 
             // Create the Metadata dispenser.

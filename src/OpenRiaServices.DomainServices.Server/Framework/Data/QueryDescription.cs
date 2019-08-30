@@ -24,11 +24,11 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainOperationEntry == null)
             {
-                throw new ArgumentNullException("domainOperationEntry");
+                throw new ArgumentNullException(nameof(domainOperationEntry));
             }
             if (domainOperationEntry.Operation != DomainOperation.Query)
             {
-                throw new ArgumentOutOfRangeException("domainOperationEntry");
+                throw new ArgumentOutOfRangeException(nameof(domainOperationEntry));
             }
 
             this._domainOperationEntry = domainOperationEntry;
@@ -44,7 +44,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (parameterValues == null)
             {
-                throw new ArgumentNullException("parameterValues");
+                throw new ArgumentNullException(nameof(parameterValues));
             }
 
             this._parameterValues = parameterValues;

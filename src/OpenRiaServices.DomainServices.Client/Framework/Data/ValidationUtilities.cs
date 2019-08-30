@@ -34,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (instance == null)
             {
-                throw new ArgumentNullException("instance");
+                throw new ArgumentNullException(nameof(instance));
             }
 
             ValidationContext context = new ValidationContext(instance, parentContext, parentContext != null ? parentContext.Items : null);
@@ -600,17 +600,17 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(methodName))
             {
-                throw new ArgumentNullException("methodName");
+                throw new ArgumentNullException(nameof(methodName));
             }
 
             if (validationContext == null)
             {
-                throw new ArgumentNullException("validationContext");
+                throw new ArgumentNullException(nameof(validationContext));
             }
 
             if (validationContext.ObjectInstance == null)
             {
-                throw new ArgumentException(DataResource.ValidationUtilities_ContextInstance_CannotBeNull, "validationContext");
+                throw new ArgumentException(DataResource.ValidationUtilities_ContextInstance_CannotBeNull, nameof(validationContext));
             }
 
             MethodInfo method = GetMethod(validationContext.ObjectInstance, methodName, parameters);

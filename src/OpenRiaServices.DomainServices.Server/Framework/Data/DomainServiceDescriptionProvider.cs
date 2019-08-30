@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             this._domainServiceType = domainServiceType;
@@ -79,11 +79,11 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
             if (parent == null)
             {
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
             }
 
             if (this._parentDescriptionProvider != null)
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             return false;
@@ -125,7 +125,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (operation == null)
             {
-                throw new ArgumentNullException("operation");
+                throw new ArgumentNullException(nameof(operation));
             }
 
             if (this._parentDescriptionProvider != null)
@@ -147,7 +147,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             if (this._isEntityTypeFunc != null)
@@ -186,7 +186,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (baseDescription == null)
             {
-                throw new ArgumentNullException("baseDescription");
+                throw new ArgumentNullException(nameof(baseDescription));
             }
             return new DomainServiceDescription(baseDescription);
         }

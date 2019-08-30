@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (attribute == null)
             {
-                throw new ArgumentNullException("attribute");
+                throw new ArgumentNullException(nameof(attribute));
             }
 
             Type attributeType = attribute.GetType();

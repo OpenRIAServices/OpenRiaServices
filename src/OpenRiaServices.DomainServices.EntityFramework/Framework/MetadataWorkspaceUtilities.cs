@@ -220,17 +220,17 @@ namespace System.Data.Mapping
             {
                 if (csdlPath == null)
                 {
-                    throw new ArgumentNullException("csdlPath");
+                    throw new ArgumentNullException(nameof(csdlPath));
                 }
 
                 if (mslPath == null)
                 {
-                    throw new ArgumentNullException("mslPath");
+                    throw new ArgumentNullException(nameof(mslPath));
                 }
 
                 if (ssdlPath == null)
                 {
-                    throw new ArgumentNullException("ssdlPath");
+                    throw new ArgumentNullException(nameof(ssdlPath));
                 }
 
                 this.Csdl = csdlPath;

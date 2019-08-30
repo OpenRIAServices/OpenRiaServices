@@ -11,9 +11,9 @@ namespace System.Linq.Dynamic
         public static IQueryable Where(this IQueryable source, string predicate, QueryResolver queryResolver)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (predicate == null)
-                throw new ArgumentNullException("predicate");
+                throw new ArgumentNullException(nameof(predicate));
             LambdaExpression lambda = DynamicExpression.ParseLambda(source.ElementType, typeof(bool), predicate, queryResolver);
             return source.Provider.CreateQuery(
                 Expression.Call(
@@ -25,9 +25,9 @@ namespace System.Linq.Dynamic
         public static IQueryable OrderBy(this IQueryable source, string ordering, QueryResolver queryResolver)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             if (ordering == null)
-                throw new ArgumentNullException("ordering");
+                throw new ArgumentNullException(nameof(ordering));
             ParameterExpression[] parameters = new ParameterExpression[] {
                 Expression.Parameter(source.ElementType, "") };
             ExpressionParser parser = new ExpressionParser(parameters, ordering, queryResolver);
@@ -50,7 +50,7 @@ namespace System.Linq.Dynamic
         public static IQueryable Take(this IQueryable source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "Take",
@@ -61,7 +61,7 @@ namespace System.Linq.Dynamic
         public static IQueryable Skip(this IQueryable source, int count)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "Skip",
@@ -334,7 +334,7 @@ namespace System.Linq.Dynamic
         public ExpressionParser(ParameterExpression[] parameters, string expression, QueryResolver queryResolver)
         {
             if (expression == null)
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
 
             this.queryResolver = queryResolver;
             symbols = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);

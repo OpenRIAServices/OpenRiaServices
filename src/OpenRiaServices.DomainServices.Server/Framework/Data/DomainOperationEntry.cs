@@ -43,23 +43,23 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
             if (returnType == null)
             {
-                throw new ArgumentNullException("returnType");
+                throw new ArgumentNullException(nameof(returnType));
             }
             if (parameters == null)
             {
-                throw new ArgumentNullException("parameters");
+                throw new ArgumentNullException(nameof(parameters));
             }
             if (attributes == null)
             {
-                throw new ArgumentNullException("attributes");
+                throw new ArgumentNullException(nameof(attributes));
             }
             if (domainServiceType == null)
             {
-                throw new ArgumentNullException("domainServiceType");
+                throw new ArgumentNullException(nameof(domainServiceType));
             }
 
             if (operation == DomainOperation.None)

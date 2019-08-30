@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Tools
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ArgumentNullException("value", Resource.Null_Language_Property);
+                    throw new ArgumentNullException(nameof(value), Resource.Null_Language_Property);
                 }
                 this._language = value;
             }

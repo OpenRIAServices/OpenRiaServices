@@ -36,15 +36,15 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (domainClient == null)
             {
-                throw new ArgumentNullException("domainClient");
+                throw new ArgumentNullException(nameof(domainClient));
             }
             if (string.IsNullOrEmpty(queryName))
             {
-                throw new ArgumentNullException("queryName");
+                throw new ArgumentNullException(nameof(queryName));
             }
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
             this._domainClient = domainClient;
             this._queryName = queryName;
@@ -65,11 +65,11 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (baseQuery == null)
             {
-                throw new ArgumentNullException("baseQuery");
+                throw new ArgumentNullException(nameof(baseQuery));
             }
             if (query == null)
             {
-                throw new ArgumentNullException("query");
+                throw new ArgumentNullException(nameof(query));
             }
             this._domainClient = baseQuery._domainClient;
             this._queryName = baseQuery._queryName;

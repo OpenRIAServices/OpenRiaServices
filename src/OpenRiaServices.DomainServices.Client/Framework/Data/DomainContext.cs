@@ -43,7 +43,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (domainClient == null)
             {
-                throw new ArgumentNullException("domainClient");
+                throw new ArgumentNullException(nameof(domainClient));
             }
 
             this._domainClient = domainClient;
@@ -215,12 +215,12 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entityType == null)
             {
-                throw new ArgumentNullException("entityType");
+                throw new ArgumentNullException(nameof(entityType));
             }
 
             if (domainContext == null)
             {
-                throw new ArgumentNullException("domainContext");
+                throw new ArgumentNullException(nameof(domainContext));
             }
 
             EntitySet entitySet = domainContext.EntityContainer.GetEntitySet(entityType);
@@ -910,7 +910,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
             if (returnType == null)
             {
-                throw new ArgumentNullException("returnType");
+                throw new ArgumentNullException(nameof(returnType));
             }
 
             InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, this.DomainClient.SupportsCancellation);
@@ -948,7 +948,7 @@ namespace OpenRiaServices.DomainServices.Client
             }
             if (returnType == null)
             {
-                throw new ArgumentNullException("returnType");
+                throw new ArgumentNullException(nameof(returnType));
             }
 
 
@@ -1071,7 +1071,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
             if (this.PropertyChanged != null)
             {
@@ -1112,7 +1112,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(methodName))
             {
-                throw new ArgumentNullException("methodName");
+                throw new ArgumentNullException(nameof(methodName));
             }
 
             object[] paramValues = parameters != null ? parameters.Values.ToArray() : Array.Empty<object>();

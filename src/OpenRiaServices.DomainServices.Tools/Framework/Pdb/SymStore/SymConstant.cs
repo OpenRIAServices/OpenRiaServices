@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             // We should not wrap null instances
             if (target == null)
-                throw new ArgumentNullException("target");
+                throw new ArgumentNullException(nameof(target));
 
             m_target = target;
         }

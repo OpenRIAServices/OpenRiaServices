@@ -42,11 +42,11 @@ namespace System.ComponentModel.DataAnnotations
         {
             if (principal == null)
             {
-                throw new ArgumentNullException("principal");
+                throw new ArgumentNullException(nameof(principal));
             }
             if (authorizationContext == null)
             {
-                throw new ArgumentNullException("authorizationContext");
+                throw new ArgumentNullException(nameof(authorizationContext));
             }
             return this.IsAuthorized(principal, authorizationContext);
         }

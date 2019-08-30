@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
             this._user = user;
         }

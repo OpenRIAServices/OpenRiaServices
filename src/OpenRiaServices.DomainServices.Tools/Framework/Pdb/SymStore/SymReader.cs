@@ -158,7 +158,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             // We should not wrap null instances
             if (reader == null)
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException(nameof(reader));
 
             m_reader = reader;
         }

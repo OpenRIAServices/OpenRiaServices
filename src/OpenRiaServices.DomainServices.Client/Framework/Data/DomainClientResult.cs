@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (validationErrors == null)
             {
-                throw new ArgumentNullException("validationErrors");
+                throw new ArgumentNullException(nameof(validationErrors));
             }
             return new DomainClientResult(returnValue, validationErrors);
         }
@@ -62,15 +62,15 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entities == null)
             {
-                throw new ArgumentNullException("entities");
+                throw new ArgumentNullException(nameof(entities));
             }
             if (allEntities == null)
             {
-                throw new ArgumentNullException("allEntities");
+                throw new ArgumentNullException(nameof(allEntities));
             }
             if (validationErrors == null)
             {
-                throw new ArgumentNullException("validationErrors");
+                throw new ArgumentNullException(nameof(validationErrors));
             }
             return new DomainClientResult(entities, allEntities, totalEntityCount, validationErrors);
         }

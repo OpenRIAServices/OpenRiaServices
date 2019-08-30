@@ -314,7 +314,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (error == null)
             {
-                throw new ArgumentNullException("error");
+                throw new ArgumentNullException(nameof(error));
             }
 
             this.EnsureNotCompleted();

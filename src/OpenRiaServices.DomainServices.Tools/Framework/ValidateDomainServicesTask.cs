@@ -182,7 +182,7 @@ namespace OpenRiaServices.DomainServices.Tools
             {
                 if (log == null)
                 {
-                    throw new ArgumentNullException("log");
+                    throw new ArgumentNullException(nameof(log));
                 }
 
                 this._log = log;

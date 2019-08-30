@@ -125,7 +125,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
         {
             if (domainServiceContext == null)
             {
-                throw new ArgumentNullException("domainServiceContext");
+                throw new ArgumentNullException(nameof(domainServiceContext));
             }
 
             // Get or create the proxy type
@@ -247,24 +247,24 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
         {
             if (domainServiceProxy == null)
             {
-                throw new ArgumentNullException("domainServiceProxy");
+                throw new ArgumentNullException(nameof(domainServiceProxy));
             }
 
             if (current == null)
             {
-                throw new ArgumentNullException("current");
+                throw new ArgumentNullException(nameof(current));
             }
 
             if (original == null)
             {
-                throw new ArgumentNullException("original");
+                throw new ArgumentNullException(nameof(original));
             }
 
             PropertyInfo currentOriginalProp = domainServiceProxy.GetType().GetProperty("CurrentOriginalEntityMap", BindingFlags.Public | BindingFlags.Instance);
 
             if (currentOriginalProp == null)
             {
-                throw new ArgumentException(Resource.DomainServiceProxy_InvalidProxyType, "domainServiceProxy");
+                throw new ArgumentException(Resource.DomainServiceProxy_InvalidProxyType, nameof(domainServiceProxy));
             }
 
             MethodInfo currentOriginalGetter = currentOriginalProp.GetGetMethod();
@@ -298,7 +298,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             {
                 if (httpContextBase == null)
                 {
-                    throw new ArgumentNullException("httpContextBase");
+                    throw new ArgumentNullException(nameof(httpContextBase));
                 }
 
                 this._httpContextBase = httpContextBase;
@@ -314,7 +314,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
             {
                 if (serviceType == null)
                 {
-                    throw new ArgumentNullException("serviceType");
+                    throw new ArgumentNullException(nameof(serviceType));
                 }
 
                 if (serviceType == typeof(IPrincipal))

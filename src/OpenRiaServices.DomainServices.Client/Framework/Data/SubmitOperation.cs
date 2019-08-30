@@ -29,7 +29,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (changeSet == null)
             {
-                throw new ArgumentNullException("changeSet");
+                throw new ArgumentNullException(nameof(changeSet));
             }
             this._cancelAction = cancelAction;
             this._completeAction = completeAction;
@@ -131,7 +131,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 // This can never happen, all paths here supply either 
                 // ValidationFailed or Conflicts
-                throw new ArgumentException("Unsupported OperationErrorStatus","errorStatus");
+                throw new ArgumentException("Unsupported OperationErrorStatus",nameof(errorStatus));
             }
 
             base.Complete(error);

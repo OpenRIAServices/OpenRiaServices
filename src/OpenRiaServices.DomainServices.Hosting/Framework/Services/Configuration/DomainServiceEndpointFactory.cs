@@ -36,7 +36,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
 
                 this._name = value;

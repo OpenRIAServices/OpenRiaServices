@@ -48,7 +48,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             // We should not wrap null instances
             if (variable == null)
-                throw new ArgumentNullException("variable");
+                throw new ArgumentNullException(nameof(variable));
 
             m_unmanagedVariable = variable;
         }

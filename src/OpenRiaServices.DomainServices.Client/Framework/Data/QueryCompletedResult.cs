@@ -27,15 +27,15 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entities == null)
             {
-                throw new ArgumentNullException("entities");
+                throw new ArgumentNullException(nameof(entities));
             }
             if (includedEntities == null)
             {
-                throw new ArgumentNullException("includedEntities");
+                throw new ArgumentNullException(nameof(includedEntities));
             }
             if (validationErrors == null)
             {
-                throw new ArgumentNullException("validationErrors");
+                throw new ArgumentNullException(nameof(validationErrors));
             }
 
             this._entities = entities.ToList().AsReadOnly();

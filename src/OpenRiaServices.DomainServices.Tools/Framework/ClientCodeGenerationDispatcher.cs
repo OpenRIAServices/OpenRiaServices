@@ -234,7 +234,7 @@ namespace OpenRiaServices.DomainServices.Tools
 
             if (string.IsNullOrEmpty(options.Language))
             {
-                throw new ArgumentException(Resource.Null_Language_Property, "options");
+                throw new ArgumentException(Resource.Null_Language_Property, nameof(options));
             }
 
             IDomainServiceClientCodeGenerator generator = null;

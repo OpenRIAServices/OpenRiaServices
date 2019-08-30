@@ -41,7 +41,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             this._id = id;

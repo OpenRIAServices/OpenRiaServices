@@ -126,7 +126,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             // We should not wrap null instances
             if (comBinderObject == null)
-                throw new ArgumentNullException("comBinderObject");
+                throw new ArgumentNullException(nameof(comBinderObject));
 
             m_binder = comBinderObject;
         }

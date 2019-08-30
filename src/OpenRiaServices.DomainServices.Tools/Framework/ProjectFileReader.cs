@@ -34,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             this._logger = logger;
@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (string.IsNullOrEmpty(projectPath))
             {
-                throw new ArgumentNullException("projectPath");
+                throw new ArgumentNullException(nameof(projectPath));
             }
 
             if (!File.Exists(projectPath))

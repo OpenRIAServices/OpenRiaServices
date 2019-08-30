@@ -162,23 +162,23 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (parent == null)
             {
-                throw new ArgumentNullException("parent");
+                throw new ArgumentNullException(nameof(parent));
             }
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
             if (onDataMemberChanging == null)
             {
-                throw new ArgumentNullException("onDataMemberChanging");
+                throw new ArgumentNullException(nameof(onDataMemberChanging));
             }
             if (onDataMemberChanged == null)
             {
-                throw new ArgumentNullException("onDataMemberChanged");
+                throw new ArgumentNullException(nameof(onDataMemberChanged));
             }
             if (onMemberValidationChanged == null)
             {
-                throw new ArgumentNullException("onMemberValidationChanged");
+                throw new ArgumentNullException(nameof(onMemberValidationChanged));
             }
             Debug.Assert(typeof(Entity).IsAssignableFrom(parent.GetType()) || typeof(ComplexObject).IsAssignableFrom(parent.GetType()), "Parent must be an Entity or ComplexObject.");
 
@@ -222,7 +222,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             OnPropertyChanged(propertyName);
@@ -247,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             // Note, RaiseDataMemberChanged is called on every property update. We need to avoid as
@@ -316,7 +316,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             this.OnDataMemberChanging();
@@ -400,7 +400,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
 
             // if this instance is currently being deserialized, or if it is hosted by an
@@ -431,7 +431,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (metaMember == null)
             {
                 throw new ArgumentException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, this.MetaType.Type.Name, propertyName), "propertyName");
+                    string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, this.MetaType.Type.Name, propertyName), nameof(propertyName));
             }
 
             if (rootEntity != null && metaMember.EditableAttribute != null && !metaMember.EditableAttribute.AllowEdit &&
@@ -475,7 +475,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (validationContext == null)
             {
-                throw new ArgumentNullException("validationContext");
+                throw new ArgumentNullException(nameof(validationContext));
             }
 
             List<ValidationResult> validationResults = new List<ValidationResult>();

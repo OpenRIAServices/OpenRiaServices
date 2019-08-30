@@ -251,7 +251,7 @@ namespace OpenRiaServices.DomainServices.Server.Authentication
         {
             if (resourceComment == null)
             {
-                throw new ArgumentNullException("resourceComment");
+                throw new ArgumentNullException(nameof(resourceComment));
             }
 
             var commentCollection = new CodeCommentStatementCollection();

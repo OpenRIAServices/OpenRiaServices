@@ -320,7 +320,7 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (attributeType == null)
             {
-                throw new ArgumentNullException("attributeType");
+                throw new ArgumentNullException(nameof(attributeType));
             }
 
             ICustomAttributeBuilder cab = null;

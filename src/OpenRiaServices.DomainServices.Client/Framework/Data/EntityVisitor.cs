@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             foreach (MetaMember association in entity.MetaType.AssociationMembers)

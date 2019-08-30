@@ -57,7 +57,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entitySet == null)
             {
-                throw new ArgumentNullException("entitySet");
+                throw new ArgumentNullException(nameof(entitySet));
             }
 
             _entitySet = entitySet;
@@ -102,7 +102,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (value is EntitySet || value is EntityCollection<T>)
                 {
-                    throw new ArgumentException(Resources.NoESorEC, "value");
+                    throw new ArgumentException(Resources.NoESorEC, nameof(value));
                 }
 
                 if (_source != value)

@@ -39,7 +39,7 @@ namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
         {
             // We should not wrap null instances
             if (nameSpace == null)
-                throw new ArgumentNullException("nameSpace");
+                throw new ArgumentNullException(nameof(nameSpace));
 
             m_unmanagedNamespace = nameSpace;
         }

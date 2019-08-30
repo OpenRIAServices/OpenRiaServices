@@ -35,22 +35,22 @@ namespace OpenRiaServices.DomainServices.Tools
         {
             if (string.IsNullOrEmpty(rootProjectPath))
             {
-                throw new ArgumentNullException("rootProjectPath");
+                throw new ArgumentNullException(nameof(rootProjectPath));
             }
 
             if (string.IsNullOrEmpty(historyFilePath))
             {
-                throw new ArgumentNullException("historyFilePath");
+                throw new ArgumentNullException(nameof(historyFilePath));
             }
 
             if (logger == null)
             {
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
             }
 
             if (projectFileReader == null)
             {
-                throw new ArgumentNullException("projectFileReader");
+                throw new ArgumentNullException(nameof(projectFileReader));
             }
 
             this._rootProjectPath = rootProjectPath;
@@ -120,7 +120,7 @@ namespace OpenRiaServices.DomainServices.Tools
             {
                 if (string.IsNullOrEmpty(projectPath))
                 {
-                    throw new ArgumentNullException("projectPath");
+                    throw new ArgumentNullException(nameof(projectPath));
                 }
                 string result = null;
                 this.LinkedServerProjectsByProject.TryGetValue(projectPath, out result);
@@ -130,7 +130,7 @@ namespace OpenRiaServices.DomainServices.Tools
             {
                 if (string.IsNullOrEmpty(projectPath))
                 {
-                    throw new ArgumentNullException("projectPath");
+                    throw new ArgumentNullException(nameof(projectPath));
                 }
                 this.LinkedServerProjectsByProject[projectPath] = value;
                 this.IsFileCacheCurrent = false;

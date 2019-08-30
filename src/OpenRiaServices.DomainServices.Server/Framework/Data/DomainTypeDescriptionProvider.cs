@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (descriptionProvider == null)
             {
-                throw new ArgumentNullException("descriptionProvider");
+                throw new ArgumentNullException(nameof(descriptionProvider));
             }
 
             this._type = type;

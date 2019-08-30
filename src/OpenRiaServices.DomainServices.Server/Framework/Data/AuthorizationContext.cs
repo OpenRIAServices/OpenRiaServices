@@ -103,7 +103,7 @@ namespace System.ComponentModel.DataAnnotations
         {
             if (authorizationContext == null)
             {
-                throw new ArgumentNullException("authorizationContext");
+                throw new ArgumentNullException(nameof(authorizationContext));
             }
 
             // We use the _items field rather than the property to preserve the lazy instantiation semantics if it's null
@@ -228,14 +228,14 @@ namespace System.ComponentModel.DataAnnotations
             // Operation is required
             if (string.IsNullOrEmpty(operation))
             {
-                throw new ArgumentNullException("operation");
+                throw new ArgumentNullException(nameof(operation));
             }
             this._operation = operation;
 
             // OperationType is required
             if (string.IsNullOrEmpty(operationType))
             {
-                throw new ArgumentNullException("operationType");
+                throw new ArgumentNullException(nameof(operationType));
             }
             this._operationType = operationType;
 

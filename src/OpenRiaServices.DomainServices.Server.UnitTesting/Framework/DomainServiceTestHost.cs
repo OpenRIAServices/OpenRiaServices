@@ -69,11 +69,11 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
         {
             if (factory == null)
             {
-                throw new ArgumentNullException("factory");
+                throw new ArgumentNullException(nameof(factory));
             }
             if (serviceProvider == null)
             {
-                throw new ArgumentNullException("serviceProvider");
+                throw new ArgumentNullException(nameof(serviceProvider));
             }
 
             this._factory = factory;
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 this._factory = value;
             }
@@ -126,7 +126,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 this._serviceProvider = value;
             }
@@ -770,7 +770,7 @@ namespace OpenRiaServices.DomainServices.Server.UnitTesting
             {
                 if (createDomainService == null)
                 {
-                    throw new ArgumentNullException("createDomainService");
+                    throw new ArgumentNullException(nameof(createDomainService));
                 }
                 this._createDomainService = createDomainService;
             }

@@ -26,19 +26,19 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             if (dbSet == null)
             {
-                throw new ArgumentNullException("dbSet");
+                throw new ArgumentNullException(nameof(dbSet));
             }
             if (current == null)
             {
-                throw new ArgumentNullException("current");
+                throw new ArgumentNullException(nameof(current));
             }
             if (original == null)
             {
-                throw new ArgumentNullException("original");
+                throw new ArgumentNullException(nameof(original));
             }
             if (dbContext == null)
             {
-                throw new ArgumentNullException("dbContext");
+                throw new ArgumentNullException(nameof(dbContext));
             }
 
             DbEntityEntry<T> entityEntry = dbContext.Entry(current);
@@ -75,15 +75,15 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         {
             if (dbSet == null)
             {
-                throw new ArgumentNullException("dbSet");
+                throw new ArgumentNullException(nameof(dbSet));
             }
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
             if (dbContext == null)
             {
-                throw new ArgumentNullException("dbContext");
+                throw new ArgumentNullException(nameof(dbContext));
             }
 
             DbEntityEntry<T> entityEntry = dbContext.Entry(entity);

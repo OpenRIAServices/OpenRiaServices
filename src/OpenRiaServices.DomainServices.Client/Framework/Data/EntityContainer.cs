@@ -99,7 +99,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entitySet == null)
             {
-                throw new ArgumentNullException("entitySet");
+                throw new ArgumentNullException(nameof(entitySet));
             }
 
             Type entityType = entitySet.EntityType;
@@ -388,7 +388,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entities == null)
             {
-                throw new ArgumentNullException("entities");
+                throw new ArgumentNullException(nameof(entities));
             }
 
             // group the entities by type, and load each group into it's entity

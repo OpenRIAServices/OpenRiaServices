@@ -34,7 +34,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (query == null)
             {
-                throw new ArgumentNullException("query");
+                throw new ArgumentNullException(nameof(query));
             }
             this._query = query;
             this._loadBehavior = loadBehavior;
@@ -138,7 +138,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (result == null)
             {
-                throw new ArgumentNullException("result");
+                throw new ArgumentNullException(nameof(result));
             }
 
             // if the Entities property has been examined, update the backing
@@ -245,7 +245,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (result == null)
             {
-                throw new ArgumentNullException("result");
+                throw new ArgumentNullException(nameof(result));
             }
 
             // before calling base, we need to update any cached

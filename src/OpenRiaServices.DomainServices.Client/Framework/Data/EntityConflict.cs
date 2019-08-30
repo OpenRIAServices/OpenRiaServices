@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (currentEntity == null)
             {
-                throw new ArgumentNullException("currentEntity");
+                throw new ArgumentNullException(nameof(currentEntity));
             }
             this._currentEntity = currentEntity;
             this._isDeleted = isDeleted;
@@ -41,12 +41,12 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (storeEntity == null)
                 {
-                    throw new ArgumentNullException("storeEntity");
+                    throw new ArgumentNullException(nameof(storeEntity));
                 }
 
                 if (propertyNames == null)
                 {
-                    throw new ArgumentNullException("propertyNames");
+                    throw new ArgumentNullException(nameof(propertyNames));
                 }
                 
                 this._storeEntity = storeEntity;

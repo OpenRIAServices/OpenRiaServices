@@ -140,7 +140,7 @@ namespace OpenRiaServices.DomainServices
                 return type.GetGenericArguments()[0];
 #endif
             else
-                throw new ArgumentException("Type must be either Task, or Task<T>", "type");
+                throw new ArgumentException("Type must be either Task, or Task<T>", nameof(type));
         }
 
         /// <summary>

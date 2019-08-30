@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.LinqToSql
         {
             if (dataContextType == null)
             {
-                throw new ArgumentNullException("dataContextType");
+                throw new ArgumentNullException(nameof(dataContextType));
             }
 
             System.Data.Linq.DataContext dataContext = null;

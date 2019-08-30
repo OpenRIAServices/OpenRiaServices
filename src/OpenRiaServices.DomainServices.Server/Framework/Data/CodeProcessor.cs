@@ -25,7 +25,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (codeDomProvider == null)
             {
-                throw new ArgumentNullException("codeDomProvider");
+                throw new ArgumentNullException(nameof(codeDomProvider));
             }
 
             this._codeDomProvider = codeDomProvider;

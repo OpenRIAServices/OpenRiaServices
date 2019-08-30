@@ -24,17 +24,17 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             if (parameterType == null)
             {
-                throw new ArgumentNullException("parameterType");
+                throw new ArgumentNullException(nameof(parameterType));
             }
 
             if (attributes == null)
             {
-                throw new ArgumentNullException("attributes");
+                throw new ArgumentNullException(nameof(attributes));
             }
 
             this._name = name;

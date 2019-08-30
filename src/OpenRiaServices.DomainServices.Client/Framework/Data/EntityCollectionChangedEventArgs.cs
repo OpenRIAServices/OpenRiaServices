@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             this._entity = entity;

@@ -117,7 +117,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 if (this._started)
                 {
@@ -150,7 +150,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
             }
             this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

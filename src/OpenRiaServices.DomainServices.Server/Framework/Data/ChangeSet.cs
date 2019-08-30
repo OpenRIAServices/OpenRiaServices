@@ -31,7 +31,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (changeSetEntries == null)
             {
-                throw new ArgumentNullException("changeSetEntries");
+                throw new ArgumentNullException(nameof(changeSetEntries));
             }
 
             // ensure the changeset is valid
@@ -249,12 +249,12 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (clientEntity == null)
             {
-                throw new ArgumentNullException("clientEntity");
+                throw new ArgumentNullException(nameof(clientEntity));
             }
 
             if (returnedEntity == null)
             {
-                throw new ArgumentNullException("returnedEntity");
+                throw new ArgumentNullException(nameof(returnedEntity));
             }
 
             Type clientEntityType = clientEntity.GetType();
@@ -293,7 +293,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (clientEntity == null)
             {
-                throw new ArgumentNullException("clientEntity");
+                throw new ArgumentNullException(nameof(clientEntity));
             }
 
             ChangeSetEntry entry = this._changeSetEntries.FirstOrDefault(p => object.ReferenceEquals(p.Entity, clientEntity));
@@ -321,7 +321,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             // Rather than error for objects not in the changeset,
@@ -372,11 +372,11 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
             if (expression == null)
             {
-                throw new ArgumentNullException("expression");
+                throw new ArgumentNullException(nameof(expression));
             }
 
             this.VerifyExistsInChangeset(entity);
@@ -389,7 +389,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
             if (associationMember == null)
             {
-                throw new ArgumentException(Resource.ChangeSet_InvalidMemberExpression, "expression");
+                throw new ArgumentException(Resource.ChangeSet_InvalidMemberExpression, nameof(expression));
             }
 
             // validate that the member specified is an compositional association member
@@ -397,12 +397,12 @@ namespace OpenRiaServices.DomainServices.Server
             if (pd.Attributes[typeof(AssociationAttribute)] == null)
             {
                 throw new ArgumentException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.MemberNotAnAssociation, associationMember.DeclaringType, associationMember.Name), "expression");
+                    string.Format(CultureInfo.CurrentCulture, Resource.MemberNotAnAssociation, associationMember.DeclaringType, associationMember.Name), nameof(expression));
             }
             if (pd.Attributes[typeof(CompositionAttribute)] == null)
             {
                 throw new ArgumentException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.MemberNotAComposition, associationMember.DeclaringType, associationMember.Name), "expression");
+                    string.Format(CultureInfo.CurrentCulture, Resource.MemberNotAComposition, associationMember.DeclaringType, associationMember.Name), nameof(expression));
             }
 
             IEnumerable<ChangeSetEntry> associatedChanges = this.GetAssociatedChanges(entity)[pd];
@@ -618,7 +618,7 @@ namespace OpenRiaServices.DomainServices.Server
             ChangeSetEntry entry = this._changeSetEntries.FirstOrDefault(p => object.ReferenceEquals(entity, p.Entity));
             if (entry == null)
             {
-                throw new ArgumentException(Resource.ChangeSet_ChangeSetEntryNotFound, "entity");
+                throw new ArgumentException(Resource.ChangeSet_ChangeSetEntryNotFound, nameof(entity));
             }
         }
 
@@ -641,17 +641,17 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (clientEntity == null)
             {
-                throw new ArgumentNullException("clientEntity");
+                throw new ArgumentNullException(nameof(clientEntity));
             }
 
             if (storeEntity == null)
             {
-                throw new ArgumentNullException("storeEntity");
+                throw new ArgumentNullException(nameof(storeEntity));
             }
 
             if (storeToClientTransform == null)
             {
-                throw new ArgumentNullException("storeToClientTransform");
+                throw new ArgumentNullException(nameof(storeToClientTransform));
             }
 
             // Verify the provided client entity exists in our changeset
@@ -684,7 +684,7 @@ namespace OpenRiaServices.DomainServices.Server
         {
             if (storeEntity == null)
             {
-                throw new ArgumentNullException("storeEntity");
+                throw new ArgumentNullException(nameof(storeEntity));
             }
 
             List<AssociatedEntityInfo> associatedModels = null;
@@ -745,12 +745,12 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 if (clientEntity == null)
                 {
-                    throw new ArgumentNullException("clientEntity");
+                    throw new ArgumentNullException(nameof(clientEntity));
                 }
 
                 if (entityTransform == null)
                 {
-                    throw new ArgumentNullException("entityTransform");
+                    throw new ArgumentNullException(nameof(entityTransform));
                 }
 
                 this._clientEntity = clientEntity;
