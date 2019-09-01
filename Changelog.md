@@ -8,6 +8,24 @@
 4. AspNetMembership authentication (**AuthenticationBase** class) is moved to a new namespace and nuget package
   * Add a reference to **OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
 
+## Upgrade instructions
+
+1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
+2. If you have been using **AuthenticationBase** class in your server project 
+   1. add the *OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership* nuget package to it
+   2. Replace *penRiaServices.DomainServices.Server.ApplicationServices* with *penRiaServices.DomainServices.Server.Authentication*
+   3. Add using for *penRiaServices.DomainServices.Server.Authentication.AspNetMembership* in file which uses *AuthenicationBase*
+3. If you have compilation problems in your DomainServices because it overrides methods which do not exist 
+   then try to overridde the method with the same name but with "Async" as postfix, method signature will be different.
+   Eg. replace override of *Invoke* with override of *InvokeAsync*.
+4. Fix any additional compilation errors, use changes below for guidance about replacements.
+   
+   
+For better scalability (can be done afterwards):
+1. Update your Query and Invoke methods so that they use async/await where relevant.
+  E.g if you are using EF6, other ORM frameworks or do network or file access.
+   
+
 ## Client
 
 Most of the changes are **Brekaing changes**, even if many of them will only require changes in a small percentage of applicaitons.
@@ -18,7 +36,7 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 2. Remove old target frameworks
 * Remove netstandard13 (#160)
 * Remove portable class library TargetFramework (#164)
-* Remove Silverlight (#174, #175 ..)
+* Remove Silverlight (#174, #175 and more commits)
 * .Net Framework 4.5 requirement is replaced by 4.6 (will be 4.6.1+)
 3. Move *EntityList* and *QueryBuilder* from OpenRiaServices...Data namespace to OpenRiaServices...Client namespace (#182)
 4. Dont allocate PropertyChangedEventArgs if not needed (#155)   
@@ -29,7 +47,7 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 6. Have `EntityContainer.LoadEntities` return `IEnumerable<Entity>` instead of `IEnumerable`
 7. Make WebDomainClient non sealed (#166) *non breaking*
    Make CallServiceOperation virtual so that the invoke behaviour can be modified in derived classes.
-   This should simplify adding bearer based authentication 
+   This should simplify adding bearer based authentication
 8. Change from IEnumerable to IReadOnlyCollection in a few places (#183)
   * Mostly *ValidationErrors* properties and for IEntityCollection
 
