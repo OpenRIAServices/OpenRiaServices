@@ -12,9 +12,6 @@ build:
   project: src\RiaServices.sln
   parallel: true
   verbosity: minimal
-after_build:
-- ps: >-
-    NuGet/Pack-All.ps1 -Version ("4.5.0-rc1-{0:D4}" -f [int]$env:APPVEYOR_BUILD_NUMBER)
 artifacts:
 - path: 'NuGet\bin\*.nupkg'
 before_test:
