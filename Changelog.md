@@ -1,7 +1,68 @@
+# 5.0 (Unrealeased)
+
+## Overview
+
+1. Server is now asynronous which allows it to handles burst in load much better and generally better performance (latency/CPU/memory) under load. 
+2. Client networking API the *DomainClient* is now based on Task instead of using the APM pattern with Begin/End methods
+3. Supported TargetFrameworks has changed
+4. AspNetMembership authentication (**AuthenticationBase** class) is moved to a new namespace and nuget package
+  * Add a reference to **OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
+
+## Client
+
+Most of the changes are **Brekaing changes**, even if many of them will only require changes in a small percentage of applicaitons.
+
+1  Change DomainClient contract to Task based async methods (#153)
+    * Performing multiple loads and waiting for the result is now faster
+	* Any custom DomainClient or code which interact with DomainClient will no longer compile.	
+2. Remove old target frameworks
+* Remove netstandard13 (#160)
+* Remove portable class library TargetFramework (#164)
+* Remove Silverlight (#174, #175
+* .Net Framework 4.5 requirement is replaced by 4.6 (will be 4.6.1+)
+3. Move *EntityList* and *QueryBuilder* from OpenRiaServices...Data namespace to OpenRiaServices...Client namespace (#182)
+4. Dont allocate PropertyChangedEventArgs if not needed (#155)   
+    * remove sevaral *OnPropertyChanged* methods and only keep RaisePropertyChanged
+	   * If your code does not compile override RaisePropertyChanged instead
+	* Memory usage during Load etc is much lighter
+5. Make DomainClientResult internal so it can be removed in the future
+6. Have `EntityContainer.LoadEntities` return `IEnumerable<Entity>` instead of `IEnumerable`
+7. Make WebDomainClient non sealed (#166) *non breaking*
+   Make CallServiceOperation virtual so that the invoke behaviour can be modified in derived classes.
+   This should simplify adding bearer based authentication 
+
+*Behaviour changes*
+1. Base DomainContext.Load on DomainContext.LoadAsync instead of other way around
+* The generic `Load<TEntity>` can be overridden but it will only be called when any of the "Load" methods are called
+2. `DomainContext.IsLoading` is no longer set to false directly on cancellation.
+       Instead a load is only considered done until after it has been cancelled (or completed)
+
+
+## Server
+
+1. DomainServices are now async #159 and many methods have been renamed with Async suffic
+1. Move aspnet authentication to separate namespace, assembly and nuget package (#173)
+Move Authenication related code from ..Server.ApplicationServices to
+* ..Server.Authentication
+* and ..Server.Authentication.AspNetMembership (AuthenticationBase, UserBase ..)
+
+## Other
+
+* Fixed a number of flaky tests (#161, #172,  .. and more commits)
+* use VS2019 for azure  pipelines (#148)
+* Have client test start webserver if not already running (#169)
+* Changed folder structure by placing code in src folder (#176)
+* net45 dependency replaced with net46 dependency
+  * With slightly better less allocations as a result
+* Removed code market as obsolete (#170)
+* Some modernisation of codebase via refactoring via code analyzers
+
+
 # 4.6.2
 
 ## Client
 
+	
 1. Add transport (OpenRiaServices.DomainServices.Client.Web) to netstandard 2.0 nuget.
   This provides the SoapDomainClientFactory for netstandard / netcoreapp assemblies.
    
