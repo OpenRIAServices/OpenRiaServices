@@ -27,6 +27,8 @@ namespace OpenRiaServices.DomainServices.Client.Web
     public abstract class WcfDomainClientFactory : DomainClientFactory
     {
         private readonly MethodInfo _createInstanceMethod;
+        private readonly Dictionary<Type, ChannelFactory> _channelFactoryCache = new Dictionary<Type, ChannelFactory>();
+        private readonly object _channelFactoryCacheLock = new object();
         private CookieContainer _cookieContainer;
 
         /// <summary>
@@ -86,7 +88,14 @@ namespace OpenRiaServices.DomainServices.Client.Web
             set
             {
                 _cookieContainer = value;
-                SharedCookieMessageInspector = (value != null) ? new SharedCookieMessageInspector(value) : null;
+
+                // Chainging the CookieContainer means that we need a new MessageInspector so we can no longer reuse
+                // the existing channels for new DomainClients
+                lock (_channelFactoryCacheLock)
+                {
+                    SharedCookieMessageInspector = (value != null) ? new SharedCookieMessageInspector(value) : null;
+                    _channelFactoryCache.Clear();
+                }
             }
         }
 
@@ -103,22 +112,39 @@ namespace OpenRiaServices.DomainServices.Client.Web
         internal ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint, WebDomainClient<TContract> domainClient)
             where TContract : class
         {
-            // TODO: Add cache of initialised ChannelFactory instances
-            ChannelFactory<TContract> channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
-            try
+            ChannelFactory<TContract> channelFactory;
+
+            lock (_channelFactoryCacheLock)
             {
-                foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
+                if (_channelFactoryCache.TryGetValue(typeof(TContract), out var existingFactory)
+                    // This should never happen, but check anyway just to be safe
+                    && existingFactory.State != CommunicationState.Faulted)
                 {
-                    foreach (Type knownType in domainClient.KnownTypes)
-                    {
-                        op.KnownTypes.Add(knownType);
-                    }
+                    channelFactory = (ChannelFactory<TContract>)existingFactory;
                 }
-            }
-            catch
-            {
-                ((IDisposable)channelFactory)?.Dispose();
-                throw;
+                else
+                {
+                    // Create and initialize a new channel factory
+                    channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
+                    try
+                    {
+                        foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
+                        {
+                            foreach (Type knownType in domainClient.KnownTypes)
+                            {
+                                op.KnownTypes.Add(knownType);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        ((IDisposable)channelFactory)?.Dispose();
+                        throw;
+                    }
+
+
+                    _channelFactoryCache[typeof(TContract)] = channelFactory;
+                }
             }
 
             return channelFactory;
