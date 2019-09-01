@@ -28,8 +28,8 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ValidationCustomAttributeBuilder.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Naming.cs" Link="Utilities\Naming.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\SharedTypes\VirtualType.cs" Link="Utilities\VirtualType.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="Utilities\BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="Utilities\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="Utilities\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="Utilities\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="Utilities\TypeDescriptorExtensions.cs" />

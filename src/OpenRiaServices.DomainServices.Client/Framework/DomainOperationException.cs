@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Client
             public OperationErrorStatus Status;
             public string StackTrace;
             public int ErrorCode;
-            public IEnumerable<ValidationResult> ValidationResults;
+            public IReadOnlyCollection<ValidationResult> ValidationResults;
 #if !SILVERLIGHT
 
             // TODO: uncomment when CLR fixes 851783
@@ -223,12 +223,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets any validation errors for this exception.
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationErrors
+        public IReadOnlyCollection<ValidationResult> ValidationErrors
         {
             get
             {
                 if (_data.ValidationResults == null)
-                    _data.ValidationResults = Enumerable.Empty<ValidationResult>();
+                    _data.ValidationResults = Array.Empty<ValidationResult>();
                 return _data.ValidationResults;
             }
         }

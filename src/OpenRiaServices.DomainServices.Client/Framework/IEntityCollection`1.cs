@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client
     ///   </para>
     /// </summary>
     /// <typeparam name="TEntity"> The type of the elements in the collection </typeparam>
-    public interface IEntityCollection<TEntity> : ICollection<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged
+    public interface IEntityCollection<TEntity> : ICollection<TEntity>, IReadOnlyCollection<TEntity>, INotifyCollectionChanged, INotifyPropertyChanged
     {
         /// <summary>
         ///   Event raised whenever an <see cref="Entity"/> is added to this collection

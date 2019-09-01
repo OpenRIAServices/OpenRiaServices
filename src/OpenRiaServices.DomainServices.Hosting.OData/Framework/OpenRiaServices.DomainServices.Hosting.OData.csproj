@@ -22,8 +22,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting.Local\Framework\OperationException.cs" Link="Utils\OperationException.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs" Link="Utils\BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs" Link="Utils\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="Utils\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="Utils\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utils\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />

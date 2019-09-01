@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Client
         private ReadOnlyObservableLoaderCollection<Entity> _entities;
         private ReadOnlyObservableLoaderCollection<Entity> _allEntities;
 
-        private IEnumerable<ValidationResult> _validationErrors;
+        private IReadOnlyCollection<ValidationResult> _validationErrors;
         private readonly LoadBehavior _loadBehavior;
         private readonly EntityQuery _query;
 
@@ -59,7 +59,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets all the top level entities loaded by the operation. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        public IEnumerable<Entity> Entities
+        public IReadOnlyCollection<Entity> Entities
         {
             get
             {
@@ -77,7 +77,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// entities referenced by the top level entities. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        public IEnumerable<Entity> AllEntities
+        public IReadOnlyCollection<Entity> AllEntities
         {
             get
             {
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the validation errors.
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationErrors
+        public IReadOnlyCollection<ValidationResult> ValidationErrors
         {
             get
             {
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // collection
                 if (this._validationErrors == null)
                 {
-                    this._validationErrors = Enumerable.Empty<ValidationResult>();
+                    this._validationErrors = Array.Empty<ValidationResult>();
                 }
                 return this._validationErrors;
             }
@@ -197,7 +197,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// entities referenced by the top level entities. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        public new IEnumerable<TEntity> Entities
+        public new IReadOnlyCollection<TEntity> Entities
         {
             get
             {

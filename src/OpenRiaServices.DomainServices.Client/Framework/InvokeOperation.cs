@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client
     {
         private readonly string _operationName;
         private IDictionary<string, object> _parameters;
-        private IEnumerable<ValidationResult> _validationErrors;
+        private IReadOnlyCollection<ValidationResult> _validationErrors;
         private readonly Action<InvokeOperation> _completeAction;
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the validation errors.
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationErrors
+        public IReadOnlyCollection<ValidationResult> ValidationErrors
         {
             get
             {
@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Completes the invoke operation with validation errors.
         /// </summary>
         /// <param name="validationErrors">The validation errors.</param>
-        internal void Complete(IEnumerable<ValidationResult> validationErrors)
+        internal void Complete(IReadOnlyCollection<ValidationResult> validationErrors)
         {
             this._validationErrors = validationErrors;
             this.RaisePropertyChanged(nameof(ValidationErrors));

@@ -74,7 +74,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Returns any entities in error after the submit operation completes.
         /// </summary>
-        public IEnumerable<Entity> EntitiesInError
+        public IReadOnlyCollection<Entity> EntitiesInError
         {
             get
             {

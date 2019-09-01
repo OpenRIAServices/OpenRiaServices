@@ -509,8 +509,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The load operation.</returns>
         public virtual LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
         {
-            Action<LoadOperation<TEntity>> cancelAction = null;
-
             var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, DomainClient.SupportsCancellation);
 
             LoadAsync(query, loadBehavior, loadOperation.CancellationToken)
@@ -636,8 +634,8 @@ namespace OpenRiaServices.DomainServices.Client
             var continueationCts = new CancellationTokenSource();
             return domainClientTask.ContinueWith(result =>
                 {
-                    IEnumerable<Entity> loadedEntities = null;
-                    IEnumerable<Entity> allLoadedEntities = null;
+                    IReadOnlyCollection<Entity> loadedEntities = null;
+                    List<Entity> allLoadedEntities = null;
                     int totalCount;
 
                     QueryCompletedResult results = null;
@@ -651,8 +649,10 @@ namespace OpenRiaServices.DomainServices.Client
                             // load the entities into the entity container
                             loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
 
-                            IEnumerable<Entity> loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
-                            allLoadedEntities = loadedEntities.Concat(loadedIncludedEntities);
+                            var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
+                            allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
+                            allLoadedEntities.AddRange(loadedEntities);
+                            allLoadedEntities.AddRange(loadedIncludedEntities);
                             totalCount = results.TotalCount;
                         }
                     }

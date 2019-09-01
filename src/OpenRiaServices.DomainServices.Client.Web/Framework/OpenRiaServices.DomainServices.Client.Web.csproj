@@ -22,10 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\BinaryTypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs">
       <Link>Utilities\BinaryTypeUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Data\TypeUtility.cs">
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs">
       <Link>Utilities\TypeUtility.cs</Link>
     </Compile>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">

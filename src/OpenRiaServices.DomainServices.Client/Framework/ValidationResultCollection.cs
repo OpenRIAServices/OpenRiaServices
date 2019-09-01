@@ -12,7 +12,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// for custom validation error collections. Derived classes can override the several protected
     /// virtual methods to receive notifications when the collection state changes.
     /// </summary>
-    internal abstract class ValidationResultCollection : ICollection<ValidationResult>
+    internal abstract class ValidationResultCollection : ICollection<ValidationResult>, IReadOnlyCollection<ValidationResult>
     {
         #region Member Fields
 

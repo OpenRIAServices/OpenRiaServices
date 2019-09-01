@@ -38,7 +38,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="entities">Top level entities loaded.</param>
         /// <param name="allEntities">All entities loaded.</param>
         /// <param name="totalEntityCount">The total entity count.</param>
-        public LoadResult(EntityQuery<TEntity> query, LoadBehavior loadBehavior, IEnumerable<TEntity> entities, IEnumerable<Entity> allEntities, int totalEntityCount)
+        public LoadResult(EntityQuery<TEntity> query, LoadBehavior loadBehavior, IEnumerable<TEntity> entities, IReadOnlyCollection<Entity> allEntities, int totalEntityCount)
         {
             _loadedEntites = (entities as Data.ReadOnlyObservableLoaderCollection<TEntity>) ?? new Data.ReadOnlyObservableLoaderCollection<TEntity>(entities.ToList());
 
@@ -51,17 +51,13 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets all the top level entities loaded by the operation.
         /// </summary>
-        public IEnumerable<TEntity> Entities { get { return _loadedEntites; } }
+        public IReadOnlyCollection<TEntity> Entities { get { return _loadedEntites; } }
 
         /// <summary>
         ///  Gets all the entities loaded by the operation, including any
         /// entities referenced by the top level entities. 
         /// </summary>
-        public IEnumerable<Entity> AllEntities
-        {
-            get;
-            private set;
-        }
+        public IReadOnlyCollection<Entity> AllEntities { get; private set; }
 
         /// <summary>
         /// The <see cref="EntityQuery"/> for this load operation.
@@ -110,7 +106,7 @@ namespace OpenRiaServices.DomainServices.Client
         object ICollection.SyncRoot { get { return this.SyncRoot; } }
 
 
-        IEnumerable<Entity> ILoadResult.Entities => this.Entities;
+        IReadOnlyCollection<Entity> ILoadResult.Entities => this.Entities;
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
