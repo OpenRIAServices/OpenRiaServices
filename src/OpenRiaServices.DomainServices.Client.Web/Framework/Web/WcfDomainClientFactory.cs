@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
@@ -126,28 +127,43 @@ namespace OpenRiaServices.DomainServices.Client.Web
                 {
                     // Create and initialize a new channel factory
                     channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
-                    try
-                    {
-                        foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
-                        {
-                            foreach (Type knownType in domainClient.KnownTypes)
-                            {
-                                op.KnownTypes.Add(knownType);
-                            }
-                        }
-                    }
-                    catch
-                    {
-                        ((IDisposable)channelFactory)?.Dispose();
-                        throw;
-                    }
-
+                    InitializeChannelFactory(domainClient, channelFactory);
 
                     _channelFactoryCache[typeof(TContract)] = channelFactory;
                 }
             }
 
             return channelFactory;
+        }
+
+        /// <summary>
+        /// Performs one time initialization of the ChannelFactory
+        /// </summary>
+        private static void InitializeChannelFactory<TContract>(WebDomainClient<TContract> domainClient, ChannelFactory<TContract> channelFactory) where TContract : class
+        {
+            var originalSyncContext = SynchronizationContext.Current;
+            try
+            {
+                foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
+                {
+                    foreach (Type knownType in domainClient.KnownTypes)
+                    {
+                        op.KnownTypes.Add(knownType);
+                    }
+                }
+
+                SynchronizationContext.SetSynchronizationContext(null);
+                channelFactory.Open();
+            }
+            catch
+            {
+                ((IDisposable)channelFactory)?.Dispose();
+                throw;
+            }
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(originalSyncContext);
+            }
         }
 
 
