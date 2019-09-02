@@ -2133,7 +2133,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
-                Assert.AreEqual(origUnitPrice, products[0].UnitPrice);
+                Assert.AreEqual(origUnitPrice, products[0].UnitPrice ?? 0);
                 nw2NewUnitPrice = origUnitPrice + 2;
                 products[0].UnitPrice = nw2NewUnitPrice;
                 newReorderLevel = products[1].ReorderLevel ?? 0;
