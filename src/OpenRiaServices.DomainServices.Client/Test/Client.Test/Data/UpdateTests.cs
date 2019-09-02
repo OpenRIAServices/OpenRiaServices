@@ -3308,7 +3308,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
                     // is called, the Product1's conflicts are generated. So client and store values should not be updated 
                     // even for Product0.
-                    Assert.IsNull(products[0].EntityConflict);
+                    Assert.AreEqual(null, products[0].EntityConflict, "Expected no entity conflict on product[0]");
                 }
                 else
                 {
