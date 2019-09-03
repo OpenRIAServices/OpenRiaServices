@@ -73,6 +73,9 @@ GO
 
 DBCC SHRINKDATABASE('$databaseName');
 GO
+
+ALTER DATABASE [$databaseName] SET READ_ONLY;
+go
 "@;
     Execute-SQL $SqlCommand
 }
