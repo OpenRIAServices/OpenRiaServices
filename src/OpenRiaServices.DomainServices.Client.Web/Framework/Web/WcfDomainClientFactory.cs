@@ -236,14 +236,14 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// </summary>
         private struct ChannelFactoryKey : IEquatable<ChannelFactoryKey>
         {
+            private readonly Uri _uri;
+            private readonly Type _contractType;
+
             public ChannelFactoryKey(Type contract, Uri serviceUri)
             {
                 _contractType = contract;
                 _uri = serviceUri;
             }
-
-            private Uri _uri;
-            private Type _contractType;
 
             public override bool Equals(object obj)
             {
