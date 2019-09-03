@@ -19,8 +19,7 @@ namespace Website.Services
         [OperationContract]
         public void CreateNewDatabase(string databaseName)
         {
-            string connection = DBImager.CreateNewDatabase(databaseName);
-            ActiveConnections.Set(databaseName, connection);
+            DBImager.CreateNewDatabase(databaseName);
         }
 
         /// <summary>
@@ -31,7 +30,6 @@ namespace Website.Services
         [OperationContract]
         public void ReleaseNewDatabase(string databaseName)
         {
-            ActiveConnections.Set(databaseName, null);
             DBImager.CleanDB(databaseName);
         }
 

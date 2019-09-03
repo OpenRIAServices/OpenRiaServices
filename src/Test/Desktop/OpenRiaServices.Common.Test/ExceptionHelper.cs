@@ -68,6 +68,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         Assert.AreEqual(typeof(TException), ex.GetType());
                     }
                 }
+                else if (ex is AssertFailedException)
+                {
+                    throw;
+                }
                 else
                 {
                     Type tExpected = typeof(TException);

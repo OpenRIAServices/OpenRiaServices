@@ -83,11 +83,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return Guid.NewGuid().ToString().Substring(0, 20);
         }
 
-        [TestInitialize]
-        public void TestSetup()
-        {
-        }
-
         [TestMethod]
         [Asynchronous]
         [WorkItem(898909)]
@@ -4390,7 +4385,7 @@ TestContext testContext
             EnqueueConditional(() => so.IsComplete);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error.Message);
+                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
                 Entity[] entitiesInConflict = so.EntitiesInError.ToArray();
                 Assert.AreEqual(1, so.ChangeSet.RemovedEntities.Count);
                 Assert.AreEqual(1, entitiesInConflict.Length);
@@ -4517,13 +4512,6 @@ TestContext testContext
             TestDatabase.Initialize();
         }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            // make sure our test database is removed on the server after all unit tests
-            // have been run
-            ((IDisposable)TestDatabase).Dispose();
-        }
     }
 
     [TestClass]
@@ -4547,14 +4535,6 @@ TestContext testContext
             // ensure that our isolation DB has been created once and only once
             // at the test fixture level
             TestDatabase.Initialize();
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            // make sure our test database is removed on the server after all unit tests
-            // have been run
-            ((IDisposable)TestDatabase).Dispose();
         }
     }
 

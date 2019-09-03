@@ -74,14 +74,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         #region IDisposable Members
 
-        void IDisposable.Dispose()
+        public void Dispose()
         {
             if (isInitialized)
             {
                 TestServicesClient ts = new TestServicesClient();
                 SetAddress(ts);
                 isInitialized = false;
-                ts.ReleaseNewDatabaseAsync(databaseName);
+                ts.ReleaseNewDatabase(databaseName);
             }
         }
         #endregion
