@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
     public abstract class WcfDomainClientFactory : DomainClientFactory
     {
         private readonly MethodInfo _createInstanceMethod;
-        private readonly Dictionary<Type, ChannelFactory> _channelFactoryCache = new Dictionary<Type, ChannelFactory>();
+        private readonly Dictionary<ChannelFactoryKey, ChannelFactory> _channelFactoryCache = new Dictionary<ChannelFactoryKey, ChannelFactory>();
         private readonly object _channelFactoryCacheLock = new object();
         private CookieContainer _cookieContainer;
 
@@ -114,10 +114,11 @@ namespace OpenRiaServices.DomainServices.Client.Web
             where TContract : class
         {
             ChannelFactory<TContract> channelFactory;
+            ChannelFactoryKey key = new ChannelFactoryKey(typeof(TContract), endpoint);
 
             lock (_channelFactoryCacheLock)
             {
-                if (_channelFactoryCache.TryGetValue(typeof(TContract), out var existingFactory)
+                if (_channelFactoryCache.TryGetValue(key, out var existingFactory)
                     // This should never happen, but check anyway just to be safe
                     && existingFactory.State != CommunicationState.Faulted)
                 {
@@ -129,7 +130,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
                     channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
                     InitializeChannelFactory(domainClient, channelFactory);
 
-                    _channelFactoryCache[typeof(TContract)] = channelFactory;
+                    _channelFactoryCache[key] = channelFactory;
                 }
             }
 
@@ -226,6 +227,42 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// this inspector is used by wcf based transports to setup cookie suport
         /// </summary>
         internal IClientMessageInspector SharedCookieMessageInspector { get; private set; }
+
+
+        /// <summary>
+        /// Immutable key for _channelFactoryCache, entries are stored by type nad uri
+        /// since <see cref="WebDomainClient{TContract}"/> currently uses default endpoint 
+        /// on the factory
+        /// </summary>
+        private struct ChannelFactoryKey : IEquatable<ChannelFactoryKey>
+        {
+            public ChannelFactoryKey(Type contract, Uri serviceUri)
+            {
+                _contractType = contract;
+                _uri = serviceUri;
+            }
+
+            private Uri _uri;
+            private Type _contractType;
+
+            public override bool Equals(object obj)
+            {
+                return obj is ChannelFactoryKey key && Equals(key);
+            }
+
+            public bool Equals(ChannelFactoryKey other)
+            {
+                return EqualityComparer<Uri>.Default.Equals(_uri, other._uri) &&
+                       EqualityComparer<Type>.Default.Equals(_contractType, other._contractType);
+            }
+
+            public override int GetHashCode()
+            {
+                int hashCode = EqualityComparer<Uri>.Default.GetHashCode(_uri);
+                hashCode = hashCode * -1521134295 + EqualityComparer<Type>.Default.GetHashCode(_contractType);
+                return hashCode;
+            }
+        }
     }
 
     /// <summary>
