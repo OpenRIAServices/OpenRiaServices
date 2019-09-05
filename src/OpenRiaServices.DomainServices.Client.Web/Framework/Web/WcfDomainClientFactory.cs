@@ -114,7 +114,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
             where TContract : class
         {
             ChannelFactory<TContract> channelFactory;
-            ChannelFactoryKey key = new ChannelFactoryKey(typeof(TContract), endpoint);
+            ChannelFactoryKey key = new ChannelFactoryKey(typeof(TContract), endpoint, requiresSecureEndpoint);
 
             lock (_channelFactoryCacheLock)
             {
@@ -237,12 +237,14 @@ namespace OpenRiaServices.DomainServices.Client.Web
         private struct ChannelFactoryKey : IEquatable<ChannelFactoryKey>
         {
             private readonly Uri _uri;
+            private readonly bool _requiresSecureEndpoint;
             private readonly Type _contractType;
 
-            public ChannelFactoryKey(Type contract, Uri serviceUri)
+            public ChannelFactoryKey(Type contract, Uri serviceUri, bool requiresSecureEndpoint)
             {
                 _contractType = contract;
                 _uri = serviceUri;
+                _requiresSecureEndpoint = requiresSecureEndpoint;
             }
 
             public override bool Equals(object obj)
@@ -253,12 +255,14 @@ namespace OpenRiaServices.DomainServices.Client.Web
             public bool Equals(ChannelFactoryKey other)
             {
                 return EqualityComparer<Uri>.Default.Equals(_uri, other._uri) &&
+                       _requiresSecureEndpoint == other._requiresSecureEndpoint &&
                        EqualityComparer<Type>.Default.Equals(_contractType, other._contractType);
             }
 
             public override int GetHashCode()
             {
-                int hashCode = EqualityComparer<Uri>.Default.GetHashCode(_uri);
+                var hashCode = EqualityComparer<Uri>.Default.GetHashCode(_uri);
+                hashCode = hashCode * -1521134295 + _requiresSecureEndpoint.GetHashCode();
                 hashCode = hashCode * -1521134295 + EqualityComparer<Type>.Default.GetHashCode(_contractType);
                 return hashCode;
             }
