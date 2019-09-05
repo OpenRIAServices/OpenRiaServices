@@ -34,8 +34,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         internal static readonly object[] EmptyObjectArray = Array.Empty<object>();
 
         private static readonly object _inspectorLock = new object();
-        private static AuthenticationSchemes _authenticationSchemes = AuthenticationSchemes.None;
-        private static HttpClientCredentialType _credentialType = HttpClientCredentialType.None;
+        private static AuthenticationSchemes? _authenticationSchemes;
+        private static HttpClientCredentialType? _credentialType;
 
         /// <summary>
         /// Gets the default authentication scheme supported by the server
@@ -45,7 +45,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             get
             {
                 VerifyAuthenticationMode();
-                return _authenticationSchemes;
+                return _authenticationSchemes.Value;
             }
         }
 
@@ -57,18 +57,18 @@ namespace OpenRiaServices.DomainServices.Hosting
             get
             {
                 VerifyAuthenticationMode();
-                return _credentialType;
+                return _credentialType.Value;
             }
         }
 
         private static void VerifyAuthenticationMode()
         {
             // Authentication scheme should never be none.
-            if (_authenticationSchemes == AuthenticationSchemes.None)
+            if (_authenticationSchemes == null)
             {
                 lock (_inspectorLock)
                 {
-                    if (_authenticationSchemes == AuthenticationSchemes.None)
+                    if (_authenticationSchemes == null)
                     {
                         WebServiceHostInspector inspector = new WebServiceHostInspector();
                         inspector.Inspect();
