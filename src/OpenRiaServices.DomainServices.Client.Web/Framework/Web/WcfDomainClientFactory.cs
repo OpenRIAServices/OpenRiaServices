@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using System.Threading;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
@@ -27,6 +28,8 @@ namespace OpenRiaServices.DomainServices.Client.Web
     public abstract class WcfDomainClientFactory : DomainClientFactory
     {
         private readonly MethodInfo _createInstanceMethod;
+        private readonly Dictionary<ChannelFactoryKey, ChannelFactory> _channelFactoryCache = new Dictionary<ChannelFactoryKey, ChannelFactory>();
+        private readonly object _channelFactoryCacheLock = new object();
         private CookieContainer _cookieContainer;
 
         /// <summary>
@@ -86,7 +89,14 @@ namespace OpenRiaServices.DomainServices.Client.Web
             set
             {
                 _cookieContainer = value;
-                SharedCookieMessageInspector = (value != null) ? new SharedCookieMessageInspector(value) : null;
+
+                // Chainging the CookieContainer means that we need a new MessageInspector so we can no longer reuse
+                // the existing channels for new DomainClients
+                lock (_channelFactoryCacheLock)
+                {
+                    SharedCookieMessageInspector = (value != null) ? new SharedCookieMessageInspector(value) : null;
+                    _channelFactoryCache.Clear();
+                }
             }
         }
 
@@ -103,8 +113,36 @@ namespace OpenRiaServices.DomainServices.Client.Web
         internal ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint, WebDomainClient<TContract> domainClient)
             where TContract : class
         {
-            // TODO: Add cache of initialised ChannelFactory instances
-            ChannelFactory<TContract> channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
+            ChannelFactory<TContract> channelFactory;
+            ChannelFactoryKey key = new ChannelFactoryKey(typeof(TContract), endpoint, requiresSecureEndpoint);
+
+            lock (_channelFactoryCacheLock)
+            {
+                if (_channelFactoryCache.TryGetValue(key, out var existingFactory)
+                    // This should never happen, but check anyway just to be safe
+                    && existingFactory.State != CommunicationState.Faulted)
+                {
+                    channelFactory = (ChannelFactory<TContract>)existingFactory;
+                }
+                else
+                {
+                    // Create and initialize a new channel factory
+                    channelFactory = CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
+                    InitializeChannelFactory(domainClient, channelFactory);
+
+                    _channelFactoryCache[key] = channelFactory;
+                }
+            }
+
+            return channelFactory;
+        }
+
+        /// <summary>
+        /// Performs one time initialization of the ChannelFactory
+        /// </summary>
+        private static void InitializeChannelFactory<TContract>(WebDomainClient<TContract> domainClient, ChannelFactory<TContract> channelFactory) where TContract : class
+        {
+            var originalSyncContext = SynchronizationContext.Current;
             try
             {
                 foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
@@ -114,14 +152,19 @@ namespace OpenRiaServices.DomainServices.Client.Web
                         op.KnownTypes.Add(knownType);
                     }
                 }
+
+                SynchronizationContext.SetSynchronizationContext(null);
+                channelFactory.Open();
             }
             catch
             {
                 ((IDisposable)channelFactory)?.Dispose();
                 throw;
             }
-
-            return channelFactory;
+            finally
+            {
+                SynchronizationContext.SetSynchronizationContext(originalSyncContext);
+            }
         }
 
 
@@ -184,6 +227,46 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// this inspector is used by wcf based transports to setup cookie suport
         /// </summary>
         internal IClientMessageInspector SharedCookieMessageInspector { get; private set; }
+
+
+        /// <summary>
+        /// Immutable key for _channelFactoryCache, entries are stored by type nad uri
+        /// since <see cref="WebDomainClient{TContract}"/> currently uses default endpoint 
+        /// on the factory
+        /// </summary>
+        private struct ChannelFactoryKey : IEquatable<ChannelFactoryKey>
+        {
+            private readonly Uri _uri;
+            private readonly bool _requiresSecureEndpoint;
+            private readonly Type _contractType;
+
+            public ChannelFactoryKey(Type contract, Uri serviceUri, bool requiresSecureEndpoint)
+            {
+                _contractType = contract;
+                _uri = serviceUri;
+                _requiresSecureEndpoint = requiresSecureEndpoint;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is ChannelFactoryKey key && Equals(key);
+            }
+
+            public bool Equals(ChannelFactoryKey other)
+            {
+                return EqualityComparer<Uri>.Default.Equals(_uri, other._uri) &&
+                       _requiresSecureEndpoint == other._requiresSecureEndpoint &&
+                       EqualityComparer<Type>.Default.Equals(_contractType, other._contractType);
+            }
+
+            public override int GetHashCode()
+            {
+                var hashCode = EqualityComparer<Uri>.Default.GetHashCode(_uri);
+                hashCode = hashCode * -1521134295 + _requiresSecureEndpoint.GetHashCode();
+                hashCode = hashCode * -1521134295 + EqualityComparer<Type>.Default.GetHashCode(_contractType);
+                return hashCode;
+            }
+        }
     }
 
     /// <summary>

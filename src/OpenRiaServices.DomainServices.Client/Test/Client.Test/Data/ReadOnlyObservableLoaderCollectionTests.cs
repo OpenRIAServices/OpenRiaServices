@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.DomainServices.Client.Data;
 
-namespace OpenRiaServices.DomainServices.Client.Test.Data
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     [TestClass]
     public class ReadOnlyObservableLoaderCollectionTests

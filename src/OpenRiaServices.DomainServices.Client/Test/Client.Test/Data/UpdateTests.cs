@@ -83,11 +83,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return Guid.NewGuid().ToString().Substring(0, 20);
         }
 
-        [TestInitialize]
-        public void TestSetup()
-        {
-        }
-
         [TestMethod]
         [Asynchronous]
         [WorkItem(898909)]
@@ -2133,7 +2128,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
-                Assert.AreEqual(origUnitPrice, products[0].UnitPrice);
+                Assert.AreEqual(origUnitPrice, products[0].UnitPrice ?? 0);
                 nw2NewUnitPrice = origUnitPrice + 2;
                 products[0].UnitPrice = nw2NewUnitPrice;
                 newReorderLevel = products[1].ReorderLevel ?? 0;
@@ -3308,7 +3303,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
                     // is called, the Product1's conflicts are generated. So client and store values should not be updated 
                     // even for Product0.
-                    Assert.IsNull(products[0].EntityConflict);
+                    Assert.AreEqual(null, products[0].EntityConflict, "Expected no entity conflict on product[0]");
                 }
                 else
                 {
@@ -4390,7 +4385,7 @@ TestContext testContext
             EnqueueConditional(() => so.IsComplete);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error.Message);
+                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
                 Entity[] entitiesInConflict = so.EntitiesInError.ToArray();
                 Assert.AreEqual(1, so.ChangeSet.RemovedEntities.Count);
                 Assert.AreEqual(1, entitiesInConflict.Length);
@@ -4517,13 +4512,6 @@ TestContext testContext
             TestDatabase.Initialize();
         }
 
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            // make sure our test database is removed on the server after all unit tests
-            // have been run
-            ((IDisposable)TestDatabase).Dispose();
-        }
     }
 
     [TestClass]
@@ -4547,14 +4535,6 @@ TestContext testContext
             // ensure that our isolation DB has been created once and only once
             // at the test fixture level
             TestDatabase.Initialize();
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            // make sure our test database is removed on the server after all unit tests
-            // have been run
-            ((IDisposable)TestDatabase).Dispose();
         }
     }
 

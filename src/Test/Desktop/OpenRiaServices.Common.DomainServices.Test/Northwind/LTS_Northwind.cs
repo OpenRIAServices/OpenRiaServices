@@ -355,7 +355,7 @@ namespace TestDomainServices.LTS
         {
             NorthwindDataContext context = null;
 
-            string connection = ActiveConnections.Get("Northwind");
+            string connection = DBImager.GetNewDatabaseConnectionString("Northwind");
             if (!string.IsNullOrEmpty(connection))
             {
                 // if there is an active connection in scope use it

@@ -8,7 +8,7 @@ using OpenRiaServices.Silverlight.Testing;
 using SharedEntities;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Client.Test.Data
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 

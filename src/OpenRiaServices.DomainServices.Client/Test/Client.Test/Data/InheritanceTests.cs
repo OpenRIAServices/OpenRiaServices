@@ -13,7 +13,7 @@ using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDomainServices.NamedUpdates;
 
-namespace OpenRiaServices.DomainServices.Client.Data.Test
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 

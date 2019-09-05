@@ -28,16 +28,16 @@ For better scalability (can be done afterwards):
 
 ## Client
 
-Most of the changes are **Brekaing changes**, even if many of them will only require changes in a small percentage of applicaitons.
+Most of the changes are **Brekaing changes**, even if many of them will only require changes in a small percentage of applications.
 
 1  Change DomainClient contract to Task based async methods (#153)
     * Performing multiple loads and waiting for the result is now faster
 	* Any custom DomainClient or code which interact with DomainClient will no longer compile.	
 2. Remove old target frameworks
-* Remove netstandard13 (#160)
-* Remove portable class library TargetFramework (#164)
-* Remove Silverlight (#174, #175 and more commits)
-* .Net Framework 4.5 requirement is replaced by 4.6 (will be 4.6.1+)
+  * Remove netstandard13 (#160)
+  * Remove portable class library TargetFramework (#164)
+  * Remove Silverlight (#174, #175 and more commits)
+  * .Net Framework 4.5 requirement is replaced by 4.6 (will be 4.6.1+)
 3. Move *EntityList* and *QueryBuilder* from OpenRiaServices...Data namespace to OpenRiaServices...Client namespace (#182)
 4. Dont allocate PropertyChangedEventArgs if not needed (#155)   
     * remove sevaral *OnPropertyChanged* methods and only keep RaisePropertyChanged
@@ -48,7 +48,12 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 7. Make WebDomainClient non sealed (#166) *non breaking*
    Make CallServiceOperation virtual so that the invoke behaviour can be modified in derived classes.
    This should simplify adding bearer based authentication
-8. Change from IEnumerable to IReadOnlyCollection in a few places (#183)
+8. Cache WCF ChannelFactories per DomainContext type for improved perf (#184)
+  * This significantly improves the performance for the first network operation per DominContext insteance.
+    The cost is only paid on the first access per DomainService *type* (not per instance).
+	Performance of overhead for E2E benchmark of loading some simple entity from a simple DomainService went from 200% to <10% 
+	(so the speedup for creating a new instance of this specific DomainContext is above 20 times) and will improve with more complex services.
+ 9. Change from IEnumerable to IReadOnlyCollection in a few places (#183)
   * Mostly *ValidationErrors* properties and for IEntityCollection
 
 *Behaviour changes*

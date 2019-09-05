@@ -59,6 +59,17 @@ namespace TestDomainServices.Testing
             return GetConnectionStringForDatabaseFile(DestMDF);
         }
 
+        /// <summary>
+        /// Get connectionstring to the temporary created read/write database
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        public static string GetNewDatabaseConnectionString(string dbName)
+        {
+            string DestMDF = GetTempDbFilePath(dbName, ".mdf");
+            return GetConnectionStringForDatabaseFile(DestMDF);
+        }
+
         private static string CreateDatabaseFile(string dbName, bool overwrite)
         {
             string SourceMDF = GetDBFileTemplatePath(dbName + ".mdf");
@@ -95,12 +106,10 @@ namespace TestDomainServices.Testing
         // TODO: Allow reading from env and app settings
         internal static string LocalSqlServer => "(localdb)\\MSSQLLocalDB";
 
-        private static string GetConnectionStringForDatabaseFile(string ConStr)
+        private static string GetConnectionStringForDatabaseFile(string path)
         {
-            string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(ConStr));
-            ConStr = $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={ConStr};Integrated Security=True;Connect Timeout=5";
-
-            return ConStr;
+            string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(path));
+            return  $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
         }
 
         private static string GetDbCatalogName(string dbName)
@@ -152,56 +161,4 @@ namespace TestDomainServices.Testing
 
     }
 
-    /// <summary>
-    /// Static cache of active database connection strings. This cache can be used by DomainServices
-    /// to provide connection durability across provider requests.
-    /// </summary>
-    public static class ActiveConnections
-    {
-        private static Dictionary<string, string> activeConnections = new Dictionary<string, string>();
-
-        static ActiveConnections()
-        {
-            Load();
-        }
-
-        public static string Get(string databaseName)
-        {
-            string connection = null;
-            activeConnections.TryGetValue(databaseName, out connection);
-            return connection;
-        }
-
-        public static void Set(string databaseName, string connnectionString)
-        {
-            if (connnectionString != null)
-            {
-                activeConnections[databaseName] = connnectionString;
-            }
-            else
-            {
-                activeConnections.Remove(databaseName);
-            }
-            Save();
-        }
-
-        private static void Load()
-        {
-            string path = HttpContext.Current.Server.MapPath("~/activeconnections.txt");
-            if (File.Exists(path))
-            {
-                foreach (string line in File.ReadAllLines(path).Where(p => !string.IsNullOrEmpty(p)))
-                {
-                    string[] tokens = line.Split('\0');
-                    activeConnections.Add(tokens[0], tokens[1]);
-                }
-            }
-        }
-
-        private static void Save()
-        {
-            string[] lines = activeConnections.Select(kvp => kvp.Key + "\0" + kvp.Value).ToArray();
-            File.WriteAllLines(HttpContext.Current.Server.MapPath("~/activeconnections.txt"), lines);
-        }
-    }
 }
