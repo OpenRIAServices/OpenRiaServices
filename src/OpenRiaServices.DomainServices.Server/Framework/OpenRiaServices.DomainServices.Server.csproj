@@ -3,7 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-  </PropertyGroup> 
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <!-- Disable obsolete warning (primarily AssociationAttribute) -->
     <NoWarn>$(NoWarn);CS0618</NoWarn>
@@ -13,11 +13,16 @@
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3" />
+  </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.6.0-preview4.19212.13" />
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\DomainException.cs" Link="Data\DomainException.cs" />
@@ -43,9 +48,6 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Compile Remove="ApplicationServices\AuthenticationBase.cs" />
-  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -58,10 +60,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
     <Compile Condition=" '$(RunCodeAnalysis)' != 'true' " Remove="GlobalSuppressions.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3" />
-  </ItemGroup>
+
 </Project>
