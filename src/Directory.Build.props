@@ -41,7 +41,7 @@
   <!-- Enable source link, we really only want this for framework assemblies and CI builds
   -->
   <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All"/>
 
   </ItemGroup>
 

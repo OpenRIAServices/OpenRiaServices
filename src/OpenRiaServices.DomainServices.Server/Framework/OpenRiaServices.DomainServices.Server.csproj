@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net46;netcoreapp3.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp3.0'">
     <!-- Disable obsolete warning (primarily AssociationAttribute) -->
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
@@ -17,9 +17,9 @@
   <ItemGroup>
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netcoreapp3.0'">
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.6.0-preview4.19212.13" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.6.0-preview9.19421.4" />
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
 
