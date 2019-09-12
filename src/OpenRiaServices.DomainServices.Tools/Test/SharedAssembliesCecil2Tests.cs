@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         public SharedAssembliesCecilTests()
         {
         }
-        internal virtual ISharedAssemblies CreatedSharedAssembliesService(IEnumerable<string> assemblies, IEnumerable<string> assemblySearchPats, ILogger logger)
+        internal virtual SharedAssembliesCecil CreatedSharedAssembliesService(IEnumerable<string> assemblies, IEnumerable<string> assemblySearchPats, ILogger logger)
         {
             return new SharedAssembliesCecil(assemblies, assemblySearchPats, logger);
         }
@@ -184,13 +184,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             ConsoleLogger logger = new ConsoleLogger();
             string file = "DoesNotExist.dll";
-            var sa = CreatedSharedAssembliesService(new string[] { file }, CodeGenHelper.GetClientAssemblyPaths(), logger);
+            using (var sa = CreatedSharedAssembliesService(new string[] { file }, CodeGenHelper.GetClientAssemblyPaths(), logger))
+            {
+                var sharedType = GetSharedTypeLocation(sa, typeof(TestEntity));
+                Assert.IsNull(sharedType, "Should not have detected any shared type.");
 
-            var sharedType = GetSharedTypeLocation(sa, typeof(TestEntity));
-            Assert.IsNull(sharedType, "Should not have detected any shared type.");
-
-            string message = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, file, null);
-            TestHelper.AssertHasInfoThatStartsWith(logger, message);
+                string message = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, file, null);
+                TestHelper.AssertHasInfoThatStartsWith(logger, message);
+            }
         }
 
         [Description("SharedAssembliesManaged service logs an info message for bad image format assembly file")]
@@ -203,10 +204,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             ConsoleLogger logger = new ConsoleLogger();
 
-            var sa = CreatedSharedAssembliesService(new string[] { assemblyFileName }, CodeGenHelper.GetClientAssemblyPaths(), logger);
-
-            var sharedType = GetSharedTypeLocation(sa, typeof(TestEntity));
-            Assert.IsNull(sharedType, "Should not have detected any shared type.");
+            using (var sa = CreatedSharedAssembliesService(new string[] { assemblyFileName }, CodeGenHelper.GetClientAssemblyPaths(), logger))
+            {
+                var sharedType = GetSharedTypeLocation(sa, typeof(TestEntity));
+                Assert.IsNull(sharedType, "Should not have detected any shared type.");
+            }
 
             string errorMessage = null;
             try
@@ -223,6 +225,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
             string message = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, null);
             TestHelper.AssertHasInfoThatStartsWith(logger, message);
+
         }
 
         private static string GetSharedTypeLocation(ISharedAssemblies sa, Type type)

@@ -27,6 +27,8 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
             public ModuleDefinition ModuleDefinition { get; }
 
+            public string FullName => TypeDefinition.FullName;
+
             public TypeInfo(TypeDefinition t, ModuleDefinition m)
             {
                 TypeDefinition = t;
@@ -52,10 +54,12 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
             public AssemblyDefinition LoadAssembly(string path)
             {
-                AssemblyDefinition a = AssemblyDefinition.ReadAssembly(File.OpenRead(path), 
+                AssemblyDefinition a = AssemblyDefinition.ReadAssembly(
+                    File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete), 
                     new ReaderParameters()
                     {
-                         AssemblyResolver = this
+                         AssemblyResolver = this,
+                         ReadSymbols =  false,
                     });
                 base.RegisterAssembly(a);
                 return a;
@@ -89,23 +93,36 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             return null;
         }
 
+        class AssemblyNameReferenceComparer : IEqualityComparer<AssemblyNameReference>
+        {
+            public bool Equals(AssemblyNameReference x, AssemblyNameReference y)
+            {
+                return x.FullName == y.FullName;
+            }
+
+            public int GetHashCode(AssemblyNameReference obj)
+            {
+                return obj.FullName.GetHashCode();
+            }
+        }
+
         private void LoadAssemblies(IEnumerable<string> assemblyFileNames, ILogger logger)
         {
+            var loaded = new HashSet<AssemblyNameReference>(new AssemblyNameReferenceComparer());
+            var references = new HashSet<AssemblyNameReference>(new AssemblyNameReferenceComparer());
             foreach (var assembly in assemblyFileNames)
             {
                 try
                 {
                     AssemblyDefinition a = _resolver.LoadAssembly(assembly);
+                    loaded.Add(a.Name);
                     IEnumerable<ModuleDefinition> ms = a.Modules;
                     foreach (ModuleDefinition m in ms)
                     {
-                        foreach (var t in m.Types)
-                        {
-                            if (t.IsPublic)
-                            {
-                                _sharedTypeByName[t.FullName] = new TypeInfo(t, m);
-                            }
-                        }
+                        AddPublicTypesToDictionary(m);
+
+                        foreach (var reference in m.AssemblyReferences)
+                            references.Add(reference);
                     }
                 }
                 catch (Exception ex)
@@ -114,6 +131,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                     if (ex is System.IO.FileNotFoundException ||
                         ex is System.IO.FileLoadException ||
                         ex is System.IO.PathTooLongException ||
+                        ex is System.BadImageFormatException || 
                         ex is System.Security.SecurityException)
                     {
                         if (logger != null)
@@ -125,6 +143,53 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                     {
                         throw;
                     }
+                }
+            }
+
+            // TODO: Consider replacing this with some smarter code using TypeReferences
+            // from loaded assemblies and creating "incomplete" types with them
+            // to populate the dictionary
+            references.ExceptWith(loaded);
+            foreach (var assembly in references)
+            {
+                try
+                {
+                    AssemblyDefinition a = _resolver.Resolve(assembly);
+                    IEnumerable<ModuleDefinition> ms = a.Modules;
+                    foreach (ModuleDefinition m in ms)
+                    {
+                        AddPublicTypesToDictionary(m);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Some common exceptions log a warning and keep running
+                    if (ex is System.IO.FileNotFoundException ||
+                        ex is System.IO.FileLoadException ||
+                        ex is System.IO.PathTooLongException ||
+                        ex is System.BadImageFormatException ||
+                        ex is System.Security.SecurityException)
+                    {
+                        if (logger != null)
+                        {
+                            logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assembly, ex.Message));
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        private void AddPublicTypesToDictionary(ModuleDefinition m)
+        {
+            foreach (var t in m.Types)
+            {
+                if (t.IsPublic)
+                {
+                    _sharedTypeByName[t.FullName] = new TypeInfo(t, m);
                 }
             }
         }
@@ -150,7 +215,11 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 {
                     type.Properties = new HashSet<string>();
                     foreach (var property in type.TypeDefinition.Properties)
-                        type.Properties.Add(property.Name);
+                    {
+                        var method = property.GetMethod ?? property.SetMethod;
+                        if (method.IsPublic)
+                            type.Properties.Add(property.Name);
+                    }                        
                 }
 
                 if (type.Properties.Contains(name))
@@ -172,7 +241,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         public string GetSharedAssemblyPath(CodeMemberKey key)
         {
             Debug.Assert(key != null, "key cannot be null");
-            string location = null;
+            ModuleDefinition location = null;
 
             TypeInfo typeInfo;
             if (this.TryGetSharedType(key.TypeName, out typeInfo))
@@ -180,24 +249,19 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 switch (key.KeyKind)
                 {
                     case CodeMemberKey.CodeMemberKeyKind.TypeKey:
-                        location = typeInfo.ModuleDefinition.Assembly.Name.Name;
+                        location = typeInfo.ModuleDefinition;
                         break;
 
                     case CodeMemberKey.CodeMemberKeyKind.PropertyKey:
-                        location = HasProperty(typeInfo, key.MemberName)?.ModuleDefinition.Assembly.Name.Name;
+                        location = HasProperty(typeInfo, key.MemberName)?.ModuleDefinition;
                         break;
 
                     case CodeMemberKey.CodeMemberKeyKind.MethodKey:
-                        /*       Type[] parameterTypes = this.GetSharedTypes(key.ParameterTypeNames);
-                               if (parameterTypes != null)
-                               {
-                                   MethodBase methodBase = this.FindSharedMethodOrConstructor(type, key);
-                                   if (methodBase != null)
-                                   {
-                                       location = methodBase.DeclaringType.Assembly.Location;
-                                   }
-                               }
-                          */
+                        var method = this.FindSharedMethodOrConstructor(typeInfo, key);
+                        if (method != null)
+                        {
+                            location = method.DeclaringType.Module;
+                        }
                         break;
 
                     default:
@@ -205,7 +269,8 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                         break;
                 }
             }
-            return location;
+
+            return location?.Assembly.Name.Name;
         }
 
         /// <summary>
@@ -215,46 +280,57 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <param name="sharedType">The <see cref="Type"/> we have already located in our set of shared assemblies.</param>
         /// <param name="key">The key describing the method to find.</param>
         /// <returns>The matching <see cref="MethodBase"/> or <c>null</c> if no match is found.</returns>
-        /*private MethodBase FindSharedMethodOrConstructor(Type sharedType, CodeMemberKey key)
+        private MethodDefinition FindSharedMethodOrConstructor(TypeInfo sharedType, CodeMemberKey key)
         {
-            Type[] parameterTypes = this.GetSharedTypes(key.ParameterTypeNames);
+            var parameterTypes = this.GetSharedTypes(key.ParameterTypeNames);
             if (parameterTypes == null)
             {
                 return null;
             }
             bool isConstructor = key.IsConstructor;
-            IEnumerable<MethodBase> methods = isConstructor ? sharedType.GetConstructors().Cast<MethodBase>() : sharedType.GetMethods().Cast<MethodBase>();
-            foreach (MethodBase method in methods)
+
+            do
             {
-                if (!isConstructor && !string.Equals(method.Name, key.MemberName, StringComparison.OrdinalIgnoreCase))
+                var methods = sharedType.TypeDefinition.Methods;
+                foreach (var method in methods)
                 {
-                    continue;
-                }
-                ParameterInfo[] parameterInfos = method.GetParameters();
-                if (parameterInfos.Length != parameterTypes.Length)
-                {
-                    continue;
-                }
-                int matchedParameters = 0;
-                for (int i = 0; i < parameterInfos.Length; ++i)
-                {
-                    if (string.Equals(parameterInfos[i].ParameterType.FullName, parameterTypes[i].FullName, StringComparison.OrdinalIgnoreCase))
+                    // Name matches or it is a constructur we are 
+                    if (isConstructor ? !method.IsConstructor : !string.Equals(method.Name, key.MemberName, StringComparison.OrdinalIgnoreCase))
                     {
-                        ++matchedParameters;
+                        continue;
                     }
-                    else
+
+                    var parameterInfos = method.Parameters;
+                    if (parameterInfos.Count != parameterTypes.Length)
                     {
-                        break;
+                        continue;
+                    }
+                    int matchedParameters = 0;
+                    for (int i = 0; i < parameterInfos.Count; ++i)
+                    {
+                        if (string.Equals(parameterInfos[i].ParameterType.FullName, parameterTypes[i].FullName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            ++matchedParameters;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (matchedParameters == parameterInfos.Count)
+                    {
+                        return method;
                     }
                 }
 
-                if (matchedParameters == parameterInfos.Length)
-                {
-                    return method;
-                }
-            }
+
+                // Continue searching in base types
+            } while (!isConstructor &&
+                (sharedType = GetBaseType(sharedType)) != null);
+
             return null;
-        }*/
+        }
 
         /// <summary>
         /// Given a collection of <see cref="Type"/> names, this method returns
@@ -288,6 +364,13 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <returns>The <see cref="Type"/> from the shared assemblies if it exists, otherwise <c>null</c>.</returns>
         private bool TryGetSharedType(string typeName, out TypeInfo typeInfo)
         {
+
+            // TODO: Handle arrays, e.g System.Char[]
+            // and generics? (strip generic part)
+            // (new List<byte[]>()).GetType().FullName
+ // => "System.Collections.Generic.List`1[[System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
+
+
             if (!_sharedTypeByName.TryGetValue(typeName, out typeInfo))
             {
                 bool found = false;
