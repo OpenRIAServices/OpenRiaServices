@@ -368,6 +368,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// Returns the <see cref="Type"/> from the set of shared assemblies of the given name.
         /// </summary>
         /// <param name="typeName">The fully qualified type name.</param>
+        /// <param name="typeInfo">the matching type descriptor if any was found</param>
         /// <returns>The <see cref="Type"/> from the shared assemblies if it exists, otherwise <c>null</c>.</returns>
         private bool TryGetSharedType(string typeName, out TypeInfo typeInfo)
         {

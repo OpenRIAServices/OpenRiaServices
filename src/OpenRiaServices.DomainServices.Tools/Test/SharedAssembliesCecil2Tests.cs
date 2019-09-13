@@ -19,9 +19,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     [TestClass]
     public class SharedAssembliesCecilTests
     {
-        public SharedAssembliesCecilTests()
-        {
-        }
         internal virtual SharedAssembliesCecil CreatedSharedAssembliesService(IEnumerable<string> assemblies, IEnumerable<string> assemblySearchPats, ILogger logger)
         {
             return new SharedAssembliesCecil(assemblies, assemblySearchPats, logger);
@@ -38,21 +35,24 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
+            using (var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger))
+            {
 
-            string sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestEntity));
-            Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
-            Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
 
-            sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestValidator));
-            Assert.IsNotNull(sharedTypeLocation, "Expected TestValidator type to be shared");
-            Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                string sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestEntity));
+                Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
+                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
 
-            sharedTypeLocation = GetSharedTypeLocation(sa, typeof(DomainService));
-            Assert.IsNull(sharedTypeLocation, "Expected DomainService type not to be shared");
+                sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestValidator));
+                Assert.IsNotNull(sharedTypeLocation, "Expected TestValidator type to be shared");
+                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
 
-            sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestValidatorServer));
-            Assert.IsNull(sharedTypeLocation, "Expected TestValidatorServer type not to be shared");
+                sharedTypeLocation = GetSharedTypeLocation(sa, typeof(DomainService));
+                Assert.IsNull(sharedTypeLocation, "Expected DomainService type not to be shared");
+
+                sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestValidatorServer));
+                Assert.IsNull(sharedTypeLocation, "Expected TestValidatorServer type not to be shared");
+            }
 
             TestHelper.AssertNoErrorsOrWarnings(logger);
         }
@@ -68,34 +68,35 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
+            using (var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger))
+            {
+                string sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ClientAndServerValue));
+                Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
+                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
 
-            string sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ClientAndServerValue));
-            Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
-            Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ServerAndClientValue));
+                Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
+                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
 
-            sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ServerAndClientValue));
-            Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
-            Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.TheValue));
+                Assert.IsNull(sharedTypeLocation, "Expected TestEntity.TheValue type to not be shared");
 
-            sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.TheValue));
-            Assert.IsNull(sharedTypeLocation, "Expected TestEntity.TheValue type to not be shared");
+                // We should detect properties from derived types
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "ServerClassLib.TestDomainSharedContext", "ValidationContext");
+                Assert.IsNotNull(sharedTypeLocation, "Expected to detect properties from base classes (DomainContext.ValidationContext)");
+                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
 
-            // We should detect properties from derived types
-            sharedTypeLocation = GetSharedPropertyLocation(sa, "ServerClassLib.TestDomainSharedContext", "ValidationContext");
-            Assert.IsNotNull(sharedTypeLocation, "Expected to detect properties from base classes (DomainContext.ValidationContext)");
-            StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
+                // We should not detect internal properties
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ValidationErrors");
+                Assert.IsNotNull(sharedTypeLocation, "Should detect properties in other assemblies");
+                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
 
-            // We should not detect internal properties
-            sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ValidationErrors");
-            Assert.IsNotNull(sharedTypeLocation, "Should detect properties in other assemblies");
-            StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ParentAssociation");
+                Assert.IsNull(sharedTypeLocation, "Expected to not detect internal properties");
 
-            sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ParentAssociation");
-            Assert.IsNull(sharedTypeLocation, "Expected to not detect internal properties");
-
-            sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "IsMergingState");
-            Assert.IsNull(sharedTypeLocation, "Expected to not detect protected internal properties");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "IsMergingState");
+                Assert.IsNull(sharedTypeLocation, "Expected to not detect protected internal properties");
+            }
 
             TestHelper.AssertNoErrorsOrWarnings(logger);
         }
@@ -111,18 +112,19 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
+            using (var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger))
+            {
+                var sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestValidator), "IsValid", new[] { typeof(TestEntity), typeof(ValidationContext) });
+                Assert.IsNotNull(sharedMethodLocation, "Expected TestValidator.IsValid to be shared");
+                Assert.IsTrue(sharedMethodLocation.Contains("ClientClassLib"), "Expected to find method in client class lib");
 
-            var sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestValidator), "IsValid", new[] { typeof(TestEntity), typeof(ValidationContext) });
-            Assert.IsNotNull(sharedMethodLocation, "Expected TestValidator.IsValid to be shared");
-            Assert.IsTrue(sharedMethodLocation.Contains("ClientClassLib"), "Expected to find method in client class lib");
+                sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestEntity), "ServerAndClientMethod", Type.EmptyTypes);
+                Assert.IsNotNull(sharedMethodLocation, "Expected TestEntity.ServerAndClientMethod to be shared");
+                Assert.IsTrue(sharedMethodLocation.Contains("ClientClassLib"), "Expected to find method in client class lib");
 
-            sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestEntity), "ServerAndClientMethod", Type.EmptyTypes);
-            Assert.IsNotNull(sharedMethodLocation, "Expected TestEntity.ServerAndClientMethod to be shared");
-            Assert.IsTrue(sharedMethodLocation.Contains("ClientClassLib"), "Expected to find method in client class lib");
-
-            sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestValidator), "ServertMethod", Type.EmptyTypes);
-            Assert.IsNull(sharedMethodLocation, "Expected TestValidator.ServerMethod not to be shared");
+                sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestValidator), "ServertMethod", Type.EmptyTypes);
+                Assert.IsNull(sharedMethodLocation, "Expected TestValidator.ServerMethod not to be shared");
+            }
 
             TestHelper.AssertNoErrorsOrWarnings(logger);
         }
@@ -160,24 +162,26 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             List<string> assemblies = CodeGenHelper.ClientClassLibReferences(clientProjectPath, true);
 
             ConsoleLogger logger = new ConsoleLogger();
-            var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger);
-            foreach (Type t in sharedTypes)
+            using (var sa = CreatedSharedAssembliesService(assemblies, CodeGenHelper.GetClientAssemblyPaths(), logger))
             {
-                var sharedTypeLocation = GetSharedTypeLocation(sa, t);
-                Assert.IsNotNull(sharedTypeLocation, "Expected type " + t.Name + " to be considered shared.");
-            }
+                foreach (Type t in sharedTypes)
+                {
+                    var sharedTypeLocation = GetSharedTypeLocation(sa, t);
+                    Assert.IsNotNull(sharedTypeLocation, "Expected type " + t.Name + " to be considered shared.");
+                }
 
-            foreach (MethodBase m in sharedMethods)
-            {
-                Type[] parameterTypes = m.GetParameters().Select(p => p.ParameterType).ToArray();
-                var sharedMethodLocation = GetSharedMethodLocation(sa, m.DeclaringType, m.Name, parameterTypes);
-                Assert.IsNotNull(sharedMethodLocation, "Expected method " + m.DeclaringType.Name + "." + m.Name + " to be considered shared.");
-            }
+                foreach (MethodBase m in sharedMethods)
+                {
+                    Type[] parameterTypes = m.GetParameters().Select(p => p.ParameterType).ToArray();
+                    var sharedMethodLocation = GetSharedMethodLocation(sa, m.DeclaringType, m.Name, parameterTypes);
+                    Assert.IsNotNull(sharedMethodLocation, "Expected method " + m.DeclaringType.Name + "." + m.Name + " to be considered shared.");
+                }
 
-            foreach (Type t in nonSharedTypes)
-            {
-                var sType = GetSharedTypeLocation(sa, t);
-                Assert.IsNull(sType, "Expected type " + t.Name + " to be considered *not* shared.");
+                foreach (Type t in nonSharedTypes)
+                {
+                    var sType = GetSharedTypeLocation(sa, t);
+                    Assert.IsNull(sType, "Expected type " + t.Name + " to be considered *not* shared.");
+                }
             }
         }
 

@@ -97,6 +97,8 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 this._locationService.Dispose();
                 this._locationService = null;
             }
+
+            (_sharedAssemblies as IDisposable)?.Dispose();
         }
 
         #endregion
