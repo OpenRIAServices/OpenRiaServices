@@ -21,22 +21,29 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         private readonly Dictionary<string, TypeInfo> _sharedTypeByName;
         private readonly CustomAssemblyResolver _resolver;
 
+        [DebuggerDisplay("{FullName,nq}")]
         class TypeInfo
         {
-            public TypeDefinition TypeDefinition { get; }
-
-            public ModuleDefinition ModuleDefinition { get; }
-
-            public string FullName => TypeDefinition.FullName;
-
-            public TypeInfo(TypeDefinition t, ModuleDefinition m)
-            {
-                TypeDefinition = t;
-                ModuleDefinition = m;
-            }
-
             public HashSet<string> Properties;
             public TypeInfo BaseType;
+            private readonly string _typeName;
+
+            public TypeDefinition TypeDefinition { get; }
+
+            public string FullName => _typeName ?? TypeDefinition.FullName;
+
+            public ModuleDefinition ModuleDefinition => TypeDefinition.Module;
+
+            public TypeInfo(TypeDefinition typeDefinition)
+            {
+                TypeDefinition = typeDefinition;
+            }
+
+            public TypeInfo(TypeInfo typeInfo, string typeName)
+            {
+                TypeDefinition = typeInfo.TypeDefinition;
+                _typeName = typeName;
+            }
         };
 
         private readonly ILogger _logger;
@@ -55,11 +62,11 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             public AssemblyDefinition LoadAssembly(string path)
             {
                 AssemblyDefinition a = AssemblyDefinition.ReadAssembly(
-                    File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete), 
+                    File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete),
                     new ReaderParameters()
                     {
-                         AssemblyResolver = this,
-                         ReadSymbols =  false,
+                        AssemblyResolver = this,
+                        ReadSymbols = false,
                     });
                 base.RegisterAssembly(a);
                 return a;
@@ -131,7 +138,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                     if (ex is System.IO.FileNotFoundException ||
                         ex is System.IO.FileLoadException ||
                         ex is System.IO.PathTooLongException ||
-                        ex is System.BadImageFormatException || 
+                        ex is System.BadImageFormatException ||
                         ex is System.Security.SecurityException)
                     {
                         if (logger != null)
@@ -189,7 +196,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             {
                 if (t.IsPublic)
                 {
-                    _sharedTypeByName[t.FullName] = new TypeInfo(t, m);
+                    _sharedTypeByName[t.FullName] = new TypeInfo(t);
                 }
             }
         }
@@ -200,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 && typeInfo.TypeDefinition.BaseType != null)
             {
                 var type = typeInfo.TypeDefinition.BaseType.Resolve();
-                typeInfo.BaseType = new TypeInfo(type, type.Module);
+                typeInfo.BaseType = new TypeInfo(type);
             }
 
             return typeInfo.BaseType;
@@ -208,7 +215,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
         TypeInfo HasProperty(TypeInfo type, string name)
         {
-            while(type != null)
+            while (type != null)
             {
                 // Get or Initialize Property collection
                 if (type.Properties == null)
@@ -219,7 +226,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                         var method = property.GetMethod ?? property.SetMethod;
                         if (method.IsPublic)
                             type.Properties.Add(property.Name);
-                    }                        
+                    }
                 }
 
                 if (type.Properties.Contains(name))
@@ -364,29 +371,61 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <returns>The <see cref="Type"/> from the shared assemblies if it exists, otherwise <c>null</c>.</returns>
         private bool TryGetSharedType(string typeName, out TypeInfo typeInfo)
         {
-
-            // TODO: Handle arrays, e.g System.Char[]
-            // and generics? (strip generic part)
-            // (new List<byte[]>()).GetType().FullName
- // => "System.Collections.Generic.List`1[[System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]"
-
-
             if (!_sharedTypeByName.TryGetValue(typeName, out typeInfo))
             {
-                bool found = false;
-                // Check if typename is assembly qualified, and try resolving without assembly qualified name
-                int assemblyNameStart = typeName.IndexOf(',', 0);
-                if (assemblyNameStart != -1)
+
+                // Check if array ( with "[]" after type name) or generic with "[[...](,[...])*]" patter
+                int openBracet = typeName.IndexOf('[');
+                if (openBracet != -1 && openBracet + 1 < typeName.Length)
                 {
-                    var shortTypeName = typeName.Substring(0, assemblyNameStart);
-                    found = TryGetSharedType(shortTypeName, out typeInfo);
+                    // Is array
+                    if (typeName[openBracet + 1] == ']')
+                    {
+                        string underlyingTypeName = typeName.Substring(0, openBracet);
+                        if (TryGetSharedType(underlyingTypeName, out typeInfo))
+                        {
+                            // It is a array, we "cheat" and return the underlying type
+                            // since we assume array is always reachable the type in the 
+                            // array is what is important
+                            // But strip any part of the name which corresponds to assembly qualified part
+                            typeInfo = new TypeInfo(typeInfo, typeName.Substring(0, (openBracet + 1) + 1));
+                        }
+                    }
+                    // Or generic
+                    else if (typeName[openBracet + 1] == '[')
+                    {
+                        string genericTypeName = typeName.Substring(0, openBracet);
+                        TypeInfo genericType;
+                        if (TryGetSharedType(genericTypeName, out genericType))
+                        {
+                            int endBracket;
+                            if (TryGetSharedGenericParameters(typeName, openBracet + 1, out endBracket))
+                            {
+                                // Skip any part after typename which would be assembly qualified part
+                                typeInfo = new TypeInfo(genericType, typeName.Substring(0, endBracket +1));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Unexpected single '[' in type name cannot determine type '{typeName}'");
+                    }
                 }
 
-                if (!found)
+                // Check if typename is assembly qualified, and try resolving without assembly qualified name
+                if (typeInfo == null)
                 {
-                    // TODO: extra case
-                    // Try resolving type using universe, but fallback to old mscorlib special case
-                    // sharedType = _universe.GetType(typeName, throwOnError: false);
+                    int assemblyNameStart = typeName.IndexOf(',', 0);
+                    if (assemblyNameStart != -1)
+                    {
+                        var shortTypeName = typeName.Substring(0, assemblyNameStart);
+                        TryGetSharedType(shortTypeName, out typeInfo);
+                    }
+                }
+
+                if (typeInfo == null)
+                {
+                    // TODO: look in "mscorlib" (lookup a known type and use module type system?)
                 }
 
                 _sharedTypeByName.Add(typeName, typeInfo);
@@ -395,36 +434,47 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
             return typeInfo != null;
         }
 
+        private bool TryGetSharedGenericParameters(string typeName, int startBracket, out int endBracket)
+        {
+            while (true)
+            {
+                endBracket = typeName.IndexOf(']', startBracket + 1);
+                if (endBracket == -1)
+                {
+                    _logger.LogError($"Expected ']' in typename '{typeName}' after position {startBracket}");
+                    return false;
+                }
+
+                string parameterName = typeName.Substring(startBracket + 1, endBracket - (startBracket + 1));
+                if (TryGetSharedType(parameterName, out _))
+                {
+                    // genericParameters.Add(typeInfo);
+
+                    // End of generic type
+                    if (typeName[endBracket + 1] == ']')
+                    {
+                        endBracket = endBracket + 1;
+                        return true;
+                    }
+                    else if (typeName[endBracket + 1] == ',' && typeName[endBracket + 2] == '[') // ",[" or "]"
+                    {
+                        startBracket = endBracket + 2;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Unrecognized typename '{typeName}' eexpected ']' or ',[' at position {endBracket + 1}");
+                    }
+                }
+                else // Bail out if a single argument cannot be found
+                {
+                    return false;
+                }
+            }
+        }
+
         public void Dispose()
         {
             _resolver.Dispose();
         }
-
-        /// <summary>
-        /// Attempts to load the specified <paramref name="assemblyName"/> by searching through
-        /// the specified <paramref name="assemblySearchPaths"/>. The first successful load is returned.
-        /// </summary>
-        /// <param name="assemblyName">The assembly to locate.</param>
-        /// <param name="assemblySearchPaths">List of full paths to folders to search.</param>
-        /// <returns><c>null</c> for failure, else the first assembly loaded.</returns>
-        /*
-         * internal Assembly ReflectionOnlyLoadFromSearchPaths(AssemblyName assemblyName, IEnumerable<string> assemblySearchPaths)
-        {
-            string baseName = assemblyName.Name;
-            foreach (string path in assemblySearchPaths)
-            {
-                string fullPath = Path.Combine(path, baseName) + ".dll";
-                if (File.Exists(fullPath))
-                {
-                    Assembly assembly = ReflectionOnlyLoadFrom(fullPath, null);
-                    if (assembly != null)
-                    {
-                        return assembly;
-                    }
-                }
-            }
-            return null;
-        }
-        */
     }
 }

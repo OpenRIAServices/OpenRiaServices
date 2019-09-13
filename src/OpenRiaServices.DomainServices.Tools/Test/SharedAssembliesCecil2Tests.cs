@@ -136,10 +136,15 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 typeof(Int32),
                 typeof(string),
                 typeof(Decimal),
+                typeof(List<int>),
+                typeof(Dictionary<int, string>)
             };
 
             Type[] nonSharedTypes = new Type[] {
-                typeof(SerializableAttribute),
+                typeof(DomainService),
+                typeof(List<DomainService>),
+                typeof(DomainService[])
+                // Below is fomr System.IO.Compression.Filesystem which is not referenced by client
                 //typeof(System.Xml.Linq.XElement)
             };
 
@@ -175,8 +180,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 Assert.IsNull(sType, "Expected type " + t.Name + " to be considered *not* shared.");
             }
         }
-
-
 
         [Description("SharedAssembliesManaged service logs an info message for nonexistent assembly file")]
         [TestMethod]
