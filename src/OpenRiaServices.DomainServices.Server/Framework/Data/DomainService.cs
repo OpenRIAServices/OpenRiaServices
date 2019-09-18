@@ -285,8 +285,7 @@ namespace OpenRiaServices.DomainServices.Server
                 object[] parameters = queryDescription.ParameterValues;
 
                 // Authentication check - will throw if unauthorized
-                List<ValidationResult> errors = new List<ValidationResult>();
-                if (!this.ValidateMethodCall(queryDescription.Method, parameters, errors))
+                if (!this.ValidateMethodCall(queryDescription.Method, parameters, out List<ValidationResult> errors))
                 {
                     validationErrorList = new List<ValidationResult>();
                     foreach (ValidationResult error in errors)
@@ -437,8 +436,7 @@ namespace OpenRiaServices.DomainServices.Server
                 this.EnsureInitialized();
                 this.CheckOperationType(DomainOperationType.Invoke);
 
-                List<ValidationResult> errors = new List<ValidationResult>();
-                if (!this.ValidateMethodCall(invokeDescription.Method, invokeDescription.ParameterValues, errors))
+                if (!this.ValidateMethodCall(invokeDescription.Method, invokeDescription.ParameterValues, out List<ValidationResult> errors))
                 {
                     var validationErrorsList = new List<ValidationResult>();
                     foreach (ValidationResult error in errors)
@@ -1194,11 +1192,19 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="parameters">The parameters to pass to the method.</param>
         /// <param name="validationResults">The collection to which we can append validation results.</param>
         /// <returns><c>true</c> if the parameters are valid, <c>false</c> otherwise.</returns>
-        private bool ValidateMethodCall(DomainOperationEntry domainOperationEntry, object[] parameters, List<ValidationResult> validationResults)
+        private bool ValidateMethodCall(DomainOperationEntry domainOperationEntry, object[] parameters, out List<ValidationResult> validationResults)
         {
             // First do an authentication check and throw immediately if unauthorized
             this.ValidateMethodPermissions(domainOperationEntry, /* entity */ null);
 
+            // Then do validaiton only if required
+            if (!domainOperationEntry.RequiresValidation)
+            {
+                validationResults = null;
+                return true;
+            }
+
+            validationResults = new List<ValidationResult>();
             ValidationContext validationContext = ValidationUtilities.CreateValidationContext(this, this.ValidationContext);
 
             // First do method level and simple parameter validation
