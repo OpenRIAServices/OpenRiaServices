@@ -5,6 +5,7 @@ Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaS
 
 Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
 
+LGTM [![Total alerts](https://img.shields.io/lgtm/alerts/g/OpenRIAServices/OpenRiaServices.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/OpenRIAServices/OpenRiaServices/alerts/)
 
 <!-- Below badges should be reenabled once new scripts for appveyor build is set up
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
