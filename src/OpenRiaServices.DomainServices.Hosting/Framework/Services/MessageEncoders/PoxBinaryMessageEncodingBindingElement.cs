@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading;
@@ -255,15 +256,196 @@ namespace OpenRiaServices.DomainServices.Client
 
                 message.Properties.Encoder = this;
 
-                using (MemoryStream ms = new MemoryStream())
-                using (XmlDictionaryWriter writer = XmlDictionaryWriter.CreateBinaryWriter(ms))
+                using (var stream = new BufferManagerStream(bufferManager, messageOffset, 2 * 1024, maxMessageSize))
                 {
-                    message.WriteMessage(writer);
-                    writer.Flush();
+                    using (XmlDictionaryWriter writer = XmlDictionaryWriter.CreateBinaryWriter(stream))
+                    {
+                        message.WriteMessage(writer);
+                        writer.Flush();
 
-                    byte[] buffer = bufferManager.TakeBuffer((int)ms.Position + messageOffset);
-                    Buffer.BlockCopy(ms.GetBuffer(), 0, buffer, messageOffset, (int)ms.Position);
-                    return new ArraySegment<byte>(buffer, messageOffset, (int)ms.Position);
+                        return stream.GetArrayAndDispose();
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Stream optimized for usage by <see cref="XmlBinaryWriter"/> without unneccessary 
+            /// allocations on LOH.
+            /// It writes directly to memory pooled by a <see cref="BufferManager"/> so that it 
+            /// that the memory is pooled and can be returnedd directly without additional copies 
+            /// (for small messages) by <see cref="PoxBinaryMessageEncoder.WriteMessage(Message, int, BufferManager, int)" />
+            /// </summary>
+            internal class BufferManagerStream : Stream
+            {
+                private static readonly bool Is64BitProcess = Environment.Is64BitProcess;
+                private readonly BufferManager _bufferManager;
+                private readonly int _offset;
+                private int _bufferWritten;
+                private readonly int _maxSize;
+                // "Current" buffer
+                private byte[] _buffer;
+                private System.Collections.Generic.List<byte[]> _bufferList;
+                private int _position;
+
+                public BufferManagerStream(BufferManager bufferManager, int offset, int minSize, int maxSize)
+                {
+                    _bufferManager = bufferManager;
+                    _offset = offset;
+                    _bufferWritten = offset;
+                    _maxSize = maxSize;
+                    _buffer = bufferManager.TakeBuffer(minSize + _bufferWritten);
+                }
+
+                public override bool CanRead => true;
+
+                public override bool CanSeek => false;
+
+                public override bool CanWrite => true;
+
+                public override long Length => throw new NotImplementedException();
+
+                public override long Position { get => _position; set => throw new NotImplementedException(); }
+
+                public override void Flush()
+                {
+
+                }
+
+                public override int Read(byte[] buffer, int offset, int count)
+                {
+                    throw new NotImplementedException();
+                }
+
+                public override long Seek(long offset, SeekOrigin origin)
+                {
+                    throw new NotImplementedException();
+                }
+
+                public override void SetLength(long value)
+                {
+                    throw new NotImplementedException();
+                }
+
+                public override void Write(byte[] buffer, int offset, int count)
+                {
+                    // Argument validation is skipped since it is only used by 
+                    // BinaryXml writer which we trust to always give correct data
+
+                    do
+                    {
+                        if (count < _buffer.Length - _bufferWritten)
+                        {
+                            FastCopy(buffer, offset, _buffer, _bufferWritten, count);
+                            _position += count;
+                            _bufferWritten += count;
+                            break;
+                        }
+                        else // TODO: consider case with exact size
+                        {
+                            // Fill _buffer
+                            int toCopy = _buffer.Length - _bufferWritten;
+                            FastCopy(buffer, offset, _buffer, _bufferWritten, toCopy);
+                            _position += toCopy;
+                            offset += toCopy;
+                            count -= toCopy;
+
+                            // Allocate next
+                            if (_bufferList == null)
+                                _bufferList = new System.Collections.Generic.List<byte[]>(capacity: 16);
+                            _bufferList.Add(_buffer);
+
+                            // Ensure we never return buffer twice in case TakeBuffer below throws
+                            _buffer = null;
+                            _buffer = _bufferManager.TakeBuffer(Math.Min(_position, _maxSize));
+                            _bufferWritten = 0;
+                        }
+                    } while (count > 0);
+                }
+
+                protected override void Dispose(bool disposing)
+                {
+                    try
+                    {
+                        base.Dispose(disposing);
+                    }
+                    finally
+                    {
+                        if (_buffer != null)
+                        {
+                            _bufferManager.ReturnBuffer(_buffer);
+                            _buffer = null;
+                        }
+
+                        if (_bufferList != null)
+                        {
+                            foreach (var buffer in _bufferList)
+                                _bufferManager.ReturnBuffer(buffer);
+                            _bufferList = null;
+                        }
+                    }
+                }
+
+                /// <summary>
+                /// Copies bytes from <paramref name="src"/> to <paramref name="dest"/> using fastes 
+                /// copy based on process bitness (x86 / x64)
+                /// </summary>
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                private static unsafe void FastCopy(byte[] src, int srcOffset, byte[] dest, int destOffset, int count)
+                {
+                    if (count == 0)
+                        return;
+
+                    if (Is64BitProcess)
+                    {
+                        fixed (byte* s = &src[srcOffset], d = &dest[destOffset])
+                            Buffer.MemoryCopy(s, d, dest.Length - destOffset, count);
+                    }
+                    else
+                    {
+                        // For x86 it is significantly faster to do copying of int's and longs
+                        // or similar in managed code for smaller counts.
+                        // Luckily the binary WxmlWriter will buffer writes up around 512 bytes
+                        // So we do not expect a large number of writes with small counts
+                        Buffer.BlockCopy(src, srcOffset, dest, destOffset, count);
+                    }
+                }
+
+                public ArraySegment<byte> GetArrayAndDispose()
+                {
+                    // We only have a single segment, return it directly with no copying
+                    if (_bufferList == null)
+                    {
+                        var buffer = _buffer;
+                        _buffer = null;
+
+                        System.Diagnostics.Debug.Assert(_bufferWritten == _position + _offset);
+                        Dispose();
+                        return new ArraySegment<byte>(buffer, _offset, _position);
+                    }
+                    else
+                    {
+                        int totalSize = _offset + _position;
+                        var buffer = _bufferManager.TakeBuffer(totalSize);
+
+                        // Copy in reverse order from filled to utilize CPU caches better
+                        // Last one is _buffer which can be poartially filled
+                        int destOffset = totalSize - _bufferWritten;
+                        FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
+
+                        // Buffers in list are all full 
+                        for (int i = _bufferList.Count - 1; i > 0; --i)
+                        {
+                            destOffset -= _bufferList[i].Length;
+                            FastCopy(_bufferList[i], 0, buffer, destOffset, _bufferList[i].Length);
+                        }
+
+                        // First buffer has offset
+                        FastCopy(_bufferList[0], _offset, buffer, _offset, _bufferList[0].Length - _offset);
+                        System.Diagnostics.Debug.Assert(destOffset - (_bufferList[0].Length - _offset) == _offset);
+
+                        Dispose();
+                        return new ArraySegment<byte>(buffer, _offset, _position);
+                    }
                 }
             }
 
