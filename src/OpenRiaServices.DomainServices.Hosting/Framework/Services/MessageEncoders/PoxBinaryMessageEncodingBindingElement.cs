@@ -157,7 +157,7 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         // Message encoder for Binary XML.
-        private class PoxBinaryMessageEncoder : MessageEncoder
+        internal class PoxBinaryMessageEncoder : MessageEncoder
         {
             private const string Fault = "Fault";
             private const string Namespace = "http://schemas.microsoft.com/ws/2005/05/envelope/none";
@@ -271,9 +271,9 @@ namespace OpenRiaServices.DomainServices.Client
             /// <summary>
             /// Stream optimized for usage by <see cref="XmlBinaryWriter"/> without unneccessary 
             /// allocations on LOH.
-            /// It writes directly to memory pooled by a <see cref="BufferManager"/> so that it 
-            /// that the memory is pooled and can be returnedd directly without additional copies 
-            /// (for small messages) by <see cref="PoxBinaryMessageEncoder.WriteMessage(Message, int, BufferManager, int)" />
+            /// It writes directly to memory pooled by a <see cref="BufferManager"/> in order to 
+            /// avoid allocations and be able to return memory directly without additional copies 
+            /// (for small messages).
             /// </summary>
             internal class BufferManagerStream : Stream
             {
@@ -308,7 +308,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 public override void Flush()
                 {
-
+                    // Nothing to do
                 }
 
                 public override int Read(byte[] buffer, int offset, int count)
@@ -329,18 +329,18 @@ namespace OpenRiaServices.DomainServices.Client
                 public override void Write(byte[] buffer, int offset, int count)
                 {
                     // Argument validation is skipped since it is only used by 
-                    // BinaryXml writer which we trust to always give correct data
+                    // BinaryXml writer which we trust to always give valid input
 
                     do
                     {
-                        if (count < _buffer.Length - _bufferWritten)
+                        if (count <= _buffer.Length - _bufferWritten)
                         {
                             FastCopy(buffer, offset, _buffer, _bufferWritten, count);
                             _position += count;
                             _bufferWritten += count;
                             break;
                         }
-                        else // TODO: consider case with exact size
+                        else
                         {
                             // Fill _buffer
                             int toCopy = _buffer.Length - _bufferWritten;
