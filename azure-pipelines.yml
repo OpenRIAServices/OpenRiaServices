@@ -10,7 +10,7 @@ steps:
 
 - task: NuGetToolInstaller@0
   inputs:
-    versionSpec: 5.0.2
+    versionSpec: 5.2.0
     
 - task: GitVersion@4
   displayName: GitVersion
@@ -25,6 +25,7 @@ steps:
     
 - task: SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
+  enabled: false
   inputs:
     SonarCloud: 'sonarcloud.io'
     organization: openriaservices
@@ -36,8 +37,18 @@ steps:
      # Put one key=value per line, example:
      sonar.exclusions=src\VisualStudio/ItemTemplates/**,src\VisualStudio/Templates/**;
 
+- task: synopsys-coverity@1
+  inputs:
+    coverityService: 'coverity scan'
+    projectName: 'Daniel-Svensson/OpenRiaServices'
+    checkIssues: true
+    coverityBuildDirectory: '$(Build.Repository.LocalPath)'
+    buildCommand: 'msbuild /t:Rebuild @(Solution)'
+    streamName: master
+
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
+  enabled: false
   inputs:
     solution: '$(Solution)'
     platform: '$(BuildPlatform)'
@@ -51,8 +62,10 @@ steps:
    .\Setup-TestDatabases.ps1
    
   displayName: 'Setup database'
+  enabled: false
 
 - task: VSTest@2
+  enabled: false
   displayName: 'Run tests'
   inputs:
     testAssemblyVer2: |
@@ -72,6 +85,7 @@ steps:
   timeoutInMinutes: 40
 
 - task: SonarCloudAnalyze@1
+  enabled: false
   displayName: 'Run Code Analysis'
   continueOnError: true
   condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
