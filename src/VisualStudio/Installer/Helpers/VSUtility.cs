@@ -73,7 +73,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             try
             {
                 // if we can't open it as an MSBuild project, we do anything with it
-                var p = project.AsMSBuildProject();
+                project.AsMSBuildProject();
                 return true;
             }
             catch (Exception)
