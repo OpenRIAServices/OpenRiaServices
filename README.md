@@ -10,7 +10,7 @@ LGTM [![Total alerts](https://img.shields.io/lgtm/alerts/g/OpenRIAServices/OpenR
 <!-- Below badges should be reenabled once new scripts for appveyor build is set up
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
 -->
-Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarqube.com/OpenRIAServices_OpenRiaServices/tech_debt.svg)](https://sonarcloud.io/dashboard?id=OpenRIAServices_OpenRiaServices)
+Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarcloud.io/OpenRIAServices_OpenRiaServices/tech_debt.svg)](https://sonarcloud.io/dashboard?id=OpenRIAServices_OpenRiaServices)
 
 
 The Open RIA Services project continues what was previously known as WCF RIA Services.
