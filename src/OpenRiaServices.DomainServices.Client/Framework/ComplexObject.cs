@@ -514,7 +514,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="context">The serialization context</param>
         [OnDeserialized]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void OnDeserialized(StreamingContext context)
+        internal void OnDeserialized(StreamingContext context)
         {
             this._isDeserializing = false;
         }
@@ -525,7 +525,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="context">The serialization context</param>
         [OnDeserializing]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void OnDeserializing(StreamingContext context)
+        internal void OnDeserializing(StreamingContext context)
         {
             this._isDeserializing = true;
         }
