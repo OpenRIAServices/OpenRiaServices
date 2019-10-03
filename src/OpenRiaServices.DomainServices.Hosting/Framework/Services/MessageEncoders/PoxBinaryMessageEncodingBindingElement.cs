@@ -256,7 +256,14 @@ namespace OpenRiaServices.DomainServices.Client
 
                 message.Properties.Encoder = this;
 
-                using (var stream = new BufferManagerStream(bufferManager, messageOffset, 2 * 1024, maxMessageSize))
+                /// PERF: 
+                /// For further imprioved perf we should look into adopting a similar behaviour as for the 
+                /// in binary encoding which performs *size prediction* 
+                /// https://referencesource.microsoft.com/#System.ServiceModel/System/ServiceModel/Channels/BufferedMessageWriter.cs,ed72c7ce79a15637
+                /// that should allow us to skip memory copies and further improve performance.
+                /// 
+                /// We should be able to pool both the stream and the binary writer togheter with size data
+                using (var stream = new BufferManagerStream(bufferManager, messageOffset, minAllocationSize: 2 * 1024, maxAllocationSize: maxMessageSize))
                 {
                     using (XmlDictionaryWriter writer = XmlDictionaryWriter.CreateBinaryWriter(stream))
                     {
@@ -287,13 +294,13 @@ namespace OpenRiaServices.DomainServices.Client
                 private System.Collections.Generic.List<byte[]> _bufferList;
                 private int _position;
 
-                public BufferManagerStream(BufferManager bufferManager, int offset, int minSize, int maxSize)
+                public BufferManagerStream(BufferManager bufferManager, int offset, int minAllocationSize, int maxAllocationSize)
                 {
                     _bufferManager = bufferManager;
                     _offset = offset;
                     _bufferWritten = offset;
-                    _maxSize = maxSize;
-                    _buffer = bufferManager.TakeBuffer(minSize + _bufferWritten);
+                    _maxSize = maxAllocationSize;
+                    _buffer = bufferManager.TakeBuffer(minAllocationSize + _bufferWritten);
                 }
 
                 public override bool CanRead => true;
@@ -331,8 +338,12 @@ namespace OpenRiaServices.DomainServices.Client
                     // Argument validation is skipped since it is only used by 
                     // BinaryXml writer which we trust to always give valid input
 
+                    // Note: BinaryXml buffers up to 512 bytesso we should expect most writes to be around 
+                    // 500+ bytes (smaller if the next write is a long string or byte array)
+
                     do
                     {
+                        // Write bufffer
                         if (count <= _buffer.Length - _bufferWritten)
                         {
                             FastCopy(buffer, offset, _buffer, _bufferWritten, count);
@@ -349,13 +360,13 @@ namespace OpenRiaServices.DomainServices.Client
                             offset += toCopy;
                             count -= toCopy;
 
-                            // Allocate next
+                            // Save current buffer in list before allocating a new buffer
                             if (_bufferList == null)
                                 _bufferList = new System.Collections.Generic.List<byte[]>(capacity: 16);
                             _bufferList.Add(_buffer);
-
                             // Ensure we never return buffer twice in case TakeBuffer below throws
                             _buffer = null;
+
                             _buffer = _bufferManager.TakeBuffer(Math.Min(_position, _maxSize));
                             _bufferWritten = 0;
                         }
@@ -428,18 +439,18 @@ namespace OpenRiaServices.DomainServices.Client
                         var buffer = _bufferManager.TakeBuffer(totalSize);
 
                         // Copy in reverse order from filled to utilize CPU caches better
-                        // Last one is _buffer which can be poartially filled
+                        // _buffer might only be partially filled
                         int destOffset = totalSize - _bufferWritten;
                         FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
 
-                        // Buffers in list are all full 
+                        // Buffers in list are all full
                         for (int i = _bufferList.Count - 1; i > 0; --i)
                         {
                             destOffset -= _bufferList[i].Length;
                             FastCopy(_bufferList[i], 0, buffer, destOffset, _bufferList[i].Length);
                         }
 
-                        // First buffer has offset
+                        // First buffer might have offset
                         FastCopy(_bufferList[0], _offset, buffer, _offset, _bufferList[0].Length - _offset);
                         System.Diagnostics.Debug.Assert(destOffset - (_bufferList[0].Length - _offset) == _offset);
 
