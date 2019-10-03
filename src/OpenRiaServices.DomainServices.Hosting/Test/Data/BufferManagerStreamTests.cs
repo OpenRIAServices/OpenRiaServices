@@ -13,15 +13,15 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
     [TestClass]
     public class BufferManagerStreamTests
     {
-        // Buffer with bytes [0..255]
+        // Buffer with bytes [1..255]
         private readonly byte[] _input;
 
         public BufferManagerStreamTests()
         {
-            _input = new byte[256];
+            _input = new byte[255];
             for (int i = 0; i < _input.Length; ++i)
             {
-                _input[i] = (byte)i;
+                _input[i] = (byte)(i + 1);
             }
         }
 
@@ -34,6 +34,10 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
             SmallWrite(offset: 0);
         }
 
+
+        /// <summary>
+        /// Only partially fill first buffer but start at an offset
+        /// </summary>
         [TestMethod]
         public void SmallWriteWithOffset()
         {
@@ -156,11 +160,13 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
 
             for (int i = 0; i < count; ++i)
             {
-                if (i != buffer.Array[buffer.Offset + i])
+                byte expected = (byte)(i + 1);
+                byte actual = buffer.Array[buffer.Offset + i];
+                if (expected != actual)
                 {
                     Dump(buffer.Array, count);
 
-                    Assert.Fail($"Buffer contents is wrong, expected {i} but buffer[{buffer.Offset} + {i}] = {buffer.Array[buffer.Offset + i]}");
+                    Assert.Fail($"Buffer contents is wrong, expected {expected} but buffer[{buffer.Offset} + {i}] = {actual}");
                 }
             }
         }
@@ -198,8 +204,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
 
             public override void ReturnBuffer(byte[] buffer)
             {
-                bool removed = _rented.Remove(buffer);
-                if (!removed)
+                if (!_rented.Remove(buffer))
                 {
                     Assert.Fail("Buffer was not rented (returned twice?");
                 }
