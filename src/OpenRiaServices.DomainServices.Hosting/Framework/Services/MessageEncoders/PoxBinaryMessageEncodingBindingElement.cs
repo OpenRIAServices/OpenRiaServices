@@ -286,12 +286,16 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 private static readonly bool Is64BitProcess = Environment.Is64BitProcess;
                 private readonly BufferManager _bufferManager;
-                private readonly int _offset;
-                private int _bufferWritten;
                 private readonly int _maxSize;
-                // "Current" buffer
+                // The offset into the final byte array where our content should start
+                private readonly int _offset;
+                // number of bytes written to _buffer, used as offset into _buffer where we write next time
+                private int _bufferWritten;
+                // "Current" buffer where the next write should go
                 private byte[] _buffer;
+                // Any "previous" buffers already filled
                 private System.Collections.Generic.List<byte[]> _bufferList;
+                // String "position" (total size so far)
                 private int _position;
 
                 public BufferManagerStream(BufferManager bufferManager, int offset, int minAllocationSize, int maxAllocationSize)
@@ -300,10 +304,10 @@ namespace OpenRiaServices.DomainServices.Client
                     _offset = offset;
                     _bufferWritten = offset;
                     _maxSize = maxAllocationSize;
-                    _buffer = bufferManager.TakeBuffer(minAllocationSize + _bufferWritten);
+                    _buffer = bufferManager.TakeBuffer(minAllocationSize + offset);
                 }
 
-                public override bool CanRead => true;
+                public override bool CanRead => false;
 
                 public override bool CanSeek => false;
 
@@ -343,6 +347,8 @@ namespace OpenRiaServices.DomainServices.Client
 
                     do
                     {
+                        EnsureBufferCapacity();
+
                         // Write bufffer
                         if (count <= _buffer.Length - _bufferWritten)
                         {
@@ -357,20 +363,32 @@ namespace OpenRiaServices.DomainServices.Client
                             int toCopy = _buffer.Length - _bufferWritten;
                             FastCopy(buffer, offset, _buffer, _bufferWritten, toCopy);
                             _position += toCopy;
+                            _bufferWritten += toCopy;
                             offset += toCopy;
                             count -= toCopy;
-
-                            // Save current buffer in list before allocating a new buffer
-                            if (_bufferList == null)
-                                _bufferList = new System.Collections.Generic.List<byte[]>(capacity: 16);
-                            _bufferList.Add(_buffer);
-                            // Ensure we never return buffer twice in case TakeBuffer below throws
-                            _buffer = null;
-
-                            _buffer = _bufferManager.TakeBuffer(Math.Min(_position, _maxSize));
-                            _bufferWritten = 0;
                         }
                     } while (count > 0);
+                }
+
+                /// <summary>
+                /// Allocate more space if buffer is full.
+                /// Ensures _buffer is non null and has space to write more bytes
+                /// </summary>
+                private void EnsureBufferCapacity()
+                {
+                    // There is space left
+                    if (_bufferWritten < _buffer.Length)
+                        return;
+
+                    // Save current buffer in list before allocating a new buffer
+                    if (_bufferList == null)
+                        _bufferList = new System.Collections.Generic.List<byte[]>(capacity: 16);
+                    _bufferList.Add(_buffer);
+                    // Ensure we never return buffer twice in case TakeBuffer below throws
+                    _buffer = null;
+
+                    _buffer = _bufferManager.TakeBuffer(Math.Min(_position, _maxSize));
+                    _bufferWritten = 0;
                 }
 
                 protected override void Dispose(bool disposing)
@@ -406,7 +424,7 @@ namespace OpenRiaServices.DomainServices.Client
                     if (count == 0)
                         return;
 
-                    if (Is64BitProcess)
+                    if (Is64BitProcess && count <= 1024)
                     {
                         fixed (byte* s = &src[srcOffset], d = &dest[destOffset])
                             Buffer.MemoryCopy(s, d, dest.Length - destOffset, count);
