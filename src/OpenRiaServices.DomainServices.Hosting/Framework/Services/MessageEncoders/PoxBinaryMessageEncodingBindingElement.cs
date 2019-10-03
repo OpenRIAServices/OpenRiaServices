@@ -344,29 +344,17 @@ namespace OpenRiaServices.DomainServices.Client
 
                     // Note: BinaryXml buffers up to 512 bytesso we should expect most writes to be around 
                     // 500+ bytes (smaller if the next write is a long string or byte array)
-
                     do
                     {
                         EnsureBufferCapacity();
 
-                        // Write bufffer
-                        if (count <= _buffer.Length - _bufferWritten)
-                        {
-                            FastCopy(buffer, offset, _buffer, _bufferWritten, count);
-                            _position += count;
-                            _bufferWritten += count;
-                            break;
-                        }
-                        else
-                        {
-                            // Fill _buffer
-                            int toCopy = _buffer.Length - _bufferWritten;
-                            FastCopy(buffer, offset, _buffer, _bufferWritten, toCopy);
-                            _position += toCopy;
-                            _bufferWritten += toCopy;
-                            offset += toCopy;
-                            count -= toCopy;
-                        }
+                        // Write up to count bytes, but never more than the rest of the buffer
+                        int toCopy = Math.Min(count, _buffer.Length - _bufferWritten);
+                        FastCopy(buffer, offset, _buffer, _bufferWritten, toCopy);
+                        _position += toCopy;
+                        _bufferWritten += toCopy;
+                        offset += toCopy;
+                        count -= toCopy;
                     } while (count > 0);
                 }
 
@@ -387,7 +375,8 @@ namespace OpenRiaServices.DomainServices.Client
                     // Ensure we never return buffer twice in case TakeBuffer below throws
                     _buffer = null;
 
-                    _buffer = _bufferManager.TakeBuffer(Math.Min(_position, _maxSize));
+                    int nextSize = Math.Min(_position * 2, _maxSize);
+                    _buffer = _bufferManager.TakeBuffer(nextSize);
                     _bufferWritten = 0;
                 }
 
@@ -416,7 +405,7 @@ namespace OpenRiaServices.DomainServices.Client
 
                 /// <summary>
                 /// Copies bytes from <paramref name="src"/> to <paramref name="dest"/> using fastes 
-                /// copy based on process bitness (x86 / x64)
+                /// copy based on process bitness (x86 / x64) tested on .Net Framework 4.8
                 /// </summary>
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static unsafe void FastCopy(byte[] src, int srcOffset, byte[] dest, int destOffset, int count)
@@ -432,9 +421,8 @@ namespace OpenRiaServices.DomainServices.Client
                     else
                     {
                         // For x86 it is significantly faster to do copying of int's and longs
-                        // or similar in managed code for smaller counts.
-                        // Luckily the binary WxmlWriter will buffer writes up around 512 bytes
-                        // So we do not expect a large number of writes with small counts
+                        // or similar in managed code for smaller counts (below 100-200)
+                        // But we expect most copies to be larger since xml writer buffer around 500 bytes
                         Buffer.BlockCopy(src, srcOffset, dest, destOffset, count);
                     }
                 }
@@ -453,27 +441,49 @@ namespace OpenRiaServices.DomainServices.Client
                     }
                     else
                     {
-                        int totalSize = _offset + _position;
-                        var buffer = _bufferManager.TakeBuffer(totalSize);
-
                         // Copy in reverse order from filled to utilize CPU caches better
                         // _buffer might only be partially filled
+                        int totalSize = _offset + _position;
                         int destOffset = totalSize - _bufferWritten;
-                        FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
+                        byte[] buffer = null;
 
-                        // Buffers in list are all full
-                        for (int i = _bufferList.Count - 1; i > 0; --i)
+                        try
                         {
-                            destOffset -= _bufferList[i].Length;
-                            FastCopy(_bufferList[i], 0, buffer, destOffset, _bufferList[i].Length);
+                            // Reuse the "current" buffer if it is large enough
+                            if (_position <= _buffer.Length)
+                            {
+                                buffer = _buffer;
+                                FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
+                                _buffer = null;
+                            }
+                            else
+                            {
+                                buffer = _bufferManager.TakeBuffer(totalSize);
+                                FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
+                            }
+
+                            // Buffers in list are all full
+                            for (int i = _bufferList.Count - 1; i > 0; --i)
+                            {
+                                destOffset -= _bufferList[i].Length;
+                                FastCopy(_bufferList[i], 0, buffer, destOffset, _bufferList[i].Length);
+                            }
+
+                            // First buffer might have offset
+                            FastCopy(_bufferList[0], _offset, buffer, _offset, _bufferList[0].Length - _offset);
+                            System.Diagnostics.Debug.Assert(destOffset - (_bufferList[0].Length - _offset) == _offset);
+
+                            Dispose();
+
+                            return new ArraySegment<byte>(buffer, _offset, _position);
+
                         }
-
-                        // First buffer might have offset
-                        FastCopy(_bufferList[0], _offset, buffer, _offset, _bufferList[0].Length - _offset);
-                        System.Diagnostics.Debug.Assert(destOffset - (_bufferList[0].Length - _offset) == _offset);
-
-                        Dispose();
-                        return new ArraySegment<byte>(buffer, _offset, _position);
+                        catch
+                        {
+                            if (buffer != null)
+                                _bufferManager.ReturnBuffer(buffer);
+                            throw;
+                        }
                     }
                 }
             }

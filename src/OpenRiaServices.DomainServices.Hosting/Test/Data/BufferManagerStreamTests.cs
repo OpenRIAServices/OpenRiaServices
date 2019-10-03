@@ -98,6 +98,32 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
         }
 
         [TestMethod]
+        public void ReuseLastBufferIfPossible()
+        {
+            int initialOffset = 0, initalBufferSize = 4;
+            int buffer2Size = initalBufferSize * 2;
+            int buffer3Size = initalBufferSize + buffer2Size;
+            var manager = new BufferManageMock();
+            using (var stream = new BufferManagerStream(manager, initialOffset, initalBufferSize, 1024))
+            {
+                // Fill first and second buffers full
+                stream.Write(_input, 0, initalBufferSize);
+                stream.Write(_input, initalBufferSize, buffer2Size);
+                Assert.AreEqual(buffer2Size, manager.Allocated[1].Length, "This test assumed allocation size was wrong");
+
+                // Write next one up just a little so that everyhing should fit in the 3rd
+                int streamOffsetLastBuffer = (int)stream.Position;
+                stream.Write(_input, streamOffsetLastBuffer, streamOffsetLastBuffer);
+
+                Assert.AreEqual(3, manager.Allocated.Count, "Test assumes 3 buffers");
+                Assert.AreEqual((int)stream.Position, manager.Allocated[2].Length, "This test assumes allocation size is enough");
+
+                var buffer = VerifyStreamContents(stream, initialOffset, streamOffsetLastBuffer * 2, manager);
+                Assert.AreSame(manager.Allocated[2], buffer.Array);
+            }
+        }
+
+        [TestMethod]
         public void MultipleWrites()
         {
             int initialOffset = 0;
