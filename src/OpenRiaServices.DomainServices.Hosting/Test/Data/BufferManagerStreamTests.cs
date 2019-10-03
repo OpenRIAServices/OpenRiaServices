@@ -29,14 +29,25 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
         /// Only partially fill first buffer
         /// </summary>
         [TestMethod]
-        public void SingleSmallWrite()
+        public void SmallWrite()
+        {
+            SmallWrite(offset: 0);
+        }
+
+        [TestMethod]
+        public void SmallWriteWithOffset()
+        {
+            SmallWrite(offset: 6);
+        }
+
+        public void SmallWrite(int offset)
         {
             var manager = new BufferManageMock();
-            using (var stream = new BufferManagerStream(manager, 0, 4, 1024))
+            using (var stream = new BufferManagerStream(manager, offset, 4, 1024))
             {
                 stream.Write(_input, 0, 2);
 
-                var buffer = VerifyStreamContents(stream, 0, 2, manager);
+                var buffer = VerifyStreamContents(stream, offset, 2, manager);
                 Assert.AreEqual(1, manager.Allocated.Count, "Should only have allocated a single buffer");
                 Assert.AreSame(manager.Allocated[0], buffer.Array, "Should reuse initial array");
             }
@@ -46,7 +57,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
         /// Only partially fill first buffer
         /// </summary>
         [TestMethod]
-        public void FillInitialBuffer()
+        public void SmallWriteFullBuffer()
         {
             int initialOffset = 0, minBufferSize = 4;
             var manager = new BufferManageMock();
@@ -62,12 +73,22 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
         [TestMethod]
         public void LargeWrite()
         {
-            int initialOffset = 0;
+            LargeWrite(offset: 0);
+        }
+
+        [TestMethod]
+        public void LargeWriteWithOffset()
+        {
+            LargeWrite(offset: 5);
+        }
+
+        public void LargeWrite(int offset)
+        {
             var manager = new BufferManageMock();
-            using (var stream = new BufferManagerStream(manager, initialOffset, 4, 1024))
+            using (var stream = new BufferManagerStream(manager, offset, 4, 1024))
             {
                 stream.Write(_input, 0, 40);
-                VerifyStreamContents(stream, initialOffset, 40, manager);
+                VerifyStreamContents(stream, offset, 40, manager);
                 Assert.IsTrue(manager.Allocated.Count > 2, "Multiple buffers should have been used");
             }
         }
