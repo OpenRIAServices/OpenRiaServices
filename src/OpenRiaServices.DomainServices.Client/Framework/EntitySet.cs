@@ -661,13 +661,6 @@ namespace OpenRiaServices.DomainServices.Client
         {
             if (entity == null)
             {
-
-/* Unmerged change from project 'OpenRiaServices.DomainServices.Client (netstandard2.0)'
-Before:
-                throw new ArgumentNullException("entity");
-After:
-                throw new ArgumentNullException("entity));
-*/
                 throw new ArgumentNullException(nameof(entity));
             }
 

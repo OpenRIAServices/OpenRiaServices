@@ -18,6 +18,8 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
     {
         public static Project GetActiveProject(IVsMonitorSelection vsMonitorSelection)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
             IntPtr ppHier = IntPtr.Zero;
             uint pitemid;
             IVsMultiItemSelect ppMIS;

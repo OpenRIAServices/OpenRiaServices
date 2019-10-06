@@ -43,6 +43,8 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
 
         private void VsDialogWindow_Initialized(object sender, System.EventArgs e)
         {
+            Dispatcher.VerifyAccess();
+
             var noneComboBoxItem = new ComboBoxItem { DataContext = null, Content = "<No Project Set>" };
             //load our combobox items
             this.Projects.Items.Add(noneComboBoxItem);
@@ -72,6 +74,8 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            Dispatcher.VerifyAccess();
+
             var itemAsComboBoxItem = this.Projects.SelectedItem as ComboBoxItem;
             if (itemAsComboBoxItem == null)
             {
