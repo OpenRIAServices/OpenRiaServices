@@ -33,53 +33,23 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         internal static readonly object[] EmptyObjectArray = Array.Empty<object>();
 
-        private static readonly object _inspectorLock = new object();
-        private static AuthenticationSchemes? _authenticationSchemes;
-        private static HttpClientCredentialType? _credentialType;
+        private static readonly Lazy<WebSiteAuthenticationSettings> s_siteAuthenticationSettings = new Lazy<WebSiteAuthenticationSettings>(GetWebsiteAuthenticationSettings, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
         /// <summary>
         /// Gets the default authentication scheme supported by the server
         /// </summary>
-        public static AuthenticationSchemes AuthenticationScheme
-        {
-            get
-            {
-                VerifyAuthenticationMode();
-                return _authenticationSchemes.Value;
-            }
-        }
+        public static AuthenticationSchemes AuthenticationScheme => s_siteAuthenticationSettings.Value.AuthenticationScheme;
 
         /// <summary>
         /// Gets the default credential type supported by the server
         /// </summary>
-        public static HttpClientCredentialType CredentialType
-        {
-            get
-            {
-                VerifyAuthenticationMode();
-                return _credentialType.Value;
-            }
-        }
+        public static HttpClientCredentialType CredentialType => s_siteAuthenticationSettings.Value.CredentialType;
 
-        private static void VerifyAuthenticationMode()
+        private static WebSiteAuthenticationSettings GetWebsiteAuthenticationSettings()
         {
-            // Authentication scheme should never be none.
-            if (_authenticationSchemes == null)
-            {
-                lock (_inspectorLock)
-                {
-                    if (_authenticationSchemes == null)
-                    {
-                        WebServiceHostInspector inspector = new WebServiceHostInspector();
-                        inspector.Inspect();
-                        _authenticationSchemes = inspector.AuthenticationScheme;
-                        _credentialType = inspector.CredentialType;
-
-                        // We can't close the host because it's in a faulted state. Trying to do so will 
-                        // cause a CommunicationException to be thrown.
-                    }
-                }
-            }
+            WebServiceHostInspector inspector = new WebServiceHostInspector();
+            inspector.Inspect();
+            return new WebSiteAuthenticationSettings(inspector.AuthenticationScheme, inspector.CredentialType);
         }
 
         // Populates a contract description from a domain service description.
@@ -255,16 +225,16 @@ namespace OpenRiaServices.DomainServices.Hosting
             return operationDesc;
         }
 
-       /// <summary>
-       /// Get the <see cref="WebInvokeAttribute.UriTemplate"/> which corresponds to the default generated 
-       /// UriTemplate for "GET" methods for a given query operation.
-       /// </summary>
-       /// <param name="operation">the query operation for which to get the UriTemplate</param>
-       /// <returns>the default UriTemplate for "GET" methods in case no UriTemplate is specified</returns>
-       private static string GetDefaultQueryUriTemplate(DomainOperationEntry operation)
-       {
-          StringBuilder stringBuilder = new StringBuilder(operation.Name);
-          if (operation.Parameters.Count > 0)
+        /// <summary>
+        /// Get the <see cref="WebInvokeAttribute.UriTemplate"/> which corresponds to the default generated 
+        /// UriTemplate for "GET" methods for a given query operation.
+        /// </summary>
+        /// <param name="operation">the query operation for which to get the UriTemplate</param>
+        /// <returns>the default UriTemplate for "GET" methods in case no UriTemplate is specified</returns>
+        private static string GetDefaultQueryUriTemplate(DomainOperationEntry operation)
+        {
+            StringBuilder stringBuilder = new StringBuilder(operation.Name);
+            if (operation.Parameters.Count > 0)
             {
                 stringBuilder.Append("?");
                 foreach (DomainOperationParameter parameter in operation.Parameters)
@@ -274,7 +244,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 stringBuilder.Remove(stringBuilder.Length - 1, 1);
             }
             return stringBuilder.ToString();
-         }
+        }
 
         private static OperationDescription CreateOperationDescription(ContractDescription declaringContract, DomainOperationEntry operation)
         {
@@ -298,11 +268,11 @@ namespace OpenRiaServices.DomainServices.Hosting
             else if (operation.Operation == DomainOperation.Query && !((QueryAttribute)operation.OperationAttribute).HasSideEffects)
             {
                 // This is a query with HasSideEffects == false, allow both POST and GET
-               var invoke = ServiceUtility.EnsureBehavior<WebInvokeAttribute>(operationDesc);
-               invoke.Method = "*";
-               // We need to set URI template in order to allow the normal parameters to be extracted from the Uri
-               if (operation.Parameters.Count > 0)
-                  invoke.UriTemplate = GetDefaultQueryUriTemplate(operation);
+                var invoke = ServiceUtility.EnsureBehavior<WebInvokeAttribute>(operationDesc);
+                invoke.Method = "*";
+                // We need to set URI template in order to allow the normal parameters to be extracted from the Uri
+                if (operation.Parameters.Count > 0)
+                    invoke.UriTemplate = GetDefaultQueryUriTemplate(operation);
             }
             else
             {
@@ -581,6 +551,21 @@ namespace OpenRiaServices.DomainServices.Hosting
                 return e.Message;
             }
             return string.Format(CultureInfo.CurrentCulture, Resource.FaultException_InnerExceptionDetails, e.Message, e.InnerException.Message);
+        }
+
+        /// <summary>
+        /// Immutable struct to record values from <see cref="WebServiceHostInspector"/>
+        /// </summary>
+        struct WebSiteAuthenticationSettings
+        {
+            public WebSiteAuthenticationSettings(AuthenticationSchemes authenticationScheme, HttpClientCredentialType credentialType)
+            {
+                AuthenticationScheme = authenticationScheme;
+                CredentialType = credentialType;
+            }
+
+            public AuthenticationSchemes AuthenticationScheme { get; }
+            public HttpClientCredentialType CredentialType { get; }
         }
 
         #region WebServiceHostInspector
