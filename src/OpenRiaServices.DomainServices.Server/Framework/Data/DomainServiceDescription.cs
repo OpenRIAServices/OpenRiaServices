@@ -19,8 +19,10 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     public sealed class DomainServiceDescription
     {
-        private static readonly ConcurrentDictionary<Type, DomainServiceDescription> domainServiceMap = new ConcurrentDictionary<Type, DomainServiceDescription>();
-        private static readonly ConcurrentDictionary<Type, HashSet<Type>> typeDescriptionProviderMap = new ConcurrentDictionary<Type, HashSet<Type>>();
+        private static readonly ConcurrentDictionary<Type, DomainServiceDescription> s_domainServiceMap = new ConcurrentDictionary<Type, DomainServiceDescription>();
+        private static readonly ConcurrentDictionary<Type, HashSet<Type>> s_typeDescriptionProviderMap = new ConcurrentDictionary<Type, HashSet<Type>>();
+        private static readonly Func<Type, DomainServiceDescription> s_createDescriptionFunc = CreateDescription;
+
         private readonly Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>> _submitMethods = new Dictionary<Type, Dictionary<DomainOperation, DomainOperationEntry>>();
         private readonly Dictionary<Type, Dictionary<string, DomainOperationEntry>> _customMethods = new Dictionary<Type, Dictionary<string, DomainOperationEntry>>();
         private readonly Dictionary<string, DomainOperationEntry> _queryMethods = new Dictionary<string, DomainOperationEntry>(StringComparer.OrdinalIgnoreCase);
@@ -36,6 +38,8 @@ namespace OpenRiaServices.DomainServices.Server
         private AttributeCollection _attributes;
         private readonly List<DomainOperationEntry> _operationEntries = new List<DomainOperationEntry>();
         private readonly ConcurrentDictionary<Type, Type> _exposedTypeMap = new ConcurrentDictionary<Type, Type>();
+        private readonly Func<Type, Type> _createSerializationType;
+
         private DomainServiceDescriptionProvider _descriptionProvider;
 
         /// <summary>
@@ -50,6 +54,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
 
             this._domainServiceType = domainServiceType;
+            this._createSerializationType = (Type type) => this.CreateSerializationType(type);
         }
 
         /// <summary>
@@ -66,6 +71,7 @@ namespace OpenRiaServices.DomainServices.Server
             this._domainServiceType = baseDescription._domainServiceType;
             this._attributes = baseDescription._attributes;
             this._operationEntries.AddRange(baseDescription._operationEntries);
+            this._createSerializationType = (Type type) => this.CreateSerializationType(type);
         }
 
         /// <summary>
@@ -388,27 +394,29 @@ namespace OpenRiaServices.DomainServices.Server
         {
             this.EnsureInitialized();
 
-            return this._exposedTypeMap.GetOrAdd(type, t =>
+            return this._exposedTypeMap.GetOrAdd(type, _createSerializationType);
+        }
+
+        private Type CreateSerializationType(Type t)
+        {
+            // Complex types do not support inheritance, return the type.
+            if (this._complexTypes.Contains(t))
             {
-                // Complex types do not support inheritance, return the type.
-                if (this._complexTypes.Contains(type))
-                {
-                    return type;
-                }
+                return t;
+            }
 
-                // The correct type to serialize is the first entity type that is in the
-                // list of known entities, walking back the inheritance chain
-                Type baseType;
-                for (baseType = t; baseType != null; baseType = baseType.BaseType)
+            // The correct type to serialize is the first entity type that is in the
+            // list of known entities, walking back the inheritance chain
+            Type baseType;
+            for (baseType = t; baseType != null; baseType = baseType.BaseType)
+            {
+                if (this._entityTypes.Contains(baseType))
                 {
-                    if (this._entityTypes.Contains(baseType))
-                    {
-                        break;
-                    }
+                    break;
                 }
+            }
 
-                return baseType;
-            });
+            return baseType;
         }
 
         /// <summary>
@@ -494,10 +502,7 @@ namespace OpenRiaServices.DomainServices.Server
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainService_InvalidType, domainServiceType.FullName));
             }
 
-            return domainServiceMap.GetOrAdd(domainServiceType, type =>
-            {
-                return CreateDescription(domainServiceType);
-            });
+            return s_domainServiceMap.GetOrAdd(domainServiceType, s_createDescriptionFunc);
         }
 
         /// <summary>
@@ -791,7 +796,7 @@ namespace OpenRiaServices.DomainServices.Server
         internal static void RegisterCustomTypeDescriptor(TypeDescriptionProvider tdp, Type type)
         {
             // Check if we already registered provider with the specified type.
-            HashSet<Type> existingProviders = typeDescriptionProviderMap.GetOrAdd(type, t =>
+            HashSet<Type> existingProviders = s_typeDescriptionProviderMap.GetOrAdd(type, t =>
                 {
                     return new HashSet<Type>();
                 });
