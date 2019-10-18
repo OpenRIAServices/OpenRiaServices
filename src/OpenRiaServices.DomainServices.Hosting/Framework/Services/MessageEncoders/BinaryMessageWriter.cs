@@ -83,15 +83,14 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Get mazimum buffer size of the last few messages.
+        /// Get estimate based on maximum buffer size of the last few messages.
         /// </summary>
-        /// <returns></returns>
         private int EstimateMessageSize()
         {
-            int min1 = Math.Min(_lastMessageLengths[3], _lastMessageLengths[2]);
-            int min2 = Math.Min(_lastMessageLengths[1], _lastMessageLengths[0]);
+            int min1 = Math.Max(_lastMessageLengths[3], _lastMessageLengths[2]);
+            int min2 = Math.Max(_lastMessageLengths[1], _lastMessageLengths[0]);
 
-            return Math.Min(min2, min1) + 256;
+            return Math.Max(min2, min1) + 256;
         }
 
         private XmlDictionaryWriter GetXmlWriter(BufferManager bufferManager, int offset)
