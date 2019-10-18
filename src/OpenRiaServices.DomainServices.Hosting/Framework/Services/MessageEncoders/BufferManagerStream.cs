@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.ServiceModel.Channels;
-using System.Xml;
 
 #if SERVERFX
 namespace OpenRiaServices.DomainServices.Hosting
@@ -10,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Client
 #endif
 {
     /// <summary>
-    /// Stream optimized for usage by <see cref="XmlDictionaryWriter"/> without unneccessary 
+    /// Stream optimized for usage by <see cref="System.Xml.XmlDictionaryWriter"/> without unneccessary 
     /// allocations on LOH.
     /// It writes directly to memory pooled by a <see cref="BufferManager"/> in order to 
     /// avoid allocations and be able to return memory directly without additional copies 

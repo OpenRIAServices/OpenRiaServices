@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading;
@@ -16,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Client
     /// <summary>
     /// The binding element that specifies the .NET Binary Format for XML used to encode messages.
     /// </summary>
-    internal partial class PoxBinaryMessageEncodingBindingElement : MessageEncodingBindingElement
+    internal class PoxBinaryMessageEncodingBindingElement : MessageEncodingBindingElement
     {
         private readonly XmlDictionaryReaderQuotas _readerQuotas;
 
@@ -157,7 +156,7 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         // Message encoder for Binary XML.
-        internal partial class PoxBinaryMessageEncoder : MessageEncoder
+        private class PoxBinaryMessageEncoder : MessageEncoder
         {
             private const string Fault = "Fault";
             private const string Namespace = "http://schemas.microsoft.com/ws/2005/05/envelope/none";
