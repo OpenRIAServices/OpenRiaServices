@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.DomainServices.Client.Test;
-using BufferManagerStream = OpenRiaServices.DomainServices.Hosting.PoxBinaryMessageEncodingBindingElement.PoxBinaryMessageEncoder.BufferManagerStream;
 
 namespace OpenRiaServices.DomainServices.Hosting.Test.Data
 {
@@ -166,12 +165,38 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
             manager.AssertEverythingIsReturned();
         }
 
-        private ArraySegment<byte> VerifyStreamContents(BufferManagerStream stream, int expectedOffset, int count, BufferManageMock manager)
+        [TestMethod]
+        public void ResetShouldAllowStreamReuse()
+        {
+            int initialOffset = 0;
+            var manager = new BufferManageMock();
+            using (var stream = new BufferManagerStream(manager, initialOffset, 4, 1024))
+            {
+                stream.Write(_input, 0, 4);
+                manager.ReturnBuffer(stream.GetArrayAndClear().Array);
+                manager.AssertEverythingIsReturned();
+
+                initialOffset = 1;
+                stream.Reset(manager, initialOffset, 4);
+
+                Assert.AreEqual(stream.Position, 0, "Position should be 0 after reset");
+
+                byte[] otherInput = new byte[] { 3, 2, 1 };
+                stream.Write(otherInput, 0, otherInput.Length);
+
+                var array = stream.GetArrayAndClear();
+                VerifyBufferContents(array, initialOffset, new ArraySegment<byte>(otherInput));
+                manager.ReturnBuffer(array.Array);
+                manager.AssertEverythingIsReturned();
+            }
+        }
+
+        private ArraySegment<byte> VerifyStreamContents(BufferManagerStream stream, int expectedOffset, int count, BufferManageMock manager, byte[] expectedContents = null)
         {
             Assert.AreEqual(count, stream.Position, "Stream position should equal count");
 
-            var buffer = stream.GetArrayAndDispose();
-            VeriryBufferContents(buffer, expectedOffset, count);
+            var buffer = stream.GetArrayAndClear();
+            VerifyBufferContents(buffer, expectedOffset, new ArraySegment<byte>(expectedContents ?? _input, 0 , count));
 
             // By returning buffer we also ensure that it was allocated through the buffer manager
             manager.ReturnBuffer(buffer.Array);
@@ -179,18 +204,18 @@ namespace OpenRiaServices.DomainServices.Hosting.Test.Data
             return buffer;
         }
 
-        private static void VeriryBufferContents(ArraySegment<byte> buffer, int expectedOffset, int count)
+        private void VerifyBufferContents(ArraySegment<byte> buffer, int expectedOffset, ArraySegment<byte> expectedContents)
         {
             Assert.AreEqual(buffer.Offset, expectedOffset, "Wrong offset");
-            Assert.AreEqual(buffer.Count, count, "Wrong count");
+            Assert.AreEqual(buffer.Count, expectedContents.Count, "Wrong count");
 
-            for (int i = 0; i < count; ++i)
+            for (int i = 0; i < expectedContents.Count; ++i)
             {
-                byte expected = (byte)(i + 1);
+                byte expected = expectedContents.Array[expectedContents.Offset + i];
                 byte actual = buffer.Array[buffer.Offset + i];
                 if (expected != actual)
                 {
-                    Dump(buffer.Array, count);
+                    Dump(buffer.Array, expectedContents.Count);
 
                     Assert.Fail($"Buffer contents is wrong, expected {expected} but buffer[{buffer.Offset} + {i}] = {actual}");
                 }
