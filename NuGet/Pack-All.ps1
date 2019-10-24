@@ -1,5 +1,5 @@
 param(
-	[string[]]$Path = "OpenRiaServices.*", ".",
+	[string[]]$Path =  @("OpenRiaServices.*", "."),
 	[string]$Version = $null,
 	[string]$NuGetPath
 )

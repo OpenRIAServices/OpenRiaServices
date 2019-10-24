@@ -147,7 +147,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       <Name>OpenRiaServices Server Project Link</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <Private>False</Private>
-      <-- Fix error messages about incompatible Target frameworks -->
+      <!-- Fix error messages about incompatible Target frameworks -->
       <SkipGetTargetFrameworkProperties>true</SkipGetTargetFrameworkProperties>
       <UndefineProperties>TargetFramework</UndefineProperties>
     </ProjectReference>
@@ -291,11 +291,6 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     ================================================================
     -->
   <Target Name="CreateOpenRiaClientFiles">
-
-    <!-- Advice Silverlight users to use Silverlight package instead-->
-    <Warning 
-       Text="You are using OpenRiaServices Client CodeGen package in a Silverlight project please uninstall and use corresponding OpenRiaServices Silverlight CodeGen instead."
-       Condition="'$(TargetFrameworkIdentifier)' == 'Silverlight' " />
 
     <!--
     ================================================================
