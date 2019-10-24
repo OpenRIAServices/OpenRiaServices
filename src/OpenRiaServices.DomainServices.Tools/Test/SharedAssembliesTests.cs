@@ -17,11 +17,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     /// Tests for SharedAssembliesManaged service
     /// </summary>
     [TestClass]
-    public class SharedAssembliesCecilTests
+    public class SharedAssembliesTests
     {
-        internal virtual SharedAssembliesCecil CreatedSharedAssembliesService(IEnumerable<string> assemblies, IEnumerable<string> assemblySearchPats, ILogger logger)
+        internal virtual SharedAssemblies CreatedSharedAssembliesService(IEnumerable<string> assemblies, IEnumerable<string> assemblySearchPats, ILogger logger)
         {
-            return new SharedAssembliesCecil(assemblies, assemblySearchPats, logger);
+            return new SharedAssemblies(assemblies, assemblySearchPats, logger);
         }
 
         [Description("SharedAssembliesManaged service locates shared types between projects")]

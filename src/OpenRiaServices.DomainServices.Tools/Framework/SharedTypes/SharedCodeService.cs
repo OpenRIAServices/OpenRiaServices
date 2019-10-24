@@ -48,7 +48,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 
             this._locationService = new SourceFileLocationService(factories, this._filenameMap);
             this._sharedSourceFiles = new SharedSourceFiles(this._locationService, this._filenameMap, parameters.SharedSourceFiles);
-            this._sharedAssemblies = new SharedAssembliesCecil(parameters.ClientAssemblies, parameters.ClientAssemblyPathsNormalized, loggingService);
+            this._sharedAssemblies = new SharedAssemblies(parameters.ClientAssemblies, parameters.ClientAssemblyPathsNormalized, loggingService);
         }
 
         /// <summary>

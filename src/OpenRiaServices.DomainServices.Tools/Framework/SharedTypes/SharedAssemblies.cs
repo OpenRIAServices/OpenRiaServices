@@ -14,7 +14,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// and allow clients to ask whether types or methods are
     /// in that set.
     /// </summary>
-    internal sealed class SharedAssembliesCecil : ISharedAssemblies, IDisposable
+    internal sealed class SharedAssemblies : ISharedAssemblies, IDisposable
     {
         private readonly Dictionary<string, TypeInfo> _sharedTypeByName;
         private readonly CustomAssemblyResolver _resolver;
@@ -76,7 +76,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <param name="assemblyFileNames">The set of assemblies to use</param>
         /// <param name="assemblySearchPaths">Optional set of paths to search for referenced assemblies.</param>
         /// <param name="logger">Optional logger to use to report errors or warnings</param>
-        public SharedAssembliesCecil(IEnumerable<string> assemblyFileNames, IEnumerable<string> assemblySearchPaths, ILogger logger)
+        public SharedAssemblies(IEnumerable<string> assemblyFileNames, IEnumerable<string> assemblySearchPaths, ILogger logger)
         {
             if (assemblyFileNames == null)
             {
