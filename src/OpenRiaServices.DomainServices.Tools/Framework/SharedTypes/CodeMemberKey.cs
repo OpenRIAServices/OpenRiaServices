@@ -18,7 +18,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         internal CodeMemberKeyKind KeyKind { get; set; }
         internal string TypeName { get; set; }
         internal string MemberName { get; set; }
-        internal string MethodName { get; set; }
         internal string[] ParameterTypeNames { get; set; }
 
         /// <summary>

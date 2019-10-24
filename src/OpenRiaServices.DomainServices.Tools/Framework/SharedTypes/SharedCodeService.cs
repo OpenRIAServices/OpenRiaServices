@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         private SourceFileLocationService _locationService;
         private readonly SharedSourceFiles _sharedSourceFiles;
         private readonly SharedAssemblies _sharedAssemblies;
-        private FilenameMap _filenameMap = new FilenameMap();
+        private readonly FilenameMap _filenameMap = new FilenameMap();
 
         // We maintain a cache so we never lookup any code element more than once.
         // The cache is keyed by SharedCodeKey, which describes the code element and serves as a unique key for it.
@@ -52,17 +52,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         }
 
         /// <summary>
-        /// Gets the instances managing the shared assemblies
-        /// </summary>
-        private SharedAssemblies SharedAssemblies
-        {
-            get
-            {
-                return this._sharedAssemblies;
-            }
-        }
-
-        /// <summary>
         /// Gets the instance managing the shared source files.
         /// </summary>
         private SharedSourceFiles SharedSourceFiles
@@ -82,7 +71,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         {
             return this._cachedDescriptions.GetOrAdd(key, k =>
             {
-                string sharedAssemblyLocation = this.SharedAssemblies.GetSharedAssemblyPath(key);
+                string sharedAssemblyLocation = this._sharedAssemblies.GetSharedAssemblyPath(key);
                 if (sharedAssemblyLocation != null)
                 {
                     return new SharedCodeDescription(CodeMemberShareKind.SharedByReference, new[] { this._filenameMap.AddOrGet(sharedAssemblyLocation) });
@@ -108,7 +97,8 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 this._locationService.Dispose();
                 this._locationService = null;
             }
-            this._filenameMap = null;
+
+            (_sharedAssemblies as IDisposable)?.Dispose();
         }
 
         #endregion
