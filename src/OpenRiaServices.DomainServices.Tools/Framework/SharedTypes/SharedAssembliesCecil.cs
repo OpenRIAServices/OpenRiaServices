@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Mono.Cecil;
 
 namespace OpenRiaServices.DomainServices.Tools.SharedTypes
@@ -17,7 +16,6 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// </summary>
     internal sealed class SharedAssembliesCecil : ISharedAssemblies, IDisposable
     {
-        private readonly string[] _assemblySearchPaths;
         private readonly Dictionary<string, TypeInfo> _sharedTypeByName;
         private readonly CustomAssemblyResolver _resolver;
 
@@ -85,11 +83,9 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 throw new ArgumentNullException("assemblyFileNames");
             }
             this._logger = logger;
-            this._assemblySearchPaths = assemblySearchPaths?.ToArray() ?? new string[0];
             this._sharedTypeByName = new Dictionary<string, TypeInfo>(StringComparer.Ordinal);
 
-            // TODO: Add dispose method
-            this._resolver = new CustomAssemblyResolver(_assemblySearchPaths);
+            this._resolver = new CustomAssemblyResolver(assemblySearchPaths ?? Enumerable.Empty<string>());
             this._resolver.ResolveFailure += _resolver_ResolveFailure;
             LoadAssemblies(assemblyFileNames, logger);
         }
@@ -281,12 +277,12 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         }
 
         /// <summary>
-        /// Locates the <see cref="MethodBase"/> in the set of shared assemblies that
+        /// Locates the <see cref="MethodDefinition"/> in the set of shared assemblies that
         /// corresponds to the method described by <paramref name="key"/>.
         /// </summary>
-        /// <param name="sharedType">The <see cref="Type"/> we have already located in our set of shared assemblies.</param>
+        /// <param name="sharedType">The <see cref="TypeInfo"/> we have already located in our set of shared assemblies.</param>
         /// <param name="key">The key describing the method to find.</param>
-        /// <returns>The matching <see cref="MethodBase"/> or <c>null</c> if no match is found.</returns>
+        /// <returns>The matching <see cref="MethodDefinition"/> or <c>null</c> if no match is found.</returns>
         private MethodDefinition FindSharedMethodOrConstructor(TypeInfo sharedType, CodeMemberKey key)
         {
             var parameterTypes = this.GetSharedTypes(key.ParameterTypeNames);
@@ -449,9 +445,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
                 string parameterName = typeName.Substring(startBracket + 1, endBracket - (startBracket + 1));
                 if (TryGetSharedType(parameterName, out _))
                 {
-                    // genericParameters.Add(typeInfo);
-
-                    // End of generic type
+                    // Check for closing bracet of generic type (double ']')
                     if (typeName[endBracket + 1] == ']')
                     {
                         endBracket = endBracket + 1;
