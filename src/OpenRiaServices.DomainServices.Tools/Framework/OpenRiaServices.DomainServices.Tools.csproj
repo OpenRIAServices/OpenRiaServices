@@ -3,6 +3,8 @@
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET40</DefineConstants>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net46</TargetFramework>
+    <!-- Copy Mono.Cecil to output directory -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />

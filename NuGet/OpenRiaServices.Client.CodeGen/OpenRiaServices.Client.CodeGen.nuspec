@@ -23,5 +23,6 @@
     <files>
         <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
         <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll"/>
+        <file src="..\..\src\bin\Release\net46\Mono.Cecil.dll" target="build\Mono.Cecil.dll"/>
     </files>
 </package>
