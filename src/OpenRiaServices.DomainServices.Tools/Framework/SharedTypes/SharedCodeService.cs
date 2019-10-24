@@ -19,7 +19,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     {
         private SourceFileLocationService _locationService;
         private readonly SharedSourceFiles _sharedSourceFiles;
-        private readonly ISharedAssemblies _sharedAssemblies;
+        private readonly SharedAssemblies _sharedAssemblies;
         private readonly FilenameMap _filenameMap = new FilenameMap();
 
         // We maintain a cache so we never lookup any code element more than once.

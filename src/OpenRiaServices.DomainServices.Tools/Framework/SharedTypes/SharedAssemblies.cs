@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// and allow clients to ask whether types or methods are
     /// in that set.
     /// </summary>
-    internal sealed class SharedAssemblies : ISharedAssemblies, IDisposable
+    internal sealed class SharedAssemblies : IDisposable
     {
         private readonly Dictionary<string, TypeInfo> _sharedTypeByName;
         private readonly CustomAssemblyResolver _resolver;

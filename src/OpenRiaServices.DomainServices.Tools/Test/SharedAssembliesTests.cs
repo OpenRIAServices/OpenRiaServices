@@ -235,24 +235,24 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         }
 
-        private static string GetSharedTypeLocation(ISharedAssemblies sa, Type type)
+        private static string GetSharedTypeLocation(SharedAssemblies sa, Type type)
         {
             var key = CodeMemberKey.CreateTypeKey(type.FullName);
             return sa.GetSharedAssemblyPath(key);
         }
 
-        private static string GetSharedMethodLocation(ISharedAssemblies sa, Type type, string methodName, Type[] parameterTypes)
+        private static string GetSharedMethodLocation(SharedAssemblies sa, Type type, string methodName, Type[] parameterTypes)
         {
             var key = CodeMemberKey.CreateMethodKey(type.AssemblyQualifiedName, methodName, parameterTypes.Select(t => t.AssemblyQualifiedName).ToArray());
             return sa.GetSharedAssemblyPath(key);
         }
 
-        private static string GetSharedPropertyLocation(ISharedAssemblies sa, Type type, string propertyName)
+        private static string GetSharedPropertyLocation(SharedAssemblies sa, Type type, string propertyName)
         {
             return GetSharedPropertyLocation(sa, type.FullName, propertyName);
         }
 
-        private static string GetSharedPropertyLocation(ISharedAssemblies sa, string fullName, string propertyName)
+        private static string GetSharedPropertyLocation(SharedAssemblies sa, string fullName, string propertyName)
         {
             var key = CodeMemberKey.CreatePropertyKey(fullName, propertyName);
             return sa.GetSharedAssemblyPath(key);
