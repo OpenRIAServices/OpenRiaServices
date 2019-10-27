@@ -452,18 +452,31 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         }
 
         /// <summary>
-        /// Compares <see cref="AssemblyNameReference"/> based on FullName
+        /// Compares <see cref="AssemblyNameReference"/> based on Name and PublicKeyToken
         /// </summary>
         private class AssemblyNameReferenceComparer : IEqualityComparer<AssemblyNameReference>
         {
             public bool Equals(AssemblyNameReference x, AssemblyNameReference y)
             {
-                return x.FullName == y.FullName;
+                if (x.Name == y.Name
+                    && x.PublicKeyToken.Length == y.PublicKeyToken.Length)
+                {
+                    for (int i = 0; i < x.PublicKeyToken.Length; ++i)
+                    {
+                        if (x.PublicKeyToken[i] != y.PublicKeyToken[i])
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+                return false;
             }
 
             public int GetHashCode(AssemblyNameReference obj)
             {
-                return obj.FullName.GetHashCode();
+                return obj.Name.GetHashCode();
             }
         }
     }
