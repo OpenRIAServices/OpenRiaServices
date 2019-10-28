@@ -62,7 +62,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared types between projects")]
         [TestMethod]
         public void SharedCodeService_Types()
@@ -124,8 +123,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-
-        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared methods between projects")]
         [TestMethod]
         public void SharedCodeService_Methods()
@@ -154,7 +151,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt")]
         [Description("SharedCodeService locates shared ctors between projects")]
         [TestMethod]
         public void SharedCodeService_Ctors()
@@ -167,9 +163,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             using (SharedCodeService sts = CodeGenHelper.CreateSharedCodeService(clientProjectPath, logger))
             {
-                ConstructorInfo ctor = typeof(TestValidator).GetConstructor(new Type[] { typeof(string)});
+                ConstructorInfo ctor = typeof(TestValidator).GetConstructor(new Type[] { typeof(string) });
                 Assert.IsNotNull("Failed to find string ctor on TestValidator");
-                CodeMemberShareKind shareKind = sts.GetMethodShareKind(typeof(TestValidator).AssemblyQualifiedName, ctor.Name , new string[] { typeof(string).AssemblyQualifiedName });
+                CodeMemberShareKind shareKind = sts.GetMethodShareKind(typeof(TestValidator).AssemblyQualifiedName, ctor.Name, new string[] { typeof(string).AssemblyQualifiedName });
                 Assert.AreEqual(CodeMemberShareKind.SharedByReference, shareKind, "Expected TestValidator ctor to be shared by reference");
                 TestHelper.AssertNoErrorsOrWarnings(logger);
             }

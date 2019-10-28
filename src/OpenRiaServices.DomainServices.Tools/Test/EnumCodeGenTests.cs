@@ -28,10 +28,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("Entity property returning enum type generates enum in C#")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_CS")]
         public void Enum_Gen_Basic_CSharp()
         {
-            using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_CS", /*isCSharp*/ true, /*useFullTypeNames*/ false, new Type[] { typeof(Enum_Basic_DomainService) }))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(true, /*isCSharp*/ false, /*useFullTypeNames*/ new Type[] { typeof(Enum_Basic_DomainService) }))
             {
                 VerifyEnumGenBasic(asmGen);
             }
@@ -39,10 +38,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in C# with full type names")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_CS_FULL")]
         public void Enum_Gen_Basic_CSharp_Full()
         {
-            using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_CS_FULL", /*isCSharp*/ true, /*useFullTypeNames*/ true, new Type[] { typeof(Enum_Basic_DomainService) }))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(true, /*isCSharp*/ true, /*useFullTypeNames*/ new Type[] { typeof(Enum_Basic_DomainService) }))
             {
                 VerifyEnumGenBasic(asmGen);
             }
@@ -50,10 +48,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in VB")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_VB")]
         public void Enum_Gen_Basic_VB()
         {
-            using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_VB", /*isCSharp*/ false, /*useFullTypeNames*/ false, new Type[] { typeof(Enum_Basic_DomainService) }))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(false, /*isCSharp*/ false, /*useFullTypeNames*/ new Type[] { typeof(Enum_Basic_DomainService) }))
             {
                 VerifyEnumGenBasic(asmGen);
             }
@@ -61,10 +58,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Entity property returning enum type generates enum in VB with full type names")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_VB_FULL")]
         public void Enum_Gen_Basic_VB_Full()
         {
-            using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM_VB_FULL", /*isCSharp*/ false, /*useFullTypeNames*/ true, new Type[] { typeof(Enum_Basic_DomainService) }))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(false, /*isCSharp*/ true, /*useFullTypeNames*/ new Type[] { typeof(Enum_Basic_DomainService) }))
             {
                 VerifyEnumGenBasic(asmGen);
             }
@@ -72,10 +68,9 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("If an entity has DataContract applied only enum properties with DataMember are generated")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_DataContract()
         {
-            using (AssemblyGenerator asmGen = new AssemblyGenerator("CG_ENUM", true, false, new Type[] { typeof(Enum_DataContract_DomainService) }))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(true, false, new Type[] { typeof(Enum_DataContract_DomainService) }))
             {
                 Type clientEntityType = asmGen.GetGeneratedType(typeof(Enum_DataContract_Entity).FullName);
 
@@ -243,9 +238,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_ENUM",
                                                     isCSharp,
-                                                    new Type[] { typeof(Enum_System_Prop_DomainService) }))
+                    new Type[] { typeof(Enum_System_Prop_DomainService) }))
                 {
                     // Force this type to be unshared to force failure
                     asmGen.MockSharedCodeService.AddUnsharedType(typeof(System.IO.FileAttributes));
@@ -267,9 +261,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_ENUM",
                                                     isCSharp,
-                                                    new Type[] { typeof(Enum_Nested_Prop_DomainService) }))
+                    new Type[] { typeof(Enum_Nested_Prop_DomainService) }))
                 {
                     string generatedCode = asmGen.GeneratedCode;
                     Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "Failed to generate code:\r\n" + asmGen.ConsoleLogger.Errors);
@@ -289,9 +282,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_ENUM",
                                                     isCSharp,
-                                                    new Type[] { typeof(Enum_System_Query_DomainService) }))
+                    new Type[] { typeof(Enum_System_Query_DomainService) }))
                 {
                     // Force this type to be unshared to force failure
                     asmGen.MockSharedCodeService.AddUnsharedType(typeof(System.IO.FileAttributes));
@@ -313,9 +305,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_ENUM",
                                                     isCSharp,
-                                                    new Type[] { typeof(Enum_System_Invoke_DomainService) }))
+                    new Type[] { typeof(Enum_System_Invoke_DomainService) }))
                 {
                     // Force this type to be unshared to force failure
                     asmGen.MockSharedCodeService.AddUnsharedType(typeof(System.IO.FileAttributes));
@@ -337,9 +328,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_ENUM",
                                                     isCSharp,
-                                                    new Type[] { typeof(Enum_System_Named_DomainService) }))
+                    new Type[] { typeof(Enum_System_Named_DomainService) }))
                 {
                     // Force this type to be unshared to force failure
                     asmGen.MockSharedCodeService.AddUnsharedType(typeof(System.IO.FileAttributes));
@@ -361,9 +351,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_ENUM_THROW",
                                                     isCSharp,
-                                                    new Type[] { typeof(Enum_Throwing_CustomAttribute_DomainService) }))
+                    new Type[] { typeof(Enum_Throwing_CustomAttribute_DomainService) }))
                 {
                     // Force this type to be unshared to force failure
                     asmGen.MockSharedCodeService.AddUnsharedType(typeof(System.IO.FileAttributes));

@@ -21,40 +21,36 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for C#, short type names")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_TR_CS")]
         public void TypeReference_Common_Types_CS()
         {
-            this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ false, "CG_TR_CS");
+            this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ false);
         }
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for C#, full type names")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_TR_CS_Full")]
         public void TypeReference_Common_Types_CS_FullTypeNames()
         {
-            this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ true, "CG_TR_CS_Full");
+            this.TypeReference_Common_Types_Helper(/*isCSharp*/ true, /*useFullTypes*/ true);
         }
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for VB, short type names")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_TR_VB")]
         public void TypeReference_Common_Types_VB()
         {
-            this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ false, "CG_TR_VB");
+            this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ false);
         }
 
         [TestMethod]
         [Description("DomainServices in different namespaces both import common types for VB, full type names")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_TR_VB_Full")]
         public void TypeReference_Common_Types_VB_FullTypeNames()
         {
-            this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ true, "CG_TR_VB_Full");
+            this.TypeReference_Common_Types_Helper(/*isCSharp*/ false, /*useFullTypes*/ true);
         }
 
         // Common helper that does body of test
-        private void TypeReference_Common_Types_Helper(bool isCSharp, bool useFullTypeNames, string testFolderName)
+        private void TypeReference_Common_Types_Helper(bool isCSharp, bool useFullTypeNames)
         {
-            using (AssemblyGenerator asmGen = new AssemblyGenerator(testFolderName, isCSharp, useFullTypeNames, new Type[] { typeof(TypeReferenceDomainService_Common_Types1), typeof(TypeReferenceDomainService_Common_Types2) }))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(isCSharp, useFullTypeNames, new Type[] { typeof(TypeReferenceDomainService_Common_Types1), typeof(TypeReferenceDomainService_Common_Types2) }))
             {
                 // Force this type to be shared to force failure
                 asmGen.MockSharedCodeService.AddSharedType(typeof(System.Reflection.BindingFlags));

@@ -24,13 +24,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
     {
         [TestMethod]
         [Description("Inheritance: the domain service catalog identifies the right entities")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH1")]
         public void Inherit_Gen_DomainServiceCatalog()
         {
             using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                "CG_INH1",
                                                 true /*isCSharp*/,
-                                                new Type[] { typeof(Inherit_Basic_DomainService) }))
+                new Type[] { typeof(Inherit_Basic_DomainService) }))
             {
                 // ---------------------------------------------------
                 // Get the DomainServiceCatalog from our helper
@@ -75,15 +73,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: basic validation of code gen for domain service with single derived type")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH2")]
         public void Inherit_Gen_Basic()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH2",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Basic_DomainService) }))
+                    new Type[] { typeof(Inherit_Basic_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -195,15 +191,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: CUD methods on derived types is allowed")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH3")]
         public void Inherit_Gen_Basic_With_CUD()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH3",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Basic_CUD_DomainService) }))
+                    new Type[] { typeof(Inherit_Basic_CUD_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -254,15 +248,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         #region Association
         [TestMethod]
         [Description("Inheritance: unidirectional 1:1 association is legal from derived entity to other root entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH4")]
         public void Inherit_Gen_Assoc_Uni_Derived_To_Included_Root()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH4",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Assoc_UD2IR_DomainService) }))
+                    new Type[] { typeof(Inherit_Assoc_UD2IR_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -313,15 +305,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association is legal from derived entity to other root entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH5")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Root()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH5",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Assoc_BD2IR_DomainService) }))
+                    new Type[] { typeof(Inherit_Assoc_BD2IR_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -390,15 +380,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH6")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Derived()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH6",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Assoc_BD2ID_DomainService) }))
+                    new Type[] { typeof(Inherit_Assoc_BD2ID_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -473,15 +461,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:M association is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH7")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Derived_OneToMany()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH7",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Assoc_BD2ID_OneToMany_DomainService) }))
+                    new Type[] { typeof(Inherit_Assoc_BD2ID_OneToMany_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -562,15 +548,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional M:1 association is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH8")]
         public void Inherit_Gen_Assoc_Bi_Derived_To_Included_Derived_ManyToOne()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH8",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Assoc_BD2ID_ManyToOne_DomainService) }))
+                    new Type[] { typeof(Inherit_Assoc_BD2ID_ManyToOne_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + string.Join("\r\n", asmGen.ConsoleLogger.ErrorMessages.ToArray()));
@@ -655,15 +639,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association with projection is legal from derived entity to other derived entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH9")]
         public void Inherit_Gen_Projection_Bi_Derived_To_Included_Derived()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH9",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Projection_BD2ID_DomainService) }))
+                    new Type[] { typeof(Inherit_Projection_BD2ID_DomainService) }))
                 {
                     DomainServiceCatalog cat = asmGen.DomainServiceCatalog;
 
@@ -754,7 +736,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: bidirectional 1:1 association with projection is legal from target derived entity to source derived entity identified only through [Include]")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH10")]
         public void Inherit_Gen_Projection_Bi_Derived_To_Included_Derived_Reversed()
         {
             // This test differs from the one above only in that project elements occur
@@ -762,9 +743,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH10",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Projection_BD2ID_Reversed_DomainService) }))
+                    new Type[] { typeof(Inherit_Projection_BD2ID_Reversed_DomainService) }))
                 {
                     DomainServiceCatalog cat = asmGen.DomainServiceCatalog;
 
@@ -857,15 +837,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: validates buddy class on derived types works")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH11")]
         public void Inherit_Gen_Buddy()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH11",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Buddy_DomainService) }))
+                    new Type[] { typeof(Inherit_Buddy_DomainService) }))
                 {
 
 
@@ -1035,15 +1013,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: checks generation of partial methods")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH12")]
         public void Inherit_Gen_Partial_Methods()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH12",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Basic_DomainService) }))
+                    new Type[] { typeof(Inherit_Basic_DomainService) }))
                 {
                     // We add this extra code into the compile.
                     // C# will generate compile errors if you attempt to implement a partial
@@ -1146,15 +1122,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: validates the DomainServiceDescription builds correct known type hierarchy for abstracts")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH13")]
         public void Inherit_DomainServiceDescription_Type_Hierarchies()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH13",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Abstract_Root_DomainService) }))
+                    new Type[] { typeof(Inherit_Abstract_Root_DomainService) }))
                 {
                     DomainServiceDescription dsd = asmGen.DomainServiceCatalog.DomainServiceDescriptions.FirstOrDefault();
                     Assert.IsNotNull(dsd, "Expected DomainServiceDescription");
@@ -1218,15 +1192,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: root entity may be abstract if it specifies a concrete derived type")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH14")]
         public void Inherit_Gen_Abstract_Root_With_Concrete_Derived()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH14",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Abstract_Root_DomainService) }))
+                    new Type[] { typeof(Inherit_Abstract_Root_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -1281,15 +1253,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: root entity type without [Key] causes error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH15")]
         public void Inherit_Gen_No_Key_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH15",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_No_Key_DomainService) }))
+                    new Type[] { typeof(Inherit_No_Key_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;
@@ -1304,15 +1274,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: derived entity type with [Key] causes error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH16")]
         public void Inherit_Gen_Derived_Key_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH16",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Derived_Key_DomainService) }))
+                    new Type[] { typeof(Inherit_Derived_Key_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;
@@ -1327,15 +1295,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: derived entity type not specified in [KnownType] causes error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH17")]
         public void Inherit_Gen_Missing_KnownType_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH17",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Missing_KnownType_DomainService) }))
+                    new Type[] { typeof(Inherit_Missing_KnownType_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;
@@ -1350,15 +1316,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: entity properties may be polymorphic")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH18")]
         public void Inherit_Gen_Polymorphic_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH18",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Polymorphic_DomainService) }))
+                    new Type[] { typeof(Inherit_Polymorphic_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -1415,15 +1379,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: using 'new' to override a property generates an error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH19")]
         public void Inherit_Gen_New_Property_Illegal()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH19",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Polymorphic_New_DomainService) }))
+                    new Type[] { typeof(Inherit_Polymorphic_New_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNull(assy, "Assembly should have failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -1441,15 +1403,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Code generator flattens the hierarchy when it has non-visible types")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH20")]
         public void Inherit_Gen_Flatten()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH20",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Flatten_DomainService) }))
+                    new Type[] { typeof(Inherit_Flatten_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -1542,15 +1502,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: insert method on derived entity only is an error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH21")]
         public void Inherit_Gen_No_Root_Insert_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH21",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_No_Root_Insert_DomainService) }))
+                    new Type[] { typeof(Inherit_No_Root_Insert_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;
@@ -1565,15 +1523,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: update method on derived entity only is an error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH22")]
         public void Inherit_Gen_No_Root_Update_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH22",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_No_Root_Update_DomainService) }))
+                    new Type[] { typeof(Inherit_No_Root_Update_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;
@@ -1588,15 +1544,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: delete method on derived entity only is an error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH23")]
         public void Inherit_Gen_No_Root_Delete_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH23",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_No_Root_Delete_DomainService) }))
+                    new Type[] { typeof(Inherit_No_Root_Delete_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;
@@ -1611,15 +1565,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: custom method on derived entity only is legal")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH24")]
         public void Inherit_Gen_No_Root_Custom()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH24",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_No_Root_Custom_DomainService) }))
+                    new Type[] { typeof(Inherit_No_Root_Custom_DomainService) }))
                 {
                     Assembly assy = asmGen.GeneratedAssembly;
                     Assert.IsNotNull(assy, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
@@ -1670,16 +1622,14 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         [TestMethod]
         [Description("Inheritance: overloaded custom method on derived type is error")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_INH25")]
         [Ignore] // TODO: [Dev10] This generates no errors, but it should
         public void Inherit_Gen_Custom_Overload_Is_Error()
         {
             foreach (bool isCSharp in new bool[] { true, false })
             {
                 using (AssemblyGenerator asmGen = new AssemblyGenerator(
-                                                    "CG_INH25",
                                                     isCSharp,
-                                                    new Type[] { typeof(Inherit_Custom_Overload_DomainService) }))
+                    new Type[] { typeof(Inherit_Custom_Overload_DomainService) }))
                 {
                     // Trigger code generation but don't attempt to build
                     string generatedCode = asmGen.GeneratedCode;

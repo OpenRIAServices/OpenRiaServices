@@ -18,7 +18,6 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
 {
     internal class T4AssemblyGenerator : IDisposable
     {
-        private readonly string _relativeTestDir;
         private readonly bool _isCSharp;
         private string _outputAssemblyName;
         private readonly IEnumerable<Type> _domainServiceTypes;
@@ -35,16 +34,13 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         private readonly bool _useFullTypeNames;
 
 
-        public T4AssemblyGenerator(string relativeTestDir, bool isCSharp, IEnumerable<Type> domainServiceTypes) :
-            this(relativeTestDir, isCSharp, false, domainServiceTypes)
+        public T4AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
+            this(isCSharp, false, domainServiceTypes)
         {
         }
 
-        public T4AssemblyGenerator(string relativeTestDir, bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
+        public T4AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
-            Assert.IsFalse(string.IsNullOrEmpty(relativeTestDir), "relativeTestDir required");
-            
-            this._relativeTestDir = relativeTestDir;
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
@@ -147,7 +143,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
             {
                 if (this._referenceAssemblies == null)
                 {
-                    this._referenceAssemblies = CompilerHelper.GetClientAssemblies(this._relativeTestDir);
+                    this._referenceAssemblies = CompilerHelper.GetClientAssemblies(string.Empty);
                 }
                 return this._referenceAssemblies;
             }
