@@ -247,7 +247,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     ================================================================
     -->
   <Target Name="ResolveOpenRiaClientCodeGenInputs" DependsOnTargets="ResolveReferences" Condition="Exists('$(LinkedOpenRiaServerProject)')">
-
+    
     <!-- Gather the build outputs of the server project -->
     <MSBuild   Projects="$(LinkedOpenRiaServerProject)" Targets="GetTargetPath">
       <Output TaskParameter="TargetOutputs" ItemName="OpenRiaClientCodeGenServerBuildOutput" />
@@ -272,6 +272,14 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       <OpenRiaClientCodeGenClientAssemblySearchPath Include="$(TargetFrameworkDirectory)" />
       <OpenRiaClientCodeGenClientAssemblySearchPath Include="$(TargetFrameworkSDKDirectory)" />
     </ItemGroup>
+
+    <!-- For netstandard use directory of mscorlib to set FrameworkPathOverride to a valid folder-->
+    <ItemGroup Condition="'$(FrameworkPathOverride)' ==''">
+      <_MsCorlibDir Include="%(ReferencePath.FullPath)" Condition=" '%(ReferencePath.Filename)' == 'mscorlib' "/>
+    </ItemGroup>
+    <PropertyGroup Condition="'$(FrameworkPathOverride)' ==''">
+      <FrameworkPathOverride>$([System.IO.Directory]::GetParent(%(_MsCorlibDir.Identity)))</FrameworkPathOverride>    
+    </PropertyGroup>
 
   </Target>
 
