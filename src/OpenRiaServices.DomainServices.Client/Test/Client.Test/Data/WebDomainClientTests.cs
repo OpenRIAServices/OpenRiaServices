@@ -321,11 +321,28 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             this.EnqueueCallback(() =>
             {
-                this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2071)); // --> 2083, the max length
-                op = this.CityDomainContext.Echo(
-                    "",
-                    (io) => WebDomainClientTests.HandleError(io, ref error),
-                    null);
+                try
+                {
+
+                    this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2071)); // --> 2083, the max length
+                    op = this.CityDomainContext.Echo(
+                        "",
+                        (io) => WebDomainClientTests.HandleError(io, ref error),
+                        null);
+                }
+                catch (ProtocolException pex)
+                {
+                    if (pex.InnerException is System.Net.WebException wex)
+                    {
+                        Console.Write($"message {wex.Message} and status {wex.Status}");
+                        var response = wex.Response.GetResponseStream();
+                        response.Seek(0, System.IO.SeekOrigin.Begin);
+                        var text = new System.IO.StreamReader(response).ReadToEnd();
+                        Console.Write($"response text {text}");
+                    }
+
+                    throw;
+                }
             });
             this.EnqueueConditional(() => op.IsComplete);
             this.EnqueueCallback(() =>
