@@ -237,34 +237,17 @@ namespace OpenRiaServices.DomainServices.Client
             public override ArraySegment<byte> WriteMessage(Message message, int maxMessageSize, BufferManager bufferManager, int messageOffset)
             {
                 if (message == null)
-                {
                     throw new ArgumentNullException(nameof(message));
-                }
 
                 if (bufferManager == null)
-                {
                     throw new ArgumentNullException(nameof(bufferManager));
-                }
 
                 if (maxMessageSize < 0)
-                {
                     throw new ArgumentOutOfRangeException(nameof(maxMessageSize));
-                }
 
                 this.ThrowIfInvalidMessageVersion(message);
 
-                message.Properties.Encoder = this;
-
-                using (MemoryStream ms = new MemoryStream())
-                using (XmlDictionaryWriter writer = XmlDictionaryWriter.CreateBinaryWriter(ms))
-                {
-                    message.WriteMessage(writer);
-                    writer.Flush();
-
-                    byte[] buffer = bufferManager.TakeBuffer((int)ms.Position + messageOffset);
-                    Buffer.BlockCopy(ms.GetBuffer(), 0, buffer, messageOffset, (int)ms.Position);
-                    return new ArraySegment<byte>(buffer, messageOffset, (int)ms.Position);
-                }
+                return BinaryMessageWriter.WriteMessage(message, bufferManager, messageOffset);
             }
 
             public override void WriteMessage(Message message, Stream stream)

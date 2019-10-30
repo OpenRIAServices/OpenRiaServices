@@ -5,6 +5,7 @@
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <PackageTags>WCF;RIA;Services;RIAServices;Silverlight;OpenRiaServices</PackageTags>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
@@ -33,9 +34,7 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
       <Link>Web\Behaviors\WebHttpQueryStringConverter.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs">
-      <Link>Data\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs</Link>
-    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\MessageEncoders\*.cs" LinkBase="Data\MessageEncoders" />
   </ItemGroup>
 
   <!-- Remove ServiceModel.Web dependent parts (binary endpoint) -->
