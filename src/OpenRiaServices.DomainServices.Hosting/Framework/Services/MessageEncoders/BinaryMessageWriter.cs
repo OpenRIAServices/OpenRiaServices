@@ -65,7 +65,6 @@ namespace OpenRiaServices.DomainServices.Client
                 writer.Flush();
 
                 var result = _stream.GetArrayAndClear();
-
                 RecordMessageSize(result.Count);
                 return result;
             }
@@ -87,10 +86,10 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         private int EstimateMessageSize()
         {
-            int min1 = Math.Max(_lastMessageLengths[3], _lastMessageLengths[2]);
-            int min2 = Math.Max(_lastMessageLengths[1], _lastMessageLengths[0]);
+            int max1 = Math.Max(_lastMessageLengths[3], _lastMessageLengths[2]);
+            int max2 = Math.Max(_lastMessageLengths[1], _lastMessageLengths[0]);
 
-            return Math.Max(min2, min1) + 256;
+            return Math.Max(max2, max1) + 256;
         }
 
         private XmlDictionaryWriter GetXmlWriter(BufferManager bufferManager, int offset)
