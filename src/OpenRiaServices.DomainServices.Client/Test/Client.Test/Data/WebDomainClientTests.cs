@@ -330,9 +330,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         (io) => WebDomainClientTests.HandleError(io, ref error),
                         null);
                 }
-                catch (ProtocolException pex)
+                catch (Exception ex)
                 {
-                    if (pex.InnerException is System.Net.WebException wex)
+                    if (ex.InnerException is System.Net.WebException wex)
                     {
                         Console.Write($"message {wex.Message} and status {wex.Status}");
                         var response = wex.Response.GetResponseStream();
@@ -349,6 +349,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 // Expect a 'Not Found'
                 Assert.IsInstanceOfType(error, typeof(DomainOperationException));
+                if (error.InnerException is System.Net.WebException wex)
+                {
+                    Console.Write($"in callback message {wex.Message} and status {wex.Status}");
+                    var response = wex.Response.GetResponseStream();
+                    response.Seek(0, System.IO.SeekOrigin.Begin);
+                    var text = new System.IO.StreamReader(response).ReadToEnd();
+                    Console.Write($"response text {text}");
+                }
                 Assert.IsInstanceOfType(error.InnerException, typeof(CommunicationException));
 
                 this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2072)); // --> 2084, one over the max length
