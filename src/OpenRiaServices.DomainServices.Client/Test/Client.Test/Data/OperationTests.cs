@@ -201,7 +201,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                invoke.Complete(validationErrors);
+                // TODO: Rewrite
+                invoke.Complete(new DomainOperationException("", validationErrors));
             }
             catch (DomainOperationException e)
             {

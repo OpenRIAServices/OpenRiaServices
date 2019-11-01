@@ -54,6 +54,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         public Type ReturnType
         {
+            // TODO: Remove, and go through all unused parameters/fields
             get 
             {
                 return this._returnType; 
