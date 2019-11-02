@@ -638,7 +638,6 @@ namespace OpenRiaServices.DomainServices.Client
             QueryCompletedResult results = null;
             try
             {
-                // The task is known to be completed so this will never block
                 results = await domainClientTask;
 
                 lock (this._syncRoot)
@@ -962,15 +961,39 @@ query.QueryName);
             }
 
             // create a strongly typed InvokeOperation instance
-            if (returnType == typeof(void))
+            if (returnType == typeof(void) || returnType == typeof(object))
             {
                 Action<InvokeOperation<object>> call = callback;
                 return InvokeOperation<object>(operationName, returnType, parameters, hasSideEffects, call, userState);
             }
             else
             {
-                // TODO: Invoke via reflection if not (void)
-                throw new NotImplementedException();
+                // Get MethodInfo for Load<TEntity>(EntityQuery<TEntity>, LoadBehavior, Action<LoadOperation<TEntity>>, object, LoadOperation<TEntity>)
+                var method = new Func<string, Type, IDictionary<string, object>, bool, Action<InvokeOperation<object>>, object, InvokeOperation<object>>(this.InvokeOperation<object>);
+                var loadMethod = method.Method.GetGenericMethodDefinition();
+
+                try
+                {
+                    return (InvokeOperation)loadMethod
+                        .MakeGenericMethod(returnType)
+                        .Invoke(this, new object[]
+                    {
+                    operationName,
+                    returnType,
+                    parameters,
+                    hasSideEffects,
+                    callback,
+                    userState
+                    });
+                }
+                catch (TargetInvocationException tie)
+                {
+                    if (tie.InnerException != null)
+                    {
+                        throw tie.InnerException;
+                    }
+                    throw;
+                }
             }
         }
 
@@ -987,11 +1010,9 @@ query.QueryName);
         [EditorBrowsable(EditorBrowsableState.Never)]
         public async virtual Task<InvokeResult> InvokeOperationAsync(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken)
         {
-            //  TODO: pass void as return type
-            return await InvokeOperationAsync<object>(operationName, parameters, hasSideEffects, cancellationToken);
-          
+            return await InvokeOperationAsync<object>(operationName, parameters, hasSideEffects, typeof(void), cancellationToken);
         }
 
         /// <summary>
@@ -1004,22 +1025,30 @@ query.QueryName);
         /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
-        public async virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
+        public virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken)
+        {
+            return InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, typeof(TValue), cancellationToken);
+        }
+
+        private async Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
+            IDictionary<string, object> parameters, bool hasSideEffects,
+            Type returnType,
+            CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(operationName))
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "operationName"));
             }
 
-            // TODO: accept invokeargs ? so it can be void but return InvokeResult<object>
             InvokeArgs invokeArgs = new InvokeArgs(operationName, typeof(TValue), parameters, hasSideEffects);
-            Exception error = null;
-            InvokeCompletedResult results = null;
+            var invokeTask = this.DomainClient.InvokeAsync(invokeArgs, cancellationToken);
+            
+            InvokeCompletedResult results;
             try
             {
-                results = await this.DomainClient.InvokeAsync(invokeArgs, cancellationToken);
+                results = await invokeTask;
             }
             catch (TaskCanceledException)
             {
@@ -1038,7 +1067,7 @@ query.QueryName);
                 }
                 string message = string.Format(CultureInfo.CurrentCulture,
            Resource.DomainContext_InvokeOperationFailed,
-           operationName, error.Message);
+           operationName, ex.Message);
 
                 throw ex is DomainOperationException domainOperationException
                     ? new DomainOperationException(message, domainOperationException)

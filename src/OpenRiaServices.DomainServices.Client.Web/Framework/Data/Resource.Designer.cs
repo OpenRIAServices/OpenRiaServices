@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.DomainServices.Client {
+namespace OpenRiaServices.DomainServices.Client.Web {
     using System;
     
     
@@ -61,42 +61,6 @@ namespace OpenRiaServices.DomainServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current application or application host is null and the host URI cannot be determined..
-        /// </summary>
-        internal static string DomainClient_UnableToDetermineHostUri {
-            get {
-                return ResourceManager.GetString("DomainClient_UnableToDetermineHostUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The specified service URI is not correctly formatted..
-        /// </summary>
-        internal static string DomainContext_InvalidServiceUri {
-            get {
-                return ResourceManager.GetString("DomainContext_InvalidServiceUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Load operation failed for query &apos;{0}&apos;. {1}.
-        /// </summary>
-        internal static string DomainContext_LoadOperationFailed {
-            get {
-                return ResourceManager.GetString("DomainContext_LoadOperationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Submit operation failed. {0}.
-        /// </summary>
-        internal static string DomainContext_SubmitOperationFailed {
-            get {
-                return ResourceManager.GetString("DomainContext_SubmitOperationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The PoxBinaryMessageEncoder only supports content type {0}..
         /// </summary>
         internal static string PoxBinaryMessageEncoder_InvalidContentType {
@@ -120,6 +84,15 @@ namespace OpenRiaServices.DomainServices.Client {
         internal static string PoxBinaryMessageEncoder_MessageVersionNotSupported {
             get {
                 return ResourceManager.GetString("PoxBinaryMessageEncoder_MessageVersionNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified service URI is not correctly formatted..
+        /// </summary>
+        internal static string WebDomainClient_InvalidServiceUri {
+            get {
+                return ResourceManager.GetString("WebDomainClient_InvalidServiceUri", resourceCulture);
             }
         }
         

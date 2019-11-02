@@ -3,7 +3,6 @@
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,7 +10,7 @@ using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Client.UnitTest
+namespace OpenRiaServices.DomainServices.Client.Test
 {
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
 
