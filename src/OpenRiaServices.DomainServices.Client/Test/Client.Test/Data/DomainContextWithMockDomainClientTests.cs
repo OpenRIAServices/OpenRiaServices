@@ -242,14 +242,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsNotNull(loadOperation.Error);
                 Assert.AreSame(myState, loadOperation.UserState);
 
-                // verify the exception properties
-
-                Assert.AreEqual(OperationErrorStatus.ValidationFailed, loadOperation.Error);
                 CollectionAssert.AreEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
-                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"), loadOperation.Error.Message);
+
+                // verify the exception properties
+                var ex = loadOperation.Error as DomainOperationException;
+                Assert.IsNotNull(ex, "expected exception of type DomainOperationException");
+                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"), ex.Message);
             });
 
             EnqueueTestComplete();
