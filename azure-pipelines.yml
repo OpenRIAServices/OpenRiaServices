@@ -66,8 +66,6 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    rerunFailedTests: true
-    rerunFailedThreshold: 40
     diagnosticsEnabled: false
   timeoutInMinutes: 40
 
