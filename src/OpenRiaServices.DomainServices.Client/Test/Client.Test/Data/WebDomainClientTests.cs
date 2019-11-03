@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Behaviors;
+using System.Text;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -256,6 +257,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Expect a 'Not Found'
                 Assert.IsInstanceOfType(error, typeof(DomainOperationException));
                 Assert.IsInstanceOfType(error.InnerException, typeof(CommunicationException));
+                StringAssert.Contains(error.InnerException.InnerException?.Message, "404");
 
                 this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2067)); // --> 2084, one over the max length
                 ExceptionHelper.ExpectException<InvalidOperationException>(() =>
@@ -330,9 +332,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueConditional(() => op.IsComplete);
             this.EnqueueCallback(() =>
             {
-                // Expect a 'Not Found'
                 Assert.IsInstanceOfType(error, typeof(DomainOperationException));
                 Assert.IsInstanceOfType(error.InnerException, typeof(CommunicationException));
+                var webException = error.InnerException.InnerException as System.Net.WebException;
+                StringAssert.Contains(webException?.Message, "404");
 
                 this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2072)); // --> 2084, one over the max length
                 ExceptionHelper.ExpectException<InvalidOperationException>(() =>
@@ -445,8 +448,23 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         private static Uri GenerateUriBase(int length)
         {
-            string template = TestURIs.RootURI.OriginalString + "{0}/";
-            return new Uri(string.Format(template, new string('0', length - template.Length + 3)), UriKind.Absolute);
+            var sb = new StringBuilder(value: TestURIs.RootURI.OriginalString, capacity: length);
+            // IIS has segment length limit of 260 per default so split path into smaller bits
+            length -= TestURIs.RootURI.OriginalString.Length;
+            while (length > 251)
+            {
+                sb.Append('0', repeatCount: 250);
+                sb.Append('/');
+                length -= 251;
+            }
+
+            if (length > 0)
+            {
+                sb.Append('0', length - 1);
+                sb.Append("/");
+            }
+
+            return new Uri(sb.ToString(), UriKind.Absolute);;
         }
 
         private void CreateDomainContext()
