@@ -118,7 +118,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void Complete(Exception error)
+        internal new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
                 && doe.ValidationErrors.Any())
@@ -127,7 +127,7 @@ namespace OpenRiaServices.DomainServices.Client
                 this.RaisePropertyChanged(nameof(ValidationErrors));
             }
 
-            base.Complete(error);
+            base.SetError(error);
         }
 
         /// <summary>

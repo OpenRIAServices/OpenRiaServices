@@ -64,7 +64,7 @@
     <EmbeddedResource Update="Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client.Web</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

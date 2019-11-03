@@ -9,7 +9,7 @@ using System.Xml;
 #if SERVERFX
 namespace OpenRiaServices.DomainServices.Hosting
 #else
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client.Web
 #endif
 {
     /// <summary>

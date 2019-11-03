@@ -14,14 +14,14 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Behaviors;
+using OpenRiaServices.DomainServices.Client.Test;
 using System.Text;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.DomainServices.Client.Web.Test
 {
     using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
-
 
     /// <summary>
     /// Tests <see cref="WebDomainClient&lt;TContract&gt;"/> members.
@@ -549,7 +549,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
             CityDomainContext dc = new CityDomainContext(GenerateUriBase(1000)); // --> the length when localized to Turkish is > 2083
             ExceptionHelper.ExpectException<InvalidOperationException>(() => dc.Echo(""),
-                String.Format(SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
+                String.Format(SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
         }
 
         [TestMethod]
@@ -558,7 +558,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR");
             CityDomainContext dc = new CityDomainContext(GenerateUriBase(1000)); // --> the length when localized to Turkish is > 2083
             ExceptionHelper.ExpectException<InvalidOperationException>(() => dc.Load(dc.GetCitiesQuery()),
-                String.Format(SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
+                String.Format(SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Resource.WebDomainClient_MaximumUriLengthExceeded, 2083));
         }
 
         private static Uri GenerateUriBase(int length)

@@ -251,7 +251,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Transition the operation into the Cancelled state
         /// </summary>
-        internal protected void SetCancelled()
+        protected internal void SetCancelled()
         {
             // must flag completion before callbacks or events are raised
             this._completed = true;
@@ -307,7 +307,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Completes the operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        protected void Complete(Exception error)
+        protected void SetError(Exception error)
         {
             if (error == null)
             {

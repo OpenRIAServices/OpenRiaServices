@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (!serviceUri.IsAbsoluteUri)
             {
                 // Relative URIs currently only supported on Silverlight
-                throw new ArgumentException(OpenRiaServices.DomainServices.Client.Resource.DomainContext_InvalidServiceUri, nameof(serviceUri));
+                throw new ArgumentException(Resource.WebDomainClient_InvalidServiceUri, nameof(serviceUri));
             }
 #endif
 
@@ -477,7 +477,7 @@ namespace OpenRiaServices.DomainServices.Client
             MethodInfo m = typeof(TContract).GetMethod("End" + operationName);
             if (m == null)
             {
-                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_OperationDoesNotExist, operationName));
+                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, Resource.WebDomainClient_OperationDoesNotExist, operationName));
             }
             return m;
         }

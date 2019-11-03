@@ -22,8 +22,14 @@ namespace OpenRiaServices.DomainServices.Client
     {
         internal const int TotalCountUndefined = -1;
 
-        private static MethodInfo createInvokeOperationMethod = typeof(InvokeOperation)
-                .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly MethodInfo s_invokeOperationAsync = typeof(DomainContext)
+                .GetMethod(nameof(InvokeOperationAsync), new Type[] {
+                    typeof(string),
+                    typeof(IDictionary<string, object>),
+                    typeof(bool),
+                    typeof(Type),
+                    typeof(CancellationToken)
+                });
 
         private int _activeLoadCount;
         private readonly DomainClient _domainClient;
@@ -299,7 +305,7 @@ namespace OpenRiaServices.DomainServices.Client
                         {
                             if (!validChangeset)
                             {
-                                submitOperation.Complete(OperationErrorStatus.ValidationFailed);
+                                submitOperation.SetError(OperationErrorStatus.ValidationFailed);
                             }
                             else
                             {
@@ -326,7 +332,7 @@ namespace OpenRiaServices.DomainServices.Client
                         }
                         , submitOperation
                         , CancellationToken.None
-                        , TaskContinuationOptions.NotOnCanceled
+                        , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.HideScheduler
                         , _syncContextScheduler);
                 }
             }
@@ -515,12 +521,7 @@ namespace OpenRiaServices.DomainServices.Client
                 .ContinueWith((loadTask, state) =>
                {
                    var operation = (LoadOperation<TEntity>)state;
-                   // if the load operation has been canceled,
-                   // no work to do.
-                   if (operation.IsCanceled)
-                   {
-                       return;
-                   }
+
 
                    if (loadTask.IsCanceled)
                    {
@@ -528,7 +529,7 @@ namespace OpenRiaServices.DomainServices.Client
                    }
                    else if (loadTask.Exception != null)
                    {
-                       operation.Complete(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
+                       operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
                    }
                    else
                    {
@@ -537,7 +538,7 @@ namespace OpenRiaServices.DomainServices.Client
                }
                 , (object)loadOperation
                 , CancellationToken.None
-                , TaskContinuationOptions.None
+                , TaskContinuationOptions.HideScheduler
                 , _syncContextScheduler);
 
             return loadOperation;
@@ -554,13 +555,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 return (LoadOperation)loadMethod
                     .MakeGenericMethod(query.EntityType)
-                    .Invoke(this, new object[]
-                {
-                    query,
-                    loadBehavior,
-                    callback,
-                    userState
-                });
+                    .Invoke(this, new object[] { query, loadBehavior, callback, userState });
             }
             catch (TargetInvocationException tie)
             {
@@ -629,78 +624,76 @@ namespace OpenRiaServices.DomainServices.Client
             // Proceed with query
             var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
 
-            // We dont want to cancel continuation based on original cancellationToken
-            // Since we must always decrement load count, use separate token to cancel continuation
             var continueationCts = new CancellationTokenSource();
             return domainClientTask.ContinueWith(result =>
+            {
+                IReadOnlyCollection<Entity> loadedEntities = null;
+                List<Entity> allLoadedEntities = null;
+                int totalCount;
+
+                QueryCompletedResult results = null;
+                try
                 {
-                    IReadOnlyCollection<Entity> loadedEntities = null;
-                    List<Entity> allLoadedEntities = null;
-                    int totalCount;
+                    lock (this._syncRoot)
+                    {
+                        // The task is known to be completed so this will never block
+                        results = result.GetAwaiter().GetResult();
 
-                    QueryCompletedResult results = null;
-                    try
-                    {
-                        lock (this._syncRoot)
-                        {
-                            // The task is known to be completed so this will never block
-                            results = result.GetAwaiter().GetResult();
+                        // load the entities into the entity container
+                        loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
 
-                            // load the entities into the entity container
-                            loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
-
-                            var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
-                            allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
-                            allLoadedEntities.AddRange(loadedEntities);
-                            allLoadedEntities.AddRange(loadedIncludedEntities);
-                            totalCount = results.TotalCount;
-                        }
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        continueationCts.Cancel();
-                        throw new OperationCanceledException(continueationCts.Token);
-                    }
-                    catch (DomainException)
-                    {
-                        // DomainExceptions should not be modified
-                        throw;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.IsFatal())
-                        {
-                            throw;
-                        }
-
-                        string message = string.Format(CultureInfo.CurrentCulture,
-                            Resource.DomainContext_LoadOperationFailed,
-                            query.QueryName, ex.Message);
-
-                        throw ex is DomainOperationException domainOperationException
-                            ? new DomainOperationException(message, domainOperationException)
-                            : new DomainOperationException(message, ex);
-                    }
-                    finally
-                    {
-                        this.DecrementLoadCount();
-                    }
-
-                    if (results.ValidationErrors.Any())
-                    {
-                        string message = string.Format(CultureInfo.CurrentCulture,
-      Resource.DomainContext_LoadOperationFailed_Validation,
-      query.QueryName);
-                        throw new DomainOperationException(message, results.ValidationErrors);
-                    }
-                    else
-                    {
-                        return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
+                        var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
+                        allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
+                        allLoadedEntities.AddRange(loadedEntities);
+                        allLoadedEntities.AddRange(loadedIncludedEntities);
+                        totalCount = results.TotalCount;
                     }
                 }
-                , continueationCts.Token
-                , TaskContinuationOptions.None
-                , _syncContextScheduler);
+                catch (TaskCanceledException)
+                {
+                    continueationCts.Cancel();
+                    throw new OperationCanceledException(continueationCts.Token);
+                }
+                catch (DomainException)
+                {
+                    // DomainExceptions should not be modified
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    if (ex.IsFatal())
+                    {
+                        throw;
+                    }
+
+                    string message = string.Format(CultureInfo.CurrentCulture,
+                        Resource.DomainContext_LoadOperationFailed,
+                        query.QueryName, ex.Message);
+
+                    throw ex is DomainOperationException domainOperationException
+                        ? new DomainOperationException(message, domainOperationException)
+                        : new DomainOperationException(message, ex);
+                }
+                finally
+                {
+                    this.DecrementLoadCount();
+                }
+
+                if (results.ValidationErrors.Any())
+                {
+                    string message = string.Format(CultureInfo.CurrentCulture,
+  Resource.DomainContext_LoadOperationFailed_Validation,
+  query.QueryName);
+                    throw new DomainOperationException(message, results.ValidationErrors);
+                }
+                else
+                {
+                    return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
+                }
+            }
+            , continueationCts.Token
+            , TaskContinuationOptions.HideScheduler
+            , _syncContextScheduler);
         }
 
         /// <summary>
@@ -867,11 +860,11 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         if (operationResults.Any(p => p.ValidationErrors != null && p.ValidationErrors.Any()))
                         {
-                            submitOperation.Complete(OperationErrorStatus.ValidationFailed);
+                            submitOperation.SetError(OperationErrorStatus.ValidationFailed);
                         }
                         else if (operationResults.Any(p => p.HasConflict))
                         {
-                            submitOperation.Complete(OperationErrorStatus.Conflicts);
+                            submitOperation.SetError(OperationErrorStatus.Conflicts);
                         }
                     }
                     else
@@ -884,7 +877,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 else
                 {
-                    submitOperation.Complete(error);
+                    submitOperation.SetError(error);
                 }
             }
         }
@@ -914,15 +907,27 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, this.DomainClient.SupportsCancellation);
+            InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, returnType, invokeOperation.CancellationToken)
+                 .ContinueWith((loadTask, state) =>
+                 {
+                     var operation = (InvokeOperation<TValue>)state;
 
-            InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            this.DomainClient.InvokeAsync(invokeArgs, invokeOperation.CancellationToken)
-                .ContinueWith(result =>
-                {
-                    this.CompleteInvoke(result, invokeOperation);
-                }
+                     if (loadTask.IsCanceled)
+                     {
+                         operation.SetCancelled();
+                     }
+                     else if (loadTask.Exception != null)
+                     {
+                         operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
+                     }
+                     else
+                     {
+                         operation.Complete(loadTask.Result);
+                     }
+                 }
+                , (object)invokeOperation
                 , CancellationToken.None
-                , TaskContinuationOptions.NotOnCanceled
+                , TaskContinuationOptions.HideScheduler
                 , _syncContextScheduler);
 
             return invokeOperation;
@@ -942,80 +947,28 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
         {
-            if (string.IsNullOrEmpty(operationName))
+            // We only expect void types for generated code
+            // Use InvokeOperation<object> return type for these
+            if (returnType == typeof(void) || returnType == typeof(object))
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "operationName"));
-            }
-            if (returnType == null)
-            {
-                throw new ArgumentNullException(nameof(returnType));
-            }
-
-
-            // create a strongly typed InvokeOperation instance
-            MethodInfo createMethod = DomainContext.createInvokeOperationMethod
-                .MakeGenericMethod(returnType == typeof(void) ? typeof(object) : returnType);
-            InvokeOperation invokeOperation = (InvokeOperation)createMethod.Invoke(
-                null, // Static method invocation.
-                new object[]
-                {
-                    operationName,
-                    parameters,
-                    callback,
-                    userState,
-                    DomainClient.SupportsCancellation
-                });
-
-            InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
-            this.DomainClient.InvokeAsync(invokeArgs, invokeOperation.CancellationToken)
-                .ContinueWith(result =>
-                {
-                    this.CompleteInvoke(result, invokeOperation);
-                }
-                , CancellationToken.None
-                , TaskContinuationOptions.NotOnCanceled
-                , _syncContextScheduler);
-
-            return invokeOperation;
-        }
-
-        private void CompleteInvoke(Task<InvokeCompletedResult> invokeTask, InvokeOperation invokeOperation)
-        {
-            if (invokeOperation.IsCanceled)
-            {
-                return;
-            }
-
-            Exception error = null;
-            InvokeCompletedResult results = null;
-            try
-            {
-                results = invokeTask.GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                if (ex.IsFatal())
-                {
-                    throw;
-                }
-                error = ex;
-            }
-
-            if (error == null)
-            {
-                if (results.ValidationErrors.Any())
-                {
-                    invokeOperation.Complete(results.ValidationErrors);
-                }
-                else
-                {
-                    DomainClientResult result = DomainClientResult.CreateInvokeResult(results.ReturnValue, results.ValidationErrors);
-                    invokeOperation.Complete(result);
-                }
+                return InvokeOperation<object>(operationName, returnType, parameters, hasSideEffects, callback, userState);
             }
             else
             {
-                invokeOperation.Complete(error);
+                try
+                {
+                    return (InvokeOperation)s_invokeOperationAsync
+                        .MakeGenericMethod(returnType)
+                        .Invoke(this, new object[] { operationName, returnType, parameters, hasSideEffects, callback, userState });
+                }
+                catch (TargetInvocationException tie)
+                {
+                    if (tie.InnerException != null)
+                    {
+                        throw tie.InnerException;
+                    }
+                    throw;
+                }
             }
         }
 
@@ -1031,14 +984,17 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual Task<InvokeResult> InvokeOperationAsync(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<InvokeResult>();
-
-            var invokeOperation = InvokeOperation(operationName, typeof(void), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult()), tcs);
-            RegisterCancellationToken(invokeOperation, cancellationToken);
-
-            return tcs.Task;
+            // Do not do use await since parameter validation are not thrown instantly
+            return InvokeOperationAsync<object>(operationName, parameters, hasSideEffects, typeof(void), cancellationToken)
+                .ContinueWith(res =>
+                {
+                    return (InvokeResult)res.GetAwaiter().GetResult();
+                }
+                , CancellationToken.None
+                , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.ExecuteSynchronously
+                , TaskScheduler.Default);
         }
 
         /// <summary>
@@ -1053,14 +1009,72 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The invoke operation.</returns>
         public virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken)
         {
-            var tcs = new TaskCompletionSource<InvokeResult<TValue>>();
+            return InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, typeof(TValue), cancellationToken);
+        }
 
-            var invokeOperation = InvokeOperation<TValue>(operationName, typeof(TValue), parameters, hasSideEffects, res => SetTaskResult(res, tcs, (op) => new InvokeResult<TValue>(op.Value)), tcs);
-            RegisterCancellationToken(invokeOperation, cancellationToken);
+        private Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
+            IDictionary<string, object> parameters, bool hasSideEffects,
+            Type returnType,
+            CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(operationName))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "operationName"));
+            }
 
-            return tcs.Task;
+            if (returnType is null)
+            {
+                throw new ArgumentNullException(nameof(returnType));
+            }
+
+            InvokeArgs invokeArgs = new InvokeArgs(operationName, typeof(TValue), parameters, hasSideEffects);
+            return this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
+                                    .ContinueWith((Task<InvokeCompletedResult> task, object state) =>
+            {
+                InvokeCompletedResult results;
+                string operation = (string)state;
+                try
+                {
+                    results = task.GetAwaiter().GetResult();
+                }
+                catch (DomainException)
+                {
+                    // DomainExceptions should not be modified
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    if (ex.IsFatal())
+                    {
+                        throw;
+                    }
+                    string message = string.Format(CultureInfo.CurrentCulture,
+               Resource.DomainContext_InvokeOperationFailed,
+               operation, ex.Message);
+
+                    throw ex is DomainOperationException domainOperationException
+                        ? new DomainOperationException(message, domainOperationException)
+                        : new DomainOperationException(message, ex);
+                }
+
+                if (results.ValidationErrors.Count == 0)
+                {
+                    return new InvokeResult<TValue>((TValue)results.ReturnValue);
+                }
+                else
+                {
+                    string message = string.Format(CultureInfo.CurrentCulture,
+             Resource.DomainContext_InvokeOperationFailed_Validation,
+             operation);
+                    throw new DomainOperationException(message, results.ValidationErrors);
+                }
+            }
+            , operationName
+            , CancellationToken.None
+            , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.HideScheduler
+            , _syncContextScheduler);
         }
 
         /// <summary>

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Reflection;
+using System.Linq;
 
 namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
     /// Represents an asynchronous invoke operation.
     /// </summary>
-    public class InvokeOperation : OperationBase
+    public class InvokeOperation : OperationBase, IInvokeResult
     {
-        private readonly string _operationName;
         private IDictionary<string, object> _parameters;
         private IReadOnlyCollection<ValidationResult> _validationErrors;
         private readonly Action<InvokeOperation> _completeAction;
@@ -34,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 throw new ArgumentNullException(nameof(operationName));
             }
-            this._operationName = operationName;
+            this.OperationName = operationName;
             this._parameters = parameters;
             this._completeAction = completeAction;
         }
@@ -42,13 +40,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the name of the operation.
         /// </summary>
-        public string OperationName
-        {
-            get
-            {
-                return this._operationName;
-            }
-        }
+        public string OperationName { get; }
 
         /// <summary>
         /// Gets the collection of parameters to the operation.
@@ -66,55 +58,14 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Creates a strongly typed <see cref="InvokeOperation"/> for the specified Type.
+        /// The <see cref="IInvokeResult"/> for this operation.
         /// </summary>
-        /// <typeparam name="TValue">The return value Type.</typeparam>
-        /// <param name="operationName">The operation to invoke.</param>
-        /// <param name="parameters">Optional parameters to the operation. Specify null
-        /// if the operation takes no parameters.</param>
-        /// <param name="completeAction">Optional action to execute when the operation completes.</param>
-        /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="supportCancellation"><c>rtue</c> to enable cancellation support</param>
-        /// <returns>The operation instance created.</returns>
-        internal static InvokeOperation Create<TValue>(string operationName, IDictionary<string, object> parameters,
-            Action<InvokeOperation> completeAction, object userState,
-            bool supportCancellation)
-        {
-            Action<InvokeOperation<TValue>> wrappedCompleteAction = null;
-            if (completeAction != null)
-            {
-                wrappedCompleteAction = arg => completeAction(arg);
-            }
-            
-
-            return new InvokeOperation<TValue>(operationName, parameters, wrappedCompleteAction, userState, supportCancellation);
-        }
-
-        /// <summary>
-        /// The <see cref="DomainClientResult"/> for this operation.
-        /// </summary>
-        private protected new DomainClientResult Result
-        {
-            get
-            {
-                return (DomainClientResult)base.Result;
-            }
-        }
+        private protected new IInvokeResult Result => (IInvokeResult)base.Result;
 
         /// <summary>
         /// Gets the return value for the invoke operation.
         /// </summary>
-        public object Value
-        {
-            get
-            {
-                if (this.Result == null)
-                {
-                    return null;
-                }
-                return this.Result.ReturnValue;
-            }
-        }
+        public object Value => Result?.Value;
 
         /// <summary>
         /// Gets the validation errors.
@@ -123,81 +74,42 @@ namespace OpenRiaServices.DomainServices.Client
         {
             get
             {
-                if (this.Result != null)
+                // return any errors if set, otherwise return an empty
+                // collection
+                if (this._validationErrors == null)
                 {
-                    return this.Result.ValidationErrors;
-                }
-                else
-                {
-                    // return any errors if set, otherwise return an empty
-                    // collection
-                    if (this._validationErrors == null)
-                    {
-                        this._validationErrors = Array.Empty<ValidationResult>();
-                    }
+                    this._validationErrors = Array.Empty<ValidationResult>();
                 }
                 return this._validationErrors;
             }
         }
 
         /// <summary>
-        /// Completes the invoke operation with validation errors.
-        /// </summary>
-        /// <param name="validationErrors">The validation errors.</param>
-        internal void Complete(IReadOnlyCollection<ValidationResult> validationErrors)
-        {
-            this._validationErrors = validationErrors;
-            this.RaisePropertyChanged(nameof(ValidationErrors));
-
-            string message = string.Format(CultureInfo.CurrentCulture, 
-                Resource.DomainContext_InvokeOperationFailed_Validation, 
-                this.OperationName);
-            DomainOperationException error = new DomainOperationException(message, validationErrors);
-
-            base.Complete(error);
-        }
-
-        /// <summary>
-        /// Completes the invoke operation with the specified error.
+        /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void Complete(Exception error)
+        internal new void SetError(Exception error)
         {
-            if (typeof(DomainException).IsAssignableFrom(error.GetType()))
+            if (error is DomainOperationException doe
+                && doe.ValidationErrors.Any())
             {
-                // DomainExceptions should not be modified
-                base.Complete(error);
-                return;
+                this._validationErrors = doe.ValidationErrors;
+                this.RaisePropertyChanged(nameof(ValidationErrors));
             }
 
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_InvokeOperationFailed,
-                this.OperationName, error.Message);
-
-            DomainOperationException domainOperationException = error as DomainOperationException;
-            if (domainOperationException != null)
-            {
-                error = new DomainOperationException(message, domainOperationException);
-            }
-            else
-            {
-                error = new DomainOperationException(message, error);
-            }
-
-            base.Complete(error);
+            base.SetError(error);
         }
 
         /// <summary>
         /// Completes the invoke operation with the specified result.
         /// </summary>
         /// <param name="result">The result.</param>
-        internal void Complete(DomainClientResult result)
+        internal void Complete(InvokeResult result)
         {
-            object prevValue = this.Value;
-
+            System.Diagnostics.Debug.Assert(this.Value is null);
             base.Complete(result);
 
-            if (this.Result != null && this.Result.ReturnValue != prevValue)
+            if (this.Value is object)
             {
                 this.RaisePropertyChanged(nameof(Value));
             }
@@ -209,6 +121,11 @@ namespace OpenRiaServices.DomainServices.Client
         protected override void InvokeCompleteAction()
         {
             this._completeAction?.Invoke(this);
+        }
+
+        private protected override void OnCancellationRequested()
+        {
+            // Prevent OperationBase from calling SetCancelled
         }
     }
 
@@ -247,10 +164,16 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     return default(TValue);
                 }
-                return (TValue)this.Result.ReturnValue;
+                return this.Result.Value;
             }
         }
-        
+
+
+        /// <summary>
+        /// The <see cref="IInvokeResult"/> for this operation.
+        /// </summary>
+        private new InvokeResult<TValue> Result => (InvokeResult<TValue>)base.Result;
+
         /// <summary>
         /// Invoke the completion callback.
         /// </summary>
