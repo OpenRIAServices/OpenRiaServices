@@ -91,12 +91,12 @@ namespace OpenRiaServices.DomainServices.Client
         /// Complete the submit operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void Complete(Exception error)
+        internal new void SetError(Exception error)
         {
             if (typeof(DomainException).IsAssignableFrom(error.GetType()))
             {
                 // DomainExceptions should not be modified
-                base.Complete(error);
+                base.SetError(error);
                 return;
             }
 
@@ -113,10 +113,10 @@ namespace OpenRiaServices.DomainServices.Client
                 error = new SubmitOperationException(ChangeSet, message, error);
             }
 
-            base.Complete(error);
+            base.SetError(error);
         }
 
-        internal void Complete(OperationErrorStatus errorStatus)
+        internal void SetError(OperationErrorStatus errorStatus)
         {
             SubmitOperationException error = null;
             if (errorStatus == OperationErrorStatus.ValidationFailed)
@@ -134,7 +134,7 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new ArgumentException("Unsupported OperationErrorStatus",nameof(errorStatus));
             }
 
-            base.Complete(error);
+            base.SetError(error);
         }
 
         /// <summary>

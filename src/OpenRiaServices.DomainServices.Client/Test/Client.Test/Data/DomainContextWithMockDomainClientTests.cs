@@ -199,6 +199,49 @@ namespace OpenRiaServices.DomainServices.Client.Test
             CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
         }
 
+
+        /// <summary>
+        /// Test case where DomainClient completes despite cancellation request
+        /// </summary>
+        [TestMethod]
+        public async Task TestMockClient_InvokeAsync_Cancel_DomainClientCompletes()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+
+            // If the web requires returns a value even if cancelled
+            // It should still return a result
+            var tcs = new TaskCompletionSource<InvokeCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.InvokeCompletedResult = tcs.Task;
+            var invokeTask = dp.EchoAsync("TestInvoke", cts.Token);
+            cts.Cancel();
+            tcs.SetResult(new InvokeCompletedResult("Res"));
+
+            var res = await invokeTask;
+            Assert.AreEqual("Res", res.Value);
+        }
+
+        /// <summary>
+        /// Test case where DomainClient do cancel on cancellation request
+        /// </summary>
+        [TestMethod]
+        public async Task TestMockClient_InvokeAsync_Cancel_DomainClientCancel()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<InvokeCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.InvokeCompletedResult = tcs.Task;
+            var invokeTask = dp.EchoAsync("TestInvoke", cts.Token);
+            cts.Cancel();
+            tcs.TrySetCanceled(cts.Token);
+
+            Assert.IsTrue(invokeTask.IsCanceled);
+        }
+
         /// <summary>
         /// Test that ValidationErrors for invoke are properly returned.
         /// </summary>

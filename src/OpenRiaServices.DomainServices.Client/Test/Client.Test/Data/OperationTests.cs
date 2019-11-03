@@ -40,9 +40,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             base.CancelCore();
         }
 
-        public new void Complete(Exception error)
+        public new void SetError(Exception error)
         {
-            base.Complete(error);
+            base.SetError(error);
         }
 
         public new void Complete(object result)
@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             lo.Completed += action;
 
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            lo.Complete(ex);
+            lo.SetError(ex);
 
             // verify that calling MarkAsHandled again is a noop
             lo.MarkErrorAsHandled();
@@ -122,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                lo.Complete(ex);
+                lo.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -142,7 +142,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             
             try
             {
-                lo.Complete(ex);
+                lo.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -169,7 +169,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                invoke.Complete(ex);
+                invoke.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -188,7 +188,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                invoke.Complete(validationException);
+                invoke.SetError(validationException);
             }
             catch (DomainOperationException e)
             {
@@ -221,7 +221,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                submit.Complete(ex);
+                submit.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -247,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                submit.Complete(OperationErrorStatus.Conflicts);
+                submit.SetError(OperationErrorStatus.Conflicts);
             }
             catch (DomainOperationException e)
             {
@@ -268,7 +268,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                submit.Complete(OperationErrorStatus.ValidationFailed);
+                submit.SetError(OperationErrorStatus.ValidationFailed);
             }
             catch (DomainOperationException e)
             {

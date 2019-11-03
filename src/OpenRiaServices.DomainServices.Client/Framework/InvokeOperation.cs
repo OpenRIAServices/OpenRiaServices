@@ -45,7 +45,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         public string OperationName => this._operationName;
 
-        // TODO: Consider IReadOnlyDictionary
         /// <summary>
         /// Gets the collection of parameters to the operation.
         /// </summary>
@@ -92,7 +91,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void Complete(Exception error)
+        internal new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
                 && doe.ValidationErrors.Any())
@@ -101,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Client
                 this.RaisePropertyChanged(nameof(ValidationErrors));
             }
 
-            base.Complete(error);
+            base.SetError(error);
         }
 
         /// <summary>
@@ -125,6 +124,11 @@ namespace OpenRiaServices.DomainServices.Client
         protected override void InvokeCompleteAction()
         {
             this._completeAction?.Invoke(this);
+        }
+
+        private protected override void OnCancellationRequested()
+        {
+            // Prevent OperationBase from calling SetCancelled
         }
     }
 
