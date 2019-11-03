@@ -1,12 +1,13 @@
-# 5.0 (Unrealeased)
+# 5.0 (In Preview)
 
 ## Overview
 
 1. Server is now asynronous which allows it to handles burst in load much better and generally better performance (latency/CPU/memory) under load. 
 2. Client networking API the *DomainClient* is now based on Task instead of using the APM pattern with Begin/End methods
 3. Supported TargetFrameworks has changed
-4. AspNetMembership authentication (**AuthenticationBase** class) is moved to a new namespace and nuget package
-  * Add a reference to **OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
+4. Code generation now works against *netstandard 2.0* and *netcore 2.1+* clients
+5. AspNetMembership authentication (**AuthenticationBase** class) is moved to a new namespace and nuget package
+   * Add a reference to **OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
 
 ## Upgrade instructions
 
@@ -22,9 +23,37 @@
    
    
 For better scalability (can be done afterwards):
+
 1. Update your Query and Invoke methods so that they use async/await where relevant.
-  E.g if you are using EF6, other ORM frameworks or do network or file access.
-   
+  E.g if you are using EF6, other ORM frameworks or do network or file access.   
+
+# 5.0.0 Preview 2
+
+This is mostly a performance and feature update.
+It does not contain any new breaking changes since preiew 1
+
+### Client
+
+* Cache *ChannelFactories* for large performance improvements (#184)
+
+### Code generation
+
+* Code generation now works for *netstandard* and *netcoreapp* (#199, #201)
+* Fix error messages about incompatible Target frameworks when TargetFramework differs between client and server. (#188)
+
+### Server
+
+* *Significant* performance and memory usage improvemens for serialization (#189)
+* Improve Perf for Query and Invoke where validation is not required (#186)
+* Reduce per request allocations (#197)
+* Small improvements in Task To APM wrapper for async completing operations
+* Fix potential race condition when configuring endpoint authentication. (#196)
+
+### Other
+
+* Readme updates
+
+# 5.0.0 Preview 1
 
 ## Client
 

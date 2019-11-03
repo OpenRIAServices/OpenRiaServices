@@ -424,7 +424,7 @@ namespace OpenRiaServices.DomainServices.Client
                 catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
-                    taskCompletionSource.SetException(ex);
+                    taskCompletionSource.TrySetException(ex);
                 }
                 finally
                 {
@@ -437,7 +437,17 @@ namespace OpenRiaServices.DomainServices.Client
             realParameters[realParameters.Length - 1] = /*userState*/endInvokeMethod;
 
             // Call Begin** method
-            InvokeMethod(beginInvokeMethod, channel, realParameters);
+            // Handle any immediate CommunicationException which can be thrown directly from begin method
+            // for some tests that perform invalid calls against localhost
+            try
+            {
+                InvokeMethod(beginInvokeMethod, channel, realParameters);
+            }
+            catch (CommunicationException ex)
+            {
+                taskCompletionSource.TrySetException(ex);
+            }
+
             return taskCompletionSource.Task;
         }
 
