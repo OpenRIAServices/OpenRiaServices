@@ -57,6 +57,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             EnqueueTestComplete();
         }
+
         [TestMethod]
         public void TestMockClient_CancellationSupport()
         {
@@ -239,6 +240,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             cts.Cancel();
             tcs.TrySetCanceled(cts.Token);
 
+            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => invokeTask);
             Assert.IsTrue(invokeTask.IsCanceled);
         }
 
@@ -309,7 +311,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
             Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
-
 
             var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
                 () => dp.LoadAsync(dp.GetCitiesQuery()),
