@@ -22,8 +22,14 @@ namespace OpenRiaServices.DomainServices.Client
     {
         internal const int TotalCountUndefined = -1;
 
-        private static MethodInfo createInvokeOperationMethod = typeof(InvokeOperation)
-                .GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic);
+        private static readonly MethodInfo s_invokeOperationAsync = typeof(DomainContext)
+                .GetMethod(nameof(InvokeOperationAsync), new Type[] {
+                    typeof(string),
+                    typeof(IDictionary<string, object>),
+                    typeof(bool),
+                    typeof(Type),
+                    typeof(CancellationToken)
+                });
 
         private int _activeLoadCount;
         private readonly DomainClient _domainClient;
@@ -941,31 +947,17 @@ namespace OpenRiaServices.DomainServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
         {
-            if (string.IsNullOrEmpty(operationName))
-            {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "operationName"));
-            }
-            if (returnType == null)
-            {
-                throw new ArgumentNullException(nameof(returnType));
-            }
-
             // We only expect void types for generated code
             // Use InvokeOperation<object> return type for these
             if (returnType == typeof(void) || returnType == typeof(object))
             {
-                Action<InvokeOperation<object>> call = callback;
-                return InvokeOperation<object>(operationName, returnType, parameters, hasSideEffects, call, userState);
+                return InvokeOperation<object>(operationName, returnType, parameters, hasSideEffects, callback, userState);
             }
             else
             {
-                // Get MethodInfo for InvokeOperation<object>(string, Type, IDictionary<string, object>, bool, Action<InvokeOperation<object>>, object)
-                var method = new Func<string, Type, IDictionary<string, object>, bool, Action<InvokeOperation<object>>, object, InvokeOperation<object>>(this.InvokeOperation<object>);
-                var invokeMethod = method.Method.GetGenericMethodDefinition();
-
                 try
                 {
-                    return (InvokeOperation)invokeMethod
+                    return (InvokeOperation)s_invokeOperationAsync
                         .MakeGenericMethod(returnType)
                         .Invoke(this, new object[] { operationName, returnType, parameters, hasSideEffects, callback, userState });
                 }

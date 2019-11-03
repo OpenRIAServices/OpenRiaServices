@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -12,7 +10,6 @@ namespace OpenRiaServices.DomainServices.Client
     /// </summary>
     public class InvokeOperation : OperationBase, IInvokeResult
     {
-        private readonly string _operationName;
         private IDictionary<string, object> _parameters;
         private IReadOnlyCollection<ValidationResult> _validationErrors;
         private readonly Action<InvokeOperation> _completeAction;
@@ -35,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 throw new ArgumentNullException(nameof(operationName));
             }
-            this._operationName = operationName;
+            this.OperationName = operationName;
             this._parameters = parameters;
             this._completeAction = completeAction;
         }
@@ -43,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <summary>
         /// Gets the name of the operation.
         /// </summary>
-        public string OperationName => this._operationName;
+        public string OperationName { get; }
 
         /// <summary>
         /// Gets the collection of parameters to the operation.
