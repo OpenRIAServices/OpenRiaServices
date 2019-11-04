@@ -6,9 +6,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.ServiceModel;
-using OpenRiaServices.DomainServices.Client.Test.Services;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cities;
 using DataTests.AdventureWorks.LTS;
@@ -20,7 +21,6 @@ using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.Descri
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
-    using System.Net;
     using TestDomainServices.Saleテ;
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
@@ -47,9 +47,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// parts of the query. The repro test below demonstrates this, where "take=1" is a substring of "take=10".
         /// </summary>
         [TestMethod]
-        [Asynchronous]
         [WorkItem(195495)]
-        public void VerifyQueryOperatorOrdering()
+        public async Task VerifyQueryOperatorOrdering()
         {
             TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -57,50 +56,31 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
-                RoundtripQueryEntity entity = (RoundtripQueryEntity)lo.Entities.Single();
-                Assert.IsTrue(entity.Query.Contains(".OrderBy(Param_0 => Param_0.PropB).Take(10).Where(Param_1 => Not(Param_1.PropC.Contains(\"Pluto\"))).Take(1)"));
+            await lo;
+            Assert.IsFalse(lo.HasError);
+            RoundtripQueryEntity entity = (RoundtripQueryEntity)lo.Entities.Single();
+            Assert.IsTrue(entity.Query.Contains(".OrderBy(Param_0 => Param_0.PropB).Take(10).Where(Param_1 => Not(Param_1.PropC.Contains(\"Pluto\"))).Take(1)"));
 
-                // do a similar test, this time reversing the order of the takes
-                query = ctxt.GetRoundtripQueryEntitiesQuery().OrderBy(p => p.PropB).Take(1).Where(p => !p.PropC.Contains("Pluto")).Take(10);
-                lo = ctxt.Load(query, LoadBehavior.RefreshCurrent, false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
-                RoundtripQueryEntity entity = (RoundtripQueryEntity)lo.Entities.Single();
-                Assert.IsTrue(entity.Query.Contains(".OrderBy(Param_0 => Param_0.PropB).Take(1).Where(Param_1 => Not(Param_1.PropC.Contains(\"Pluto\"))).Take(10)"));
+            // do a similar test, this time reversing the order of the takes
+            query = ctxt.GetRoundtripQueryEntitiesQuery().OrderBy(p => p.PropB).Take(1).Where(p => !p.PropC.Contains("Pluto")).Take(10);
+            lo = ctxt.Load(query, LoadBehavior.RefreshCurrent, false);
 
-                query = ctxt.GetRoundtripQueryEntitiesQuery().Take(100).Take(10).Take(1);
-                lo = ctxt.Load(query, LoadBehavior.RefreshCurrent, false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
-                RoundtripQueryEntity entity = (RoundtripQueryEntity)lo.Entities.Single();
-                Assert.IsTrue(entity.Query.Contains(".Take(100).Take(10).Take(1)"));
-            });
+            await lo;
+            Assert.IsFalse(lo.HasError);
+            entity = (RoundtripQueryEntity)lo.Entities.Single();
+            Assert.IsTrue(entity.Query.Contains(".OrderBy(Param_0 => Param_0.PropB).Take(1).Where(Param_1 => Not(Param_1.PropC.Contains(\"Pluto\"))).Take(10)"));
 
-            EnqueueTestComplete();
+            query = ctxt.GetRoundtripQueryEntitiesQuery().Take(100).Take(10).Take(1);
+            lo = ctxt.Load(query, LoadBehavior.RefreshCurrent, false);
+
+            await lo;
+            Assert.IsFalse(lo.HasError);
+            entity = (RoundtripQueryEntity)lo.Entities.Single();
+            Assert.IsTrue(entity.Query.Contains(".Take(100).Take(10).Take(1)"));
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void Bug830468_MultipleWhereClauses()
+        public async Task Bug830468_MultipleWhereClauses()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
 
@@ -108,22 +88,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = nw.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
-                Assert.AreEqual(1, lo.Entities.Count());
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsFalse(lo.HasError);
+            Assert.AreEqual(1, lo.Entities.Count());
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void SelectQueryOperator()
+        public async Task SelectQueryOperator()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
@@ -164,21 +135,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     select c;
             LoadOperation lo = cities.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
-                Assert.IsTrue(lo.Entities.Count() > 0);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsFalse(lo.HasError);
+            Assert.IsTrue(lo.Entities.Count() > 0);
         }
 
         /// <summary>
         /// Verify that synchronous method level validation occurs immediately for
         /// query operations.
         [TestMethod]
-        [Asynchronous]
         public void ClientValidation_Query()
         {
             TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
@@ -187,8 +152,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 ctxt.QueryWithParamValidationQuery(-3, "ABC");
             }, "The field a must be between 0 and 10.", typeof(RangeAttribute), -3);
-
-            EnqueueTestComplete();
         }
 
         /// <summary>
@@ -196,8 +159,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// client for query operations.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void ServerValidation_Query()
+        public async Task ServerValidation_Query()
         {
             TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -233,66 +195,38 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 validate((LoadOperation<A>)sender);
             };
 
-            EnqueueConditional(delegate
-            {
-                return op.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                validate(op);
-            });
+            await op;
+            validate(op);
 
             var loadTask = ctxt.LoadAsync(query);
-            EnqueueConditional(() => loadTask.IsCompleted);
-            EnqueueCallback(() =>
-            {
-                validateException(loadTask.Exception?.InnerException);
-            });
-
-            EnqueueTestComplete();
+            await loadTask;
+            validateException(loadTask.Exception?.InnerException);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestNullReturningQueryOperations()
+        public async Task TestNullReturningQueryOperations()
         {
             TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             // test null returning singleton
             LoadOperation lo = ctxt.Load(ctxt.GetAReturnNullQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(0, lo.Entities.Count());
-            });
-            EnqueueCallback(delegate
-            {
-                // test null returning collection query
-                lo = ctxt.Load(ctxt.GetAsReturnNullQuery(), false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(0, lo.Entities.Count());
-            });
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(0, lo.Entities.Count());
 
-            EnqueueTestComplete();
+            // test null returning collection query
+            lo = ctxt.Load(ctxt.GetAsReturnNullQuery(), false);
+
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(0, lo.Entities.Count());
         }
 
 #if !VBTests
 
         [TestMethod]
-        [Asynchronous]
-        public void Bug705027_IsLoadingAfterCancel()
+        public async Task Bug705027_IsLoadingAfterCancel()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
@@ -303,50 +237,36 @@ namespace OpenRiaServices.DomainServices.Client.Test
             lo.Cancel();
             Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(cities.IsLoading, "IsLoading should be false");
-                Assert.IsTrue(lo.IsCanceled, "operation should be canceled");
-                Assert.IsFalse(lo.HasError, "Cancelled operation should not have any error");
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsFalse(cities.IsLoading, "IsLoading should be false");
+            Assert.IsTrue(lo.IsCanceled, "operation should be canceled");
+            Assert.IsFalse(lo.HasError, "Cancelled operation should not have any error");
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperation_SingletonQueryMethod()
+        public async Task LoadOperation_SingletonQueryMethod()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
 
             // first test a query that returns an instance
             LoadOperation lo = nw.Load(nw.GetProductByIdQuery(5), false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
+            await lo;
+            Assert.IsFalse(lo.HasError);
 
-                DataTests.Northwind.LTS.Product prod = nw.Products.Single();
-                Assert.AreEqual(5, prod.ProductID);
+            DataTests.Northwind.LTS.Product prod = nw.Products.Single();
+            Assert.AreEqual(5, prod.ProductID);
 
-                // next test a query that returns nothing
-                lo = nw.Load(nw.GetProductByIdQuery(-1), false);
-            });
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.HasError);
-                Assert.AreEqual(1, nw.Products.Count);
-            });
+            // next test a query that returns nothing
+            lo = nw.Load(nw.GetProductByIdQuery(-1), false);
 
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsFalse(lo.HasError);
+            Assert.AreEqual(1, nw.Products.Count);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperation_SubscribeCompletedAfterComplete()
+        public async Task LoadOperation_SubscribeCompletedAfterComplete()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
             bool callbackCalled = false;
@@ -354,27 +274,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = cities.GetCitiesQuery().Where(p => p.StateName == "Ohio");
             LoadOperation<City> lo = cities.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
+            await lo;
+            Assert.IsFalse(lo.HasError);
+
+            // subscribe to completed event AFTER completion. Verify
+            // that the callback is called immediately
+            lo.Completed += (s, e) =>
             {
-                Assert.IsFalse(lo.HasError);
+                callbackCalled = true;
+            };
 
-                // subscribe to completed event AFTER completion. Verify
-                // that the callback is called immediately
-                lo.Completed += (s, e) =>
-                {
-                    callbackCalled = true;
-                };
-
-                Assert.IsTrue(callbackCalled);
-            });
-
-            EnqueueTestComplete();
+            Assert.IsTrue(callbackCalled);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperation_ObservableCollections()
+        public async Task LoadOperation_ObservableCollections()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
@@ -411,40 +325,32 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ((INotifyCollectionChanged)lo.AllEntities).CollectionChanged += allEntitiesCollectionChangedHandler;
             ((INotifyPropertyChanged)lo).PropertyChanged += propertyChangedEventHandler;
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(0, entitiesCollectionChangedArgs.Count);
-                Assert.AreEqual(0, allEntitiesCollectionChangedArgs.Count);
-                Assert.IsFalse(totalCountChanged);
+            await lo;
+            Assert.AreEqual(0, entitiesCollectionChangedArgs.Count);
+            Assert.AreEqual(0, allEntitiesCollectionChangedArgs.Count);
+            Assert.IsFalse(totalCountChanged);
 
-                // now execute a query returning 3 entities
-                query = cities.GetCitiesQuery().Take(3);
-                lo = cities.Load(query, false);
-                ((INotifyCollectionChanged)lo.Entities).CollectionChanged += entitiesCollectionChangedHandler;
-                ((INotifyCollectionChanged)lo.AllEntities).CollectionChanged += allEntitiesCollectionChangedHandler;
-                ((INotifyPropertyChanged)lo).PropertyChanged += propertyChangedEventHandler;
-            });
-            EnqueueConditional(() => lo.Entities.Count() == 3);
-            EnqueueCallback(delegate
-            {
-                // Entities : expect a Reset event and no Adds
-                Assert.AreEqual(1, entitiesCollectionChangedArgs.Count);
-                Assert.AreEqual(3, lo.Entities.Count());
+            // now execute a query returning 3 entities
+            query = cities.GetCitiesQuery().Take(3);
+            lo = cities.Load(query, false);
+            ((INotifyCollectionChanged)lo.Entities).CollectionChanged += entitiesCollectionChangedHandler;
+            ((INotifyCollectionChanged)lo.AllEntities).CollectionChanged += allEntitiesCollectionChangedHandler;
+            ((INotifyPropertyChanged)lo).PropertyChanged += propertyChangedEventHandler;
 
-                // AllEntities : expect a Reset event
-                Assert.AreEqual(1, allEntitiesCollectionChangedArgs.Count);
-                Assert.AreEqual(3, lo.AllEntities.Count());
+            await lo;
+            // Entities : expect a Reset event and no Adds
+            Assert.AreEqual(1, entitiesCollectionChangedArgs.Count);
+            Assert.AreEqual(3, lo.Entities.Count());
 
-                Assert.IsTrue(totalCountChanged);
-            });
+            // AllEntities : expect a Reset event
+            Assert.AreEqual(1, allEntitiesCollectionChangedArgs.Count);
+            Assert.AreEqual(3, lo.AllEntities.Count());
 
-            EnqueueTestComplete();
+            Assert.IsTrue(totalCountChanged);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperation_MulipleCompletionBehavior()
+        public async Task LoadOperation_MulipleCompletionBehavior()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
@@ -452,40 +358,31 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation<City> lo = cities.Load(query, false);
 
             lo.Cancel();
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
+            await lo;
+            ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                ExceptionHelper.ExpectInvalidOperationException(delegate
-                {
-                    lo.Cancel();
-                }, Resources.AsyncOperation_AlreadyCompleted);
+                lo.Cancel();
+            }, Resources.AsyncOperation_AlreadyCompleted);
 
-                lo = cities.Load(query, false);
-            }); 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
+            lo = cities.Load(query, false);
+
+            await lo;
+            Assert.IsTrue(lo.IsComplete);
+
+            ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                Assert.IsTrue(lo.IsComplete);
+                lo.Complete(new LoadResult<City>(query, default(LoadBehavior), Array.Empty<City>(), Array.Empty<City>(), 0));
+            }, Resources.AsyncOperation_AlreadyCompleted);
 
-                ExceptionHelper.ExpectInvalidOperationException(delegate
-                {
-                    lo.Complete(new LoadResult<City>(query, default(LoadBehavior), Array.Empty<City>(), Array.Empty<City>(), 0));
-                }, Resources.AsyncOperation_AlreadyCompleted);
+            lo = cities.Load(query, false);
 
-                lo = cities.Load(query, false);
-            });
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
+            await lo;
+            Assert.IsTrue(lo.IsComplete);
+
+            ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                Assert.IsTrue(lo.IsComplete);
-
-                ExceptionHelper.ExpectInvalidOperationException(delegate
-                {
-                    lo.SetError(new Exception("FAIL!"));
-                }, Resources.AsyncOperation_AlreadyCompleted);
-            });
-
-            EnqueueTestComplete();
+                lo.SetError(new Exception("FAIL!"));
+            }, Resources.AsyncOperation_AlreadyCompleted);
         }
 
         /// <summary>
@@ -495,8 +392,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         ///   - INPC events are fired
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperationLifecycle_Success()
+        public async Task LoadOperationLifecycle_Success()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
@@ -561,27 +457,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
-            EnqueueConditional(() => lo.IsComplete && callbackCalled && completedCalled);
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(completedCalled);
-                Assert.IsTrue(callbackCalled);
+            await lo;
+            Assert.IsTrue(completedCalled);
+            Assert.IsTrue(callbackCalled);
 
-                // verify state after completion
-                Assert.IsNull(lo.Error);
-                Assert.IsFalse(lo.HasError);
-                Assert.IsFalse(lo.IsCanceled);
-                Assert.IsTrue(lo.IsComplete);
-                Assert.IsFalse(lo.CanCancel);
+            // verify state after completion
+            Assert.IsNull(lo.Error);
+            Assert.IsFalse(lo.HasError);
+            Assert.IsFalse(lo.IsCanceled);
+            Assert.IsTrue(lo.IsComplete);
+            Assert.IsFalse(lo.CanCancel);
 
-                // verify property change notifications and ordering
-                Assert.AreEqual(3, propChangeNotifications.Count);
-                Assert.AreEqual("IsComplete", propChangeNotifications[0]);
-                Assert.AreEqual("CanCancel", propChangeNotifications[1]);
-                Assert.AreEqual("TotalEntityCount", propChangeNotifications[2]);
-            });
-
-            EnqueueTestComplete();
+            // verify property change notifications and ordering
+            Assert.AreEqual(3, propChangeNotifications.Count);
+            Assert.AreEqual("IsComplete", propChangeNotifications[0]);
+            Assert.AreEqual("CanCancel", propChangeNotifications[1]);
+            Assert.AreEqual("TotalEntityCount", propChangeNotifications[2]);
         }
 
         /// <summary>
@@ -591,8 +482,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         ///   - INPC events are fired
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperationLifecycle_Cancel()
+        public async Task LoadOperationLifecycle_Cancel()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
@@ -651,36 +541,30 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
-            EnqueueCallback(() =>
-            {
-                // cancel the load
-                Assert.IsFalse(lo.IsComplete);
-                lo.Cancel();
+            await lo;
+            // cancel the load
+            Assert.IsFalse(lo.IsComplete);
+            lo.Cancel();
 
-                Assert.IsFalse(lo.CanCancel);
-                Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
-            });
-            EnqueueConditional(() => lo.IsComplete && callbackCalled && completedCalled);
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(completedCalled);
-                Assert.IsTrue(callbackCalled);
+            Assert.IsFalse(lo.CanCancel);
+            Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
-                // verify state after completion
-                Assert.IsNull(lo.Error);
-                Assert.IsFalse(lo.HasError);
-                Assert.IsTrue(lo.IsCanceled);
-                Assert.IsTrue(lo.IsComplete);
-                Assert.IsFalse(lo.CanCancel);
+            await lo;
+            Assert.IsTrue(completedCalled);
+            Assert.IsTrue(callbackCalled);
 
-                // verify property change notifications and ordering
-                Assert.AreEqual(3, propChangeNotifications.Count);
-                Assert.AreEqual("IsCanceled", propChangeNotifications[0]);
-                Assert.AreEqual("CanCancel", propChangeNotifications[1]);
-                Assert.AreEqual("IsComplete", propChangeNotifications[2]);
-            });
+            // verify state after completion
+            Assert.IsNull(lo.Error);
+            Assert.IsFalse(lo.HasError);
+            Assert.IsTrue(lo.IsCanceled);
+            Assert.IsTrue(lo.IsComplete);
+            Assert.IsFalse(lo.CanCancel);
 
-            EnqueueTestComplete();
+            // verify property change notifications and ordering
+            Assert.AreEqual(3, propChangeNotifications.Count);
+            Assert.AreEqual("IsCanceled", propChangeNotifications[0]);
+            Assert.AreEqual("CanCancel", propChangeNotifications[1]);
+            Assert.AreEqual("IsComplete", propChangeNotifications[2]);
         }
 
         /// <summary>
@@ -690,8 +574,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         ///   - INPC events are fired
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void LoadOperationLifecycle_Error()
+        public async Task LoadOperationLifecycle_Error()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
@@ -754,28 +637,23 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
-            EnqueueConditional(() => lo.IsComplete && callbackCalled && completedCalled);
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(completedCalled);
-                Assert.IsTrue(callbackCalled);
+            await lo;
+            Assert.IsTrue(completedCalled);
+            Assert.IsTrue(callbackCalled);
 
-                // verify state after completion
-                Assert.IsTrue(lo.HasError);
-                Assert.IsFalse(lo.IsCanceled);
-                Assert.IsTrue(lo.IsComplete);
-                Assert.IsFalse(lo.CanCancel);
+            // verify state after completion
+            Assert.IsTrue(lo.HasError);
+            Assert.IsFalse(lo.IsCanceled);
+            Assert.IsTrue(lo.IsComplete);
+            Assert.IsFalse(lo.CanCancel);
 
-                // verify property change notifications and ordering
-                Assert.AreEqual(5, propChangeNotifications.Count);
-                Assert.AreEqual("IsErrorHandled", propChangeNotifications[0]);
-                Assert.AreEqual("Error", propChangeNotifications[1]);
-                Assert.AreEqual("HasError", propChangeNotifications[2]);
-                Assert.AreEqual("IsComplete", propChangeNotifications[3]);
-                Assert.AreEqual("CanCancel", propChangeNotifications[4]);
-            });
-
-            EnqueueTestComplete();
+            // verify property change notifications and ordering
+            Assert.AreEqual(5, propChangeNotifications.Count);
+            Assert.AreEqual("IsErrorHandled", propChangeNotifications[0]);
+            Assert.AreEqual("Error", propChangeNotifications[1]);
+            Assert.AreEqual("HasError", propChangeNotifications[2]);
+            Assert.AreEqual("IsComplete", propChangeNotifications[3]);
+            Assert.AreEqual("CanCancel", propChangeNotifications[4]);
         }
 
         [TestMethod]
@@ -804,27 +682,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// serialized to the client
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestInheritance()
+        public async Task TestInheritance()
         {
             TestDomainServices.TestProvider_Inheritance1 ctxt = new TestDomainServices.TestProvider_Inheritance1(new Uri(TestURIs.RootURI, "TestDomainServices-TestProvider_Inheritance1.svc"));
-
             LoadOperation<TestDomainServices.InheritanceC> result = ctxt.Load(ctxt.GetCsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
+            await result;
+            Assert.IsNull(result.Error);
 
-                TestDomainServices.InheritanceC c = ctxt.InheritanceCs.First();
-                Assert.AreEqual("AVal", c.InheritanceAProp);
-                Assert.AreEqual("CVal", c.InheritanceCProp);
-            });
-
-            EnqueueTestComplete();
+            TestDomainServices.InheritanceC c = ctxt.InheritanceCs.First();
+            Assert.AreEqual("AVal", c.InheritanceAProp);
+            Assert.AreEqual("CVal", c.InheritanceCProp);
         }
 #endif
 
@@ -866,8 +734,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestInvokingQueryWithSideEffects()
+        public async Task TestInvokingQueryWithSideEffects()
         {
             TestDomainServices.TestProvider_Scenarios provider = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -876,48 +743,32 @@ namespace OpenRiaServices.DomainServices.Client.Test
             entityQuery.IncludeTotalCount = true;
             LoadOperation<TestSideEffects> result = provider.Load(entityQuery, false);
 
-            EnqueueConditional(delegate
-            {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
-                Assert.AreEqual(2, result.TotalEntityCount);
-                Assert.AreEqual(2, result.Entities.Count());
+            await result;
+            Assert.IsNull(result.Error);
+            Assert.AreEqual(2, result.TotalEntityCount);
+            Assert.AreEqual(2, result.Entities.Count());
 
-                var entity = result.Entities.First();
-                Assert.AreEqual("TestName", entity.Name);
-                Assert.AreEqual("POST", entity.Verb);
-                Assert.IsFalse(entity.URL.AbsoluteUri.Contains(@"$where"));
-            });
-            EnqueueTestComplete();
+            var entity = result.Entities.First();
+            Assert.AreEqual("TestName", entity.Name);
+            Assert.AreEqual("POST", entity.Verb);
+            Assert.IsFalse(entity.URL.AbsoluteUri.Contains(@"$where"));
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestReadOnlyMemberSerialization()
+        public async Task TestReadOnlyMemberSerialization()
         {
             TestDomainServices.TestProvider_Scenarios provider = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             LoadOperation result = provider.Load(provider.GetAsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
+            await result;
+            Assert.IsNull(result.Error);
 
-                TestDomainServices.A a = provider.As.First();
+            TestDomainServices.A a = provider.As.First();
 
-                Assert.AreEqual("ReadOnlyData", a.ReadOnlyData_NoReadOnlyAttribute);
-                Assert.AreEqual("ReadOnlyData", a.ReadOnlyData_NoSetter);
-                Assert.AreEqual("ReadOnlyData", a.ReadOnlyData_WithSetter);
-            });
-
-            EnqueueTestComplete();
+            Assert.AreEqual("ReadOnlyData", a.ReadOnlyData_NoReadOnlyAttribute);
+            Assert.AreEqual("ReadOnlyData", a.ReadOnlyData_NoSetter);
+            Assert.AreEqual("ReadOnlyData", a.ReadOnlyData_WithSetter);
         }
 
         /// <summary>
@@ -926,69 +777,50 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// we're handling them properly.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void Bug479461_StringConcatQuery()
+        public async Task Bug479461_StringConcatQuery()
         {
             Catalog catalog = CreateDomainContext();
 
             var query = catalog.GetProductsQuery().Where(p => (p.ProductID + 5) > 0).OrderBy(p => (p.Name + "ZZ"));
             LoadOperation result = catalog.Load(query, false);
 
-            EnqueueConditional(() => result.IsComplete);
-            EnqueueCallback(delegate
-            {
-                AssertSuccess();
-            });
-
-            EnqueueTestComplete();
+            await result;
+            AssertSuccess();
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestCycleRoot()
+        public async Task TestCycleRoot()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             LoadOperation result = ctxt.Load(ctxt.GetTestCyclesRootQuery(), false);
 
-            EnqueueConditional(() => result.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
+            await result;
+            Assert.IsNull(result.Error);
 
-                // Verify resulting graph structure
-                Assert.AreEqual(1, result.Entities.Count());
-                Assert.AreEqual(2, result.Entities.Cast<TestCycles>().Single().IncludedTs.Count);
-                Assert.AreEqual(63, result.AllEntities.Count());
-            });
-
-            EnqueueTestComplete();
+            // Verify resulting graph structure
+            Assert.AreEqual(1, result.Entities.Count());
+            Assert.AreEqual(2, result.Entities.Cast<TestCycles>().Single().IncludedTs.Count);
+            Assert.AreEqual(63, result.AllEntities.Count());
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestCycleTier1()
+        public async Task TestCycleTier1()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             LoadOperation result = ctxt.Load(ctxt.GetTestCyclesTier1Query(), false);
 
-            EnqueueConditional(() => result.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
+            await result;
+            Assert.IsNull(result.Error);
 
-                // Verify resulting graph structure
-                Assert.AreEqual(16, result.Entities.Count());
-                Assert.AreEqual(16, result.Entities.Cast<TestCycles>().First().IncludedTs.Count);
-                Assert.AreEqual(273, result.AllEntities.Count());
-            });
-
-            EnqueueTestComplete();
+            // Verify resulting graph structure
+            Assert.AreEqual(16, result.Entities.Count());
+            Assert.AreEqual(16, result.Entities.Cast<TestCycles>().First().IncludedTs.Count);
+            Assert.AreEqual(273, result.AllEntities.Count());
         }
 
         [TestMethod]
-        [Asynchronous]
         [Ignore] //Missing stored procedures
-        public void Bug479449_Requery_RefreshCurrent()
+        public async Task Bug479449_Requery_RefreshCurrent()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
 
@@ -1001,96 +833,62 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 }
             };
             LoadOperation result = nw.Load(query, LoadBehavior.RefreshCurrent, action, "data");
+            await result;
+            Assert.IsNull(result.Error);
+            Assert.AreEqual(LoadBehavior.RefreshCurrent, result.LoadBehavior);
 
-            EnqueueConditional(delegate
+            foreach (DataTests.Northwind.LTS.Order_Detail detail in nw.Order_Details)
             {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
-                Assert.AreEqual(LoadBehavior.RefreshCurrent, result.LoadBehavior);
+                Assert.AreEqual(detail.ProductID, detail.Product.ProductID);
+            }
 
-                foreach (DataTests.Northwind.LTS.Order_Detail detail in nw.Order_Details)
-                {
-                    Assert.AreEqual(detail.ProductID, detail.Product.ProductID);
-                }
-
-                nw.Load(query, LoadBehavior.RefreshCurrent, action, "data");
-            });
-            EnqueueConditional(delegate
+            result = nw.Load(query, LoadBehavior.RefreshCurrent, action, "data");
+            await result;
+            foreach (DataTests.Northwind.LTS.Order_Detail detail in nw.Order_Details)
             {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                foreach (DataTests.Northwind.LTS.Order_Detail detail in nw.Order_Details)
-                {
-                    Assert.AreEqual(detail.ProductID, detail.Product.ProductID);
-                }
-            });
-
-            EnqueueTestComplete();
+                Assert.AreEqual(detail.ProductID, detail.Product.ProductID);
+            }
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestProjectionIncludes()
+        public async Task TestProjectionIncludes()
         {
             TestDomainServices.IncludeScenariosTestProvider provider = new TestDomainServices.IncludeScenariosTestProvider(new Uri(TestURIs.RootURI, "TestDomainServices-IncludeScenariosTestProvider.svc"));
             LoadOperation result = provider.Load(provider.GetAsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result.Error);
+            await result;
+            Assert.IsNull(result.Error);
+            List<TestDomainServices.IncludesA> results = provider.IncludesAs.ToList();
 
-                List<TestDomainServices.IncludesA> results = provider.IncludesAs.ToList();
+            // verify all projections
+            TestDomainServices.IncludesA a = results[0];
+            Assert.AreEqual("BP1", a.BP1);
+            Assert.AreEqual("CP1", a.CP1);
+            Assert.AreEqual("DP2", a.DP2);
 
-                // verify all projections
-                TestDomainServices.IncludesA a = results[0];
-                Assert.AreEqual("BP1", a.BP1);
-                Assert.AreEqual("CP1", a.CP1);
-                Assert.AreEqual("DP2", a.DP2);
+            // verify projections in hierarchy with null links
+            a = results[1];
+            Assert.AreEqual("BP1", a.BP1);
+            Assert.AreEqual(null, a.CP1);
+            Assert.AreEqual(null, a.DP2);
 
-                // verify projections in hierarchy with null links
-                a = results[1];
-                Assert.AreEqual("BP1", a.BP1);
-                Assert.AreEqual(null, a.CP1);
-                Assert.AreEqual(null, a.DP2);
-
-                // verify that projection properties are read-only
-                EditableAttribute editableAttribute = (EditableAttribute)a.GetType().GetProperty("BP1").GetCustomAttributes(typeof(EditableAttribute), false).Single();
-                Assert.IsFalse(editableAttribute.AllowEdit);
-            });
-
-            EnqueueTestComplete();
+            // verify that projection properties are read-only
+            EditableAttribute editableAttribute = (EditableAttribute)a.GetType().GetProperty("BP1").GetCustomAttributes(typeof(EditableAttribute), false).Single();
+            Assert.IsFalse(editableAttribute.AllowEdit);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestQueryProjectionIncludes()
+        public async Task TestQueryProjectionIncludes()
         {
             TestDomainServices.IncludeScenariosTestProvider provider = new TestDomainServices.IncludeScenariosTestProvider(new Uri(TestURIs.RootURI, "TestDomainServices-IncludeScenariosTestProvider.svc"));
-
             LoadOperation result1 = provider.Load(provider.GetAsQuery().Where(p => p.ID == 1 && p.DP2 == "DP2"), false);
             LoadOperation result2 = provider.Load(provider.GetAsQuery().Where(p => p.ID == 1 && p.DP2.ToLower() == "dp2"), false);
 
-            EnqueueConditional(delegate
-            {
-                return result1.IsComplete && result2.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(result1.Error);
-                Assert.IsNull(result2.Error);
-                Assert.AreEqual(1, provider.IncludesAs.Count);
-            });
-
-            EnqueueTestComplete();
+            await result1;
+            await result2;
+            Assert.IsNull(result1.Error);
+            Assert.IsNull(result2.Error);
+            Assert.AreEqual(1, provider.IncludesAs.Count);
         }
 
         /// <summary>
@@ -1098,8 +896,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// are fired as expected
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestEntitySet_Accumulation()
+        public async Task TestEntitySet_Accumulation()
         {
             Catalog catalog = CreateDomainContext();
             string classFilter = "M ";
@@ -1114,71 +911,48 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsQuery().Where(p => p.Class == classFilter && p.Style == styleFilter);
             LoadOperation result = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
-                Assert.AreEqual(22, listChangeNotifications);
+            await result;
+            Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
+            Assert.AreEqual(22, listChangeNotifications);
 
-                listChangeNotifications = 0;
-                styleFilter = "U ";
-                result = catalog.Load(query, false);
-            });
-            EnqueueConditional(delegate
-            {
-                return result.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
-                Assert.AreEqual(22, listChangeNotifications);
-            });
+            listChangeNotifications = 0;
+            styleFilter = "U ";
+            result = catalog.Load(query, false);
 
-            EnqueueTestComplete();
+            await result;
+            Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
+            Assert.AreEqual(22, listChangeNotifications);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestAssociations_FKSynchronization()
+        public async Task TestAssociations_FKSynchronization()
         {
             Catalog catalog = CreateDomainContext();
 
             LoadOperation lo = catalog.Load(catalog.GetPurchaseOrdersQuery().Take(2), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                PurchaseOrder[] orders = catalog.PurchaseOrders.ToArray();
+            await lo;
+            PurchaseOrder[] orders = catalog.PurchaseOrders.ToArray();
 
-                PurchaseOrder po = orders[0];
-                PurchaseOrderDetail detail = po.PurchaseOrderDetails.First();
-                Assert.AreEqual(po.PurchaseOrderID, detail.PurchaseOrderID);
+            PurchaseOrder po = orders[0];
+            PurchaseOrderDetail detail = po.PurchaseOrderDetails.First();
+            Assert.AreEqual(po.PurchaseOrderID, detail.PurchaseOrderID);
 
-                // now set the detail's order ref to a new entity and verify
-                // FKs are synched properly
-                PurchaseOrder newOrder = orders[1];
-                detail.PurchaseOrder = newOrder;
-                Assert.AreEqual(newOrder.PurchaseOrderID, detail.PurchaseOrderID);
-                Assert.AreSame(newOrder, detail.PurchaseOrder);
+            // now set the detail's order ref to a new entity and verify
+            // FKs are synched properly
+            PurchaseOrder newOrder = orders[1];
+            detail.PurchaseOrder = newOrder;
+            Assert.AreEqual(newOrder.PurchaseOrderID, detail.PurchaseOrderID);
+            Assert.AreSame(newOrder, detail.PurchaseOrder);
 
-                // now set the detail's order ref to null
-                detail.PurchaseOrder = null;
-                Assert.AreEqual(0, detail.PurchaseOrderID);
-                Assert.AreEqual(null, detail.PurchaseOrder);
-            });
-
-            EnqueueTestComplete();
+            // now set the detail's order ref to null
+            detail.PurchaseOrder = null;
+            Assert.AreEqual(0, detail.PurchaseOrderID);
+            Assert.AreEqual(null, detail.PurchaseOrder);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoadLoadBehaviors()
+        public async Task TestLoadLoadBehaviors()
         {
             Product cachedProd = null;
             Catalog catalog = CreateDomainContext();
@@ -1196,57 +970,41 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsQuery().Where(p => p.ProductID >= 317 && p.ProductID <= 321);
             LoadOperation<Product> lo = catalog.Load(query, LoadBehavior.KeepCurrent, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                // Assert that the event args contains the cached value
-                List<Product> loadedProducts = lo.Entities.ToList();
-                Product loadedProduct = loadedProducts.Single(p => p.ProductID == prod.ProductID);
-                Assert.AreSame(prod, loadedProduct);
+            await lo;
+            // Assert that the event args contains the cached value
+            List<Product> loadedProducts = lo.Entities.ToList();
+            Product loadedProduct = loadedProducts.Single(p => p.ProductID == prod.ProductID);
+            Assert.AreSame(prod, loadedProduct);
 
-                Assert.AreEqual(5, catalog.Products.Count);
-                cachedProd = catalog.Products.Single(p => p.ProductID == prod.ProductID);
+            Assert.AreEqual(5, catalog.Products.Count);
+            cachedProd = catalog.Products.Single(p => p.ProductID == prod.ProductID);
 
-                // Assert that the instances are equal and that
-                // our cached values haven't been overwritten
-                Assert.AreSame(prod, cachedProd);
-                Assert.AreEqual("Red", cachedProd.Color);
-            });
-            EnqueueCallback(delegate
-            {
-                // now issue a query for the same entity using
-                // LoadBehavior.RefreshCurrent
-                lo = catalog.Load(query, LoadBehavior.RefreshCurrent, false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                // Assert that the event args contains the cached value
-                List<Product> loadedProducts = lo.Entities.ToList();
-                Product loadedProduct = loadedProducts.Single(p => p.ProductID == prod.ProductID);
-                Assert.AreSame(prod, loadedProduct);
+            // Assert that the instances are equal and that
+            // our cached values haven't been overwritten
+            Assert.AreSame(prod, cachedProd);
+            Assert.AreEqual("Red", cachedProd.Color);
 
-                Assert.AreEqual(5, catalog.Products.Count);
-                cachedProd = catalog.Products.Single(p => p.ProductID == prod.ProductID);
+            // now issue a query for the same entity using
+            // LoadBehavior.RefreshCurrent
+            lo = catalog.Load(query, LoadBehavior.RefreshCurrent, false);
 
-                // Assert that the instances are equal and that
-                // our cached values HAVE been overwritten
-                Assert.AreSame(prod, cachedProd);
-                Assert.AreEqual("Black", cachedProd.Color);
-            });
+            await lo;
+            // Assert that the event args contains the cached value
+            loadedProducts = lo.Entities.ToList();
+            loadedProduct = loadedProducts.Single(p => p.ProductID == prod.ProductID);
+            Assert.AreSame(prod, loadedProduct);
 
-            EnqueueTestComplete();
+            Assert.AreEqual(5, catalog.Products.Count);
+            cachedProd = catalog.Products.Single(p => p.ProductID == prod.ProductID);
+
+            // Assert that the instances are equal and that
+            // our cached values HAVE been overwritten
+            Assert.AreSame(prod, cachedProd);
+            Assert.AreEqual("Black", cachedProd.Color);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMethodWithParameters()
+        public async Task TestMethodWithParameters()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -1257,86 +1015,65 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(32, catalog.Products.Count);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.AreEqual(32, catalog.Products.Count);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMethodWithParameters_PrimitiveTypes()
+        public async Task TestMethodWithParameters_PrimitiveTypes()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             var query = provider.GetMixedTypes_PrimitiveQuery("MixedType_Max", true, 123, 123, 123, 123, 123, 123, 123, 123, (char)123, 123.123, (float)123.123);
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
+            await lo;
+            Assert.IsNull(lo.Error);
 
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
-                MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
-                Assert.AreEqual(true, changedObj.BooleanProp);
-                Assert.AreEqual<Byte>(123, changedObj.ByteProp);
-                Assert.AreEqual<Int16>(123, changedObj.Int16Prop);
-                Assert.AreEqual<UInt16>(123, changedObj.UInt16Prop);
-                Assert.AreEqual<Int32>(123, changedObj.Int32Prop);
-                Assert.AreEqual<UInt32>(123, changedObj.UInt32Prop);
-                Assert.AreEqual<Int64>(123, changedObj.Int64Prop);
-                Assert.AreEqual<UInt64>(123, changedObj.UInt64Prop);
-                Assert.AreEqual<Char>((char)123, changedObj.CharProp);
-                Assert.AreEqual<Double>(123.123, changedObj.DoubleProp);
-                Assert.AreEqual<Single>((Single)123.123, changedObj.SingleProp);
-            });
-
-            EnqueueTestComplete();
+            Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+            MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            Assert.AreEqual(true, changedObj.BooleanProp);
+            Assert.AreEqual<Byte>(123, changedObj.ByteProp);
+            Assert.AreEqual<Int16>(123, changedObj.Int16Prop);
+            Assert.AreEqual<UInt16>(123, changedObj.UInt16Prop);
+            Assert.AreEqual<Int32>(123, changedObj.Int32Prop);
+            Assert.AreEqual<UInt32>(123, changedObj.UInt32Prop);
+            Assert.AreEqual<Int64>(123, changedObj.Int64Prop);
+            Assert.AreEqual<UInt64>(123, changedObj.UInt64Prop);
+            Assert.AreEqual<Char>((char)123, changedObj.CharProp);
+            Assert.AreEqual<Double>(123.123, changedObj.DoubleProp);
+            Assert.AreEqual<Single>((Single)123.123, changedObj.SingleProp);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMethodWithParameters_PrimitiveTypes_MaxAndNaN()
+        public async Task TestMethodWithParameters_PrimitiveTypes_MaxAndNaN()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             var query = provider.GetMixedTypes_PrimitiveQuery("MixedType_Max", true, byte.MaxValue, sbyte.MaxValue, short.MaxValue, ushort.MaxValue, int.MaxValue, uint.MaxValue, long.MaxValue, ulong.MaxValue, char.MaxValue, double.NaN, float.NaN);
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
+            await lo;
+            Assert.IsNull(lo.Error);
 
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
-                MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
-                Assert.AreEqual(true, changedObj.BooleanProp);
-                Assert.AreEqual<Byte>(byte.MaxValue, changedObj.ByteProp);
-                Assert.AreEqual<Int16>(short.MaxValue, changedObj.Int16Prop);
-                Assert.AreEqual<UInt16>(ushort.MaxValue, changedObj.UInt16Prop);
-                Assert.AreEqual<Int32>(int.MaxValue, changedObj.Int32Prop);
-                Assert.AreEqual<UInt32>(uint.MaxValue, changedObj.UInt32Prop);
-                Assert.AreEqual<Int64>(long.MaxValue, changedObj.Int64Prop);
-                Assert.AreEqual<UInt64>(ulong.MaxValue, changedObj.UInt64Prop);
-                Assert.AreEqual<Char>(char.MaxValue, changedObj.CharProp);
-                Assert.AreEqual<Double>(double.NaN, changedObj.DoubleProp);
-                Assert.AreEqual<Single>(float.NaN, changedObj.SingleProp);
-            });
-
-            EnqueueTestComplete();
+            Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+            MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            Assert.AreEqual(true, changedObj.BooleanProp);
+            Assert.AreEqual<Byte>(byte.MaxValue, changedObj.ByteProp);
+            Assert.AreEqual<Int16>(short.MaxValue, changedObj.Int16Prop);
+            Assert.AreEqual<UInt16>(ushort.MaxValue, changedObj.UInt16Prop);
+            Assert.AreEqual<Int32>(int.MaxValue, changedObj.Int32Prop);
+            Assert.AreEqual<UInt32>(uint.MaxValue, changedObj.UInt32Prop);
+            Assert.AreEqual<Int64>(long.MaxValue, changedObj.Int64Prop);
+            Assert.AreEqual<UInt64>(ulong.MaxValue, changedObj.UInt64Prop);
+            Assert.AreEqual<Char>(char.MaxValue, changedObj.CharProp);
+            Assert.AreEqual<Double>(double.NaN, changedObj.DoubleProp);
+            Assert.AreEqual<Single>(float.NaN, changedObj.SingleProp);
         }
 
         [TestMethod]
-        [Asynchronous]
         [FullTrustTest] // ISerializable types cannot be deserialized in medium trust.
-        public void TestMethodWithParameters_PredefinedTypes()
+        public async Task TestMethodWithParameters_PredefinedTypes()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             string[] strings = { "hello", "world" };
@@ -1357,59 +1094,53 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = provider.GetMixedTypes_PredefinedQuery("MixedType_Max", "hello", 123, dt, ts, dto, strings, uri, guid, new byte[] { 0, 111, 222 }, xElem, new byte[] { 123, 234 }, TestEnum.Value1 | TestEnum.Value2, ints, dictDT, dictGuid, dictString, dictEnum, dictXE, dictDTO);
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
+            await lo;
+            Assert.IsNull(lo.Error);
+
+            Assert.AreEqual(3, lo.Entities.Count());
+            MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            Assert.AreEqual<string>("hello", changedObj.StringProp);
+            Assert.AreEqual<Decimal>(123, changedObj.DecimalProp);
+            Assert.AreEqual<DateTime>(dt, changedObj.DateTimeProp);
+            Assert.AreEqual<TimeSpan>(ts, changedObj.TimeSpanProp);
+            Assert.AreEqual<DateTimeOffset>(dto, changedObj.DateTimeOffsetProp);
+            Assert.AreEqual<Uri>(uri, changedObj.UriProp);
+            Assert.AreEqual<Guid>(guid, changedObj.GuidProp);
+            Assert.AreEqual(3, changedObj.BinaryProp.Length);
+            Assert.AreEqual(222, changedObj.BinaryProp[2]);
+            Assert.AreEqual(2, changedObj.ByteArrayProp.Length);
+            Assert.AreEqual(123, changedObj.ByteArrayProp[0]);
+            Assert.AreEqual<TestEnum>(TestEnum.Value1 | TestEnum.Value2, changedObj.EnumProp);
+            Assert.AreEqual("<myNode xmlns=\"foo\">node text</myNode>", changedObj.XElementProp.ToString());
+            Assert.AreEqual("node text", changedObj.XElementProp.Value);
+
+            Assert.IsTrue(CompareDictionaries(dictDT, changedObj.DictionaryDateTimeProp));
+            Assert.IsTrue(CompareDictionaries(dictDTO, changedObj.DictionaryDateTimeOffsetProp));
+            Assert.IsTrue(CompareDictionaries(dictGuid, changedObj.DictionaryGuidProp));
+            Assert.IsTrue(CompareDictionaries(dictString, changedObj.DictionaryStringProp));
+            Assert.IsTrue(CompareDictionaries(dictEnum, changedObj.DictionaryTestEnumProp));
+            Assert.IsTrue(CompareDictionaries(dictXE, changedObj.DictionaryXElementProp));
+
+            Assert.IsNotNull(changedObj.StringsProp);
+            Assert.IsNotNull(changedObj.IntsProp);
+
+            var returnedStrings = changedObj.StringsProp.ToArray();
+            Assert.AreEqual(strings.Length, returnedStrings.Length);
+            for (int i = 0; i < returnedStrings.Length; i++)
             {
-                Assert.IsNull(lo.Error);
+                Assert.AreEqual(strings[i], returnedStrings[i]);
+            }
 
-                Assert.AreEqual(3, lo.Entities.Count());
-                MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
-                Assert.AreEqual<string>("hello", changedObj.StringProp);
-                Assert.AreEqual<Decimal>(123, changedObj.DecimalProp);
-                Assert.AreEqual<DateTime>(dt, changedObj.DateTimeProp);
-                Assert.AreEqual<TimeSpan>(ts, changedObj.TimeSpanProp);
-                Assert.AreEqual<DateTimeOffset>(dto, changedObj.DateTimeOffsetProp);
-                Assert.AreEqual<Uri>(uri, changedObj.UriProp);
-                Assert.AreEqual<Guid>(guid, changedObj.GuidProp);
-                Assert.AreEqual(3, changedObj.BinaryProp.Length);
-                Assert.AreEqual(222, changedObj.BinaryProp[2]);
-                Assert.AreEqual(2, changedObj.ByteArrayProp.Length);
-                Assert.AreEqual(123, changedObj.ByteArrayProp[0]);
-                Assert.AreEqual<TestEnum>(TestEnum.Value1 | TestEnum.Value2, changedObj.EnumProp);
-                Assert.AreEqual("<myNode xmlns=\"foo\">node text</myNode>", changedObj.XElementProp.ToString());
-                Assert.AreEqual("node text", changedObj.XElementProp.Value);
-
-                Assert.IsTrue(CompareDictionaries(dictDT, changedObj.DictionaryDateTimeProp));
-                Assert.IsTrue(CompareDictionaries(dictDTO, changedObj.DictionaryDateTimeOffsetProp));
-                Assert.IsTrue(CompareDictionaries(dictGuid, changedObj.DictionaryGuidProp));
-                Assert.IsTrue(CompareDictionaries(dictString, changedObj.DictionaryStringProp));
-                Assert.IsTrue(CompareDictionaries(dictEnum, changedObj.DictionaryTestEnumProp));
-                Assert.IsTrue(CompareDictionaries(dictXE, changedObj.DictionaryXElementProp));
-
-                Assert.IsNotNull(changedObj.StringsProp);
-                Assert.IsNotNull(changedObj.IntsProp);
-
-                var returnedStrings = changedObj.StringsProp.ToArray();
-                Assert.AreEqual(strings.Length, returnedStrings.Length);
-                for (int i = 0; i < returnedStrings.Length; i++)
-                {
-                    Assert.AreEqual(strings[i], returnedStrings[i]);
-                }
-
-                var returnedInts = changedObj.IntsProp;
-                Assert.AreEqual(ints.Length, returnedInts.Length);
-                for (int i = 0; i < returnedInts.Length; i++)
-                {
-                    Assert.AreEqual(ints[i], returnedInts[i]);
-                }
-            });
-
-            EnqueueTestComplete();
+            var returnedInts = changedObj.IntsProp;
+            Assert.AreEqual(ints.Length, returnedInts.Length);
+            for (int i = 0; i < returnedInts.Length; i++)
+            {
+                Assert.AreEqual(ints[i], returnedInts[i]);
+            }
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMethod_ComplexQueryProperties()
+        public async Task TestMethod_ComplexQueryProperties()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -1418,23 +1149,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
                        && x.IntsProp.Length == 2 && x.NullableInt32Prop.ToString() == "123");
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-
-                Assert.AreEqual(1, lo.Entities.Count());
-                Assert.AreEqual(new Uri("http://localhost"), provider.MixedTypes.First().UriProp);
-                Assert.AreEqual(new TimeSpan(123), provider.MixedTypes.First().TimeSpanProp);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(1, lo.Entities.Count());
+            Assert.AreEqual(new Uri("http://localhost"), provider.MixedTypes.First().UriProp);
+            Assert.AreEqual(new TimeSpan(123), provider.MixedTypes.First().TimeSpanProp);
         }
 
         [TestMethod]
         [Asynchronous]
         [FullTrustTest] // ISerializable types cannot be deserialized in medium trust.
-        public void TestMethodWithParameters_PredefinedTypes_WithNull()
+        public async Task TestMethodWithParameters_PredefinedTypes_WithNull()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             DateTime dt = new DateTime(2009, 9, 10);
@@ -1452,27 +1177,20 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = provider.GetMixedTypes_PredefinedQuery("MixedType_Max", null, 123, dt, ts, dto, null, uri, guid, null, null, null, TestEnum.Value1 | TestEnum.Value2, null, dictDT, dictGuid, dictString, dictEnum, dictXE, dictDTO);
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-
-                Assert.AreEqual(3, lo.Entities.Count());
-                MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
-                Assert.IsNull(changedObj.StringProp);
-                Assert.IsNull(changedObj.BinaryProp);
-                Assert.IsNull(changedObj.ByteArrayProp);
-                Assert.IsNull(changedObj.XElementProp);
-                Assert.IsNull(changedObj.StringsProp);
-                Assert.IsNull(changedObj.IntsProp);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(3, lo.Entities.Count());
+            MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            Assert.IsNull(changedObj.StringProp);
+            Assert.IsNull(changedObj.BinaryProp);
+            Assert.IsNull(changedObj.ByteArrayProp);
+            Assert.IsNull(changedObj.XElementProp);
+            Assert.IsNull(changedObj.StringsProp);
+            Assert.IsNull(changedObj.IntsProp);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMethodWithParameters_NullableTypes()
+        public async Task TestMethodWithParameters_NullableTypes()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             TimeSpan?[] nullableTimeSpans =
@@ -1490,44 +1208,37 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 123, dt, ts, guid, TestEnum.Value1 | TestEnum.Value2, nullableTimeSpans, nullDictDT);
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(3, lo.Entities.Count());
+            MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            Assert.AreEqual<Boolean?>(true, changedObj.NullableBooleanProp);
+            Assert.AreEqual<Byte?>(123, changedObj.NullableByteProp);
+            Assert.AreEqual<Int16?>(123, changedObj.NullableInt16Prop);
+            Assert.AreEqual<UInt16?>(123, changedObj.NullableUInt16Prop);
+            Assert.AreEqual<Int32?>(123, changedObj.NullableInt32Prop);
+            Assert.AreEqual<UInt32?>(123, changedObj.NullableUInt32Prop);
+            Assert.AreEqual<Int64?>(123, changedObj.NullableInt64Prop);
+            Assert.AreEqual<UInt64?>(123, changedObj.NullableUInt64Prop);
+            Assert.AreEqual<Char?>((char)123, changedObj.NullableCharProp);
+            Assert.AreEqual<Double?>(123.123, changedObj.NullableDoubleProp);
+            Assert.AreEqual<Single?>((Single)123.123, changedObj.NullableSingleProp);
+            Assert.AreEqual<Decimal?>(123, changedObj.NullableDecimalProp);
+            Assert.AreEqual<DateTime?>(dt, ((DateTime)changedObj.NullableDateTimeProp));
+            Assert.AreEqual<TimeSpan?>(ts, ((TimeSpan)changedObj.NullableTimeSpanProp));
+            Assert.AreEqual<Guid?>(guid, changedObj.NullableGuidProp);
+            Assert.AreEqual<TestEnum?>(TestEnum.Value1 | TestEnum.Value2, changedObj.NullableEnumProp);
+            Assert.IsTrue(CompareDictionaries(nullDictDT, changedObj.NullableDictionaryDateTimeProp));
 
-                Assert.AreEqual(3, lo.Entities.Count());
-                MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
-                Assert.AreEqual<Boolean?>(true, changedObj.NullableBooleanProp);
-                Assert.AreEqual<Byte?>(123, changedObj.NullableByteProp);
-                Assert.AreEqual<Int16?>(123, changedObj.NullableInt16Prop);
-                Assert.AreEqual<UInt16?>(123, changedObj.NullableUInt16Prop);
-                Assert.AreEqual<Int32?>(123, changedObj.NullableInt32Prop);
-                Assert.AreEqual<UInt32?>(123, changedObj.NullableUInt32Prop);
-                Assert.AreEqual<Int64?>(123, changedObj.NullableInt64Prop);
-                Assert.AreEqual<UInt64?>(123, changedObj.NullableUInt64Prop);
-                Assert.AreEqual<Char?>((char)123, changedObj.NullableCharProp);
-                Assert.AreEqual<Double?>(123.123, changedObj.NullableDoubleProp);
-                Assert.AreEqual<Single?>((Single)123.123, changedObj.NullableSingleProp);
-                Assert.AreEqual<Decimal?>(123, changedObj.NullableDecimalProp);
-                Assert.AreEqual<DateTime?>(dt, ((DateTime)changedObj.NullableDateTimeProp));
-                Assert.AreEqual<TimeSpan?>(ts, ((TimeSpan)changedObj.NullableTimeSpanProp));
-                Assert.AreEqual<Guid?>(guid, changedObj.NullableGuidProp);
-                Assert.AreEqual<TestEnum?>(TestEnum.Value1 | TestEnum.Value2, changedObj.NullableEnumProp);
-                Assert.IsTrue(CompareDictionaries(nullDictDT, changedObj.NullableDictionaryDateTimeProp));
-
-                var returnedTimeSpans = changedObj.NullableTimeSpanListProp.ToArray();
-                Assert.AreEqual(3, returnedTimeSpans.Length);
-                Assert.AreEqual(nullableTimeSpans[0], returnedTimeSpans[0]);
-                Assert.IsNull(returnedTimeSpans[1]);
-                Assert.AreEqual(nullableTimeSpans[2], returnedTimeSpans[2]);
-            });
-
-            EnqueueTestComplete();
+            var returnedTimeSpans = changedObj.NullableTimeSpanListProp.ToArray();
+            Assert.AreEqual(3, returnedTimeSpans.Length);
+            Assert.AreEqual(nullableTimeSpans[0], returnedTimeSpans[0]);
+            Assert.IsNull(returnedTimeSpans[1]);
+            Assert.AreEqual(nullableTimeSpans[2], returnedTimeSpans[2]);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMethodWithParameters_NullableTypes_WithNull()
+        public async Task TestMethodWithParameters_NullableTypes_WithNull()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             DateTime dt = new DateTime(2009, 2, 2);
@@ -1535,38 +1246,31 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = provider.GetMixedTypes_NullableQuery("MixedType_Max", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
             LoadOperation lo = provider.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-
-                Assert.AreEqual(3, lo.Entities.Count());
-                MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
-                Assert.IsNull(changedObj.NullableBooleanProp);
-                Assert.IsNull(changedObj.NullableByteProp);
-                Assert.IsNull(changedObj.NullableInt16Prop);
-                Assert.IsNull(changedObj.NullableUInt16Prop);
-                Assert.IsNull(changedObj.NullableInt32Prop);
-                Assert.IsNull(changedObj.NullableUInt32Prop);
-                Assert.IsNull(changedObj.NullableInt64Prop);
-                Assert.IsNull(changedObj.NullableUInt64Prop);
-                Assert.IsNull(changedObj.NullableCharProp);
-                Assert.IsNull(changedObj.NullableDoubleProp);
-                Assert.IsNull(changedObj.NullableSingleProp);
-                Assert.IsNull(changedObj.NullableDecimalProp);
-                Assert.IsNull(changedObj.NullableDateTimeProp);
-                Assert.IsNull(changedObj.NullableGuidProp);
-                Assert.IsNull(changedObj.NullableEnumProp);
-                Assert.IsNull(changedObj.NullableTimeSpanListProp);
-                Assert.IsNull(changedObj.NullableDictionaryDateTimeProp);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(3, lo.Entities.Count());
+            MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            Assert.IsNull(changedObj.NullableBooleanProp);
+            Assert.IsNull(changedObj.NullableByteProp);
+            Assert.IsNull(changedObj.NullableInt16Prop);
+            Assert.IsNull(changedObj.NullableUInt16Prop);
+            Assert.IsNull(changedObj.NullableInt32Prop);
+            Assert.IsNull(changedObj.NullableUInt32Prop);
+            Assert.IsNull(changedObj.NullableInt64Prop);
+            Assert.IsNull(changedObj.NullableUInt64Prop);
+            Assert.IsNull(changedObj.NullableCharProp);
+            Assert.IsNull(changedObj.NullableDoubleProp);
+            Assert.IsNull(changedObj.NullableSingleProp);
+            Assert.IsNull(changedObj.NullableDecimalProp);
+            Assert.IsNull(changedObj.NullableDateTimeProp);
+            Assert.IsNull(changedObj.NullableGuidProp);
+            Assert.IsNull(changedObj.NullableEnumProp);
+            Assert.IsNull(changedObj.NullableTimeSpanListProp);
+            Assert.IsNull(changedObj.NullableDictionaryDateTimeProp);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestAssociations()
+        public async Task TestAssociations()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -1575,33 +1279,24 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         select p;
             LoadOperation lo = catalog.Load(query.Take(5), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                List<PurchaseOrder> orders = catalog.PurchaseOrders.ToList();
-                Assert.IsTrue(orders.Count > 0);
-                PurchaseOrder order = orders.First();
+            await lo;
+            List<PurchaseOrder> orders = catalog.PurchaseOrders.ToList();
+            Assert.IsTrue(orders.Count > 0);
+            PurchaseOrder order = orders.First();
 
-                // enumerate the PurchaseOrderDetails collection
-                Assert.IsTrue(order.PurchaseOrderDetails.Count() > 0);
-                PurchaseOrderDetail detail = order.PurchaseOrderDetails.First();
+            // enumerate the PurchaseOrderDetails collection
+            Assert.IsTrue(order.PurchaseOrderDetails.Count() > 0);
+            PurchaseOrderDetail detail = order.PurchaseOrderDetails.First();
 
-                // verify the back reference
-                Assert.AreSame(order, detail.PurchaseOrder);
+            // verify the back reference
+            Assert.AreSame(order, detail.PurchaseOrder);
 
-                Product prod = detail.Product;
-                Assert.AreEqual(detail.ProductID, prod.ProductID);
-            });
-
-            EnqueueTestComplete();
+            Product prod = detail.Product;
+            Assert.AreEqual(detail.ProductID, prod.ProductID);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestDomainContextCancelLoad()
+        public async Task TestDomainContextCancelLoad()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -1611,38 +1306,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
             lo.Cancel();
             Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(lo.IsCanceled);
-                Assert.IsNull(lo.Error);
-            });
-            EnqueueCallback(delegate
-            {
-                // call load again to verify that cancelled state is managed
-                // properly for a subsequent successfull query
-                lo = catalog.Load(query, false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(lo.IsCanceled);
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(504, lo.Entities.Count());
-            });
+            await lo;
+            Assert.IsTrue(lo.IsCanceled);
+            Assert.IsNull(lo.Error);
 
-            EnqueueTestComplete();
+            // call load again to verify that cancelled state is managed
+            // properly for a subsequent successfull query
+            lo = catalog.Load(query, false);
+
+            await lo;
+            Assert.IsFalse(lo.IsCanceled);
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(504, lo.Entities.Count());
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestDomainContext_IsLoadingPropertyChangeNotifications()
+        public async Task TestDomainContext_IsLoadingPropertyChangeNotifications()
         {
             PropertyChangedEventArgs loadingEventArgs = null;
             PropertyChangedEventArgs loadedEventArgs = null;
@@ -1674,37 +1353,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            EnqueueConditional(delegate ()
-            {
-                return loadingEventArgs != null;
-            });
+            await lo;
+            Assert.IsNull(loadingEventArgs);
+            Assert.IsFalse(loadCompleteDuringLoading);
+            Assert.AreEqual("IsLoading", loadingEventArgs.PropertyName);
+            Assert.AreSame(catalog, savedSender);  // verify sender
+            Assert.AreEqual(true, isLoadingDuringPropertyChange, "IsLoading should have been true");
 
-            EnqueueCallback(delegate ()
-            {
-                Assert.IsFalse(loadCompleteDuringLoading);
-                Assert.AreEqual("IsLoading", loadingEventArgs.PropertyName);
-                Assert.AreSame(catalog, savedSender);  // verify sender
-                Assert.AreEqual(true, isLoadingDuringPropertyChange, "IsLoading should have been true");
-            });
-
-            EnqueueConditional(delegate ()
-            {
-                return lo.IsComplete;
-            });
-
-            EnqueueCallback(delegate ()
-            {
-                Assert.AreEqual("IsLoading", loadedEventArgs.PropertyName);
-                Assert.AreEqual(2, isLoadingEventCount);
-                Assert.AreEqual(false, isLoadingDuringPropertyChange, "IsLoading should have been true");
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.AreEqual("IsLoading", loadedEventArgs.PropertyName);
+            Assert.AreEqual(2, isLoadingEventCount);
+            Assert.AreEqual(false, isLoadingDuringPropertyChange, "IsLoading should have been true");
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestMultipartQuery()
+        public async Task TestMultipartQuery()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -1731,22 +1394,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation<Product> lo = catalog.Load(query, callback, userState);
 
-            EnqueueConditional(delegate
-            {
-                return callbackCalled;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.IsTrue(lo.Entities.Count() > 0);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsTrue(callbackCalled);
+            Assert.IsNull(lo.Error);
+            Assert.IsTrue(lo.Entities.Count() > 0);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestAscDescSorting()
+        public async Task TestAscDescSorting()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -1756,25 +1411,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(10, catalog.Products.Count);
-                Product[] products = catalog.Products.ToArray();
-                Assert.IsTrue(products[0].ProductID > products[1].ProductID);
-                Assert.IsTrue(products[0].ListPrice <= products[1].ListPrice);
-                Assert.IsTrue(products[1].ListPrice <= products[2].ListPrice);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.AreEqual(10, catalog.Products.Count);
+            Product[] products = catalog.Products.ToArray();
+            Assert.IsTrue(products[0].ProductID > products[1].ProductID);
+            Assert.IsTrue(products[0].ListPrice <= products[1].ListPrice);
+            Assert.IsTrue(products[1].ListPrice <= products[2].ListPrice);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestDuplicateQueryOperations()
+        public async Task TestDuplicateQueryOperations()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -1790,21 +1436,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(catalog.Products.Count > 0);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsTrue(catalog.Products.Count > 0);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoadOperationResults()
+        public async Task TestLoadOperationResults()
         {
             int prodCount = 0;
             object userState = this;
@@ -1820,42 +1457,28 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ListPrice > 2000), LoadBehavior.KeepCurrent, action, userState);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreSame(userState, lo.UserState);
+            await lo;
+            Assert.AreSame(userState, lo.UserState);
 
-                // the LoadedEntities on the event args should equal all the loaded products
-                prodCount = catalog.Products.Count;
-                Assert.IsTrue(prodCount > 0);
-                Assert.IsTrue(lo.Entities.Cast<Product>().OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.OrderBy(p => p.ProductID)));
+            // the LoadedEntities on the event args should equal all the loaded products
+            prodCount = catalog.Products.Count;
+            Assert.IsTrue(prodCount > 0);
+            Assert.IsTrue(lo.Entities.Cast<Product>().OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.OrderBy(p => p.ProductID)));
 
-                // verify error is null
-                Assert.IsNull(lo.Error);
+            // verify error is null
+            Assert.IsNull(lo.Error);
 
-                // load another set of products
-                lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ListPrice < 1500), false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                // the LoadedEntities on the event args should equal all the loaded products
-                Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
-                Assert.IsTrue(lo.Entities.Cast<Product>().OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.Where(p => p.ListPrice < 1500).OrderBy(p => p.ProductID)));
-            });
+            // load another set of products
+            lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ListPrice < 1500), false);
 
-            EnqueueTestComplete();
+            await lo;
+            // the LoadedEntities on the event args should equal all the loaded products
+            Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
+            Assert.IsTrue(lo.Entities.Cast<Product>().OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.Where(p => p.ListPrice < 1500).OrderBy(p => p.ProductID)));
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoadOperationState()
+        public async Task TestLoadOperationState()
         {
             Catalog catalog = CreateDomainContext();
             int prodCount = 0;
@@ -1871,61 +1494,41 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
             LoadOperation<Product> lo = catalog.Load(query, action, userState);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreSame(userState, lo.UserState);
+            await lo;
+            Assert.AreSame(userState, lo.UserState);
+            prodCount = catalog.Products.Count;
+            Assert.IsTrue(prodCount > 0);
+            Assert.IsTrue(lo.Entities.OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.OrderBy(p => p.ProductID)));
 
-                prodCount = catalog.Products.Count;
-                Assert.IsTrue(prodCount > 0);
-                Assert.IsTrue(lo.Entities.OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.OrderBy(p => p.ProductID)));
+            // verify error is null
+            Assert.IsNull(lo.Error);
 
-                // verify error is null
-                Assert.IsNull(lo.Error);
+            // load another set of products
+            query = catalog.GetProductsQuery().Where(p => p.ListPrice < 1500);
+            lo = catalog.Load(query, false);
 
-                // load another set of products
-                query = catalog.GetProductsQuery().Where(p => p.ListPrice < 1500);
-                lo = catalog.Load(query, false);
-            });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                // the LoadedEntities on the event args should equal all the loaded products
-                Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
-                Assert.IsTrue(lo.Entities.OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.Where(p => p.ListPrice < 1500).OrderBy(p => p.ProductID)));
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            // the LoadedEntities on the event args should equal all the loaded products
+            Assert.IsTrue(catalog.Products.Count > prodCount);  // make sure we read more products
+            Assert.IsTrue(lo.Entities.OrderBy(p => p.ProductID).SequenceEqual(catalog.Products.Where(p => p.ListPrice < 1500).OrderBy(p => p.ProductID)));
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_DataContext_ResultCounts()
+        public async Task TestLoad_DataContext_ResultCounts()
         {
             Catalog catalog = CreateDomainContext();
 
             LoadOperation lo = catalog.Load(catalog.GetPurchaseOrdersQuery()
                 .OrderBy(c => c.PurchaseOrderID).Take(5), false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error, (lo.Error != null) ? lo.Error.ToString() : null);
-                Assert.AreEqual<int>(5, lo.Entities.Count());
-                Assert.AreEqual<int>(17, lo.AllEntities.Count());
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error, (lo.Error != null) ? lo.Error.ToString() : null);
+            Assert.AreEqual<int>(5, lo.Entities.Count());
+            Assert.AreEqual<int>(17, lo.AllEntities.Count());
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_ResultCounts()
+        public async Task TestLoad_ResultCounts()
         {
             int purchaseOrdersToTake = 5;
 
@@ -1943,42 +1546,31 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 .OrderBy(c => c.PurchaseOrderID)
                 .Take(purchaseOrdersToTake);
             query.IncludeTotalCount = true;
+
             LoadOperation lo = catalog.Load(query, LoadBehavior.RefreshCurrent, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(() =>
-            {
-                Assert.IsFalse(lo.IsCanceled);
-                Assert.AreEqual<int>(PurchaseOrderCountInDatabase, lo.TotalEntityCount);
-                Assert.AreEqual<int>(purchaseOrdersToTake, lo.Entities.Count());
-                Assert.AreEqual<int>(purchaseOrdersToTake + relatedEntitiesIncluded, lo.AllEntities.Count());
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsFalse(lo.IsCanceled);
+            Assert.AreEqual<int>(PurchaseOrderCountInDatabase, lo.TotalEntityCount);
+            Assert.AreEqual<int>(purchaseOrdersToTake, lo.Entities.Count());
+            Assert.AreEqual<int>(purchaseOrdersToTake + relatedEntitiesIncluded, lo.AllEntities.Count());
         }
 
         /// <summary>
         /// Verify that an empty result set is handled properly
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_NoResults()
+        public async Task TestLoad_NoResults()
         {
             Catalog catalog = CreateDomainContext();
 
             var query = catalog.GetProductsQuery().Where(p => p.ProductID < 0);
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                List<Product> products = catalog.Products.ToList();
-                Assert.IsTrue(products.Count == 0);
-                Assert.IsTrue(lo.Entities.Count() == 0);
-            });
-            EnqueueTestComplete();
+            await lo;
+            List<Product> products = catalog.Products.ToList();
+            Assert.IsTrue(products.Count == 0);
+            Assert.IsTrue(lo.Entities.Count() == 0);
         }
 
         private class TestUserState
@@ -1992,8 +1584,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// completion
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_UserState()
+        public async Task TestLoad_UserState()
         {
             TestUserState myUserState = new TestUserState
             {
@@ -2001,7 +1592,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 B = "Test"
             };
             Catalog catalog = CreateDomainContext();
-
             Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
             {
                 if (o.HasError)
@@ -2011,22 +1601,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == 1), action, myUserState);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error, (lo.Error != null) ? lo.Error.ToString() : null);
-                Assert.IsTrue(catalog.Products.Count == 1);
-                Assert.AreSame(myUserState, lo.UserState);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error, (lo.Error != null) ? lo.Error.ToString() : null);
+            Assert.IsTrue(catalog.Products.Count == 1);
+            Assert.AreSame(myUserState, lo.UserState);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_MultipleCalls()
+        public async Task TestLoad_MultipleCalls()
         {
             const int numberOfActiveLoadCalls = 10;
             Catalog catalog = new Catalog(this.ServiceUri);
@@ -2036,26 +1618,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 loadOps.Add(catalog.Load(catalog.GetProductsQuery().Skip(i * 5).Take(5), false));
             }
-            EnqueueConditional(() => loadOps.All(p => p.IsComplete));
-            EnqueueCallback(delegate
-            {
-                for (int i = 0; i < numberOfActiveLoadCalls; i++)
-                {
-                    if (loadOps[i].Error != null)
-                    {
-                        Assert.Fail(loadOps[i].Error.ToString());
-                    }
-                    Assert.AreEqual(5, loadOps[i].Entities.Count());
-                }
-                Assert.AreEqual(numberOfActiveLoadCalls * 5, catalog.Products.Count);
-            });
 
-            EnqueueTestComplete();
+            foreach (LoadOperation op in loadOps)
+                await op;
+            for (int i = 0; i < numberOfActiveLoadCalls; i++)
+            {
+                if (loadOps[i].Error != null)
+                {
+                    Assert.Fail(loadOps[i].Error.ToString());
+                }
+                Assert.AreEqual(5, loadOps[i].Entities.Count());
+            }
+            Assert.AreEqual(numberOfActiveLoadCalls * 5, catalog.Products.Count);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_MultipleCalls_Cancel()
+        public async Task TestLoad_MultipleCalls_Cancel()
         {
             const int numberOfActiveLoadCalls = 10;
             Catalog tempCatalog = new Catalog(this.ServiceUri);
@@ -2067,66 +1645,59 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Load 10 products to get 10 product IDs.
             LoadOperation lo = tempCatalog.Load(tempCatalog.GetProductsQuery().Take(numberOfActiveLoadCalls), false);
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(numberOfActiveLoadCalls, tempCatalog.Products.Count);
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(numberOfActiveLoadCalls, tempCatalog.Products.Count);
 
-                foreach (var product in tempCatalog.Products)
+            foreach (var product in tempCatalog.Products)
+            {
+                // Do this in separate threads to prevent this becoming a synchronous process.
+                // [Ron] My single-proc machine generally has finished all the loads by the time
+                // the cancel is issued.  Using ThreadPool breaks this behavior.
+                ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
                 {
-                    // Do this in separate threads to prevent this becoming a synchronous process.
-                    // [Ron] My single-proc machine generally has finished all the loads by the time
-                    // the cancel is issued.  Using ThreadPool breaks this behavior.
-                    ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
+                    Product thisProduct = (Product)productObject;
+                    lock (syncObject)
                     {
-                        Product thisProduct = (Product)productObject;
-                        lock (syncObject)
+                        Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
                         {
-                            Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
+                            if (o.HasError)
                             {
-                                if (o.HasError)
-                                {
-                                    o.MarkErrorAsHandled();
-                                }
-                            };
-                            lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), action, thisProduct.ProductID);
-                            loadOperations.Add(lo);
-
-                            // When have asked for Product[5], issue a cancel.
-                            Product[] products = tempCatalog.Products.ToArray();
-                            if (thisProduct.ProductID == products[5].ProductID)
-                            {
-                                lo.Cancel();
+                                o.MarkErrorAsHandled();
                             }
-                        }
-                    }, product);
-                }
-            });
-            EnqueueConditional(() => loadOperations.Count(p => p.IsComplete) == numberOfActiveLoadCalls);
-            EnqueueCallback(delegate
-            {
-                for (int i = 0; i < numberOfActiveLoadCalls; i++)
-                {
-                    if (!loadOperations[i].IsCanceled)
-                    {
-                        Assert.IsNull(loadOperations[i].Error);
-                        Assert.AreEqual(1, loadOperations[i].Entities.Count());
-                        var product = (Product)loadOperations[i].Entities.First();
-                        Product[] products = tempCatalog.Products.ToArray();
-                        Assert.AreNotEqual(products[5].ProductID, product.ProductID);
-                    }
-                }
-                Assert.AreEqual((numberOfActiveLoadCalls - 1), catalog.Products.Count);
-                Assert.AreEqual(1, loadOperations.Where(a => a.IsCanceled).Count());
-            });
+                        };
+                        lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), action, thisProduct.ProductID);
+                        loadOperations.Add(lo);
 
-            EnqueueTestComplete();
+                        // When have asked for Product[5], issue a cancel.
+                        Product[] products = tempCatalog.Products.ToArray();
+                        if (thisProduct.ProductID == products[5].ProductID)
+                        {
+                            lo.Cancel();
+                        }
+                    }
+                }, product);
+            }
+
+            foreach (LoadOperation op in loadOperations)
+                await op;
+            for (int i = 0; i < numberOfActiveLoadCalls; i++)
+            {
+                if (!loadOperations[i].IsCanceled)
+                {
+                    Assert.IsNull(loadOperations[i].Error);
+                    Assert.AreEqual(1, loadOperations[i].Entities.Count());
+                    var product = (Product)loadOperations[i].Entities.First();
+                    Product[] products = tempCatalog.Products.ToArray();
+                    Assert.AreNotEqual(products[5].ProductID, product.ProductID);
+                }
+            }
+            Assert.AreEqual((numberOfActiveLoadCalls - 1), catalog.Products.Count);
+            Assert.AreEqual(1, loadOperations.Where(a => a.IsCanceled).Count());
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_Cancel()
+        public async Task TestLoad_Cancel()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -2137,31 +1708,20 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // after starting the load, issue a cancel
             lo.Cancel();
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(0, catalog.Products.Count);
-                Assert.IsTrue(lo.IsCanceled, "Operation should've been cancelled.");
-            });
+            await lo;
+            Assert.AreEqual(0, catalog.Products.Count);
+            Assert.IsTrue(lo.IsCanceled, "Operation should've been cancelled.");
 
             var cts = new CancellationTokenSource();
             var loadTask = catalog.LoadAsync(query, cts.Token);
             cts.Cancel();
 
-            EnqueueConditional(() => loadTask.IsCompleted);
-            EnqueueCallback(() =>
-            {
-                Assert.IsTrue(loadTask.IsCanceled, "Task should be cancelled");
-            });
-            EnqueueTestComplete();
+            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => loadTask);
+            Assert.IsTrue(loadTask.IsCanceled, "Task should be cancelled");
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestBeginLoad_CancelFast()
+        public async Task TestBeginLoad_CancelFast()
         {
             Catalog catalog = CreateDomainContext();
 
@@ -2174,24 +1734,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // cancel the first load call only
             lo1.Cancel();
 
-            EnqueueConditional(() => lo1.IsComplete && lo2.IsComplete);
-
-            EnqueueCallback(delegate
-            {
-                // Make sure we only loaded the product from our second load call.
-                Assert.IsNull(lo1.Error);
-                Assert.IsNull(lo2.Error);
-                Assert.IsTrue(lo1.IsCanceled, "Operation should've been cancelled.");
-                Assert.IsFalse(lo2.IsCanceled, "Operation should not have been cancelled.");
-                Assert.AreEqual(1, catalog.Products.Count);
-                Assert.AreEqual(2, catalog.Products.Single().ProductID);
-            });
-            EnqueueTestComplete();
+            await lo1;
+            await lo2;
+            // Make sure we only loaded the product from our second load call.
+            Assert.IsNull(lo1.Error);
+            Assert.IsNull(lo2.Error);
+            Assert.IsTrue(lo1.IsCanceled, "Operation should've been cancelled.");
+            Assert.IsFalse(lo2.IsCanceled, "Operation should not have been cancelled.");
+            Assert.AreEqual(1, catalog.Products.Count);
+            Assert.AreEqual(2, catalog.Products.Single().ProductID);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_MultipleParameters()
+        public async Task TestLoad_MultipleParameters()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
@@ -2205,16 +1760,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             EntityQuery<Product> query = ctxt.CreateQuery<Product>("GetProductsMultipleParams", args);
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error, (lo.Error != null) ? lo.Error.ToString() : null);
-                Assert.IsTrue(ctxt.Products.Count == 4);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error, lo.Error?.ToString());
+            Assert.IsTrue(ctxt.Products.Count == 4);
         }
 
         /// <summary>
@@ -2223,26 +1771,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// match and the default contract is used.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_DefaultContractNamespace()
+        public async Task TestLoad_DefaultContractNamespace()
         {
             WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
             {
                 EntityTypes = new Type[] { typeof(City) }
             };
 
-            var queryTask = client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), CancellationToken.None);
-            EnqueueConditional(delegate
-            {
-                return queryTask.IsCompleted;
-            });
-            EnqueueCallback(delegate
-            {
-                var results = queryTask.Result;
-                List<City> cities = results.Entities.Concat(results.IncludedEntities).Cast<City>().ToList();
-                Assert.IsTrue(cities.Count > 0);
-            });
-            EnqueueTestComplete();
+            var results = await client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), CancellationToken.None);
+            Assert.IsTrue(results.TotalCount > 0);
         }
 
         /// <summary>
@@ -2250,8 +1787,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// fails because we are not authenticated.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_AuthenticationRequired()
+        public async Task TestLoad_AuthenticationRequired()
         {
             WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
             {
@@ -2261,16 +1797,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var queryTask = client.QueryAsync(
                 new EntityQuery<Zip>(client, "GetZipsIfAuthenticated", null, true, false),
                 CancellationToken.None);
-            EnqueueConditional(() => queryTask.IsCompleted);
-            EnqueueCallback(delegate
-            {
-                DomainOperationException error = queryTask.Exception?.InnerException as DomainOperationException;
 
-                Assert.IsNotNull(error, "[Permission(AuthenticationRequired=true)] attribute should have raised a DomainOperationException");
-                Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
-                Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "Access to operation '{0}' was denied.", "GetZipsIfAuthenticated"), error.Message);
-            });
-            EnqueueTestComplete();
+            DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
+            Assert.IsNotNull(error, "[Permission(AuthenticationRequired=true)] attribute should have raised a DomainOperationException");
+            Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
+            Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "Access to operation '{0}' was denied.", "GetZipsIfAuthenticated"), error.Message);
         }
 
         /// <summary>
@@ -2278,34 +1809,26 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// fails because we are not in the manager role.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_RoleRequired()
+        public async Task TestLoad_RoleRequired()
         {
             WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
             {
                 EntityTypes = new Type[] { typeof(Zip) }
             };
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), CancellationToken.None);
-            ;
-            EnqueueConditional(() => queryTask.IsCompleted);
-            EnqueueCallback(delegate
-            {
-                var error = queryTask.Exception?.InnerException as DomainOperationException;
 
-                Assert.IsNotNull(error, "[Permission(Role=\"manager\")] attribute should have raised a DomainOperationException");
-                Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
-                Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "Access to operation '{0}' was denied.", "GetZipsIfInRole"), error.Message);
-            });
-            EnqueueTestComplete();
+            DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
+            Assert.IsNotNull(error, "[Permission(Role=\"manager\")] attribute should have raised a DomainOperationException");
+            Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
+            Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "Access to operation '{0}' was denied.", "GetZipsIfInRole"), error.Message);
         }
 
         /// <summary>
         /// Verify that an attempt to use a query with a custom authorization attribute requiring a specific user
         /// </summary>
         [TestMethod]
-        [Asynchronous]
         [Description("Accessing a query with a custom authorization attribute asserting a specific user is denied")]
-        public void TestLoad_UserRequired()
+        public async Task TestLoad_UserRequired()
         {
             WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
             {
@@ -2313,24 +1836,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
 
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false), CancellationToken.None);
-            EnqueueConditional(delegate
-            {
-                return queryTask.IsCompleted;
-            });
-            EnqueueCallback(delegate
-            {
-                var error = (DomainOperationException)queryTask.Exception?.InnerException;
+            DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
 
-                Assert.IsNotNull(error, "[RequiresUser(\"mathew\")] attribute should have raised a DomainOperationException");
-                Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
-                Assert.AreEqual(error.Message, "Only one user is authorized for this query, and it isn't you.");
-            });
-            EnqueueTestComplete();
+            Assert.IsNotNull(error, "[RequiresUser(\"mathew\")] attribute should have raised a DomainOperationException");
+            Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
+            Assert.AreEqual(error.Message, "Only one user is authorized for this query, and it isn't you.");
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_EnumerableQueryComposition()
+        public async Task TestLoad_EnumerableQueryComposition()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
@@ -2341,46 +1855,29 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 select p;
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(ctxt.Products.Count == 36);
-                Assert.IsFalse(ctxt.Products.Any(p => p.Color != "Yellow"));
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsTrue(ctxt.Products.Count == 36);
+            Assert.IsFalse(ctxt.Products.Any(p => p.Color != "Yellow"));
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_DomainOperationEntryReturnsNull()
+        public async Task TestLoad_DomainOperationEntryReturnsNull()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             EntityQuery<Product> query = ctxt.CreateQuery<Product>("GetProducts_ReturnNull", null, false, true);
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.IsTrue(ctxt.Products.Count == 0);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.IsTrue(ctxt.Products.Count == 0);
         }
 
         /// <summary>
         /// Missing parameters in a query string are treated as nulls by the server
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestDomainOperationEntry_MissingParameters()
+        public async Task TestDomainOperationEntry_MissingParameters()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
@@ -2391,17 +1888,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = ctxt.CreateQuery<Product>("GetProductsMultipleParams", paramValues, false, true);
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                DomainOperationException ex = (DomainOperationException)lo.Error;
-                Assert.IsNull(ex);
-            });
-
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
         }
 
         [TestMethod]
@@ -2425,12 +1913,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Verify that exception messages for general exceptions are propagated back to the client
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestServerExceptions_GeneralException()
+        public async Task TestServerExceptions_GeneralException()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            ValidateQueryException(ctxt, query, ValidateGeneralException);
+            await ValidateQueryException(ctxt, query, ValidateGeneralException);
 
             void ValidateGeneralException(Exception exception)
             {
@@ -2448,12 +1935,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// on the client
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestServerExceptions_DataOperationException()
+        public async Task TestServerExceptions_DataOperationException()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
             var query = ctxt.CreateQuery<Product>("ThrowDataOperationException", null, false, true);
-            ValidateQueryException(ctxt, query, ex =>
+            await ValidateQueryException(ctxt, query, ex =>
             {
                 DomainException dpe = (DomainException)ex;
                 Assert.IsNotNull(dpe);
@@ -2463,12 +1949,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestServerExceptions_QueryOnNonExistentMethod()
+        public async Task TestServerExceptions_QueryOnNonExistentMethod()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
             var query = ctxt.CreateQuery<Product>("NonExistentMethod", null, false, true);
-            ValidateQueryException(ctxt, query, ex =>
+            await ValidateQueryException(ctxt, query, ex =>
             {
                 // REVIEW: Assert the error message.
                 Assert.IsNotNull(ex.InnerException as CommunicationException, "Expected CommunicationException");
@@ -2477,116 +1962,88 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestDataContracts()
+        public async Task TestDataContracts()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             LoadOperation lo = provider.Load(provider.GetEntitiesWithDataContractsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(2, provider.EntityWithDataContracts.Count);
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(2, provider.EntityWithDataContracts.Count);
 
-                EntityWithDataContract[] entities = provider.EntityWithDataContracts.ToArray();
-                Assert.AreEqual(1, entities[0].Id);
-                Assert.AreEqual("First", entities[0].Data);
-                Assert.AreEqual(2, entities[1].Id);
-                Assert.AreEqual("Second", entities[1].Data);
-            });
-            EnqueueTestComplete();
+            EntityWithDataContract[] entities = provider.EntityWithDataContracts.ToArray();
+            Assert.AreEqual(1, entities[0].Id);
+            Assert.AreEqual("First", entities[0].Data);
+            Assert.AreEqual(2, entities[1].Id);
+            Assert.AreEqual("Second", entities[1].Data);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestSpecialTypeNames()
+        public async Task TestSpecialTypeNames()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             LoadOperation lo = provider.Load(provider.GetEntitiesWithSpecialTypeNameQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(2, provider.EntityWithSpecialTypeNames.Count);
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(2, provider.EntityWithSpecialTypeNames.Count);
 
-                EntityWithSpecialTypeName[] entities = provider.EntityWithSpecialTypeNames.ToArray();
-                Assert.AreEqual(1, entities[0].Id);
-                Assert.AreEqual("First", entities[0].Data);
-                Assert.AreEqual(2, entities[1].Id);
-                Assert.AreEqual("Second", entities[1].Data);
-            });
-            EnqueueTestComplete();
+            EntityWithSpecialTypeName[] entities = provider.EntityWithSpecialTypeNames.ToArray();
+            Assert.AreEqual(1, entities[0].Id);
+            Assert.AreEqual("First", entities[0].Data);
+            Assert.AreEqual(2, entities[1].Id);
+            Assert.AreEqual("Second", entities[1].Data);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestProjectionWithBinaryPropertyType()
+        public async Task TestProjectionWithBinaryPropertyType()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             LoadOperation lo = provider.Load(provider.GetDsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(1, provider.Ds.Count);
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(1, provider.Ds.Count);
 
-                D d = provider.Ds.First();
-                Assert.AreEqual(1, d.ID);
-                Assert.IsNotNull(d.BinaryData);
-                Assert.AreEqual(2, d.BinaryData.Length);
-                Assert.AreEqual(20, d.BinaryData[0]);
-                Assert.AreEqual(30, d.BinaryData[1]);
-            });
-            EnqueueTestComplete();
+            D d = provider.Ds.First();
+            Assert.AreEqual(1, d.ID);
+            Assert.IsNotNull(d.BinaryData);
+            Assert.AreEqual(2, d.BinaryData.Length);
+            Assert.AreEqual(20, d.BinaryData[0]);
+            Assert.AreEqual(30, d.BinaryData[1]);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestStringIndexerExpression()
+        public async Task TestStringIndexerExpression()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             var query = ctxt.GetCitiesQuery().Where(c => c.Name[0] == 'a');
-
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.IsFalse(lo.HasError);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.IsFalse(lo.HasError);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestStringReplaceDoesNotAllowPropertyForReplacementArgument()
+        public async Task TestStringReplaceDoesNotAllowPropertyForReplacementArgument()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             var query = ctxt.GetCitiesQuery().Where(c => c.Name.Replace("a", c.Name) == "a");
-
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(lo.Error);
-                Assert.IsTrue(lo.HasError);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNotNull(lo.Error);
+            Assert.IsTrue(lo.HasError);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestStringReplaceDoesNotAllowMethodForReplacementArgument()
+        public async Task TestStringReplaceDoesNotAllowMethodForReplacementArgument()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -2594,21 +2051,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // to execute the code we're aiming for.  Otherwise, the method call would get rejected before
             // we even validate the Replace arguments.
             var query = ctxt.GetCitiesQuery().Where(c => c.Name.Replace("a", String.Concat(c.Name, "a")) == "a");
-
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(lo.Error);
-                Assert.IsTrue(lo.HasError);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNotNull(lo.Error);
+            Assert.IsTrue(lo.HasError);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestStringReplaceDoesNotAllowStringLongerThan100CharactersForReplacementArgument()
+        public async Task TestStringReplaceDoesNotAllowStringLongerThan100CharactersForReplacementArgument()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -2617,18 +2068,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(lo.Error);
-                Assert.IsTrue(lo.HasError);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNotNull(lo.Error);
+            Assert.IsTrue(lo.HasError);
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestStringReplaceAllowsStringUpTo100CharactersForReplacementArgument()
+        public async Task TestStringReplaceAllowsStringUpTo100CharactersForReplacementArgument()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
@@ -2637,13 +2083,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(() => lo.IsComplete);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.IsFalse(lo.HasError);
-            });
-            EnqueueTestComplete();
+            await lo;
+            Assert.IsNull(lo.Error);
+            Assert.IsFalse(lo.HasError);
         }
 
         private static Dictionary<TType, TType> CreateDictionary<TType>(TType seed)
@@ -2665,28 +2107,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                             .Count() == a.Count);
         }
 
-        private void ValidateQueryException(TestDataContext ctxt, EntityQuery<Product> query, Action<Exception> validateException)
+        private async Task ValidateQueryException(TestDataContext ctxt, EntityQuery<Product> query, Action<Exception> validateException)
         {
             LoadOperation lo = ctxt.Load(query, false);
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            base.EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(lo.Error, "Load should have resulted in exception");
-                validateException(lo.Error);
-            });
+            await lo;
+            Assert.IsNotNull(lo.Error, "Load should have resulted in exception");
+            validateException(lo.Error);
 
-            var loadTask = ctxt.LoadAsync(query);
-            base.EnqueueConditional(() => loadTask.IsCompleted);
-            base.EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(loadTask.Exception, "LoadASync should have resulted in exception");
-                validateException(loadTask.Exception?.InnerException);
-            });
-
-            EnqueueTestComplete();
+            var ex = await ExceptionHelper.ExpectExceptionAsync<Exception>(() => ctxt.LoadAsync(query));
+            validateException(ex);
         }
     }
 
