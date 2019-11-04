@@ -494,7 +494,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
             protected override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
             {
                 var factory = base.CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
-                factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
+                factory.Endpoint.EndpointBehaviors.Add(new WebDomainClientWebHttpBehavior()
                 {
                     DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
                 });

@@ -21,6 +21,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     [TestClass]
     public class EntityCollectionTests : UnitTestBase
     {
+#if HAS_COLLECTIONVIEW
         [TestMethod]
         [Description("Tests that create view returns an ICollectionView.")]
         public void ICVF_CreateView()
@@ -250,6 +251,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             view.CollectionChanged -= handler;
         }
+#endif
 
         [TestMethod]
         [Description("EntityAdded and EntityRemoved events should be raised when adding and removing from an EntityCollection")]
@@ -348,7 +350,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(city, eventArgs.Entity,
                 "Entities shoudl be equal after removing.");
         }
-
+#if HAS_COLLECTIONVIEW
         [TestMethod]
         [WorkItem(201155)]
         [Description("Tests that the memory leak in ICVF Proxies is fixed.")]
@@ -360,6 +362,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             System.GC.Collect();
             Assert.IsFalse(weakRef.IsAlive);
         }
+#endif
 
         private EntityCollection<City> CreateEntityCollection()
         {
@@ -387,6 +390,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return new City { Name = name, CountyName = "King", StateName = "WA" };
         }
 
+#if HAS_COLLECTIONVIEW
         private ICollectionView GetICV(EntityCollection<City> entityCollection)
         {
             return ((ICollectionViewFactory)entityCollection).CreateView();
@@ -396,6 +400,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             return (IEditableCollectionView)this.GetICV(entityCollection);
         }
+#endif
 
         /// <summary>
         /// An dynamic EntityContainer class that allows external configuration of

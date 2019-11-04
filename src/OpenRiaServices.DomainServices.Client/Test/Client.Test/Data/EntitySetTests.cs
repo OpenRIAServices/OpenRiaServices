@@ -21,6 +21,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     [TestClass]
     public class EntitySetTests : UnitTestBase
     {
+#if HAS_COLLECTIONVIEW
         [TestMethod]
         [Description("Tests that create view returns an ICollectionView.")]
         public void ICVF_CreateView()
@@ -245,6 +246,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             System.GC.Collect();         
             Assert.IsFalse(weakRef.IsAlive);
         }
+#endif
 
         [TestMethod]
         public void InferredAddThenAttach_EntityCollection()
@@ -321,6 +323,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return new City { Name = name, CountyName = "King", StateName = "WA" };
         }
 
+#if HAS_COLLECTIONVIEW
         private ICollectionView GetICV(EntitySet entitySet)
         {
             return ((ICollectionViewFactory)entitySet).CreateView();
@@ -330,6 +333,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             return (IEditableCollectionView)this.GetICV(entitySet);
         }
+#endif
 
         /// <summary>
         /// An dynamic EntityContainer class that allows external configuration of
