@@ -198,9 +198,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await op;
             validate(op);
 
-            var loadTask = ctxt.LoadAsync(query);
-            await loadTask;
-            validateException(loadTask.Exception?.InnerException);
+            var loadException = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(()
+                => ctxt.LoadAsync(query));
+            validateException(loadException);
         }
 
         [TestMethod]
@@ -1323,6 +1323,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task TestDomainContext_IsLoadingPropertyChangeNotifications()
         {
+            var semaphore = new SemaphoreSlim(0);
             PropertyChangedEventArgs loadingEventArgs = null;
             PropertyChangedEventArgs loadedEventArgs = null;
             object savedSender = null;
@@ -1349,12 +1350,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     loadedEventArgs = e;
                 }
                 isLoadingEventCount++;
+                semaphore.Release();
             };
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            await lo;
-            Assert.IsNull(loadingEventArgs);
+            await semaphore.WaitAsync();
+            semaphore.Dispose();
+
+            Assert.IsNotNull(loadingEventArgs);
             Assert.IsFalse(loadCompleteDuringLoading);
             Assert.AreEqual("IsLoading", loadingEventArgs.PropertyName);
             Assert.AreSame(catalog, savedSender);  // verify sender
@@ -1645,50 +1649,51 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Load 10 products to get 10 product IDs.
             LoadOperation lo = tempCatalog.Load(tempCatalog.GetProductsQuery().Take(numberOfActiveLoadCalls), false);
+
+            ManualResetEventSlim[] waitHandles = new ManualResetEventSlim[numberOfActiveLoadCalls];
+            for (int i = 0; i < numberOfActiveLoadCalls; ++i)
+                waitHandles[i] = new ManualResetEventSlim();
+
             await lo;
             Assert.IsNull(lo.Error);
             Assert.AreEqual(numberOfActiveLoadCalls, tempCatalog.Products.Count);
 
-            foreach (var product in tempCatalog.Products)
+            var products = tempCatalog.Products.ToList();
+            for (int i = 0; i < numberOfActiveLoadCalls; ++i)
             {
                 // Do this in separate threads to prevent this becoming a synchronous process.
                 // [Ron] My single-proc machine generally has finished all the loads by the time
                 // the cancel is issued.  Using ThreadPool breaks this behavior.
-                ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object productObject)
-                {
-                    Product thisProduct = (Product)productObject;
-                    lock (syncObject)
-                    {
-                        Action<LoadOperation<Product>> action = delegate (LoadOperation<Product> o)
-                        {
-                            if (o.HasError)
-                            {
-                                o.MarkErrorAsHandled();
-                            }
-                        };
-                        lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), action, thisProduct.ProductID);
-                        loadOperations.Add(lo);
-
-                        // When have asked for Product[5], issue a cancel.
-                        Product[] products = tempCatalog.Products.ToArray();
-                        if (thisProduct.ProductID == products[5].ProductID)
-                        {
-                            lo.Cancel();
-                        }
-                    }
-                }, product);
+                ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object state)
+                  {
+                      int index = (int)state;
+                      Product thisProduct = products[index];
+                      lock (syncObject)
+                      {
+                          lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), throwOnError: false);
+                          // When have asked for Product[5], issue a cancel.
+                          if (index == 5)
+                          {
+                              lo.Cancel();
+                          }
+                          loadOperations.Add(lo);
+                          lo.Completed += (_, __) => waitHandles[index].Set();
+                      }
+                  }, i);
             }
 
-            foreach (LoadOperation op in loadOperations)
-                await op;
             for (int i = 0; i < numberOfActiveLoadCalls; i++)
             {
+                waitHandles[i].Wait();
+                waitHandles[i].Dispose();
+
+                Assert.IsTrue(loadOperations[i].IsComplete);
+
                 if (!loadOperations[i].IsCanceled)
                 {
                     Assert.IsNull(loadOperations[i].Error);
                     Assert.AreEqual(1, loadOperations[i].Entities.Count());
                     var product = (Product)loadOperations[i].Entities.First();
-                    Product[] products = tempCatalog.Products.ToArray();
                     Assert.AreNotEqual(products[5].ProductID, product.ProductID);
                 }
             }
@@ -1716,7 +1721,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var loadTask = catalog.LoadAsync(query, cts.Token);
             cts.Cancel();
 
-            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => loadTask);
+            await ExceptionHelper.ExpectExceptionAsync<OperationCanceledException>(() => loadTask);
             Assert.IsTrue(loadTask.IsCanceled, "Task should be cancelled");
         }
 
@@ -2114,7 +2119,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNotNull(lo.Error, "Load should have resulted in exception");
             validateException(lo.Error);
 
-            var ex = await ExceptionHelper.ExpectExceptionAsync<Exception>(() => ctxt.LoadAsync(query));
+            var ex = await ExceptionHelper.ExpectExceptionAsync<Exception>(() => ctxt.LoadAsync(query), allowDerivedExceptions: true);
             validateException(ex);
         }
     }
