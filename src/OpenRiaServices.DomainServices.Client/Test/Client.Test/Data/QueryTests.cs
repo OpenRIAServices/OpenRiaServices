@@ -1707,6 +1707,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
             Assert.AreEqual((numberOfActiveLoadCalls - 1), catalog.Products.Count);
             Assert.AreEqual(1, loadOperations.Where(a => a.IsCanceled).Count());
+
+            cts.Dispose();
         }
 
         [TestMethod]
