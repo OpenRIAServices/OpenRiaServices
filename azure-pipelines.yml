@@ -62,7 +62,7 @@ steps:
      !**\obj\**
 
     runOnlyImpactedTests: false
-    runInParallel: false
+    runInParallel: true
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
