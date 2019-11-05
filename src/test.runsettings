@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Configurations that affect the Test Framework -->
+  <RunConfiguration>
+    <!--<MaxCpuCount>1</MaxCpuCount>-->
+    <!-- Path relative to directory that contains .runsettings file-->
+    <!--<ResultsDirectory>.\TestResults</ResultsDirectory>-->
+
+    <!-- x86 or x64 -->
+    <!-- You can also change it from the Test menu; choose "Processor Architecture for AnyCPU Projects" -->
+    <!--<TargetPlatform>x86</TargetPlatform>-->
+
+    <!-- TestSessionTimeout was introduced in Visual Studio 2017 version 15.5 -->
+    <!-- Specify timeout in milliseconds. A valid value should be greater than 0 -->
+    <!--<TestSessionTimeout>10000</TestSessionTimeout>-->
+  </RunConfiguration>
+
+  <!-- Configurations for data collectors -->
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <Configuration>
+          <CodeCoverage>
+            <ModulePaths>
+              <Include>
+                <ModulePath>.*OpenRiaServices\..*.dll$</ModulePath>
+                <ModulePath>.*OpenRiaServices\..*.exe$</ModulePath>
+              </Include>
+            </ModulePaths>
+
+            <!-- Match attributes on any code element: -->
+            <Attributes>
+              <Exclude>
+                <!-- Don't forget "Attribute" at the end of the name -->
+                <Attribute>^System\.Diagnostics\.DebuggerHiddenAttribute$</Attribute>
+                <Attribute>^System\.Diagnostics\.DebuggerNonUserCodeAttribute$</Attribute>
+                <Attribute>^System\.CodeDom\.Compiler\.GeneratedCodeAttribute$</Attribute>
+                <Attribute>^System\.Diagnostics\.CodeAnalysis\.ExcludeFromCodeCoverageAttribute$</Attribute>
+              </Exclude>
+            </Attributes>
+            <!-- Match the company name property in the assembly: -->
+            <CompanyNames>
+              <Exclude>
+                <CompanyName>.*microsoft.*</CompanyName>
+              </Exclude>
+            </CompanyNames>
+            <!-- Match the public key token of a signed assembly: -->
+            <PublicKeyTokens>
+              <!-- Exclude Visual Studio extensions: -->
+              <Exclude>
+                <PublicKeyToken>^B77A5C561934E089$</PublicKeyToken>
+                <PublicKeyToken>^B03F5F7F11D50A3A$</PublicKeyToken>
+                <PublicKeyToken>^31BF3856AD364E35$</PublicKeyToken>
+                <PublicKeyToken>^89845DCD8080CC91$</PublicKeyToken>
+                <PublicKeyToken>^71E9BCE111E9429C$</PublicKeyToken>
+                <PublicKeyToken>^8F50407C4E9E73B6$</PublicKeyToken>
+                <PublicKeyToken>^E361AF139669C375$</PublicKeyToken>
+<!-- OpenRiaServices test assemblies -->
+                <PublicKeyToken>^103cd86017c38181$</PublicKeyToken>
+              </Exclude>
+            </PublicKeyTokens>
+
+            <!-- We recommend you do not change the following values: -->
+            <UseVerifiableInstrumentation>True</UseVerifiableInstrumentation>
+            <AllowLowIntegrityProcesses>True</AllowLowIntegrityProcesses>
+            <CollectFromChildProcesses>True</CollectFromChildProcesses>
+            <!-- When set to True, restarts the IIS process and collects coverage information from it. -->
+            <CollectAspDotNet>False</CollectAspDotNet>
+          </CodeCoverage>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+
+  <!-- Parameters used by tests at run time -->
+  <TestRunParameters>
+    <Parameter name="webAppUrl" value="http://localhost" />
+    <Parameter name="webAppUserName" value="Admin" />
+    <Parameter name="webAppPassword" value="Password" />
+  </TestRunParameters>
+
+  <!-- Adapter Specific sections -->
+
+  <!-- MSTest adapter -->
+  <MSTest>
+    <!--
+    <MapInconclusiveToFailed>True</MapInconclusiveToFailed>
+    <CaptureTraceOutput>false</CaptureTraceOutput>
+    <DeleteDeploymentDirectoryAfterTestRunIsComplete>False</DeleteDeploymentDirectoryAfterTestRunIsComplete>
+    <DeploymentEnabled>False</DeploymentEnabled>
+    <AssemblyResolution>
+      <Directory path="D:\myfolder\bin\" includeSubDirectories="false"/>
+    </AssemblyResolution>
+    -->
+  </MSTest>
+
+</RunSettings>

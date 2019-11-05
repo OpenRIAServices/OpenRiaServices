@@ -63,6 +63,7 @@ steps:
 
     runOnlyImpactedTests: false
     runInParallel: false
+    runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
