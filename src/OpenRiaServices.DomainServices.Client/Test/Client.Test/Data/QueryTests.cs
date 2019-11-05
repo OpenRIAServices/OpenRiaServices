@@ -1323,7 +1323,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task TestDomainContext_IsLoadingPropertyChangeNotifications()
         {
-            var semaphore = new SemaphoreSlim(0);
+            var propertyChangeCalled = new SemaphoreSlim(0);
             PropertyChangedEventArgs loadingEventArgs = null;
             PropertyChangedEventArgs loadedEventArgs = null;
             object savedSender = null;
@@ -1350,13 +1350,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     loadedEventArgs = e;
                 }
                 isLoadingEventCount++;
-                semaphore.Release();
+                propertyChangeCalled.Release();
             };
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            await semaphore.WaitAsync();
-            semaphore.Dispose();
+            await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30));
+            propertyChangeCalled.Dispose();
 
             Assert.IsNotNull(loadingEventArgs);
             Assert.IsFalse(loadCompleteDuringLoading);
@@ -1650,9 +1650,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Load 10 products to get 10 product IDs.
             LoadOperation lo = tempCatalog.Load(tempCatalog.GetProductsQuery().Take(numberOfActiveLoadCalls), false);
 
-            ManualResetEventSlim[] waitHandles = new ManualResetEventSlim[numberOfActiveLoadCalls];
+            SemaphoreSlim[] waitHandles = new SemaphoreSlim[numberOfActiveLoadCalls];
             for (int i = 0; i < numberOfActiveLoadCalls; ++i)
-                waitHandles[i] = new ManualResetEventSlim();
+                waitHandles[i] = new SemaphoreSlim(0);
 
             await lo;
             Assert.IsNull(lo.Error);
@@ -1677,14 +1677,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                               lo.Cancel();
                           }
                           loadOperations.Add(lo);
-                          lo.Completed += (_, __) => waitHandles[index].Set();
                       }
+
+                      lo.Completed += (_, __) => waitHandles[index].Release();
                   }, i);
             }
 
             for (int i = 0; i < numberOfActiveLoadCalls; i++)
             {
-                waitHandles[i].Wait();
+                await waitHandles[i].WaitAsync(TimeSpan.FromSeconds(30));
                 waitHandles[i].Dispose();
 
                 Assert.IsTrue(loadOperations[i].IsComplete);
