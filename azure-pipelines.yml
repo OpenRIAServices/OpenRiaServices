@@ -67,7 +67,7 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: false
+    diagnosticsEnabled: true
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
@@ -96,6 +96,16 @@ steps:
      src\VisualStudio\Installer\assets\**
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+
+  
+- task: CopyFiles@2
+  displayName: 'Copy dump files  to $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: |
+     **\*.dmp
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: failed()
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'

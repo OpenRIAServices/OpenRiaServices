@@ -1350,8 +1350,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30));
+            bool waitSuccess = await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30));
             propertyChangeCalled.Dispose();
+
+            Assert.IsTrue(waitSuccess, "Waited to long for callback to be executed, semaphore note signalled");
 
             Assert.IsNotNull(loadingEventArgs);
             Assert.IsFalse(loadCompleteDuringLoading);
@@ -1678,9 +1680,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
                   }, i);
             }
 
+            // Wait for loads to complete with a timeout
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
             for (int i = 0; i < numberOfActiveLoadCalls; i++)
             {
-                await waitHandles[i].WaitAsync(TimeSpan.FromSeconds(30));
+                await waitHandles[i].WaitAsync(cts.Token);
                 waitHandles[i].Dispose();
 
                 Assert.IsTrue(loadOperations[i].IsComplete);
