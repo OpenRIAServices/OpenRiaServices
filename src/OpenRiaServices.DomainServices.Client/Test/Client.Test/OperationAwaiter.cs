@@ -29,7 +29,10 @@ namespace OpenRiaServices.DomainServices.Client
 
             public void OnCompleted(Action continuation)
             {
-                _operation.Completed += (sender, args) => continuation();
+                _operation.Completed += (sender, args) =>
+                {
+                    ThreadPool.QueueUserWorkItem((object state) => ((Action)state)(), continuation);
+                };
             }
 
             public void GetResult()
