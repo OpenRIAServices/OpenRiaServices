@@ -25,6 +25,7 @@ steps:
     
 - task: SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
+  condition: variables['sonarcloud-endpoint']
   inputs:
     SonarCloud: 'sonarcloud.io'
     organization: openriaservices
@@ -73,7 +74,7 @@ steps:
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   continueOnError: true
-  condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
 
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
@@ -105,7 +106,7 @@ steps:
     Contents: |
      **\*.dmp
     TargetFolder: '$(build.artifactstagingdirectory)'
-  condition: failed()
+  condition: succeededOrFailed()
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
@@ -116,4 +117,4 @@ steps:
 - task: SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
   continueOnError: true  
-  condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
