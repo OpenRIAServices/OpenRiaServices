@@ -315,11 +315,12 @@ namespace OpenRiaServices.DomainServices.Client
                 return;
 
             Delegate[] invocations = handler.GetInvocationList();
+            EventArgs eventArgs = EventArgs.Empty;
             int i = 0;
             try
             {
                 for (; i < invocations.Length; ++i)
-                    ((EventHandler)invocations[i]).Invoke(this, EventArgs.Empty);
+                    ((EventHandler)invocations[i]).Invoke(this, eventArgs);
             }
             catch (Exception ex) when (i + 1 < invocations.Length)
             {
@@ -332,7 +333,7 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     try
                     {
-                        ((EventHandler)invocations[i]).Invoke(this, EventArgs.Empty);
+                        ((EventHandler)invocations[i]).Invoke(this, eventArgs);
                     }
                     catch (Exception ex2)
                     {
@@ -340,14 +341,14 @@ namespace OpenRiaServices.DomainServices.Client
                     }
                 }
 
-                if (exceptions.Count > 1)
-                {
-                    throw new AggregateException(exceptions);
-                }
-                else
+                if (exceptions.Count == 1)
                 {
                     // Rethrow original exception if we only had one
                     throw;
+                }
+                else
+                {
+                    throw new AggregateException(exceptions);
                 }
             }
         }
