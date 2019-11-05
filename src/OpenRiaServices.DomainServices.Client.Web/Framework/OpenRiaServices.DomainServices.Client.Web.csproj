@@ -5,11 +5,11 @@
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <PackageTags>WCF;RIA;Services;RIAServices;Silverlight;OpenRiaServices</PackageTags>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.ServiceModel.Primitives" Version="4.5.0" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.5.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
@@ -34,9 +34,7 @@
     <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
       <Link>Web\Behaviors\WebHttpQueryStringConverter.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs">
-      <Link>Data\MessageEncoders\PoxBinaryMessageEncodingBindingElement.cs</Link>
-    </Compile>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\MessageEncoders\*.cs" LinkBase="Data\MessageEncoders" />
   </ItemGroup>
 
   <!-- Remove ServiceModel.Web dependent parts (binary endpoint) -->
@@ -66,7 +64,7 @@
     <EmbeddedResource Update="Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Client</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.DomainServices.Client.Web</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

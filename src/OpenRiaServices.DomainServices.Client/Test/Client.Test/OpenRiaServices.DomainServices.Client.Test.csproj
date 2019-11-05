@@ -4,6 +4,11 @@
     <NoWarn>108</NoWarn>
     <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
   </ItemGroup>

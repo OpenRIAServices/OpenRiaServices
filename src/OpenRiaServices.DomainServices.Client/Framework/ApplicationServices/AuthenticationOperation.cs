@@ -158,7 +158,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 {
                     throw;
                 }
-                this.Complete(e);
+                this.SetError(e);
                 this.RaiseCompletionPropertyChanges();
                 return;
             }

@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DataTests.Northwind.LTS;
 using System.ComponentModel.DataAnnotations;
 using OpenRiaServices.Silverlight.Testing;
+using System.Collections;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -39,9 +40,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             base.CancelCore();
         }
 
-        public new void Complete(Exception error)
+        public new void SetError(Exception error)
         {
-            base.Complete(error);
+            base.SetError(error);
         }
 
         public new void Complete(object result)
@@ -88,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             lo.Completed += action;
 
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            lo.Complete(ex);
+            lo.SetError(ex);
 
             // verify that calling MarkAsHandled again is a noop
             lo.MarkErrorAsHandled();
@@ -121,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                lo.Complete(ex);
+                lo.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -130,16 +131,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(ex, expectedException);
-
-            // TODO: Add separate test with mock DomainClient which throws a specific exception
-            // and move the following checks there
-            /*
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed, "ThrowGeneralException", ex.Message), expectedException.Message);
-            Assert.AreEqual(ex.StackTrace, expectedException.StackTrace);
-            Assert.AreEqual(ex.Status, expectedException.Status);
-            Assert.AreEqual(ex.ErrorCode, expectedException.ErrorCode);
-            */
 
             Assert.AreEqual(false, lo.IsErrorHandled);
 
@@ -151,7 +142,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             
             try
             {
-                lo.Complete(ex);
+                lo.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -160,7 +151,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(expectedException, ex);;
-            CollectionAssert.AreEqual(validationErrors, lo.ValidationErrors.ToList());
+            CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
         }
 
         /// <summary>
@@ -178,7 +169,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                invoke.Complete(ex);
+                invoke.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -186,22 +177,18 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed, "Echo", ex.Message), expectedException.Message);
-            Assert.AreEqual(ex.StackTrace, expectedException.StackTrace);
-            Assert.AreEqual(ex.Status, expectedException.Status);
-            Assert.AreEqual(ex.ErrorCode, expectedException.ErrorCode);
-
+            Assert.AreSame(ex, expectedException);
             Assert.AreEqual(false, invoke.IsErrorHandled);
 
             // now test again with validation errors
             expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             invoke = new InvokeOperation("Echo", null, null, null, false);
+            var validationException = new DomainOperationException("validation", validationErrors);
 
             try
             {
-                invoke.Complete(validationErrors);
+                invoke.SetError(validationException);
             }
             catch (DomainOperationException e)
             {
@@ -209,8 +196,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"), expectedException.Message);
+            Assert.AreSame(validationException, expectedException);
+            CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
         }
 
         /// <summary>
@@ -234,7 +221,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                submit.Complete(ex);
+                submit.SetError(ex);
             }
             catch (DomainOperationException e)
             {
@@ -260,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                submit.Complete(OperationErrorStatus.Conflicts);
+                submit.SetError(OperationErrorStatus.Conflicts);
             }
             catch (DomainOperationException e)
             {
@@ -281,7 +268,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             try
             {
-                submit.Complete(OperationErrorStatus.ValidationFailed);
+                submit.SetError(OperationErrorStatus.ValidationFailed);
             }
             catch (DomainOperationException e)
             {

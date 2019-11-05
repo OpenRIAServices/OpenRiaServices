@@ -89,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Client
             if (!serviceUri.IsAbsoluteUri)
             {
                 // Relative URIs currently only supported on Silverlight
-                throw new ArgumentException(OpenRiaServices.DomainServices.Client.Resource.DomainContext_InvalidServiceUri, nameof(serviceUri));
+                throw new ArgumentException(Resource.WebDomainClient_InvalidServiceUri, nameof(serviceUri));
             }
 #endif
 
@@ -424,7 +424,7 @@ namespace OpenRiaServices.DomainServices.Client
                 catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
-                    taskCompletionSource.SetException(ex);
+                    taskCompletionSource.TrySetException(ex);
                 }
                 finally
                 {
@@ -437,7 +437,17 @@ namespace OpenRiaServices.DomainServices.Client
             realParameters[realParameters.Length - 1] = /*userState*/endInvokeMethod;
 
             // Call Begin** method
-            InvokeMethod(beginInvokeMethod, channel, realParameters);
+            // Handle any immediate CommunicationException which can be thrown directly from begin method
+            // for some tests that perform invalid calls against localhost
+            try
+            {
+                InvokeMethod(beginInvokeMethod, channel, realParameters);
+            }
+            catch (CommunicationException ex)
+            {
+                taskCompletionSource.TrySetException(ex);
+            }
+
             return taskCompletionSource.Task;
         }
 
@@ -467,7 +477,7 @@ namespace OpenRiaServices.DomainServices.Client
             MethodInfo m = typeof(TContract).GetMethod("End" + operationName);
             if (m == null)
             {
-                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.DomainServices.Client.Resource.WebDomainClient_OperationDoesNotExist, operationName));
+                throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, Resource.WebDomainClient_OperationDoesNotExist, operationName));
             }
             return m;
         }

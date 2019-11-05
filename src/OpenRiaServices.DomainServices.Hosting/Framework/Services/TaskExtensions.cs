@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,24 +18,19 @@ namespace OpenRiaServices.DomainServices.Hosting
                                     AsyncCallback callback,
                                     object state)
         {
-
             var result = new AsyncResult<T>(task, callback, state);
             if (result.CompletedSynchronously)
             {
                 result.ExecuteCallback();
-                return result;
             }
             else
             {
-                task.AsTask()
-                    .ContinueWith((res, asyncResult) =>
-                {
-                    ((AsyncResult<T>)asyncResult).ExecuteCallback();
-                },
-                result,
-                CancellationToken.None,
-                TaskContinuationOptions.None,
-                TaskScheduler.Default);
+                // We use OnCompleted rather than ContinueWith in order to avoid running synchronously
+                // if the task has already completed by the time we get here. 
+                // This will allocate a delegate and some extra data to add it as a TaskContinuation
+                task.ConfigureAwait(false)
+                    .GetAwaiter()
+                    .OnCompleted(result.ExecuteCallback);
             }
 
             return result;
@@ -46,29 +38,29 @@ namespace OpenRiaServices.DomainServices.Hosting
 
         private class AsyncResult<T> : IAsyncResult
         {
-            private readonly ValueTask<T> _task;
+            private readonly ValueTask<T> _valueTask;
             private readonly object _asyncState;
             private readonly AsyncCallback _asyncCallback;
 
-            public AsyncResult(ValueTask<T> task, AsyncCallback asyncCallback, object asyncState)
+            public AsyncResult(ValueTask<T> valueTask, AsyncCallback asyncCallback, object asyncState)
             {
-                _task = task;
+                _valueTask = valueTask;
                 _asyncCallback = asyncCallback;
                 _asyncState = asyncState;
-                CompletedSynchronously = task.IsCompleted;
+                CompletedSynchronously = valueTask.IsCompleted;
             }
 
-            public T GetResult() => _task.GetAwaiter().GetResult();
+            public T GetResult() => _valueTask.GetAwaiter().GetResult();
 
             // Calls the async callback with this
             public void ExecuteCallback() => _asyncCallback(this);
 
             #region IAsyncResult implementation forwarded to Task implementation
             object IAsyncResult.AsyncState => _asyncState;
-            WaitHandle IAsyncResult.AsyncWaitHandle => !CompletedSynchronously ? ((IAsyncResult)_task.AsTask()).AsyncWaitHandle : throw new NotImplementedException();
+            WaitHandle IAsyncResult.AsyncWaitHandle => !CompletedSynchronously ? ((IAsyncResult)_valueTask.AsTask()).AsyncWaitHandle : throw new NotImplementedException();
 
             public bool CompletedSynchronously { get; }
-            bool IAsyncResult.IsCompleted => _task.IsCompleted;
+            bool IAsyncResult.IsCompleted => _valueTask.IsCompleted;
             #endregion
 
         }

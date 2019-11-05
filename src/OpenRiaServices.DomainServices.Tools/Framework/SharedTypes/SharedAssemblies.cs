@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using System.Reflection;
-using OpenRiaServices.DomainServices;
+using Mono.Cecil;
 
 namespace OpenRiaServices.DomainServices.Tools.SharedTypes
 {
@@ -13,12 +13,10 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
     /// and allow clients to ask whether types or methods are
     /// in that set.
     /// </summary>
-    internal class SharedAssemblies
+    internal sealed class SharedAssemblies : IDisposable
     {
-        private readonly List<string> _assemblyFileNames;
-        private List<Assembly> _assemblies;
-        private readonly IEnumerable<string> _assemblySearchPaths;
-        private readonly ConcurrentDictionary<string, Type> _sharedTypeByName = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, TypeInfo> _sharedTypeByName;
+        private readonly CustomAssemblyResolver _resolver;
         private readonly ILogger _logger;
 
         /// <summary>
@@ -27,30 +25,149 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <param name="assemblyFileNames">The set of assemblies to use</param>
         /// <param name="assemblySearchPaths">Optional set of paths to search for referenced assemblies.</param>
         /// <param name="logger">Optional logger to use to report errors or warnings</param>
-        internal SharedAssemblies(IEnumerable<string> assemblyFileNames, IEnumerable<string> assemblySearchPaths, ILogger logger)
+        public SharedAssemblies(IEnumerable<string> assemblyFileNames, IEnumerable<string> assemblySearchPaths, ILogger logger)
         {
             if (assemblyFileNames == null)
             {
-                throw new ArgumentNullException(nameof(assemblyFileNames));
+                throw new ArgumentNullException("assemblyFileNames");
             }
-            this._logger = logger;
-            this._assemblyFileNames = new List<string>(assemblyFileNames);
-            this._assemblySearchPaths = assemblySearchPaths ?? Array.Empty<string>();
+            _logger = logger;
+            _sharedTypeByName = new Dictionary<string, TypeInfo>(StringComparer.Ordinal);
+            _resolver = new CustomAssemblyResolver(assemblySearchPaths ?? Enumerable.Empty<string>());
+            _resolver.ResolveFailure += _resolver_ResolveFailure;
+            LoadAssemblies(assemblyFileNames, logger);
+        }
+
+        private AssemblyDefinition _resolver_ResolveFailure(object sender, AssemblyNameReference reference)
+        {
+            _logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, reference.FullName, string.Empty));
+            return null;
+        }
+
+        private void LoadAssemblies(IEnumerable<string> assemblyFileNames, ILogger logger)
+        {
+            var loaded = new HashSet<AssemblyNameReference>(new AssemblyNameReferenceComparer());
+            var references = new HashSet<AssemblyNameReference>(new AssemblyNameReferenceComparer());
+            foreach (var assembly in assemblyFileNames)
+            {
+                try
+                {
+                    AssemblyDefinition definition = _resolver.LoadAssembly(assembly);
+                    loaded.Add(definition.Name);
+                    foreach (ModuleDefinition module in definition.Modules)
+                    {
+                        AddPublicTypesToDictionary(module);
+
+                        foreach (var reference in module.AssemblyReferences)
+                            references.Add(reference);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Some common exceptions log a warning and keep running
+                    if (ex is System.IO.FileNotFoundException ||
+                        ex is System.IO.FileLoadException ||
+                        ex is System.IO.PathTooLongException ||
+                        ex is System.BadImageFormatException ||
+                        ex is System.Security.SecurityException)
+                    {
+                        if (logger != null)
+                        {
+                            logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assembly, ex.Message));
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            // PERF: Consider replacing this with some smarter code using TypeReferences
+            // from loaded assemblies and creating "incomplete" types with them
+            // to populate the dictionary
+            references.ExceptWith(loaded);
+            foreach (var assembly in references)
+            {
+                try
+                {
+                    AssemblyDefinition definition = _resolver.Resolve(assembly);
+                    foreach (ModuleDefinition m in definition.Modules)
+                    {
+                        AddPublicTypesToDictionary(m);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Some common exceptions log a warning and keep running
+                    if (ex is System.IO.FileNotFoundException ||
+                        ex is System.IO.FileLoadException ||
+                        ex is System.IO.PathTooLongException ||
+                        ex is System.BadImageFormatException ||
+                        ex is System.Security.SecurityException)
+                    {
+                        if (logger != null)
+                        {
+                            logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assembly, ex.Message));
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        private void AddPublicTypesToDictionary(ModuleDefinition module)
+        {
+            foreach (var type in module.Types)
+            {
+                if (type.IsPublic)
+                {
+                    _sharedTypeByName[type.FullName] = new TypeInfo(type);
+                }
+            }
+        }
+
+        TypeInfo GetBaseType(TypeInfo typeInfo)
+        {
+            if (typeInfo.BaseTypeCache == null
+                && typeInfo.TypeDefinition.BaseType != null)
+            {
+                TypeDefinition type = typeInfo.TypeDefinition.BaseType.Resolve();
+                typeInfo.BaseTypeCache = new TypeInfo(type);
+            }
+
+            return typeInfo.BaseTypeCache;
         }
 
         /// <summary>
-        /// Gets the set of loaded assemblies
+        /// Search for a property in a class hierarcy and get the type implementing the property or <c>null</c>
         /// </summary>
-        private IEnumerable<Assembly> Assemblies
+        TypeInfo HasProperty(TypeInfo type, string name)
         {
-            get
+            while (type != null)
             {
-                if (this._assemblies == null)
+                // Get or Initialize Property collection
+                if (type.PropertiesCache == null)
                 {
-                    this.LoadAssemblies();
+                    type.PropertiesCache = new HashSet<string>();
+                    foreach (var property in type.TypeDefinition.Properties)
+                    {
+                        var method = property.GetMethod ?? property.SetMethod;
+                        if (method.IsPublic)
+                            type.PropertiesCache.Add(property.Name);
+                    }
                 }
-                return this._assemblies;
+
+                if (type.PropertiesCache.Contains(name))
+                    return type;
+
+                type = GetBaseType(type);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -59,93 +176,94 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// </summary>
         /// <param name="key">The description of the code element.</param>
         /// <returns>The location of the assembly that contains it or <c>null</c> if it is not in a shared assembly.</returns>
-        internal string GetSharedAssemblyPath(CodeMemberKey key)
+        public string GetSharedAssemblyPath(CodeMemberKey key)
         {
             Debug.Assert(key != null, "key cannot be null");
-            string location = null;
+            ModuleDefinition location = null;
 
-            Type type = this.GetSharedType(key.TypeName);
-            if (type != null)
+            TypeInfo typeInfo;
+            if (TryGetSharedType(key.TypeName, out typeInfo))
             {
                 switch (key.KeyKind)
                 {
                     case CodeMemberKey.CodeMemberKeyKind.TypeKey:
-                        location = type.Assembly.Location;
+                        location = typeInfo.ModuleDefinition;
                         break;
 
                     case CodeMemberKey.CodeMemberKeyKind.PropertyKey:
-                        PropertyInfo propertyInfo = type.GetProperty(key.MemberName);
-                        if (propertyInfo != null)
-                        {
-                            location = propertyInfo.DeclaringType.Assembly.Location;
-                        }
+                        location = HasProperty(typeInfo, key.MemberName)?.ModuleDefinition;
                         break;
 
                     case CodeMemberKey.CodeMemberKeyKind.MethodKey:
-                        Type[] parameterTypes = this.GetSharedTypes(key.ParameterTypeNames);
-                        if (parameterTypes != null)
+                        var method = FindSharedMethodOrConstructor(typeInfo, key);
+                        if (method != null)
                         {
-                            MethodBase methodBase = this.FindSharedMethodOrConstructor(type, key);
-                            if (methodBase != null)
-                            {
-                                location = methodBase.DeclaringType.Assembly.Location;
-                            }
+                            location = method.DeclaringType.Module;
                         }
                         break;
 
                     default:
-                        Debug.Fail("unsupported key kind");
-                        break;
+                        throw new NotImplementedException();
                 }
             }
-            return location;
+
+            return location?.Assembly.Name.Name;
         }
 
         /// <summary>
-        /// Locates the <see cref="MethodBase"/> in the set of shared assemblies that
+        /// Locates the <see cref="MethodDefinition"/> in the set of shared assemblies that
         /// corresponds to the method described by <paramref name="key"/>.
         /// </summary>
-        /// <param name="sharedType">The <see cref="Type"/> we have already located in our set of shared assemblies.</param>
+        /// <param name="sharedType">The <see cref="TypeInfo"/> we have already located in our set of shared assemblies.</param>
         /// <param name="key">The key describing the method to find.</param>
-        /// <returns>The matching <see cref="MethodBase"/> or <c>null</c> if no match is found.</returns>
-        private MethodBase FindSharedMethodOrConstructor(Type sharedType, CodeMemberKey key)
+        /// <returns>The matching <see cref="MethodDefinition"/> or <c>null</c> if no match is found.</returns>
+        private MethodDefinition FindSharedMethodOrConstructor(TypeInfo sharedType, CodeMemberKey key)
         {
-            Type[] parameterTypes = this.GetSharedTypes(key.ParameterTypeNames);
+            TypeInfo[] parameterTypes = GetSharedTypes(key.ParameterTypeNames);
             if (parameterTypes == null)
             {
                 return null;
             }
             bool isConstructor = key.IsConstructor;
-            IEnumerable<MethodBase> methods = isConstructor ? sharedType.GetConstructors().Cast<MethodBase>() : sharedType.GetMethods().Cast<MethodBase>();
-            foreach (MethodBase method in methods)
+
+            do
             {
-                if (!isConstructor && !string.Equals(method.Name, key.MemberName, StringComparison.OrdinalIgnoreCase))
+                foreach (var method in sharedType.TypeDefinition.Methods)
                 {
-                    continue;
-                }
-                ParameterInfo[] parameterInfos = method.GetParameters();
-                if (parameterInfos.Length != parameterTypes.Length)
-                {
-                    continue;
-                }
-                int matchedParameters = 0;
-                for (int i = 0; i < parameterInfos.Length; ++i)
-                {
-                    if (string.Equals(parameterInfos[i].ParameterType.FullName, parameterTypes[i].FullName, StringComparison.OrdinalIgnoreCase))
+                    // Name matches or it is a constructur we are 
+                    if (isConstructor ? !method.IsConstructor : !string.Equals(method.Name, key.MemberName, StringComparison.OrdinalIgnoreCase))
                     {
-                        ++matchedParameters;
+                        continue;
                     }
-                    else
+
+                    var parameterInfos = method.Parameters;
+                    if (parameterInfos.Count != parameterTypes.Length)
                     {
-                        break;
+                        continue;
+                    }
+                    int matchedParameters = 0;
+                    for (int i = 0; i < parameterInfos.Count; ++i)
+                    {
+                        if (string.Equals(parameterInfos[i].ParameterType.FullName, parameterTypes[i].FullName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            ++matchedParameters;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (matchedParameters == parameterInfos.Count)
+                    {
+                        return method;
                     }
                 }
 
-                if (matchedParameters == parameterInfos.Length)
-                {
-                    return method;
-                }
-            }
+                // Continue searching in base types
+            } while (!isConstructor &&
+                (sharedType = GetBaseType(sharedType)) != null);
+
             return null;
         }
 
@@ -156,149 +274,209 @@ namespace OpenRiaServices.DomainServices.Tools.SharedTypes
         /// <param name="typeNames">The collection of type names.  It can be null.</param>
         /// <returns>The collection of types in the shared assemblies.
         /// A <c>null</c> means one or more types in the list were not shared.</returns>
-        private Type[] GetSharedTypes(IEnumerable<string> typeNames)
+        TypeInfo[] GetSharedTypes(string[] typeNames)
         {
-            List<Type> types = new List<Type>();
-            if (typeNames != null)
+            if (typeNames == null)
+                return Array.Empty<TypeInfo>();
+
+            var types = new TypeInfo[typeNames.Length];
+            for (int i = 0; i < typeNames.Length; ++i)
             {
-                foreach (string typeName in typeNames)
+                if (!TryGetSharedType(typeNames[i], out types[i]))
                 {
-                    Type type = this.GetSharedType(typeName);
-                    if (type == null)
-                    {
-                        return null;
-                    }
-                    types.Add(type);
+                    return null;
                 }
             }
-            return types.ToArray();
-        }
-
-        /// <summary>
-        /// Returns the <see cref="MethodBase"/> of the method or constructor from the
-        /// set of shared assemblies, if it exists.
-        /// </summary>
-        /// <param name="typeName">The fully qualified type name declaring the method.</param>
-        /// <param name="methodName">The name of the method</param>
-        /// <param name="parameterTypeNames">The fully qualified type names of the method parameters.</param>
-        /// <returns>The <see cref="MethodBase"/> if it exists in the shared assemblies, otherwise <c>null</c></returns>
-        internal MethodBase GetSharedMethod(string typeName, string methodName, IEnumerable<string> parameterTypeNames)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(typeName), "typeName cannot be null");
-            Debug.Assert(!string.IsNullOrEmpty(methodName), "methodName cannot be null");
-
-            MethodBase sharedMethod = null;
-            Type sharedType = this.GetSharedType(typeName);
-            if (sharedType != null)
-            {
-                CodeMemberKey key = CodeMemberKey.CreateMethodKey(typeName, methodName, parameterTypeNames == null ? Array.Empty<string>() : parameterTypeNames.ToArray());
-                sharedMethod = this.FindSharedMethodOrConstructor(sharedType, key);
-            }
-
-            return sharedMethod;
+            return types;
         }
 
         /// <summary>
         /// Returns the <see cref="Type"/> from the set of shared assemblies of the given name.
         /// </summary>
         /// <param name="typeName">The fully qualified type name.</param>
+        /// <param name="typeInfo">the matching type descriptor if any was found</param>
         /// <returns>The <see cref="Type"/> from the shared assemblies if it exists, otherwise <c>null</c>.</returns>
-        internal Type GetSharedType(string typeName)
+        private bool TryGetSharedType(string typeName, out TypeInfo typeInfo)
         {
-            Type sharedType = this._sharedTypeByName.GetOrAdd(typeName, n =>
+            if (!_sharedTypeByName.TryGetValue(typeName, out typeInfo))
             {
-                return this.FindSharedType(n);
-            });
-            return sharedType;
-        }
-
-        /// <summary>
-        /// If the given type is defined in a system assembly, returns the type directly, otherwise <c>null</c>.
-        /// </summary>
-        /// <param name="type">The type whose equivalent we need.</param>
-        /// <returns>If the type lives in a system assembly, the input type, else <c>null</c>.</returns>
-        private static Type EquivalentMsCorlibType(Type type)
-        {
-            if (AssemblyUtilities.IsAssemblyMsCorlib(type.Assembly.GetName()))
-            {
-                // For now, only a core set of predefined system types are assumed to be supported
-                return TypeUtility.IsPredefinedType(type) ? type : null;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Searches the shared assemblies for a type of the given name.
-        /// </summary>
-        /// <param name="typeName">The fully-qualified type name.</param>
-        /// <returns>The <see cref="Type"/> or <c>null</c> if it is not in one of the shared assemblies.</returns>
-        private Type FindSharedType(string typeName)
-        {
-            Type type = Type.GetType(typeName, /*throwOnError*/ false);
-            if (type != null)
-            {
-                Type result = FindSharedTypeInAssemblies(type.FullName);
-                if (result != null)
-                    return result;
-
-                // TODO: review
-                // If we could not find the type, but it lives in mscorlib,
-                // we treat it specially because we cannot load mscorlib to tell.
-                return EquivalentMsCorlibType(type);
-            }
-
-            return FindSharedTypeInAssemblies(typeName);
-        }
-
-        /// <summary>
-        /// Locates and returns the type in the set of known assemblies
-        /// that is equivalent to the given type.
-        /// </summary>
-        /// <param name="typeFullName">FullName of the type to search for</param>        
-        private Type FindSharedTypeInAssemblies(string typeFullName)
-        {
-            foreach (Assembly assembly in this.Assemblies)
-            {
-                // Utility autorecovers and logs known common exceptions
-                IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(assembly, this._logger);
-
-                foreach (Type searchType in types)
+                // Check if array ( with "[]" after type name) or generic with "[[...](,[...])*]" patter
+                int openBracet = typeName.IndexOf('[');
+                if (openBracet != -1 && openBracet + 1 < typeName.Length)
                 {
-                    if (string.Equals(typeFullName, searchType.FullName, StringComparison.Ordinal))
+                    // Is array if '[]'
+                    if (typeName[openBracet + 1] == ']')
                     {
-                        return searchType;
+                        string underlyingTypeName = typeName.Substring(0, openBracet);
+                        if (TryGetSharedType(underlyingTypeName, out typeInfo))
+                        {
+                            // It is a array, we "cheat" and return the underlying type
+                            // since we assume array is always reachable the type in the 
+                            // array is what is important
+                            // But strip any part of the name which corresponds to assembly qualified part
+                            typeInfo = new TypeInfo(typeInfo, typeName.Substring(0, (openBracet + 1) + 1));
+                        }
+                    }
+                    // Or generic if '[['
+                    else if (typeName[openBracet + 1] == '[')
+                    {
+                        string genericTypeName = typeName.Substring(0, openBracet);
+                        TypeInfo genericType;
+                        if (TryGetSharedType(genericTypeName, out genericType))
+                        {
+                            if (TryGetSharedGenericParameters(typeName, openBracet + 1, out int endBracket))
+                            {
+                                // Skip any part after typename which would be assembly qualified part
+                                typeInfo = new TypeInfo(genericType, typeName.Substring(0, endBracket + 1));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Unexpected single '[' in type name cannot determine type '{typeName}'");
                     }
                 }
+
+                // Check if typename is assembly qualified, and try resolving without assembly qualified name
+                if (typeInfo == null)
+                {
+                    int assemblyNameStart = typeName.IndexOf(',', 0);
+                    if (assemblyNameStart != -1)
+                    {
+                        var shortTypeName = typeName.Substring(0, assemblyNameStart);
+                        TryGetSharedType(shortTypeName, out typeInfo);
+                    }
+                }
+
+                if (typeInfo == null)
+                {
+                    // TODO: look in "mscorlib" (lookup a known type and use module type system?)
+                }
+
+                _sharedTypeByName.Add(typeName, typeInfo);
             }
 
-            return null;
+            return typeInfo != null;
+        }
+
+        private bool TryGetSharedGenericParameters(string typeName, int startBracket, out int endBracket)
+        {
+            while (true)
+            {
+                endBracket = typeName.IndexOf(']', startBracket + 1);
+                if (endBracket == -1)
+                {
+                    _logger.LogError($"Expected ']' in typename '{typeName}' after position {startBracket}");
+                    return false;
+                }
+
+                string parameterName = typeName.Substring(startBracket + 1, endBracket - (startBracket + 1));
+                if (TryGetSharedType(parameterName, out _))
+                {
+                    // Check for closing bracet of generic type (double ']')
+                    if (typeName[endBracket + 1] == ']')
+                    {
+                        endBracket = endBracket + 1;
+                        return true;
+                    }
+                    else if (typeName[endBracket + 1] == ',' && typeName[endBracket + 2] == '[') // ",[" or "]"
+                    {
+                        startBracket = endBracket + 2;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Unrecognized typename '{typeName}' eexpected ']' or ',[' at position {endBracket + 1}");
+                    }
+                }
+                else // Bail out if a single argument cannot be found
+                {
+                    return false;
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            _resolver.Dispose();
+        }
+
+        [DebuggerDisplay("{FullName,nq}")]
+        private class TypeInfo
+        {
+            private readonly string _typeName;
+
+            public HashSet<string> PropertiesCache { get; set; }
+            public TypeInfo BaseTypeCache { get; set; }
+            public TypeDefinition TypeDefinition { get; }
+            public string FullName => _typeName ?? TypeDefinition.FullName;
+            public ModuleDefinition ModuleDefinition => TypeDefinition.Module;
+
+            public TypeInfo(TypeDefinition typeDefinition)
+            {
+                TypeDefinition = typeDefinition;
+            }
+
+            public TypeInfo(TypeInfo typeInfo, string typeName)
+            {
+                TypeDefinition = typeInfo.TypeDefinition;
+                _typeName = typeName;
+            }
+        };
+
+        /// <summary>
+        /// Load dependencies from a specified list of directories
+        /// </summary>
+        private class CustomAssemblyResolver : DefaultAssemblyResolver
+        {
+            public CustomAssemblyResolver(IEnumerable<string> assemblySearchPaths)
+            {
+                foreach (var dir in base.GetSearchDirectories())
+                    base.RemoveSearchDirectory(dir);
+
+                foreach (var dir in assemblySearchPaths)
+                    base.AddSearchDirectory(dir);
+            }
+
+            public AssemblyDefinition LoadAssembly(string path)
+            {
+                AssemblyDefinition a = AssemblyDefinition.ReadAssembly(
+                    File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete),
+                    new ReaderParameters()
+                    {
+                        AssemblyResolver = this,
+                        ReadSymbols = false,
+                    });
+                base.RegisterAssembly(a);
+                return a;
+            }
         }
 
         /// <summary>
-        /// Loads all the named assemblies into a cache of known assemblies
+        /// Compares <see cref="AssemblyNameReference"/> based on Name and PublicKeyToken
         /// </summary>
-        private void LoadAssemblies()
+        private class AssemblyNameReferenceComparer : IEqualityComparer<AssemblyNameReference>
         {
-            this._assemblies = new List<Assembly>();
-            Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
-            foreach (string file in this._assemblyFileNames)
+            public bool Equals(AssemblyNameReference x, AssemblyNameReference y)
             {
-                // Pass 1 -- load all the assemblies we have been given.  No referenced assemblies yet.
-                Assembly assembly = AssemblyUtilities.ReflectionOnlyLoadFrom(file, this._logger);
-                if (assembly != null)
+                if (x.Name == y.Name
+                    && x.PublicKeyToken.Length == y.PublicKeyToken.Length)
                 {
-                    this._assemblies.Add(assembly);
+                    for (int i = 0; i < x.PublicKeyToken.Length; ++i)
+                    {
+                        if (x.PublicKeyToken[i] != y.PublicKeyToken[i])
+                        {
+                            return false;
+                        }
+                    }
 
-                    // Keep track of loaded assemblies for next step
-                    loadedAssemblies[assembly.FullName] = assembly;
+                    return true;
                 }
+                return false;
             }
 
-            // Pass 2 -- recursively load all reference assemblies from the assemblies we loaded.
-            foreach (Assembly assembly in this._assemblies)
+            public int GetHashCode(AssemblyNameReference obj)
             {
-                AssemblyUtilities.ReflectionOnlyLoadReferences(assembly, this._assemblySearchPaths, loadedAssemblies, /*recursive*/ true, this._logger);
+                return obj.Name.GetHashCode();
             }
         }
     }

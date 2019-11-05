@@ -1,5 +1,6 @@
 param(
-	[string[]]$Path = "OpenRiaServices.*", ".",
+    [string]$Path = ".",
+	[string[]]$Include =  @("OpenRiaServices.*.nuspec"),
 	[string]$Version = $null,
 	[string]$NuGetPath
 )
@@ -21,14 +22,10 @@ if ([string]::IsNullOrEmpty($NuGetPath))
 [string[]]$NuGetParameters = @("-OutputDirectory", "$outputDir")
 if (-not [string]::IsNullOrEmpty($Version)) {$NuGetParameters = $NuGetParameters + @("-Version", $Version)}
 
-foreach($folder in (dir $Path | where {[System.IO.Directory]::Exists($_)}))
+foreach($nuspec in (dir $Path -Recurse -Include $Include))
 {
-    $targets = (dir "$folder\*.nuspec")
-    foreach($nuspec in $targets)
-    {
         echo "Building $nuspec"
         & $NuGetPath pack ($nuspec) $NuGetParameters
-    }
 }
 
 Pop-Location

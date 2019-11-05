@@ -61,11 +61,11 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             return host;
         }
 
-        internal static void GenerateAndVerifyCodeGenerators(string testName, Type[] domainServiceTypes, Type[] sharedTypes, string[] refAssemblies)
+        internal static void GenerateAndVerifyCodeGenerators(Type[] domainServiceTypes, Type[] sharedTypes, string[] refAssemblies)
         {
             Assembly codeDomCodeGenAssembly = null;
             Assembly t4CodeGenAssembly = null;
-            using (AssemblyGenerator asmGen = new AssemblyGenerator(testName, /* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
+            using (AssemblyGenerator asmGen = new AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
             {
                 foreach (Type t in sharedTypes)
                 {
@@ -85,7 +85,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
             }
 
-            using (T4AssemblyGenerator asmGen = new T4AssemblyGenerator(testName, /* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
+            using (T4AssemblyGenerator asmGen = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
             {
                 foreach (Type t in sharedTypes)
                 {

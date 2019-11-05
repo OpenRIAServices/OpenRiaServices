@@ -16,18 +16,14 @@ namespace OpenRiaServices.DomainServices.Server
     /// </summary>
     public abstract class DomainOperationEntry
     {
-        private DomainOperation _operation;
-        private readonly ReadOnlyCollection<DomainOperationParameter> _effectiveParameters;
-        private readonly bool _hasOutCountParameter;
         private readonly string _methodName;
         private Attribute _operationAttribute;
         private AttributeCollection _attributes;
         private Type _associatedType;
         private readonly Type _actualReturnType;
-        private readonly Type _returnType;
         private readonly Type _domainServiceType;
-        private bool? _requiresValidation;
-        private bool? _requiresAuthorization;
+        private LazyBool _requiresValidation;
+        private LazyBool _requiresAuthorization;
         private Func<object, ValueTask<object>> _unwrapTaskResultFunc;
 
         /// <summary>
@@ -71,9 +67,9 @@ namespace OpenRiaServices.DomainServices.Server
 
             this._methodName = isTaskType ? RemoveAsyncFromName(name) : name;
             this._actualReturnType = returnType;
-            this._returnType = isTaskType ? TypeUtility.GetTaskReturnType(returnType) : returnType;
+            this.ReturnType = isTaskType ? TypeUtility.GetTaskReturnType(returnType) : returnType;
             this._attributes = attributes;
-            this._operation = operation;
+            this.Operation = operation;
             this._domainServiceType = domainServiceType;
 
             List<DomainOperationParameter> effectiveParameters = parameters.ToList();
@@ -83,11 +79,11 @@ namespace OpenRiaServices.DomainServices.Server
                 DomainOperationParameter lastParameter = effectiveParameters[paramCount - 1];
                 if (lastParameter.IsOut && lastParameter.ParameterType.HasElementType && lastParameter.ParameterType.GetElementType() == typeof(int))
                 {
-                    this._hasOutCountParameter = true;
+                    this.HasOutCountParameter = true;
                     effectiveParameters = effectiveParameters.Take(paramCount - 1).ToList();
                 }
             }
-            this._effectiveParameters = effectiveParameters.AsReadOnly();
+            this.Parameters = effectiveParameters.AsReadOnly();
         }
 
         /// <summary>
@@ -148,24 +144,12 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Gets the <see cref="DomainService"/> Type this operation is a member of.
         /// </summary>
-        public Type DomainServiceType
-        {
-            get
-            {
-                return this._domainServiceType;
-            }
-        }
+        public Type DomainServiceType => this._domainServiceType;
 
         /// <summary>
         /// Gets the name of the operation
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this._methodName;
-            }
-        }
+        public string Name => this._methodName;
 
         /// <summary>
         /// Gets the attribute that contains metadata about the operation.
@@ -186,33 +170,40 @@ namespace OpenRiaServices.DomainServices.Server
         {
             get
             {
-                if (!this._requiresValidation.HasValue)
+                LazyBool value = this._requiresValidation;
+                if (value == LazyBool.Unknown)
                 {
-                    // Determine whether this operation requires validation.
-                    this._requiresValidation = this._attributes[typeof(ValidationAttribute)] != null;
-                    if (!this._requiresValidation.Value)
-                    {
-                        this._requiresValidation = this.Parameters.Any(p => p.Attributes[typeof(ValidationAttribute)] != null);
-                    }
-                    if (!this._requiresValidation.Value)
-                    {
-                        this._requiresValidation = this.Parameters.Any(p =>
-                        {
-                            // Complex parameters need to be validated if validation occurs on the
-                            // type itself.
-                            if (TypeUtility.IsSupportedComplexType(p.ParameterType))
-                            {
-                                Type complexType = TypeUtility.GetElementType(p.ParameterType);
-                                MetaType metaType = MetaType.GetMetaType(complexType);
-                                return metaType.RequiresValidation;
-                            }
-
-                            return false;
-                        });
-                    }
+                    value = CalculateRequiresValidation() ? LazyBool.True : LazyBool.False;
+                    _requiresValidation = value;
                 }
-                return this._requiresValidation.Value;
+                // value will only be True or False here
+                return value == LazyBool.True;
             }
+        }
+
+        /// <summary>
+        /// Determines if the current operation requires validation
+        /// </summary>
+        /// <returns><c>true</c> if validation is required</returns>
+        private bool CalculateRequiresValidation()
+        {
+            return this._attributes[typeof(ValidationAttribute)] != null
+                || this.Parameters.Any(p =>
+                    {
+                        if (p.Attributes[typeof(ValidationAttribute)] != null)
+                            return true;
+
+                        // Complex parameters need to be validated if validation occurs on the
+                        // type itself.
+                        if (TypeUtility.IsSupportedComplexType(p.ParameterType))
+                        {
+                            Type complexType = TypeUtility.GetElementType(p.ParameterType);
+                            MetaType metaType = MetaType.GetMetaType(complexType);
+                            return metaType.RequiresValidation;
+                        }
+
+                        return false;
+                    });
         }
 
         /// <summary>
@@ -222,17 +213,19 @@ namespace OpenRiaServices.DomainServices.Server
         {
             get
             {
-                if (!this._requiresAuthorization.HasValue)
+                LazyBool value = this._requiresAuthorization;
+                if (value == LazyBool.Unknown)
                 {
                     // Determine whether this operation requires authorization. AuthorizationAttributes may appear on
                     // the DomainService type as well as the DomainOperationEntry method.
-                    this._requiresAuthorization = this._attributes[typeof(AuthorizationAttribute)] != null;
-                    if (!this._requiresAuthorization.Value)
-                    {
-                        this._requiresAuthorization = DomainServiceDescription.GetDescription(this._domainServiceType).Attributes[typeof(AuthorizationAttribute)] != null;
-                    }
+                    bool requiresAuthorization = this._attributes[typeof(AuthorizationAttribute)] != null
+                        || DomainServiceDescription.GetDescription(this._domainServiceType).Attributes[typeof(AuthorizationAttribute)] != null;
+
+                    value = requiresAuthorization ? LazyBool.True : LazyBool.False;
+                    _requiresAuthorization = value;
                 }
-                return this._requiresAuthorization.Value;
+                // value will only be True or False here
+                return value == LazyBool.True;
             }
         }
 
@@ -248,7 +241,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
 
             bool attributeCreated = false;
-            switch (this._operation)
+            switch (this.Operation)
             {
                 case DomainOperation.Query:
                     this._operationAttribute = this._attributes[typeof(QueryAttribute)];
@@ -334,40 +327,25 @@ namespace OpenRiaServices.DomainServices.Server
 
                 // need to reset computed flags that are based
                 // on operation attributes so they will be recomputed
-                this._requiresValidation = null;
-                this._requiresAuthorization = null;
+                this._requiresValidation = LazyBool.Unknown;
+                this._requiresAuthorization = LazyBool.Unknown;
             }
         }
 
         /// <summary>
         /// Gets the return Type of the operation
         /// </summary>
-        public Type ReturnType
-        {
-            get
-            {
-                return this._returnType;
-            }
-        }
+        public Type ReturnType { get; }
 
         /// <summary>
         /// Gets a value indicating whether the actual return type is a Task or Task{T}.
         /// </summary>
-        public bool IsTaskAsync
-        {
-            get { return TypeUtility.IsTaskType(this._actualReturnType); }
-        }
+        public bool IsTaskAsync => TypeUtility.IsTaskType(this._actualReturnType);
 
         /// <summary>
         /// Gets the parameters of the operation
         /// </summary>
-        public ReadOnlyCollection<DomainOperationParameter> Parameters
-        {
-            get
-            {
-                return this._effectiveParameters;
-            }
-        }
+        public ReadOnlyCollection<DomainOperationParameter> Parameters { get; }
 
         /// <summary>
         /// Invokes this <see cref="DomainOperationEntry" />.
@@ -380,17 +358,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Gets the type of domain operation implemented by the method.
         /// </summary>
-        public DomainOperation Operation
-        {
-            get
-            {
-                return this._operation;
-            }
-            internal set
-            {
-                this._operation = value;
-            }
-        }
+        public DomainOperation Operation { get; internal set; }
 
         /// <summary>
         /// Returns the associated Type this DomainOperation operates on. For query methods
@@ -429,13 +397,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
         }
 
-        private bool HasOutCountParameter
-        {
-            get
-            {
-                return this._hasOutCountParameter;
-            }
-        }
+        private bool HasOutCountParameter { get; }
 
         /// <summary>
         /// Invokes this <see cref="DomainOperationEntry" />.
@@ -470,7 +432,7 @@ namespace OpenRiaServices.DomainServices.Server
 
             if (_unwrapTaskResultFunc == null)
             {
-                if (ReturnType == typeof (void))
+                if (ReturnType == typeof(void))
                     _unwrapTaskResultFunc = UnwrapVoidResult;
                 else
                 {
@@ -484,7 +446,7 @@ namespace OpenRiaServices.DomainServices.Server
 
         private static async ValueTask<object> UnwrapVoidResult(object result)
         {
-            if(result == null)
+            if (result == null)
                 throw new InvalidOperationException("Task method returned null");
 
             if (result is Task t)
@@ -498,7 +460,7 @@ namespace OpenRiaServices.DomainServices.Server
 
         private static async ValueTask<object> UnwrapGenericResult<T>(object result)
         {
-            if(result == null)
+            if (result == null)
                 throw new InvalidOperationException("Task method returned null");
 
             if (result is Task<T> t)
@@ -525,6 +487,23 @@ namespace OpenRiaServices.DomainServices.Server
             }
             output.Append(')');
             return output.ToString();
+        }
+
+        /// <summary>
+        /// Lazily initialized boolean
+        /// It is used for lazy initialized boolean properties, 
+        /// since read/writes of primitive types less than or equal to wordsizze is
+        /// atomic. But bool? is not guaranteed to be atomic and multithread safe 
+        /// (even it it probably is since it should be 2 bytes large)
+        /// 
+        /// See C# specication at
+        /// https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/variables#atomicity-of-variable-references
+        /// </summary>
+        private enum LazyBool
+        {
+            Unknown,
+            False,
+            True
         }
     }
 }

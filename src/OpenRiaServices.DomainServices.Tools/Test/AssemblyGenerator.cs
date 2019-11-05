@@ -12,7 +12,6 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 {
     internal class AssemblyGenerator : IDisposable
     {
-        private readonly string _relativeTestDir;
         private readonly bool _isCSharp;
         private readonly IEnumerable<Type> _domainServiceTypes;
         private DomainServiceCatalog _domainServiceCatalog;
@@ -26,16 +25,13 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private readonly bool _useFullTypeNames;
 
 
-        public AssemblyGenerator(string relativeTestDir, bool isCSharp, IEnumerable<Type> domainServiceTypes) :
-            this(relativeTestDir, isCSharp, false, domainServiceTypes)
+        public AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
+            this(isCSharp, false, domainServiceTypes)
         {
         }
 
-        public AssemblyGenerator(string relativeTestDir, bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
+        public AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
-            Assert.IsFalse(string.IsNullOrEmpty(relativeTestDir), "relativeTestDir required");
-
-            this._relativeTestDir = relativeTestDir;
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
@@ -112,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             {
                 if (this._referenceAssemblies == null)
                 {
-                    this._referenceAssemblies = CompilerHelper.GetClientAssemblies(this._relativeTestDir);
+                    this._referenceAssemblies = CompilerHelper.GetClientAssemblies(string.Empty);
                 }
                 return this._referenceAssemblies;
             }
@@ -364,7 +360,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
             Assembly assy = null;
-            Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>();
+            Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>(new AssemblyNameComparer());
 
             try
             {
@@ -446,5 +442,22 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         #endregion
+    }
+
+    internal class AssemblyNameComparer : IEqualityComparer<AssemblyName>
+    {
+        public AssemblyNameComparer()
+        {
+        }
+
+        public bool Equals(AssemblyName x, AssemblyName y)
+        {
+            return x.FullName == y.FullName;
+        }
+
+        public int GetHashCode(AssemblyName obj)
+        {
+            return obj.FullName.GetHashCode();
+        }
     }
 }

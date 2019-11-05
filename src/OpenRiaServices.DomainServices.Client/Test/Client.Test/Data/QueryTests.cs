@@ -481,7 +481,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 ExceptionHelper.ExpectInvalidOperationException(delegate
                 {
-                    lo.Complete(new Exception("FAIL!"));
+                    lo.SetError(new Exception("FAIL!"));
                 }, Resources.AsyncOperation_AlreadyCompleted);
             });
 

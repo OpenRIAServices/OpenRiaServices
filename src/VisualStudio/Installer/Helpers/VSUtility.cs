@@ -18,6 +18,8 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
     {
         public static Project GetActiveProject(IVsMonitorSelection vsMonitorSelection)
         {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
             IntPtr ppHier = IntPtr.Zero;
             uint pitemid;
             IVsMultiItemSelect ppMIS;
@@ -73,7 +75,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             try
             {
                 // if we can't open it as an MSBuild project, we do anything with it
-                var p = project.AsMSBuildProject();
+                project.AsMSBuildProject();
                 return true;
             }
             catch (Exception)

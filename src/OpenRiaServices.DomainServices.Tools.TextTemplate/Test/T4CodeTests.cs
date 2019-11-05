@@ -14,10 +14,8 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
     public class T4CodeTests
     {
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenBasicTest()
         {
-            string testName = "T4CG_Basic_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly),
                 typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate)
@@ -30,14 +28,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 typeof(CustomNamespace.CustomAttribute).Assembly.ManifestModule.FullyQualifiedName
             };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenTest_Inheritance()
         {
-            string testName = "T4CG_Basic_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.TestProvider_Inheritance1),             
             };
@@ -49,15 +45,13 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 typeof(CustomNamespace.CustomAttribute).Assembly.ManifestModule.FullyQualifiedName
             };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenBasicTest2()
         {
-            string testName = "T4CG_Basic_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.TestProvider_Scenarios_CodeGen),             
             };
@@ -70,14 +64,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 typeof(CustomNamespace.CustomAttribute).Assembly.ManifestModule.FullyQualifiedName
             };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenBasicTest3()
         {
-            string testName = "T4CG_Basic_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.EF.Northwind), 
                 typeof(TestDomainServices.LTS.Northwind)            
@@ -88,14 +80,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
             };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Basic_CS")]
         public void T4CodeGenTest_SharedEntities()
         {
-            string testName = "T4CG_Basic_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(SharedEntities.ExposeChildEntityDomainService),
                 typeof(SharedEntities.ExposeParentEntityDomainService)
@@ -109,14 +99,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 typeof(CustomNamespace.CustomAttribute).Assembly.ManifestModule.FullyQualifiedName
             };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Northwind_CS")]
         public void T4CodeGenTest_Northwind()
         {
-            string testName = "T4CG_Northwind_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.EF.Northwind),
             };            
@@ -125,14 +113,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
             };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_ComplexType_CS")]
         public void T4CodeGenTest_ComplexTypes()
         {
-            string testName = "T4CG_ComplexType_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.ComplexTypes_TestService),
                 typeof(TestDomainServices.ComplexTypes_DomainService),
@@ -144,14 +130,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
            };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Conflicts_CS")]
         public void T4CodeGenTest_ConflictTypes()
         {
-            string testName = "T4CG_Conflicts_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1),
                 typeof(TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2),
@@ -163,14 +147,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
            };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_Composition_CS")]
         public void T4CodeGenTest_CompositionTypes()
         {
-            string testName = "T4CG_Composition_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.CompositionInheritanceScenarios),
                 typeof(TestDomainServices.AssociationInheritanceScenarios)
@@ -181,14 +163,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
            };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_VariableNames_CS")]
         public void T4CodeGenTest_VariableNames()
         {
-            string testName = "T4CG_VariableNames_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainService1)
             };
@@ -198,14 +178,12 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
            };
 
-            TestHelper.GenerateAndVerifyCodeGenerators(testName, domainServiceTypes, sharedTypes, refAssemblies);
+            TestHelper.GenerateAndVerifyCodeGenerators(domainServiceTypes, sharedTypes, refAssemblies);
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_VBCodeGenError_CS")]
         public void T4CodeGenTest_VBCodeGenError()
         {
-            string testName = "T4CG_VBCodeGenError_CS";
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainService1)
             };
@@ -214,7 +192,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
            };
 
-            using (T4AssemblyGenerator asmGen = new T4AssemblyGenerator(testName, /* isCSharp */ false, /* useFullTypeNames */ false, domainServiceTypes))
+            using (T4AssemblyGenerator asmGen = new T4AssemblyGenerator(false, /* isCSharp */ false, /* useFullTypeNames */ domainServiceTypes))
             {
                 
                 foreach (string refAssembly in refAssemblies)
@@ -231,7 +209,6 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"ProjectPath.txt", "T4CG_VBCodeGenTest_VB")]
         public void T4CodeGenTest_VBCodeGenTest()
         {
             Type[] domainServiceTypes = new Type[] {};

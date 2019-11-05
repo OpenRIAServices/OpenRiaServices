@@ -4,17 +4,26 @@ using System.Linq;
 namespace OpenRiaServices.DomainServices.Client
 {
     /// <summary>
-    /// The value of a successfully completed Invoke operation
+    /// Interface for non-generic access to <see cref="InvokeResult{T}"/>
+    /// used by <see cref="InvokeOperation"/>
     /// </summary>
-    public class InvokeResult
+    interface IInvokeResult
     {
-
+        object Value { get; }
     }
 
     /// <summary>
     /// The value of a successfully completed Invoke operation
     /// </summary>
-    public class InvokeResult<T> : InvokeResult
+    public class InvokeResult : IInvokeResult
+    {
+        object IInvokeResult.Value => null;
+    }
+
+    /// <summary>
+    /// The value of a successfully completed Invoke operation
+    /// </summary>
+    public class InvokeResult<T> : InvokeResult, IInvokeResult
     {
         private readonly T _value;
 
@@ -33,10 +42,9 @@ namespace OpenRiaServices.DomainServices.Client
         /// <value>
         /// The value.
         /// </value>
-        public T Value
-        {
-            get { return _value; }
-        }
+        public T Value => _value;
+
+        object IInvokeResult.Value => _value;
 
         /// <summary>
         /// Implicit conversion to <typeparamref name="T"/> so that <see cref="Value"/> does not need to be used
