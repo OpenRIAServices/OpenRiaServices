@@ -53,7 +53,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
             var query = ctxt.GetRoundtripQueryEntitiesQuery().OrderBy(p => p.PropB).Take(10).Where(p => !p.PropC.Contains("Pluto")).Take(1);
-
             LoadOperation lo = ctxt.Load(query, false);
 
             await lo;
@@ -85,12 +84,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
 
             var query = nw.GetOrdersQuery().Where(p => p.Freight < 1000).Where(p => p.ShipAddress.ToLower() != "").Take(1);
-
             LoadOperation lo = nw.Load(query, false);
 
             await lo;
             Assert.IsFalse(lo.HasError);
-            Assert.AreEqual(1, lo.Entities.Count());
+            Assert.AreEqual(1, lo.Entities.Count);
         }
 
         [TestMethod]
@@ -137,7 +135,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsFalse(lo.HasError);
-            Assert.IsTrue(lo.Entities.Count() > 0);
+            Assert.IsTrue(lo.Entities.Count > 0);
         }
 
         /// <summary>
@@ -213,14 +211,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(0, lo.Entities.Count());
+            Assert.AreEqual(0, lo.Entities.Count);
 
             // test null returning collection query
             lo = ctxt.Load(ctxt.GetAsReturnNullQuery(), false);
 
             await lo;
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(0, lo.Entities.Count());
+            Assert.AreEqual(0, lo.Entities.Count);
         }
 
 #if !VBTests
@@ -297,8 +295,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = cities.GetCitiesQuery().Where(p => p.Name == "DNE");
             LoadOperation<City> lo = cities.Load(query, false);
 
-            Assert.AreEqual(0, lo.Entities.Count());
-            Assert.AreEqual(0, lo.AllEntities.Count());
+            Assert.AreEqual(0, lo.Entities.Count);
+            Assert.AreEqual(0, lo.AllEntities.Count);
 
             List<NotifyCollectionChangedEventArgs> entitiesCollectionChangedArgs = new List<NotifyCollectionChangedEventArgs>();
             NotifyCollectionChangedEventHandler entitiesCollectionChangedHandler = (s, e) =>
@@ -340,11 +338,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             // Entities : expect a Reset event and no Adds
             Assert.AreEqual(1, entitiesCollectionChangedArgs.Count);
-            Assert.AreEqual(3, lo.Entities.Count());
+            Assert.AreEqual(3, lo.Entities.Count);
 
             // AllEntities : expect a Reset event
             Assert.AreEqual(1, allEntitiesCollectionChangedArgs.Count);
-            Assert.AreEqual(3, lo.AllEntities.Count());
+            Assert.AreEqual(3, lo.AllEntities.Count);
 
             Assert.IsTrue(totalCountChanged);
         }
@@ -377,8 +375,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             lo = cities.Load(query, false);
 
             await lo;
-            Assert.IsTrue(lo.IsComplete);
-
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 lo.SetError(new Exception("FAIL!"));
@@ -411,8 +407,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
-                Assert.IsTrue(o.Entities.Count() > 0);
-                Assert.IsTrue(o.AllEntities.Count() > 0);
+                Assert.IsTrue(o.Entities.Count > 0);
+                Assert.IsTrue(o.AllEntities.Count > 0);
                 callbackCalled = true;
             };
 
@@ -451,8 +447,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
 
-                Assert.IsTrue(o.Entities.Count() > 0);
-                Assert.IsTrue(o.AllEntities.Count() > 0);
+                Assert.IsTrue(o.Entities.Count > 0);
+                Assert.IsTrue(o.AllEntities.Count > 0);
 
                 completedCalled = true;
             };
@@ -595,8 +591,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
-                Assert.IsTrue(o.Entities.Count() == 0);
-                Assert.IsTrue(o.AllEntities.Count() == 0);
+                Assert.IsTrue(o.Entities.Count == 0);
+                Assert.IsTrue(o.AllEntities.Count == 0);
                 callbackCalled = true;
             };
 
@@ -745,7 +741,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await result;
             Assert.IsNull(result.Error);
             Assert.AreEqual(2, result.TotalEntityCount);
-            Assert.AreEqual(2, result.Entities.Count());
+            Assert.AreEqual(2, result.Entities.Count);
 
             var entity = result.Entities.First();
             Assert.AreEqual("TestName", entity.Name);
@@ -797,9 +793,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(result.Error);
 
             // Verify resulting graph structure
-            Assert.AreEqual(1, result.Entities.Count());
+            Assert.AreEqual(1, result.Entities.Count);
             Assert.AreEqual(2, result.Entities.Cast<TestCycles>().Single().IncludedTs.Count);
-            Assert.AreEqual(63, result.AllEntities.Count());
+            Assert.AreEqual(63, result.AllEntities.Count);
         }
 
         [TestMethod]
@@ -812,9 +808,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsNull(result.Error);
 
             // Verify resulting graph structure
-            Assert.AreEqual(16, result.Entities.Count());
+            Assert.AreEqual(16, result.Entities.Count);
             Assert.AreEqual(16, result.Entities.Cast<TestCycles>().First().IncludedTs.Count);
-            Assert.AreEqual(273, result.AllEntities.Count());
+            Assert.AreEqual(273, result.AllEntities.Count);
         }
 
         [TestMethod]
@@ -1029,7 +1025,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             Assert.IsNull(lo.Error);
 
-            Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+            Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.AreEqual(true, changedObj.BooleanProp);
             Assert.AreEqual<Byte>(123, changedObj.ByteProp);
@@ -1055,7 +1051,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             Assert.IsNull(lo.Error);
 
-            Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+            Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.AreEqual(true, changedObj.BooleanProp);
             Assert.AreEqual<Byte>(byte.MaxValue, changedObj.ByteProp);
@@ -1096,7 +1092,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             Assert.IsNull(lo.Error);
 
-            Assert.AreEqual(3, lo.Entities.Count());
+            Assert.AreEqual(3, lo.Entities.Count);
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.AreEqual<string>("hello", changedObj.StringProp);
             Assert.AreEqual<Decimal>(123, changedObj.DecimalProp);
@@ -1150,7 +1146,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(1, lo.Entities.Count());
+            Assert.AreEqual(1, lo.Entities.Count);
             Assert.AreEqual(new Uri("http://localhost"), provider.MixedTypes.First().UriProp);
             Assert.AreEqual(new TimeSpan(123), provider.MixedTypes.First().TimeSpanProp);
         }
@@ -1178,7 +1174,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(3, lo.Entities.Count());
+            Assert.AreEqual(3, lo.Entities.Count);
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.IsNull(changedObj.StringProp);
             Assert.IsNull(changedObj.BinaryProp);
@@ -1209,7 +1205,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(3, lo.Entities.Count());
+            Assert.AreEqual(3, lo.Entities.Count);
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.AreEqual<Boolean?>(true, changedObj.NullableBooleanProp);
             Assert.AreEqual<Byte?>(123, changedObj.NullableByteProp);
@@ -1247,7 +1243,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(3, lo.Entities.Count());
+            Assert.AreEqual(3, lo.Entities.Count);
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.IsNull(changedObj.NullableBooleanProp);
             Assert.IsNull(changedObj.NullableByteProp);
@@ -1316,7 +1312,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             Assert.IsFalse(lo.IsCanceled);
             Assert.IsNull(lo.Error);
-            Assert.AreEqual(504, lo.Entities.Count());
+            Assert.AreEqual(504, lo.Entities.Count);
         }
 
         [TestMethod]
@@ -1400,7 +1396,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             Assert.IsTrue(callbackCalled);
             Assert.IsNull(lo.Error);
-            Assert.IsTrue(lo.Entities.Count() > 0);
+            Assert.IsTrue(lo.Entities.Count > 0);
         }
 
         [TestMethod]
@@ -1526,8 +1522,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsNull(lo.Error, (lo.Error != null) ? lo.Error.ToString() : null);
-            Assert.AreEqual<int>(5, lo.Entities.Count());
-            Assert.AreEqual<int>(17, lo.AllEntities.Count());
+            Assert.AreEqual<int>(5, lo.Entities.Count);
+            Assert.AreEqual<int>(17, lo.AllEntities.Count);
         }
 
         [TestMethod]
@@ -1555,8 +1551,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             Assert.IsFalse(lo.IsCanceled);
             Assert.AreEqual<int>(PurchaseOrderCountInDatabase, lo.TotalEntityCount);
-            Assert.AreEqual<int>(purchaseOrdersToTake, lo.Entities.Count());
-            Assert.AreEqual<int>(purchaseOrdersToTake + relatedEntitiesIncluded, lo.AllEntities.Count());
+            Assert.AreEqual<int>(purchaseOrdersToTake, lo.Entities.Count);
+            Assert.AreEqual<int>(purchaseOrdersToTake + relatedEntitiesIncluded, lo.AllEntities.Count);
         }
 
         /// <summary>
@@ -1573,7 +1569,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             await lo;
             List<Product> products = catalog.Products.ToList();
             Assert.IsTrue(products.Count == 0);
-            Assert.IsTrue(lo.Entities.Count() == 0);
+            Assert.IsTrue(lo.Entities.Count == 0);
         }
 
         private class TestUserState
@@ -1630,7 +1626,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
                     Assert.Fail(loadOps[i].Error.ToString());
                 }
-                Assert.AreEqual(5, loadOps[i].Entities.Count());
+                Assert.AreEqual(5, loadOps[i].Entities.Count);
             }
             Assert.AreEqual(numberOfActiveLoadCalls * 5, catalog.Products.Count);
         }
@@ -1692,7 +1688,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 if (!loadOperations[i].IsCanceled)
                 {
                     Assert.IsNull(loadOperations[i].Error);
-                    Assert.AreEqual(1, loadOperations[i].Entities.Count());
+                    Assert.AreEqual(1, loadOperations[i].Entities.Count);
                     var product = (Product)loadOperations[i].Entities.First();
                     Assert.AreNotEqual(products[5].ProductID, product.ProductID);
                 }
