@@ -541,7 +541,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
-            await lo;
             // cancel the load
             Assert.IsFalse(lo.IsComplete);
             lo.Cancel();
