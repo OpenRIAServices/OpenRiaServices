@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
@@ -261,13 +262,16 @@ namespace OpenRiaServices.DomainServices.Client
             this.CancelCore();
 
             // callback is called even for a canceled operation
-            this.InvokeCompleteAction();
-
-            this._completedEventHandler?.Invoke(this, EventArgs.Empty);
-
-            this.RaisePropertyChanged(nameof(IsCanceled));
-            this.RaisePropertyChanged(nameof(CanCancel));
-            this.RaisePropertyChanged(nameof(IsComplete));
+            try
+            {
+                this.InvokeCompleteCallbacks();
+            }
+            finally
+            {
+                this.RaisePropertyChanged(nameof(IsCanceled));
+                this.RaisePropertyChanged(nameof(CanCancel));
+                this.RaisePropertyChanged(nameof(IsComplete));
+            }
         }
 
         /// <summary>
@@ -292,14 +296,59 @@ namespace OpenRiaServices.DomainServices.Client
             // must flag completion before callbacks or events are raised
             this._completed = true;
 
-            this.InvokeCompleteAction();
-
-            this._completedEventHandler?.Invoke(this, EventArgs.Empty);
-
-            this.RaisePropertyChanged(nameof(IsComplete));
-            if (prevCanCancel == true)
+            try
             {
-                this.RaisePropertyChanged(nameof(CanCancel));
+                this.InvokeCompleteCallbacks();
+            }
+            finally
+            {
+                this.RaisePropertyChanged(nameof(IsComplete));
+                if (prevCanCancel == true)
+                    this.RaisePropertyChanged(nameof(CanCancel));
+            }
+        }
+
+        private void InvokeCompletedEvent()
+        {
+            var handler = _completedEventHandler;
+            if (handler == null)
+                return;
+
+            Delegate[] invocations = handler.GetInvocationList();
+            int i = 0;
+            try
+            {
+                for (; i < invocations.Length; ++i)
+                    ((EventHandler)invocations[i]).Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex) when (i + 1 < invocations.Length)
+            {
+                // Once we have an exception continue invoking the rest of the callbacks
+                // and add any additional exceptions to a list
+                // so we can raise an AggregateException in case of multiple exceptions
+                ++i;
+                var exceptions = new List<Exception>() { ex };
+                for (; i < invocations.Length; ++i)
+                {
+                    try
+                    {
+                        ((EventHandler)invocations[i]).Invoke(this, EventArgs.Empty);
+                    }
+                    catch (Exception ex2)
+                    {
+                        exceptions.Add(ex2);
+                    }
+                }
+
+                if (exceptions.Count > 1)
+                {
+                    throw new AggregateException(exceptions);
+                }
+                else
+                {
+                    // Rethrow original exception if we only had one
+                    throw;
+                }
             }
         }
 
@@ -323,22 +372,63 @@ namespace OpenRiaServices.DomainServices.Client
             this._completed = true;
 
             // callback is called even in error case
-            this.InvokeCompleteAction();
-
-            this._completedEventHandler?.Invoke(this, EventArgs.Empty);
-
-            this.RaisePropertyChanged(nameof(Error));
-            this.RaisePropertyChanged(nameof(HasError));
-            this.RaisePropertyChanged(nameof(IsComplete));
-            if (prevCanCancel == true)
+            try
             {
-                this.RaisePropertyChanged(nameof(CanCancel));
+                this.InvokeCompleteCallbacks();
+            }
+            finally
+            {
+                this.RaisePropertyChanged(nameof(Error));
+                this.RaisePropertyChanged(nameof(HasError));
+                this.RaisePropertyChanged(nameof(IsComplete));
+
+                if (prevCanCancel == true)
+                {
+                    this.RaisePropertyChanged(nameof(CanCancel));
+                }
             }
 
             if (!this.IsErrorHandled)
             {
                 throw error;
             }
+        }
+
+        /// <summary>
+        /// Invokes both the Complete action passed to constructor
+        /// as well as all Completed event handlers even if exceptions
+        /// occurs
+        /// </summary>
+        /// <exception cref="AggregateException" />
+        /// <exception cref="Exception" />
+        private void InvokeCompleteCallbacks()
+        {
+            try
+            {
+                this.InvokeCompleteAction();
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    this.InvokeCompletedEvent();
+                }
+                catch (AggregateException ex2)
+                {
+                    var exceptions = new List<Exception>(ex2.InnerExceptions);
+                    exceptions.Add(ex);
+                    throw new AggregateException(exceptions);
+                }
+                catch (Exception ex2)
+                {
+                    throw new AggregateException(ex, ex2);
+                }
+
+                // Only a single exception so rethrow it as is
+                throw;
+            }
+
+            InvokeCompletedEvent();
         }
 
         /// <summary>
