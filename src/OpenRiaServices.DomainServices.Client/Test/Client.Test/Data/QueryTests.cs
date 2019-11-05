@@ -1642,7 +1642,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             object syncObject = new object();
 
             List<int> productIDs = new List<int>();
-            List<LoadOperation> loadOperations = new List<LoadOperation>();
+            LoadOperation[] loadOperations = new LoadOperation[numberOfActiveLoadCalls];
 
             // Load 10 products to get 10 product IDs.
             LoadOperation lo = tempCatalog.Load(tempCatalog.GetProductsQuery().Take(numberOfActiveLoadCalls), false);
@@ -1661,23 +1661,31 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Do this in separate threads to prevent this becoming a synchronous process.
                 // [Ron] My single-proc machine generally has finished all the loads by the time
                 // the cancel is issued.  Using ThreadPool breaks this behavior.
-                ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object state)
-                  {
-                      int index = (int)state;
-                      Product thisProduct = products[index];
-                      lock (syncObject)
-                      {
-                          lo = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), throwOnError: false);
-                          // When have asked for Product[5], issue a cancel.
-                          if (index == 5)
-                          {
-                              lo.Cancel();
-                          }
-                          loadOperations.Add(lo);
-                      }
+                ThreadPool.QueueUserWorkItem((object state) =>
+                {
+                    int index = (int)state;
+                    Product thisProduct = products[index];
+                    LoadOperation thisLoad;
+                    try
+                    {
+                        lock (syncObject)
+                        {
+                            thisLoad = catalog.Load(catalog.GetProductsQuery().Where(p => p.ProductID == thisProduct.ProductID), throwOnError: false);
+                            // When have asked for Product[5], issue a cancel.
+                            if (index == 5)
+                            {
+                                thisLoad.Cancel();
+                            }
+                            loadOperations[index] = thisLoad;
+                        }
 
-                      lo.Completed += (_, __) => waitHandles[index].Release();
-                  }, i);
+                        thisLoad.Completed += (_, __) => waitHandles[index].Release();
+                    }
+                    catch
+                    {
+                        waitHandles[index].Release();
+                    }
+                }, i);
             }
 
             // Wait for loads to complete with a timeout
