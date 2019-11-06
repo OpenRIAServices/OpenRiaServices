@@ -2,6 +2,8 @@
 
 Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=master)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
 [![Tests](https://img.shields.io/azure-devops/tests/OpenRiaServices/OpenRiaServices/1/master.svg)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
+[![Coverage](https://img.shields.io/azure-devops/coverage/OpenRiaServices/OpenRiaServices/1/master)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
+
 
 
 Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarcloud.io/OpenRIAServices_OpenRiaServices/tech_debt.svg)](https://sonarcloud.io/dashboard?id=OpenRIAServices_OpenRiaServices)
