@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Client
                 _operation.Completed += (sender, args) =>
                 {
                     ContextCallback action;
-                    if (syncContext is null || syncContext is Test.TestSynchronizationContext)
+                    if (syncContext is null /*|| syncContext is Test.TestSynchronizationContext*/)
                     {
                         action = (object o) => ((Action)o)();
                     }
