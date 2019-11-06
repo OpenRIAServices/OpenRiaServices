@@ -5,12 +5,14 @@ variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
   Solution: 'src\RiaServices.sln'
+# Define the following variable for the build pipeline in order to enable sonarcloud analysis
+# sonarcloud-endpoint: 'sonarcloud.io'
 
 steps:
 
 - task: NuGetToolInstaller@0
   inputs:
-    versionSpec: 5.0.2
+    versionSpec: 5.3.1
     
 - task: GitVersion@4
   displayName: GitVersion
@@ -27,7 +29,7 @@ steps:
   displayName: 'Prepare analysis on SonarCloud'
   condition: variables['sonarcloud-endpoint']
   inputs:
-    SonarCloud: 'sonarcloud.io'
+    SonarCloud: variables['sonarcloud-endpoint']
     organization: openriaservices
     projectKey: 'OpenRIAServices_OpenRiaServices'
     projectName: OpenRiaServices
@@ -68,7 +70,7 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: true
+    diagnosticsEnabled: false
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
