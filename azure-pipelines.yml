@@ -25,6 +25,7 @@ steps:
     
 - task: SonarCloudPrepare@1
   displayName: 'Prepare analysis on SonarCloud'
+  condition: variables['sonarcloud-endpoint']
   inputs:
     SonarCloud: 'sonarcloud.io'
     organization: openriaservices
@@ -63,16 +64,17 @@ steps:
 
     runOnlyImpactedTests: false
     runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: false
-  timeoutInMinutes: 40
+    diagnosticsEnabled: true
+  timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   continueOnError: true
-  condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
 
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
@@ -96,6 +98,16 @@ steps:
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
+  
+- task: CopyFiles@2
+  displayName: 'Copy dump files  to $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: |
+     **\*.dmp
+    TargetFolder: '$(build.artifactstagingdirectory)'
+  condition: succeededOrFailed()
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
@@ -105,4 +117,4 @@ steps:
 - task: SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
   continueOnError: true  
-  condition: or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master')))
+  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))

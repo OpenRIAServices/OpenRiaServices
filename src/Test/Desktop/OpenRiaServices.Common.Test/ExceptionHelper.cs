@@ -103,12 +103,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
         }
 
-        public static Task<TException> ExpectExceptionAsync<TException>(AsyncDelegate asyncDel) where TException : Exception
+        public static Task<TException> ExpectExceptionAsync<TException>(AsyncDelegate asyncDel, bool allowDerivedExceptions = false) where TException : Exception
         {
             return ExecuteDelegateAsync(asyncDel)
                 .ContinueWith(res =>
                 {
-                    return ExpectException<TException>(() => res.GetAwaiter().GetResult(), false);
+                    return ExpectException<TException>(() => res.GetAwaiter().GetResult(), allowDerivedExceptions);
                 });
         }
 

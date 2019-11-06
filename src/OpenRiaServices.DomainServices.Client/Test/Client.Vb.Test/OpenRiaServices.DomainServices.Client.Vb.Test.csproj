@@ -40,6 +40,8 @@
     <Compile Include="..\Client.Test\Data\ServerSideAsyncTests.cs">
       <Link>Client.Test\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
+
+    <Compile Include="..\Client.Test\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
     <Compile Include="..\Client.Test\Main.cs" Link="Main.cs" />
     <Compile Include="..\Client.Test\TestUris.cs" Link="TestUris.cs" />
     <Compile Update="Service References\Services\Reference.cs">
