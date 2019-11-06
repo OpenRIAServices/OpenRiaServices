@@ -18,9 +18,11 @@ namespace OpenRiaServices.DomainServices.Client
             return new OperationAwaiter(operation);
         }
 
-        public struct OperationAwaiter : INotifyCompletion
+        public class OperationAwaiter : INotifyCompletion
         {
             private readonly OperationBase _operation;
+            private Task _domainContextCompletionTask;
+
             public OperationAwaiter(OperationBase control)
             {
                 _operation = control;
@@ -37,35 +39,42 @@ namespace OpenRiaServices.DomainServices.Client
                 var scheduler = TaskScheduler.Current;
                 var executionContext = ExecutionContext.Capture();
 
+                ContextCallback action;
+                if (syncContext is null /*|| syncContext is Test.TestSynchronizationContext*/)
+                {
+                    action = (object o) => ((Action)o)();
+                }
+                else
+                {
+                    action = (object o) =>
+                    {
+                        SynchronizationContext.Current.Post((object s) => { ((Action)s)(); }, o);
+                    };
+                }
+
                 _operation.Completed += (sender, args) =>
                 {
-                    ContextCallback action;
-                    if (syncContext is null /*|| syncContext is Test.TestSynchronizationContext*/)
-                    {
-                        action = (object o) => ((Action)o)();
-                    }
-                    else
-                    {
-                        action = (object o) =>
-                        {
-                            SynchronizationContext.Current.Post((object s) => { ((Action)s)(); }, o);
-                        };
-                    }
-
                     // The operation is completed in a ContinueWith callback
                     // Get the task associated with the callback
                     // so that continuation is run after the whole completion
                     // Since the currentTask is currently executing
                     // This will not complete now, but later when it is finished
-                    var currentTask = s_getCurrentTask();
-                    currentTask.ContinueWith((Task _, object o) =>
+                    _domainContextCompletionTask = s_getCurrentTask();
+                    if (_domainContextCompletionTask != null)
                     {
-                        ExecutionContext.Run(executionContext, action, o);
+                        _domainContextCompletionTask.ContinueWith((Task _, object o) =>
+                        {
+                            ExecutionContext.Run(executionContext, action, o);
+                        }
+                        , continuation
+                        , CancellationToken.None
+                        , TaskContinuationOptions.None
+                        , scheduler);
                     }
-                    , continuation
-                    , CancellationToken.None
-                    , TaskContinuationOptions.None
-                    , scheduler);
+                    else
+                    {
+                        ExecutionContext.Run(executionContext, action, continuation);
+                    }
                 };
             }
 
@@ -73,6 +82,10 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (!_operation.IsComplete)
                     throw new InvalidOperationException();
+
+                // Pass any exception from the callbacks which were not handled
+                if (_domainContextCompletionTask != null)
+                    _domainContextCompletionTask.GetAwaiter().GetResult();
             }
         }
 
