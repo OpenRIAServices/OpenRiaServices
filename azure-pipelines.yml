@@ -29,7 +29,7 @@ steps:
   displayName: 'Prepare analysis on SonarCloud'
   condition: variables['sonarcloud-endpoint']
   inputs:
-    SonarCloud: variables['sonarcloud-endpoint']
+    SonarCloud: 'sonarcloud.io'
     organization: openriaservices
     projectKey: 'OpenRIAServices_OpenRiaServices'
     projectName: OpenRiaServices
