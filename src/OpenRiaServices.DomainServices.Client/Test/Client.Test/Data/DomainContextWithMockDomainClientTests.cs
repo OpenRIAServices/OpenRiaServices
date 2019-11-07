@@ -121,6 +121,36 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
 
+        public async Task TestMockClient_Submit_Cancel_DomainClientCancel()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<SubmitCompletedResult>();
+            mockDomainClient.SubmitCompletedResult = tcs.Task;
+
+            dp.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+
+            var submitOp = dp.SubmitChanges();
+            submitOp.Cancel();
+            Assert.IsTrue(submitOp.IsCancellationRequested);
+            Assert.IsFalse(submitOp.IsCanceled);
+            Assert.IsTrue(dp.IsSubmitting);
+            Assert.IsTrue(dp.Cities.First().IsSubmitting, "entity should be in submitting state");
+
+            tcs.TrySetCanceled(submitOp.CancellationToken);
+            await submitOp;
+
+            // Return cancellation from domain client
+            Assert.IsTrue(submitOp.IsCanceled);
+            Assert.IsFalse(dp.IsSubmitting);
+            Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
+        }
+
+
+        [TestMethod]
+
         public async Task TestMockClient_SubmitAsync_Cancel_DomainClientCancel()
         {
             var mockDomainClient = new CitiesMockDomainClient();
@@ -145,7 +175,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsTrue(submitTask.IsCanceled);
             Assert.IsFalse(dp.IsSubmitting);
             Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
-
         }
 
         [TestMethod]
