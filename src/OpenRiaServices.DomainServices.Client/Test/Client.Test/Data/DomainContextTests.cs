@@ -13,7 +13,7 @@ using TestDomainServices.LTS;
 namespace OpenRiaServices.DomainServices.Client.Test
 {
     [TestClass]
-    public class DomainContextTests : UnitTestBase
+    public class DomainContext_E2E_Tests : UnitTestBase
     {
         #region Test Setup
 
@@ -69,27 +69,20 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// to complete the operation again.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
         [WorkItem(755212)]
-        public void CancelSubmit_EmptyChangeset()
+        public async Task CancelSubmit_EmptyChangeset()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
-            SubmitOperation so = null;
+            SubmitOperation so = nw.SubmitChanges();
 
-            this.EnqueueCallback(() =>
-            {
-                so = nw.SubmitChanges();
-                if (so.CanCancel)
-                {
-                    so.Cancel();
-                }
-            });
-            this.EnqueueConditional(() => so.IsComplete);
-            this.EnqueueCallback(() =>
-            {
-                Assert.IsNull(so.Error);
-            });
-            this.EnqueueTestComplete();
+            // WARNING: Race condition
+            // A SyncronizationContext needs to be provided 
+            // So that the the operation cannot be completed between the CanCancel
+            // and the IsCompleted check in Cancel
+            so.Cancel();
+
+            await so;
+            Assert.IsNull(so.Error);
         }
 
         [TestMethod]
@@ -126,22 +119,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void LoadAsync_CancellationBehavior()
-        {
-            var cts = new CancellationTokenSource();
-            var loadResult = BeginLoadCityDataAsync(cts.Token);
-            cts.Cancel();
-
-            this.EnqueueConditional(() => loadResult.IsCompleted);
-            this.EnqueueCallback(() =>
-            {
-                Assert.AreEqual(true, loadResult.IsCanceled);
-            });
-            this.EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
         public void SubmitChanges_DefaultBehavior()
         {
             this.EnqueueCallback(() =>
@@ -155,7 +132,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             this.EnqueueTestComplete();
         }
-    
+
         [TestMethod]
         [Asynchronous]
         public void DomainContextCallsVirtualMethods()
@@ -183,8 +160,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.ResetData();
-                Assert.IsTrue(this.CityDomainContext.InvokeOperationCalled);
+                this.CityDomainContext.ResetData(null, null);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationGenericCalled);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
@@ -198,7 +175,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueCallback(() =>
             {
                 var query = this.CityDomainContext.GetCitiesQuery();
-                this.CityDomainContext.LoadAsync(query);                
+                this.CityDomainContext.LoadAsync(query);
                 Assert.IsTrue(this.CityDomainContext.LoadAsyncCalled);
                 Assert.IsFalse(this.CityDomainContext.LoadCalled, "LoadAsync should invoke Load");
             });
@@ -209,7 +186,22 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(this.CityDomainContext.SubmitChangesAsyncCalled);
                 Assert.IsTrue(this.CityDomainContext.SubmitChangesCalled, "SubmitChangesAsync should invoke SubmitChanges");
             });
-          
+
+            this.EnqueueCallback(() =>
+            {
+                this.CityDomainContext.EchoAsync("hi");
+                Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
+            });
+
+            this.EnqueueCallback(() =>
+            {
+                this.CityDomainContext.ResetDataAsync();
+                Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
+            });
+
+
             this.EnqueueTestComplete();
         }
 
@@ -341,7 +333,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.LoadOperation = this.CityDomainContext.Load(query, LoadBehavior.RefreshCurrent, callback, userState);
         }
 
-        private Task<LoadResult<City>>  BeginLoadCityDataAsync(CancellationToken cts)
+        private Task<LoadResult<City>> BeginLoadCityDataAsync(CancellationToken cts)
         {
             var query = this.CityDomainContext.GetCitiesQuery();
             return this.CityDomainContext.LoadAsync(query, LoadBehavior.RefreshCurrent, cts);

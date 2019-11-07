@@ -809,18 +809,15 @@ namespace OpenRiaServices.DomainServices.Client
             try
             {
                 // This needs to be inside try statement, since code in finally must run
-                if (submitTask.IsCanceled)
+                if (!submitTask.IsCanceled)
                 {
-                    submitOperation.SetCancelled();
-                    return;
+                    SubmitCompletedResult submitResults = submitTask.GetAwaiter().GetResult();
+
+                    // If the request was successful, process the results
+                    ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results.Cast<ChangeSetEntry>());
+
+                    operationResults = submitResults.Results;
                 }
-
-                SubmitCompletedResult submitResults = submitTask.GetAwaiter().GetResult();
-
-                // If the request was successful, process the results
-                ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results.Cast<ChangeSetEntry>());
-
-                operationResults = submitResults.Results;
             }
             catch (Exception ex)
             {
@@ -839,7 +836,11 @@ namespace OpenRiaServices.DomainServices.Client
                 this.IsSubmitting = false;
             }
 
-            if (!submitOperation.IsCanceled)
+            if (submitTask.IsCanceled)
+            {
+                submitOperation.SetCancelled();
+            }
+            else
             {
                 if (error == null)
                 {
@@ -932,7 +933,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="userState">Optional user state for the operation.</param>
         /// <returns>The invoke operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
+        public InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
         {
             // We only expect void types for generated code
             // Use InvokeOperation<object> return type for these
@@ -969,7 +970,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual Task<InvokeResult> InvokeOperationAsync(string operationName,
+        public Task<InvokeResult> InvokeOperationAsync(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
             CancellationToken cancellationToken)
         {
@@ -994,14 +995,14 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
-        public virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
+        public Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
             CancellationToken cancellationToken)
         {
             return InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, typeof(TValue), cancellationToken);
         }
 
-        private Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
+        protected virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
             Type returnType,
             CancellationToken cancellationToken)

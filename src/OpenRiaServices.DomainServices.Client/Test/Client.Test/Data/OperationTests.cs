@@ -62,6 +62,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             this._completeAction?.Invoke(this);
         }
+
+        private protected override void OnCancellationRequested()
+        {
+            base.SetCancelled();
+        }
     }
     #endregion
 

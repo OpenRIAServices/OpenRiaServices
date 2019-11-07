@@ -10,20 +10,12 @@ namespace Cities
 {
     public sealed partial class CityDomainContext : DomainContext
     {
-        internal bool InvokeOperationCalled { get; set; }
         internal bool InvokeOperationGenericCalled { get; set; }
         internal bool InvokeOperationAsyncGenericCalled { get; set; }
         internal bool LoadCalled { get; set; }
         internal bool LoadAsyncCalled { get; set; }
         internal bool SubmitChangesCalled { get; set; }
         internal bool SubmitChangesAsyncCalled { get; set; }
-        public bool InvokeOperationAsyncNonGenericCalled { get; private set; }
-
-        public override InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
-        {
-            this.InvokeOperationCalled = true;
-            return base.InvokeOperation(operationName, returnType, parameters, hasSideEffects, callback, userState);
-        }
 
         public override InvokeOperation<TValue> InvokeOperation<TValue>(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation<TValue>> callback, object userState)
         {
@@ -42,16 +34,10 @@ namespace Cities
             return base.SubmitChanges(callback, userState);
         }
 
-        public override Task<InvokeResult> InvokeOperationAsync(string operationName, IDictionary<string, object> parameters, bool hasSideEffects, CancellationToken cancellationToken)
-        {
-            InvokeOperationAsyncNonGenericCalled = true;
-            return base.InvokeOperationAsync(operationName, parameters, hasSideEffects, cancellationToken);
-        }
-
-        public override Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName, IDictionary<string, object> parameters, bool hasSideEffects, CancellationToken cancellationToken)
+        protected override Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName, IDictionary<string, object> parameters, bool hasSideEffects, Type returnType, CancellationToken cancellationToken)
         {
             InvokeOperationAsyncGenericCalled = true;
-            return base.InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, cancellationToken);
+            return base.InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, returnType, cancellationToken);
         }
 
         public override Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior,

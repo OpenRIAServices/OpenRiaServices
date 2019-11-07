@@ -27,47 +27,106 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Test that query processing works using a mock DomainClient.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestMockClient_Query()
+        public async Task Load()
         {
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(new CitiesMockDomainClient());
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
             string myState = "Test User State";
 
-            var query = dp.GetCitiesQuery().Where(p => p.StateName == "WA").OrderBy(p => p.CountyName).Take(4);
-            LoadOperation lo = dp.Load(query, null, myState);
-            lo.Completed += (o, e) =>
-            {
-                LoadOperation loadOp = (LoadOperation)o;
-                if (loadOp.HasError)
-                {
-                    loadOp.MarkErrorAsHandled();
-                }
-            };
+            var query = ctx.GetCitiesQuery().Where(p => p.StateName == "WA").OrderBy(p => p.CountyName).Take(4);
+            LoadOperation lo = ctx.Load(query, TestHelperMethods.DefaultOperationAction, myState);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(lo.Error);
-                Assert.AreEqual(4, dp.Cities.Count);
-                Assert.IsTrue(dp.Cities.All(p => p.StateName == "WA"));
-                Assert.AreEqual(myState, lo.UserState);
-            });
+            await lo;
 
-            EnqueueTestComplete();
+            Assert.IsNull(lo.Error);
+            Assert.AreEqual(4, ctx.Cities.Count);
+            Assert.IsTrue(ctx.Cities.All(p => p.StateName == "WA"));
+            Assert.AreEqual(myState, lo.UserState);
         }
 
+        /// <summary>
+        /// Test case where DomainClient do cancel on cancellation request
+        /// </summary>
         [TestMethod]
-        public void TestMockClient_CancellationSupport()
+        public async Task Load_Cancel_DomainClientCancel()
         {
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(new CitiesMockDomainClient());
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
-            var query = dp.GetCitiesQuery();
-            LoadOperation lo = dp.Load(query, false);
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            mockDomainClient.QueryCompletedResult = tcs.Task;
+            var loadOp = ctx.Load(ctx.GetCitiesQuery());
+            loadOp.Cancel();
+
+            Assert.IsTrue(loadOp.IsCancellationRequested);
+            Assert.IsTrue(ctx.IsLoading);
+            Assert.IsFalse(loadOp.IsCanceled);
+            Assert.IsFalse(loadOp.IsComplete);
+
+            tcs.TrySetCanceled(loadOp.CancellationToken);
+            await loadOp;
+
+            Assert.IsFalse(ctx.IsLoading);
+            Assert.IsTrue(loadOp.IsCanceled);
+            Assert.IsTrue(loadOp.IsComplete);
+        }
+
+        /// <summary>
+        /// Test case where DomainClient do cancel on cancellation request
+        /// </summary>
+        [TestMethod]
+        public async Task LoadAsync_Cancel_DomainClientCancel()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.QueryCompletedResult = tcs.Task;
+            var loadTask = ctx.LoadAsync(ctx.GetCitiesQuery(), cts.Token);
+            cts.Cancel();
+            tcs.TrySetCanceled(cts.Token);
+
+            await ExceptionHelper.ExpectExceptionAsync<OperationCanceledException>(() => loadTask, allowDerivedExceptions: true);
+            Assert.IsTrue(loadTask.IsCanceled);
+        }
+
+        /// <summary>
+        /// Test case where DomainClient do cancel on cancellation request
+        /// </summary>
+        [TestMethod]
+        public async Task LoadAsync_Cancel_DomainClientCompletes()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+            var city = new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" };
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.QueryCompletedResult = tcs.Task;
+            var loadTask = ctx.LoadAsync(ctx.GetCitiesQuery(), cts.Token);
+            cts.Cancel();
+            tcs.SetResult(new QueryCompletedResult(new[] { city }, Array.Empty<Entity>(), -1, Array.Empty<ValidationResult>()));
+
+            var result = await loadTask;
+            Assert.AreEqual(1, result.Entities.Count);
+            Assert.AreSame(city, result.Entities.First());
+        }
+
+
+        [TestMethod]
+        public void CancellationSupport()
+        {
+            var domainClient = new CitiesMockDomainClient();
+            domainClient.SetSupportsCancellation(false);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(domainClient);
+
+            var query = ctx.GetCitiesQuery();
+            LoadOperation lo = ctx.Load(query, false);
             Assert.IsFalse(lo.CanCancel, "Cancellation should not be supported.");
-            Assert.IsFalse(dp.DomainClient.SupportsCancellation, "Cancellation should not be supported.");
+            Assert.IsFalse(ctx.DomainClient.SupportsCancellation, "Cancellation should not be supported.");
 
             ExceptionHelper.ExpectException<NotSupportedException>(delegate
             {
@@ -77,9 +136,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void TestMockClient_Submit()
+        public void Submit()
         {
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(new CitiesMockDomainClient());
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
             string myState = "Test User State";
 
             Cities.Zip newZip = new Cities.Zip
@@ -89,8 +148,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 CityName = "Issaquah",
                 StateName = "Issaquah"
             };
-            dp.Zips.Add(newZip);
-            SubmitOperation so = dp.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
+            ctx.Zips.Add(newZip);
+            SubmitOperation so = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
 
             EnqueueConditional(delegate
             {
@@ -104,7 +163,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 // fix by setting the Name
                 newZip.StateName = "WA";
-                so = dp.SubmitChanges(null, myState);
+                so = ctx.SubmitChanges(null, myState);
             });
             EnqueueConditional(delegate
             {
@@ -121,67 +180,66 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
 
-        public async Task TestMockClient_Submit_Cancel_DomainClientCancel()
+        public async Task Submit_Cancel_DomainClientCancel()
         {
             var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<SubmitCompletedResult>();
             mockDomainClient.SubmitCompletedResult = tcs.Task;
 
-            dp.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+            ctx.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
 
-            var submitOp = dp.SubmitChanges();
+            var submitOp = ctx.SubmitChanges();
             submitOp.Cancel();
             Assert.IsTrue(submitOp.IsCancellationRequested);
             Assert.IsFalse(submitOp.IsCanceled);
-            Assert.IsTrue(dp.IsSubmitting);
-            Assert.IsTrue(dp.Cities.First().IsSubmitting, "entity should be in submitting state");
+            Assert.IsTrue(ctx.IsSubmitting);
+            Assert.IsTrue(ctx.Cities.First().IsSubmitting, "entity should be in submitting state");
 
             tcs.TrySetCanceled(submitOp.CancellationToken);
             await submitOp;
 
             // Return cancellation from domain client
             Assert.IsTrue(submitOp.IsCanceled);
-            Assert.IsFalse(dp.IsSubmitting);
-            Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
+            Assert.IsFalse(ctx.IsSubmitting);
+            Assert.IsFalse(ctx.Cities.First().IsSubmitting, "entity should not be in submitting state");
         }
 
 
         [TestMethod]
-
-        public async Task TestMockClient_SubmitAsync_Cancel_DomainClientCancel()
+        public async Task SubmitAsync_Cancel_DomainClientCancel()
         {
             var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<SubmitCompletedResult>();
             var cts = new CancellationTokenSource();
             mockDomainClient.SubmitCompletedResult = tcs.Task;
 
-            dp.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+            ctx.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
 
-            var submitTask = dp.SubmitChangesAsync(cts.Token);
+            var submitTask = ctx.SubmitChangesAsync(cts.Token);
             cts.Cancel();
-            Assert.IsTrue(dp.IsSubmitting);
-            Assert.IsTrue(dp.Cities.First().IsSubmitting, "entity should be in submitting state");
+            Assert.IsTrue(ctx.IsSubmitting);
+            Assert.IsTrue(ctx.Cities.First().IsSubmitting, "entity should be in submitting state");
 
             // Return cancellation from domain client
             tcs.TrySetCanceled(cts.Token);
 
             await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => submitTask);
             Assert.IsTrue(submitTask.IsCanceled);
-            Assert.IsFalse(dp.IsSubmitting);
-            Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
+            Assert.IsFalse(ctx.IsSubmitting);
+            Assert.IsFalse(ctx.Cities.First().IsSubmitting, "entity should not be in submitting state");
         }
 
         [TestMethod]
-        public async Task TestMockClient_SubmitAsync_Cancel_DomainClientCompletes()
+        public async Task SubmitAsync_Cancel_DomainClientCompletes()
         {
             var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var cts = new CancellationTokenSource();
@@ -201,16 +259,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 return submitResults;
             };
 
-            dp.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+            ctx.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
 
-            var submitTask = dp.SubmitChangesAsync(cts.Token);
-            Assert.IsTrue(dp.IsSubmitting);
-            Assert.IsTrue(dp.Cities.First().IsSubmitting, "entity should be in submitting state");
+            var submitTask = ctx.SubmitChangesAsync(cts.Token);
+            Assert.IsTrue(ctx.IsSubmitting);
+            Assert.IsTrue(ctx.Cities.First().IsSubmitting, "entity should be in submitting state");
             cts.Cancel();
 
             var result = await submitTask;
-            Assert.IsFalse(dp.IsSubmitting);
-            Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
+            Assert.IsFalse(ctx.IsSubmitting);
+            Assert.IsFalse(ctx.Cities.First().IsSubmitting, "entity should not be in submitting state");
         }
 
         /// <summary>
@@ -218,12 +276,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestMockClient_Invoke()
+        public void Invoke()
         {
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(new CitiesMockDomainClient());
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
             string myState = "Test User State";
 
-            InvokeOperation invoke = dp.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
+            InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
 
             EnqueueConditional(delegate
             {
@@ -244,15 +302,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestMockClient_Invoke_ValidationErrors()
+        public void Invoke_ValidationErrors()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             mockDomainClient.InvokeCompletedResult = Task.FromResult(new InvokeCompletedResult(null, validationErrors));
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
             string myState = "Test User State";
 
-            InvokeOperation invoke = dp.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
+            InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
 
             EnqueueConditional(delegate
             {
@@ -279,15 +337,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Test that ValidationErrors for invoke are properly returned.
         /// </summary>
         [TestMethod]
-        public async Task TestMockClient_InvokeAsync_ValidationErrors()
+        public async Task InvokeAsync_ValidationErrors()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             mockDomainClient.InvokeCompletedResult = Task.FromResult(new InvokeCompletedResult(null, validationErrors));
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => dp.EchoAsync("TestInvoke"),
+                () => ctx.EchoAsync("TestInvoke"),
                 string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"));
 
             // verify the exception properties
@@ -300,17 +358,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Test case where DomainClient completes despite cancellation request
         /// </summary>
         [TestMethod]
-        public async Task TestMockClient_InvokeAsync_Cancel_DomainClientCompletes()
+        public async Task InvokeAsync_Cancel_DomainClientCompletes()
         {
             var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             // If the web requires returns a value even if cancelled
             // It should still return a result
             var tcs = new TaskCompletionSource<InvokeCompletedResult>();
             var cts = new CancellationTokenSource();
             mockDomainClient.InvokeCompletedResult = tcs.Task;
-            var invokeTask = dp.EchoAsync("TestInvoke", cts.Token);
+            var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
             cts.Cancel();
             tcs.SetResult(new InvokeCompletedResult("Res"));
 
@@ -322,16 +380,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Test case where DomainClient do cancel on cancellation request
         /// </summary>
         [TestMethod]
-        public async Task TestMockClient_InvokeAsync_Cancel_DomainClientCancel()
+        public async Task InvokeAsync_Cancel_DomainClientCancel()
         {
             var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<InvokeCompletedResult>();
             var cts = new CancellationTokenSource();
             mockDomainClient.InvokeCompletedResult = tcs.Task;
-            var invokeTask = dp.EchoAsync("TestInvoke", cts.Token);
+            var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
             cts.Cancel();
             tcs.TrySetCanceled(cts.Token);
 
@@ -343,15 +401,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Test that ValidationErrors for invoke are properly returned.
         /// </summary>
         [TestMethod]
-        public async Task TestMockClient_InvokeAsync_DomainOperationException()
+        public async Task InvokeAsync_DomainOperationException()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             DomainOperationException exception = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             mockDomainClient.InvokeCompletedResult = Task.FromException<InvokeCompletedResult>(exception);
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => dp.EchoAsync("TestInvoke"),
+                () => ctx.EchoAsync("TestInvoke"),
                 string.Format(Resource.DomainContext_InvokeOperationFailed, "Echo", exception.Message));
 
             // verify the exception properties
@@ -366,15 +424,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestMockClient_Query_ValidationErrors()
+        public void Load_ValidationErrors()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
             string myState = "Test User State";
 
-            LoadOperation<Cities.City> loadOperation = dp.Load(dp.GetCitiesQuery(), LoadBehavior.RefreshCurrent, l => l.MarkErrorAsHandled(), myState); ;
+            LoadOperation<Cities.City> loadOperation = ctx.Load(ctx.GetCitiesQuery(), LoadBehavior.RefreshCurrent, l => l.MarkErrorAsHandled(), myState); ;
 
             EnqueueConditional(delegate
             {
@@ -400,15 +458,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// Test that ValidationErrors for invoke are properly returned.
         /// </summary>
         [TestMethod]
-        public async Task TestMockClient_QueryAsync_ValidationErrors()
+        public async Task LoadAsync_ValidationErrors()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
-            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => dp.LoadAsync(dp.GetCitiesQuery()),
+                () => ctx.LoadAsync(ctx.GetCitiesQuery()),
                 string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"));
 
             // verify the exception properties
@@ -422,6 +480,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public class CitiesMockDomainClient : DomainClient
         {
             private readonly Cities.CityData citiesData = new Cities.CityData();
+            private bool _isCancellationSupported = true;
 
             /// <summary>
             /// What to return on next Invoke
@@ -429,6 +488,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             public Task<InvokeCompletedResult> InvokeCompletedResult { get; set; }
             public Task<QueryCompletedResult> QueryCompletedResult { get; set; }
             public Task<SubmitCompletedResult> SubmitCompletedResult { get; set; }
+
+            public override bool SupportsCancellation => _isCancellationSupported;
+            public void SetSupportsCancellation(bool value) => _isCancellationSupported = value;
 
             public Func<EntityChangeSet, IEnumerable<ChangeSetEntry>, Task<SubmitCompletedResult>> SubmitCompletedCallback { get; set; }
             protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
