@@ -276,21 +276,7 @@ namespace OpenRiaServices.DomainServices.Client
                 changeSet = this.EntityContainer.GetChanges();
                 bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
 
-                Action<SubmitOperation> cancelAction = null;
-                if (this.DomainClient.SupportsCancellation)
-                {
-                    cancelAction = (op) =>
-                    {
-                        // TODO: Consider moving to callback below ?
-                        this.IsSubmitting = false;
-                        foreach (Entity entity in changeSet)
-                        {
-                            entity.IsSubmitting = false;
-                        }
-                    };
-                }
-
-                submitOperation = new SubmitOperation(changeSet, callback, userState, cancelAction);
+                submitOperation = new SubmitOperation(changeSet, callback, userState, DomainClient.SupportsCancellation);
 
                 // Exit early if we have no changes or if there are validation errors
                 if (changeSet.IsEmpty || !validChangeset)
@@ -332,7 +318,7 @@ namespace OpenRiaServices.DomainServices.Client
                         }
                         , submitOperation
                         , CancellationToken.None
-                        , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.HideScheduler
+                        , TaskContinuationOptions.HideScheduler
                         , _syncContextScheduler);
                 }
             }
@@ -819,12 +805,13 @@ namespace OpenRiaServices.DomainServices.Client
         {
             IEnumerable<ChangeSetEntry> operationResults = null;
             Exception error = null;
-            Debug.Assert(submitTask.IsCompleted && !submitTask.IsCanceled);
 
             try
             {
-                if (submitOperation.IsCanceled)
+                // This needs to be inside try statement, since code in finally must run
+                if (submitTask.IsCanceled)
                 {
+                    submitOperation.SetCancelled();
                     return;
                 }
 

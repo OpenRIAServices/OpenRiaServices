@@ -12,10 +12,12 @@ namespace Cities
     {
         internal bool InvokeOperationCalled { get; set; }
         internal bool InvokeOperationGenericCalled { get; set; }
+        internal bool InvokeOperationAsyncGenericCalled { get; set; }
         internal bool LoadCalled { get; set; }
         internal bool LoadAsyncCalled { get; set; }
         internal bool SubmitChangesCalled { get; set; }
         internal bool SubmitChangesAsyncCalled { get; set; }
+        public bool InvokeOperationAsyncNonGenericCalled { get; private set; }
 
         public override InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
         {
@@ -38,6 +40,18 @@ namespace Cities
         {
             this.SubmitChangesCalled = true;
             return base.SubmitChanges(callback, userState);
+        }
+
+        public override Task<InvokeResult> InvokeOperationAsync(string operationName, IDictionary<string, object> parameters, bool hasSideEffects, CancellationToken cancellationToken)
+        {
+            InvokeOperationAsyncNonGenericCalled = true;
+            return base.InvokeOperationAsync(operationName, parameters, hasSideEffects, cancellationToken);
+        }
+
+        public override Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName, IDictionary<string, object> parameters, bool hasSideEffects, CancellationToken cancellationToken)
+        {
+            InvokeOperationAsyncGenericCalled = true;
+            return base.InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, cancellationToken);
         }
 
         public override Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior,

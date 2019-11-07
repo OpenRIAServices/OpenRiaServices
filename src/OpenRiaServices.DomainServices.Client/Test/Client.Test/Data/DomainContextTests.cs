@@ -155,42 +155,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             this.EnqueueTestComplete();
         }
-
-        [TestMethod]
-        [Asynchronous]
-        public void SubmitChanges_CancellationBehavior()
-        {
-            this.EnqueueCallback(() =>
-            {
-                this.BeginSubmitCityDataAndCancel();
-            });
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
-            this.EnqueueCallback(() =>
-            {
-                this.AssertSubmitCancelled();
-            });
-            this.EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
-        public void SubmitChangesAsync_CancellationBehavior()
-        {
-            var cts = new CancellationTokenSource();
-            EntitySet entitySet = this.CityDomainContext.EntityContainer.GetEntitySet<City>();
-            entitySet.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
-
-            var submitTask = CityDomainContext.SubmitChangesAsync(cts.Token);
-            cts.Cancel();
-
-            this.EnqueueConditional(() => submitTask.IsCompleted);
-            this.EnqueueCallback(() =>
-            {
-                Assert.IsTrue(submitTask.IsCanceled);
-            });
-            this.EnqueueTestComplete();
-        }
-
+    
         [TestMethod]
         [Asynchronous]
         public void DomainContextCallsVirtualMethods()
@@ -213,12 +178,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 this.CityDomainContext.Echo("hi", null, null);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
             this.EnqueueCallback(() =>
             {
                 this.CityDomainContext.ResetData();
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
             this.EnqueueTestComplete();
@@ -438,18 +405,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private void AssertLoadCancelled()
         {
             this.AssertOperationCompleted(this.LoadOperation, true);
-        }
-
-        private void AssertSubmitCompleted()
-        {
-            Assert.IsNotNull(this.SubmitOperation);
-            Assert.IsFalse(this.SubmitOperation.IsCanceled);
-            this.AssertOperationCompleted(this.SubmitOperation, false);
-        }
-
-        private void AssertSubmitCancelled()
-        {
-            this.AssertOperationCompleted(this.SubmitOperation, true);
         }
 
         private void AssertInProgress(OperationBase operation)

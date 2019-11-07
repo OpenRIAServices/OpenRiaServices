@@ -814,7 +814,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        [Ignore] //Missing stored procedures
         public async Task Bug479449_Requery_RefreshCurrent()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
@@ -1345,7 +1344,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     loadedEventArgs = e;
                 }
                 isLoadingEventCount++;
-                propertyChangeCalled.Release();
+                if (isLoadingEventCount == 1)
+                    propertyChangeCalled.Release();
             };
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);

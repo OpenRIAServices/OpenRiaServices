@@ -14,6 +14,7 @@ using OpenRiaServices.Silverlight.Testing;
 using OpenRiaServices.DomainServices.Client.Test.Utilities;
 using System.Threading;
 using System.Threading.Tasks;
+using Cities;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -116,6 +117,71 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             EnqueueTestComplete();
+        }
+
+        [TestMethod]
+
+        public async Task TestMockClient_SubmitAsync_Cancel_DomainClientCancel()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<SubmitCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.SubmitCompletedResult = tcs.Task;
+
+            dp.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+
+            var submitTask = dp.SubmitChangesAsync(cts.Token);
+            cts.Cancel();
+            Assert.IsTrue(dp.IsSubmitting);
+            Assert.IsTrue(dp.Cities.First().IsSubmitting, "entity should be in submitting state");
+
+            // Return cancellation from domain client
+            tcs.TrySetCanceled(cts.Token);
+
+            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => submitTask);
+            Assert.IsTrue(submitTask.IsCanceled);
+            Assert.IsFalse(dp.IsSubmitting);
+            Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
+
+        }
+
+        [TestMethod]
+        public async Task TestMockClient_SubmitAsync_Cancel_DomainClientCompletes()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext dp = new Cities.CityDomainContext(mockDomainClient);
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var cts = new CancellationTokenSource();
+            mockDomainClient.SubmitCompletedCallback = async (changeSet, submitOperations) =>
+            {
+                // Wait for cancellation, and then return successfully without cancellation
+                try
+                {
+                    await Task.Delay(-1, cts.Token);
+                }
+                catch
+                {
+
+                }
+                // perform mock submit operations
+                SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
+                return submitResults;
+            };
+
+            dp.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+
+            var submitTask = dp.SubmitChangesAsync(cts.Token);
+            Assert.IsTrue(dp.IsSubmitting);
+            Assert.IsTrue(dp.Cities.First().IsSubmitting, "entity should be in submitting state");
+            cts.Cancel();
+
+            var result = await submitTask;
+            Assert.IsFalse(dp.IsSubmitting);
+            Assert.IsFalse(dp.Cities.First().IsSubmitting, "entity should not be in submitting state");
         }
 
         /// <summary>
@@ -333,7 +399,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             /// </summary>
             public Task<InvokeCompletedResult> InvokeCompletedResult { get; set; }
             public Task<QueryCompletedResult> QueryCompletedResult { get; set; }
+            public Task<SubmitCompletedResult> SubmitCompletedResult { get; set; }
 
+            public Func<EntityChangeSet, IEnumerable<ChangeSetEntry>, Task<SubmitCompletedResult>> SubmitCompletedCallback { get; set; }
             protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
             {
                 if (QueryCompletedResult != null)
@@ -353,11 +421,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
             {
+                if (SubmitCompletedResult != null)
+                    return SubmitCompletedResult;
+
                 IEnumerable<ChangeSetEntry> submitOperations = changeSet.GetChangeSetEntries();
 
-                // perform mock submit operations
-                SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
-                return TaskHelper.FromResult(submitResults);
+                if (SubmitCompletedCallback != null)
+                {
+                    return SubmitCompletedCallback(changeSet, submitOperations);
+                }
+                else
+                {
+                    // perform mock submit operations
+                    SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
+                    return TaskHelper.FromResult(submitResults);
+                }
             }
 
             protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)

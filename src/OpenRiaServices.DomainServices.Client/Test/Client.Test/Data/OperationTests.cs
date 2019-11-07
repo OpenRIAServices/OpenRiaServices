@@ -215,7 +215,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             city.ZoneID = 1;
             Assert.IsTrue(cities.EntityContainer.HasChanges);
 
-            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, null);
+            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
@@ -243,7 +243,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ChangeSetEntry entry = entries.First();
             entry.ValidationErrors = new ValidationResultInfo[] { new ValidationResultInfo("Foo", new string[] { "Bar" }) };
 
-            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, null);
+            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
 
             try
             {
@@ -264,7 +264,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             entry = entries.First();
             entry.ConflictMembers = new string[] { "ZoneID" };
 
-            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, null);
+            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
 
             try
             {
@@ -393,7 +393,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 lo.Cancel();
             }, "Fnord!");
 
-            SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, soCallback);
+            SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
+            so.CancellationToken.Register(() => throw new InvalidOperationException("Fnard!"));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 so.Cancel();

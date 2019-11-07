@@ -12,7 +12,6 @@ namespace OpenRiaServices.DomainServices.Client
     public sealed class SubmitOperation : OperationBase
     {
         private readonly EntityChangeSet _changeSet;
-        private readonly Action<SubmitOperation> _cancelAction;
         private readonly Action<SubmitOperation> _completeAction;
 
         /// <summary>
@@ -21,30 +20,18 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="changeSet">The changeset being submitted.</param>
         /// <param name="completeAction">Optional action to invoke when the operation completes.</param>
         /// <param name="userState">Optional user state to associate with the operation.</param>
-        /// <param name="cancelAction">Optional action to invoke when the operation is canceled. If null, cancellation will not be supported.</param>
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         internal SubmitOperation(EntityChangeSet changeSet,
             Action<SubmitOperation> completeAction, object userState,
-            Action<SubmitOperation> cancelAction)
-            : base(userState, cancelAction != null)
+            bool supportCancellation)
+            : base(userState, supportCancellation)
         {
             if (changeSet == null)
             {
                 throw new ArgumentNullException(nameof(changeSet));
             }
-            this._cancelAction = cancelAction;
             this._completeAction = completeAction;
             this._changeSet = changeSet;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return (this._cancelAction != null);
-            }
         }
 
         /// <summary>
@@ -67,14 +54,6 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 return this._changeSet.Where(p => p.EntityConflict != null || p.HasValidationErrors);
             }
-        }
-
-        /// <summary>
-        /// Invokes the cancel callback.
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this._cancelAction(this);
         }
 
         /// <summary>

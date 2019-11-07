@@ -235,18 +235,6 @@ namespace OpenRiaServices.DomainServices.Client
                     throw ExceptionHandlingUtility.GetUnwrappedException(ex); ;
                 }
             }
-
-            OnCancellationRequested();
-        }
-
-        /// <summary>
-        /// Called when user calls <see cref="Cancel"/>, the default behaviour
-        /// is to mark the operation as completed as Cancelled, but can 
-        /// be overriden to prevent that.
-        /// </summary>
-        private protected virtual void OnCancellationRequested()
-        {
-            SetCancelled();
         }
 
         /// <summary>
