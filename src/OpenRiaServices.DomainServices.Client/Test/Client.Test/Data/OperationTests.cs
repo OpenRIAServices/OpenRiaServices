@@ -340,6 +340,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void Exceptions()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+            const string Message = "Fnord!";
 
             Action<LoadOperation<City>> loCallback = (op) =>
             {
@@ -348,7 +349,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     op.MarkErrorAsHandled();
                 }
 
-                throw new InvalidOperationException("Fnord!");
+                throw new InvalidOperationException(Message);
             };
 
             Action<SubmitOperation> soCallback = (op) =>
@@ -358,7 +359,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     op.MarkErrorAsHandled();
                 }
 
-                throw new InvalidOperationException("Fnord!");
+                throw new InvalidOperationException(Message);
             };
 
             Action<InvokeOperation> ioCallback = (op) =>
@@ -368,19 +369,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     op.MarkErrorAsHandled();
                 }
 
-                throw new InvalidOperationException("Fnord!");
+                throw new InvalidOperationException(Message);
             };
 
             var query = cities.GetCitiesQuery();
             var loadBehaviour = LoadBehavior.MergeIntoCurrent;
-            LoadOperation<City> lo = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
 
             // verify completion callbacks that throw
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 try
                 {
-                    lo.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
+                    var load = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
+                    load.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
                 }
                 catch (Exception ex)
                 {
@@ -388,29 +389,44 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                     throw;
                 }
-            }, "Fnord!");
+            }, Message);
+
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
+                try
+                {
+                    var submit = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
+                    submit.Complete();
+                }
+                catch (Exception ex)
+                {
+                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.DomainServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+
+                    throw;
+                }
+            }, Message);
 
             // verify cancellation callbacks for all fx operation types
-            lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
-            lo.CancellationToken.Register(() => throw new InvalidOperationException("Fnord!"));
+            var lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
+            lo.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 lo.Cancel();
-            }, "Fnord!");
+            }, Message);
 
             SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
-            so.CancellationToken.Register(() => throw new InvalidOperationException("Fnard!"));
+            so.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 so.Cancel();
-            }, "Fnord!");
+            }, Message);
 
             InvokeOperation io = new InvokeOperation("Fnord", null, null, null, true);
-            io.CancellationToken.Register(() => throw new InvalidOperationException("Fnord!"));
+            io.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 io.Cancel();
-            }, "Fnord!");
+            }, Message);
         }
 
         /// <summary>
