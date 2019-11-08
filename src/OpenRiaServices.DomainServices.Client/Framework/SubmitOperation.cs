@@ -72,47 +72,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="error">The error.</param>
         internal new void SetError(Exception error)
         {
-            if (typeof(DomainException).IsAssignableFrom(error.GetType()))
-            {
-                // DomainExceptions should not be modified
-                base.SetError(error);
-                return;
-            }
-
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_SubmitOperationFailed, error.Message);
-
-            DomainOperationException domainOperationException = error as DomainOperationException;
-            if (domainOperationException != null)
-            {
-                error = new SubmitOperationException(ChangeSet, message, domainOperationException);
-            }
-            else
-            {
-                error = new SubmitOperationException(ChangeSet, message, error);
-            }
-
-            base.SetError(error);
-        }
-
-        internal void SetError(OperationErrorStatus errorStatus)
-        {
-            SubmitOperationException error = null;
-            if (errorStatus == OperationErrorStatus.ValidationFailed)
-            {
-                error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
-            }
-            else if (errorStatus == OperationErrorStatus.Conflicts)
-            {
-                error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Conflicts, OperationErrorStatus.Conflicts);
-            }
-            else
-            {
-                // This can never happen, all paths here supply either 
-                // ValidationFailed or Conflicts
-                throw new ArgumentException("Unsupported OperationErrorStatus",nameof(errorStatus));
-            }
-
             base.SetError(error);
         }
 

@@ -47,10 +47,10 @@ namespace Cities
             return base.LoadAsync(query, loadBehavior, cancellationToken);
         }
 
-        public override Task<SubmitResult> SubmitChangesAsync(CancellationToken cancellationToken)
+        protected override Task<SubmitResult> SubmitChangesAsync(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             SubmitChangesAsyncCalled = true;
-            return base.SubmitChangesAsync(cancellationToken);
+            return base.SubmitChangesAsync(changeSet, cancellationToken);
         }
     }
 }

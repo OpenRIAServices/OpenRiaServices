@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
             ex = new DomainOperationException("expected", validationErrors);
-            
+
             try
             {
                 lo.SetError(ex);
@@ -155,7 +155,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.AreSame(expectedException, ex);;
+            Assert.AreSame(expectedException, ex);
             CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
         }
 
@@ -234,55 +234,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed, ex.Message), expectedException.Message);
-            Assert.AreEqual(ex.StackTrace, expectedException.StackTrace);
-            Assert.AreEqual(ex.Status, expectedException.Status);
-            Assert.AreEqual(ex.ErrorCode, expectedException.ErrorCode);
-
+            Assert.AreSame(expectedException, ex);
             Assert.AreEqual(false, submit.IsErrorHandled);
-
-            // now test again with conflicts
-            expectedException = null;
-            IEnumerable<ChangeSetEntry> entries = ChangeSetBuilder.Build(cities.EntityContainer.GetChanges());
-            ChangeSetEntry entry = entries.First();
-            entry.ValidationErrors = new ValidationResultInfo[] { new ValidationResultInfo("Foo", new string[] { "Bar" }) };
-
-            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
-
-            try
-            {
-                submit.SetError(OperationErrorStatus.Conflicts);
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
-
-            // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed_Conflicts), expectedException.Message);
-
-            // now test again with validation errors
-            expectedException = null;
-            entries = ChangeSetBuilder.Build(cities.EntityContainer.GetChanges());
-            entry = entries.First();
-            entry.ConflictMembers = new string[] { "ZoneID" };
-
-            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
-
-            try
-            {
-                submit.SetError(OperationErrorStatus.ValidationFailed);
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
-
-            // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed_Validation, ex.Message), expectedException.Message);
         }
 
         [TestMethod]

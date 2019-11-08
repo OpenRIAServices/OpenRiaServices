@@ -271,6 +271,59 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsFalse(ctx.Cities.First().IsSubmitting, "entity should not be in submitting state");
         }
 
+        [TestMethod]
+        public async Task SubmitAsync_Exceptions()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+            DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            mockDomainClient.SubmitCompletedResult = Task.FromException<SubmitCompletedResult>(ex);
+
+            ctx.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
+
+            Assert.IsTrue(ctx.EntityContainer.HasChanges);
+            var submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync());
+
+            // verify the exception properties
+            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed, ex.Message), submitEx.Message);
+            Assert.AreEqual(ex.StackTrace, submitEx.StackTrace);
+            Assert.AreEqual(ex.Status, submitEx.Status);
+            Assert.AreEqual(ex.ErrorCode, submitEx.ErrorCode);
+            Assert.IsTrue(ctx.EntityContainer.HasChanges);
+
+            // now test with validation exception
+            var changeSet = ctx.EntityContainer.GetChanges();
+            IEnumerable<ChangeSetEntry> entries = ChangeSetBuilder.Build(changeSet);
+            ChangeSetEntry entry = entries.First();
+            entry.ValidationErrors = new ValidationResultInfo[] { new ValidationResultInfo("Foo", new string[] { "Bar" }) };
+
+            mockDomainClient.SubmitCompletedResult = Task.FromResult(new SubmitCompletedResult(changeSet, entries));
+            submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync());
+
+            // verify the exception properties
+            Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, submitEx.Message);
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, submitEx.Status);
+            Assert.AreEqual(1, submitEx.EntitiesInError.Count);
+            Assert.AreEqual(entry.ClientEntity, submitEx.EntitiesInError.First());
+
+            // now test again with conflicts
+            entries = ChangeSetBuilder.Build(changeSet);
+            entry = entries.First();
+            entry.ConflictMembers = new string[] { nameof(City.CountyName) };
+            entry.StoreEntity = new City() { CountyName = "OtherCounty" };
+
+            mockDomainClient.SubmitCompletedResult = Task.FromResult(new SubmitCompletedResult(changeSet, entries));
+            submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync());
+
+            // verify the exception properties
+            Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, submitEx.Message);
+            Assert.AreEqual(OperationErrorStatus.Conflicts, submitEx.Status);
+            Assert.AreEqual(1, submitEx.EntitiesInError.Count);
+            Assert.AreEqual(entry.ClientEntity, submitEx.EntitiesInError.First());
+        }
+
         /// <summary>
         /// Test that query processing works using a mock DomainClient.
         /// </summary>

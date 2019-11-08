@@ -260,81 +260,31 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>The <see cref="SubmitOperation"/>.</returns>
         public virtual SubmitOperation SubmitChanges(Action<SubmitOperation> callback, object userState)
         {
-            if (this.IsSubmitting)
-            {
-                throw new InvalidOperationException(Resource.DomainContext_SubmitAlreadyInProgress);
-            }
+            EntityChangeSet changeSet = this.EntityContainer.GetChanges();
+            var submitOperation = new SubmitOperation(changeSet, callback, userState, DomainClient.SupportsCancellation);
 
-            // Set state
-            this.IsSubmitting = true;
-
-            SubmitOperation submitOperation;
-            EntityChangeSet changeSet = null;
-            try
-            {
-                // Build and validate the changeset
-                changeSet = this.EntityContainer.GetChanges();
-                bool validChangeset = this.ValidateChangeSet(changeSet, this.ValidationContext);
-
-                submitOperation = new SubmitOperation(changeSet, callback, userState, DomainClient.SupportsCancellation);
-
-                // Exit early if we have no changes or if there are validation errors
-                if (changeSet.IsEmpty || !validChangeset)
+            this.SubmitChangesAsync(changeSet, submitOperation.CancellationToken)
+                .ContinueWith((submitTask, state) =>
                 {
-                    Task.Factory.StartNew(() =>
-                    {
-                        this.IsSubmitting = false;
+                    var operation = (SubmitOperation)state;
 
-                        // Need to check if the operation has already completed, for
-                        // example if the operation was cancelled.
-                        if (!submitOperation.IsComplete)
-                        {
-                            if (!validChangeset)
-                            {
-                                submitOperation.SetError(OperationErrorStatus.ValidationFailed);
-                            }
-                            else
-                            {
-                                submitOperation.Complete();
-                            }
-                        }
+                    if (submitTask.IsCanceled)
+                    {
+                        operation.SetCancelled();
                     }
-                    , CancellationToken.None
-                    , TaskCreationOptions.None
-                    , _syncContextScheduler);
-                }
-                else
-                {
-                    foreach (Entity entity in changeSet)
+                    else if (submitTask.Exception != null)
                     {
-                        // Prevent any changes to the entities while we are submitting.
-                        entity.IsSubmitting = true;
+                        operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(submitTask.Exception));
                     }
-
-                    this.DomainClient.SubmitAsync(changeSet, submitOperation.CancellationToken)
-                        .ContinueWith((submitTask, state) =>
-                        {
-                            this.CompleteSubmitChanges(submitTask, (SubmitOperation)state);
-                        }
-                        , submitOperation
-                        , CancellationToken.None
-                        , TaskContinuationOptions.HideScheduler
-                        , _syncContextScheduler);
-                }
-            }
-            catch
-            {
-                // if an exception is thrown revert our state
-                this.IsSubmitting = false;
-                if (changeSet != null)
-                {
-                    foreach (Entity entity in changeSet)
+                    else
                     {
-                        entity.IsSubmitting = false;
+                        operation.Complete();
                     }
                 }
-                throw;
-            }
+                , submitOperation
+                , CancellationToken.None
+                , TaskContinuationOptions.HideScheduler
+                , _syncContextScheduler);
 
             return submitOperation;
         }
@@ -353,56 +303,122 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <returns>The <see cref="SubmitResult"/>.</returns>
         /// <param name="cancellationToken">cancellation token</param>
-        public virtual Task<SubmitResult> SubmitChangesAsync(CancellationToken cancellationToken)
+        public Task<SubmitResult> SubmitChangesAsync(CancellationToken cancellationToken)
         {
-            TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
-
-            var submitOp = this.SubmitChanges((res) => SetTaskResult(res, tcs, (op) => new SubmitResult(op.ChangeSet)), userState: null);
-            RegisterCancellationToken(submitOp, cancellationToken);
-
-            return tcs.Task;
+            EntityChangeSet changeSet = this.EntityContainer.GetChanges();
+            return SubmitChangesAsync(changeSet, cancellationToken);
         }
 
-        /// <summary>
-        /// Tries to set the return value on the TaskCompletionSource, using the TrySetXXX function family based on the status of a completed operation. 
-        /// </summary>
-        /// <typeparam name="TOperation">The type of the operation.</typeparam>
-        /// <typeparam name="TResult">The type of the return type.</typeparam>
-        /// <param name="operation">The operation which has completed.</param>
-        /// <param name="tcs">The TaskCompletionSource used to create a task for the specified operation.</param>
-        /// <param name="toResult">Function used to convert an operation into the corresponding result-type.</param>
-        private void SetTaskResult<TOperation, TResult>(TOperation operation, TaskCompletionSource<TResult> tcs, Func<TOperation, TResult> toResult)
-            where TOperation : OperationBase
+        protected virtual Task<SubmitResult> SubmitChangesAsync(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
-            if (operation.IsCanceled)
-                tcs.TrySetCanceled();
-            else if (operation.HasError)
+            if (changeSet.IsEmpty)
             {
-                operation.MarkErrorAsHandled();
-                tcs.TrySetException(operation.Error);
+                return Task.FromResult(new SubmitResult(changeSet));
             }
-            else
-            {
-                tcs.TrySetResult(toResult(operation));
-            }
-        }
 
-        /// <summary>
-        /// Registers the operation with the CancellationToken so that the operation is cancelled whenever the cancellation is requested.
-        /// </summary>
-        /// <param name="operation">The operation.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        private static void RegisterCancellationToken(OperationBase operation, CancellationToken cancellationToken)
-        {
-            if (cancellationToken.CanBeCanceled && operation.CanCancel)
+            if (this.IsSubmitting)
             {
-                cancellationToken.Register((state) =>
+                throw new InvalidOperationException(Resource.DomainContext_SubmitAlreadyInProgress);
+            }
+
+            // Set state
+            this.IsSubmitting = true;
+
+            try
+            {
+                // validate the changeset
+                if (!this.ValidateChangeSet(changeSet, this.ValidationContext))
                 {
-                    var op = (OperationBase)state;
+                    throw new SubmitOperationException(changeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
+                }
 
-                    if (op.CanCancel)
-                        op.Cancel();
-                }, operation, useSynchronizationContext: true);
+                // Prevent any changes to the entities while we are submitting.
+                foreach (Entity entity in changeSet)
+                {
+                    entity.IsSubmitting = true;
+                }
+
+                var continueationCts = new CancellationTokenSource();
+                return this.DomainClient.SubmitAsync(changeSet, cancellationToken)
+                    .ContinueWith((submitTask, state) =>
+                    {
+                        IEnumerable<ChangeSetEntry> operationResults = null;
+                        EntityChangeSet callbackChangeSet = (EntityChangeSet)state;
+                        bool hasValidationErros = false;
+                        bool hasConflict = false;
+
+                        try
+                        {
+                            // This needs to be inside try statement, since code in finally must run
+                            SubmitCompletedResult submitResults = submitTask.GetAwaiter().GetResult();
+
+                            // If the request was successful, process the results
+                            ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results, out hasValidationErros, out hasConflict);
+
+                            operationResults = submitResults.Results;
+                        }
+                        catch (TaskCanceledException)
+                        {
+                            continueationCts.Cancel();
+                            continueationCts.Token.ThrowIfCancellationRequested();
+                        }
+                        catch (DomainException)
+                        {
+                            // DomainExceptions should not be modified
+                            throw;
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.IsFatal())
+                            {
+                                throw;
+                            }
+
+                            string message = string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_SubmitOperationFailed, ex.Message);
+                            throw ex is DomainOperationException domainOperationException
+                                ? new SubmitOperationException(callbackChangeSet, message, domainOperationException)
+                                : new SubmitOperationException(callbackChangeSet, message, ex);
+                        }
+                        finally
+                        {
+                            foreach (Entity entity in callbackChangeSet)
+                            {
+                                entity.IsSubmitting = false;
+                            }
+                            this.IsSubmitting = false;
+                            continueationCts.Dispose();
+                        }
+
+                        if (hasValidationErros)
+                        {
+                            throw new SubmitOperationException(callbackChangeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
+                        }
+                        else if (hasConflict)
+                        {
+                            throw new SubmitOperationException(callbackChangeSet, Resource.DomainContext_SubmitOperationFailed_Conflicts, OperationErrorStatus.Conflicts);
+                        }
+                        else
+                        {
+                            return new SubmitResult(callbackChangeSet);
+                        }
+                    }
+                    , changeSet
+                    , continueationCts.Token
+                    , TaskContinuationOptions.HideScheduler
+                    , _syncContextScheduler);
+            }
+            catch
+            {
+                // if an exception is thrown revert our state
+                this.IsSubmitting = false;
+                if (changeSet != null)
+                {
+                    foreach (Entity entity in changeSet)
+                    {
+                        entity.IsSubmitting = false;
+                    }
+                }
+                throw;
             }
         }
 
@@ -507,7 +523,6 @@ namespace OpenRiaServices.DomainServices.Client
                 .ContinueWith((loadTask, state) =>
                {
                    var operation = (LoadOperation<TEntity>)state;
-
 
                    if (loadTask.IsCanceled)
                    {
@@ -688,15 +703,16 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="changeSet">The submitted <see cref="EntityChangeSet"/>.</param>
         /// <param name="changeSetResults">The operation results returned from the submit request.</param>
-        private static void ProcessSubmitResults(EntityChangeSet changeSet, IEnumerable<ChangeSetEntry> changeSetResults)
+        private static void ProcessSubmitResults(EntityChangeSet changeSet, IEnumerable<ChangeSetEntry> changeSetResults, out bool hasValidationErros, out bool hasConflict)
         {
-            bool hasErrors = false;
+            hasValidationErros = false;
+            hasConflict = false;
             Dictionary<Entity, List<ValidationResult>> entityValidationErrorMap = new Dictionary<Entity, List<ValidationResult>>();
             foreach (ChangeSetEntry changeSetEntry in changeSetResults)
             {
                 if (changeSetEntry.ValidationErrors != null && changeSetEntry.ValidationErrors.Any())
                 {
-                    hasErrors = true;
+                    hasValidationErros = true;
                     AddEntityErrors(changeSetEntry.ClientEntity, changeSetEntry.ValidationErrors, entityValidationErrorMap);
                 }
 
@@ -704,12 +720,12 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     EntityConflict conflict = new EntityConflict(changeSetEntry.ClientEntity, changeSetEntry.StoreEntity, changeSetEntry.ConflictMembers, changeSetEntry.IsDeleteConflict);
                     changeSetEntry.ClientEntity.EntityConflict = conflict;
-                    hasErrors = true;
+                    hasConflict = true;
                 }
             }
 
             // If there were any errors we don't want to process any further
-            if (hasErrors)
+            if (hasValidationErros || hasConflict)
             {
                 return;
             }
@@ -795,78 +811,6 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 // just pass the event on
                 this.RaisePropertyChanged(nameof(HasChanges));
-            }
-        }
-
-        /// <summary>
-        /// Completes an event-based asynchronous <see cref="SubmitChanges()"/> operation.
-        /// </summary>
-        private void CompleteSubmitChanges(Task<SubmitCompletedResult> submitTask, SubmitOperation submitOperation)
-        {
-            IEnumerable<ChangeSetEntry> operationResults = null;
-            Exception error = null;
-
-            try
-            {
-                // This needs to be inside try statement, since code in finally must run
-                if (!submitTask.IsCanceled)
-                {
-                    SubmitCompletedResult submitResults = submitTask.GetAwaiter().GetResult();
-
-                    // If the request was successful, process the results
-                    ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results.Cast<ChangeSetEntry>());
-
-                    operationResults = submitResults.Results;
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex.IsFatal())
-                {
-                    throw;
-                }
-                error = ex;
-            }
-            finally
-            {
-                foreach (Entity entity in submitOperation.ChangeSet)
-                {
-                    entity.IsSubmitting = false;
-                }
-                this.IsSubmitting = false;
-            }
-
-            if (submitTask.IsCanceled)
-            {
-                submitOperation.SetCancelled();
-            }
-            else
-            {
-                if (error == null)
-                {
-                    if (operationResults.Any(p => p.HasError))
-                    {
-                        if (operationResults.Any(p => p.ValidationErrors != null && p.ValidationErrors.Any()))
-                        {
-                            submitOperation.SetError(OperationErrorStatus.ValidationFailed);
-                        }
-                        else if (operationResults.Any(p => p.HasConflict))
-                        {
-                            submitOperation.SetError(OperationErrorStatus.Conflicts);
-                        }
-                    }
-                    else
-                    {
-                        // if we've completed successfully, all changes should have been accepted
-                        Debug.Assert(!this.HasChanges, "Submit has completed. HasChanges must be false.");
-
-                        submitOperation.Complete();
-                    }
-                }
-                else
-                {
-                    submitOperation.SetError(error);
-                }
             }
         }
 
