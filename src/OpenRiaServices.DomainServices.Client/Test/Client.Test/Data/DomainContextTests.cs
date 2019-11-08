@@ -70,6 +70,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [WorkItem(755212)]
+        [Ignore] // Need to fix Race condition before enabling again
         public async Task CancelSubmit_EmptyChangeset()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
@@ -83,6 +84,18 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await so;
             Assert.IsNull(so.Error);
+        }
+
+        [TestMethod]
+        public async Task SubmitAsync_Cancel_EmptyChangeset()
+        {
+            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            CancellationTokenSource cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            // This should not throw any error, OperationCancelledException might be acceptable
+            // in the  future
+            await nw.SubmitChangesAsync(cts.Token);
         }
 
         [TestMethod]
