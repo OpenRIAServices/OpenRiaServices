@@ -188,7 +188,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
-        [Ignore]  // repro test - enable once bug is fixed
         public void CompositionSelfReference_UpdateChildBypassingParent()
         {
             ConfigurableEntityContainer container = new ConfigurableEntityContainer();
