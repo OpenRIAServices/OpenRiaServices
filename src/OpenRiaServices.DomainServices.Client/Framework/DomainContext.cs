@@ -329,14 +329,15 @@ namespace OpenRiaServices.DomainServices.Client
                 throw new InvalidOperationException(Resource.DomainContext_SubmitAlreadyInProgress);
             }
 
+            // validate the changeset, this might throw InvalidOperation
+            if (!this.ValidateChangeSet(changeSet, this.ValidationContext))
+            {
+                return Task.FromException<SubmitResult>(new SubmitOperationException(changeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed));
+            }
+
             return SubmitChangesAsyncImplementation();
             async Task<SubmitResult> SubmitChangesAsyncImplementation()
             {
-                // validate the changeset
-                if (!this.ValidateChangeSet(changeSet, this.ValidationContext))
-                {
-                    throw new SubmitOperationException(changeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
-                }
 
                 // Set state
                 this.IsSubmitting = true;
