@@ -224,24 +224,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 #if !VBTests
 
         [TestMethod]
-        public async Task Bug705027_IsLoadingAfterCancel()
-        {
-            Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
-
-            var query = cities.GetCitiesQuery().Take(1);
-            LoadOperation<City> lo = cities.Load(query, false);
-
-            Assert.IsTrue(cities.IsLoading);
-            lo.Cancel();
-            Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
-
-            await lo;
-            Assert.IsFalse(cities.IsLoading, "IsLoading should be false");
-            Assert.IsTrue(lo.IsCanceled, "operation should be canceled");
-            Assert.IsFalse(lo.HasError, "Cancelled operation should not have any error");
-        }
-
-        [TestMethod]
         public async Task LoadOperation_SingletonQueryMethod()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
@@ -274,6 +256,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             await lo;
             Assert.IsFalse(lo.HasError);
+            Assert.IsTrue(lo.IsComplete);
 
             // subscribe to completed event AFTER completion. Verify
             // that the callback is called immediately
@@ -390,7 +373,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task LoadOperationLifecycle_Success()
         {
-            Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+            var mockDomainClient = new CitiesMockDomainClient();
+            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            mockDomainClient.QueryCompletedResult = tcs.Task;
+            Cities.CityDomainContext cities = new CityDomainContext(mockDomainClient);
+            var returnedCities = new Entity[3]
+            {
+                new City() {Name="Duvall", CountyName="King", StateName="WA"},
+                new City() {Name="Carnation", CountyName="King", StateName="WA"},
+                new City() {Name="Everett", CountyName="King", StateName="WA"},
+            };
 
             // subscribe a user callback
             object userState = new object();
@@ -453,6 +445,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
+
+            Assert.IsFalse(completedCalled);
+            Assert.IsFalse(callbackCalled);
+            Assert.AreEqual(0, propChangeNotifications.Count);
+
+            // Now have load operation complete
+            tcs.SetResult(new QueryCompletedResult(returnedCities, Enumerable.Empty<Entity>(), 10, Enumerable.Empty<ValidationResult>()));
             await lo;
             Assert.IsTrue(completedCalled);
             Assert.IsTrue(callbackCalled);
@@ -480,7 +479,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task LoadOperationLifecycle_Cancel()
         {
-            Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+            var mockDomainClient = new CitiesMockDomainClient();
+            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            mockDomainClient.QueryCompletedResult = tcs.Task;
+            Cities.CityDomainContext cities = new CityDomainContext(mockDomainClient);
 
             // subscribe a user callback
             object userState = new object();
@@ -537,13 +539,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
-            // cancel the load
+            // request cancellation
             Assert.IsFalse(lo.IsComplete);
             lo.Cancel();
 
             Assert.IsFalse(lo.CanCancel);
             Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
+            Assert.IsFalse(completedCalled);
+            Assert.IsFalse(callbackCalled);
+            Assert.AreEqual(0, propChangeNotifications.Count);
+
+            // continue with actual cancellation
+            tcs.TrySetCanceled(lo.CancellationToken);
             await lo;
             Assert.IsTrue(completedCalled);
             Assert.IsTrue(callbackCalled);
@@ -571,7 +579,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task LoadOperationLifecycle_Error()
         {
-            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
+            var mockDomainClient = new CitiesMockDomainClient();
+            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            mockDomainClient.QueryCompletedResult = tcs.Task;
+            TestDataContext ctxt = new TestDataContext(mockDomainClient);
 
             object userState = new object();
             bool completedCalled = false;
@@ -632,6 +643,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
+            Assert.IsFalse(completedCalled);
+            Assert.IsFalse(callbackCalled);
+            Assert.AreEqual(0, propChangeNotifications.Count);
+
+            tcs.SetException(new DomainOperationException("error"));
             await lo;
             Assert.IsTrue(completedCalled);
             Assert.IsTrue(callbackCalled);

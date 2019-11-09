@@ -15,6 +15,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
         }
 
+        public TestDataContext(DomainClient domainClient)
+        : base(domainClient)
+        {
+        }
+
         public EntitySet<Product> Products
         {
             get
