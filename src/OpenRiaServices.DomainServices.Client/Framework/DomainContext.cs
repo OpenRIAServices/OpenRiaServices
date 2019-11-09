@@ -335,10 +335,13 @@ namespace OpenRiaServices.DomainServices.Client
                 return Task.FromException<SubmitResult>(new SubmitOperationException(changeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed));
             }
 
+            // Build the changeset entries, this will cause additional validation to run
+            // The result is cached so when the DomainClient calls the method again the results are reused
+            changeSet.GetChangeSetEntries();
+
             return SubmitChangesAsyncImplementation();
             async Task<SubmitResult> SubmitChangesAsyncImplementation()
             {
-
                 // Set state
                 this.IsSubmitting = true;
                 try
