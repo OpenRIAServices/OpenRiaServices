@@ -446,15 +446,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
 
 
-            Assert.IsFalse(completedCalled);
-            Assert.IsFalse(callbackCalled);
+            Assert.IsFalse(Volatile.Read(ref completedCalled));
+            Assert.IsFalse(Volatile.Read(ref callbackCalled));
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             // Now have load operation complete
             tcs.SetResult(new QueryCompletedResult(returnedCities, Enumerable.Empty<Entity>(), 10, Enumerable.Empty<ValidationResult>()));
             await lo;
-            Assert.IsTrue(completedCalled);
-            Assert.IsTrue(callbackCalled);
+            Assert.IsTrue(Volatile.Read(ref completedCalled));
+            Assert.IsTrue(Volatile.Read(ref callbackCalled));
 
             // verify state after completion
             Assert.IsNull(lo.Error);
@@ -546,15 +546,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsFalse(lo.CanCancel);
             Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
-            Assert.IsFalse(completedCalled);
-            Assert.IsFalse(callbackCalled);
+            Assert.IsFalse(Volatile.Read(ref completedCalled));
+            Assert.IsFalse(Volatile.Read(ref callbackCalled));
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             // continue with actual cancellation
             tcs.TrySetCanceled(lo.CancellationToken);
             await lo;
-            Assert.IsTrue(completedCalled);
-            Assert.IsTrue(callbackCalled);
+            Assert.IsTrue(Volatile.Read(ref completedCalled));
+            Assert.IsTrue(Volatile.Read(ref callbackCalled));
 
             // verify state after completion
             Assert.IsNull(lo.Error);
@@ -643,14 +643,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 completedCalled = true;
             };
 
-            Assert.IsFalse(completedCalled);
-            Assert.IsFalse(callbackCalled);
+            Assert.IsFalse(Volatile.Read(ref completedCalled));
+            Assert.IsFalse(Volatile.Read(ref callbackCalled));
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             tcs.SetException(new DomainOperationException("error"));
             await lo;
-            Assert.IsTrue(completedCalled);
-            Assert.IsTrue(callbackCalled);
+            Assert.IsTrue(Volatile.Read(ref completedCalled));
+            Assert.IsTrue(Volatile.Read(ref callbackCalled));
+
 
             // verify state after completion
             Assert.IsTrue(lo.HasError);
