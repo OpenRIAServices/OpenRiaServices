@@ -386,8 +386,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // subscribe a user callback
             object userState = new object();
-            bool completedCalled = false;
-            bool callbackCalled = false;
+            Box<bool> completedCalled = new Box<bool>(false);
+            Box<bool> callbackCalled = new Box<bool>(false);
             Action<LoadOperation<City>> callback = (o) =>
             {
                 if (o.HasError)
@@ -397,11 +397,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
-                Assert.IsFalse(completedCalled);
+                Assert.IsFalse(completedCalled.Value);
                 Assert.AreSame(userState, o.UserState);
                 Assert.IsTrue(o.Entities.Count > 0);
                 Assert.IsTrue(o.AllEntities.Count > 0);
-                callbackCalled = true;
+                callbackCalled.Value = true;
             };
 
             var query = cities.GetCitiesQuery().Take(3);
@@ -434,7 +434,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 LoadOperation<City> o = (LoadOperation<City>)s;
 
                 // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled);
+                Assert.IsTrue(callbackCalled.Value);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
@@ -442,19 +442,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(o.Entities.Count > 0);
                 Assert.IsTrue(o.AllEntities.Count > 0);
 
-                completedCalled = true;
+                completedCalled.Value = true;
             };
 
 
-            Assert.IsFalse(Volatile.Read(ref completedCalled));
-            Assert.IsFalse(Volatile.Read(ref callbackCalled));
+            Assert.IsFalse(Volatile.Read(ref completedCalled.Value));
+            Assert.IsFalse(Volatile.Read(ref callbackCalled.Value));
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             // Now have load operation complete
             tcs.SetResult(new QueryCompletedResult(returnedCities, Enumerable.Empty<Entity>(), 10, Enumerable.Empty<ValidationResult>()));
             await lo;
-            Assert.IsTrue(Volatile.Read(ref completedCalled));
-            Assert.IsTrue(Volatile.Read(ref callbackCalled));
+            Assert.IsTrue(Volatile.Read(ref completedCalled.Value));
+            Assert.IsTrue(Volatile.Read(ref callbackCalled.Value));
 
             // verify state after completion
             Assert.IsNull(lo.Error);
@@ -479,8 +479,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task LoadOperationLifecycle_Cancel()
         {
+            // Force boxing of async statemachine so that the version captured by 
+            // callbacks are the heap allocated copy
+            await Task.Yield();
+
             var mockDomainClient = new CitiesMockDomainClient();
-            var tcs = new TaskCompletionSource<QueryCompletedResult>();
+            var tcs = new TaskCompletionSource<QueryCompletedResult>(TaskCreationOptions.RunContinuationsAsynchronously);
             mockDomainClient.QueryCompletedResult = tcs.Task;
             Cities.CityDomainContext cities = new CityDomainContext(mockDomainClient);
 
@@ -500,7 +504,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
-                callbackCalled = true;
+                Volatile.Write(ref callbackCalled, true);
             };
 
             var query = cities.GetCitiesQuery().Take(3);
@@ -536,7 +540,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsTrue(o.IsCanceled);
 
-                completedCalled = true;
+                Volatile.Write(ref completedCalled, true);
             };
 
             // request cancellation
@@ -579,6 +583,10 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task LoadOperationLifecycle_Error()
         {
+            // Force boxing of async statemachine so that the version captured by 
+            // callbacks are the heap allocated copy
+            await Task.Yield();
+
             var mockDomainClient = new CitiesMockDomainClient();
             var tcs = new TaskCompletionSource<QueryCompletedResult>();
             mockDomainClient.QueryCompletedResult = tcs.Task;
@@ -604,7 +612,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreSame(userState, o.UserState);
                 Assert.IsTrue(o.Entities.Count == 0);
                 Assert.IsTrue(o.AllEntities.Count == 0);
-                callbackCalled = true;
+                Volatile.Write(ref callbackCalled, true);
             };
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
@@ -640,7 +648,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(o.IsCanceled);
 
-                completedCalled = true;
+                Volatile.Write(ref completedCalled, true);
             };
 
             Assert.IsFalse(Volatile.Read(ref completedCalled));
