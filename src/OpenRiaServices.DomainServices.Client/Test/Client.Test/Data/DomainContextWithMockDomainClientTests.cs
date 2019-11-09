@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client;
-using Microsoft.Silverlight.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Silverlight.Testing;
 using System.Threading;
 using System.Threading.Tasks;
 using Cities;
+using Microsoft.Silverlight.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -20,6 +20,171 @@ namespace OpenRiaServices.DomainServices.Client.Test
     [TestClass]
     public class DomainContextWithMockDomainClientTests : UnitTestBase
     {
+        [TestMethod]
+        public void CancellationSupport()
+        {
+            var domainClient = new CitiesMockDomainClient();
+            domainClient.SetSupportsCancellation(false);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(domainClient);
+
+            var query = ctx.GetCitiesQuery();
+            LoadOperation lo = ctx.Load(query, false);
+            Assert.IsFalse(lo.CanCancel, "Cancellation should not be supported.");
+            Assert.IsFalse(ctx.DomainClient.SupportsCancellation, "Cancellation should not be supported.");
+
+            ExceptionHelper.ExpectException<NotSupportedException>(delegate
+            {
+                lo.Cancel();
+            }, string.Format(CultureInfo.CurrentCulture, Resources.AsyncOperation_CancelNotSupported));
+        }
+
+        /// <summary>
+        /// Test that query processing works using a mock DomainClient.
+        /// </summary>
+        [TestMethod]
+        [Asynchronous]
+        public void Invoke()
+        {
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
+            string myState = "Test User State";
+
+            InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
+
+            EnqueueConditional(delegate
+            {
+                return invoke.IsComplete;
+            });
+            EnqueueCallback(delegate
+            {
+                Assert.IsNull(invoke.Error);
+                Assert.AreSame(myState, invoke.UserState);
+                Assert.AreEqual("Echo: TestInvoke", invoke.Value);
+            });
+
+            EnqueueTestComplete();
+        }
+
+        /// <summary>
+        /// Test that ValidationErrors for invoke are properly returned.
+        /// </summary>
+        [TestMethod]
+        [Asynchronous]
+        public void Invoke_ValidationErrors()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
+            mockDomainClient.InvokeCompletedResult = Task.FromResult(new InvokeCompletedResult(null, validationErrors));
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+            string myState = "Test User State";
+
+            InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
+
+            EnqueueConditional(delegate
+            {
+                return invoke.IsComplete;
+            });
+            EnqueueCallback(delegate
+            {
+                Assert.IsNotNull(invoke.Error);
+                Assert.AreSame(myState, invoke.UserState);
+
+                CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
+
+                // verify the exception properties
+                var ex = (DomainOperationException)invoke.Error;
+                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+                CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
+                Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"), ex.Message);
+            });
+
+            EnqueueTestComplete();
+        }
+
+        /// <summary>
+        /// Test case where DomainClient do cancel on cancellation request
+        /// </summary>
+        [TestMethod]
+        public async Task InvokeAsync_Cancel_DomainClientCancel()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+
+            // If cancellation results in request beeing cancelled the result should be cancelled
+            var tcs = new TaskCompletionSource<InvokeCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.InvokeCompletedResult = tcs.Task;
+            var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
+            cts.Cancel();
+            tcs.TrySetCanceled(cts.Token);
+
+            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => invokeTask);
+            Assert.IsTrue(invokeTask.IsCanceled);
+        }
+
+        /// <summary>
+        /// Test case where DomainClient completes despite cancellation request
+        /// </summary>
+        [TestMethod]
+        public async Task InvokeAsync_Cancel_DomainClientCompletes()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+
+            // If the web requires returns a value even if cancelled
+            // It should still return a result
+            var tcs = new TaskCompletionSource<InvokeCompletedResult>();
+            var cts = new CancellationTokenSource();
+            mockDomainClient.InvokeCompletedResult = tcs.Task;
+            var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
+            cts.Cancel();
+            tcs.SetResult(new InvokeCompletedResult("Res"));
+
+            var res = await invokeTask;
+            Assert.AreEqual("Res", res.Value);
+        }
+
+        /// <summary>
+        /// Test that ValidationErrors for invoke are properly returned.
+        /// </summary>
+        [TestMethod]
+        public async Task InvokeAsync_DomainOperationException()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            DomainOperationException exception = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
+            mockDomainClient.InvokeCompletedResult = Task.FromException<InvokeCompletedResult>(exception);
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+
+            var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
+                () => ctx.EchoAsync("TestInvoke"),
+                string.Format(Resource.DomainContext_InvokeOperationFailed, "Echo", exception.Message));
+
+            // verify the exception properties
+            Assert.AreEqual(null, ex.InnerException);
+            Assert.AreEqual(ex.StackTrace, exception.StackTrace);
+            Assert.AreEqual(ex.Status, exception.Status);
+            Assert.AreEqual(ex.ErrorCode, exception.ErrorCode);
+        }
+
+        /// <summary>
+        /// Test that ValidationErrors for invoke are properly returned.
+        /// </summary>
+        [TestMethod]
+        public async Task InvokeAsync_ValidationErrors()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
+            mockDomainClient.InvokeCompletedResult = Task.FromResult(new InvokeCompletedResult(null, validationErrors));
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+
+            var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
+                () => ctx.EchoAsync("TestInvoke"),
+                string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"));
+
+            // verify the exception properties
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
+        }
+
         /// <summary>
         /// Test that query processing works using a mock DomainClient.
         /// </summary>
@@ -70,6 +235,41 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         /// <summary>
+        /// Test that ValidationErrors for invoke are properly returned.
+        /// </summary>
+        [TestMethod]
+        [Asynchronous]
+        public void Load_ValidationErrors()
+        {
+            var mockDomainClient = new CitiesMockDomainClient();
+            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
+            mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
+            string myState = "Test User State";
+
+            LoadOperation<Cities.City> loadOperation = ctx.Load(ctx.GetCitiesQuery(), LoadBehavior.RefreshCurrent, l => l.MarkErrorAsHandled(), myState); ;
+
+            EnqueueConditional(delegate
+            {
+                return loadOperation.IsComplete;
+            });
+            EnqueueCallback(delegate
+            {
+                Assert.AreSame(myState, loadOperation.UserState);
+
+                CollectionAssert.AreEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
+
+                // verify the exception properties
+                var ex = loadOperation.Error as DomainOperationException;
+                Assert.IsNotNull(ex, "expected exception of type DomainOperationException");
+                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"), ex.Message);
+            });
+
+            EnqueueTestComplete();
+        }
+
+        /// <summary>
         /// Test case where DomainClient do cancel on cancellation request
         /// </summary>
         [TestMethod]
@@ -116,23 +316,24 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreSame(city, result.Entities.First());
         }
 
-
+        /// <summary>
+        /// Test that ValidationErrors for invoke are properly returned.
+        /// </summary>
         [TestMethod]
-        public void CancellationSupport()
+        public async Task LoadAsync_ValidationErrors()
         {
-            var domainClient = new CitiesMockDomainClient();
-            domainClient.SetSupportsCancellation(false);
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(domainClient);
+            var mockDomainClient = new CitiesMockDomainClient();
+            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
+            mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
+            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
-            var query = ctx.GetCitiesQuery();
-            LoadOperation lo = ctx.Load(query, false);
-            Assert.IsFalse(lo.CanCancel, "Cancellation should not be supported.");
-            Assert.IsFalse(ctx.DomainClient.SupportsCancellation, "Cancellation should not be supported.");
+            var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
+                () => ctx.LoadAsync(ctx.GetCitiesQuery()),
+                string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"));
 
-            ExceptionHelper.ExpectException<NotSupportedException>(delegate
-            {
-                lo.Cancel();
-            }, string.Format(CultureInfo.CurrentCulture, Resources.AsyncOperation_CancelNotSupported));
+            // verify the exception properties
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
         }
 
         [TestMethod]
@@ -323,209 +524,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(OperationErrorStatus.Conflicts, submitEx.Status);
             Assert.AreEqual(1, submitEx.EntitiesInError.Count);
             Assert.AreEqual(entry.ClientEntity, submitEx.EntitiesInError.First());
-        }
-
-        /// <summary>
-        /// Test that query processing works using a mock DomainClient.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void Invoke()
-        {
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
-            string myState = "Test User State";
-
-            InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
-
-            EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(invoke.Error);
-                Assert.AreSame(myState, invoke.UserState);
-                Assert.AreEqual("Echo: TestInvoke", invoke.Value);
-            });
-
-            EnqueueTestComplete();
-        }
-
-        /// <summary>
-        /// Test that ValidationErrors for invoke are properly returned.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void Invoke_ValidationErrors()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            mockDomainClient.InvokeCompletedResult = Task.FromResult(new InvokeCompletedResult(null, validationErrors));
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-            string myState = "Test User State";
-
-            InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
-
-            EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(invoke.Error);
-                Assert.AreSame(myState, invoke.UserState);
-
-                CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
-
-                // verify the exception properties
-                var ex = (DomainOperationException)invoke.Error;
-                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-                CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
-                Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"), ex.Message);
-            });
-
-            EnqueueTestComplete();
-        }
-
-        /// <summary>
-        /// Test that ValidationErrors for invoke are properly returned.
-        /// </summary>
-        [TestMethod]
-        public async Task InvokeAsync_ValidationErrors()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            mockDomainClient.InvokeCompletedResult = Task.FromResult(new InvokeCompletedResult(null, validationErrors));
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-
-            var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => ctx.EchoAsync("TestInvoke"),
-                string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"));
-
-            // verify the exception properties
-            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
-        }
-
-
-        /// <summary>
-        /// Test case where DomainClient completes despite cancellation request
-        /// </summary>
-        [TestMethod]
-        public async Task InvokeAsync_Cancel_DomainClientCompletes()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-
-            // If the web requires returns a value even if cancelled
-            // It should still return a result
-            var tcs = new TaskCompletionSource<InvokeCompletedResult>();
-            var cts = new CancellationTokenSource();
-            mockDomainClient.InvokeCompletedResult = tcs.Task;
-            var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
-            cts.Cancel();
-            tcs.SetResult(new InvokeCompletedResult("Res"));
-
-            var res = await invokeTask;
-            Assert.AreEqual("Res", res.Value);
-        }
-
-        /// <summary>
-        /// Test case where DomainClient do cancel on cancellation request
-        /// </summary>
-        [TestMethod]
-        public async Task InvokeAsync_Cancel_DomainClientCancel()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-
-            // If cancellation results in request beeing cancelled the result should be cancelled
-            var tcs = new TaskCompletionSource<InvokeCompletedResult>();
-            var cts = new CancellationTokenSource();
-            mockDomainClient.InvokeCompletedResult = tcs.Task;
-            var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
-            cts.Cancel();
-            tcs.TrySetCanceled(cts.Token);
-
-            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => invokeTask);
-            Assert.IsTrue(invokeTask.IsCanceled);
-        }
-
-        /// <summary>
-        /// Test that ValidationErrors for invoke are properly returned.
-        /// </summary>
-        [TestMethod]
-        public async Task InvokeAsync_DomainOperationException()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            DomainOperationException exception = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            mockDomainClient.InvokeCompletedResult = Task.FromException<InvokeCompletedResult>(exception);
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-
-            var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => ctx.EchoAsync("TestInvoke"),
-                string.Format(Resource.DomainContext_InvokeOperationFailed, "Echo", exception.Message));
-
-            // verify the exception properties
-            Assert.AreEqual(null, ex.InnerException);
-            Assert.AreEqual(ex.StackTrace, exception.StackTrace);
-            Assert.AreEqual(ex.Status, exception.Status);
-            Assert.AreEqual(ex.ErrorCode, exception.ErrorCode);
-        }
-
-        /// <summary>
-        /// Test that ValidationErrors for invoke are properly returned.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void Load_ValidationErrors()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-            string myState = "Test User State";
-
-            LoadOperation<Cities.City> loadOperation = ctx.Load(ctx.GetCitiesQuery(), LoadBehavior.RefreshCurrent, l => l.MarkErrorAsHandled(), myState); ;
-
-            EnqueueConditional(delegate
-            {
-                return loadOperation.IsComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreSame(myState, loadOperation.UserState);
-
-                CollectionAssert.AreEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
-
-                // verify the exception properties
-                var ex = loadOperation.Error as DomainOperationException;
-                Assert.IsNotNull(ex, "expected exception of type DomainOperationException");
-                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"), ex.Message);
-            });
-
-            EnqueueTestComplete();
-        }
-
-        /// <summary>
-        /// Test that ValidationErrors for invoke are properly returned.
-        /// </summary>
-        [TestMethod]
-        public async Task LoadAsync_ValidationErrors()
-        {
-            var mockDomainClient = new CitiesMockDomainClient();
-            ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            mockDomainClient.QueryCompletedResult = Task.FromResult(new QueryCompletedResult(Enumerable.Empty<Entity>(), Enumerable.Empty<Entity>(), 0, validationErrors));
-            Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
-
-            var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => ctx.LoadAsync(ctx.GetCitiesQuery()),
-                string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"));
-
-            // verify the exception properties
-            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
         }
     }
 }
