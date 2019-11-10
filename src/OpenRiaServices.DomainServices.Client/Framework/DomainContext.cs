@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly TaskScheduler _syncContextScheduler;
         private ValidationContext _validationContext;
         private bool _isSubmitting;
-        private readonly Dictionary<string, bool> requiresValidationMap = new Dictionary<string, bool>();
+        private readonly Dictionary<string, bool> _requiresValidationMap = new Dictionary<string, bool>();
         private readonly object _syncRoot = new object();
         private static IDomainClientFactory s_domainClientFactory;
 
@@ -532,6 +532,14 @@ namespace OpenRiaServices.DomainServices.Client
             return loadOperation;
         }
 
+        /// <summary>
+        /// Initiates a load operation for the specified query without having to now the type at compile time.
+        /// </summary>
+        /// <param name="query">The query to invoke.</param>
+        /// <param name="loadBehavior">The <see cref="LoadBehavior"/> to apply.</param>
+        /// <param name="callback">Optional callback to be called when the load operation completes.</param>
+        /// <param name="userState">Optional user state.</param>
+        /// <returns>The load operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
         {
@@ -758,7 +766,7 @@ namespace OpenRiaServices.DomainServices.Client
             // We need to accumulate all the errors on an entity in the entityErrorMap Entity.ValidationErrors are IEnumerable. 
             Debug.Assert(failedEntity != null, "failedEntity should not be null");
 
-            List<ValidationResult> entityErrors = null;
+            List<ValidationResult> entityErrors;
             if (!entityErrorMap.TryGetValue(failedEntity, out entityErrors))
             {
                 entityErrors = errors.Select(e => new ValidationResult(e.Message, e.SourceMemberNames)).ToList();
@@ -1135,12 +1143,11 @@ namespace OpenRiaServices.DomainServices.Client
         /// <returns>True if the method requires validation, false otherwise.</returns>
         private bool MethodRequiresValidation(string methodName, object[] paramValues)
         {
-            bool requiresValidation = false;
-            if (!this.requiresValidationMap.TryGetValue(methodName, out requiresValidation))
+            if (!this._requiresValidationMap.TryGetValue(methodName, out bool requiresValidation))
             {
                 MethodInfo method = ValidationUtilities.GetMethod(this, methodName, paramValues);
                 requiresValidation = ValidationUtilities.MethodRequiresValidation(method);
-                this.requiresValidationMap[methodName] = requiresValidation;
+                this._requiresValidationMap[methodName] = requiresValidation;
             }
             return requiresValidation;
         }
