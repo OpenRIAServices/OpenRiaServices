@@ -339,44 +339,45 @@ namespace OpenRiaServices.DomainServices.Client
             // The result is cached so when the DomainClient calls the method again the results are reused
             changeSet.GetChangeSetEntries();
 
-            return SubmitChangesAsyncImplementation();
-            async Task<SubmitResult> SubmitChangesAsyncImplementation()
+            // Set state
+            this.IsSubmitting = true;
+            try
             {
-                // Set state
-                this.IsSubmitting = true;
+                // Prevent any changes to the entities while we are submitting.
+                foreach (Entity entity in changeSet)
+                {
+                    entity.IsSubmitting = true;
+                }
+
+                var domainClientTask = this.DomainClient.SubmitAsync(changeSet, cancellationToken);
+                return SubmitChangesAsyncImplementation(domainClientTask);
+            }
+            catch
+            {
+                // if an exception is thrown revert our state
+                foreach (Entity entity in changeSet)
+                {
+                    entity.IsSubmitting = false;
+                }
+                this.IsSubmitting = false;
+                throw;
+            }
+
+            async Task<SubmitResult> SubmitChangesAsyncImplementation(Task<SubmitCompletedResult> submitTask)
+            {
                 try
                 {
-                    // Prevent any changes to the entities while we are submitting.
-                    foreach (Entity entity in changeSet)
-                    {
-                        entity.IsSubmitting = true;
-                    }
-
                     bool hasValidationErros = false;
                     bool hasConflict = false;
                     try
                     {
-                        SubmitCompletedResult submitResults = await this.DomainClient.SubmitAsync(changeSet, cancellationToken);
+                        SubmitCompletedResult submitResults = await submitTask.ConfigureAwait(true);
 
                         // If the request was successful, process the results
                         ProcessSubmitResults(submitResults.ChangeSet, submitResults.Results, out hasValidationErros, out hasConflict);
                     }
-                    catch (OperationCanceledException)
+                    catch (Exception ex) when (!(ex is DomainException || ex is OperationCanceledException || ex.IsFatal()))
                     {
-                        throw;
-                    }
-                    catch (DomainException)
-                    {
-                        // DomainExceptions should not be modified
-                        throw;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.IsFatal())
-                        {
-                            throw;
-                        }
-
                         string message = string.Format(CultureInfo.CurrentCulture, Resource.DomainContext_SubmitOperationFailed, ex.Message);
                         throw ex is DomainOperationException domainOperationException
                             ? new SubmitOperationException(changeSet, message, domainOperationException)
@@ -399,12 +400,9 @@ namespace OpenRiaServices.DomainServices.Client
                 finally
                 {
                     // if an exception is thrown revert our state
-                    if (changeSet != null)
+                    foreach (Entity entity in changeSet)
                     {
-                        foreach (Entity entity in changeSet)
-                        {
-                            entity.IsSubmitting = false;
-                        }
+                        entity.IsSubmitting = false;
                     }
                     this.IsSubmitting = false;
                 }
@@ -611,79 +609,87 @@ namespace OpenRiaServices.DomainServices.Client
 
             this.IncrementLoadCount();
 
-            // Proceed with query
-            var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
-
-            var continueationCts = new CancellationTokenSource();
-            return domainClientTask.ContinueWith(result =>
+            try
             {
-                IReadOnlyCollection<Entity> loadedEntities = null;
-                List<Entity> allLoadedEntities = null;
-                int totalCount;
+                // Proceed with query
+                var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
 
-                QueryCompletedResult results = null;
-                try
+                var continueationCts = new CancellationTokenSource();
+                return domainClientTask.ContinueWith(result =>
                 {
-                    lock (this._syncRoot)
+                    IReadOnlyCollection<Entity> loadedEntities = null;
+                    List<Entity> allLoadedEntities = null;
+                    int totalCount;
+
+                    QueryCompletedResult results = null;
+                    try
                     {
+                        lock (this._syncRoot)
+                        {
                         // The task is known to be completed so this will never block
                         results = result.GetAwaiter().GetResult();
 
                         // load the entities into the entity container
                         loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
 
-                        var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
-                        allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
-                        allLoadedEntities.AddRange(loadedEntities);
-                        allLoadedEntities.AddRange(loadedIncludedEntities);
-                        totalCount = results.TotalCount;
+                            var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
+                            allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
+                            allLoadedEntities.AddRange(loadedEntities);
+                            allLoadedEntities.AddRange(loadedIncludedEntities);
+                            totalCount = results.TotalCount;
+                        }
                     }
-                }
-                catch (TaskCanceledException)
-                {
-                    continueationCts.Cancel();
-                    throw new OperationCanceledException(continueationCts.Token);
-                }
-                catch (DomainException)
-                {
+                    catch (TaskCanceledException)
+                    {
+                        continueationCts.Cancel();
+                        throw new OperationCanceledException(continueationCts.Token);
+                    }
+                    catch (DomainException)
+                    {
                     // DomainExceptions should not be modified
                     throw;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.IsFatal())
+                    }
+                    catch (Exception ex)
                     {
-                        throw;
+                        if (ex.IsFatal())
+                        {
+                            throw;
+                        }
+
+                        string message = string.Format(CultureInfo.CurrentCulture,
+                            Resource.DomainContext_LoadOperationFailed,
+                            query.QueryName, ex.Message);
+
+                        throw ex is DomainOperationException domainOperationException
+                            ? new DomainOperationException(message, domainOperationException)
+                            : new DomainOperationException(message, ex);
+                    }
+                    finally
+                    {
+                        this.DecrementLoadCount();
                     }
 
-                    string message = string.Format(CultureInfo.CurrentCulture,
-                        Resource.DomainContext_LoadOperationFailed,
-                        query.QueryName, ex.Message);
-
-                    throw ex is DomainOperationException domainOperationException
-                        ? new DomainOperationException(message, domainOperationException)
-                        : new DomainOperationException(message, ex);
+                    if (results.ValidationErrors.Any())
+                    {
+                        string message = string.Format(CultureInfo.CurrentCulture,
+            Resource.DomainContext_LoadOperationFailed_Validation,
+            query.QueryName);
+                        throw new DomainOperationException(message, results.ValidationErrors);
+                    }
+                    else
+                    {
+                        return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
+                    }
                 }
-                finally
-                {
-                    this.DecrementLoadCount();
-                }
-
-                if (results.ValidationErrors.Any())
-                {
-                    string message = string.Format(CultureInfo.CurrentCulture,
-        Resource.DomainContext_LoadOperationFailed_Validation,
-        query.QueryName);
-                    throw new DomainOperationException(message, results.ValidationErrors);
-                }
-                else
-                {
-                    return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
-                }
+                , continueationCts.Token
+                , TaskContinuationOptions.HideScheduler
+                , _syncContextScheduler);
             }
-            , continueationCts.Token
-            , TaskContinuationOptions.HideScheduler
-            , _syncContextScheduler);
+            catch (Exception)
+            {
+                DecrementLoadCount();
+                throw;
+            }
         }
 
         /// <summary>
