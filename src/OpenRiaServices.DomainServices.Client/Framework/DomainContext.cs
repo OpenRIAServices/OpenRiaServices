@@ -692,6 +692,8 @@ namespace OpenRiaServices.DomainServices.Client
         /// </summary>
         /// <param name="changeSet">The submitted <see cref="EntityChangeSet"/>.</param>
         /// <param name="changeSetResults">The operation results returned from the submit request.</param>
+        /// <param name="hasValidationErros">set to <c>true</c> if processing was aborted due to finding validation errors</param>
+        /// <param name="hasConflict">set to <c>true</c> if processing was aborted due to finding conflicts</param>
         private static void ProcessSubmitResults(EntityChangeSet changeSet, IEnumerable<ChangeSetEntry> changeSetResults, out bool hasValidationErros, out bool hasConflict)
         {
             hasValidationErros = false;
@@ -935,6 +937,17 @@ namespace OpenRiaServices.DomainServices.Client
             return InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, typeof(TValue), cancellationToken);
         }
 
+        /// <summary>
+        /// Invokes an invoke operation.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value that will be returned.</typeparam>
+        /// <param name="operationName">The name of the operation.</param>
+        /// <param name="parameters">Optional parameters to the operation. Specify null
+        /// if the operation takes no parameters.</param>
+        /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
+        /// <param name="returnType">The return Type of the operation.</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>The invoke operation.</returns>
         protected virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
             IDictionary<string, object> parameters, bool hasSideEffects,
             Type returnType,
