@@ -371,7 +371,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
         ///   - INPC events are fired
         /// </summary>
         [TestMethod]
-        public async Task LoadOperationLifecycle_Success()
+        [Asynchronous]
+        public void LoadOperationLifecycle_Success()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             var tcs = new TaskCompletionSource<QueryCompletedResult>();
@@ -386,8 +387,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // subscribe a user callback
             object userState = new object();
-            Box<bool> completedCalled = new Box<bool>(false);
-            Box<bool> callbackCalled = new Box<bool>(false);
+            bool completedCalled = false;
+            bool callbackCalled = false;
             Action<LoadOperation<City>> callback = (o) =>
             {
                 if (o.HasError)
@@ -397,11 +398,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
-                Assert.IsFalse(completedCalled.Value);
+                Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
                 Assert.IsTrue(o.Entities.Count > 0);
                 Assert.IsTrue(o.AllEntities.Count > 0);
-                callbackCalled.Value = true;
+                callbackCalled = true;
             };
 
             var query = cities.GetCitiesQuery().Take(3);
@@ -434,7 +435,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 LoadOperation<City> o = (LoadOperation<City>)s;
 
                 // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled.Value);
+                Assert.IsTrue(callbackCalled);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
@@ -442,32 +443,32 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(o.Entities.Count > 0);
                 Assert.IsTrue(o.AllEntities.Count > 0);
 
-                completedCalled.Value = true;
+                completedCalled = true;
             };
 
-
-            Assert.IsFalse(Volatile.Read(ref completedCalled.Value));
-            Assert.IsFalse(Volatile.Read(ref callbackCalled.Value));
+            Assert.IsFalse(completedCalled);
+            Assert.IsFalse(callbackCalled);
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             // Now have load operation complete
             tcs.SetResult(new QueryCompletedResult(returnedCities, Enumerable.Empty<Entity>(), 10, Enumerable.Empty<ValidationResult>()));
-            await lo;
-            Assert.IsTrue(Volatile.Read(ref completedCalled.Value));
-            Assert.IsTrue(Volatile.Read(ref callbackCalled.Value));
+            EnqueueConditional(() => lo.IsComplete && completedCalled && callbackCalled);
+            EnqueueCallback(() =>
+            {
+                // verify state after completion
+                Assert.IsNull(lo.Error);
+                Assert.IsFalse(lo.HasError);
+                Assert.IsFalse(lo.IsCanceled);
+                Assert.IsTrue(lo.IsComplete);
+                Assert.IsFalse(lo.CanCancel);
 
-            // verify state after completion
-            Assert.IsNull(lo.Error);
-            Assert.IsFalse(lo.HasError);
-            Assert.IsFalse(lo.IsCanceled);
-            Assert.IsTrue(lo.IsComplete);
-            Assert.IsFalse(lo.CanCancel);
-
-            // verify property change notifications and ordering
-            Assert.AreEqual(3, propChangeNotifications.Count);
-            Assert.AreEqual("IsComplete", propChangeNotifications[0]);
-            Assert.AreEqual("CanCancel", propChangeNotifications[1]);
-            Assert.AreEqual("TotalEntityCount", propChangeNotifications[2]);
+                // verify property change notifications and ordering
+                Assert.AreEqual(3, propChangeNotifications.Count);
+                Assert.AreEqual("IsComplete", propChangeNotifications[0]);
+                Assert.AreEqual("CanCancel", propChangeNotifications[1]);
+                Assert.AreEqual("TotalEntityCount", propChangeNotifications[2]);
+            });
+            EnqueueTestComplete();
         }
 
         /// <summary>
@@ -477,10 +478,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
         ///   - INPC events are fired
         /// </summary>
         [TestMethod]
-        public async Task LoadOperationLifecycle_Cancel()
+        [Asynchronous]
+        public void LoadOperationLifecycle_Cancel()
         {
-            // Force boxing of async statemachine so that the version captured by 
-            // callbacks are the heap allocated copy
             var mockDomainClient = new CitiesMockDomainClient();
             var tcs = new TaskCompletionSource<QueryCompletedResult>(TaskCreationOptions.RunContinuationsAsynchronously);
             mockDomainClient.QueryCompletedResult = tcs.Task;
@@ -488,8 +488,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // subscribe a user callback
             object userState = new object();
-            Box<bool> completedCalled = new Box<bool>(false);
-            Box<bool> callbackCalled = new Box<bool>(false);
+            bool completedCalled = false;
+            bool callbackCalled = false;
             Action<LoadOperation<City>> callback = (o) =>
             {
                 if (o.HasError)
@@ -500,9 +500,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsTrue(o.IsCanceled);
                 Assert.IsFalse(o.CanCancel);
-                Assert.IsFalse(completedCalled.Value);
+                Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
-                Volatile.Write(ref callbackCalled.Value, true);
+                Volatile.Write(ref callbackCalled, true);
             };
 
             var query = cities.GetCitiesQuery().Take(3);
@@ -532,13 +532,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 LoadOperation<City> o = (LoadOperation<City>)s;
 
                 // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled.Value);
+                Assert.IsTrue(callbackCalled);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsTrue(o.IsCanceled);
 
-                Volatile.Write(ref completedCalled.Value, true);
+                Volatile.Write(ref completedCalled, true);
             };
 
             // request cancellation
@@ -548,28 +548,30 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsFalse(lo.CanCancel);
             Assert.IsTrue(lo.IsCancellationRequested, "Cancellation should be requested");
 
-            Assert.IsFalse(Volatile.Read(ref completedCalled.Value));
-            Assert.IsFalse(Volatile.Read(ref callbackCalled.Value));
+            Assert.IsFalse(completedCalled);
+            Assert.IsFalse(callbackCalled);
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             // continue with actual cancellation
             tcs.TrySetCanceled(lo.CancellationToken);
-            await lo;
-            Assert.IsTrue(Volatile.Read(ref completedCalled.Value));
-            Assert.IsTrue(Volatile.Read(ref callbackCalled.Value));
 
-            // verify state after completion
-            Assert.IsNull(lo.Error);
-            Assert.IsFalse(lo.HasError);
-            Assert.IsTrue(lo.IsCanceled);
-            Assert.IsTrue(lo.IsComplete);
-            Assert.IsFalse(lo.CanCancel);
+            EnqueueConditional(() => lo.IsComplete && completedCalled && callbackCalled);
+            EnqueueCallback(() =>
+            {
+                // verify state after completion
+                Assert.IsNull(lo.Error);
+                Assert.IsFalse(lo.HasError);
+                Assert.IsTrue(lo.IsCanceled);
+                Assert.IsTrue(lo.IsComplete);
+                Assert.IsFalse(lo.CanCancel);
 
-            // verify property change notifications and ordering
-            Assert.AreEqual(3, propChangeNotifications.Count);
-            Assert.AreEqual("IsCanceled", propChangeNotifications[0]);
-            Assert.AreEqual("CanCancel", propChangeNotifications[1]);
-            Assert.AreEqual("IsComplete", propChangeNotifications[2]);
+                // verify property change notifications and ordering
+                Assert.AreEqual(3, propChangeNotifications.Count);
+                Assert.AreEqual("IsCanceled", propChangeNotifications[0]);
+                Assert.AreEqual("CanCancel", propChangeNotifications[1]);
+                Assert.AreEqual("IsComplete", propChangeNotifications[2]);
+            });
+            EnqueueTestComplete();
         }
 
         /// <summary>
@@ -579,7 +581,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
         ///   - INPC events are fired
         /// </summary>
         [TestMethod]
-        public async Task LoadOperationLifecycle_Error()
+        [Asynchronous]
+        public void LoadOperationLifecycle_Error()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             var tcs = new TaskCompletionSource<QueryCompletedResult>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -587,8 +590,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestDataContext ctxt = new TestDataContext(mockDomainClient);
 
             object userState = new object();
-            Box<bool> completedCalled = new Box<bool>(false);
-            Box<bool> callbackCalled = new Box<bool>(false);
+            bool completedCalled = false;
+            bool callbackCalled = false;
             List<string> propChangeNotifications = new List<string>();
             LoadOperation<Product> lo = null;
 
@@ -602,11 +605,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsTrue(o.HasError);
                 Assert.IsFalse(o.CanCancel);
-                Assert.IsFalse(completedCalled.Value);
+                Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
                 Assert.IsTrue(o.Entities.Count == 0);
                 Assert.IsTrue(o.AllEntities.Count == 0);
-                callbackCalled.Value = true;
+                callbackCalled = true;
             };
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
@@ -635,39 +638,40 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 LoadOperation<Product> o = (LoadOperation<Product>)s;
 
                 // verify callback is called BEFORE the event is raised
-                Assert.IsTrue(callbackCalled.Value);
+                Assert.IsTrue(callbackCalled);
 
                 Assert.IsTrue(o.IsComplete);
                 Assert.IsTrue(o.HasError);
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(o.IsCanceled);
 
-                Volatile.Write(ref completedCalled.Value, true);
+                Volatile.Write(ref completedCalled, true);
             };
 
-            Assert.IsFalse(Volatile.Read(ref completedCalled.Value));
-            Assert.IsFalse(Volatile.Read(ref callbackCalled.Value));
+            Assert.IsFalse(completedCalled);
+            Assert.IsFalse(callbackCalled);
             Assert.AreEqual(0, propChangeNotifications.Count);
 
             tcs.SetException(new DomainOperationException("error"));
-            await lo;
-            Assert.IsTrue(Volatile.Read(ref completedCalled.Value));
-            Assert.IsTrue(Volatile.Read(ref callbackCalled.Value));
 
+            EnqueueConditional(() => lo.IsComplete && completedCalled && callbackCalled);
+            EnqueueCallback(() =>
+            {
+                // verify state after completion
+                Assert.IsTrue(lo.HasError);
+                Assert.IsFalse(lo.IsCanceled);
+                Assert.IsTrue(lo.IsComplete);
+                Assert.IsFalse(lo.CanCancel);
 
-            // verify state after completion
-            Assert.IsTrue(lo.HasError);
-            Assert.IsFalse(lo.IsCanceled);
-            Assert.IsTrue(lo.IsComplete);
-            Assert.IsFalse(lo.CanCancel);
-
-            // verify property change notifications and ordering
-            Assert.AreEqual(5, propChangeNotifications.Count);
-            Assert.AreEqual("IsErrorHandled", propChangeNotifications[0]);
-            Assert.AreEqual("Error", propChangeNotifications[1]);
-            Assert.AreEqual("HasError", propChangeNotifications[2]);
-            Assert.AreEqual("IsComplete", propChangeNotifications[3]);
-            Assert.AreEqual("CanCancel", propChangeNotifications[4]);
+                // verify property change notifications and ordering
+                Assert.AreEqual(5, propChangeNotifications.Count);
+                Assert.AreEqual("IsErrorHandled", propChangeNotifications[0]);
+                Assert.AreEqual("Error", propChangeNotifications[1]);
+                Assert.AreEqual("HasError", propChangeNotifications[2]);
+                Assert.AreEqual("IsComplete", propChangeNotifications[3]);
+                Assert.AreEqual("CanCancel", propChangeNotifications[4]);
+            });
+            EnqueueTestComplete();
         }
 
         [TestMethod]

@@ -36,20 +36,17 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 // Capture syncContext and scheduler from await location
                 var syncContext = SynchronizationContext.Current;
-                var scheduler = TaskScheduler.Current;
+                TaskScheduler scheduler;
                 var executionContext = ExecutionContext.Capture();
+                ContextCallback action = (object o) => ((Action)o)();
 
-                ContextCallback action;
                 if (syncContext is null /*|| syncContext is Test.TestSynchronizationContext*/)
                 {
-                    action = (object o) => ((Action)o)();
+                    scheduler = TaskScheduler.Current;
                 }
                 else
                 {
-                    action = (object o) =>
-                    {
-                        SynchronizationContext.Current.Post((object s) => { ((Action)s)(); }, o);
-                    };
+                    scheduler = TaskScheduler.FromCurrentSynchronizationContext();
                 }
 
                 _operation.Completed += (sender, args) =>
