@@ -214,6 +214,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
+        private protected override void OnCancellationRequested()
+        {
+            base.SetCancelled();
+        }
         #endregion
     }
 }

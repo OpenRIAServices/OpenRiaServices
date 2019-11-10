@@ -122,11 +122,6 @@ namespace OpenRiaServices.DomainServices.Client
         {
             this._completeAction?.Invoke(this);
         }
-
-        private protected override void OnCancellationRequested()
-        {
-            // Prevent OperationBase from calling SetCancelled
-        }
     }
 
     /// <summary>

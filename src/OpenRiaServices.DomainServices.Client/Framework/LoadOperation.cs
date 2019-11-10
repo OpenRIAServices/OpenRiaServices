@@ -150,11 +150,6 @@ namespace OpenRiaServices.DomainServices.Client
             this._allEntities?.Reset(result.AllEntities);
         }
 
-        private protected override void OnCancellationRequested()
-        {
-            // Prevent OperationBase from calling SetCancelled
-        }
-
         private protected static ReadOnlyObservableLoaderCollection<TEntity> AsReadOnlyObservableLoaderCollection<TEntity>(IEnumerable<TEntity> resultEntities)
         {
             return resultEntities as ReadOnlyObservableLoaderCollection<TEntity> ?? new ReadOnlyObservableLoaderCollection<TEntity>(resultEntities);

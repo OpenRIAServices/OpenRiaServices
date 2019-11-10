@@ -41,13 +41,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets a value indicating whether the operation error has been marked as
         /// handled by calling <see cref="MarkErrorAsHandled"/>.
         /// </summary>
-        public bool IsErrorHandled
-        {
-            get
-            {
-                return this._isErrorHandled;
-            }
-        }
+        public bool IsErrorHandled => this._isErrorHandled;
 
         /// <summary>
         /// Event raised when the operation completes.
@@ -77,13 +71,7 @@ namespace OpenRiaServices.DomainServices.Client
         /// Gets a value indicating whether this operation supports cancellation.
         /// If overridden to return true, <see cref="CancelCore"/> must also be overridden.
         /// </summary>
-        protected virtual bool SupportsCancellation
-        {
-            get
-            {
-                return this._cancellationTokenSource != null;
-            }
-        }
+        protected virtual bool SupportsCancellation => this._cancellationTokenSource != null;
 
         /// <summary>
         /// Gets a value indicating whether Cancel has been called on this operation.
@@ -122,69 +110,33 @@ namespace OpenRiaServices.DomainServices.Client
         /// Note that successful cancellation of this operation does not guarantee 
         /// state changes were prevented from happening on the server.
         /// </remarks>
-        public bool IsCanceled
-        {
-            get
-            {
-                return this._canceled;
-            }
-        }
+        public bool IsCanceled => this._canceled;
 
         /// <summary>
         /// Gets the operation error if the operation failed.
         /// </summary>
-        public Exception Error
-        {
-            get
-            {
-                return this._error;
-            }
-        }
+        public Exception Error => this._error;
 
         /// <summary>
         /// Gets a value indicating whether the operation has failed. If
         /// true, inspect the Error property for details.
         /// </summary>
-        public bool HasError
-        {
-            get
-            {
-                return this._error != null;
-            }
-        }
+        public bool HasError => this._error != null;
 
         /// <summary>
         /// Gets a value indicating whether this operation has completed.
         /// </summary>
-        public bool IsComplete
-        {
-            get
-            {
-                return this._completed;
-            }
-        }
+        public bool IsComplete => this._completed;
 
         /// <summary>
         /// Gets the result of the async operation.
         /// </summary>
-        private protected object Result
-        {
-            get
-            {
-                return this._result;
-            }
-        }
+        private protected object Result => this._result;
 
         /// <summary>
         /// Gets the optional user state for this operation.
         /// </summary>
-        public object UserState
-        {
-            get
-            {
-                return this._userState;
-            }
-        }
+        public object UserState => this._userState;
 
         /// <summary>
         /// For an operation where <see cref="HasError"/> is <c>true</c>, this method marks the error as handled.
@@ -240,13 +192,11 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Called when user calls <see cref="Cancel"/>, the default behaviour
-        /// is to mark the operation as completed as Cancelled, but can 
-        /// be overriden to prevent that.
+        /// Called when user calls <see cref="Cancel"/>,
+        /// can be overriden to transition operation into cancelled immediately.
         /// </summary>
         private protected virtual void OnCancellationRequested()
         {
-            SetCancelled();
         }
 
         /// <summary>

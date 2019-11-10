@@ -62,6 +62,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             this._completeAction?.Invoke(this);
         }
+
+        private protected override void OnCancellationRequested()
+        {
+            base.SetCancelled();
+        }
     }
     #endregion
 
@@ -139,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
             ex = new DomainOperationException("expected", validationErrors);
-            
+
             try
             {
                 lo.SetError(ex);
@@ -150,7 +155,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.AreSame(expectedException, ex);;
+            Assert.AreSame(expectedException, ex);
             CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
         }
 
@@ -215,7 +220,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             city.ZoneID = 1;
             Assert.IsTrue(cities.EntityContainer.HasChanges);
 
-            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, null);
+            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
@@ -229,55 +234,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed, ex.Message), expectedException.Message);
-            Assert.AreEqual(ex.StackTrace, expectedException.StackTrace);
-            Assert.AreEqual(ex.Status, expectedException.Status);
-            Assert.AreEqual(ex.ErrorCode, expectedException.ErrorCode);
-
+            Assert.AreSame(expectedException, ex);
             Assert.AreEqual(false, submit.IsErrorHandled);
-
-            // now test again with conflicts
-            expectedException = null;
-            IEnumerable<ChangeSetEntry> entries = ChangeSetBuilder.Build(cities.EntityContainer.GetChanges());
-            ChangeSetEntry entry = entries.First();
-            entry.ValidationErrors = new ValidationResultInfo[] { new ValidationResultInfo("Foo", new string[] { "Bar" }) };
-
-            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, null);
-
-            try
-            {
-                submit.SetError(OperationErrorStatus.Conflicts);
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
-
-            // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed_Conflicts), expectedException.Message);
-
-            // now test again with validation errors
-            expectedException = null;
-            entries = ChangeSetBuilder.Build(cities.EntityContainer.GetChanges());
-            entry = entries.First();
-            entry.ConflictMembers = new string[] { "ZoneID" };
-
-            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, null);
-
-            try
-            {
-                submit.SetError(OperationErrorStatus.ValidationFailed);
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
-
-            // verify the exception properties
-            Assert.IsNotNull(expectedException);
-            Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed_Validation, ex.Message), expectedException.Message);
         }
 
         [TestMethod]
@@ -335,6 +293,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public void Exceptions()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+            const string Message = "Fnord!";
 
             Action<LoadOperation<City>> loCallback = (op) =>
             {
@@ -343,7 +302,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     op.MarkErrorAsHandled();
                 }
 
-                throw new InvalidOperationException("Fnord!");
+                throw new InvalidOperationException(Message);
             };
 
             Action<SubmitOperation> soCallback = (op) =>
@@ -353,7 +312,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     op.MarkErrorAsHandled();
                 }
 
-                throw new InvalidOperationException("Fnord!");
+                throw new InvalidOperationException(Message);
             };
 
             Action<InvokeOperation> ioCallback = (op) =>
@@ -363,19 +322,19 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     op.MarkErrorAsHandled();
                 }
 
-                throw new InvalidOperationException("Fnord!");
+                throw new InvalidOperationException(Message);
             };
 
             var query = cities.GetCitiesQuery();
             var loadBehaviour = LoadBehavior.MergeIntoCurrent;
-            LoadOperation<City> lo = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
 
             // verify completion callbacks that throw
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 try
                 {
-                    lo.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
+                    var load = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
+                    load.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
                 }
                 catch (Exception ex)
                 {
@@ -383,28 +342,44 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                     throw;
                 }
-            }, "Fnord!");
+            }, Message);
+
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
+                try
+                {
+                    var submit = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
+                    submit.Complete();
+                }
+                catch (Exception ex)
+                {
+                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.DomainServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+
+                    throw;
+                }
+            }, Message);
 
             // verify cancellation callbacks for all fx operation types
-            lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
-            lo.CancellationToken.Register(() => throw new InvalidOperationException("Fnord!"));
+            var lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
+            lo.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 lo.Cancel();
-            }, "Fnord!");
+            }, Message);
 
-            SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, soCallback);
+            SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
+            so.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 so.Cancel();
-            }, "Fnord!");
+            }, Message);
 
             InvokeOperation io = new InvokeOperation("Fnord", null, null, null, true);
-            io.CancellationToken.Register(() => throw new InvalidOperationException("Fnord!"));
+            io.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 io.Cancel();
-            }, "Fnord!");
+            }, Message);
         }
 
         /// <summary>

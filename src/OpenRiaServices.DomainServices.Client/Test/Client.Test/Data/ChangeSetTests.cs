@@ -236,25 +236,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.IsFalse(details.Contains(detail));
         }
 
-        [TestMethod]
-        public void Bug635474_IsSubmittingStateManagement()
-        {
-            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
-            Product prod = new Product
-            {
-                ProductID = 1,
-                ProductName = "Tasty O's"
-            };
-            nw.Products.Attach(prod);
-
-            // verify that IsSubmitting is reset when the submit
-            // is cancelled
-            prod.ProductName += "x";
-            SubmitOperation so = nw.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            so.Cancel();
-            Assert.IsFalse(nw.IsSubmitting);
-        }
-
         /// <summary>
         /// Verify that any entities added to an EntityCollection that haven't been explicitly
         /// attached to an EntitySet are inferred as new entities and Added to their entity

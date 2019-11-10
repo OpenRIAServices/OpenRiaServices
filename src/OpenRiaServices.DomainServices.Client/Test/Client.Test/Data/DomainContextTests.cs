@@ -13,7 +13,7 @@ using TestDomainServices.LTS;
 namespace OpenRiaServices.DomainServices.Client.Test
 {
     [TestClass]
-    public class DomainContextTests : UnitTestBase
+    public class DomainContext_E2E_Tests : UnitTestBase
     {
         #region Test Setup
 
@@ -69,27 +69,33 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// to complete the operation again.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
         [WorkItem(755212)]
-        public void CancelSubmit_EmptyChangeset()
+        [Ignore] // Need to fix Race condition before enabling again
+        public async Task CancelSubmit_EmptyChangeset()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
-            SubmitOperation so = null;
+            SubmitOperation so = nw.SubmitChanges();
 
-            this.EnqueueCallback(() =>
-            {
-                so = nw.SubmitChanges();
-                if (so.CanCancel)
-                {
-                    so.Cancel();
-                }
-            });
-            this.EnqueueConditional(() => so.IsComplete);
-            this.EnqueueCallback(() =>
-            {
-                Assert.IsNull(so.Error);
-            });
-            this.EnqueueTestComplete();
+            // WARNING: Race condition
+            // A SyncronizationContext needs to be provided 
+            // So that the the operation cannot be completed between the CanCancel
+            // and the IsCompleted check in Cancel
+            so.Cancel();
+
+            await so;
+            Assert.IsNull(so.Error);
+        }
+
+        [TestMethod]
+        public async Task SubmitAsync_Cancel_EmptyChangeset()
+        {
+            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            CancellationTokenSource cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            // This should not throw any error, OperationCancelledException might be acceptable
+            // in the  future
+            await nw.SubmitChangesAsync(cts.Token);
         }
 
         [TestMethod]
@@ -126,22 +132,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void LoadAsync_CancellationBehavior()
-        {
-            var cts = new CancellationTokenSource();
-            var loadResult = BeginLoadCityDataAsync(cts.Token);
-            cts.Cancel();
-
-            this.EnqueueConditional(() => loadResult.IsCompleted);
-            this.EnqueueCallback(() =>
-            {
-                Assert.AreEqual(true, loadResult.IsCanceled);
-            });
-            this.EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
         public void SubmitChanges_DefaultBehavior()
         {
             this.EnqueueCallback(() =>
@@ -152,41 +142,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(SubmitOperation.Error);
-            });
-            this.EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
-        public void SubmitChanges_CancellationBehavior()
-        {
-            this.EnqueueCallback(() =>
-            {
-                this.BeginSubmitCityDataAndCancel();
-            });
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
-            this.EnqueueCallback(() =>
-            {
-                this.AssertSubmitCancelled();
-            });
-            this.EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
-        public void SubmitChangesAsync_CancellationBehavior()
-        {
-            var cts = new CancellationTokenSource();
-            EntitySet entitySet = this.CityDomainContext.EntityContainer.GetEntitySet<City>();
-            entitySet.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
-
-            var submitTask = CityDomainContext.SubmitChangesAsync(cts.Token);
-            cts.Cancel();
-
-            this.EnqueueConditional(() => submitTask.IsCompleted);
-            this.EnqueueCallback(() =>
-            {
-                Assert.IsTrue(submitTask.IsCanceled);
             });
             this.EnqueueTestComplete();
         }
@@ -207,18 +162,21 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 this.CityDomainContext.SubmitChanges();
                 Assert.IsTrue(this.CityDomainContext.SubmitChangesCalled);
+                Assert.IsTrue(this.CityDomainContext.SubmitChangesAsyncCalled);
             });
 
             this.EnqueueCallback(() =>
             {
                 this.CityDomainContext.Echo("hi", null, null);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.ResetData();
-                Assert.IsTrue(this.CityDomainContext.InvokeOperationCalled);
+                this.CityDomainContext.ResetData(null, null);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
             this.EnqueueTestComplete();
@@ -231,18 +189,33 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.EnqueueCallback(() =>
             {
                 var query = this.CityDomainContext.GetCitiesQuery();
-                this.CityDomainContext.LoadAsync(query);                
+                this.CityDomainContext.LoadAsync(query);
                 Assert.IsTrue(this.CityDomainContext.LoadAsyncCalled);
-                Assert.IsFalse(this.CityDomainContext.LoadCalled, "LoadAsync should invoke Load");
+                Assert.IsFalse(this.CityDomainContext.LoadCalled);
             });
 
             this.EnqueueCallback(() =>
             {
                 this.CityDomainContext.SubmitChangesAsync();
                 Assert.IsTrue(this.CityDomainContext.SubmitChangesAsyncCalled);
-                Assert.IsTrue(this.CityDomainContext.SubmitChangesCalled, "SubmitChangesAsync should invoke SubmitChanges");
+                Assert.IsFalse(this.CityDomainContext.SubmitChangesCalled);
             });
-          
+
+            this.EnqueueCallback(() =>
+            {
+                this.CityDomainContext.EchoAsync("hi");
+                Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
+            });
+
+            this.EnqueueCallback(() =>
+            {
+                this.CityDomainContext.ResetDataAsync();
+                Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
+                Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
+            });
+
+
             this.EnqueueTestComplete();
         }
 
@@ -374,7 +347,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.LoadOperation = this.CityDomainContext.Load(query, LoadBehavior.RefreshCurrent, callback, userState);
         }
 
-        private Task<LoadResult<City>>  BeginLoadCityDataAsync(CancellationToken cts)
+        private Task<LoadResult<City>> BeginLoadCityDataAsync(CancellationToken cts)
         {
             var query = this.CityDomainContext.GetCitiesQuery();
             return this.CityDomainContext.LoadAsync(query, LoadBehavior.RefreshCurrent, cts);
@@ -438,18 +411,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private void AssertLoadCancelled()
         {
             this.AssertOperationCompleted(this.LoadOperation, true);
-        }
-
-        private void AssertSubmitCompleted()
-        {
-            Assert.IsNotNull(this.SubmitOperation);
-            Assert.IsFalse(this.SubmitOperation.IsCanceled);
-            this.AssertOperationCompleted(this.SubmitOperation, false);
-        }
-
-        private void AssertSubmitCancelled()
-        {
-            this.AssertOperationCompleted(this.SubmitOperation, true);
         }
 
         private void AssertInProgress(OperationBase operation)

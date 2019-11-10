@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace OpenRiaServices.DomainServices.Client
 {
@@ -12,7 +10,6 @@ namespace OpenRiaServices.DomainServices.Client
     public sealed class SubmitOperation : OperationBase
     {
         private readonly EntityChangeSet _changeSet;
-        private readonly Action<SubmitOperation> _cancelAction;
         private readonly Action<SubmitOperation> _completeAction;
 
         /// <summary>
@@ -21,30 +18,18 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="changeSet">The changeset being submitted.</param>
         /// <param name="completeAction">Optional action to invoke when the operation completes.</param>
         /// <param name="userState">Optional user state to associate with the operation.</param>
-        /// <param name="cancelAction">Optional action to invoke when the operation is canceled. If null, cancellation will not be supported.</param>
+        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         internal SubmitOperation(EntityChangeSet changeSet,
             Action<SubmitOperation> completeAction, object userState,
-            Action<SubmitOperation> cancelAction)
-            : base(userState, cancelAction != null)
+            bool supportCancellation)
+            : base(userState, supportCancellation)
         {
             if (changeSet == null)
             {
                 throw new ArgumentNullException(nameof(changeSet));
             }
-            this._cancelAction = cancelAction;
             this._completeAction = completeAction;
             this._changeSet = changeSet;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return (this._cancelAction != null);
-            }
         }
 
         /// <summary>
@@ -70,14 +55,6 @@ namespace OpenRiaServices.DomainServices.Client
         }
 
         /// <summary>
-        /// Invokes the cancel callback.
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this._cancelAction(this);
-        }
-
-        /// <summary>
         /// Successfully complete the submit operation.
         /// </summary>
         internal void Complete()
@@ -93,47 +70,6 @@ namespace OpenRiaServices.DomainServices.Client
         /// <param name="error">The error.</param>
         internal new void SetError(Exception error)
         {
-            if (typeof(DomainException).IsAssignableFrom(error.GetType()))
-            {
-                // DomainExceptions should not be modified
-                base.SetError(error);
-                return;
-            }
-
-            string message = string.Format(CultureInfo.CurrentCulture,
-                Resource.DomainContext_SubmitOperationFailed, error.Message);
-
-            DomainOperationException domainOperationException = error as DomainOperationException;
-            if (domainOperationException != null)
-            {
-                error = new SubmitOperationException(ChangeSet, message, domainOperationException);
-            }
-            else
-            {
-                error = new SubmitOperationException(ChangeSet, message, error);
-            }
-
-            base.SetError(error);
-        }
-
-        internal void SetError(OperationErrorStatus errorStatus)
-        {
-            SubmitOperationException error = null;
-            if (errorStatus == OperationErrorStatus.ValidationFailed)
-            {
-                error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Validation, OperationErrorStatus.ValidationFailed);
-            }
-            else if (errorStatus == OperationErrorStatus.Conflicts)
-            {
-                error = new SubmitOperationException(ChangeSet, Resource.DomainContext_SubmitOperationFailed_Conflicts, OperationErrorStatus.Conflicts);
-            }
-            else
-            {
-                // This can never happen, all paths here supply either 
-                // ValidationFailed or Conflicts
-                throw new ArgumentException("Unsupported OperationErrorStatus",nameof(errorStatus));
-            }
-
             base.SetError(error);
         }
 
