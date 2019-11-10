@@ -502,7 +502,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(completedCalled);
                 Assert.AreSame(userState, o.UserState);
-                Volatile.Write(ref callbackCalled, true);
+                callbackCalled = true;
             };
 
             var query = cities.GetCitiesQuery().Take(3);
@@ -538,7 +538,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsTrue(o.IsCanceled);
 
-                Volatile.Write(ref completedCalled, true);
+                completedCalled = true;
             };
 
             // request cancellation
@@ -645,7 +645,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsFalse(o.CanCancel);
                 Assert.IsFalse(o.IsCanceled);
 
-                Volatile.Write(ref completedCalled, true);
+                completedCalled = true;
             };
 
             Assert.IsFalse(completedCalled);

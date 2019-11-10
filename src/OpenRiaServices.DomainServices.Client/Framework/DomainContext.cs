@@ -626,11 +626,11 @@ namespace OpenRiaServices.DomainServices.Client
                     {
                         lock (this._syncRoot)
                         {
-                        // The task is known to be completed so this will never block
-                        results = result.GetAwaiter().GetResult();
+                            // The task is known to be completed so this will never block
+                            results = result.GetAwaiter().GetResult();
 
-                        // load the entities into the entity container
-                        loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
+                            // load the entities into the entity container
+                            loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
 
                             var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
                             allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
@@ -646,8 +646,8 @@ namespace OpenRiaServices.DomainServices.Client
                     }
                     catch (DomainException)
                     {
-                    // DomainExceptions should not be modified
-                    throw;
+                        // DomainExceptions should not be modified
+                        throw;
                     }
                     catch (Exception ex)
                     {
