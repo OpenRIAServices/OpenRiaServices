@@ -1954,7 +1954,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
             await ValidateQueryException(ctxt, query, ValidateGeneralException);
 
-            void ValidateGeneralException(Exception exception)
+            static void ValidateGeneralException(Exception exception)
             {
                 var ex = (DomainOperationException)exception;
                 Assert.IsNotNull(ex);

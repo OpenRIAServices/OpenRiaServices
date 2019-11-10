@@ -90,7 +90,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public async Task SubmitAsync_Cancel_EmptyChangeset()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
-            CancellationTokenSource cts = new CancellationTokenSource();
+            using CancellationTokenSource cts = new CancellationTokenSource();
             cts.Cancel();
 
             // This should not throw any error, OperationCancelledException might be acceptable

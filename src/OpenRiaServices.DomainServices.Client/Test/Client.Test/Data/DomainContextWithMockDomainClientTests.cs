@@ -111,7 +111,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<InvokeCompletedResult>();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             mockDomainClient.InvokeCompletedResult = tcs.Task;
             var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
             cts.Cancel();
@@ -133,7 +133,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // If the web requires returns a value even if cancelled
             // It should still return a result
             var tcs = new TaskCompletionSource<InvokeCompletedResult>();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             mockDomainClient.InvokeCompletedResult = tcs.Task;
             var invokeTask = ctx.EchoAsync("TestInvoke", cts.Token);
             cts.Cancel();
@@ -280,7 +280,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<QueryCompletedResult>();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             mockDomainClient.QueryCompletedResult = tcs.Task;
             var loadTask = ctx.LoadAsync(ctx.GetCitiesQuery(), cts.Token);
 
@@ -305,7 +305,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<QueryCompletedResult>();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             mockDomainClient.QueryCompletedResult = tcs.Task;
             var loadTask = ctx.LoadAsync(ctx.GetCitiesQuery(), cts.Token);
             cts.Cancel();
@@ -418,7 +418,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // If cancellation results in request beeing cancelled the result should be cancelled
             var tcs = new TaskCompletionSource<SubmitCompletedResult>();
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             mockDomainClient.SubmitCompletedResult = tcs.Task;
 
             ctx.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
@@ -444,7 +444,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             // If cancellation results in request beeing cancelled the result should be cancelled
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             mockDomainClient.SubmitCompletedCallback = async (changeSet, submitOperations) =>
             {
                 // Wait for cancellation, and then return successfully without cancellation
@@ -452,9 +452,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 {
                     await Task.Delay(-1, cts.Token);
                 }
-                catch
+                catch (OperationCanceledException)
                 {
-
+                    // Do nothing this is the expected outcome
                 }
                 // perform mock submit operations
                 SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
