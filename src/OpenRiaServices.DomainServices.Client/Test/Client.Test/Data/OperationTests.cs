@@ -76,6 +76,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
     [TestClass]
     public class OperationTests : UnitTestBase
     {
+        [TestMethod]
         public void Operation_MarkAsHandled()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
@@ -104,7 +105,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // results in an exception
             lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
             Assert.IsFalse(lo.HasError);
-            Assert.IsTrue(lo.IsErrorHandled);
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 lo.MarkErrorAsHandled();

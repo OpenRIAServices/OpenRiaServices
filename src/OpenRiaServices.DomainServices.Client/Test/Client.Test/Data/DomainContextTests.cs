@@ -90,7 +90,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public async Task SubmitAsync_Cancel_EmptyChangeset()
         {
             Northwind nw = new Northwind(TestURIs.LTS_Northwind);
-            CancellationTokenSource cts = new CancellationTokenSource();
+            using CancellationTokenSource cts = new CancellationTokenSource();
             cts.Cancel();
 
             // This should not throw any error, OperationCancelledException might be acceptable
@@ -347,21 +347,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.LoadOperation = this.CityDomainContext.Load(query, LoadBehavior.RefreshCurrent, callback, userState);
         }
 
-        private Task<LoadResult<City>> BeginLoadCityDataAsync(CancellationToken cts)
-        {
-            var query = this.CityDomainContext.GetCitiesQuery();
-            return this.CityDomainContext.LoadAsync(query, LoadBehavior.RefreshCurrent, cts);
-        }
-
-        private void BeginLoadCityData(Action<LoadOperation<City>> callback, bool assertInProgress)
-        {
-            this.BeginLoadCityData(callback, null);
-            if (assertInProgress)
-            {
-                this.AssertInProgress(this.LoadOperation);
-            }
-        }
-
         private void BeginLoadCityData()
         {
             this.BeginLoadCityData(null, null);
@@ -381,41 +366,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             this.SubmitOperation = this.CityDomainContext.SubmitChanges(callback, this.CityDomainContext);
         }
 
-        private void BeginSubmitCityData(Action<SubmitOperation> callback, bool assertInProgress)
-        {
-            this.BeginSubmitCityData(callback);
-            if (assertInProgress)
-            {
-                this.AssertInProgress(this.SubmitOperation);
-            }
-        }
-
         private void BeginSubmitCityData()
         {
             this.BeginSubmitCityData(null);
         }
 
-        private void BeginSubmitCityDataAndCancel()
-        {
-            this.BeginSubmitCityData(null);
-            this.SubmitOperation.Cancel();
-        }
-
-        private void AssertLoadCompleted()
-        {
-            Assert.IsNotNull(this.LoadOperation);
-            Assert.IsFalse(this.LoadOperation.IsCanceled);
-            this.AssertOperationCompleted(this.LoadOperation, false);
-        }
-
         private void AssertLoadCancelled()
         {
             this.AssertOperationCompleted(this.LoadOperation, true);
-        }
-
-        private void AssertInProgress(OperationBase operation)
-        {
-            Assert.IsFalse(operation.IsComplete);
         }
 
         private void AssertOperationCompleted(OperationBase operation, bool cancelled)
@@ -425,25 +383,5 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         #endregion // Test Methods
-    }
-
-    public class MockAsyncResult : IAsyncResult
-    {
-        public object AsyncState
-        {
-            get { throw new NotImplementedException(); }
-        }
-        public WaitHandle AsyncWaitHandle
-        {
-            get { throw new NotImplementedException(); }
-        }
-        public bool CompletedSynchronously
-        {
-            get { throw new NotImplementedException(); }
-        }
-        public bool IsCompleted
-        {
-            get { throw new NotImplementedException(); }
-        }
     }
 }

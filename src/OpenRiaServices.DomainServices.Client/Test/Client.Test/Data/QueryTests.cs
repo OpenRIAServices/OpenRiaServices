@@ -1340,7 +1340,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         [TestMethod]
         public async Task TestDomainContext_IsLoadingPropertyChangeNotifications()
         {
-            var propertyChangeCalled = new SemaphoreSlim(0);
+            using var propertyChangeCalled = new SemaphoreSlim(0);
             PropertyChangedEventArgs loadingEventArgs = null;
             PropertyChangedEventArgs loadedEventArgs = null;
             object savedSender = null;
@@ -1374,7 +1374,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
             bool waitSuccess = await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30));
-            propertyChangeCalled.Dispose();
 
             Assert.IsTrue(waitSuccess, "Waited to long for callback to be executed, semaphore note signalled");
 
@@ -1712,7 +1711,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
 
             // Wait for loads to complete with a timeout
-            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(60));
             for (int i = 0; i < numberOfActiveLoadCalls; i++)
             {
                 await waitHandles[i].WaitAsync(cts.Token);
@@ -1730,8 +1729,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
             Assert.AreEqual((numberOfActiveLoadCalls - 1), catalog.Products.Count);
             Assert.AreEqual(1, loadOperations.Where(a => a.IsCanceled).Count());
-
-            cts.Dispose();
         }
 
         [TestMethod]
@@ -1750,7 +1747,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(0, catalog.Products.Count);
             Assert.IsTrue(lo.IsCanceled, "Operation should've been cancelled.");
 
-            var cts = new CancellationTokenSource();
+            using var cts = new CancellationTokenSource();
             var loadTask = catalog.LoadAsync(query, cts.Token);
             cts.Cancel();
 
@@ -1957,7 +1954,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
             await ValidateQueryException(ctxt, query, ValidateGeneralException);
 
-            void ValidateGeneralException(Exception exception)
+            static void ValidateGeneralException(Exception exception)
             {
                 var ex = (DomainOperationException)exception;
                 Assert.IsNotNull(ex);

@@ -412,6 +412,7 @@ namespace OpenRiaServices.DomainServices.Client
                     TResult result = callback(channel, asyncResponseResult);
                     taskCompletionSource.SetResult(result);
                 }
+#pragma warning disable CA1031 // Do not catch general exception types, we "rethrow it via task
                 catch (CommunicationException) when (cancellationToken.IsCancellationRequested)
                 {
 #if SILVERLIGHT || NET45
@@ -420,7 +421,6 @@ namespace OpenRiaServices.DomainServices.Client
                     taskCompletionSource.TrySetCanceled(cancellationToken);
 #endif
                 }
-#pragma warning disable CA1031 // Do not catch general exception types, we "rethrow it via task
                 catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
                 {
@@ -445,7 +445,11 @@ namespace OpenRiaServices.DomainServices.Client
             }
             catch (CommunicationException ex)
             {
-                taskCompletionSource.TrySetException(ex);
+                // We might have aborted the channel due to cancellation
+                if (cancellationToken.IsCancellationRequested)
+                    taskCompletionSource.TrySetCanceled(cancellationToken);
+                else
+                    taskCompletionSource.TrySetException(ex);
             }
 
             return taskCompletionSource.Task;
