@@ -1751,7 +1751,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var loadTask = catalog.LoadAsync(query, cts.Token);
             cts.Cancel();
 
-            await ExceptionHelper.ExpectExceptionAsync<OperationCanceledException>(() => loadTask);
+            await ExceptionHelper.ExpectExceptionAsync<TaskCanceledException>(() => loadTask);
             Assert.IsTrue(loadTask.IsCanceled, "Task should be cancelled");
         }
 
