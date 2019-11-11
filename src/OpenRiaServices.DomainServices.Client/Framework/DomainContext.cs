@@ -42,7 +42,6 @@ namespace OpenRiaServices.DomainServices.Client
 
         private TaskScheduler CurrrentSyncronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
-
         /// <summary>
         /// Protected constructor
         /// </summary>
@@ -617,87 +616,64 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this.IncrementLoadCount();
-
             try
             {
                 // Proceed with query
                 var domainClientTask = this.DomainClient.QueryAsync(query, cancellationToken);
-
-                var continueationCts = new CancellationTokenSource();
-                return domainClientTask.ContinueWith(result =>
-                {
-                    IReadOnlyCollection<Entity> loadedEntities = null;
-                    List<Entity> allLoadedEntities = null;
-                    int totalCount;
-
-                    QueryCompletedResult results = null;
-                    try
-                    {
-                        lock (this._syncRoot)
-                        {
-                            // The task is known to be completed so this will never block
-                            results = result.GetAwaiter().GetResult();
-
-                            // load the entities into the entity container
-                            loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
-
-                            var loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
-                            allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
-                            allLoadedEntities.AddRange(loadedEntities);
-                            allLoadedEntities.AddRange(loadedIncludedEntities);
-                            totalCount = results.TotalCount;
-                        }
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        continueationCts.Cancel();
-                        throw new OperationCanceledException(continueationCts.Token);
-                    }
-                    catch (DomainException)
-                    {
-                        // DomainExceptions should not be modified
-                        throw;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.IsFatal())
-                        {
-                            throw;
-                        }
-
-                        string message = string.Format(CultureInfo.CurrentCulture,
-                            Resource.DomainContext_LoadOperationFailed,
-                            query.QueryName, ex.Message);
-
-                        throw ex is DomainOperationException domainOperationException
-                            ? new DomainOperationException(message, domainOperationException)
-                            : new DomainOperationException(message, ex);
-                    }
-                    finally
-                    {
-                        this.DecrementLoadCount();
-                    }
-
-                    if (results.ValidationErrors.Any())
-                    {
-                        string message = string.Format(CultureInfo.CurrentCulture,
-            Resource.DomainContext_LoadOperationFailed_Validation,
-            query.QueryName);
-                        throw new DomainOperationException(message, results.ValidationErrors);
-                    }
-                    else
-                    {
-                        return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
-                    }
-                }
-                , continueationCts.Token
-                , TaskContinuationOptions.HideScheduler
-                , CurrrentSyncronizationContextTaskScheduler);
+                return LoadAsyncImplementation(domainClientTask);
             }
             catch (Exception)
             {
                 DecrementLoadCount();
                 throw;
+            }
+
+            async Task<LoadResult<TEntity>> LoadAsyncImplementation(Task<QueryCompletedResult> queryCompletedResult)
+            {
+                IReadOnlyCollection<Entity> loadedEntities = null;
+                IReadOnlyCollection<Entity> loadedIncludedEntities = null;
+                List<Entity> allLoadedEntities = null;
+                int totalCount;
+
+                QueryCompletedResult results = null;
+                try
+                {
+                    // The task is known to be completed so this will never block
+                    results = await queryCompletedResult.ConfigureAwait(true);
+                    lock (this._syncRoot)
+                    {
+                        // load the entities into the entity container
+                        loadedEntities = this.EntityContainer.LoadEntities(results.Entities, loadBehavior);
+                        loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
+                    }
+
+                    allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
+                    allLoadedEntities.AddRange(loadedEntities);
+                    allLoadedEntities.AddRange(loadedIncludedEntities);
+                    totalCount = results.TotalCount;
+                }
+                catch (Exception ex) when (!(ex is DomainException || ex is OperationCanceledException || ex.IsFatal()))
+                {
+                    string message = string.Format(Resource.DomainContext_LoadOperationFailed, query.QueryName, ex.Message);
+
+                    throw ex is DomainOperationException domainOperationException
+                        ? new DomainOperationException(message, domainOperationException)
+                        : new DomainOperationException(message, ex);
+                }
+                finally
+                {
+                    this.DecrementLoadCount();
+                }
+
+                if (results.ValidationErrors.Any())
+                {
+                    string message = string.Format(Resource.DomainContext_LoadOperationFailed_Validation, query.QueryName);
+                    throw new DomainOperationException(message, results.ValidationErrors);
+                }
+                else
+                {
+                    return new LoadResult<TEntity>(query, loadBehavior, loadedEntities.Cast<TEntity>(), allLoadedEntities, totalCount);
+                }
             }
         }
 
