@@ -964,20 +964,9 @@ namespace OpenRiaServices.DomainServices.Client
                 {
                     results = task.GetAwaiter().GetResult();
                 }
-                catch (DomainException)
+                catch (Exception ex) when (!(ex is DomainException || ex.IsFatal()))
                 {
-                    // DomainExceptions should not be modified
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.IsFatal())
-                    {
-                        throw;
-                    }
-                    string message = string.Format(CultureInfo.CurrentCulture,
-               Resource.DomainContext_InvokeOperationFailed,
-               operation, ex.Message);
+                    string message = string.Format(Resource.DomainContext_InvokeOperationFailed, operation, ex.Message);
 
                     throw ex is DomainOperationException domainOperationException
                         ? new DomainOperationException(message, domainOperationException)
@@ -990,9 +979,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 else
                 {
-                    string message = string.Format(CultureInfo.CurrentCulture,
-             Resource.DomainContext_InvokeOperationFailed_Validation,
-             operation);
+                    string message = string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, operation);
                     throw new DomainOperationException(message, results.ValidationErrors);
                 }
             }
