@@ -34,12 +34,14 @@ namespace OpenRiaServices.DomainServices.Client
         private int _activeLoadCount;
         private readonly DomainClient _domainClient;
         private EntityContainer _entityContainer;
-        private readonly TaskScheduler _syncContextScheduler;
         private ValidationContext _validationContext;
         private bool _isSubmitting;
         private readonly Dictionary<string, bool> _requiresValidationMap = new Dictionary<string, bool>();
         private readonly object _syncRoot = new object();
         private static IDomainClientFactory s_domainClientFactory;
+
+        private TaskScheduler CurrrentSyncronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+
 
         /// <summary>
         /// Protected constructor
@@ -53,7 +55,6 @@ namespace OpenRiaServices.DomainServices.Client
             }
 
             this._domainClient = domainClient;
-            this._syncContextScheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
         }
 
         /// <summary>
@@ -284,7 +285,7 @@ namespace OpenRiaServices.DomainServices.Client
                 , submitOperation
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , _syncContextScheduler);
+                , CurrrentSyncronizationContextTaskScheduler);
 
             return submitOperation;
         }
@@ -527,7 +528,7 @@ namespace OpenRiaServices.DomainServices.Client
                 , (object)loadOperation
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , _syncContextScheduler);
+                , CurrrentSyncronizationContextTaskScheduler);
 
             return loadOperation;
         }
@@ -691,7 +692,7 @@ namespace OpenRiaServices.DomainServices.Client
                 }
                 , continueationCts.Token
                 , TaskContinuationOptions.HideScheduler
-                , _syncContextScheduler);
+                , CurrrentSyncronizationContextTaskScheduler);
             }
             catch (Exception)
             {
@@ -865,7 +866,7 @@ namespace OpenRiaServices.DomainServices.Client
                 , (object)invokeOperation
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , _syncContextScheduler);
+                , CurrrentSyncronizationContextTaskScheduler);
 
             return invokeOperation;
         }
@@ -1022,7 +1023,7 @@ namespace OpenRiaServices.DomainServices.Client
             , operationName
             , CancellationToken.None
             , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.HideScheduler
-            , _syncContextScheduler);
+            , CurrrentSyncronizationContextTaskScheduler);
         }
 
         /// <summary>
