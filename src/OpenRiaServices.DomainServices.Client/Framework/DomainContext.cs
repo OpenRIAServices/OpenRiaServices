@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Client
         private readonly object _syncRoot = new object();
         private static IDomainClientFactory s_domainClientFactory;
 
-        private TaskScheduler CurrrentSyncronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+        private TaskScheduler CurrrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
         /// <summary>
         /// Protected constructor
@@ -284,7 +284,7 @@ namespace OpenRiaServices.DomainServices.Client
                 , submitOperation
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , CurrrentSyncronizationContextTaskScheduler);
+                , CurrrentSynchronizationContextTaskScheduler);
 
             return submitOperation;
         }
@@ -527,7 +527,7 @@ namespace OpenRiaServices.DomainServices.Client
                 , (object)loadOperation
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , CurrrentSyncronizationContextTaskScheduler);
+                , CurrrentSynchronizationContextTaskScheduler);
 
             return loadOperation;
         }
@@ -842,7 +842,7 @@ namespace OpenRiaServices.DomainServices.Client
                 , (object)invokeOperation
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , CurrrentSyncronizationContextTaskScheduler);
+                , CurrrentSynchronizationContextTaskScheduler);
 
             return invokeOperation;
         }
@@ -986,7 +986,7 @@ namespace OpenRiaServices.DomainServices.Client
             , operationName
             , CancellationToken.None
             , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.HideScheduler
-            , CurrrentSyncronizationContextTaskScheduler);
+            , CurrrentSynchronizationContextTaskScheduler);
         }
 
         /// <summary>
