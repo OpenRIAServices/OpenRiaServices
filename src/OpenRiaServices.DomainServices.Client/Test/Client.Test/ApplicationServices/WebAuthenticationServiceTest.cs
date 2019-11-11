@@ -37,17 +37,17 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 
             public IAsyncResult BeginLoadUserMock(AsyncCallback callback, object state)
             {
-                return base.BeginLoadUser(callback, state);
+                return base.LoadUserAsync(callback, state);
             }
 
             public IAsyncResult BeginLoginMock(LoginParameters parameters, AsyncCallback callback, object state)
             {
-                return base.BeginLogin(parameters, callback, state);
+                return base.LoginAsync(parameters, callback, state);
             }
 
             public IAsyncResult BeginLogoutMock(AsyncCallback callback, object state)
             {
-                return base.BeginLogout(callback, state);
+                return base.LoogoutAsync(callback, state);
             }
 
             public IAsyncResult BeginSaveUserMock(IPrincipal user, AsyncCallback callback, object state)

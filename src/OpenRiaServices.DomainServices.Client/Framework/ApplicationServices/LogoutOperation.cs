@@ -32,21 +32,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </summary>
         /// <param name="callback">The callback invoked when the operation completes</param>
         /// <returns>The async result for the operation</returns>
-        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
+        protected override async Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return Task.Factory.FromAsync((CancellationToken token, AsyncCallback callback, object state) =>
-            {
-                var operation = this.Service.BeginLogout(callback, state);
-                if (token.CanBeCanceled)
-                {
-                    token.Register(() => this.Service.CancelLogout(operation));
-                }
-                return operation;
-            }
-            , (op) => (object)this.Service.EndLogout(op)
-            , cancellationToken
-            , null
-            , TaskCreationOptions.None);
+            return await this.Service.LogoutAsync(cancellationToken);
         }
 
         /// <summary>

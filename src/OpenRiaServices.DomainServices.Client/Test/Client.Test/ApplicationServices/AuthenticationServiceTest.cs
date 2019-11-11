@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 return this.CreateNullDefaultUser ? null : new MockPrincipal();
             }
 
-            protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
             {
                 MockPrincipal user = null;
                 if ((parameters != null) && (parameters.UserName == MockAuthentication.ValidUserName))
@@ -114,7 +114,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 return new LoginResult(result.User, (result.User != null));
             }
 
-            protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
             {
                 this.Result = new MockAsyncResult(new MockPrincipal() { Type = UserType.LoggedOut }, callback, state);
                 return this.Result;
@@ -134,7 +134,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 return new LogoutResult(result.User);
             }
 
-            protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
             {
                 this.Result = new MockAsyncResult(new MockPrincipal() { Type = UserType.Loaded }, callback, state);
                 return this.Result;
@@ -223,10 +223,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             }
 
             public int BeginLoginCount { get; set; }
-            protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
             {
                 this.BeginLoginCount++;
-                return base.BeginLogin(parameters, callback, state);
+                return base.LoginAsync(parameters, callback, state);
             }
 
             public int CancelLoginCount { get; set; }
@@ -244,10 +244,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             }
 
             public int BeginLogoutCount { get; set; }
-            protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
             {
                 this.BeginLogoutCount++;
-                return base.BeginLogout(callback, state);
+                return base.LoogoutAsync(callback, state);
             }
 
             public int CancelLogoutCount { get; set; }
@@ -265,10 +265,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             }
 
             public int BeginLoadUserCount { get; set; }
-            protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
             {
                 this.BeginLoadUserCount++;
-                return base.BeginLoadUser(callback, state);
+                return base.LoadUserAsync(callback, state);
             }
 
             public int CancelLoadUserCount { get; set; }
@@ -313,13 +313,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             public Exception CancelError { get; set; }
             public Exception EndError { get; set; }
 
-            protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
             {
                 if (this.BeginError != null)
                 {
                     throw this.BeginError;
                 }
-                return base.BeginLogin(parameters, callback, state);
+                return base.LoginAsync(parameters, callback, state);
             }
 
             protected internal override void CancelLogin(IAsyncResult asyncResult)
@@ -340,13 +340,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 return base.EndLogin(asyncResult);
             }
 
-            protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
             {
                 if (this.BeginError != null)
                 {
                     throw this.BeginError;
                 }
-                return base.BeginLogout(callback, state);
+                return base.LoogoutAsync(callback, state);
             }
 
             protected internal override void CancelLogout(IAsyncResult asyncResult)
@@ -367,13 +367,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 return base.EndLogout(asyncResult);
             }
 
-            protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
             {
                 if (this.BeginError != null)
                 {
                     throw this.BeginError;
                 }
-                return base.BeginLoadUser(callback, state);
+                return base.LoadUserAsync(callback, state);
             }
 
             protected internal override void CancelLoadUser(IAsyncResult asyncResult)

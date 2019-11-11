@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -28,7 +30,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <param name="state">The parameter is not used.</param>
         /// <returns>The result.</returns>
         /// <exception cref="NotSupportedException"> is always thrown.</exception>
-        protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+
+        protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
         {
             throw new NotSupportedException(Resources.ApplicationServices_WANoLogin);
         }
@@ -40,7 +43,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <param name="state">The parameter is not used.</param>
         /// <returns>The result.</returns>
         /// <exception cref="NotSupportedException"> is always thrown.</exception>
-        protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+        protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException(Resources.ApplicationServices_WANoLogout);
         }

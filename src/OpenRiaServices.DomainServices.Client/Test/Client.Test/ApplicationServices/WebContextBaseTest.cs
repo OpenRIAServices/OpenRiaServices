@@ -71,7 +71,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 return new PrincipalMock();
             }
 
-            protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
 
-            protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
@@ -91,7 +91,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
 
-            protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }

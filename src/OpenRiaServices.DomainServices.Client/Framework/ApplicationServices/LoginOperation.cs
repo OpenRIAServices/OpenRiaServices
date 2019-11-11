@@ -62,21 +62,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Begins a login operation
         /// </summary>
         /// <returns>The async result for the operation</returns>
-        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
+        protected override async Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return Task.Factory.FromAsync((CancellationToken token, AsyncCallback callback, object state) =>
-            {
-                var operation = this.Service.BeginLogin(this.LoginParameters, callback, state);
-                if (token.CanBeCanceled)
-                {
-                    token.Register(() => this.Service.CancelLogin(operation));
-                }
-                return operation;
-            }
-            , (op) => (object)this.Service.EndLogin(op)
-            , cancellationToken
-            , null
-            , TaskCreationOptions.None);
+            return await this.Service.LoginAsync(this.LoginParameters, cancellationToken);
         }
 
         /// <summary>
