@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -28,29 +30,23 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// Begins a load operation
         /// </summary>
-        /// <param name="callback">The callback invoked when the operation completes</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The async result for the operation</returns>
-        protected override IAsyncResult BeginCore(AsyncCallback callback)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return this.Service.BeginLoadUser(callback, null);
-        }
-
-        /// <summary>
-        /// Cancels a load operation
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this.Service.CancelLoadUser(this.AsyncResult);
-        }
-
-        /// <summary>
-        /// Ends a load operation
-        /// </summary>
-        /// <param name="asyncResult">The async result for the operation</param>
-        /// <returns>The result of the operation</returns>
-        protected override object EndCore(IAsyncResult asyncResult)
-        {
-            return this.Service.EndLoadUser(asyncResult);
+            return Task.Factory.FromAsync((CancellationToken token, AsyncCallback callback, object state) =>
+            {
+                var operation = this.Service.BeginLoadUser(callback, state);
+                if (token.CanBeCanceled)
+                {
+                    token.Register(() => this.Service.CancelLoadUser(operation));
+                }
+                return operation;
+            }
+            , (op) => (object)this.Service.EndLoadUser(op)
+            , cancellationToken
+            , null
+            , TaskCreationOptions.None);
         }
 
         /// <summary>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -59,29 +61,22 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// Begins a login operation
         /// </summary>
-        /// <param name="callback">The callback invoked when the operation completes</param>
         /// <returns>The async result for the operation</returns>
-        protected override IAsyncResult BeginCore(AsyncCallback callback)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return this.Service.BeginLogin(this.LoginParameters, callback, null);
-        }
-
-        /// <summary>
-        /// Cancels a login operation
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this.Service.CancelLogin(this.AsyncResult);
-        }
-
-        /// <summary>
-        /// Ends a login operation
-        /// </summary>
-        /// <param name="asyncResult">The async result for the operation</param>
-        /// <returns>The result of the operation</returns>
-        protected override object EndCore(IAsyncResult asyncResult)
-        {
-            return this.Service.EndLogin(asyncResult);
+            return Task.Factory.FromAsync((CancellationToken token, AsyncCallback callback, object state) =>
+            {
+                var operation = this.Service.BeginLogin(this.LoginParameters, callback, state);
+                if (token.CanBeCanceled)
+                {
+                    token.Register(() => this.Service.CancelLogin(operation));
+                }
+                return operation;
+            }
+            , (op) => (object)this.Service.EndLogin(op)
+            , cancellationToken
+            , null
+            , TaskCreationOptions.None);
         }
 
         /// <summary>

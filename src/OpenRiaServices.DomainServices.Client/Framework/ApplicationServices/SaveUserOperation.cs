@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -30,27 +32,21 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </summary>
         /// <param name="callback">The callback invoked when the operation completes</param>
         /// <returns>The async result for the operation</returns>
-        protected override IAsyncResult BeginCore(AsyncCallback callback)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return this.Service.BeginSaveUser(this.Service.User, callback, null);
-        }
-
-        /// <summary>
-        /// Cancels a save operation
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this.Service.CancelSaveUser(this.AsyncResult);
-        }
-
-        /// <summary>
-        /// Ends a save operation
-        /// </summary>
-        /// <param name="asyncResult">The async result for the operation</param>
-        /// <returns>The result of the operation</returns>
-        protected override object EndCore(IAsyncResult asyncResult)
-        {
-            return this.Service.EndSaveUser(asyncResult);
+            return Task.Factory.FromAsync((CancellationToken token, AsyncCallback callback, object state) =>
+            {
+                var operation = this.Service.BeginSaveUser(this.User, callback, state);
+                if (token.CanBeCanceled)
+                {
+                    token.Register(() => this.Service.CancelSaveUser(operation));
+                }
+                return operation;
+            }
+            , (op) => (object)this.Service.EndSaveUser(op)
+            , cancellationToken
+            , null
+            , TaskCreationOptions.None);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -43,10 +44,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         #region Properties
 
         /// <summary>
-        /// Gets the async result returned from <see cref="BeginCore"/>.
+        /// Gets the async result returned from <see cref="InvokeAsync"/>.
         /// </summary>
         /// <remarks>
-        /// If <see cref="BeginCore"/> has not been called, this may be <c>null</c>.
+        /// If <see cref="InvokeAsync"/> has not been called, this may be <c>null</c>.
         /// </remarks>
         protected IAsyncResult AsyncResult
         {
@@ -97,13 +98,50 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Starts the operation.
         /// </summary>
         /// <remarks>
-        /// This method will invoke <see cref="BeginCore"/> and will allow all
-        /// exceptions thrown from <see cref="BeginCore"/> to pass through.
+        /// This method will invoke <see cref="InvokeAsync"/> and will allow all
+        /// exceptions thrown from <see cref="InvokeAsync"/> to pass through.
         /// </remarks>
         internal void Start()
         {
-            this._asyncResult = this.BeginCore(this.HandleAsyncCompleted);
+            var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+
+            var task = this.InvokeAsync(this.CancellationToken)
+                .ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
+
+            static void InvokeComplete(Task<object> res, object state)
+            {
+                var This = (AuthenticationOperation)state;
+                object endResult = null;
+
+                if (res.IsCanceled)
+                {
+                    This.SetCancelled();
+                    return;
+                }
+
+                try
+                {
+                    endResult = res.GetAwaiter().GetResult();
+                }
+                catch (Exception e)
+                {
+                    This.SetError(e);
+                    This.RaiseCompletionPropertyChanges();
+
+                    if (e.IsFatal())
+                    {
+                        throw;
+                    }
+
+                    return;
+                }
+
+                This.Complete(endResult);
+                This.RaiseCompletionPropertyChanges();
+            }
         }
+
+
 
         /// <summary>
         /// Template method for invoking the corresponding Begin method in the
@@ -113,95 +151,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// This method is invoked from <see cref="Start"/>. Any exceptions thrown
         /// will be passed through.
         /// </remarks>
-        /// <param name="callback">The <see cref="AsyncCallback"/> to invoke when the
-        /// async call has completed. This can be passed directly to the underlying
-        /// Begin method.
-        /// </param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The async result returned by the underlying Begin call</returns>
-        protected abstract IAsyncResult BeginCore(AsyncCallback callback);
-
-        /// <summary>
-        /// Handles completion of the underlying async call.
-        /// </summary>
-        /// <remarks>
-        /// If <see cref="AsyncResult"/> is <c>null</c> (as in the case of a synchronous
-        /// completion), it will be set to <paramref name="asyncResult"/>.
-        /// </remarks>
-        /// <param name="asyncResult">The async result returned by the underlying Begin call</param>
-        private void HandleAsyncCompleted(IAsyncResult asyncResult)
-        {
-            if (this._asyncResult == null)
-            {
-                this._asyncResult = asyncResult;
-            }
-            this.RunInSynchronizationContext(state => this.End(asyncResult), null);
-        }
-
-        /// <summary>
-        /// Completes the operation.
-        /// </summary>
-        /// <remarks>
-        /// This method will invoke <see cref="EndCore"/> and will funnel all
-        /// exceptions throw from <see cref="EndCore"/> into the operation.
-        /// </remarks>
-        /// <param name="result">The async result returned by the underlying Begin call</param>
-        private void End(IAsyncResult result)
-        {
-            object endResult = null;
-            try
-            {
-                endResult = this.EndCore(result);
-            }
-            catch (Exception e)
-            {
-                if (e.IsFatal())
-                {
-                    throw;
-                }
-                this.SetError(e);
-                this.RaiseCompletionPropertyChanges();
-                return;
-            }
-
-            this.Complete(endResult);
-            this.RaiseCompletionPropertyChanges();
-        }
-
-        /// <summary>
-        /// Template method for invoking the corresponding End method in the
-        /// underlying async result implementation.
-        /// </summary>
-        /// <remarks>
-        /// This method is invoked by the callback passed into <see cref="BeginCore"/>.
-        /// Any exceptions thrown will be captured in the <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">The async result returned by the underlying Begin call</param>
-        /// <returns>The result of the End call to store in <see cref="OperationBase.Result"/></returns>
-        protected abstract object EndCore(IAsyncResult asyncResult);
-
-        /// <summary>
-        /// Runs the callback in the synchronization context the operation was created in.
-        /// </summary>
-        /// <param name="callback">The callback to run in the synchronization context</param>
-        /// <param name="state">The optional state to pass to the callback</param>
-        private void RunInSynchronizationContext(SendOrPostCallback callback, object state)
-        {
-            if (SynchronizationContext.Current == this._synchronizationContext)
-            {
-                // We're in the current context, just execute synchronously
-                callback(state);
-            }
-            else
-            {
-                this._synchronizationContext.Post(callback, state);
-            }
-        }
+        protected abstract Task<object> InvokeAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Raises property changes after the operation has completed.
         /// </summary>
         /// <remarks>
-        /// This method is invoked by the callback passed into <see cref="BeginCore"/> once
+        /// This method is invoked by the callback passed into <see cref="InvokeAsync"/> once
         /// <see cref="OperationBase.Result"/> and <see cref="OperationBase.Error"/> have
         /// been set. Change notifications for any properties that have been affected by the
         /// state changes should occur here.
