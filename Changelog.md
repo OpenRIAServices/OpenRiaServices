@@ -25,7 +25,30 @@
 For better scalability (can be done afterwards):
 
 1. Update your Query and Invoke methods so that they use async/await where relevant.
-  E.g if you are using EF6, other ORM frameworks or do network or file access.   
+  E.g if you are using EF6, other ORM frameworks or do network or file access.
+  
+  
+# 5.0.0 Unreleased
+
+### Client
+
+* Complete Load/Invoke/Submit operation on the ´SynchronizationContext` of the caller instead of saving the SynchronizationContext (#211, #209 for submit)
+  * This is a behavioral change which **might break** applications.
+This means that operations should be started on the UI thread if any data of the DomainContext or returned Operaitons are bound to the UI before completion.
+* Base SubmitChanges on SubmitChangesAsync (#209)
+   * Submit operation will now cancel only if the web request is cancelled (and then *after* cancellation)
+     Update cancellation behavior to be the same as for Load and Invoke (Follow up on #203 and #162)
+   * Changed extension point for SubmitChangesAsync to a new method called by both SubmitChanges and SubmitChangesAsync
+`protected virtual Task<SubmitResult> SubmitChangesAsync(EntityChangeSet changeSet, CancellationToken cancellationToken)`
+   * Changed extension point for InvokeOperationAsync to a new protected method.
+* Base DomainContext.Invoke on DomainContext.InvokeAsync (#203)
+    * Invoke operation will now cancel only if the web request is cancelled (and then *after* cancellation)
+* Ensure Completed event is always called when Load/Invoke/SubmitOperation finishes (#206)
+
+**Bugfix**
+* Handle early cancellation (Cancellation before actual request has been sent) in WebDomainClient (#210)
+  * In earlier previews an exception was thrown instead of the operation beeing Cancelled
+
 
 # 5.0.0 Preview 2
 
