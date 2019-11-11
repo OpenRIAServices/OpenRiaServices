@@ -461,7 +461,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
 
             this.RaisePropertyChanged(nameof(IsBusy));
-            this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(this.Operation));
+            this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(operation));
         }
 
         /// <summary>

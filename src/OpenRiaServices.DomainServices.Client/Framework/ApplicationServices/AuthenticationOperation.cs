@@ -103,10 +103,18 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </remarks>
         internal void Start()
         {
-            var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+            var task = this.InvokeAsync(this.CancellationToken);
 
-            var task = this.InvokeAsync(this.CancellationToken)
-                .ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
+            // Many tests throw from InvokeXX directly and expect it to be rethrown
+            if (task.IsCompleted)
+            {
+                InvokeComplete(task, this);
+            }
+            else
+            {
+                var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+                task.ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
+            }
 
             static void InvokeComplete(Task<object> res, object state)
             {
