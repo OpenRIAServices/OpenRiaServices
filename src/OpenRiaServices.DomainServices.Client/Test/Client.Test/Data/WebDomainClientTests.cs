@@ -19,7 +19,6 @@ using System.Text;
 
 namespace OpenRiaServices.DomainServices.Client.Web.Test
 {
-    using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
     using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
     using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
 

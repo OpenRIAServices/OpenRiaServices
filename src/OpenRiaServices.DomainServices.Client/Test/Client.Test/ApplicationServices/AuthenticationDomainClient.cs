@@ -14,8 +14,6 @@ using OpenRiaServices.DomainServices.Client.Test.Utilities;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
-    using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
-
     public class AuthenticationDomainClient : DomainClient
     {
         public enum UserType { None, LoggedIn, LoggedOut, Loaded, Saved }
@@ -65,7 +63,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             }
         }
 
-        internal class AdcAsyncResult : AsyncResultBase
+        internal class AdcAsyncResult : Client.Test.AsyncResultBase
         {
             private readonly MockUser _user;
 

@@ -1,8 +1,11 @@
-﻿using System;
+﻿extern alias SSmDsClient;
+using System;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.DomainServices.Client.Test
 {
+    using Resources = SSmDsClient.OpenRiaServices.DomainServices.Client.Resources;
+
     /// <summary>
     /// Internal type used as a common <see cref="IAsyncResult"/> base for all cancellable asynchronous operations.
     /// </summary>

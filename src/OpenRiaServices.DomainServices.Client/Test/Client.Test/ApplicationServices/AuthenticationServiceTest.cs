@@ -10,11 +10,10 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 {
-    using AsyncResultBase = SSmDsClient::OpenRiaServices.DomainServices.Client.AsyncResultBase;
-
     /// <summary>
     /// Tests <see cref="AuthenticationService"/> members.
     /// </summary>
@@ -71,10 +70,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
             public bool CreateNullDefaultUser { get; set; }
 
+            private SemaphoreSlim _delay = new SemaphoreSlim(0);
+
             public void RequestCallback()
             {
                 this.Timer = null;
-                this.Result.Complete();
+                _delay.Release();
             }
 
             public void RequestCallback(int delay)
@@ -88,7 +89,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 return this.CreateNullDefaultUser ? null : new MockPrincipal();
             }
 
-            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override async Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
             {
                 MockPrincipal user = null;
                 if ((parameters != null) && (parameters.UserName == MockAuthentication.ValidUserName))
@@ -96,84 +97,51 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                     user = new MockPrincipal() { Type = UserType.LoggedIn };
                     ((MockIdentity)user.Identity).IsAuthenticated = true;
                 }
-                this.Result = new MockAsyncResult(user, callback, state);
-                return this.Result;
-            }
 
-            protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
-            {
+                await _delay.WaitAsync(cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
                 }
 
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-
-                return new LoginResult(result.User, (result.User != null));
+                return new LoginResult(user, (user != null));
             }
 
-            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
+            protected internal override async Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
-                this.Result = new MockAsyncResult(new MockPrincipal() { Type = UserType.LoggedOut }, callback, state);
-                return this.Result;
-            }
+                await _delay.WaitAsync(cancellationToken);
 
-            protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
-            {
                 if (this.Error != null)
                 {
                     throw this.Error;
                 }
 
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-
-                return new LogoutResult(result.User);
+                return new LogoutResult(new MockPrincipal() { Type = UserType.LoggedOut });
             }
 
-            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
+            protected internal override async Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
-                this.Result = new MockAsyncResult(new MockPrincipal() { Type = UserType.Loaded }, callback, state);
-                return this.Result;
-            }
+                await _delay.WaitAsync(cancellationToken);
 
-            protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
-            {
                 if (this.Error != null)
                 {
                     throw this.Error;
                 }
 
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-
-                return new LoadUserResult(result.User);
+                return new LoadUserResult(new MockPrincipal() { Type = UserType.Loaded });
             }
 
-            protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
+            protected internal override async Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
             {
-                Assert.IsNotNull(user,
-                    "User should never be null.");
-                this.Result = new MockAsyncResult(new MockPrincipal() { Type = UserType.Saved }, callback, state);
-                return this.Result;
-            }
+                Assert.IsNotNull(user, "User should never be null.");
 
-            protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
-            {
+                await _delay.WaitAsync(cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
                 }
 
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-
-                return new SaveUserResult(result.User);
+                return new SaveUserResult(new MockPrincipal() { Type = UserType.Saved });
             }
         }
 
@@ -184,33 +152,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 get { return true; }
             }
 
-            protected internal override void CancelLogin(IAsyncResult asyncResult)
-            {
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult, true);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-            }
-
-            protected internal override void CancelLogout(IAsyncResult asyncResult)
-            {
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult, true);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-            }
-
-            protected internal override void CancelLoadUser(IAsyncResult asyncResult)
-            {
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult, true);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-            }
-
-            protected internal override void CancelSaveUser(IAsyncResult asyncResult)
-            {
-                MockAsyncResult result = AsyncResultBase.EndAsyncOperation<MockAsyncResult>(asyncResult, true);
-                Assert.AreEqual(this.Result, result,
-                    "MockAuthentication async results should be equal.");
-            }
         }
 
         private class TrackingAuthentication : MockAuthentication
@@ -223,87 +164,34 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             }
 
             public int BeginLoginCount { get; set; }
-            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
+
+            protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
             {
                 this.BeginLoginCount++;
-                return base.LoginAsync(parameters, callback, state);
-            }
-
-            public int CancelLoginCount { get; set; }
-            protected internal override void CancelLogin(IAsyncResult asyncResult)
-            {
-                this.CancelLoginCount++;
-                base.CancelLogin(asyncResult);
-            }
-
-            public int EndLoginCount { get; set; }
-            protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
-            {
-                this.EndLoginCount++;
-                return base.EndLogin(asyncResult);
+                return base.LoginAsync(parameters, cancellationToken);
             }
 
             public int BeginLogoutCount { get; set; }
-            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
+            protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
                 this.BeginLogoutCount++;
-                return base.LoogoutAsync(callback, state);
-            }
-
-            public int CancelLogoutCount { get; set; }
-            protected internal override void CancelLogout(IAsyncResult asyncResult)
-            {
-                this.CancelLogoutCount++;
-                base.CancelLogout(asyncResult);
-            }
-
-            public int EndLogoutCount { get; set; }
-            protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
-            {
-                this.EndLogoutCount++;
-                return base.EndLogout(asyncResult);
+                return base.LogoutAsync(cancellationToken);
             }
 
             public int BeginLoadUserCount { get; set; }
-            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
+
+            protected internal override Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
                 this.BeginLoadUserCount++;
-                return base.LoadUserAsync(callback, state);
-            }
-
-            public int CancelLoadUserCount { get; set; }
-            protected internal override void CancelLoadUser(IAsyncResult asyncResult)
-            {
-                this.CancelLoadUserCount++;
-                base.CancelLoadUser(asyncResult);
-            }
-
-            public int EndLoadUserCount { get; set; }
-            protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
-            {
-                this.EndLoadUserCount++;
-                return base.EndLoadUser(asyncResult);
+                return base.LoadUserAsync(cancellationToken);
             }
 
             public int BeginSaveUserCount { get; set; }
-            protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
+
+            protected internal override Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
             {
                 this.BeginSaveUserCount++;
-                return base.BeginSaveUser(user, callback, state);
-            }
-
-            public int CancelSaveUserCount { get; set; }
-            protected internal override void CancelSaveUser(IAsyncResult asyncResult)
-            {
-                this.CancelSaveUserCount++;
-                base.CancelSaveUser(asyncResult);
-            }
-
-            public int EndSaveUserCount { get; set; }
-            protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
-            {
-                this.EndSaveUserCount++;
-                return base.EndSaveUser(asyncResult);
+                return base.SaveUserAsync(user, cancellationToken);
             }
         }
 
@@ -313,112 +201,66 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             public Exception CancelError { get; set; }
             public Exception EndError { get; set; }
 
-            protected internal override IAsyncResult LoginAsync(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
             {
                 if (this.BeginError != null)
-                {
                     throw this.BeginError;
-                }
-                return base.LoginAsync(parameters, callback, state);
-            }
 
-            protected internal override void CancelLogin(IAsyncResult asyncResult)
-            {
                 if (this.CancelError != null)
-                {
-                    throw this.CancelError;
-                }
-                base.CancelLogin(asyncResult);
-            }
+                    cancellationToken.Register(() => { throw this.CancelError; });
 
-            protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
-            {
+                var result = base.LoginAsync(parameters, cancellationToken);
                 if (this.EndError != null)
-                {
-                    throw this.EndError;
-                }
-                return base.EndLogin(asyncResult);
+                    result = result.ContinueWith<LoginResult>(task => throw this.EndError);
+
+                return result;
+
             }
 
-            protected internal override IAsyncResult LoogoutAsync(AsyncCallback callback, object state)
+            protected internal override Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
                 if (this.BeginError != null)
-                {
                     throw this.BeginError;
-                }
-                return base.LoogoutAsync(callback, state);
-            }
 
-            protected internal override void CancelLogout(IAsyncResult asyncResult)
-            {
                 if (this.CancelError != null)
-                {
-                    throw this.CancelError;
-                }
-                base.CancelLogout(asyncResult);
-            }
+                    cancellationToken.Register(() => { throw this.CancelError; });
 
-            protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
-            {
+                var result = base.LoadUserAsync(cancellationToken);
                 if (this.EndError != null)
-                {
-                    throw this.EndError;
-                }
-                return base.EndLogout(asyncResult);
+                    result = result.ContinueWith<LoadUserResult>(task => throw this.EndError);
+
+                return result;
             }
 
-            protected internal override IAsyncResult LoadUserAsync(AsyncCallback callback, object state)
+            protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
                 if (this.BeginError != null)
-                {
                     throw this.BeginError;
-                }
-                return base.LoadUserAsync(callback, state);
-            }
 
-            protected internal override void CancelLoadUser(IAsyncResult asyncResult)
-            {
                 if (this.CancelError != null)
-                {
-                    throw this.CancelError;
-                }
-                base.CancelLoadUser(asyncResult);
-            }
+                    cancellationToken.Register(() => { throw this.CancelError; });
 
-            protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
-            {
+                var result = base.LogoutAsync(cancellationToken);
                 if (this.EndError != null)
-                {
-                    throw this.EndError;
-                }
-                return base.EndLoadUser(asyncResult);
+                    result = result.ContinueWith<LogoutResult>(task => throw this.EndError);
+
+                return result;
             }
 
-            protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
+            protected internal override Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
             {
                 if (this.BeginError != null)
-                {
                     throw this.BeginError;
-                }
-                return base.BeginSaveUser(user, callback, state);
-            }
 
-            protected internal override void CancelSaveUser(IAsyncResult asyncResult)
-            {
                 if (this.CancelError != null)
-                {
-                    throw this.CancelError;
-                }
-                base.CancelSaveUser(asyncResult);
-            }
+                    cancellationToken.Register(() => { throw this.CancelError; });
 
-            protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
-            {
+                var result = base.SaveUserAsync(user, cancellationToken);
                 if (this.EndError != null)
-                {
-                    throw this.EndError;
-                }
-                return base.EndSaveUser(asyncResult);
+                    result = result.ContinueWith<SaveUserResult>(task => throw this.EndError);
+
+                return result;
+
             }
         }
 
@@ -456,32 +298,20 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
         public void CancelThrowsWhenNotSupported()
         {
             MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel();
-
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.Login(string.Empty, string.Empty).Cancel());
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.CancelLogin(null));
 
             mock = new MockAuthenticationNoCancel();
-
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.Logout(false).Cancel());
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.CancelLogout(null));
 
             mock = new MockAuthenticationNoCancel();
-
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.LoadUser().Cancel());
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.CancelLoadUser(null));
 
             mock = new MockAuthenticationNoCancel();
-
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.SaveUser(false).Cancel());
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.CancelSaveUser(null));
         }
 
         [TestMethod]
@@ -632,8 +462,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty), null, null).Cancel();
             Assert.AreEqual(3, mock.BeginLoginCount,
                 "BeginLogin should have been called 3 times.");
-            Assert.AreEqual(3, mock.CancelLoginCount,
-                "CancelLogin should have been called 3 times.");
 
             mock = new TrackingAuthentication();
 
@@ -647,8 +475,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.RequestCallback();
             Assert.AreEqual(3, mock.BeginLoginCount,
                 "BeginLogin should have been called 3 times.");
-            Assert.AreEqual(3, mock.EndLoginCount,
-                "EndLogin should have been called 3 times.");
+            //    Assert.AreEqual(3, mock.EndLoginCount,
+            //        "EndLogin should have been called 3 times.");
         }
 
         [TestMethod]
@@ -662,8 +490,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.Logout(null, null).Cancel();
             Assert.AreEqual(2, mock.BeginLogoutCount,
                 "BeginLogout should have been called 2 times.");
-            Assert.AreEqual(2, mock.CancelLogoutCount,
-                "CancelLogout should have been called 2 times.");
+            // TODO: Verify operations are cancelled
 
             mock = new TrackingAuthentication();
 
@@ -675,8 +502,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.RequestCallback();
             Assert.AreEqual(2, mock.BeginLogoutCount,
                 "BeginLogout should have been called 2 times.");
-            Assert.AreEqual(2, mock.EndLogoutCount,
-                "EndLogout should have been called 2 times.");
+            // TODO: Verify operations are completed
         }
 
         [TestMethod]
@@ -690,8 +516,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.LoadUser(null, null).Cancel();
             Assert.AreEqual(2, mock.BeginLoadUserCount,
                 "BeginLoadUser should have been called 2 times.");
-            Assert.AreEqual(2, mock.CancelLoadUserCount,
-                "CancelLoadUser should have been called 2 times.");
+            // TODO: Verify operations are cancelled
 
             mock = new TrackingAuthentication();
 
@@ -703,8 +528,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.RequestCallback();
             Assert.AreEqual(2, mock.BeginLoadUserCount,
                 "BeginLoadUser should have been called 2 times.");
-            Assert.AreEqual(2, mock.EndLoadUserCount,
-                "EndLoadUser should have been called 2 times.");
+            //Assert.AreEqual(2, mock.EndLoadUserCount,
+            //    "EndLoadUser should have been called 2 times.");
         }
 
         [TestMethod]
@@ -718,8 +543,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.SaveUser(null, null).Cancel();
             Assert.AreEqual(2, mock.BeginSaveUserCount,
                 "BeginSaveUser should have been called 2 times.");
-            Assert.AreEqual(2, mock.CancelSaveUserCount,
-                "CancelSaveUser should have been called 2 times.");
+            //Assert.AreEqual(2, mock.CancelSaveUserCount,
+            //    "CancelSaveUser should have been called 2 times.");
 
             mock = new TrackingAuthentication();
 
@@ -731,8 +556,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             mock.RequestCallback();
             Assert.AreEqual(2, mock.BeginSaveUserCount,
                 "BeginSaveUser should have been called 2 times.");
-            Assert.AreEqual(2, mock.EndSaveUserCount,
-                "EndSaveUser should have been called 2 times.");
+            //Assert.AreEqual(2, mock.EndSaveUserCount,
+            //    "EndSaveUser should have been called 2 times.");
         }
 
         #endregion
