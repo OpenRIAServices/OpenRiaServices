@@ -42,22 +42,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             public UserType Type { get; set; }
         }
 
-        private class MockAsyncResult : AsyncResultBase
-        {
-            private readonly MockPrincipal _user;
-
-            public MockAsyncResult(MockPrincipal user, AsyncCallback asyncCallback, object asyncState)
-                : base(asyncCallback, asyncState)
-            {
-                this._user = user;
-            }
-
-            public MockPrincipal User
-            {
-                get { return this._user; }
-            }
-        }
-
         private class MockAuthenticationNoCancel : AuthenticationService
         {
             public const string ValidUserName = "ValidUser";

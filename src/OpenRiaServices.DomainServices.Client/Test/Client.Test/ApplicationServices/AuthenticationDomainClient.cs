@@ -16,6 +16,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
     public class AuthenticationDomainClient : DomainClient
     {
+        private SemaphoreSlim _callbackDelay = new SemaphoreSlim(0);
+
         public enum UserType { None, LoggedIn, LoggedOut, Loaded, Saved }
 
         public class MockUser : Entity, IPrincipal, IIdentity
@@ -63,101 +65,25 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             }
         }
 
-        internal class AdcAsyncResult : Client.Test.AsyncResultBase
-        {
-            private readonly MockUser _user;
-
-            public AdcAsyncResult(MockUser user, AsyncCallback asyncCallback, object asyncState)
-                : base(asyncCallback, asyncState)
-            {
-                this._user = user;
-            }
-
-            public MockUser User
-            {
-                get { return this._user; }
-            }
-        }
-
-        internal class AdcSubmitAsyncResult : AdcAsyncResult
-        {
-            private readonly EntityChangeSet _changeSet;
-            private readonly IEnumerable<ChangeSetEntry> _submitOperations;
-
-            private bool _submitted;
-
-            public AdcSubmitAsyncResult(EntityChangeSet changeSet, IEnumerable<ChangeSetEntry> submitOperations, MockUser user, AsyncCallback asyncCallback, object asyncState)
-                : base(user, asyncCallback, asyncState)
-            {
-                this._changeSet = changeSet;
-                this._submitOperations = submitOperations;
-            }
-
-            public EntityChangeSet ChangeSet
-            {
-                get { return this._changeSet; }
-            }
-
-            public IEnumerable<ChangeSetEntry> SubmitOperations
-            {
-                get { return this._submitOperations; }
-            }
-
-            public bool Submitted
-            {
-                get { return this._submitted; }
-            }
-
-            public void Submit(IEnumerable<string> conflictMembers, IEnumerable<ValidationResultInfo> errors, IEnumerable<ValidationResultInfo> validationErrors)
-            {
-                this._submitted = true;
-                this._submitOperations.First().ConflictMembers = conflictMembers;
-                this._submitOperations.First().ValidationErrors = validationErrors;
-            }
-        }
-
         public const string ValidUserName = "ValidUser";
         public const string InvalidUserName = "InvalidUser";
 
         public Exception Error { get; set; }
 
-        private AdcAsyncResult Result { get; set; }
-
-        public IEnumerable<ValidationResultInfo> SubmitErrors { get; set; }
         public IEnumerable<ValidationResultInfo> SubmitValidationErrors { get; set; }
         public IEnumerable<string> SubmitConflictMembers { get; set; }
         public bool Submitted { get; set; }
 
         public bool CancellationRequested { get; set; }
 
-        public override bool SupportsCancellation
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        private Timer Timer { get; set; }
+        public override bool SupportsCancellation => true;
 
         public void RequestCallback()
         {
-            this.Timer = null;
-            if (this.Result != null)
-            {
-                this.Result.Complete();
-            }
+            _callbackDelay.Release();
         }
 
-        public void RequestCallback(int delay)
-        {
-            // We have to post back to the UI thread to avoid an intermittent hang
-            this.Timer = new Timer(state => this.RequestCallback(), null, delay, Timeout.Infinite);
-            //SynchronizationContext context = SynchronizationContext.Current;
-            //new Timer(state => context.Post(state2 => this.RequestCallback(), null), null, delay, Timeout.Infinite);
-        }
-
-        protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
+        protected override async Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
             MockUser user = null;
 
@@ -200,49 +126,28 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 Assert.Fail("Only Login, Logout, and GetUser methods are supported for queries.");
             }
 
+            cancellationToken.Register(() => this.CancellationRequested = true);
+            await _callbackDelay.WaitAsync(cancellationToken);
 
-            AsyncCallback completeCallback = (asyncResult) =>
+            // Maybe assert expected type
+            if (this.Error != null)
             {
-                var adcAsyncResult = (AdcAsyncResult)asyncResult;
-                var tcs = (TaskCompletionSource<QueryCompletedResult>)adcAsyncResult.AsyncState;
-
-                // Maybe assert expected type
-                if (this.Error != null)
-                {
-                    tcs.SetException(this.Error);
-                }
-                else if (this.CancellationRequested)
-                {
-                    tcs.SetCanceled();
-                }
-                else
-                {
-                    QueryCompletedResult results;
-                    if (user == null)
-                    {
-                        results = new QueryCompletedResult(Array.Empty<MockUser>(), Array.Empty<Entity>(), 0, Array.Empty<ValidationResult>());
-                    }
-                    else
-                    {
-                        results = new QueryCompletedResult(new MockUser[] { user }, Array.Empty<Entity>(), 1, Array.Empty<ValidationResult>());
-                    }
-
-                    tcs.SetResult(results);
-                }
-            };
-
-            var taskCompletionSource = new TaskCompletionSource<QueryCompletedResult>();
-            this.Result = new AdcAsyncResult(user, completeCallback, taskCompletionSource);
-
-            cancellationToken.Register(res =>
+                throw this.Error;
+            }
+            QueryCompletedResult results;
+            if (user == null)
             {
-                this.CancellationRequested = true;
-            }, this.Result);
-
-            return taskCompletionSource.Task;
+                results = new QueryCompletedResult(Array.Empty<MockUser>(), Array.Empty<Entity>(), 0, Array.Empty<ValidationResult>());
+            }
+            else
+            {
+                results = new QueryCompletedResult(new MockUser[] { user }, Array.Empty<Entity>(), 1, Array.Empty<ValidationResult>());
+            }
+            return results;
         }
 
-        protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
+
+        protected override async Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             Assert.AreEqual(0, changeSet.AddedEntities.Count,
                 "Change set should not contained added entities.");
@@ -257,47 +162,31 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.AreEqual(1, submitOperations.Length,
                 "A single submit operation is expected.");
 
+     
+            cancellationToken.Register(() => this.CancellationRequested = true);
+            await _callbackDelay.WaitAsync(cancellationToken);
+
+            // Maybe assert expected type
+            if (this.Error != null)
+            {
+                throw this.Error;
+            }
+
+            this.Submitted = true;
+
             MockUser userToSubmit = (MockUser)submitOperations[0].Entity;
             MockUser userToReturn = new MockUser() { Name = userToSubmit.Name, Type = UserType.Saved };
 
             List<ChangeSetEntry> submitOperationsToReturn = new List<ChangeSetEntry>();
             submitOperationsToReturn.Add(new ChangeSetEntry(userToReturn, submitOperations[0].Id, submitOperations[0].Operation));
 
+            var operation = submitOperationsToReturn.First();
+            operation.Entity = userToReturn;
 
-            AsyncCallback completeCallback = (asyncResult) =>
-            {
-                var tcs = (TaskCompletionSource<SubmitCompletedResult>)asyncResult.AsyncState;
+            operation.ConflictMembers = this.SubmitConflictMembers;
+            operation.ValidationErrors = this.SubmitValidationErrors;
 
-                // Maybe assert expected type
-                if (this.Error != null)
-                {
-                    tcs.SetException(this.Error);
-                }
-                else if (this.CancellationRequested)
-                {
-                    tcs.SetCanceled();
-                }
-                else
-                {
-                    this.Submitted = true;
-
-                    AdcSubmitAsyncResult result = asyncResult as AdcSubmitAsyncResult;
-                    result.SubmitOperations.First().Entity = result.User;
-                    result.Submit(this.SubmitConflictMembers, this.SubmitErrors, this.SubmitValidationErrors);
-                    SubmitCompletedResult results = new SubmitCompletedResult(result.ChangeSet, result.SubmitOperations);
-                    tcs.SetResult(results);
-                }
-            };
-
-            var taskCompletionSource = new TaskCompletionSource<SubmitCompletedResult>();
-            this.Result = new AdcSubmitAsyncResult(changeSet, submitOperationsToReturn, userToReturn, completeCallback, taskCompletionSource);
-
-            cancellationToken.Register(res =>
-            {
-                this.CancellationRequested = true;
-            }, this.Result);
-
-            return taskCompletionSource.Task;
+            return new SubmitCompletedResult(changeSet, submitOperationsToReturn);
         }
 
         protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
