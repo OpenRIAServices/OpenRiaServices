@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using System.Threading.Tasks;
+using OpenRiaServices.DomainServices.Client;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 {
@@ -62,8 +63,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
             public const string ValidUserName = "ValidUser";
             public const string InvalidUserName = "InvalidUser";
 
-            protected MockAsyncResult Result { get; set; }
-
             public Exception Error { get; set; }
 
             private Timer Timer { get; set; }
@@ -72,10 +71,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
             private SemaphoreSlim _delay = new SemaphoreSlim(0);
 
-            public void RequestCallback()
+            public AuthenticationOperation RequestCallback()
             {
+                var operation = this.Operation;
+
                 this.Timer = null;
                 _delay.Release();
+                return operation;
             }
 
             public void RequestCallback(int delay)
@@ -157,6 +159,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
         private class TrackingAuthentication : MockAuthentication
         {
             public int CreateDefaultUserCount { get; set; }
+
+            public AuthenticationOperation Operation => base.Operation;
+
             protected override IPrincipal CreateDefaultUser()
             {
                 this.CreateDefaultUserCount++;
@@ -165,33 +170,78 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
             public int BeginLoginCount { get; set; }
 
+            public int CancelLoginCount { get; set; }
+
+            public int EndLoginCount { get; set; }
+
             protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
             {
                 this.BeginLoginCount++;
-                return base.LoginAsync(parameters, cancellationToken);
+                return base.LoginAsync(parameters, cancellationToken)
+                    .ContinueWith(res =>
+                    {
+                        if (res.IsCanceled)
+                            CancelLoginCount++;
+                        else
+                            EndLoginCount++;
+
+                        return res.GetAwaiter().GetResult();
+                    });
             }
 
             public int BeginLogoutCount { get; set; }
+            public int CancelLogoutCount { get; set; }
+            public int EndLogoutCount { get; set; }
             protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
                 this.BeginLogoutCount++;
-                return base.LogoutAsync(cancellationToken);
+                return base.LogoutAsync(cancellationToken).ContinueWith(res =>
+                {
+                    if (res.IsCanceled)
+                        CancelLogoutCount++;
+                    else
+                        EndLogoutCount++;
+
+                    return res.GetAwaiter().GetResult();
+                });
             }
 
             public int BeginLoadUserCount { get; set; }
+            public int CancelLoadUserCount { get; set; }
+            public int EndLoadUserCount { get; set; }
 
             protected internal override Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
                 this.BeginLoadUserCount++;
-                return base.LoadUserAsync(cancellationToken);
+                return base.LoadUserAsync(cancellationToken).ContinueWith(res =>
+                {
+                    if (res.IsCanceled)
+                        CancelLoadUserCount++;
+                    else
+                        EndLoadUserCount++;
+
+                    return res.GetAwaiter().GetResult();
+                });
             }
 
             public int BeginSaveUserCount { get; set; }
 
+            public int CancelSaveUserCount { get; set; }
+            public int EndSaveUserCount { get; set; }
+
             protected internal override Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
             {
                 this.BeginSaveUserCount++;
-                return base.SaveUserAsync(user, cancellationToken);
+                return base.SaveUserAsync(user, cancellationToken)
+                    .ContinueWith(res =>
+                    {
+                        if (res.IsCanceled)
+                            CancelSaveUserCount++;
+                        else
+                            EndSaveUserCount++;
+
+                        return res.GetAwaiter().GetResult();
+                    });
             }
         }
 
@@ -452,117 +502,111 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
         [TestMethod]
         [Description("Tests that Login calls BeginLogin, CancelLogin, and EndLogin.")]
-        public void LoginCallsBeginCancelEnd()
+        public async Task LoginCallsBeginCancelEnd()
         {
             TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
-            mock.Login(MockAuthentication.ValidUserName, string.Empty).Cancel();
-            mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty)).Cancel();
-            mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty), null, null).Cancel();
+            await CancelAndCheckStatusAsync(mock.Login(MockAuthentication.ValidUserName, string.Empty));
+            await CancelAndCheckStatusAsync(mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty)));
+            await CancelAndCheckStatusAsync(mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty), null, null));
             Assert.AreEqual(3, mock.BeginLoginCount,
                 "BeginLogin should have been called 3 times.");
+            Assert.AreEqual(3, mock.CancelLoginCount, "CancelLoginCount should have been called 3 times.");
 
             mock = new TrackingAuthentication();
-
             // Begin/End
-            // TODO: Determine if I should be able to do this successfully (synchronously)
-            mock.Login(MockAuthentication.ValidUserName, string.Empty);
-            mock.RequestCallback();
-            mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty));
-            mock.RequestCallback();
-            mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty), null, null);
-            mock.RequestCallback();
+            await CompleteAndCheckStatusAsync(mock, mock.Login(MockAuthentication.ValidUserName, string.Empty));
+            await CompleteAndCheckStatusAsync(mock, mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty)));
+            await CompleteAndCheckStatusAsync(mock, mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty), null, null));
             Assert.AreEqual(3, mock.BeginLoginCount,
                 "BeginLogin should have been called 3 times.");
-            //    Assert.AreEqual(3, mock.EndLoginCount,
-            //        "EndLogin should have been called 3 times.");
+            Assert.AreEqual(3, mock.EndLoginCount,
+                "EndLogin should have been called 3 times.");
         }
 
         [TestMethod]
         [Description("Tests that Logout calls BeginLogout, CancelLogout, and EndLogout.")]
-        public void LogoutCallsBeginCancelEnd()
+        public async Task LogoutCallsBeginCancelEnd()
         {
             TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
-            mock.Logout(false).Cancel();
-            mock.Logout(null, null).Cancel();
+            await CancelAndCheckStatusAsync(mock.Logout(false));
+            await CancelAndCheckStatusAsync(mock.Logout(null, null));
             Assert.AreEqual(2, mock.BeginLogoutCount,
                 "BeginLogout should have been called 2 times.");
+            Assert.AreEqual(2, mock.CancelLogoutCount,
+    "CancelLogout should have been called 2 times.");
             // TODO: Verify operations are cancelled
 
             mock = new TrackingAuthentication();
 
             // Begin/End
             // TODO: Determine if I should be able to do this successfully (synchronously)
-            mock.Logout(false);
-            mock.RequestCallback();
-            mock.Logout(null, null);
-            mock.RequestCallback();
+            await CompleteAndCheckStatusAsync(mock, mock.Logout(false));
+            await CompleteAndCheckStatusAsync(mock, mock.Logout(null, null));
             Assert.AreEqual(2, mock.BeginLogoutCount,
                 "BeginLogout should have been called 2 times.");
-            // TODO: Verify operations are completed
+            Assert.AreEqual(2, mock.EndLogoutCount,
+                "EndLogout should have been called 2 times.");
         }
 
         [TestMethod]
         [Description("Tests that LoadUser calls BeginLoadUser, CancelLoadUser, and EndLoadUser.")]
-        public void LoadUserCallsBeginCancelEnd()
+        public async Task LoadUserCallsBeginCancelEnd()
         {
             TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
-            mock.LoadUser().Cancel();
-            mock.LoadUser(null, null).Cancel();
+            await CancelAndCheckStatusAsync(mock.LoadUser());
+            await CancelAndCheckStatusAsync(mock.LoadUser(null, null));
             Assert.AreEqual(2, mock.BeginLoadUserCount,
                 "BeginLoadUser should have been called 2 times.");
-            // TODO: Verify operations are cancelled
+            Assert.AreEqual(2, mock.CancelLoadUserCount,
+                "EndLoadUser should have been called 2 times.");
 
             mock = new TrackingAuthentication();
 
             // Begin/End
             // TODO: Determine if I should be able to do this successfully (synchronously)
-            mock.LoadUser();
-            mock.RequestCallback();
-            mock.LoadUser(null, null);
-            mock.RequestCallback();
+            await CompleteAndCheckStatusAsync(mock, mock.LoadUser());
+            await CompleteAndCheckStatusAsync(mock, mock.LoadUser(null, null));
             Assert.AreEqual(2, mock.BeginLoadUserCount,
                 "BeginLoadUser should have been called 2 times.");
-            //Assert.AreEqual(2, mock.EndLoadUserCount,
-            //    "EndLoadUser should have been called 2 times.");
+            Assert.AreEqual(2, mock.EndLoadUserCount,
+                "EndLoadUser should have been called 2 times.");
         }
 
         [TestMethod]
         [Description("Tests that SaveUser calls BeginSaveUser, CancelSaveUser, and EndSaveUser.")]
-        public void SaveUserCallsBeginCancelEnd()
+        public async Task SaveUserCallsBeginCancelEnd()
         {
             TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
-            mock.SaveUser(false).Cancel();
-            mock.SaveUser(null, null).Cancel();
+            await CancelAndCheckStatusAsync(mock.SaveUser(false));
+            await CancelAndCheckStatusAsync(mock.SaveUser(null, null));
             Assert.AreEqual(2, mock.BeginSaveUserCount,
                 "BeginSaveUser should have been called 2 times.");
-            //Assert.AreEqual(2, mock.CancelSaveUserCount,
-            //    "CancelSaveUser should have been called 2 times.");
+            Assert.AreEqual(2, mock.CancelSaveUserCount,
+                "CancelSaveUser should have been called 2 times.");
 
             mock = new TrackingAuthentication();
 
             // Begin/End
             // TODO: Determine if I should be able to do this successfully (synchronously)
-            mock.SaveUser(false);
-            mock.RequestCallback();
-            mock.SaveUser(null, null);
-            mock.RequestCallback();
+            await CompleteAndCheckStatusAsync(mock, mock.SaveUser(false));
+            await CompleteAndCheckStatusAsync(mock, mock.SaveUser(null, null));
             Assert.AreEqual(2, mock.BeginSaveUserCount,
                 "BeginSaveUser should have been called 2 times.");
-            //Assert.AreEqual(2, mock.EndSaveUserCount,
-            //    "EndSaveUser should have been called 2 times.");
+            Assert.AreEqual(2, mock.EndSaveUserCount,
+                "EndSaveUser should have been called 2 times.");
         }
 
         #endregion
 
-        #region Twice
+        #region Twice (invoking operation while busy should raise exception)
 
         [TestMethod]
         [Description("Tests that invoking Login twice throws an InvalidOperationException")]
@@ -1359,5 +1403,28 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
         }
 
         #endregion
+
+
+
+        private static async Task CancelAndCheckStatusAsync(AuthenticationOperation op)
+        {
+            Assert.IsFalse(op.IsComplete);
+            op.Cancel();
+            Assert.IsTrue(op.IsCancellationRequested);
+            await op;
+            Assert.IsTrue(op.IsComplete);
+            Assert.IsTrue(op.IsCanceled);
+            Assert.IsFalse(op.HasError);
+        }
+
+        private static async Task CompleteAndCheckStatusAsync(MockAuthenticationNoCancel mock, AuthenticationOperation op)
+        {
+            Assert.IsFalse(op.IsComplete);
+            await mock.RequestCallback();
+            Assert.IsTrue(op.IsComplete);
+            Assert.IsFalse(op.IsCanceled);
+            Assert.IsFalse(op.HasError);
+        }
+
     }
 }

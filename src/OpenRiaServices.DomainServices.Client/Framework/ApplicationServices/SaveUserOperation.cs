@@ -32,9 +32,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </summary>
         /// <param name="callback">The callback invoked when the operation completes</param>
         /// <returns>The async result for the operation</returns>
-        protected async override Task<object> InvokeAsync(CancellationToken cancellationToken)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return await this.Service.SaveUserAsync(this.User, cancellationToken);
+            return CastToObjectTask(this.Service.SaveUserAsync(this.Service.User, cancellationToken));
         }
 
         /// <summary>

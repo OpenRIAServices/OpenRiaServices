@@ -187,16 +187,6 @@ namespace OpenRiaServices.DomainServices.Client
                     throw ExceptionHandlingUtility.GetUnwrappedException(ex); ;
                 }
             }
-
-            OnCancellationRequested();
-        }
-
-        /// <summary>
-        /// Called when user calls <see cref="Cancel"/>,
-        /// can be overriden to transition operation into cancelled immediately.
-        /// </summary>
-        private protected virtual void OnCancellationRequested()
-        {
         }
 
         /// <summary>

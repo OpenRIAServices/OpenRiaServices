@@ -62,9 +62,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Begins a login operation
         /// </summary>
         /// <returns>The async result for the operation</returns>
-        protected override async Task<object> InvokeAsync(CancellationToken cancellationToken)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return await this.Service.LoginAsync(this.LoginParameters, cancellationToken);
+            return CastToObjectTask(this.Service.LoginAsync(this.LoginParameters, cancellationToken));
         }
 
         /// <summary>

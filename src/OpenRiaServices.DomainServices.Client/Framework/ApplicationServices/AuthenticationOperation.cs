@@ -33,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <param name="service">The service this operation will use to implement Begin, Cancel, and End</param>
         /// <param name="userState">Optional user state.</param>
         internal AuthenticationOperation(AuthenticationService service, object userState) :
-            base(userState, false)
+            base(userState, /* TODO: pass on from ctor */ true)
         {
             Debug.Assert(service != null, "The service cannot be null.");
             this._service = service;
@@ -180,9 +180,16 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
-        private protected override void OnCancellationRequested()
+        private protected Task<object> CastToObjectTask<T>(Task<T> task)
+            where T : class
         {
-            base.SetCancelled();
+            return task.ContinueWith(res =>
+            {
+                return (object)res.GetAwaiter().GetResult();
+            }
+           , CancellationToken.None
+           , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.ExecuteSynchronously
+           , TaskScheduler.Default);
         }
         #endregion
     }

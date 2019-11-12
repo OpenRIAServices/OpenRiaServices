@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Only one operation can be active at a time. This property should not be set directly
         /// but instead can be modified via the <see cref="StartOperation"/> method.
         /// </remarks>
-        private AuthenticationOperation Operation { get; set; }
+        private protected AuthenticationOperation Operation { get; private set; }
 
         #endregion
 
@@ -636,7 +636,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
         /// will be passed to the cancel and end methods.
         /// </returns>
-        protected internal abstract Task<LoginResult> LoginAsync(LoginParameters parameter, CancellationToken cancellationToken);
+        protected internal abstract Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken);
 
         /// <summary>
         /// Begins an asynchronous <c>Logout</c> operation.
