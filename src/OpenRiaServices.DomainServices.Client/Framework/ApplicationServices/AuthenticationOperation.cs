@@ -13,70 +13,27 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public abstract class AuthenticationOperation : OperationBase
     {
-        #region Member fields
-
-        // By default, events will be dispatched to the context the service is created in
-        private readonly SynchronizationContext _synchronizationContext =
-            SynchronizationContext.Current ?? new SynchronizationContext();
-
-        private IAsyncResult _asyncResult;
-
-        private readonly AuthenticationService _service;
-
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationOperation"/> class.
         /// </summary>
         /// <param name="service">The service this operation will use to implement Begin, Cancel, and End</param>
         /// <param name="userState">Optional user state.</param>
-        internal AuthenticationOperation(AuthenticationService service, object userState) :
-            base(userState, /* TODO: pass on from ctor */ true)
+        internal AuthenticationOperation(AuthenticationService service, object userState)
+            : base(userState, service.SupportsCancellation)
         {
             Debug.Assert(service != null, "The service cannot be null.");
-            this._service = service;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the async result returned from <see cref="InvokeAsync"/>.
-        /// </summary>
-        /// <remarks>
-        /// If <see cref="InvokeAsync"/> has not been called, this may be <c>null</c>.
-        /// </remarks>
-        protected IAsyncResult AsyncResult
-        {
-            get { return this._asyncResult; }
+            this.Service = service;
         }
 
         /// <summary>
         /// Gets the service this operation will use to implement Begin, Cancel, and End.
         /// </summary>
-        protected AuthenticationService Service
-        {
-            get { return this._service; }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether the operation supports cancellation.
-        /// </summary>
-        protected override bool SupportsCancellation
-        {
-            get { return this.Service.SupportsCancellation; }
-        }
+        protected AuthenticationService Service { get; }
 
         /// <summary>
         /// Gets the result as an <see cref="AuthenticationResult"/>.
         /// </summary>
-        protected new AuthenticationResult Result
-        {
-            get { return (AuthenticationResult)base.Result; }
-        }
+        protected new AuthenticationResult Result => (AuthenticationResult)base.Result;
 
         /// <summary>
         /// Gets the user principal.
@@ -89,8 +46,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             get { return (this.Result == null) ? null : this.Result.User; }
         }
-
-        #endregion
 
         #region Methods
 
@@ -105,25 +60,18 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             var task = this.InvokeAsync(this.CancellationToken);
 
-            // Many tests throw from InvokeXX directly and expect it to be rethrown
-            if (task.IsCompleted)
-            {
-                InvokeComplete(task, this);
-            }
-            else
-            {
-                var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
-                task.ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
-            }
+            // Continue on same SynchronizationContext
+            var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+            task.ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
 
             static void InvokeComplete(Task<object> res, object state)
             {
-                var This = (AuthenticationOperation)state;
+                var operation = (AuthenticationOperation)state;
                 object endResult = null;
 
                 if (res.IsCanceled)
                 {
-                    This.SetCancelled();
+                    operation.SetCancelled();
                     return;
                 }
 
@@ -133,8 +81,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 }
                 catch (Exception e)
                 {
-                    This.SetError(e);
-                    This.RaiseCompletionPropertyChanges();
+                    operation.SetError(e);
+                    operation.RaiseCompletionPropertyChanges();
 
                     if (e.IsFatal())
                     {
@@ -144,12 +92,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     return;
                 }
 
-                This.Complete(endResult);
-                This.RaiseCompletionPropertyChanges();
+                operation.Complete(endResult);
+                operation.RaiseCompletionPropertyChanges();
             }
         }
-
-
 
         /// <summary>
         /// Template method for invoking the corresponding Begin method in the
