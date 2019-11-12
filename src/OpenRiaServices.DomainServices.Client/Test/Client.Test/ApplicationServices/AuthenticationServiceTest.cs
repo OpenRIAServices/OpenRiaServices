@@ -184,9 +184,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                             CancelLoginCount++;
                         else
                             EndLoginCount++;
-
-                        return res.GetAwaiter().GetResult();
-                    });
+                        return res;
+                    }).Unwrap();
             }
 
             public int BeginLogoutCount { get; set; }
@@ -202,8 +201,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                     else
                         EndLogoutCount++;
 
-                    return res.GetAwaiter().GetResult();
-                });
+                    return res;
+                }).Unwrap();
             }
 
             public int BeginLoadUserCount { get; set; }
@@ -220,8 +219,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                     else
                         EndLoadUserCount++;
 
-                    return res.GetAwaiter().GetResult();
-                });
+                    return res;
+                }).Unwrap();
             }
 
             public int BeginSaveUserCount { get; set; }
@@ -240,8 +239,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                         else
                             EndSaveUserCount++;
 
-                        return res.GetAwaiter().GetResult();
-                    });
+                        return res;
+                    }).Unwrap();
             }
         }
 
