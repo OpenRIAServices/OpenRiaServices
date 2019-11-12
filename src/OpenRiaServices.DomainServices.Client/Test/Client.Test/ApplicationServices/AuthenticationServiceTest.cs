@@ -13,7 +13,7 @@ using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.Descri
 using System.Threading.Tasks;
 using OpenRiaServices.DomainServices.Client;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
+namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="AuthenticationService"/> members.
