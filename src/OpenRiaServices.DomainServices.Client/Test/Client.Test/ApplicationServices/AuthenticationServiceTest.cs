@@ -654,7 +654,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
         [TestMethod]
         [Description("Tests that Login and Cancel can be synchronously interleaved")]
-        public void LoginCancelLogin()
+        public async Task LoginCancelLogin()
         {
             MockAuthentication mock = new MockAuthentication();
 
@@ -671,13 +671,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 "Service should be logging in.");
 
             op.Cancel();
+            await op;
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
             Assert.IsFalse(mock.IsLoggingIn,
                 "Service should not be logging in.");
 
-            mock.Login(null);
+            _ = mock.Login(null);
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
@@ -687,7 +688,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
         [TestMethod]
         [Description("Tests that Logout and Cancel can be synchronously interleaved")]
-        public void LogoutCancelLogout()
+        public async Task LogoutCancelLogout()
         {
             MockAuthentication mock = new MockAuthentication();
 
@@ -704,13 +705,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 "Service should be logging out.");
 
             op.Cancel();
+            await op;
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
             Assert.IsFalse(mock.IsLoggingOut,
                 "Service should not be logging out.");
 
-            mock.Logout(false);
+            _ = mock.Logout(false);
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
@@ -720,7 +722,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
         [TestMethod]
         [Description("Tests that LoadUser and Cancel can be synchronously interleaved")]
-        public void LoadUserCancelLoadUser()
+        public async Task LoadUserCancelLoadUser()
         {
             MockAuthentication mock = new MockAuthentication();
 
@@ -737,13 +739,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 "Service should be loading.");
 
             op.Cancel();
+            await op;
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
             Assert.IsFalse(mock.IsLoadingUser,
                 "Service should not be loading.");
 
-            mock.LoadUser();
+            _ = mock.LoadUser();
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
@@ -753,7 +756,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
 
         [TestMethod]
         [Description("Tests that SaveUser and Cancel can be synchronously interleaved")]
-        public void SaveUserCancelSaveUser()
+        public async Task SaveUserCancelSaveUser()
         {
             MockAuthentication mock = new MockAuthentication();
 
@@ -770,13 +773,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.UnitTests
                 "Service should be saving.");
 
             op.Cancel();
+            await op;
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
             Assert.IsFalse(mock.IsSavingUser,
                 "Service should not be saving.");
 
-            mock.SaveUser(false);
+            _ = mock.SaveUser(false);
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
