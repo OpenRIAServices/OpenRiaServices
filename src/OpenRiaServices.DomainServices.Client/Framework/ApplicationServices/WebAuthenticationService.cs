@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// Initializes a new instance of the <see cref="WebAuthenticationService"/> class.
         /// </summary>
-        internal WebAuthenticationService()
+        private protected WebAuthenticationService()
         {
         }
 

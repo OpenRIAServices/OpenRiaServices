@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private readonly object _syncLock = new object();
 
         // By default, events will be dispatched to the context the service is created in
-        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
+        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
         private IPrincipal _user;
         private PropertyChangedEventHandler _propertyChangedEventHandler;
 
