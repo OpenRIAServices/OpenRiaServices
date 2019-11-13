@@ -324,7 +324,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 
         #endregion
 
-        private const int Delay = 200;
+        private const int Delay = 5;
         private const string ErrorMessage = "There was an error";
 
         // TODO:
