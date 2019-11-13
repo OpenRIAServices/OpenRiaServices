@@ -36,7 +36,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation<double> invoke = ctxt.RoundtripDouble(d);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 double result = invoke.Value;
@@ -93,10 +93,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 validate((InvokeOperation<bool>)sender);
             };
 
-            EnqueueConditional(delegate
-            {
-                return op.IsComplete;
-            });
+            this.EnqueueCompletion(() => op);
             EnqueueCallback(delegate
             {
                 validate(op);
@@ -115,7 +112,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             invoke.Cancel();
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Value);
@@ -136,7 +133,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Assert.AreEqual(0, invoke.ValidationErrors.Count());
             Assert.IsNull(invoke.Value);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Value);
@@ -163,7 +160,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     notifications.Add(e.PropertyName);
                 };
             });
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(invoke.HasError);
@@ -190,7 +187,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 invoke = cities.Echo("hello", TestHelperMethods.DefaultOperationAction, "my user state");
             });
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Error);
@@ -206,7 +203,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 invoke = cities.Echo("hello");
             });
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(invoke.Value, "Echo: hello");
@@ -224,7 +221,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = provider.VoidMethod(TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Value);
@@ -243,7 +240,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var xml = XElement.Parse(string.Format("<{0} xmlns=\"foo\">{1}</{0}>", elementName, elementValue));
             InvokeOperation invoke = provider.ReturnsXElement(xml, TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 object returnValue = invoke.Value;
@@ -262,7 +259,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             MixedType mt = new MixedType();
             InvokeOperation invoke = provider.ReturnsEntity_Online(mt, "MixedType_Other", TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(invoke);
@@ -281,7 +278,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             InvokeOperation invoke = provider.ReturnsEntityCollection_Online(3, TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(invoke);
@@ -305,7 +302,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = provider.ReturnsDictionary(dictionary, TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 object returnValue = invoke.Value;
@@ -331,7 +328,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = provider.VariousParameterTypes("hello", 2, true, TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 // 8 because "hello".Length (5) + 2 + true (1) = 8.
@@ -376,7 +373,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = provider.ThrowOnlineException(TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Value);
@@ -398,7 +395,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = provider.MethodRequiresAuthentication(TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Value);
@@ -426,7 +423,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation<int> invoke = provider.IncrementBid1ForA(inputA, TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(invoke.Value);
@@ -480,7 +477,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
 
             InvokeOperation<IEnumerable<TestEntityForInvokeOperations>> invoke = ctxt.InvokeOpWithIEnumerableParam(list.AsEnumerable());
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
@@ -515,7 +512,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             };
 
             InvokeOperation<IEnumerable<TestEntityForInvokeOperations>> invoke = ctxt.InvokeOpWithIEnumerableParamAndNoSideEffects(list.AsEnumerable());
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
@@ -548,7 +545,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {
@@ -561,7 +558,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     valuesObj.UInt64Prop, valuesObj.CharProp, valuesObj.DoubleProp, valuesObj.SingleProp, TestHelperMethods.DefaultOperationAction, null);
             });
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 // verify invocation completed succesfully
@@ -591,7 +588,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {
@@ -605,7 +602,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     valuesObj.EnumProp, valuesObj.GuidsProp, valuesObj.UInt64sProp, valuesObj.DateTimeOffsetProp, TestHelperMethods.DefaultOperationAction, null);
             });
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 // verify invocation completed succesfully
@@ -632,7 +629,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {
@@ -648,7 +645,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     valuesObj.NullableTimeSpanListProp, valuesObj.NullableDateTimeOffsetProp, TestHelperMethods.DefaultOperationAction, null);
             });
 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 // verify invocation completed succesfully
@@ -795,7 +792,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             InvokeOperation<string> invokeOp = provider.ReturnHttpMethodWithSideEffects_Online(TestHelperMethods.DefaultOperationAction, null);
 
-            this.EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
             this.EnqueueCallback(() =>
             {
                 Assert.IsFalse(invokeOp.HasError, "Expected operation to complete without error.");
@@ -812,7 +809,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
             InvokeOperation<string> invokeOp = provider.ReturnHttpMethodWithoutSideEffects_Online(TestHelperMethods.DefaultOperationAction, null);
 
-            this.EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
             this.EnqueueCallback(() =>
             {
                 Assert.IsFalse(invokeOp.HasError, "Expected operation to complete without error.");
@@ -849,7 +846,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for invoke operation to return. 
-            EnqueueConditional(() => invoke.IsComplete);
+            this.EnqueueCompletion(() => invoke);
 
             EnqueueCallback(delegate
             {

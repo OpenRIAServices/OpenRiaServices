@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             var invokeOp = ctx.Greet(message);
 
-            this.EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(invokeOp.Error);
@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             var invokeOp = ctx.AddOne(number);
 
-            this.EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(invokeOp.Error);
@@ -61,7 +61,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Check non-null return value
             var invokeOp = ctx.AddNullableOne(number);
-            this.EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(invokeOp.Error);
@@ -70,7 +70,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             // Check null return value
             var invokeNullOp = ctx.AddNullableOne(null);
-            this.EnqueueConditional(() => invokeNullOp.IsComplete);
+            this.EnqueueCompletion(() => invokeNullOp);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(invokeNullOp.Error);
@@ -91,7 +91,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Check that we properly wait for "void-Tasks"
             DateTime start = DateTime.Now;
             var invokeOp = ctx.SleepAndSetLastDelay(delay);
-            this.EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
             this.EnqueueCallback(() =>
             {
                 var actualDelay = (DateTime.Now - start);
@@ -102,7 +102,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Server store the last delay the last thing it does so we shold only get
                 // it if we actually waited for the Task to complete
                 var getDelayOp = ctx.GetLastDelay();
-                this.EnqueueConditional(() => getDelayOp.IsComplete);
+                this.EnqueueCompletion(() => getDelayOp);
                 this.EnqueueCallback(() =>
                 {
                     Assert.IsNull(getDelayOp.Error);
@@ -123,7 +123,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             var normalLoad = ctx.Load(normalQuery);
             var asyncLoad = ctx.LoadAsync(asyncQuery);
-            this.EnqueueConditional(() => normalLoad.IsComplete);
+            this.EnqueueCompletion(() => normalLoad);
             this.EnqueueConditional(() => asyncLoad.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -206,7 +206,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             const string expectedMessage = "GetQueryableRangeWithExceptionFirst";
 
             var load = ctx.Load(exceptionFirstQuery, throwOnError:false);
-            this.EnqueueConditional(() => load.IsComplete);
+            this.EnqueueCompletion(() => load);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNotNull(load.Error, "Exception is null");
@@ -229,7 +229,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             string expectedMessage = "GetQueryableRangeWithExceptionTask";
             
             var load = ctx.Load(exceptionFirstQuery, throwOnError: false);
-            this.EnqueueConditional(() => load.IsComplete);
+            this.EnqueueCompletion(() => load);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNotNull(load.Error, "Exception is null");

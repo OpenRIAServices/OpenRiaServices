@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation<bool> invokeOp = dp.UsesCustomHost(TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(() => invokeOp.IsComplete);
+            this.EnqueueCompletion(() => invokeOp);
 
             EnqueueCallback(() =>
             {
@@ -55,7 +55,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
             LoadOperation lo = dp.Load(dp.GetStatesQuery().Where(s => s.TimeZone == Cities.TimeZone.Pacific), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -77,7 +77,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = dp.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(() =>
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
             LoadOperation lo = dp.Load(dp.GetStatesInShippingZoneQuery(ShippingZone.Eastern), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -120,7 +120,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = dp.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(() =>
             {
                 Assert.IsNull(so.Error);
@@ -139,7 +139,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = dp.Load(dp.GetCitiesQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() => 
                 {
@@ -182,7 +182,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = dp.Load(dp.GetCitiesInStateQuery("WA"), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -211,7 +211,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = dp.Load(dp.GetCitiesInStateQuery(string.Empty), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -234,7 +234,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var cityQuery = dp.GetCitiesQuery().Where(c => c.CountyName == "King");
             LoadOperation lo = dp.Load(cityQuery, false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -275,7 +275,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 lo = dp.Load(query, false);
             });
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {

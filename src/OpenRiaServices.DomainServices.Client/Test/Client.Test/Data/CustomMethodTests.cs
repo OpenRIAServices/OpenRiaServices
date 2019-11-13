@@ -662,7 +662,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = ctxt.Load(ctxt.GetCitiesQuery(), false);
             SubmitOperation so = null;
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 city = ctxt.Cities.First();
@@ -686,7 +686,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);
@@ -716,7 +716,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             City lastRootCity = null;
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 changeset = citiesProvider.EntityContainer.GetChanges();
@@ -766,7 +766,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
             });
             // wait for submit to complete, then verify invoked entities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -808,7 +808,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
             // wait for LoadCities to complete, then LoadZips
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 refCityCount = citiesProvider.Cities.Count;
@@ -816,7 +816,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 // this test the following combinations of CRUD and Domain method in changeset:
@@ -859,7 +859,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(1, so.ChangeSet.AddedEntities.Count);
                 Assert.AreEqual(2, so.ChangeSet.RemovedEntities.Count);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error, string.Format("SubmitOperation.Error should be null.\r\nMessage: {0}\r\nStack Trace:\r\n{1}", so.Error != null ? so.Error.Message : string.Empty, so.Error != null ? so.Error.StackTrace : string.Empty));
@@ -1217,7 +1217,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
@@ -1234,7 +1234,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify invoked entities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -1272,7 +1272,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
@@ -1289,7 +1289,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify invoked entities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -1330,7 +1330,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
@@ -1348,7 +1348,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify invoked entities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -1386,7 +1386,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
@@ -1402,7 +1402,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify invoked entities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -1434,7 +1434,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = provider.Load(provider.GetMixedTypesQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
@@ -1450,7 +1450,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify invoked entities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -1513,7 +1513,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // perform some update operations on an entity, invoke a custom 
             // method and submit changes.
             loadOp = ctx.Load(ctx.GetEntitiesQuery(), false);
-            this.EnqueueConditional(() => loadOp.IsComplete);
+            this.EnqueueCompletion(() => loadOp);
             this.EnqueueCallback(() =>
             {
                 // Verify we loaded OK
@@ -1538,7 +1538,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(entity.IsReadOnly);
                 submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => submitOp.IsComplete);
+            this.EnqueueCompletion(() => submitOp);
             this.EnqueueCallback(() =>
             {
                 // Verify we submitted OK
@@ -1570,7 +1570,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // This should result in a failure since no custom method was 
             // invoked.
             loadOp = ctx.Load(ctx.GetEntitiesQuery(), false);
-            this.EnqueueConditional(() => loadOp.IsComplete);
+            this.EnqueueCompletion(() => loadOp);
             this.EnqueueCallback(() =>
             {
                 // Verify we loaded OK
@@ -1594,7 +1594,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Submit changes
                 submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => submitOp.IsComplete);
+            this.EnqueueCompletion(() => submitOp);
             this.EnqueueCallback(() =>
             {
                 // Verify error message
@@ -1624,7 +1624,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Let's perform some update operations on an entity, invoke a custom 
             // method and submit changes.
             loadOp = ctx.Load(ctx.GetEntitiesQuery(), false);
-            this.EnqueueConditional(() => loadOp.IsComplete);
+            this.EnqueueCompletion(() => loadOp);
             this.EnqueueCallback(() =>
             {
                 // Verify we loaded OK
@@ -1649,7 +1649,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(entity.IsReadOnly);
                 submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => submitOp.IsComplete);
+            this.EnqueueCompletion(() => submitOp);
             this.EnqueueCallback(() =>
             {
                 // Verify we submitted OK
@@ -1691,7 +1691,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 loadOp = ctx.Load(ctx.GetEntities3Query(), TestHelperMethods.DefaultOperationAction, null);
             });
 
-            this.EnqueueConditional(() => loadOp.IsComplete);
+            this.EnqueueCompletion(() => loadOp);
 
             this.EnqueueCallback(() =>
             {
@@ -1710,7 +1710,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
 
-            this.EnqueueConditional(() => submitOp.IsComplete);
+            this.EnqueueCompletion(() => submitOp);
 
             this.EnqueueCallback(() =>
             {
@@ -1755,7 +1755,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     loadOp = ctx.Load(ctx.GetEntities3Query(), TestHelperMethods.DefaultOperationAction, null);
                 });
 
-                this.EnqueueConditional(() => loadOp.IsComplete);
+                this.EnqueueCompletion(() => loadOp);
 
                 this.EnqueueCallback(() =>
                 {
@@ -1786,7 +1786,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-                this.EnqueueConditional(() => submitOp.IsComplete);
+                this.EnqueueCompletion(() => submitOp);
 
                 this.EnqueueCallback(() =>
                 {
@@ -1800,7 +1800,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-                this.EnqueueConditional(() => submitOp.IsComplete);
+                this.EnqueueCompletion(() => submitOp);
 
                 this.EnqueueCallback(() =>
                 {
@@ -1850,7 +1850,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     loadOp = ctx.Load(ctx.GetEntities4Query(), TestHelperMethods.DefaultOperationAction, null);
                 });
 
-                this.EnqueueConditional(() => loadOp.IsComplete);
+                this.EnqueueCompletion(() => loadOp);
 
                 this.EnqueueCallback(() =>
                 {
@@ -1897,7 +1897,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-                this.EnqueueConditional(() => submitOp.IsComplete);
+                this.EnqueueCompletion(() => submitOp);
 
                 this.EnqueueCallback(() =>
                 {
@@ -1911,7 +1911,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-                this.EnqueueConditional(() => submitOp.IsComplete);
+                this.EnqueueCompletion(() => submitOp);
 
                 this.EnqueueCallback(() =>
                 {
@@ -1969,7 +1969,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         loadOp = ctx.Load(ctx.GetEntities3Query(), TestHelperMethods.DefaultOperationAction, null);
                     });
 
-                    this.EnqueueConditional(() => loadOp.IsComplete);
+                    this.EnqueueCompletion(() => loadOp);
 
                     this.EnqueueCallback(() =>
                     {
@@ -2041,7 +2041,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                     });
 
-                    this.EnqueueConditional(() => submitOp.IsComplete);
+                    this.EnqueueCompletion(() => submitOp);
 
                     this.EnqueueCallback(() =>
                     {
@@ -2055,7 +2055,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                         submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                     });
 
-                    this.EnqueueConditional(() => submitOp.IsComplete);
+                    this.EnqueueCompletion(() => submitOp);
 
                     this.EnqueueCallback(() =>
                     {
@@ -2123,7 +2123,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                             loadOp = ctx.Load(ctx.GetEntities5Query(), TestHelperMethods.DefaultOperationAction, null);
                         });
 
-                    this.EnqueueConditional(() => loadOp.IsComplete);
+                    this.EnqueueCompletion(() => loadOp);
 
                     this.EnqueueCallback(() =>
                         {
@@ -2139,7 +2139,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                             submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                         });
 
-                    this.EnqueueConditional(() => submitOp.IsComplete);
+                    this.EnqueueCompletion(() => submitOp);
 
                     this.EnqueueCallback(() =>
                         {
@@ -2155,7 +2155,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                             submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                         });
 
-                    this.EnqueueConditional(() => submitOp.IsComplete);
+                    this.EnqueueCompletion(() => submitOp);
 
                     this.EnqueueCallback(() =>
                         {
@@ -2213,7 +2213,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     loadOp = ctx.Load(ctx.GetEntities6Query(), TestHelperMethods.DefaultOperationAction, null);
                 });
 
-            this.EnqueueConditional(() => loadOp.IsComplete);
+            this.EnqueueCompletion(() => loadOp);
 
             this.EnqueueCallback(() =>
                 {
@@ -2235,7 +2235,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-            this.EnqueueConditional(() => submitOp.IsComplete);
+            this.EnqueueCompletion(() => submitOp);
 
             this.EnqueueCallback(() =>
                 {
@@ -2247,7 +2247,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     submitOp = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-            this.EnqueueConditional(() => submitOp.IsComplete);
+            this.EnqueueCompletion(() => submitOp);
 
             this.EnqueueCallback(() =>
                 {
@@ -2274,7 +2274,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 calc = ctxt.CalculatorValues.First();
@@ -2299,7 +2299,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Submit so server calculates (((((0+2)*3)+1)*5)+2) = 37
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);
@@ -2324,7 +2324,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
             List<string> propChanged = new List<string>();
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 calc = ctxt.CalculatorValueOldCodeGens.First();
@@ -2346,7 +2346,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // Submit so server calculates 0 + 2*2
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);

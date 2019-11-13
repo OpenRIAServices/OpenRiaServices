@@ -1,21 +1,12 @@
 ﻿extern alias SSmDsClient;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
-using OpenRiaServices.DomainServices.Client;
-using OpenRiaServices.DomainServices.Client.Test.Services;
-using System.Xml.Linq;
 using Cities;
-using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDomainServices.LTS;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -38,10 +29,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsQuery().Where(p => p.ProductID < 0);
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -60,10 +48,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = dc.GetCitiesQuery().Where(c => c.Name == "-");
             LoadOperation lo = dc.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -82,10 +67,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsQuery().OrderBy(p => p.Name).Take(50);
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -104,10 +86,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = dc.GetCitiesQuery();
             LoadOperation lo = dc.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -126,10 +105,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsWithCachingQuery().OrderBy(p => p.Name).Take(50);
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -148,10 +124,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsQuery().OrderBy(p => p.Name).Take(500);
             LoadOperation lo = catalog.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -172,10 +145,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             string str = "Hello, World!";
             InvokeOperation<string> io = dc.ReturnsString_Online(str);
 
-            EnqueueConditional(delegate
-            {
-                return io.IsComplete;
-            });
+            this.EnqueueCompletion(() => io);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(io);
@@ -244,10 +214,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
             SubmitOperation so = dc.SubmitChanges();
 
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -276,10 +243,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             }
             SubmitOperation so = dc.SubmitChanges();
 
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);

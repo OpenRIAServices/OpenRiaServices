@@ -516,7 +516,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Cities.CityDomainContext dp = new Cities.CityDomainContext(TestURIs.Cities);    // Abs URI so runs on desktop too
             LoadOperation lo = dp.Load(dp.GetCitiesQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -551,7 +551,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Cities.CityDomainContext dp = new Cities.CityDomainContext(TestURIs.Cities);    // Abs URI so runs on desktop too
             LoadOperation lo = dp.Load(dp.GetCitiesQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {
@@ -604,7 +604,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Cities.CityDomainContext dp = new Cities.CityDomainContext(TestURIs.Cities);    // Abs URI so runs on desktop too
             LoadOperation lo = dp.Load(dp.GetCitiesQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {

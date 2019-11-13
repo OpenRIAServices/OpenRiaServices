@@ -33,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -67,7 +67,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<Entity> expectedUpdates = null;
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -92,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedUpdates = cs.Where(p => p.HasChildChanges || p.HasPropertyChanges).ToArray();
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 this.VerifySuccess(ctxt, so, expectedUpdates);
@@ -115,7 +115,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<Entity> expectedUpdates = null;
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -140,7 +140,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedUpdates = cs.Where(p => p.HasChildChanges || p.HasPropertyChanges).ToArray();
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 this.VerifySuccess(ctxt, so, expectedUpdates);
@@ -161,7 +161,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<Entity> expectedUpdates = null;
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -186,7 +186,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedUpdates = cs.Where(p => p.HasChildChanges || p.HasPropertyChanges).ToArray();
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 this.VerifySuccess(ctxt, so, expectedUpdates);
@@ -207,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<Entity> expectedUpdates = null;
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -232,7 +232,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedUpdates = cs.Where(p => p.HasChildChanges || p.HasPropertyChanges).ToArray();
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 this.VerifySuccess(ctxt, so, expectedUpdates);
@@ -253,7 +253,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             IEnumerable<Entity> expectedUpdates = null;
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -280,7 +280,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 expectedUpdates = cs.Where(p => p.HasChildChanges || p.HasPropertyChanges).ToArray();
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 this.VerifySuccess(ctxt, so, expectedUpdates);

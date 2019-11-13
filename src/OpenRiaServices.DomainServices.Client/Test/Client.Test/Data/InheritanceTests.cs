@@ -132,7 +132,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             CityWithInfo cityWithInfo = null;
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 changeset = citiesProvider.EntityContainer.GetChanges();
@@ -174,7 +174,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
             });
             // wait for submit to complete, then verify invokedEntities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 if (so.Error != null)
@@ -219,7 +219,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 cityWithInfo = citiesProvider.Cities.FirstOrDefault() as CityWithInfo;
@@ -271,7 +271,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
              });
             // wait for submit to complete, then verify invokedEntities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -316,7 +316,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 cityWithInfo = citiesProvider.Cities.FirstOrDefault() as CityWithInfo;
@@ -368,7 +368,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
             });
             // wait for submit to complete, then verify invokedEntities in changeset
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
@@ -412,7 +412,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
             // wait for Load to complete
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {
@@ -423,7 +423,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so = citiesContext.SubmitChanges();
             });
             // wait for submit to complete
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 if (so.Error != null)
@@ -458,7 +458,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             string originalCountyName = null;
 
             // wait for Load to complete
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {
@@ -476,7 +476,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so = citiesContext.SubmitChanges();
             });
             // wait for submit to complete
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 if (so.Error != null)
@@ -517,10 +517,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             //  survives across queries)
             InvokeOperation invoke = citiesContext.ResetData(null, null);
 
-            EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 if (invoke.Error != null)
@@ -537,7 +534,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
 
             // wait for Load to complete
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {
@@ -557,7 +554,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so = citiesContext.SubmitChanges();
             });
             // wait for submit to complete
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 if (so.Error != null)
@@ -578,7 +575,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // Wait for deleted city query to complete
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(delegate
             {

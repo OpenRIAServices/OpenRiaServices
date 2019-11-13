@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation submit = null;
             LoadOperation<TestDomainServices.MockReport> load = context.Load(context.GetReportsQuery(), false);
 
-            this.EnqueueConditional(() => load.IsComplete);
+            this.EnqueueCompletion(() => load);
 
             this.EnqueueCallback(() =>
             {
@@ -82,7 +82,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 submit = context.SubmitChanges();
             });
             
-            this.EnqueueConditional(() => submit.IsComplete);
+            this.EnqueueCompletion(() => submit);
             
             this.EnqueueCallback(() =>
             {

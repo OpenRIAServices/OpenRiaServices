@@ -902,7 +902,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ConfigurableDomainContext catalog = new ConfigurableDomainContext(new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog), container);
 
             var load = catalog.Load(catalog.GetEntityQuery<Employee>("GetEmployees"), throwOnError:false);
-            this.EnqueueConditional(() => load.IsComplete);
+            this.EnqueueCompletion(() => load);
             this.EnqueueCallback(() =>
             {
                 Assert.AreEqual(null, load.Error);

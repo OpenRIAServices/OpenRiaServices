@@ -250,7 +250,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
                     (lo) => WebDomainClientTests.HandleError(lo, ref error),
                     null);
             });
-            this.EnqueueConditional(() => op.IsComplete);
+            this.EnqueueCompletion(() => op);
             this.EnqueueCallback(() =>
             {
                 // Expect a 'Not Found'
@@ -295,7 +295,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
                     (lo) => WebDomainClientTests.HandleError(lo, ref error),
                     null);
             });
-            this.EnqueueConditional(() => op.IsComplete);
+            this.EnqueueCompletion(() => op);
 #if SILVERLIGHT
             this.EnqueueCallback(() =>
             {
@@ -328,7 +328,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
                     (io) => WebDomainClientTests.HandleError(io, ref error),
                     null);
             });
-            this.EnqueueConditional(() => op.IsComplete);
+            this.EnqueueCompletion(() => op);
             this.EnqueueCallback(() =>
             {
                 Assert.IsInstanceOfType(error, typeof(DomainOperationException));

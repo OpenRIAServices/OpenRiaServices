@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 
             AuthenticationOperation ao = service.Login("manager", "manager");
 
-            this.EnqueueConditional(() => ao.IsComplete);
+            this.EnqueueCompletion(() => ao);
 
             this.EnqueueCallback(() =>
             {
@@ -33,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 ao = service.Logout(false);
             });
 
-            this.EnqueueConditional(() => ao.IsComplete);
+            this.EnqueueCompletion(() => ao);
 
             this.EnqueueCallback(() =>
             {
