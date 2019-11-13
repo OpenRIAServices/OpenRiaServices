@@ -69,7 +69,6 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets a value indicating whether this operation supports cancellation.
-        /// If overridden to return true, <see cref="CancelCore"/> must also be overridden.
         /// </summary>
         protected bool SupportsCancellation => this._cancellationTokenSource != null;
 
@@ -79,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Client
         public bool IsCancellationRequested => this._cancellationTokenSource?.IsCancellationRequested == true;
 
         /// <summary>
-        /// Gets a <see cref="System.Threading.CancellationToken"/> which is cancelled if 
+        /// Gets a <see cref="System.Threading.CancellationToken"/> which is cancelled 
         /// when this operation is cancelled. 
         /// It is valid if the operation support cancellation se constructor.
         /// </summary>
