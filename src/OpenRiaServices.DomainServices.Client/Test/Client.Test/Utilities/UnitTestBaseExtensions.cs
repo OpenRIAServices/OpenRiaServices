@@ -48,7 +48,9 @@ namespace OpenRiaServices.Silverlight.Testing
                 if (!operation.IsComplete)
                 {
                     using var semaphore = new SemaphoreSlim(0);
-                    operation.Completed += (_, a) => semaphore.Release();
+                    // The awaiter has some extra code to wait a bit more after Completed event
+                    // so more property changes etc will have time to trigger
+                    operation.GetAwaiter().OnCompleted(() => semaphore.Release());
 
                     if (!semaphore.Wait(TimeSpan.FromSeconds(timeoutInSeconds)))
                         Assert.Fail(UnitTestBase.ComposeTimeoutMessage(timeoutInSeconds, string.Empty));
