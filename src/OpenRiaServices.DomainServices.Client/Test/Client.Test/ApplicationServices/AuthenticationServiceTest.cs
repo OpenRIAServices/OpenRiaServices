@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             public UserType Type { get; set; }
         }
 
-        private class MockAuthenticationNoCancel : AuthenticationService
+        private class MockAuthenticationNoCancel : AuthenticationService, IDisposable
         {
             public const string ValidUserName = "ValidUser";
             public const string InvalidUserName = "InvalidUser";
@@ -53,7 +53,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 
             public bool CreateNullDefaultUser { get; set; }
 
-            private SemaphoreSlim _delay = new SemaphoreSlim(0);
+            private readonly SemaphoreSlim _delay = new SemaphoreSlim(0);
 
             public AuthenticationOperation RequestCallback()
             {
@@ -129,6 +129,31 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 
                 return new SaveUserResult(new MockPrincipal() { Type = UserType.Saved });
             }
+
+            #region IDisposable Support
+            private bool _disposedValue = false; // To detect redundant calls
+
+            protected virtual void Dispose(bool disposing)
+            {
+                if (!_disposedValue)
+                {
+                    if (disposing)
+                    {
+                        if (Timer != null)
+                            Timer.Dispose();
+                        _delay.Dispose();
+                    }
+
+                    _disposedValue = true;
+                }
+            }
+
+            public void Dispose()
+            {
+                // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+                Dispose(true);
+            }
+            #endregion
         }
 
         private class MockAuthentication : MockAuthenticationNoCancel
@@ -351,7 +376,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that User throws an InvalidOperationException when CreateDefaultUser returns null.")]
         public void UserThrowsOnNull()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
             mock.CreateNullDefaultUser = true;
 
             ExceptionHelper.ExpectException<InvalidOperationException>(
@@ -362,7 +387,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests the default values for an AuthenticationService.")]
         public void DefaultValues()
         {
-            MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel();
+            using MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel();
 
             Assert.IsFalse(mock.IsBusy,
                 "The AuthenticationService should not be busy.");
@@ -396,7 +421,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that exceptions thrown from BeginXx are thrown from Xx.")]
         public void BeginExceptionsThrown()
         {
-            ThrowingAuthentication mock = new ThrowingAuthentication();
+            using ThrowingAuthentication mock = new ThrowingAuthentication();
             mock.BeginError = new Exception(AuthenticationServiceTest.ErrorMessage);
 
             ExceptionHelper.ExpectException<Exception>(
@@ -474,7 +499,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that getting User will call CreateDefaultUser.")]
         public void UserCallsCreateDefaultUser()
         {
-            TrackingAuthentication mock = new TrackingAuthentication();
+            using TrackingAuthentication mock = new TrackingAuthentication();
             Assert.IsNotNull(mock.User,
                 "Getting User.");
             Assert.IsNotNull(mock.User,
@@ -487,7 +512,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that Login calls BeginLogin, CancelLogin, and EndLogin.")]
         public async Task LoginCallsBeginCancelEnd()
         {
-            TrackingAuthentication mock = new TrackingAuthentication();
+            using TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
             await CancelAndCheckStatusAsync(mock.Login(MockAuthentication.ValidUserName, string.Empty));
@@ -497,7 +522,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 "BeginLogin should have been called 3 times.");
             Assert.AreEqual(3, mock.CancelLoginCount, "CancelLoginCount should have been called 3 times.");
 
-            mock = new TrackingAuthentication();
+            mock.BeginLoginCount = 0;
             // Begin/End
             await CompleteAndCheckStatusAsync(mock, mock.Login(MockAuthentication.ValidUserName, string.Empty));
             await CompleteAndCheckStatusAsync(mock, mock.Login(new LoginParameters(MockAuthentication.ValidUserName, string.Empty)));
@@ -512,7 +537,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that Logout calls BeginLogout, CancelLogout, and EndLogout.")]
         public async Task LogoutCallsBeginCancelEnd()
         {
-            TrackingAuthentication mock = new TrackingAuthentication();
+            using TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
             await CancelAndCheckStatusAsync(mock.Logout(false));
@@ -520,13 +545,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.AreEqual(2, mock.BeginLogoutCount,
                 "BeginLogout should have been called 2 times.");
             Assert.AreEqual(2, mock.CancelLogoutCount,
-    "CancelLogout should have been called 2 times.");
-            // TODO: Verify operations are cancelled
+                "CancelLogout should have been called 2 times.");
 
-            mock = new TrackingAuthentication();
+            mock.BeginLogoutCount = 0;
 
             // Begin/End
-            // TODO: Determine if I should be able to do this successfully (synchronously)
             await CompleteAndCheckStatusAsync(mock, mock.Logout(false));
             await CompleteAndCheckStatusAsync(mock, mock.Logout(null, null));
             Assert.AreEqual(2, mock.BeginLogoutCount,
@@ -539,7 +562,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that LoadUser calls BeginLoadUser, CancelLoadUser, and EndLoadUser.")]
         public async Task LoadUserCallsBeginCancelEnd()
         {
-            TrackingAuthentication mock = new TrackingAuthentication();
+            using TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
             await CancelAndCheckStatusAsync(mock.LoadUser());
@@ -547,12 +570,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.AreEqual(2, mock.BeginLoadUserCount,
                 "BeginLoadUser should have been called 2 times.");
             Assert.AreEqual(2, mock.CancelLoadUserCount,
-                "EndLoadUser should have been called 2 times.");
+                "CancelLoadUser should have been called 2 times.");
 
-            mock = new TrackingAuthentication();
+            mock.BeginLoadUserCount = 0;
 
             // Begin/End
-            // TODO: Determine if I should be able to do this successfully (synchronously)
             await CompleteAndCheckStatusAsync(mock, mock.LoadUser());
             await CompleteAndCheckStatusAsync(mock, mock.LoadUser(null, null));
             Assert.AreEqual(2, mock.BeginLoadUserCount,
@@ -565,7 +587,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that SaveUser calls BeginSaveUser, CancelSaveUser, and EndSaveUser.")]
         public async Task SaveUserCallsBeginCancelEnd()
         {
-            TrackingAuthentication mock = new TrackingAuthentication();
+            using TrackingAuthentication mock = new TrackingAuthentication();
 
             // Begin/Cancel
             await CancelAndCheckStatusAsync(mock.SaveUser(false));
@@ -575,10 +597,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.AreEqual(2, mock.CancelSaveUserCount,
                 "CancelSaveUser should have been called 2 times.");
 
-            mock = new TrackingAuthentication();
+            mock.BeginSaveUserCount = 0;
 
             // Begin/End
-            // TODO: Determine if I should be able to do this successfully (synchronously)
             await CompleteAndCheckStatusAsync(mock, mock.SaveUser(false));
             await CompleteAndCheckStatusAsync(mock, mock.SaveUser(null, null));
             Assert.AreEqual(2, mock.BeginSaveUserCount,
@@ -595,7 +616,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that invoking Login twice throws an InvalidOperationException")]
         public void LoginTwiceThrows()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
             mock.Login(null);
             ExceptionHelper.ExpectException<InvalidOperationException>(
                 () => mock.Login(null));
@@ -605,7 +626,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that invoking Logout twice throws an InvalidOperationException")]
         public void LogoutTwiceThrows()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
             mock.Logout(false);
             ExceptionHelper.ExpectException<InvalidOperationException>(
                 () => mock.Logout(false));
@@ -615,7 +636,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that invoking LoadUser twice throws an InvalidOperationException")]
         public void LoadUserTwiceThrows()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
             mock.LoadUser();
             ExceptionHelper.ExpectException<InvalidOperationException>(
                 () => mock.LoadUser());
@@ -625,7 +646,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that invoking SaveUser twice throws an InvalidOperationException")]
         public void SaveUserTwiceThrows()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
             mock.SaveUser(false);
             ExceptionHelper.ExpectException<InvalidOperationException>(
                 () => mock.SaveUser(false));
@@ -639,7 +660,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that Login and Cancel can be synchronously interleaved")]
         public async Task LoginCancelLogin()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
@@ -661,19 +682,22 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.IsFalse(mock.IsLoggingIn,
                 "Service should not be logging in.");
 
-            _ = mock.Login(null);
+            op = mock.Login(null);
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
             Assert.IsTrue(mock.IsLoggingIn,
                 "Service should be logging in.");
+
+            op.Cancel();
+            await op;
         }
 
         [TestMethod]
         [Description("Tests that Logout and Cancel can be synchronously interleaved")]
         public async Task LogoutCancelLogout()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
@@ -695,19 +719,22 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.IsFalse(mock.IsLoggingOut,
                 "Service should not be logging out.");
 
-            _ = mock.Logout(false);
+            op = mock.Logout(false);
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
             Assert.IsTrue(mock.IsLoggingOut,
                 "Service should be logging out.");
+
+            op.Cancel();
+            await op;
         }
 
         [TestMethod]
         [Description("Tests that LoadUser and Cancel can be synchronously interleaved")]
         public async Task LoadUserCancelLoadUser()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
@@ -729,19 +756,22 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.IsFalse(mock.IsLoadingUser,
                 "Service should not be loading.");
 
-            _ = mock.LoadUser();
+            op = mock.LoadUser();
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
             Assert.IsTrue(mock.IsLoadingUser,
                 "Service should be loading.");
+
+            op.Cancel();
+            await op;
         }
 
         [TestMethod]
         [Description("Tests that SaveUser and Cancel can be synchronously interleaved")]
         public async Task SaveUserCancelSaveUser()
         {
-            MockAuthentication mock = new MockAuthentication();
+            using MockAuthentication mock = new MockAuthentication();
 
             Assert.IsFalse(mock.IsBusy,
                 "Service should not be busy.");
@@ -763,12 +793,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             Assert.IsFalse(mock.IsSavingUser,
                 "Service should not be saving.");
 
-            _ = mock.SaveUser(false);
+            op = mock.SaveUser(false);
 
             Assert.IsTrue(mock.IsBusy,
                 "Service should be busy.");
             Assert.IsTrue(mock.IsSavingUser,
                 "Service should be saving.");
+
+            op.Cancel();
+            await op;
         }
 
         #endregion
@@ -1226,6 +1259,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             }
 
             this.EnqueueConditional(() => testCompleted);
+            this.EnqueueCallback(() => mock.Dispose());
         }
 
         private static void SuppressErrors(AuthenticationOperation ao)
