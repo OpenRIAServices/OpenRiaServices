@@ -54,7 +54,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 loadOp = dc.Load(getQuery(dc));
             });
 
-            EnqueueConditional(() => loadOp.IsComplete);
+            this.EnqueueCompletion(() => loadOp);
             EnqueueCallback(delegate
             {
                 if (loadOp.Error != null)
@@ -339,10 +339,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // first test for a provider that derives from DomainService
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-ThrowingDomainService.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = (DomainOperationException)lo.Error;
@@ -364,10 +361,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // Test for a provider that derives from LinqToSqlDomainService, since LinqToSqlDomainService is instantiated differently
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-ThrowingDomainServiceL2S.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = (DomainOperationException)lo.Error;
@@ -390,10 +384,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             // first test an invalid name
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-DNE.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("NonExistentMethod", null), false);
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
@@ -406,10 +397,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 ctxt = new TestDataContext(TestURIs.RootURI);
                 lo = ctxt.Load(ctxt.CreateQuery<Product>("NonExistentMethod", null), false);
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
@@ -443,10 +431,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-InaccessibleProvider.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
@@ -467,10 +452,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-NonDomainService.svc"));
             LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
@@ -491,7 +473,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = service.Load(service.GetTestEntitiesQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             EnqueueCallback(() =>
             {

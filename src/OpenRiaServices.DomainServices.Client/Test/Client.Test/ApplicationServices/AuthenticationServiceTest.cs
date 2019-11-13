@@ -1309,7 +1309,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 (mock, operation) =>
                 {
                     mock.RequestCallback(AuthenticationServiceTest.Delay);
-                    this.EnqueueConditional(() => operation.IsComplete);
+                    this.EnqueueCompletion(() => operation);
                 },
                 asyncVerify,
                 VerificationType.Poll);
@@ -1372,7 +1372,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 (mock, operation) =>
                 {
                     operation.Cancel();
-                    this.EnqueueConditional(() => operation.IsComplete);
+                    this.EnqueueCompletion(() => operation);
                 },
                 cancelVerify,
                 VerificationType.Poll);
@@ -1416,7 +1416,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 {
                     mock.Error = new Exception(AuthenticationServiceTest.ErrorMessage);
                     mock.RequestCallback(AuthenticationServiceTest.Delay);
-                    this.EnqueueConditional(() => operation.IsComplete);
+                    this.EnqueueCompletion(() => operation);
                 },
                 errorVerify,
                 VerificationType.Poll);

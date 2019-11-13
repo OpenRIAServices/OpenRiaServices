@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Client
             return new OperationAwaiter(operation);
         }
 
-        public class OperationAwaiter : INotifyCompletion
+        public class OperationAwaiter : ICriticalNotifyCompletion
         {
             private readonly OperationBase _operation;
             private Task _domainContextCompletionTask;
@@ -34,14 +34,22 @@ namespace OpenRiaServices.DomainServices.Client
 
             public void OnCompleted(Action continuation)
             {
+                var executionContext = ExecutionContext.Capture();
+                ContextCallback action = (object o) => ((Action)o)();
+                UnsafeOnCompleted(() => ExecutionContext.Run(executionContext, action, continuation));
+            }
+
+            public void UnsafeOnCompleted(Action continuation)
+            {
                 // Capture syncContext and scheduler from await location
                 var syncContext = SynchronizationContext.Current;
                 TaskScheduler scheduler;
-                var executionContext = ExecutionContext.Capture();
-                ContextCallback action = (object o) => ((Action)o)();
 
                 if (syncContext is null /*|| syncContext is Test.TestSynchronizationContext*/)
                 {
+                    // Note we use Current instead of Default in case we want to change
+                    // the test runner to set a limited concurrency scheduler to mimic
+                    // a main "ui" thread
                     scheduler = TaskScheduler.Current;
                 }
                 else
@@ -56,23 +64,29 @@ namespace OpenRiaServices.DomainServices.Client
                     // so that continuation is run after the whole completion
                     // Since the currentTask is currently executing
                     // This will not complete now, but later when it is finished
-                    _domainContextCompletionTask = s_getCurrentTask();
+                    _domainContextCompletionTask = GetCurrentExecutingTask();
                     if (_domainContextCompletionTask != null)
                     {
                         _domainContextCompletionTask.ContinueWith((Task _, object o) =>
                         {
-                            ExecutionContext.Run(executionContext, action, o);
+                            ((Action)o)();
                         }
                         , continuation
                         , CancellationToken.None
-                        , TaskContinuationOptions.None
+                        , TaskContinuationOptions.ExecuteSynchronously
                         , scheduler);
                     }
                     else
                     {
-                        ExecutionContext.Run(executionContext, action, continuation);
+                        continuation();
                     }
                 };
+            }
+
+            
+            internal static Task GetCurrentExecutingTask()
+            {
+                return s_getCurrentTask();
             }
 
             public void GetResult()

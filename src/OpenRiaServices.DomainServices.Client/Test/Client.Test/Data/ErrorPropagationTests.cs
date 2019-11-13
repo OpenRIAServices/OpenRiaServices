@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = provider.Load(provider.GetMixedTypesThrowQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
@@ -58,7 +58,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = citiesProvider.Load(citiesProvider.GetZipsQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 // invoke methods that cause exception
@@ -85,7 +85,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
@@ -143,7 +143,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = citiesProvider.Load(citiesProvider.GetZipsQuery(), false);
 
             // wait for Load to complete, then invoke some domain methods
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 // invoke methods that cause exception
@@ -170,7 +170,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
@@ -223,7 +223,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = citiesProvider.Load(citiesProvider.GetZipsQuery(), false);
 
             // wait for Load to complete, then invoke domain method that throws on server. Submit.
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 // invoke methods that cause exception
@@ -233,7 +233,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify Entity.ValidationErrors is not empty
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = so.Error as DomainOperationException;
@@ -262,7 +262,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify Entity.ValidationErrors remains empty
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Zip zip = citiesProvider.Zips.First();
@@ -288,7 +288,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = citiesProvider.Load(citiesProvider.GetZipsQuery(), false);
 
             // wait for Load to complete, then invoke domain method that throws on server. Submit.
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 // Add an entity that will cause a Validation exception on the server (99999 is used as a way to signal failure for our validator)
@@ -306,7 +306,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
 
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = so.Error as DomainOperationException;
@@ -337,7 +337,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = ctxt.Load(ctxt.GetCitiesQuery(), false);
             SubmitOperation so = null;
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -362,7 +362,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = so.Error as DomainOperationException;
@@ -433,7 +433,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify Entity.ValidationErrors is not empty
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = so.Error as DomainOperationException;
@@ -475,7 +475,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
             LoadOperation lo = provider.Load(provider.GetAsQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(lo.Error);
@@ -484,7 +484,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 entity.BID1++;
                 so = provider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
@@ -523,7 +523,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             provider.CartItems.Add(ci2);
 
             so = provider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
@@ -547,7 +547,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = citiesProvider.Load(citiesProvider.GetZipsQuery(), false);
 
             // wait for Load to complete, then invoke domain method that throws on server. Submit.
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Zip[] zips = citiesProvider.Zips.ToArray();
@@ -556,7 +556,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
 
             // wait for submitted event being fired and verify submittedEventArgs.Error is not null
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 DomainOperationException error = so.Error as DomainOperationException;
@@ -578,14 +578,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
 
             // wait for Load to complete, then invoke domain method that throws on server. Submit.
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Zip zip = citiesProvider.Zips.First();
                 zip.ThrowException("DomainServiceExceptionWithErrorCode");
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 DomainException ex = so.Error as DomainException;

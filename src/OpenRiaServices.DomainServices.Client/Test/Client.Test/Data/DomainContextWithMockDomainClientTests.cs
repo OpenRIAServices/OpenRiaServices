@@ -50,10 +50,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
 
-            EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(invoke.Error);
@@ -79,10 +76,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
 
-            EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
+            this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(invoke.Error);
@@ -249,10 +243,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation<Cities.City> loadOperation = ctx.Load(ctx.GetCitiesQuery(), LoadBehavior.RefreshCurrent, l => l.MarkErrorAsHandled(), myState); ;
 
-            EnqueueConditional(delegate
-            {
-                return loadOperation.IsComplete;
-            });
+            this.EnqueueCompletion(() => loadOperation);
             EnqueueCallback(delegate
             {
                 Assert.AreSame(myState, loadOperation.UserState);
@@ -353,10 +344,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ctx.Zips.Add(newZip);
             SubmitOperation so = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
 
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 // verify that validation logic is run
@@ -367,10 +355,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 newZip.StateName = "WA";
                 so = ctx.SubmitChanges(null, myState);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);

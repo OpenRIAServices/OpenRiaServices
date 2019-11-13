@@ -5,6 +5,7 @@ using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -17,9 +18,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 #if !SILVERLIGHT
     [TestClass]
 #endif
-    public abstract class CrossDomainServiceQueryTests : DomainContextTestBase<Catalog> {
+    public abstract class CrossDomainServiceQueryTests : DomainContextTestBase<Catalog>
+    {
         public CrossDomainServiceQueryTests(Uri serviceUri, ProviderType providerType)
-            : base(serviceUri, providerType) {
+            : base(serviceUri, providerType)
+        {
         }
 
         protected abstract Northwind CreateNorthwind();
@@ -37,10 +40,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = nw.Load(nw.GetOrdersQuery().Take(1), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(lo.Error);
@@ -129,16 +129,13 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(ctxt.GetProductsQuery().Where(p => p.ProductID != 1), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(null, lo.Error, "Load should succeed without error");
                 Assert.AreNotEqual(0, ctxt.Products.Count);
 
-                foreach(DataTests.Northwind.LTS.Product product in ctxt.Products)
+                foreach (DataTests.Northwind.LTS.Product product in ctxt.Products)
                 {
                     // All rows except product 1 should have references to supplier and category
                     Assert.IsTrue(!string.IsNullOrEmpty(product.SupplierName), "Supplier not loaded");
@@ -154,14 +151,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
         /// </summary>
         [TestMethod]
         [Asynchronous]
-        public void TestAssociations_OneToMany() {
+        public void TestAssociations_OneToMany()
+        {
             Catalog catalog = CreateDomainContext();
 
             Load(catalog.GetPurchaseOrdersQuery().Take(5));
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return IsLoadComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 List<PurchaseOrder> orders = catalog.PurchaseOrders.ToList();
                 Assert.IsTrue(orders.Count > 0);
                 PurchaseOrder order = orders.First();
@@ -175,13 +175,16 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void TestLoad_NoQuery() {
+        public void TestLoad_NoQuery()
+        {
             Catalog catalog = CreateDomainContext();
             Load(catalog.GetProductsQuery());
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return IsLoadComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 List<Product> products = catalog.Products.ToList();
                 Assert.IsTrue(products.Count == 504);
             });
@@ -318,7 +321,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                          select p)
                         .Skip(2)
                         .Take(4);
-            
+
             Assert.AreEqual<bool>(false, query.IncludeTotalCount);
 
             Load(query);
@@ -368,7 +371,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                          where p.Weight < 10.5M
                          orderby p.Weight ascending
                          select p);
-            
+
             Assert.AreEqual<bool>(false, query.IncludeTotalCount);
 
             Load(query);
@@ -441,7 +444,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var query = catalog.GetProductsWithCustomTotalCountQuery();
 
             Load(query);
-           
+
             EnqueueConditional(delegate
             {
                 return IsLoadComplete;
@@ -453,7 +456,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-               Load(query.OrderBy(p => p.ProductID).Skip(2).Take(4));
+                Load(query.OrderBy(p => p.ProductID).Skip(2).Take(4));
             });
             EnqueueConditional(delegate
             {
@@ -469,7 +472,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void TestLoad_WithQuery() {
+        public void TestLoad_WithQuery()
+        {
             Catalog catalog = CreateDomainContext();
 
             var query = from p in catalog.GetPurchaseOrdersQuery()
@@ -478,10 +482,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             Load(query.Take(10));
 
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return IsLoadComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 List<PurchaseOrder> orders = catalog.PurchaseOrders.ToList();
                 Assert.IsTrue(orders.Count > 0);
                 PurchaseOrder order = orders.First();
@@ -493,15 +499,18 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void TestLoad_WithParameters() {
+        public void TestLoad_WithParameters()
+        {
             Catalog catalog = CreateDomainContext();
 
             Load(catalog.GetProductsByCategoryQuery(21));
 
-            EnqueueConditional(delegate {
+            EnqueueConditional(delegate
+            {
                 return IsLoadComplete;
             });
-            EnqueueCallback(delegate {
+            EnqueueCallback(delegate
+            {
                 Assert.IsTrue(catalog.Products.Count == 8);
             });
             EnqueueTestComplete();
@@ -509,9 +518,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
     }
 
     [TestClass]
-    public class LTSQueryTests : CrossDomainServiceQueryTests {
+    public class LTSQueryTests : CrossDomainServiceQueryTests
+    {
         public LTSQueryTests()
-            : base(TestURIs.LTS_Catalog, ProviderType.LTS) {
+            : base(TestURIs.LTS_Catalog, ProviderType.LTS)
+        {
         }
 
         protected override Northwind CreateNorthwind()
@@ -521,9 +532,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
     }
 
     [TestClass]
-    public class EFQueryTests : CrossDomainServiceQueryTests {
+    public class EFQueryTests : CrossDomainServiceQueryTests
+    {
         public EFQueryTests()
-            : base(TestURIs.EF_Catalog, ProviderType.EF) {
+            : base(TestURIs.EF_Catalog, ProviderType.EF)
+        {
         }
 
         protected override Northwind CreateNorthwind()

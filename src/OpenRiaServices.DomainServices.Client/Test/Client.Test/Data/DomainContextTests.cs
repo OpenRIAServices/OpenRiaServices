@@ -106,7 +106,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 this.BeginLoadCityData();
             });
-            this.EnqueueConditional(() => LoadOperation.IsComplete);
+            this.EnqueueCompletion(() => LoadOperation);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(LoadOperation.Error);
@@ -122,7 +122,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 this.BeginLoadCityDataAndCancel();
             });
-            this.EnqueueConditional(() => LoadOperation.IsComplete);
+            this.EnqueueCompletion(() => LoadOperation);
             this.EnqueueCallback(() =>
             {
                 this.AssertLoadCancelled();
@@ -138,7 +138,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 this.BeginSubmitCityData();
             });
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
+            this.EnqueueCompletion(() => SubmitOperation);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(SubmitOperation.Error);
@@ -246,7 +246,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 actualErrors.Clear();
             });
 
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
+            this.EnqueueCompletion(() => SubmitOperation);
 
             this.EnqueueCallback(() =>
             {
@@ -272,7 +272,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 actualErrors.Clear();
             });
 
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
+            this.EnqueueCompletion(() => SubmitOperation);
 
             this.EnqueueCallback(() =>
             {
@@ -292,7 +292,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 actualErrors.Clear();
             });
 
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
+            this.EnqueueCompletion(() => SubmitOperation);
 
             this.EnqueueCallback(() =>
             {
@@ -315,7 +315,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 actualErrors.Clear();
             });
 
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
+            this.EnqueueCompletion(() => SubmitOperation);
 
             this.EnqueueCallback(() =>
             {
@@ -334,7 +334,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.IsTrue(actualErrors.OrderBy(s => s).SequenceEqual(new string[] { null, "MakeBelieveProperty" }.OrderBy(s => s)), "We should have received notifications that the entity-level and property-level erros were cleared");
             });
 
-            this.EnqueueConditional(() => SubmitOperation.IsComplete);
+            this.EnqueueCompletion(() => SubmitOperation);
 
             this.EnqueueTestComplete();
         }

@@ -9,6 +9,7 @@ using DataTests.Northwind.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.DomainServices.Client.Test
 {
@@ -393,10 +394,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 submitCtx.Regions.Add(savedRegion);
                 submitOperation = submitCtx.SubmitChanges();
             });
-            EnqueueConditional(delegate
-            {
-                return submitOperation.IsComplete;
-            });
+            this.EnqueueCompletion(() => submitOperation);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(null, submitOperation.Error, "submit should be successfull");
@@ -655,10 +653,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 lo = ctxt.Load(ctxt.GetProductsQuery(), false);
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 // make sure the products table does not contain the id we're planning to use
@@ -676,10 +671,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
@@ -759,10 +751,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // submit changes in first context
                 so1 = ctxt1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so1.IsComplete;
-            });
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so1);
@@ -771,10 +760,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // in second context
                 so2 = ctxt2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so2.IsComplete;
-            });
+            this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so2.Error);
@@ -1851,7 +1837,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 customers[0].Address = nw1address;
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 Customer[] customers = nw2.Customers.ToArray();
@@ -1860,7 +1846,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 customers[1].Address = nw2address2;
                 so2 = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so2.IsComplete);
+            this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
@@ -1888,7 +1874,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so2 = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so2.IsComplete);
+            this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so2.HasError);
@@ -1942,14 +1928,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 newQuantity = ++detail1.Quantity;
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 Order_Detail detail2 = nw2.Order_Details.First();
                 nw2.Order_Details.Remove(detail2);
                 so2 = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so2.IsComplete);
+            this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
@@ -1988,7 +1974,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 lo = nw.Load(nw.GetOrderDetailsQuery().OrderBy(o => o.OrderID).Take(10), false);
             });
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -2010,7 +1996,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = nw.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -2062,14 +2048,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw1.Order_Details.Remove(detail1);
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 Order_Detail detail2 = nw2.Order_Details.First();
                 detail2.Quantity += 1;
                 so2 = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so2.IsComplete);
+            this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
@@ -2124,7 +2110,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 products[0].UnitPrice = nw1NewUnitPrice;
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
@@ -2135,7 +2121,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 products[1].ReorderLevel = ++newReorderLevel;
                 so2 = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so2.IsComplete);
+            this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
                 // verify that resolve method implementation successfully got rid of the conflicts
@@ -2150,7 +2136,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw1.EntityContainer.Clear();
                 nw1load = nw1.Load(nw1.GetProductsQuery(), false);
             });
-            EnqueueConditional(() => nw1load.IsComplete);
+            this.EnqueueCompletion(() => nw1load);
             EnqueueCallback(delegate
             {
                 // verify that updates from nw2 were succesfully saved
@@ -2547,7 +2533,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 nw1Load = nw1.Load(nw1.GetCategoriesQuery(), false);
             });
-            EnqueueConditional(() => nw1Load.IsComplete);
+            this.EnqueueCompletion(() => nw1Load);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(nw1Load);
@@ -2559,7 +2545,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw1.Categories.Add(newCat2);
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so1);
@@ -2728,7 +2714,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 nw1Load = nw1.Load(nw1.GetCategoriesQuery(), false);
             });
-            EnqueueConditional(() => nw1Load.IsComplete);
+            this.EnqueueCompletion(() => nw1Load);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(nw1Load);
@@ -2740,7 +2726,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw1.Categories.Add(newCat2);
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so1);
@@ -2922,7 +2908,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             {
                 nw1Load = nw1.Load(nw1.GetCategoriesQuery(), false);
             });
-            EnqueueConditional(() => nw1Load.IsComplete);
+            this.EnqueueCompletion(() => nw1Load);
             EnqueueCallback(delegate
             {
                 nw1Load = null;
@@ -2934,7 +2920,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw1.Categories.Add(newCat2);
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so1.IsComplete);
+            this.EnqueueCompletion(() => so1);
             EnqueueCallback(delegate
             {
                 if (so1.Error != null)
@@ -3056,7 +3042,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 // now load the order details pertaining to this product id
                 nw1load = nw1.Load(nw1.GetOrderDetailsQuery().Where(o => (o.ProductID == product1.ProductID)), false);
             });
-            EnqueueConditional(() => nw1load.IsComplete);
+            this.EnqueueCompletion(() => nw1load);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(nw1load);
@@ -3072,7 +3058,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw1.Products.Remove(product1);
                 so = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -3083,7 +3069,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 product2.UnitPrice = newUnitPrice;
                 so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
@@ -3793,7 +3779,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 nw.EntityContainer.Clear();
                 lo = nw.Load(nw.GetProductsQuery().Take(3), false);
             });
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
 
             // execute custom test logic after nw is refreshed
             EnqueueCallback(verificationsOnReload);
@@ -3854,7 +3840,7 @@ TestContext testContext
                 prod.ReorderLevel = -1;
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(() =>
             {
                 Assert.IsNotNull(so.Error);
@@ -3883,7 +3869,7 @@ TestContext testContext
             {
                 lo = ctxt.Load(ctxt.GetProductsQuery().Skip(3).Take(1), false);
             });
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(() =>
             {
                 Assert.IsNull(lo.Error);
@@ -3908,7 +3894,7 @@ TestContext testContext
                 // cancel the submit
                 so.Cancel();
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(() =>
             {
                 // Verify event args
@@ -3978,7 +3964,7 @@ TestContext testContext
                 customers[2].Address = nw2address2;
                 so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error.Message);
@@ -4008,7 +3994,7 @@ TestContext testContext
 
                 so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);
@@ -4105,10 +4091,7 @@ TestContext testContext
             {
                 lo = ctxt.Load(ctxt.GetProductsQuery().OrderBy(p => p.ProductID).Take(5));
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4140,10 +4123,7 @@ TestContext testContext
                 }
                 Assert.IsNotNull(exception);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -4167,10 +4147,7 @@ TestContext testContext
                 Assert.AreEqual(0, ctxt.Products.Count);
                 lo = ctxt.Load(ctxt.GetProductsQuery());
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Product modifiedProduct = ctxt.Products.Single(p => p.ProductID == modifiedProductID);
@@ -4206,10 +4183,7 @@ TestContext testContext
                 ctxt.Products.Add(newProduct);
                 so = ctxt.SubmitChanges();
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -4227,10 +4201,7 @@ TestContext testContext
                 ctxt = new Northwind(TestURIs.EF_Northwind_POCO_CUD);
                 lo = ctxt.Load(ctxt.GetProductsQuery().Where(p => p.ProductName == identifier));
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4271,10 +4242,7 @@ TestContext testContext
                 ctxt.Products.Add(newProduct);
                 so = ctxt.SubmitChanges();
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 // create a new context and load all products
@@ -4282,10 +4250,7 @@ TestContext testContext
                 ctxt = new Northwind(TestURIs.EF_Northwind_POCO_CUD);
                 lo = ctxt.Load(ctxt.GetProductsQuery());
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4299,10 +4264,7 @@ TestContext testContext
                 ctxt.Products.Remove(deleteProduct);
                 so = ctxt.SubmitChanges();
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -4316,10 +4278,7 @@ TestContext testContext
                 ctxt = new Northwind(TestURIs.EF_Northwind_POCO_CUD);
                 lo = ctxt.Load(ctxt.GetProductsQuery());
             });
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4382,7 +4341,7 @@ TestContext testContext
                 nw2.Order_Details.Remove(detail2);
                 so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
@@ -4579,10 +4538,7 @@ TestContext testContext
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 // verify we got the expected conflict
@@ -4605,10 +4561,7 @@ TestContext testContext
                 // we expect the subsequent update to succeed.
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -4631,10 +4584,7 @@ TestContext testContext
 
             LoadOperation lo = ctxt.Load(ctxt.GetTimestampEntityAsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4650,10 +4600,7 @@ TestContext testContext
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -4678,10 +4625,7 @@ TestContext testContext
 
             LoadOperation lo = ctxt.Load(ctxt.GetTimestampEntityBsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4697,10 +4641,7 @@ TestContext testContext
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -4725,10 +4666,7 @@ TestContext testContext
 
             LoadOperation lo = provider.Load(provider.GetAsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4743,10 +4681,7 @@ TestContext testContext
 
                 so = provider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 // expect the excluded member to be ignored and the
@@ -4767,10 +4702,7 @@ TestContext testContext
 
             LoadOperation lo = provider.Load(provider.GetAsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -4785,10 +4717,7 @@ TestContext testContext
 
                 so = provider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 // The update method will throw if it received a projection value.
@@ -5089,7 +5018,7 @@ TestContext testContext
             SubmitOperation so = null;
             LoadOperation lo = context.Load(context.GetCustomersQuery(), false);
 
-            this.EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             this.EnqueueCallback(() =>
             {
                 customer = context.MockCustomers.First();
@@ -5102,7 +5031,7 @@ TestContext testContext
                 
                 so = context.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(so.Error);
@@ -5135,7 +5064,7 @@ TestContext testContext
             SubmitOperation so = null;
             LoadOperation lo = context.Load(context.GetCustomersQuery(), false);
 
-            this.EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             this.EnqueueCallback(() =>
             {
                 customer = context.MockCustomers.First();
@@ -5147,7 +5076,7 @@ TestContext testContext
                 context.MockCustomerCustomMethod(customer, clientModifiedStateName, originalStateName); // Call a Custom method too
                 so = context.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNotNull(so.Error);
@@ -5184,7 +5113,7 @@ TestContext testContext
             SubmitOperation so = null;
             LoadOperation lo = context.Load(context.GetCustomersQuery(), false);
 
-            this.EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             this.EnqueueCallback(() =>
             {
                 customer = context.MockCustomers.First();
@@ -5196,7 +5125,7 @@ TestContext testContext
                 context.MockCustomerCustomMethod(customer, "EXPECTED_NAME", originalStateName); // Call a Custom method too, triggering a validation exception
                 so = context.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNotNull(so.Error);
@@ -5232,7 +5161,7 @@ TestContext testContext
             SubmitOperation so = null;
             LoadOperation lo = context.Load(context.GetCustomersQuery(), false);
 
-            this.EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             this.EnqueueCallback(() =>
             {
                 customer = context.MockCustomers.First();
@@ -5244,7 +5173,7 @@ TestContext testContext
                 context.MockCustomerCustomMethod(customer, "EXPECTED_NAME", originalStateName); // Call a Custom method too, triggering a validation exception
                 so = context.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            this.EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             this.EnqueueCallback(() =>
             {
                 Assert.IsNotNull(so.Error);

@@ -55,10 +55,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Address address = new Address { AddressLine1 = "47 South Wynn Rd.", City = "Oregon", State = "OH" };
             InvokeOperation<Address> io = ctxt.RoundtripAddress(address);
 
-            EnqueueConditional(delegate
-            {
-                return io.IsComplete;
-            });
+            this.EnqueueCompletion(() => io);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(io);
@@ -493,10 +490,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo.HasError);
@@ -523,10 +517,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation<Address> io = ctxt.ReturnHomeAddress(contact);
 
-            EnqueueConditional(delegate
-            {
-                return io.IsComplete;
-            });
+            this.EnqueueCompletion(() => io);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(io.HasError);
@@ -554,10 +545,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             InvokeOperation<Address> io = ctxt.RoundtripAddress(address);
 
-            EnqueueConditional(delegate
-            {
-                return io.IsComplete;
-            });
+            this.EnqueueCompletion(() => io);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(io);
@@ -584,10 +572,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
             LoadOperation lo = ctxt.Load(query, false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo.HasError);
@@ -598,10 +583,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = ctxt.SubmitChanges();
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);
@@ -623,10 +605,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation so = null;
             LoadOperation lo = ctxt.Load(ctxt.GetParentsQuery(), false);
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo.HasError);
@@ -641,10 +620,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = ctxt.SubmitChanges();
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);
@@ -1720,10 +1696,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                     Assert.AreEqual("ContactInfo.PrimaryPhone.AreaCode", result.MemberNames.Single());
                 };
 
-            EnqueueConditional(delegate
-            {
-                return lo.IsComplete;
-            });
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo.HasError);
@@ -1739,10 +1712,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsTrue(so.HasError);
@@ -1817,10 +1787,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ComplexTypes_DomainContext context = new ComplexTypes_DomainContext(TestURIs.ComplexTypes_DomainService);
             load = context.Load(context.GetStubQuery());
 
-            this.EnqueueConditional(delegate
-            {
-                return load.IsComplete;
-            });
+            this.EnqueueCompletion(() => load);
 
             this.EnqueueCallback(delegate
             {
@@ -1845,10 +1812,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 });
             });
 
-            this.EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
+            this.EnqueueCompletion(() => invoke);
 
             this.EnqueueCallback(delegate
             {
@@ -1875,10 +1839,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             SubmitOperation submit = null;
             InvokeOperation<ComplexInheritance_Child> invoke = null;
 
-            this.EnqueueConditional(delegate
-            {
-                return load.IsComplete;
-            });
+            this.EnqueueCompletion(() => load);
 
             this.EnqueueCallback(delegate
             {
@@ -1893,10 +1854,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 submit = context.SubmitChanges();
             });
 
-            this.EnqueueConditional(delegate
-            {
-                return submit.IsComplete;
-            });
+            this.EnqueueCompletion(() => submit);
 
             this.EnqueueCallback(delegate
             {
@@ -1908,10 +1866,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 invoke = context.GetHighestChild(child, children);
             });
 
-            this.EnqueueConditional(delegate
-            {
-                return invoke.IsComplete;
-            });
+            this.EnqueueCompletion(() => invoke);
 
             this.EnqueueCallback(delegate
             {

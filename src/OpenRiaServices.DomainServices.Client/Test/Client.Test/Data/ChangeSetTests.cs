@@ -743,10 +743,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             Northwind ctxt = new Northwind(TestURIs.LTS_Northwind_CUD);
             
             SubmitOperation so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            EnqueueConditional(delegate
-            {
-                return so.IsComplete;
-            });
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(so.HasError);

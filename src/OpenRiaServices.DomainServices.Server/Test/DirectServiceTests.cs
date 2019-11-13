@@ -470,7 +470,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
 
             for (int i = 0; i < numberOfThreads; i++)
             {
-                s.WaitOne(TimeSpan.FromSeconds(5));
+                Assert.IsTrue(s.WaitOne(TimeSpan.FromSeconds(5)), "wait timed out");
             }
 
             if (lastError != null)

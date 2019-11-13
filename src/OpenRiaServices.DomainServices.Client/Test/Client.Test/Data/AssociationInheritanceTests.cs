@@ -33,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             LoadOperation lo = ctxt.Load(ctxt.GetMastersQuery(), false);
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -81,7 +81,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = ctxt.Load(ctxt.GetMastersQuery(), false);
             SubmitOperation so = null;
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -108,7 +108,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so = ctxt.SubmitChanges();
             });
 
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
@@ -127,7 +127,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             LoadOperation lo = ctxt.Load(ctxt.GetMastersQuery(), false);
             SubmitOperation so = null;
 
-            EnqueueConditional(() => lo.IsComplete);
+            this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
@@ -155,7 +155,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 so = ctxt.SubmitChanges();
             });
 
-            EnqueueConditional(() => so.IsComplete);
+            this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);

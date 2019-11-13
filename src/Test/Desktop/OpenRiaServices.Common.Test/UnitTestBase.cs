@@ -18,8 +18,8 @@ namespace OpenRiaServices.Silverlight.Testing
         protected const int DefaultTimeoutThreshold = 2;
 
         // The length of time we wait by default before timing out
-        protected const int DefaultTimeoutInSeconds = 60;
-        protected const int DebuggingTimeoutInSeconds = 600;
+        protected internal const int DefaultTimeoutInSeconds = 60;
+        protected internal const int DebuggingTimeoutInSeconds = 600;
 
         // Delay between conditional evaluations
         private const int DefaultStepInMilliseconds = 10;
@@ -394,7 +394,7 @@ namespace OpenRiaServices.Silverlight.Testing
                 });
         }
 
-        private static string ComposeTimeoutMessage(int timeoutInSeconds, string timeoutMessage)
+        internal static string ComposeTimeoutMessage(int timeoutInSeconds, string timeoutMessage)
         {
             string failureMessage =
                 "The test was unable to satisfy the condition within the specified " +
