@@ -246,7 +246,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
 
-            protected internal override Task<LoginResult> LoginAsync(LoginParameters parameter, CancellationToken cancellationToken)
+            protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
             {
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
@@ -261,6 +261,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw new NotSupportedException(Resources.WebContext_AuthenticationNotSet);
             }
         }
-
     }
 }

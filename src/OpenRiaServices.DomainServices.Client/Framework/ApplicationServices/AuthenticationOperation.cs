@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </summary>
         /// <param name="service">The service this operation will use to implement Begin, Cancel, and End</param>
         /// <param name="userState">Optional user state.</param>
-        internal AuthenticationOperation(AuthenticationService service, object userState)
+        private protected AuthenticationOperation(AuthenticationService service, object userState)
             : base(userState, service.SupportsCancellation)
         {
             Debug.Assert(service != null, "The service cannot be null.");
