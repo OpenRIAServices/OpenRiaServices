@@ -69,9 +69,8 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets a value indicating whether this operation supports cancellation.
-        /// If overridden to return true, <see cref="CancelCore"/> must also be overridden.
         /// </summary>
-        protected virtual bool SupportsCancellation => this._cancellationTokenSource != null;
+        protected bool SupportsCancellation => this._cancellationTokenSource != null;
 
         /// <summary>
         /// Gets a value indicating whether Cancel has been called on this operation.
@@ -79,7 +78,7 @@ namespace OpenRiaServices.DomainServices.Client
         public bool IsCancellationRequested => this._cancellationTokenSource?.IsCancellationRequested == true;
 
         /// <summary>
-        /// Gets a <see cref="System.Threading.CancellationToken"/> which is cancelled if 
+        /// Gets a <see cref="System.Threading.CancellationToken"/> which is cancelled 
         /// when this operation is cancelled. 
         /// It is valid if the operation support cancellation se constructor.
         /// </summary>
@@ -187,16 +186,6 @@ namespace OpenRiaServices.DomainServices.Client
                     throw ExceptionHandlingUtility.GetUnwrappedException(ex); ;
                 }
             }
-
-            OnCancellationRequested();
-        }
-
-        /// <summary>
-        /// Called when user calls <see cref="Cancel"/>,
-        /// can be overriden to transition operation into cancelled immediately.
-        /// </summary>
-        private protected virtual void OnCancellationRequested()
-        {
         }
 
         /// <summary>
@@ -207,9 +196,6 @@ namespace OpenRiaServices.DomainServices.Client
             // must flag completion before callbacks or events are raised
             this._completed = true;
             this._canceled = true;
-
-            // invoke the cancel action
-            this.CancelCore();
 
             // callback is called even for a canceled operation
             try
@@ -222,14 +208,6 @@ namespace OpenRiaServices.DomainServices.Client
                 this.RaisePropertyChanged(nameof(CanCancel));
                 this.RaisePropertyChanged(nameof(IsComplete));
             }
-        }
-
-        /// <summary>
-        /// Override this method to provide a Cancel implementation
-        /// for operations that support cancellation.
-        /// </summary>
-        protected virtual void CancelCore()
-        {
         }
 
         /// <summary>

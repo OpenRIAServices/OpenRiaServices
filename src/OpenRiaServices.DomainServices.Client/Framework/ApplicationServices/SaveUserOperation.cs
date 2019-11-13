@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -7,13 +9,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public sealed class SaveUserOperation : AuthenticationOperation
     {
-        #region Member fields
-
         private readonly Action<SaveUserOperation> _completeAction;
-
-        #endregion
-
-        #region Constructors
 
         internal SaveUserOperation(AuthenticationService service, Action<SaveUserOperation> completeAction, object userState) :
             base(service, userState)
@@ -21,36 +17,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this._completeAction = completeAction;
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Begins a save operation
         /// </summary>
-        /// <param name="callback">The callback invoked when the operation completes</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The async result for the operation</returns>
-        protected override IAsyncResult BeginCore(AsyncCallback callback)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return this.Service.BeginSaveUser(this.Service.User, callback, null);
-        }
-
-        /// <summary>
-        /// Cancels a save operation
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this.Service.CancelSaveUser(this.AsyncResult);
-        }
-
-        /// <summary>
-        /// Ends a save operation
-        /// </summary>
-        /// <param name="asyncResult">The async result for the operation</param>
-        /// <returns>The result of the operation</returns>
-        protected override object EndCore(IAsyncResult asyncResult)
-        {
-            return this.Service.EndSaveUser(asyncResult);
+            return CastToObjectTask(this.Service.SaveUserAsync(this.Service.User, cancellationToken));
         }
 
         /// <summary>
@@ -60,7 +34,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             this._completeAction?.Invoke(this);
         }
-
-        #endregion
     }
 }

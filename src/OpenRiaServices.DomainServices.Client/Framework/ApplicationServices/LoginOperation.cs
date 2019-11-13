@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -7,14 +9,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public sealed class LoginOperation : AuthenticationOperation
     {
-        #region Member fields
-
         private readonly Action<LoginOperation> _completeAction;
         private readonly LoginParameters _loginParameters;
-
-        #endregion
-
-        #region Constructors
 
         internal LoginOperation(AuthenticationService service, LoginParameters loginParameters, Action<LoginOperation> completeAction, object userState) :
             base(service, userState)
@@ -22,10 +18,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this._loginParameters = loginParameters;
             this._completeAction = completeAction;
         }
-
-        #endregion
-
-        #region Properties
 
         private new LoginResult Result
         {
@@ -52,36 +44,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             get { return (this.Result == null) ? false : this.Result.LoginSuccess; }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Begins a login operation
         /// </summary>
-        /// <param name="callback">The callback invoked when the operation completes</param>
         /// <returns>The async result for the operation</returns>
-        protected override IAsyncResult BeginCore(AsyncCallback callback)
+        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
-            return this.Service.BeginLogin(this.LoginParameters, callback, null);
-        }
-
-        /// <summary>
-        /// Cancels a login operation
-        /// </summary>
-        protected override void CancelCore()
-        {
-            this.Service.CancelLogin(this.AsyncResult);
-        }
-
-        /// <summary>
-        /// Ends a login operation
-        /// </summary>
-        /// <param name="asyncResult">The async result for the operation</param>
-        /// <returns>The result of the operation</returns>
-        protected override object EndCore(IAsyncResult asyncResult)
-        {
-            return this.Service.EndLogin(asyncResult);
+            return CastToObjectTask(this.Service.LoginAsync(this.LoginParameters, cancellationToken));
         }
 
         /// <summary>
@@ -103,7 +72,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             this._completeAction?.Invoke(this);
         }
-
-        #endregion
     }
 }

@@ -30,8 +30,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
             try
             {
                 del();
-                Assert.Fail("Expected exception of type " + typeof(TException) + ".");
-                throw new Exception("can't happen");
             }
             catch (TException e)
             {
@@ -80,6 +78,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 }
                 return te;
             }
+
+            Assert.Fail("Expected exception of type " + typeof(TException) + ".");
+            throw new Exception("can't happen");
         }
 
         public static TException ExpectException<TException>(GenericDelegate del) where TException : Exception

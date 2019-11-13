@@ -13,6 +13,8 @@ using UserType = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
+    using System.Threading;
+    using System.Threading.Tasks;
 #if SILVERLIGHT
     using Resource = SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource;
 #else
@@ -35,70 +37,29 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 return base.CreateDefaultUser();
             }
 
-            public IAsyncResult BeginLoadUserMock(AsyncCallback callback, object state)
+            protected internal override Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
-                return base.BeginLoadUser(callback, state);
+                return base.LoadUserAsync(cancellationToken);
             }
 
-            public IAsyncResult BeginLoginMock(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
             {
-                return base.BeginLogin(parameters, callback, state);
+                return base.LoginAsync(parameters, cancellationToken);
             }
 
-            public IAsyncResult BeginLogoutMock(AsyncCallback callback, object state)
+            protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
-                return base.BeginLogout(callback, state);
+                return base.LogoutAsync(cancellationToken);
             }
 
-            public IAsyncResult BeginSaveUserMock(IPrincipal user, AsyncCallback callback, object state)
+            protected internal override Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
             {
-                return base.BeginSaveUser(user, callback, state);
-            }
-
-            public void CancelLoadUserMock(IAsyncResult asyncResult)
-            {
-                base.CancelLoadUser(asyncResult);
-            }
-
-            public void CancelLoginMock(IAsyncResult asyncResult)
-            {
-                base.CancelLogin(asyncResult);
-            }
-
-            public void CancelLogoutMock(IAsyncResult asyncResult)
-            {
-                base.CancelLogout(asyncResult);
-            }
-
-            public void CancelSaveUserMock(IAsyncResult asyncResult)
-            {
-                base.CancelSaveUser(asyncResult);
-            }
-
-            public AuthenticationResult EndLoadUserMock(IAsyncResult asyncResult)
-            {
-                return base.EndLoadUser(asyncResult);
-            }
-
-            public LoginResult EndLoginMock(IAsyncResult asyncResult)
-            {
-                return base.EndLogin(asyncResult);
-            }
-
-            public AuthenticationResult EndLogoutMock(IAsyncResult asyncResult)
-            {
-                return base.EndLogout(asyncResult);
-            }
-
-            public AuthenticationResult EndSaveUserMock(IAsyncResult asyncResult)
-            {
-                return base.EndSaveUser(asyncResult);
+                return base.SaveUserAsync(user, cancellationToken);
             }
         }
 
-#endregion
+        #endregion
 
-        private const int Delay = 200;
         private const string ErrorMessage = "There was an error";
 
         // TODO:
@@ -163,48 +124,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 
         [TestMethod]
         [Description("Tests that BeginSaveUser throws when saving an anonymous user.")]
-        public void SaveAnonymousUserThrows()
+        public async Task SaveAnonymousUserThrows()
         {
             AuthenticationDomainContext mock = new AuthenticationDomainContext();
             MockWebAuthenticationService service = new MockWebAuthenticationService();
 
             service.DomainContext = mock;
 
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.BeginSaveUserMock(service.User, null, null));
-        }
-
-        [TestMethod]
-        [Description("Tests that CancelXx and EndXx throw InvalidOperationExceptions when passed invalid IAsyncResults.")]
-        public void InvalidCancelAndEndIARs()
-        {
-            AuthenticationDomainContext mock = new AuthenticationDomainContext();
-            MockWebAuthenticationService service = new MockWebAuthenticationService();
-
-            service.DomainContext = mock;
-
-            IAsyncResult invalidResult = service.BeginLoadUserMock(null, null);
-            // Canceling the result once makes it invalid for subsequent use. Since we really just need
-            // to confirm that the input is handled by AsyncResultBase, this is sufficient for the test.
-            service.CancelLoadUserMock(invalidResult);
-
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.CancelLoadUserMock(invalidResult));
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.CancelLoginMock(invalidResult));
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.CancelLogoutMock(invalidResult));
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.CancelSaveUserMock(invalidResult));
-
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.EndLoadUserMock(invalidResult));
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.EndLoginMock(invalidResult));
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.EndLogoutMock(invalidResult));
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => service.EndSaveUserMock(invalidResult));
+            await ExceptionHelper.ExpectExceptionAsync<InvalidOperationException>(
+                () => service.SaveUserAsync(service.User, CancellationToken.None));
         }
 
         [TestMethod]
@@ -217,7 +145,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             service.DomainContext = mock;
 
             ExceptionHelper.ExpectArgumentNullExceptionStandard(
-                () => service.BeginLoginMock(null, null, null), "parameters");
+                () => service.LoginAsync(null, CancellationToken.None), "parameters");
         }
 
         private static void InitializeService(MockWebAuthenticationService service)
@@ -227,7 +155,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         }
 
         // Asynchronous, Cancel, Error, Synchronous
-#region Async
+        #region Async
 
         [TestMethod]
         [Asynchronous]
@@ -236,14 +164,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         {
             LoginParameters parameters = new LoginParameters(AuthenticationDomainClient.ValidUserName, string.Empty);
 
-            this.AsyncTemplate(
-            (mock, service, callback, state) =>
+            this.AsyncTemplate((mock, service) =>
             {
-                return service.BeginLoginMock(parameters, callback, state);
+                return service.LoginAsync(parameters, CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
-                LoginResult result = service.EndLoginMock(asyncResult);
+                LoginResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "LoginResults should not be null.");
                 Assert.IsTrue(result.LoginSuccess,
@@ -261,13 +188,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             LoginParameters parameters = new LoginParameters(AuthenticationDomainClient.InvalidUserName, string.Empty);
 
             this.AsyncTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
-                return service.BeginLoginMock(parameters, callback, state);
+                return service.LoginAsync(parameters, CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
-                LoginResult result = service.EndLoginMock(asyncResult);
+                LoginResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "LoginResults should not be null.");
                 Assert.IsFalse(result.LoginSuccess,
@@ -283,13 +210,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void LogoutAsync()
         {
             this.AsyncTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
-                return service.BeginLogoutMock(callback, state);
+                return service.LogoutAsync(CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
-                AuthenticationResult result = service.EndLogoutMock(asyncResult);
+                AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "LogoutResults should not be null.");
                 Assert.IsInstanceOfType(result.User, typeof(MockUser),
@@ -305,13 +232,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void LoadUserAsync()
         {
             this.AsyncTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
-                return service.BeginLoadUserMock(callback, state);
+                return service.LoadUserAsync(CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
-                AuthenticationResult result = service.EndLoadUserMock(asyncResult);
+                AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "LoadUserResults should not be null.");
                 Assert.IsInstanceOfType(result.User, typeof(MockUser),
@@ -327,15 +254,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void SaveUserAsync()
         {
             this.AsyncTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
                 ((MockUser)service.User).Name = "User";
                 ((MockUser)service.User).Modify(mock);
-                return service.BeginSaveUserMock(service.User, callback, state);
+                return service.SaveUserAsync(service.User, CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
-                AuthenticationResult result = service.EndSaveUserMock(asyncResult);
+                AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "SaveUserResults should not be null.");
                 Assert.IsInstanceOfType(result.User, typeof(MockUser),
@@ -353,14 +280,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void SaveUserEmptyAsync()
         {
             this.AsyncTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
                 ((MockUser)service.User).Name = "User";
-                return service.BeginSaveUserMock(service.User, callback, state);
+                return service.SaveUserAsync(service.User, CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
-                AuthenticationResult result = service.EndSaveUserMock(asyncResult);
+                AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "SaveUserResults should not be null.");
                 Assert.IsNull(result.User,
@@ -370,9 +297,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
             });
         }
 
-#endregion
+        #endregion
 
-#region Cancel
+        #region Cancel
 
         [TestMethod]
         [Asynchronous]
@@ -381,19 +308,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         {
             LoginParameters parameters = new LoginParameters(AuthenticationDomainClient.ValidUserName, string.Empty);
 
-            this.CancelTemplate(
-            (mock, service, callback, state) =>
+            this.CancelTemplate((mock, service, cancellationToken) =>
             {
-                return service.BeginLoginMock(parameters, callback, state);
-            },
-            (mock, service, asyncResult) =>
-            {
-                service.CancelLoginMock(asyncResult);
-            },
-            (mock, service, asyncResult) =>
-            {
-                ExceptionHelper.ExpectException<InvalidOperationException>(
-                    () => Assert.IsNull(service.EndLoginMock(asyncResult), "This should fail."));
+                return service.LoginAsync(parameters, cancellationToken);
             });
         }
 
@@ -402,19 +319,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that Logout cancels successfully.")]
         public void LogoutCancel()
         {
-            this.CancelTemplate(
-            (mock, service, callback, state) =>
+            this.CancelTemplate((mock, service, cancellationToken) =>
             {
-                return service.BeginLogoutMock(callback, state);
-            },
-            (mock, service, asyncResult) =>
-            {
-                service.CancelLogoutMock(asyncResult);
-            },
-            (mock, service, asyncResult) =>
-            {
-                ExceptionHelper.ExpectException<InvalidOperationException>(
-                    () => Assert.IsNull(service.EndLogoutMock(asyncResult), "This should fail."));
+                return service.LogoutAsync(cancellationToken);
             });
         }
 
@@ -423,19 +330,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that LoadUser cancels successfully.")]
         public void LoadUserCancel()
         {
-            this.CancelTemplate(
-            (mock, service, callback, state) =>
+            this.CancelTemplate((mock, service, cancellationToken) =>
             {
-                return service.BeginLoadUserMock(callback, state);
-            },
-            (mock, service, asyncResult) =>
-            {
-                service.CancelLoadUserMock(asyncResult);
-            },
-            (mock, service, asyncResult) =>
-            {
-                ExceptionHelper.ExpectException<InvalidOperationException>(
-                    () => Assert.IsNull(service.EndLoadUserMock(asyncResult), "This should fail."));
+                return service.LoadUserAsync(cancellationToken);
             });
         }
 
@@ -444,48 +341,39 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         [Description("Tests that SaveUser cancels successfully.")]
         public void SaveUserCancel()
         {
-            this.CancelTemplate(
-            (mock, service, callback, state) =>
+            this.CancelTemplate((mock, service, cancellationToken) =>
             {
                 ((MockUser)service.User).Name = "User";
                 ((MockUser)service.User).Modify(mock);
-                return service.BeginSaveUserMock(service.User, callback, state);
+                return service.SaveUserAsync(service.User, cancellationToken);
             },
-            (mock, service, asyncResult) =>
+            (mock, service) =>
             {
-                service.CancelSaveUserMock(asyncResult);
-            },
-            (mock, service, asyncResult) =>
-            {
-                ExceptionHelper.ExpectException<InvalidOperationException>(
-                    () => Assert.IsNull(service.EndSaveUserMock(asyncResult), "This should fail."));
                 Assert.IsFalse(mock.DomainClient.Submitted,
                     "User should not have been submitted.");
             });
         }
 
-#endregion
+        #endregion
 
-#region Error
+        #region Error
 
         [TestMethod]
-        [Asynchronous]
         [Description("Tests that Login handles errors successfully.")]
-        public void LoginError()
+        public async Task LoginError()
         {
             LoginParameters parameters = new LoginParameters(AuthenticationDomainClient.ValidUserName, string.Empty);
 
-            this.ErrorTemplate(
-            (mock, service, callback, state) =>
-            {
-                return service.BeginLoginMock(parameters, callback, state);
-            },
-            (mock, service, asyncResult) =>
-            {
-                ExceptionHelper.ExpectException<DomainOperationException>(
-                    () => Assert.IsNull(service.EndLoginMock(asyncResult), "This should fail."),
-                    string.Format(Resource.DomainContext_LoadOperationFailed, "Login", WebAuthenticationServiceTest.ErrorMessage));
-            });
+            AuthenticationDomainContext mock = new AuthenticationDomainContext();
+            MockWebAuthenticationService service = new MockWebAuthenticationService { DomainContext = mock };
+            mock.DomainClient.Error = new Exception(WebAuthenticationServiceTest.ErrorMessage);
+
+            var task = service.LoginAsync(parameters, CancellationToken.None);
+            mock.DomainClient.RequestCallback();
+
+            await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
+                () => task,
+                string.Format(Resource.DomainContext_LoadOperationFailed, "Login", WebAuthenticationServiceTest.ErrorMessage));
         }
 
         [TestMethod]
@@ -494,14 +382,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void LogoutError()
         {
             this.ErrorTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
-                return service.BeginLogoutMock(callback, state);
+                return service.LogoutAsync(CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
                 ExceptionHelper.ExpectException<DomainOperationException>(
-                    () => Assert.IsNull(service.EndLogoutMock(asyncResult), "This should fail."),
+                    () => Assert.IsNull(task.GetAwaiter().GetResult(), "This should fail."),
                     string.Format(Resource.DomainContext_LoadOperationFailed, "Logout", WebAuthenticationServiceTest.ErrorMessage));
             });
         }
@@ -512,14 +400,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void LoadUserError()
         {
             this.ErrorTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
-                return service.BeginLoadUserMock(callback, state);
+                return service.LoadUserAsync(CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
                 ExceptionHelper.ExpectException<DomainOperationException>(
-                    () => Assert.IsNull(service.EndLoadUserMock(asyncResult), "This should fail."),
+                    () => Assert.IsNull(task.GetAwaiter().GetResult(), "This should fail."),
                     string.Format(Resource.DomainContext_LoadOperationFailed, "GetUser", WebAuthenticationServiceTest.ErrorMessage));
             });
         }
@@ -530,181 +418,100 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         public void SaveUserError()
         {
             this.ErrorTemplate(
-            (mock, service, callback, state) =>
+            (mock, service) =>
             {
                 ((MockUser)service.User).Name = "User";
                 ((MockUser)service.User).Modify(mock);
-                return service.BeginSaveUserMock(service.User, callback, state);
+                return service.SaveUserAsync(service.User, CancellationToken.None);
             },
-            (mock, service, asyncResult) =>
+            (mock, service, task) =>
             {
                 ExceptionHelper.ExpectException<SubmitOperationException>(
-                    () => Assert.IsNull(service.EndSaveUserMock(asyncResult), "This should fail."),
+                    () => Assert.IsNull(task.GetAwaiter().GetResult(), "This should fail."),
                     string.Format(Resource.DomainContext_SubmitOperationFailed, WebAuthenticationServiceTest.ErrorMessage));
                 Assert.IsFalse(mock.DomainClient.Submitted,
                     "User should not have been submitted.");
             });
         }
 
-#endregion
+        #endregion
 
-#region Templates
+        #region Templates
 
-        private delegate IAsyncResult InvokeCallback(AuthenticationDomainContext mock, MockWebAuthenticationService service, AsyncCallback callback, object state);
-        private delegate void TestCallback(AuthenticationDomainContext mock, MockWebAuthenticationService service, IAsyncResult asyncResult);
-
-        private void TestTemplate(InvokeCallback invoke, TestCallback proceed, TestCallback verify, bool verifyInCallback)
+        private void TestTemplate<T>(Func<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> invoke,
+            Action<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> proceed,
+            Action<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> verify)
         {
             AuthenticationDomainContext mock = new AuthenticationDomainContext();
-            MockWebAuthenticationService service = new MockWebAuthenticationService() ;
-            service.DomainContext = mock;
-            object state = new object();
-            
-            bool testCompleted = false;
-            AsyncCallback asyncCallback = ar =>
+            MockWebAuthenticationService service = new MockWebAuthenticationService { DomainContext = mock };
+
+            Task<T> task = invoke(mock, service);
+
+            Assert.IsNotNull(task);
+
+            proceed(mock, service, task);
+            this.EnqueueConditional(() => task.IsCompleted);
+            this.EnqueueCallback(() =>
             {
-                Assert.IsNotNull(ar,
-                    "IAsyncResult should not be null.");
-                Assert.AreEqual(state, ar.AsyncState,
-                    "States should be equal.");
-                ExceptionHelper.ExpectException<NotSupportedException>(
-                    () => Assert.IsNull(ar.AsyncWaitHandle, "This property is not supported."));
-                Assert.IsFalse(ar.CompletedSynchronously,
-                    "IAsyncResult should not have completed synchronously.");
-                Assert.IsTrue(ar.IsCompleted || mock.DomainClient.CancellationRequested,
-                    "IAsyncResult should be complete or cancelled.");
-
-                try
-                {
-                    verify(mock, service, ar);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("TestTemplate cought exception {0}", ex);
-                    var exception = System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(ex);
-                    this.EnqueueCallback(() => { exception.Throw();  });
-                }
-
-                testCompleted = true;
-            };
-
-            IAsyncResult asyncResult = invoke(mock, service, verifyInCallback ? asyncCallback : null, state);
-
-            Assert.IsNotNull(asyncResult,
-                "IAsyncResult should not be null.");
-            Assert.AreEqual(state, asyncResult.AsyncState,
-                "States should be equal.");
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => Assert.IsNull(asyncResult.AsyncWaitHandle, "This property is not supported."));
-            Assert.IsFalse(asyncResult.CompletedSynchronously,
-                "IAsyncResult should not have completed synchronously.");
-
-            // We don't have a dispatcher SynchronizationContext when running tests on the
-            // full framework, so the operation will complete on another thread which can happen before we reach this assert
-            // TODO: Try to get tests to run on a dispatcher by using mstest v2 extensobility
-#if SILVERLIGHT
-             Assert.IsFalse(asyncResult.IsCompleted,    "IAsyncResult should not be complete.");
-#endif
-
-            proceed(mock, service, asyncResult);
-
-            if (!verifyInCallback)
-            {
-                this.EnqueueCallback(() => asyncCallback(asyncResult));
-            }
-            this.EnqueueConditional(() => testCompleted);
+                verify(mock, service, task);
+            });
         }
 
-        private void AsyncTemplate(InvokeCallback invoke, TestCallback verify)
+        private void AsyncTemplate<T>(Func<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> invoke, Action<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> verify)
         {
             this.TestTemplate(
                 invoke,
-                (mock, service, asyncResult) =>
+                (mock, service, task) =>
                 {
                     mock.DomainClient.RequestCallback();
-                    Assert.IsFalse(mock.DomainClient.CancellationRequested,
-                        "Result should not be canceled.");
                 },
-                verify,
-                true);
-            this.TestTemplate(
-                invoke,
-                (mock, service, asyncResult) =>
-                {
-                    mock.DomainClient.RequestCallback(WebAuthenticationServiceTest.Delay);
-                    this.EnqueueConditional(() => asyncResult.IsCompleted);
-                    this.EnqueueCallback(() =>
-                    {
-                        Assert.IsFalse(mock.DomainClient.CancellationRequested,
-                            "Result should not be canceled.");
-                    });
-                },
-                verify,
-                false);
+                 (mock, service, task) =>
+                 {
+                     Assert.IsFalse(mock.DomainClient.CancellationRequested,
+                             "Result should not be canceled.");
+                     verify(mock, service, task);
+                 });
             this.EnqueueTestComplete();
         }
 
-        private void CancelTemplate(InvokeCallback invoke, TestCallback proceed, TestCallback verify)
+        private void CancelTemplate<T>(Func<AuthenticationDomainContext, MockWebAuthenticationService, CancellationToken, Task<T>> invoke,
+            Action<AuthenticationDomainContext, MockWebAuthenticationService> verify = null)
         {
-            this.TestTemplate(
-                invoke,
-                (mock, service, asyncResult) =>
-                {
-                    proceed(mock, service, asyncResult);
-                    mock.DomainClient.RequestCallback();
-                    Assert.IsTrue(mock.DomainClient.CancellationRequested,
-                        "Result should be canceled.");
-                },
-                verify,
-                false);
-            this.TestTemplate(
-                invoke,
-                (mock, service, asyncResult) =>
-                {
-                    proceed(mock, service, asyncResult);
-                    mock.DomainClient.RequestCallback(WebAuthenticationServiceTest.Delay);
-                    this.EnqueueCallback(() =>
-                    {
-                        Assert.IsTrue(mock.DomainClient.CancellationRequested,
-                            "Result should be canceled.");
-                    });
-                },
-                verify,
-                false);
+            AuthenticationDomainContext mock = new AuthenticationDomainContext();
+            MockWebAuthenticationService service = new MockWebAuthenticationService { DomainContext = mock };
+            using var cts = new CancellationTokenSource();
+
+            Task<T> task = invoke(mock, service, cts.Token);
+
+            Assert.IsNotNull(task);
+            Assert.IsFalse(task.IsCompleted, "task should not be complete.");
+            cts.Cancel();
+
+            this.EnqueueConditional(() => task.IsCompleted);
+            this.EnqueueCallback(() =>
+            {
+                Assert.IsTrue(task.IsCanceled, "task should be cancelled");
+                verify?.Invoke(mock, service);
+            });
             this.EnqueueTestComplete();
         }
 
-        private void ErrorTemplate(InvokeCallback invoke, TestCallback verify)
+        private void ErrorTemplate<T>(Func<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> invoke,
+            Action<AuthenticationDomainContext, MockWebAuthenticationService, Task<T>> verify)
         {
             this.TestTemplate(
                 invoke,
-                (mock, service, asyncResult) =>
+                (mock, service, task) =>
                 {
                     mock.DomainClient.Error = new Exception(WebAuthenticationServiceTest.ErrorMessage);
                     mock.DomainClient.RequestCallback();
                     Assert.IsFalse(mock.DomainClient.CancellationRequested,
                         "Result should not be canceled.");
                 },
-                verify,
-                true);
-            this.TestTemplate(
-                invoke,
-                (mock, service, asyncResult) =>
-                {
-                    mock.DomainClient.Error = new Exception(WebAuthenticationServiceTest.ErrorMessage);
-                    mock.DomainClient.RequestCallback(WebAuthenticationServiceTest.Delay);
-                    this.EnqueueConditional(() => asyncResult.IsCompleted);
-                    this.EnqueueCallback(() =>
-                    {
-                        Assert.IsFalse(mock.DomainClient.CancellationRequested,
-                            "Result should not be canceled.");
-                    });
-                },
-                verify,
-                false);
+                verify);
             this.EnqueueTestComplete();
         }
 
-#endregion
+        #endregion
     }
 }

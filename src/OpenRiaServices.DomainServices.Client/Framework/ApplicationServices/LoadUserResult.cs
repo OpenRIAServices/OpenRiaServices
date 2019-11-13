@@ -3,12 +3,10 @@
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
-    /// Result returned from <see cref="AuthenticationService.EndLoadUser"/>
+    /// Result of a user load request
     /// </summary>
     public sealed class LoadUserResult : AuthenticationResult
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadUserResult"/> class.
         /// </summary>
@@ -17,7 +15,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             : base(user)
         {
         }
-
-        #endregion
     }
 }

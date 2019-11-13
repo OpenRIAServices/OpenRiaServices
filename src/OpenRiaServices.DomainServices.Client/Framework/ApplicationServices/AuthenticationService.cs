@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
@@ -24,31 +24,19 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </remarks>
     public abstract class AuthenticationService : INotifyPropertyChanged
     {
-        #region Member fields
-
         private readonly object _syncLock = new object();
 
         // By default, events will be dispatched to the context the service is created in
-        private readonly SynchronizationContext _synchronizationContext =
-            SynchronizationContext.Current ?? new SynchronizationContext();
-
+        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
         private IPrincipal _user;
         private PropertyChangedEventHandler _propertyChangedEventHandler;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
         /// </summary>
-        protected AuthenticationService() 
-        { 
+        protected AuthenticationService()
+        {
         }
-
-        #endregion
-
-        #region Events
 
         /// <summary>
         /// Raised when a new user is successfully logged in.
@@ -67,10 +55,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// anonymous.
         /// </remarks>
         public event EventHandler<AuthenticationEventArgs> LoggedOut;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether an asynchronous operation is in progress
@@ -122,7 +106,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </remarks>
         public IPrincipal User
         {
-            get 
+            get
             {
                 if (this._user == null)
                 {
@@ -143,11 +127,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Only one operation can be active at a time. This property should not be set directly
         /// but instead can be modified via the <see cref="StartOperation"/> method.
         /// </remarks>
-        private AuthenticationOperation Operation { get; set; }
-
-        #endregion
-
-        #region Methods
+        private protected AuthenticationOperation Operation { get; private set; }
 
         /// <summary>
         /// Asynchronously authenticates and logs in to the server with the specified parameters.
@@ -393,7 +373,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                     // Setting the operation to null indicates the service is no longer busy and
                     // can process another operation
                     this.Operation = null;
-                    
+
                     // Invoke the wrapped action
                     if (completeAction != null)
                     {
@@ -451,7 +431,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
             try
             {
-                operation.Start();
+                operation.StartAsync();
             }
             catch (Exception)
             {
@@ -460,7 +440,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
 
             this.RaisePropertyChanged(nameof(IsBusy));
-            this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(this.Operation));
+            this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(operation));
         }
 
         /// <summary>
@@ -499,7 +479,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 return string.Empty;
             }
         }
-        
+
         /// <summary>
         /// Runs the callback in the synchronization context
         /// </summary>
@@ -508,7 +488,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private void RunInSynchronizationContext(SendOrPostCallback callback, object state)
         {
             Debug.Assert(callback != null, "The callback cannot be null.");
-            if (SynchronizationContext.Current == this._synchronizationContext)
+            if (SynchronizationContext.Current == this._synchronizationContext || this._synchronizationContext == null)
             {
                 // We're in the current context, just execute synchronously
                 callback(state);
@@ -532,7 +512,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new ArgumentNullException(nameof(propertyName));
             }
-            
+
             PropertyChangedEventHandler handler = this._propertyChangedEventHandler;
             if (handler != null)
             {
@@ -581,10 +561,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
-        #endregion
-
-        #region Template Properties
-
         /// <summary>
         /// Gets a value indicating whether this authentication implementation supports
         /// cancellation.
@@ -597,10 +573,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             get { return false; }
         }
-
-        #endregion
-
-        #region Template Methods
 
         /// <summary>
         /// Creates a default user.
@@ -625,73 +597,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </remarks>
         /// <param name="parameters">Login parameters that specify the user to authenticate. This
         /// parameter is optional.</param>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
-        /// <seealso cref="CancelLogin"/>
-        /// <seealso cref="EndLogin"/>
-        protected internal abstract IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state);
-
-        /// <summary>
-        /// Cancels an asynchronous <c>Login</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// The default implementation throws a <see cref="NotSupportedException"/> when
-        /// <see cref="SupportsCancellation"/> is <c>false</c> and does not need to be called from
-        /// overridden implementations. This method is invoked when a <c>Login</c> operation is
-        /// canceled. Either this or <see cref="EndLogin"/> will be invoked to conclude the operation
-        /// but not both. After <see cref="CancelLogin"/> is called, the callback passed in to
-        /// <see cref="BeginLogin"/> should not be invoked. Exceptions thrown from this method will
-        /// be available in <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogin"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogin"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="OperationBase.Cancel()"/>
-        /// <seealso cref="BeginLogin"/>
-        /// <seealso cref="EndLogin"/>
-        protected internal virtual void CancelLogin(IAsyncResult asyncResult)
-        {
-            if (!this.SupportsCancellation)
-            {
-                throw new NotSupportedException(string.Format(
-                    CultureInfo.InvariantCulture,
-                    Resources.ApplicationServices_OperationCannotCancel,
-                    "Login"));
-            }
-        }
-
-        /// <summary>
-        /// Ends an asynchronous <c>Login</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// This method is invoked when a <c>Login</c> operation completes. Either this or
-        /// <see cref="CancelLogin"/> will be invoked to conclude the operation but not both.
-        /// Exceptions thrown from this method will be available in
-        /// <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogin"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>Login</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogin"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="BeginLogin"/>
-        /// <seealso cref="CancelLogin"/>
-        protected internal abstract LoginResult EndLogin(IAsyncResult asyncResult);
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
+        protected internal abstract Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken);
 
         /// <summary>
         /// Begins an asynchronous <c>Logout</c> operation.
@@ -700,73 +608,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// This method is invoked from <c>Logout</c>. Exceptions thrown from this method will
         /// prevent the operation from starting and then be thrown from <c>Logout</c>.
         /// </remarks>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
-        /// <seealso cref="CancelLogout"/>
-        /// <seealso cref="EndLogout"/>
-        protected internal abstract IAsyncResult BeginLogout(AsyncCallback callback, object state);
-
-        /// <summary>
-        /// Cancels an asynchronous <c>Logout</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// The default implementation throws a <see cref="NotSupportedException"/> when
-        /// <see cref="SupportsCancellation"/> is <c>false</c> and does not need to be called from
-        /// overridden implementations. This method is invoked when a <c>Logout</c> operation is
-        /// canceled. Either this or <see cref="EndLogout"/> will be invoked to conclude the operation
-        /// but not both. After <see cref="CancelLogout"/> is called, the callback passed in to
-        /// <see cref="BeginLogout"/> should not be invoked. Exceptions thrown from this method will
-        /// be available in <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogout"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogout"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="OperationBase.Cancel()"/>
-        /// <seealso cref="BeginLogout"/>
-        /// <seealso cref="EndLogout"/>
-        protected internal virtual void CancelLogout(IAsyncResult asyncResult)
-        {
-            if (!this.SupportsCancellation)
-            {
-                throw new NotSupportedException(string.Format(
-                    CultureInfo.InvariantCulture,
-                    Resources.ApplicationServices_OperationCannotCancel,
-                    "Logout"));
-            }
-        }
-
-        /// <summary>
-        /// Ends an asynchronous <c>Logout</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// This method is invoked when a <c>Logout</c> operation completes. Either this or
-        /// <see cref="CancelLogout"/> will be invoked to conclude the operation but not both.
-        /// Exceptions thrown from this method will be available in
-        /// <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogout"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>Logout</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogout"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="BeginLogout"/>
-        /// <seealso cref="CancelLogout"/>
-        protected internal abstract LogoutResult EndLogout(IAsyncResult asyncResult);
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the logout operation in case request was completed without exceptions</returns>
+        protected internal abstract Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Begins an asynchronous <c>LoadUser</c> operation.
@@ -775,73 +619,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// This method is invoked from <c>LoadUser</c>. Exceptions thrown from this method will
         /// prevent the operation from starting and then be thrown from <c>LoadUser</c>.
         /// </remarks>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
-        /// <seealso cref="CancelLoadUser"/>
-        /// <seealso cref="EndLoadUser"/>
-        protected internal abstract IAsyncResult BeginLoadUser(AsyncCallback callback, object state);
-
-        /// <summary>
-        /// Cancels an asynchronous <c>LoadUser</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// The default implementation throws a <see cref="NotSupportedException"/> when
-        /// <see cref="SupportsCancellation"/> is <c>false</c> and does not need to be called from
-        /// overridden implementations. This method is invoked when a <c>LoadUser</c> operation is
-        /// canceled. Either this or <see cref="EndLoadUser"/> will be invoked to conclude the operation
-        /// but not both. After <see cref="CancelLoadUser"/> is called, the callback passed in to
-        /// <see cref="BeginLoadUser"/> should not be invoked. Exceptions thrown from this method will
-        /// be available in <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLoadUser"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLoadUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="OperationBase.Cancel()"/>
-        /// <seealso cref="BeginLoadUser"/>
-        /// <seealso cref="EndLoadUser"/>
-        protected internal virtual void CancelLoadUser(IAsyncResult asyncResult)
-        {
-            if (!this.SupportsCancellation)
-            {
-                throw new NotSupportedException(string.Format(
-                    CultureInfo.InvariantCulture,
-                    Resources.ApplicationServices_OperationCannotCancel,
-                    "LoadUser"));
-            }
-        }
-
-        /// <summary>
-        /// Ends an asynchronous <c>LoadUser</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// This method is invoked when a <c>LoadUser</c> operation completes. Either this or
-        /// <see cref="CancelLoadUser"/> will be invoked to conclude the operation but not both.
-        /// Exceptions thrown from this method will be available in
-        /// <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLoadUser"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>LoadUser</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLoadUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="BeginLoadUser"/>
-        /// <seealso cref="CancelLoadUser"/>
-        protected internal abstract LoadUserResult EndLoadUser(IAsyncResult asyncResult);
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the load operation in case request was completed without exceptions</returns>
+        protected internal abstract Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Begins an asynchronous <c>SaveUser</c> operation.
@@ -851,77 +631,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// prevent the operation from starting and then be thrown from <c>SaveUser</c>.
         /// </remarks>
         /// <param name="user">The user to save. This parameter will not be null.</param>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
-        /// <seealso cref="CancelSaveUser"/>
-        /// <seealso cref="EndSaveUser"/>
-        protected internal abstract IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state);
-
-        /// <summary>
-        /// Cancels an asynchronous <c>SaveUser</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// The default implementation throws a <see cref="NotSupportedException"/> when
-        /// <see cref="SupportsCancellation"/> is <c>false</c> and does not need to be called from
-        /// overridden implementations. This method is invoked when a <c>SaveUser</c> operation is
-        /// canceled. Either this or <see cref="EndSaveUser"/> will be invoked to conclude the operation
-        /// but not both. After <see cref="CancelSaveUser"/> is called, the callback passed in to
-        /// <see cref="BeginSaveUser"/> should not be invoked. Exceptions thrown from this method will
-        /// be available in <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginSaveUser"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginSaveUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="OperationBase.Cancel()"/>
-        /// <seealso cref="BeginSaveUser"/>
-        /// <seealso cref="EndSaveUser"/>
-        protected internal virtual void CancelSaveUser(IAsyncResult asyncResult)
-        {
-            if (!this.SupportsCancellation)
-            {
-                throw new NotSupportedException(string.Format(
-                    CultureInfo.InvariantCulture,
-                    Resources.ApplicationServices_OperationCannotCancel,
-                    "SaveUser"));
-            }
-        }
-
-        /// <summary>
-        /// Ends an asynchronous <c>SaveUser</c> operation.
-        /// </summary>
-        /// <remarks>
-        /// This method is invoked when a <c>SaveUser</c> operation completes. Either this or
-        /// <see cref="CancelSaveUser"/> will be invoked to conclude the operation but not both.
-        /// Exceptions thrown from this method will be available in
-        /// <see cref="OperationBase.Error"/>.
-        /// </remarks>
-        /// <param name="asyncResult">A result returned from <see cref="BeginSaveUser"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>SaveUser</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginSaveUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        /// <seealso cref="BeginSaveUser"/>
-        /// <seealso cref="CancelSaveUser"/>
-        protected internal abstract SaveUserResult EndSaveUser(IAsyncResult asyncResult);
-
-        #endregion
-
-        #region INotifyPropertyChanged Members
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the save operation in case request was completed without exceptions</returns>
+        protected internal abstract Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken);
 
         /// <summary>
         /// Raised every time a property value changes. See <see cref="INotifyPropertyChanged.PropertyChanged"/>.
@@ -937,7 +649,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 this._propertyChangedEventHandler = (PropertyChangedEventHandler)Delegate.Remove(this._propertyChangedEventHandler, value);
             }
         }
-
-        #endregion
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
@@ -15,15 +17,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public abstract class WebAuthenticationService : AuthenticationService
     {
-        #region Static fields
-
         private const string LoginQueryName = "LoginQuery";
         private const string LogoutQueryName = "LogoutQuery";
         private const string LoadUserQueryName = "GetUserQuery";
-
-        #endregion
-
-        #region Member fields
 
         private readonly object _syncLock = new object();
 
@@ -31,20 +27,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private string _domainContextType;
         private AuthenticationDomainContextBase _domainContext;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebAuthenticationService"/> class.
         /// </summary>
-        internal WebAuthenticationService() 
-        { 
+        private protected WebAuthenticationService()
+        {
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the type of the domain context.
@@ -106,10 +94,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             get { return true; }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Creates a default user.
         /// </summary>
@@ -126,25 +110,21 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this.Initialize();
 
             IPrincipal user = null;
+            ConstructorInfo userConstructor = this.DomainContext.UserType.GetConstructor(TypeUtility.EmptyTypes);
 
-            if (user == null)
+            if (userConstructor != null)
             {
-                ConstructorInfo userConstructor = this.DomainContext.UserType.GetConstructor(TypeUtility.EmptyTypes);
-
-                if (userConstructor != null)
+                try
                 {
-                    try
+                    user = (IPrincipal)userConstructor.Invoke(TypeUtility.EmptyTypes);
+                }
+                catch (TargetInvocationException tie)
+                {
+                    if (tie.InnerException != null)
                     {
-                        user = (IPrincipal)userConstructor.Invoke(TypeUtility.EmptyTypes);
+                        throw tie.InnerException;
                     }
-                    catch (TargetInvocationException tie)
-                    {
-                        if (tie.InnerException != null)
-                        {
-                            throw tie.InnerException;
-                        }
-                        throw;
-                    }
+                    throw;
                 }
             }
 
@@ -160,14 +140,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Begins an asynchronous <c>Login</c> operation.
         /// </summary>
         /// <param name="parameters">Login parameters that specify the user to authenticate</param>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
+        protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
         {
             this.Initialize();
 
@@ -176,7 +155,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            WebAsyncResult result = new WebAsyncResult(callback, state);
             EntityQuery query;
 
             try
@@ -196,74 +174,31 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw;
             }
 
-            result.InnerOperation = this.DomainContext.Load(
-                query,
-                LoadBehavior.MergeIntoCurrent,
-                (Action<LoadOperation>)this.HandleOperationComplete,
-                result);
+            Task<ILoadResult> loadTask = LoadAsync(query, cancellationToken);
 
-            return result;
-        }
-
-        /// <summary>
-        /// Cancels an asynchronous <c>Login</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogin"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogin"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override void CancelLogin(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
-            if (result.InnerOperation.CanCancel)
+            return LoadUserImplementation(loadTask);
+            async Task<LoginResult> LoadUserImplementation(Task<ILoadResult> loadTask)
             {
-                result.InnerOperation.Cancel();
+                var result = await loadTask.ConfigureAwait(false);
+
+                IPrincipal user = (IPrincipal)result.Entities.SingleOrDefault();
+                this.PrepareUser(user);
+                return new LoginResult(user, (user != null));
             }
-        }
-
-        /// <summary>
-        /// Ends an asynchronous <c>Login</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogin"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>Login</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogin"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
-
-            if (result.InnerOperation.HasError)
-            {
-                throw result.InnerOperation.Error;
-            }
-
-            IPrincipal user = (IPrincipal)((LoadOperation)result.InnerOperation).Entities.SingleOrDefault();
-            this.PrepareUser(user);
-            return new LoginResult(user, (user != null));
         }
 
         /// <summary>
         /// Begins an asynchronous <c>Logout</c> operation.
         /// </summary>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+        protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
         {
             this.Initialize();
-
-            WebAsyncResult result = new WebAsyncResult(callback, state);
             EntityQuery query;
 
             try
@@ -283,78 +218,36 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw;
             }
 
-            result.InnerOperation = this.DomainContext.Load(
-                query,
-                LoadBehavior.MergeIntoCurrent,
-                (Action<LoadOperation>)this.HandleOperationComplete,
-                result);
+            Task<ILoadResult> loadTask = LoadAsync(query, cancellationToken);
+            return LogoutAsyncContinuation(loadTask);
 
-            return result;
-        }
-
-        /// <summary>
-        /// Cancels an asynchronous <c>Logout</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogout"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogout"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override void CancelLogout(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
-            if (result.InnerOperation.CanCancel)
+            async Task<LogoutResult> LogoutAsyncContinuation(Task<ILoadResult> loadTask)
             {
-                result.InnerOperation.Cancel();
-            }
-        }
+                var result = await loadTask.ConfigureAwait(false);
 
-        /// <summary>
-        /// Ends an asynchronous <c>Logout</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLogout"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>Logout</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLogout"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
-
-            if (result.InnerOperation.HasError)
-            {
-                throw result.InnerOperation.Error;
+                IPrincipal user = (IPrincipal)result.Entities.SingleOrDefault();
+                if (user == null)
+                {
+                    throw new InvalidOperationException(Resources.ApplicationServices_LogoutNoUser);
+                }
+                this.PrepareUser(user);
+                return new LogoutResult(user);
             }
-
-            IPrincipal user = (IPrincipal)((LoadOperation)result.InnerOperation).Entities.SingleOrDefault();
-            if (user == null)
-            {
-                throw new InvalidOperationException(Resources.ApplicationServices_LogoutNoUser);
-            }
-            this.PrepareUser(user);
-            return new LogoutResult(user);
         }
 
         /// <summary>
         /// Begins an asynchronous <c>LoadUser</c> operation.
         /// </summary>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
+        protected internal override Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
         {
             this.Initialize();
 
-            WebAsyncResult result = new WebAsyncResult(callback, state);
             EntityQuery query;
 
             try
@@ -374,76 +267,71 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw;
             }
 
-            result.InnerOperation = this.DomainContext.Load(
-                query,
-                LoadBehavior.MergeIntoCurrent,
-                (Action<LoadOperation>)this.HandleOperationComplete,
-                result);
+            Task<ILoadResult> loadTask = LoadAsync(query, cancellationToken);
 
-            return result;
-        }
-
-        /// <summary>
-        /// Cancels an asynchronous <c>LoadUser</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLoadUser"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLoadUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override void CancelLoadUser(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
-            if (result.InnerOperation.CanCancel)
+            return LoadUserImplementation(loadTask);
+            async Task<LoadUserResult> LoadUserImplementation(Task<ILoadResult> loadTask)
             {
-                result.InnerOperation.Cancel();
+                var result = await loadTask.ConfigureAwait(false);
+
+                IPrincipal user = (IPrincipal)result.Entities.SingleOrDefault();
+                if (user == null)
+                {
+                    throw new InvalidOperationException(Resources.ApplicationServices_LoadNoUser);
+                }
+                this.PrepareUser(user);
+                return new LoadUserResult(user);
             }
         }
 
         /// <summary>
-        /// Ends an asynchronous <c>LoadUser</c> operation.
+        ///  Helepr method to invoke generic LoadAsync when the type of the result is not known at compile time
         /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginLoadUser"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>LoadUser</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginLoadUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
+        private Task<ILoadResult> LoadAsync(EntityQuery query, CancellationToken cancellationToken)
         {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
-
-            if (result.InnerOperation.HasError)
+            // Get MethodInfo for Load<TEntity>(EntityQuery<TEntity>, LoadBehavior, Action<LoadOperation<TEntity>>, object, LoadOperation<TEntity>)
+            var method = new Func<EntityQuery<Entity>, LoadBehavior, CancellationToken, Task<ILoadResult>>(this.LoadAsyncHelper<Entity>);
+            var loadMethod = method.Method.GetGenericMethodDefinition();
+            Task<ILoadResult> loadTask;
+            try
             {
-                throw result.InnerOperation.Error;
+                loadTask = (Task<ILoadResult>)loadMethod
+                    .MakeGenericMethod(query.EntityType)
+                    .Invoke(this, new object[] { query, LoadBehavior.MergeIntoCurrent, cancellationToken });
+            }
+            catch (TargetInvocationException tie)
+            {
+                if (tie.InnerException != null)
+                {
+                    throw tie.InnerException;
+                }
+                throw;
             }
 
-            IPrincipal user = (IPrincipal)((LoadOperation)result.InnerOperation).Entities.SingleOrDefault();
-            if (user == null)
-            {
-                throw new InvalidOperationException(Resources.ApplicationServices_LoadNoUser);
-            }
-            this.PrepareUser(user);
-            return new LoadUserResult(user);
+            return loadTask;
+        }
+
+        /// <summary>
+        ///  Helepr method to invoke generic LoadAsync when the type of the result is not known at compile time
+        /// </summary>
+        private async Task<ILoadResult> LoadAsyncHelper<T>(EntityQuery<T> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
+            where T : Entity
+        {
+            return await this.DomainContext.LoadAsync(query, loadBehavior, cancellationToken);
         }
 
         /// <summary>
         /// Begins an asynchronous <c>SaveUser</c> operation.
         /// </summary>
         /// <param name="user">The authenticated user to save</param>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         /// <exception cref="InvalidOperationException"> is thrown if the user is anonymous.</exception>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
+        protected internal override Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
         {
             this.Initialize();
 
@@ -452,86 +340,28 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw new InvalidOperationException(Resources.ApplicationServices_CannotSaveAnonymous);
             }
 
-            WebAsyncResult result = new WebAsyncResult(callback, state);
-            result.InnerOperation = this.DomainContext.SubmitChanges(
-                (Action<SubmitOperation>)this.HandleOperationComplete,
-                result);
+            var task = this.DomainContext.SubmitChangesAsync(cancellationToken);
+            return SaveUserContinuation(task);
 
-            return result;
-        }
-
-        /// <summary>
-        /// Cancels an asynchronous <c>SaveUser</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginSaveUser"/> that represents
-        /// the asynchronous call to cancel.
-        /// </param>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginSaveUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override void CancelSaveUser(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult, true);
-            if (result.InnerOperation.CanCancel)
+            async Task<SaveUserResult> SaveUserContinuation(Task<SubmitResult> submitResult)
             {
-                result.InnerOperation.Cancel();
-            }
-        }
+                try
+                {
+                    var res = await submitResult.ConfigureAwait(false);
+                    IPrincipal user = (IPrincipal)res.ChangeSet.OfType<IPrincipal>().SingleOrDefault();
+                    this.PrepareUser(user);
+                    return new SaveUserResult(user);
 
-        /// <summary>
-        /// Ends an asynchronous <c>SaveUser</c> operation.
-        /// </summary>
-        /// <param name="asyncResult">A result returned from <see cref="BeginSaveUser"/> that represents
-        /// the asynchronous call to conclude.
-        /// </param>
-        /// <returns>The result of the asynchronous <c>SaveUser</c> call</returns>
-        /// <exception cref="InvalidOperationException"> is thrown if <paramref name="asyncResult"/>
-        /// was not returned from <see cref="BeginSaveUser"/> or the asynchronous call has already been
-        /// concluded with a previous call to cancel or end.
-        /// </exception>
-        protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
-        {
-            WebAsyncResult result = AsyncResultBase.EndAsyncOperation<WebAsyncResult>(asyncResult);
+                }
+                catch (SubmitOperationException ex)
+                {
+                    if (ex.EntitiesInError.Count != 0)
+                    {
+                        throw new InvalidOperationException(Resources.ApplicationServices_SaveErrors);
+                    }
 
-            if (result.InnerOperation.HasError)
-            {
-                throw result.InnerOperation.Error;
-            }
-
-            if (((SubmitOperation)result.InnerOperation).EntitiesInError.Any())
-            {
-                throw new InvalidOperationException(Resources.ApplicationServices_SaveErrors);
-            }
-
-            IPrincipal user = (IPrincipal)((SubmitOperation)result.InnerOperation).ChangeSet.OfType<IPrincipal>().SingleOrDefault();
-            this.PrepareUser(user);
-            return new SaveUserResult(user);
-        }
-
-        /// <summary>
-        /// Handles completion of the underlying operation in the <see cref="DomainContext"/>.
-        /// </summary>
-        /// <param name="operation">The operation that completed</param>
-        private void HandleOperationComplete(OperationBase operation)
-        {
-            WebAsyncResult result = ((WebAsyncResult)operation.UserState);
-
-            // If the submic callback is executed before the BeginMethod has set InnerOparation
-            // then do so here before calling Complete. 
-            // Since there is a race condition otherwise 
-            if (result.InnerOperation == null)
-            {
-                result.InnerOperation = operation;
-            }
-
-            if (operation.HasError)
-            {
-                operation.MarkErrorAsHandled();
-            }
-            if (!operation.IsCanceled)
-            {
-                result.Complete();
+                    throw;
+                }
             }
         }
 
@@ -584,7 +414,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 #endif
 
                 Type type = FindDomainContextType(applicationAssembly);
-
                 if ((type != null) && typeof(AuthenticationDomainContextBase).IsAssignableFrom(type))
                 {
                     ConstructorInfo constructor = type.GetConstructor(TypeUtility.EmptyTypes);
@@ -698,21 +527,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 this.DomainContext.UserSet.Detach((Entity)userToDetach);
             }
         }
-
-        #endregion
-
-        #region Nested Classes
-
-        /// <summary>
-        /// The <see cref="IAsyncResult"/> type used by this authentication service.
-        /// </summary>
-        internal class WebAsyncResult : AsyncResultBase
-        {
-            public WebAsyncResult(AsyncCallback asyncCallback, object asyncState) : base(asyncCallback, asyncState) { }
-
-            public OperationBase InnerOperation { get; set; }
-        }
-
-        #endregion
     }
 }

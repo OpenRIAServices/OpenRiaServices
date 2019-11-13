@@ -7,6 +7,8 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
 {
@@ -71,42 +73,22 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
                 return new PrincipalMock();
             }
 
-            protected internal override IAsyncResult BeginLogin(LoginParameters parameters, AsyncCallback callback, object state)
+            protected internal override Task<LoginResult> LoginAsync(LoginParameters parameter, CancellationToken cancellationToken)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
 
-            protected internal override LoginResult EndLogin(IAsyncResult asyncResult)
+            protected internal override Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
 
-            protected internal override IAsyncResult BeginLogout(AsyncCallback callback, object state)
+            protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }
 
-            protected internal override LogoutResult EndLogout(IAsyncResult asyncResult)
-            {
-                throw new NotSupportedException(WebContext_AuthenticationNotSet);
-            }
-
-            protected internal override IAsyncResult BeginLoadUser(AsyncCallback callback, object state)
-            {
-                throw new NotSupportedException(WebContext_AuthenticationNotSet);
-            }
-
-            protected internal override LoadUserResult EndLoadUser(IAsyncResult asyncResult)
-            {
-                throw new NotSupportedException(WebContext_AuthenticationNotSet);
-            }
-
-            protected internal override IAsyncResult BeginSaveUser(IPrincipal user, AsyncCallback callback, object state)
-            {
-                throw new NotSupportedException(WebContext_AuthenticationNotSet);
-            }
-
-            protected internal override SaveUserResult EndSaveUser(IAsyncResult asyncResult)
+            protected internal override Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken)
             {
                 throw new NotSupportedException(WebContext_AuthenticationNotSet);
             }

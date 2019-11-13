@@ -11,25 +11,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     [DomainIdentifier("Authentication", IsApplicationService = true)]
     public abstract class AuthenticationDomainContextBase : DomainContext
     {
-        #region Member fields
-
         private Type _userType;
         private EntitySet _userSet;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationDomainContextBase"/> class.
         /// </summary>
         /// <param name="domainClient">The <see cref="DomainClient"/> instance this <see cref="AuthenticationDomainContextBase"/> should use</param>
         protected AuthenticationDomainContextBase(DomainClient domainClient) : base(domainClient) { }
-
-        #endregion
-
-        #region Properties
-
 
         /// <summary>
         /// Gets the type of the user entity.
@@ -78,7 +67,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 return this._userSet;
             }
         }
-
-        #endregion
     }
 }

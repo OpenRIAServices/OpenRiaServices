@@ -6,17 +6,6 @@
     /// </summary>
     public class LoginParameters
     {
-        #region Member fields
-
-        private readonly string _userName;
-        private readonly string _password;
-        private readonly bool _isPersistent;
-        private readonly string _customData;
-
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginParameters"/> class with default values.
         /// </summary>
@@ -46,48 +35,30 @@
         /// <param name="customData">Optional implementation-specific data</param>
         public LoginParameters(string userName, string password, bool isPersistent, string customData)
         {
-            this._userName = userName;
-            this._password = password;
-            this._isPersistent = isPersistent;
-            this._customData = customData;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the name of the user to be authenticated.
-        /// </summary>
-        public string UserName
-        {
-            get { return this._userName; }
-        }
-
-        /// <summary>
-        /// Gets the password of the user to be authenticated.
-        /// </summary>
-        public string Password
-        {
-            get { return this._password; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the login should persist between sessions.
-        /// </summary>
-        public bool IsPersistent
-        {
-            get { return this._isPersistent; }
+            this.UserName = userName;
+            this.Password = password;
+            this.IsPersistent = isPersistent;
+            this.CustomData = customData;
         }
 
         /// <summary>
         /// Gets optional implementation-specific data.
         /// </summary>
-        public string CustomData
-        {
-            get { return this._customData; }
-        }
+        public string CustomData { get; }
 
-        #endregion
+        /// <summary>
+        /// Gets a value indicating whether the login should persist between sessions.
+        /// </summary>
+        public bool IsPersistent { get; }
+
+        /// <summary>
+        /// Gets the password of the user to be authenticated.
+        /// </summary>
+        public string Password { get; }
+
+        /// <summary>
+        /// Gets the name of the user to be authenticated.
+        /// </summary>
+        public string UserName { get; }
     }
 }

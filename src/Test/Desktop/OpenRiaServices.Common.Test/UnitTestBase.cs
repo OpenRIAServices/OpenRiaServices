@@ -22,7 +22,7 @@ namespace OpenRiaServices.Silverlight.Testing
         protected const int DebuggingTimeoutInSeconds = 600;
 
         // Delay between conditional evaluations
-        private const int DefaultStepInMilliseconds = 100;
+        private const int DefaultStepInMilliseconds = 10;
 
         // The number of timeouts
         private static int NumberOfTimeouts;

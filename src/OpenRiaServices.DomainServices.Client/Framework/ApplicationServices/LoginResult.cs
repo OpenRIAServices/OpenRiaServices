@@ -4,17 +4,11 @@ using System.Security.Principal;
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
-    /// Result returned from <see cref="AuthenticationService.EndLogin"/>
+    /// Result of an Login request
     /// </summary>
     public sealed class LoginResult : AuthenticationResult
     {
-        #region Member fields
-
         private readonly bool _loginSuccess;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginResult"/> class.
@@ -34,10 +28,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this._loginSuccess = loginSuccess;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets a value indicating whether the <c>Login</c> call completed successfully.
         /// </summary>
@@ -45,7 +35,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             get { return this._loginSuccess; }
         }
-
-        #endregion
     }
 }

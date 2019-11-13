@@ -22,22 +22,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
         private readonly Action<TestOperation> _completeAction;
 
         public TestOperation(Action<TestOperation> completeAction, object userState)
-            : base(userState, false)
+            : base(userState, true)
         {
             this._completeAction = completeAction;
-        }
-
-        protected override bool SupportsCancellation
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        protected override void CancelCore()
-        {
-            base.CancelCore();
         }
 
         public new void SetError(Exception error)
@@ -53,6 +40,8 @@ namespace OpenRiaServices.DomainServices.Client.Test
         public new void Cancel()
         {
             base.Cancel();
+
+            base.SetCancelled();
         }
 
         /// <summary>
@@ -61,11 +50,6 @@ namespace OpenRiaServices.DomainServices.Client.Test
         protected override void InvokeCompleteAction()
         {
             this._completeAction?.Invoke(this);
-        }
-
-        private protected override void OnCancellationRequested()
-        {
-            base.SetCancelled();
         }
     }
     #endregion

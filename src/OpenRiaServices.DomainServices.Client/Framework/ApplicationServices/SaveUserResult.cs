@@ -3,12 +3,10 @@
 namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 {
     /// <summary>
-    /// Result returned from <see cref="AuthenticationService.EndSaveUser"/>
+    /// Result of a save user request
     /// </summary>
     public sealed class SaveUserResult : AuthenticationResult
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SaveUserResult"/> class.
         /// </summary>
@@ -17,7 +15,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             : base(user)
         {
         }
-
-        #endregion
     }
 }
