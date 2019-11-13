@@ -8,14 +8,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public sealed class AuthenticationEventArgs : EventArgs
     {
-        #region Member fields
-
-        private readonly IPrincipal _user;
-
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initiailizes a new instance of the <see cref="AuthenticationEventArgs"/> class.
         /// </summary>
@@ -28,21 +20,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new ArgumentNullException(nameof(user));
             }
-            this._user = user;
+            this.User = user;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the user at the time the event occurred
         /// </summary>
-        public IPrincipal User
-        {
-            get { return this._user; }
-        }
-
-        #endregion
+        public IPrincipal User { get; }
     }
 }

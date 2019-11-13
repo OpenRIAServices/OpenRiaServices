@@ -56,13 +56,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// This method will invoke <see cref="InvokeAsync"/> and will allow all
         /// exceptions thrown from <see cref="InvokeAsync"/> to pass through.
         /// </remarks>
-        internal void Start()
+        internal Task StartAsync()
         {
             var task = this.InvokeAsync(this.CancellationToken);
 
             // Continue on same SynchronizationContext
             var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
-            task.ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
+            return task.ContinueWith(InvokeComplete, this, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
 
             static void InvokeComplete(Task<object> res, object state)
             {
@@ -102,7 +102,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// underlying async result implementation.
         /// </summary>
         /// <remarks>
-        /// This method is invoked from <see cref="Start"/>. Any exceptions thrown
+        /// This method is invoked from <see cref="StartAsync"/>. Any exceptions thrown
         /// will be passed through.
         /// </remarks>
         /// <param name="cancellationToken"></param>

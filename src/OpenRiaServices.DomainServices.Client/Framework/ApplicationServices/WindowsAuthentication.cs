@@ -11,23 +11,16 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public class WindowsAuthentication : WebAuthenticationService
     {
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowsAuthentication"/> class.
         /// </summary>
         public WindowsAuthentication() { }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// <c>Login</c> is not an operation supported for Windows authentication
         /// </summary>
         /// <param name="parameters">The parameter is not used.</param>
-        /// <param name="callback">The parameter is not used.</param>
-        /// <param name="state">The parameter is not used.</param>
+        /// <param name="cancellationToken">The parameter is not used.</param>
         /// <returns>The result.</returns>
         /// <exception cref="NotSupportedException"> is always thrown.</exception>
 
@@ -39,15 +32,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// <c>Logout</c> is not an operation supported for Windows authentication
         /// </summary>
-        /// <param name="callback">The parameter is not used.</param>
-        /// <param name="state">The parameter is not used.</param>
+        /// <param name="cancellationToken">The parameter is not used.</param>
         /// <returns>The result.</returns>
         /// <exception cref="NotSupportedException"> is always thrown.</exception>
         protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
         {
             throw new NotSupportedException(Resources.ApplicationServices_WANoLogout);
         }
-
-        #endregion
     }
 }

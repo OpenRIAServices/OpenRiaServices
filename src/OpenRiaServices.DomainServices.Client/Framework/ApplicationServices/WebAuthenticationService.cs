@@ -17,15 +17,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public abstract class WebAuthenticationService : AuthenticationService
     {
-        #region Static fields
-
         private const string LoginQueryName = "LoginQuery";
         private const string LogoutQueryName = "LogoutQuery";
         private const string LoadUserQueryName = "GetUserQuery";
-
-        #endregion
-
-        #region Member fields
 
         private readonly object _syncLock = new object();
 
@@ -33,20 +27,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private string _domainContextType;
         private AuthenticationDomainContextBase _domainContext;
 
-        #endregion
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WebAuthenticationService"/> class.
         /// </summary>
         internal WebAuthenticationService()
         {
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the type of the domain context.
@@ -108,10 +94,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             get { return true; }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Creates a default user.
         /// </summary>
@@ -128,25 +110,21 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this.Initialize();
 
             IPrincipal user = null;
+            ConstructorInfo userConstructor = this.DomainContext.UserType.GetConstructor(TypeUtility.EmptyTypes);
 
-            if (user == null)
+            if (userConstructor != null)
             {
-                ConstructorInfo userConstructor = this.DomainContext.UserType.GetConstructor(TypeUtility.EmptyTypes);
-
-                if (userConstructor != null)
+                try
                 {
-                    try
+                    user = (IPrincipal)userConstructor.Invoke(TypeUtility.EmptyTypes);
+                }
+                catch (TargetInvocationException tie)
+                {
+                    if (tie.InnerException != null)
                     {
-                        user = (IPrincipal)userConstructor.Invoke(TypeUtility.EmptyTypes);
+                        throw tie.InnerException;
                     }
-                    catch (TargetInvocationException tie)
-                    {
-                        if (tie.InnerException != null)
-                        {
-                            throw tie.InnerException;
-                        }
-                        throw;
-                    }
+                    throw;
                 }
             }
 
@@ -162,14 +140,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Begins an asynchronous <c>Login</c> operation.
         /// </summary>
         /// <param name="parameters">Login parameters that specify the user to authenticate</param>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        /// 
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         protected internal override Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken)
         {
             this.Initialize();
@@ -214,14 +190,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// Begins an asynchronous <c>Logout</c> operation.
         /// </summary>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
         /// </exception>
-        /// 
         protected internal override Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
         {
             this.Initialize();
@@ -264,9 +238,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// Begins an asynchronous <c>LoadUser</c> operation.
         /// </summary>
-        /// <param name="callback">The callback to invoke when the asynchronous call completes</param>
-        /// <param name="state">The optional result state</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
         /// cannot be created.
@@ -311,10 +284,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
+        /// <summary>
+        ///  Helepr method to invoke generic LoadAsync when the type of the result is not known at compile time
+        /// </summary>
         private Task<ILoadResult> LoadAsync(EntityQuery query, CancellationToken cancellationToken)
         {
             // Get MethodInfo for Load<TEntity>(EntityQuery<TEntity>, LoadBehavior, Action<LoadOperation<TEntity>>, object, LoadOperation<TEntity>)
-            var method = new Func<EntityQuery<Entity>, LoadBehavior, CancellationToken, Task<ILoadResult>>(this.LoadAsync<Entity>);
+            var method = new Func<EntityQuery<Entity>, LoadBehavior, CancellationToken, Task<ILoadResult>>(this.LoadAsyncHelper<Entity>);
             var loadMethod = method.Method.GetGenericMethodDefinition();
             Task<ILoadResult> loadTask;
             try
@@ -335,7 +311,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             return loadTask;
         }
 
-        async Task<ILoadResult> LoadAsync<T>(EntityQuery<T> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
+        /// <summary>
+        ///  Helepr method to invoke generic LoadAsync when the type of the result is not known at compile time
+        /// </summary>
+        private async Task<ILoadResult> LoadAsyncHelper<T>(EntityQuery<T> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
             where T : Entity
         {
             return await this.DomainContext.LoadAsync(query, loadBehavior, cancellationToken);
@@ -345,7 +324,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// Begins an asynchronous <c>SaveUser</c> operation.
         /// </summary>
         /// <param name="user">The authenticated user to save</param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call</returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         /// <exception cref="InvalidOperationException"> is thrown if the user is anonymous.</exception>
         /// <exception cref="InvalidOperationException"> is thrown if the
         /// <see cref="WebAuthenticationService.DomainContext"/> is <c>null</c> and a new instance
@@ -359,15 +339,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             {
                 throw new InvalidOperationException(Resources.ApplicationServices_CannotSaveAnonymous);
             }
-
-
-            //if (!this.SupportsCancellation)
-            //{
-            //    // TODO: Add following code to AuthenticationOperaiotn
-            //    throw new NotSupportedException(string.Format(
-            //        Resources.ApplicationServices_OperationCannotCancel,
-            //        "SaveUser"));
-            //}
 
             var task = this.DomainContext.SubmitChangesAsync(cancellationToken);
             return SaveUserContinuation(task);
@@ -443,7 +414,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 #endif
 
                 Type type = FindDomainContextType(applicationAssembly);
-
                 if ((type != null) && typeof(AuthenticationDomainContextBase).IsAssignableFrom(type))
                 {
                     ConstructorInfo constructor = type.GetConstructor(TypeUtility.EmptyTypes);
@@ -557,7 +527,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 this.DomainContext.UserSet.Detach((Entity)userToDetach);
             }
         }
-
-        #endregion
     }
 }

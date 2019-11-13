@@ -13,30 +13,18 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// Context for the application.
     /// </summary>
     /// <remarks>
-    /// This context makes services and other values available from code and xaml. When
-    /// a context is created, it should be registered as a lifetime-object with
-    /// <see cref="Application.ApplicationLifetimeObjects"/> (Silverlight specific).
+    /// This context makes services and other values available from code and xaml.
     /// </remarks>
     public abstract class WebContextBase : INotifyPropertyChanged
 #if SILVERLIGHT
         , IApplicationService, IApplicationLifetimeAware
 #endif
     {
-        #region Static fields
-
-        private static WebContextBase current;
-
-        #endregion
-
-        #region Member fields
+        private static WebContextBase s_current;
 
         private PropertyChangedEventHandler _propertyChangedEventHandler;
         private bool _started;
         private AuthenticationService _authentication;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebContextBase"/> class.
@@ -62,19 +50,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             if (setAsCurrent)
             {
-                if (WebContextBase.current != null)
+                if (WebContextBase.s_current != null)
                 {
                     throw new InvalidOperationException(Resources.WebContext_OnlyOne);
                 }
-                WebContextBase.current = this;
+                WebContextBase.s_current = this;
             }
 
             this._authentication = new DefaultAuthentication();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets the current context.
@@ -85,11 +69,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             get
             {
-                if (WebContextBase.current == null)
+                if (WebContextBase.s_current == null)
                 {
                     throw new InvalidOperationException(Resources.WebContext_NoContexts);
                 }
-                return WebContextBase.current;
+                return WebContextBase.s_current;
             }
         }
 
@@ -137,10 +121,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Raises an <see cref="INotifyPropertyChanged.PropertyChanged"/> event for the specified property.
         /// </summary>
@@ -170,10 +150,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
-        #endregion
-
-        #region INotifyPropertyChanged Members
-
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
@@ -183,10 +159,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             remove { this._propertyChangedEventHandler -= value; }
         }
 
-        #endregion
-
 #if SILVERLIGHT
-        #region IApplicationService Members
 
         /// <summary>
         /// Starts the context as an application service
@@ -204,10 +177,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         void IApplicationService.StopService()
         {
         }
-
-        #endregion
-
-        #region IApplicationLifetimeAware Members
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
         void IApplicationLifetimeAware.Starting()
@@ -230,9 +199,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
         }
 
-        #endregion
 #endif
-        #region Nested Classes
 
         private class DefaultIdentity : IIdentity
         {
@@ -295,6 +262,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
-        #endregion
     }
 }

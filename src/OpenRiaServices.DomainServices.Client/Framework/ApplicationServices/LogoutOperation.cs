@@ -9,13 +9,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public sealed class LogoutOperation : AuthenticationOperation
     {
-        #region Member fields
-
         private readonly Action<LogoutOperation> _completeAction;
-
-        #endregion
-
-        #region Constructors
 
         internal LogoutOperation(AuthenticationService service, Action<LogoutOperation> completeAction, object userState)
             : base(service, userState)
@@ -23,14 +17,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this._completeAction = completeAction;
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Begins a logout operation
         /// </summary>
-        /// <param name="callback">The callback invoked when the operation completes</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The async result for the operation</returns>
         protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
         {
@@ -44,7 +34,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             this._completeAction?.Invoke(this);
         }
-
-        #endregion
     }
 }

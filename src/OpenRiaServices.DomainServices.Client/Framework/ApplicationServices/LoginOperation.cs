@@ -9,14 +9,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public sealed class LoginOperation : AuthenticationOperation
     {
-        #region Member fields
-
         private readonly Action<LoginOperation> _completeAction;
         private readonly LoginParameters _loginParameters;
-
-        #endregion
-
-        #region Constructors
 
         internal LoginOperation(AuthenticationService service, LoginParameters loginParameters, Action<LoginOperation> completeAction, object userState) :
             base(service, userState)
@@ -24,10 +18,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             this._loginParameters = loginParameters;
             this._completeAction = completeAction;
         }
-
-        #endregion
-
-        #region Properties
 
         private new LoginResult Result
         {
@@ -53,10 +43,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             get { return (this.Result == null) ? false : this.Result.LoginSuccess; }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Begins a login operation
@@ -86,7 +72,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             this._completeAction?.Invoke(this);
         }
-
-        #endregion
     }
 }

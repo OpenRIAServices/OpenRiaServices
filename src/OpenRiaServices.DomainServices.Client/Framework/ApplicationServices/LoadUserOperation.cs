@@ -9,23 +9,13 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </summary>
     public sealed class LoadUserOperation : AuthenticationOperation
     {
-        #region Member fields
-
         private readonly Action<LoadUserOperation> _completeAction;
 
-        #endregion
-
-        #region Constructors
-
-        internal LoadUserOperation(AuthenticationService service, Action<LoadUserOperation> completeAction, object userState) :
-            base(service, userState)
+        internal LoadUserOperation(AuthenticationService service, Action<LoadUserOperation> completeAction, object userState)
+            : base(service, userState)
         {
             this._completeAction = completeAction;
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Begins a load operation
@@ -44,7 +34,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             this._completeAction?.Invoke(this);
         }
-
-        #endregion
     }
 }

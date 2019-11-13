@@ -25,20 +25,12 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     /// </remarks>
     public abstract class AuthenticationService : INotifyPropertyChanged
     {
-        #region Member fields
-
         private readonly object _syncLock = new object();
 
         // By default, events will be dispatched to the context the service is created in
-        private readonly SynchronizationContext _synchronizationContext =
-            SynchronizationContext.Current ?? new SynchronizationContext();
-
+        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
         private IPrincipal _user;
         private PropertyChangedEventHandler _propertyChangedEventHandler;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationService"/> class.
@@ -46,10 +38,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         protected AuthenticationService()
         {
         }
-
-        #endregion
-
-        #region Events
 
         /// <summary>
         /// Raised when a new user is successfully logged in.
@@ -68,10 +56,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// anonymous.
         /// </remarks>
         public event EventHandler<AuthenticationEventArgs> LoggedOut;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether an asynchronous operation is in progress
@@ -145,10 +129,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// but instead can be modified via the <see cref="StartOperation"/> method.
         /// </remarks>
         private protected AuthenticationOperation Operation { get; private set; }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Asynchronously authenticates and logs in to the server with the specified parameters.
@@ -452,7 +432,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
             try
             {
-                operation.Start();
+                operation.StartAsync();
             }
             catch (Exception)
             {
@@ -509,7 +489,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private void RunInSynchronizationContext(SendOrPostCallback callback, object state)
         {
             Debug.Assert(callback != null, "The callback cannot be null.");
-            if (SynchronizationContext.Current == this._synchronizationContext)
+            if (SynchronizationContext.Current == this._synchronizationContext || this._synchronizationContext == null)
             {
                 // We're in the current context, just execute synchronously
                 callback(state);
@@ -582,10 +562,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             }
         }
 
-        #endregion
-
-        #region Template Properties
-
         /// <summary>
         /// Gets a value indicating whether this authentication implementation supports
         /// cancellation.
@@ -598,10 +574,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         {
             get { return false; }
         }
-
-        #endregion
-
-        #region Template Methods
 
         /// <summary>
         /// Creates a default user.
@@ -626,16 +598,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </remarks>
         /// <param name="parameters">Login parameters that specify the user to authenticate. This
         /// parameter is optional.</param>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the login operation in case request was completed without exceptions</returns>
         protected internal abstract Task<LoginResult> LoginAsync(LoginParameters parameters, CancellationToken cancellationToken);
 
         /// <summary>
@@ -645,16 +609,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// This method is invoked from <c>Logout</c>. Exceptions thrown from this method will
         /// prevent the operation from starting and then be thrown from <c>Logout</c>.
         /// </remarks>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the logout operation in case request was completed without exceptions</returns>
         protected internal abstract Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken);
 
         /// <summary>
@@ -664,16 +620,8 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// This method is invoked from <c>LoadUser</c>. Exceptions thrown from this method will
         /// prevent the operation from starting and then be thrown from <c>LoadUser</c>.
         /// </remarks>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the load operation in case request was completed without exceptions</returns>
         protected internal abstract Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken);
 
         /// <summary>
@@ -684,21 +632,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// prevent the operation from starting and then be thrown from <c>SaveUser</c>.
         /// </remarks>
         /// <param name="user">The user to save. This parameter will not be null.</param>
-        /// <param name="callback">This callback should be invoked when the asynchronous call completes.
-        /// If the asynchronous call is canceled, the callback should not be invoked. This parameter
-        /// is optional.
-        /// </param>
-        /// <param name="state">The state should be set into the <see cref="IAsyncResult"/> this
-        /// method returns. This parameter is optional.
-        /// </param>
-        /// <returns>An <see cref="IAsyncResult"/> that represents the asynchronous call and
-        /// will be passed to the cancel and end methods.
-        /// </returns>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>The result of the save operation in case request was completed without exceptions</returns>
         protected internal abstract Task<SaveUserResult> SaveUserAsync(IPrincipal user, CancellationToken cancellationToken);
-
-        #endregion
-
-        #region INotifyPropertyChanged Members
 
         /// <summary>
         /// Raised every time a property value changes. See <see cref="INotifyPropertyChanged.PropertyChanged"/>.
@@ -714,7 +650,5 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 this._propertyChangedEventHandler = (PropertyChangedEventHandler)Delegate.Remove(this._propertyChangedEventHandler, value);
             }
         }
-
-        #endregion
     }
 }
