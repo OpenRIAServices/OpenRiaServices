@@ -22,9 +22,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The async result for the operation</returns>
-        protected override Task<object> InvokeAsync(CancellationToken cancellationToken)
+        protected internal override Task<AuthenticationResult> InvokeAsync(CancellationToken cancellationToken)
         {
-            return CastToObjectTask(this.Service.SaveUserAsync(this.Service.User, cancellationToken));
+            return CastTaskResult(this.Service.SaveUserAsync(this.Service.User, cancellationToken));
         }
 
         /// <summary>
