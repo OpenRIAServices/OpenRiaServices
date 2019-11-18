@@ -53,12 +53,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
             return CastTaskResult(this.Service.LoginAsync(this.LoginParameters, cancellationToken));
         }
 
-        /// <summary>
-        /// Raises property changes after the operation has completed.
-        /// </summary>
-        protected override void RaiseCompletionPropertyChanges()
+        internal override void Complete(AuthenticationResult endResult)
         {
-            base.RaiseCompletionPropertyChanges();
+            base.Complete(endResult);
             if (this.LoginSuccess)
             {
                 this.RaisePropertyChanged(nameof(LoginSuccess));

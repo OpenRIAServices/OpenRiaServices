@@ -54,17 +54,14 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <returns>The async result returned by the underlying Begin call</returns>
         protected internal abstract Task<AuthenticationResult> InvokeAsync(CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Raises property changes after the operation has completed.
-        /// </summary>
-        /// <remarks>
-        /// This method is invoked by the callback passed into <see cref="InvokeAsync"/> once
-        /// <see cref="OperationBase.Result"/> and <see cref="OperationBase.Error"/> have
-        /// been set. Change notifications for any properties that have been affected by the
-        /// state changes should occur here.
-        /// </remarks>
-        protected virtual void RaiseCompletionPropertyChanges()
+        internal new void SetError(Exception error)
         {
+            base.SetError(error);
+        }
+
+        internal virtual void Complete(AuthenticationResult endResult)
+        {
+            base.Complete(endResult);
             if (this.User != null)
             {
                 this.RaisePropertyChanged(nameof(User));
@@ -74,26 +71,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private protected Task<AuthenticationResult> CastTaskResult<T>(Task<T> task)
             where T : AuthenticationResult
         {
-            return task.ContinueWith(res =>
+            return task.ContinueWith<AuthenticationResult>(res =>
             {
-                return (AuthenticationResult)res.GetAwaiter().GetResult();
+                return res.GetAwaiter().GetResult();
             }
            , CancellationToken.None
            , TaskContinuationOptions.NotOnCanceled | TaskContinuationOptions.ExecuteSynchronously
            , TaskScheduler.Default);
         }
 
-        internal new void SetError(Exception error)
-        {
-            base.SetError(error);
-            RaiseCompletionPropertyChanges();
-        }
-
-        internal void Complete(AuthenticationResult endResult)
-        {
-            base.Complete(endResult);
-            RaiseCompletionPropertyChanges();
-        }
         #endregion
     }
 }
