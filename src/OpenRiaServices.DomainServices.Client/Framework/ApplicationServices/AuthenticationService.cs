@@ -190,8 +190,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <seealso cref="LoggedIn"/>
         public LoginOperation Login(LoginParameters parameters, Action<LoginOperation> completeAction, object userState)
         {
-            this.StartOperation(
-                new LoginOperation(this, parameters, this.WrapCompleteAction<LoginOperation>(completeAction), userState));
+            this.StartOperation(new LoginOperation(this, parameters, completeAction, userState));
 
             return (LoginOperation)this.Operation;
         }
@@ -240,8 +239,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <seealso cref="LoggedOut"/>
         public LogoutOperation Logout(Action<LogoutOperation> completeAction, object userState)
         {
-            this.StartOperation(
-                new LogoutOperation(this, this.WrapCompleteAction<LogoutOperation>(completeAction), userState));
+            this.StartOperation(new LogoutOperation(this, completeAction, userState));
 
             return (LogoutOperation)this.Operation;
         }
@@ -281,8 +279,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </exception>
         public LoadUserOperation LoadUser(Action<LoadUserOperation> completeAction, object userState)
         {
-            this.StartOperation(
-                new LoadUserOperation(this, this.WrapCompleteAction<LoadUserOperation>(completeAction), userState));
+            this.StartOperation(new LoadUserOperation(this, completeAction, userState));
 
             return (LoadUserOperation)this.Operation;
         }
@@ -323,91 +320,9 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// </exception>
         public SaveUserOperation SaveUser(Action<SaveUserOperation> completeAction, object userState)
         {
-            this.StartOperation(
-                new SaveUserOperation(this, this.WrapCompleteAction<SaveUserOperation>(completeAction), userState));
+            this.StartOperation(new SaveUserOperation(this, completeAction, userState));
 
             return (SaveUserOperation)this.Operation;
-        }
-
-        /// <summary>
-        /// Wraps the specified action so the <see cref="AuthenticationService"/> can complete
-        /// processing of the operation before invoking the <paramref name="completeAction"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of operation.</typeparam>
-        /// <param name="completeAction">The action to invoke once the service finishes
-        /// processing the operation. This parameter is optional.
-        /// </param>
-        /// <returns>An action that will complete processing of the operation before invoking
-        /// the wrapped action.
-        /// </returns>
-        private Action<T> WrapCompleteAction<T>(Action<T> completeAction) where T : AuthenticationOperation
-        {
-            return new Action<T>(ao =>
-                {
-                    bool raiseUserChanged = false;
-                    bool raiseLoggedIn = false;
-                    bool raiseLoggedOut = false;
-
-                    // If the operation completed successfully, update the user and 
-                    // determine which events should be raised
-                    if (!ao.IsCanceled && !ao.HasError && (ao.User != null))
-                    {
-                        if (this._user != ao.User)
-                        {
-                            raiseLoggedIn =
-                                // anonymous -> authenticated
-                                (this._user == null) ||
-                                (!this._user.Identity.IsAuthenticated && ao.User.Identity.IsAuthenticated) ||
-                                // authenticated -> authenticated
-                                (ao.User.Identity.IsAuthenticated && (this._user.Identity.Name != ao.User.Identity.Name));
-                            raiseLoggedOut =
-                                // authenticated -> anonymous
-                                (this._user != null) &&
-                                (this._user.Identity.IsAuthenticated && !ao.User.Identity.IsAuthenticated);
-
-                            this._user = ao.User;
-                            raiseUserChanged = true;
-                        }
-                    }
-
-                    // Setting the operation to null indicates the service is no longer busy and
-                    // can process another operation
-                    this.Operation = null;
-
-                    // Invoke the wrapped action
-                    if (completeAction != null)
-                    {
-                        try
-                        {
-                            completeAction.DynamicInvoke(ao);
-                        }
-                        catch (TargetInvocationException tie)
-                        {
-                            if (tie.InnerException != null)
-                            {
-                                throw tie.InnerException;
-                            }
-                            throw;
-                        }
-                    }
-
-                    // Raise notification events as appropriate
-                    if (raiseUserChanged)
-                    {
-                        this.RaisePropertyChanged(nameof(User));
-                    }
-                    this.RaisePropertyChanged(nameof(IsBusy));
-                    this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(ao));
-
-                    if (raiseLoggedIn)
-                    {
-                        this.OnLoggedIn(new AuthenticationEventArgs(ao.User));
-                    }
-                    if (raiseLoggedOut)
-                    {
-                        this.OnLoggedOut(new AuthenticationEventArgs(ao.User));
-                    }
-                });
         }
 
         /// <summary>
@@ -431,7 +346,10 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
             try
             {
-                operation.StartAsync();
+                var task = operation.InvokeAsync(operation.CancellationToken);
+                // Continue on same SynchronizationContext
+                var scheduler = SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+                task.ContinueWith(StartOperationComplete, operation, CancellationToken.None, TaskContinuationOptions.HideScheduler, scheduler);
             }
             catch (Exception)
             {
@@ -441,6 +359,87 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
             this.RaisePropertyChanged(nameof(IsBusy));
             this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(operation));
+        }
+
+        /// <summary>
+        /// This is run on the calling SynchronizationContext when an operation started
+        /// by <see cref="StartOperation"/> completes
+        /// </summary>
+        private void StartOperationComplete(Task<AuthenticationResult> res, object state)
+        {
+            var operation = (AuthenticationOperation)state;
+            AuthenticationResult endResult = null;
+
+            bool raiseUserChanged = false;
+            bool raiseLoggedIn = false;
+            bool raiseLoggedOut = false;
+
+            // Setting the operation to null indicates the service is no longer busy and
+            // can process another operation
+            this.Operation = null;
+            try
+            {
+                if (res.IsCanceled)
+                {
+                    operation.SetCancelled();
+                    return;
+                }
+
+                try
+                {
+                    endResult = res.GetAwaiter().GetResult();
+                }
+                catch (Exception e)
+                {
+                    operation.SetError(e);
+
+                    if (e.IsFatal())
+                    {
+                        throw;
+                    }
+
+                    return;
+                }
+
+                // If the operation completed successfully, update the user and 
+                // determine which events should be raised
+                if (endResult?.User != null && this._user != endResult.User)
+                {
+                    raiseLoggedIn =
+                        // anonymous -> authenticated
+                        (this._user == null) ||
+                        (!this._user.Identity.IsAuthenticated && endResult.User.Identity.IsAuthenticated) ||
+                        // authenticated -> authenticated
+                        (endResult.User.Identity.IsAuthenticated && (this._user.Identity.Name != endResult.User.Identity.Name));
+                    raiseLoggedOut =
+                        // authenticated -> anonymous
+                        (this._user != null) &&
+                        (this._user.Identity.IsAuthenticated && !endResult.User.Identity.IsAuthenticated);
+
+                    this._user = endResult.User;
+                    raiseUserChanged = true;
+                }
+                operation.Complete(endResult);
+            }
+            finally
+            {
+                // Raise notification events as appropriate
+                if (raiseUserChanged)
+                {
+                    this.RaisePropertyChanged(nameof(User));
+                }
+                this.RaisePropertyChanged(nameof(IsBusy));
+                this.RaisePropertyChanged(AuthenticationService.GetBusyPropertyName(operation));
+
+                if (raiseLoggedIn)
+                {
+                    this.OnLoggedIn(new AuthenticationEventArgs(endResult.User));
+                }
+                if (raiseLoggedOut)
+                {
+                    this.OnLoggedOut(new AuthenticationEventArgs(endResult.User));
+                }
+            }
         }
 
         /// <summary>
