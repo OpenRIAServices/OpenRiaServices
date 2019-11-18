@@ -454,29 +454,15 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         private static string GetBusyPropertyName(AuthenticationOperation operation)
         {
             Debug.Assert(operation != null, "The operation cannot be null.");
-            Type operationType = operation.GetType();
 
-            if (typeof(LoginOperation) == operationType)
+            return operation switch
             {
-                return "IsLoggingIn";
-            }
-            else if (typeof(LogoutOperation) == operationType)
-            {
-                return "IsLoggingOut";
-            }
-            else if (typeof(LoadUserOperation) == operationType)
-            {
-                return "IsLoadingUser";
-            }
-            else if (typeof(SaveUserOperation) == operationType)
-            {
-                return "IsSavingUser";
-            }
-            else
-            {
-                Debug.Assert(false, "operationType parameter is invalid.");
-                return string.Empty;
-            }
+                LoginOperation _ => nameof(IsLoggingIn),
+                LogoutOperation _ => nameof(IsLoggingOut),
+                LoadUserOperation _ => nameof(IsLoadingUser),
+                SaveUserOperation _ => nameof(IsSavingUser),
+                _ => throw new NotImplementedException("unknown operation type"),
+            };
         }
 
         /// <summary>
