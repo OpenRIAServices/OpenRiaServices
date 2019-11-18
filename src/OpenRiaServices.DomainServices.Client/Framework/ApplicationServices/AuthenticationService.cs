@@ -389,11 +389,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 {
                     endResult = res.GetAwaiter().GetResult();
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    operation.SetError(e);
+                    operation.SetError(ex);
 
-                    if (e.IsFatal())
+                    if (ex.IsFatal())
                     {
                         throw;
                     }
@@ -403,18 +403,19 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
                 // If the operation completed successfully, update the user and 
                 // determine which events should be raised
-                if (endResult?.User != null && this._user != endResult.User)
+                IPrincipal currentUser = this._user;
+                if (endResult?.User != null && currentUser != endResult.User)
                 {
                     raiseLoggedIn =
                         // anonymous -> authenticated
-                        (this._user == null) ||
-                        (!this._user.Identity.IsAuthenticated && endResult.User.Identity.IsAuthenticated) ||
-                        // authenticated -> authenticated
-                        (endResult.User.Identity.IsAuthenticated && (this._user.Identity.Name != endResult.User.Identity.Name));
+                        currentUser == null
+                        || (!currentUser.Identity.IsAuthenticated && endResult.User.Identity.IsAuthenticated)
+                         // authenticated -> authenticated
+                        || (endResult.User.Identity.IsAuthenticated && currentUser.Identity.Name != endResult.User.Identity.Name);
                     raiseLoggedOut =
                         // authenticated -> anonymous
-                        (this._user != null) &&
-                        (this._user.Identity.IsAuthenticated && !endResult.User.Identity.IsAuthenticated);
+                        currentUser != null 
+                        && currentUser.Identity.IsAuthenticated && !endResult.User.Identity.IsAuthenticated;
 
                     this._user = endResult.User;
                     raiseUserChanged = true;
