@@ -332,25 +332,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
         // LoggedOut event
         // PropertyChanged/RaisePropertyChanged/OnPropertyChanged
 
-#if !SILVERLIGHT
-        SynchronizationContext _origSyncContext;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _origSyncContext = SynchronizationContext.Current;
-            // Make sure all callbacks for async cancellation happens directly
-            // Otherwise we have race conditions for tests with cancel directly after invoke
-            SynchronizationContext.SetSynchronizationContext(new TestSynchronizationContext());
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            SynchronizationContext.SetSynchronizationContext(_origSyncContext);
-        }
-#endif
-
         [TestMethod]
         [Description("Tests that cancelling an operation that does not support cancel with throw a NotSupportedException.")]
         public void CancelThrowsWhenNotSupported()
