@@ -25,9 +25,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
     public abstract class AuthenticationService : INotifyPropertyChanged
     {
         private readonly object _syncLock = new object();
-
-        // By default, events will be dispatched to the context the service is created in
-        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
         private IPrincipal _user;
         private PropertyChangedEventHandler _propertyChangedEventHandler;
 
@@ -59,42 +56,27 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         /// <summary>
         /// Gets a value indicating whether an asynchronous operation is in progress
         /// </summary>
-        public bool IsBusy
-        {
-            get { return (this.Operation != null); }
-        }
+        public bool IsBusy => this.Operation != null;
 
         /// <summary>
         /// Gets a value indicating whether an asynchronous <c>Login</c> operation is in progress
         /// </summary>
-        public bool IsLoggingIn
-        {
-            get { return this.IsBusy && (this.Operation is LoginOperation); }
-        }
+        public bool IsLoggingIn => this.Operation is LoginOperation;
 
         /// <summary>
         /// Gets a value indicating whether an asynchronous <c>Logout</c> operation is in progress
         /// </summary>
-        public bool IsLoggingOut
-        {
-            get { return this.IsBusy && (this.Operation is LogoutOperation); }
-        }
+        public bool IsLoggingOut => this.Operation is LogoutOperation;
 
         /// <summary>
         /// Gets a value indicating whether an asynchronous <c>LoadUser</c> operation is in progress
         /// </summary>
-        public bool IsLoadingUser
-        {
-            get { return this.IsBusy && (this.Operation is LoadUserOperation); }
-        }
+        public bool IsLoadingUser => this.Operation is LoadUserOperation;
 
         /// <summary>
         /// Gets a value indicating whether an asynchronous <c>SaveUser</c> operation is in progress
         /// </summary>
-        public bool IsSavingUser
-        {
-            get { return this.IsBusy && (this.Operation is SaveUserOperation); }
-        }
+        public bool IsSavingUser => this.Operation is SaveUserOperation;
 
         /// <summary>
         /// Gets the current user.
@@ -410,11 +392,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                         // anonymous -> authenticated
                         currentUser == null
                         || (!currentUser.Identity.IsAuthenticated && endResult.User.Identity.IsAuthenticated)
-                         // authenticated -> authenticated
+                        // authenticated -> authenticated
                         || (endResult.User.Identity.IsAuthenticated && currentUser.Identity.Name != endResult.User.Identity.Name);
                     raiseLoggedOut =
                         // authenticated -> anonymous
-                        currentUser != null 
+                        currentUser != null
                         && currentUser.Identity.IsAuthenticated && !endResult.User.Identity.IsAuthenticated;
 
                     this._user = endResult.User;
@@ -434,11 +416,11 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
 
                 if (raiseLoggedIn)
                 {
-                    this.OnLoggedIn(new AuthenticationEventArgs(endResult.User));
+                    this.LoggedIn?.Invoke(this, new AuthenticationEventArgs(endResult.User));
                 }
                 if (raiseLoggedOut)
                 {
-                    this.OnLoggedOut(new AuthenticationEventArgs(endResult.User));
+                    this.LoggedOut?.Invoke(this, new AuthenticationEventArgs(endResult.User));
                 }
             }
         }
@@ -467,25 +449,6 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
         }
 
         /// <summary>
-        /// Runs the callback in the synchronization context
-        /// </summary>
-        /// <param name="callback">The callback to run</param>
-        /// <param name="state">The state to pass to the callback</param>
-        private void RunInSynchronizationContext(SendOrPostCallback callback, object state)
-        {
-            Debug.Assert(callback != null, "The callback cannot be null.");
-            if (SynchronizationContext.Current == this._synchronizationContext || this._synchronizationContext == null)
-            {
-                // We're in the current context, just execute synchronously
-                callback(state);
-            }
-            else
-            {
-                this._synchronizationContext.Post(callback, state);
-            }
-        }
-
-        /// <summary>
         /// Raises a <see cref="INotifyPropertyChanged.PropertyChanged"/> event for the specified property.
         /// </summary>
         /// <param name="propertyName">The property to raise an event for</param>
@@ -499,40 +462,7 @@ namespace OpenRiaServices.DomainServices.Client.ApplicationServices
                 throw new ArgumentNullException(nameof(propertyName));
             }
 
-            PropertyChangedEventHandler handler = this._propertyChangedEventHandler;
-            if (handler != null)
-            {
-                var eventArgs = new PropertyChangedEventArgs(propertyName);
-                this.RunInSynchronizationContext(state => handler(this, eventArgs), null);
-            }
-        }
-
-        /// <summary>
-        /// Raises a <see cref="LoggedIn"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        private void OnLoggedIn(AuthenticationEventArgs e)
-        {
-            Debug.Assert(e != null, "The event args cannot be null.");
-            EventHandler<AuthenticationEventArgs> handler = this.LoggedIn;
-            if (handler != null)
-            {
-                this.RunInSynchronizationContext(state => handler(this, e), null);
-            }
-        }
-
-        /// <summary>
-        /// Raises a <see cref="LoggedOut"/> event.
-        /// </summary>
-        /// <param name="e">The event to raise</param>
-        private void OnLoggedOut(AuthenticationEventArgs e)
-        {
-            Debug.Assert(e != null, "The event args cannot be null.");
-            EventHandler<AuthenticationEventArgs> handler = this.LoggedOut;
-            if (handler != null)
-            {
-                this.RunInSynchronizationContext(state => handler(this, e), null);
-            }
+            this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
