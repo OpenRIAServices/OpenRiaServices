@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// <param name="current">The current entity.</param>
         /// <param name="original">The original entity.</param>
         /// <param name="dbContext">The corresponding <see cref="DbContext"/></param>
-        public static void AttachAsModified<T>(this DbSet<T> dbSet, T current, T original, DbContext dbContext) where T : class
+        public static void AttachAsModified<T>(this IDbSet<T> dbSet, T current, T original, DbContext dbContext) where T : class
         {
             if (dbSet == null)
             {
@@ -71,7 +71,7 @@ namespace OpenRiaServices.DomainServices.EntityFramework
         /// <param name="dbSet">The <see cref="DbSet"/> to attach to</param>
         /// <param name="entity">The current entity</param>
         /// <param name="dbContext">The coresponding <see cref="DbContext"/></param>
-        public static void AttachAsModified<T>(this DbSet<T> dbSet, T entity, DbContext dbContext) where T : class
+        public static void AttachAsModified<T>(this IDbSet<T> dbSet, T entity, DbContext dbContext) where T : class
         {
             if (dbSet == null)
             {
