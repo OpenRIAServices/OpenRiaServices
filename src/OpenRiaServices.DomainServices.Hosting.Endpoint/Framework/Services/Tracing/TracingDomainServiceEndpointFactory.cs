@@ -35,7 +35,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="description">WCF RIA service description.</param>
         /// <param name="serviceHost">Service host to which endpoints will be added.</param>
         /// <returns>The collection of endpoints.</returns>
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
             if (serviceHost == null)
             {

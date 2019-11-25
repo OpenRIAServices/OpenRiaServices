@@ -8,18 +8,18 @@ namespace OpenRiaServices.DomainServices.Client.Web
     /// <summary>
     /// For connecting to services using the /soap endpoint based on <see cref="BasicHttpBinding"/>.
     /// <para>Set <see cref="DomainContext.DomainClientFactory"/> to an instance of this class
-    /// in order for newly created <see cref="DomainContext"/> implementations to use the soap endpoint.
+    /// in order for newly created <see cref="DomainContext"/> implementations to use the binary2 endpoint.
     /// </para>
     /// </summary>
     public class BinaryDomainClientFactory : WcfDomainClientFactory
     {
-        private const string EndpointSuffix = "/binary2";
         private readonly SoapEndpointBehavior _soapBehavior;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryDomainClientFactory" /> class.
         /// </summary>
         public BinaryDomainClientFactory()
+            : base("binary2")
         {
             _soapBehavior = new SoapEndpointBehavior(this);
         }
@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// <param name="endpoint">Absolute service URI without protocol suffix such as "/binary"</param>
         /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
         /// <returns>The channel used to communicate with the server.</returns>
-        protected internal override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
+        protected override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)
         {
             var factory = base.CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
 
@@ -51,17 +51,6 @@ namespace OpenRiaServices.DomainServices.Client.Web
         }
 
         /// <summary>
-        /// Appends "/soap" to the endpoint in order to connect to the soap endpoint
-        /// </summary>
-        /// <param name="endpoint">base endpoint (service uri)</param>
-        /// <param name="requiresSecureEndpoint">not used</param>
-        /// <returns>endpoint usefull to connect to soap endpoint of the service</returns>
-        protected override EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
-        {
-            return new EndpointAddress(new Uri(endpoint.OriginalString + EndpointSuffix, UriKind.Absolute));
-        }
-
-        /// <summary>
         /// Generates a <see cref="BasicHttpBinding"/> which is configured to speak to the
         /// "soap" endpoint
         /// </summary>
@@ -70,12 +59,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// <returns>A <see cref="Binding"/> which is compatible with soap endpoint</returns>
         protected override Binding CreateBinding(Uri endpoint, bool requiresSecureEndpoint)
         {
-            var encoding = new BinaryMessageEncodingBindingElement()
-            {
-
-            };
-
-            //ServiceUtility.SetReaderQuotas(encoding.ReaderQuotas);
+            var encoding = new BinaryMessageEncodingBindingElement();
 
             HttpTransportBindingElement transport;
             if (endpoint.Scheme.Equals(Uri.UriSchemeHttps))
@@ -92,17 +76,8 @@ namespace OpenRiaServices.DomainServices.Client.Web
             }
 
             transport.MaxReceivedMessageSize = int.MaxValue;
-
             CustomBinding binding = new CustomBinding(encoding, transport);
-
-// TODO:
-/*
-#if SILVERLIGHT
-            binding.EnableHttpCookieContainer =  CookieContainer != null;
-#else
-            binding.AllowCookies = CookieContainer != null;
-#endif
-*/
+            transport.AllowCookies = true;
             return binding;
         }
     }

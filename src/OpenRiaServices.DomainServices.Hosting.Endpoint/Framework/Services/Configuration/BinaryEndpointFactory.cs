@@ -24,19 +24,12 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
         }
 
-        /// <summary>
-        /// Creates endpoints based on the specified description.
-        /// </summary>
-        /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
-        /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
-        /// <returns>The endpoints that were created.</returns>
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
-            ContractDescription contract = this.CreateContract(description);
             List<ServiceEndpoint> endpoints = new List<ServiceEndpoint>();
             foreach (Uri address in serviceHost.BaseAddresses)
             {
-                endpoints.Add(this.CreateEndpointForAddress(contract, address));
+                endpoints.Add(this.CreateEndpointForAddress(contractDescription, address));
             }
             return endpoints;
         }
@@ -60,7 +53,6 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             var encoding = new BinaryMessageEncodingBindingElement()
             {
-                 
             };
             ServiceUtility.SetReaderQuotas(encoding.ReaderQuotas);
 
@@ -82,49 +74,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 transport.AuthenticationScheme = ServiceUtility.AuthenticationScheme;
             }
 
-            
             return new CustomBinding(encoding, transport);
-        }
-
-        /// <summary>
-        /// Creates a contract from the specified description.
-        /// </summary>
-        /// <param name="description">The description to create a contract from.</param>
-        /// <returns>A <see cref="ContractDescription"/>.</returns>
-        private ContractDescription CreateContract(DomainServiceDescription description)
-        {
-            Type domainServiceType = description.DomainServiceType;
-
-            // PERF: We should consider just looking at [ServiceDescription] directly.
-            ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
-
-            // Use names from [ServiceContract], if specified.
-            ServiceContractAttribute sca = TypeDescriptor.GetAttributes(domainServiceType)[typeof(ServiceContractAttribute)] as ServiceContractAttribute;
-            if (sca != null)
-            {
-                if (!String.IsNullOrEmpty(sca.Name))
-                {
-                    serviceDesc.Name = sca.Name;
-                }
-                if (!String.IsNullOrEmpty(sca.Namespace))
-                {
-                    serviceDesc.Name = sca.Namespace;
-                }
-            }
-
-            ContractDescription contractDesc = new ContractDescription(serviceDesc.Name + this.Name, serviceDesc.Namespace)
-            {
-                ConfigurationName = serviceDesc.ConfigurationName + this.Name,
-                ContractType = domainServiceType
-            };
-
-            // Add domain service behavior which takes care of instantiating DomainServices.
-            ServiceUtility.EnsureBehavior<DomainServiceBehavior>(contractDesc);
-
-            // Load the ContractDescription from the DomainServiceDescription.
-            ServiceUtility.LoadContractDescription(contractDesc, description);
-
-            return contractDesc;
         }
     }
 }

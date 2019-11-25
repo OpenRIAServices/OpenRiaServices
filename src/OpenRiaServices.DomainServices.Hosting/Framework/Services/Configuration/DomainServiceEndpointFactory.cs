@@ -68,7 +68,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
+        /// <param name="contractDescription">generated serice contract</param>
         /// <returns>The endpoints that were created.</returns>
-        public abstract IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost);
+        public abstract IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription);
     }
 }

@@ -111,19 +111,18 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 Type domainServiceType = this._domainServiceDescription.DomainServiceType;
                 ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
-
                 implementedContracts = new Dictionary<string, ContractDescription>();
 
-                DomainServicesSection config = DomainServicesSection.Current;
-                foreach (ProviderSettings provider in config.Endpoints)
+                var config = Internal.DomainServiceConfiguration.Instance;
+                var contract = CreateContract(this._domainServiceDescription);
+
+                foreach (DomainServiceEndpointFactory endpointFactory in config.Endpoints.Values)
                 {
-                    DomainServiceEndpointFactory endpointFactory = DomainServiceHost.CreateEndpointFactoryInstance(provider);
-                    foreach (ServiceEndpoint endpoint in endpointFactory.CreateEndpoints(this._domainServiceDescription, this))
+                    foreach (ServiceEndpoint endpoint in endpointFactory.CreateEndpoints(this._domainServiceDescription, this, contract))
                     {
                         string contractName = endpoint.Contract.ConfigurationName;
 
-                        ContractDescription contract;
-                        if (implementedContracts.TryGetValue(contractName, out contract) && contract != endpoint.Contract)
+                        if (implementedContracts.TryGetValue(contractName, out var oldContract) && !object.ReferenceEquals(oldContract, endpoint.Contract))
                         {
                             throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceHost_DuplicateContractName, contract.ConfigurationName));
                         }
@@ -143,6 +142,48 @@ namespace OpenRiaServices.DomainServices.Hosting
                 DiagnosticUtility.ServiceException(ex);
                 throw;
             }
+        }
+
+
+        /// <summary>
+        /// Creates a contract from the specified description.
+        /// </summary>
+        /// <param name="description">The description to create a contract from.</param>
+        /// <returns>A <see cref="ContractDescription"/>.</returns>
+        private ContractDescription CreateContract(DomainServiceDescription description)
+        {
+            Type domainServiceType = description.DomainServiceType;
+
+            // PERF: We should consider just looking at [ServiceDescription] directly.
+            ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
+
+            // Use names from [ServiceContract], if specified.
+            ServiceContractAttribute sca = TypeDescriptor.GetAttributes(domainServiceType)[typeof(ServiceContractAttribute)] as ServiceContractAttribute;
+            if (sca != null)
+            {
+                if (!String.IsNullOrEmpty(sca.Name))
+                {
+                    serviceDesc.Name = sca.Name;
+                }
+                if (!String.IsNullOrEmpty(sca.Namespace))
+                {
+                    serviceDesc.Name = sca.Namespace;
+                }
+            }
+
+            ContractDescription contractDesc = new ContractDescription(serviceDesc.Name, serviceDesc.Namespace)
+            {
+                ConfigurationName = serviceDesc.ConfigurationName,
+                ContractType = domainServiceType
+            };
+
+            // Add domain service behavior which takes care of instantiating DomainServices.
+            ServiceUtility.EnsureBehavior<DomainServiceBehavior>(contractDesc);
+
+            // Load the ContractDescription from the DomainServiceDescription.
+            ServiceUtility.LoadContractDescription(contractDesc, description);
+
+            return contractDesc;
         }
 
         /// <summary>

@@ -9,6 +9,10 @@ namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
 {
     partial class SoapEndpointBehavior
     {
+        /// <summary>
+        ///  Inspector which handles serialization of query parameters and adds them 
+        ///  to <see cref="Message.Headers"/> as SOAP header
+        /// </summary>
         sealed class QueryInspector : IClientMessageInspector
         {
             private const string IncludeTotalCountPropertyName = "DomainServiceIncludeTotalCount";
@@ -18,17 +22,8 @@ namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
             {
             }
 
-            private static string RewriteAction(string action)
-            {
-                // This might be better of by modifying the 
-                // endpoint during setup via behaviour instead
-                return action.Insert(action.LastIndexOf("/"), "soap");
-            }
-
             object IClientMessageInspector.BeforeSendRequest(ref Message request, IClientChannel channel)
             {
-                request.Headers.Action = RewriteAction(request.Headers.Action);
-
                 // Add Query Options if any are set
                 var messageProperties = OperationContext.Current?.OutgoingMessageProperties;
                 if (messageProperties != null)

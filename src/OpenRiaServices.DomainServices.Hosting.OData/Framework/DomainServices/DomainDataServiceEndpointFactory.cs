@@ -29,8 +29,9 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
+        /// <param name="contractDescription"></param>
         /// <returns>The endpoints that were created.</returns>
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
             Debug.Assert(this.Name != null, "Name has not been set.");
             Debug.Assert(this.domainDataServiceMetadata == null, "this.domainDataServiceMetadata == null");

@@ -6,7 +6,9 @@ using System.ServiceModel.Dispatcher;
 namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
 {
     /// <summary>
-    /// A SOAP endpoint behavior which injects a message inspector that adds query headers.
+    /// A endpoint behavior which injects a message inspector that adds query headers
+    /// to <see cref="Message.Headers"/> for use with all standard WCF protocols which 
+    /// support message headers.
     /// </summary>
     sealed partial class SoapEndpointBehavior : IEndpointBehavior
     {

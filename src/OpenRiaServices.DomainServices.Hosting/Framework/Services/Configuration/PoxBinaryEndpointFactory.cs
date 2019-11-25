@@ -28,14 +28,14 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
         /// <returns>The endpoints that were created.</returns>
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
-            ContractDescription contract = this.CreateContract(description);
-            contract.Behaviors.Add(new ServiceMetadataContractBehavior() { MetadataGenerationDisabled = true });
+            // TODO: Can this be done per endpoint or similar?
+            contractDescription.Behaviors.Add(new ServiceMetadataContractBehavior() { MetadataGenerationDisabled = true });
             List<ServiceEndpoint> endpoints = new List<ServiceEndpoint>();
             foreach (Uri address in serviceHost.BaseAddresses)
             {
-                endpoints.Add(this.CreateEndpointForAddress(contract, address));
+                endpoints.Add(this.CreateEndpointForAddress(contractDescription, address));
             }
             return endpoints;
         }
@@ -70,7 +70,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             CustomBinding binding =
                 new CustomBinding(
-                    new BindingElement[] 
+                    new BindingElement[]
                     {
                         encoding,
                         transport
@@ -83,42 +83,6 @@ namespace OpenRiaServices.DomainServices.Hosting
             });
             endpoint.Behaviors.Add(new SilverlightFaultBehavior());
             return endpoint;
-        }
-
-        private ContractDescription CreateContract(DomainServiceDescription description)
-        {
-            Type domainServiceType = description.DomainServiceType;
-
-            // PERF: We should consider just looking at [ServiceDescription] directly.
-            ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
-
-            // Use names from [ServiceContract], if specified.
-            ServiceContractAttribute sca = TypeDescriptor.GetAttributes(domainServiceType)[typeof(ServiceContractAttribute)] as ServiceContractAttribute;
-            if (sca != null)
-            {
-                if (!String.IsNullOrEmpty(sca.Name))
-                {
-                    serviceDesc.Name = sca.Name;
-                }
-                if (!String.IsNullOrEmpty(sca.Namespace))
-                {
-                    serviceDesc.Namespace = sca.Namespace;
-                }
-            }
-
-            ContractDescription contractDesc = new ContractDescription(serviceDesc.Name + this.Name, serviceDesc.Namespace)
-            {
-                ConfigurationName = serviceDesc.ConfigurationName + this.Name,
-                ContractType = domainServiceType
-            };
-
-            // Add domain service behavior which takes care of instantiating DomainServices.
-            ServiceUtility.EnsureBehavior<DomainServiceBehavior>(contractDesc);
-
-            // Load the ContractDescription from the DomainServiceDescription.
-            ServiceUtility.LoadContractDescription(contractDesc, description);
-
-            return contractDesc;
         }
     }
 }
