@@ -128,7 +128,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                         }
 
                         // Register the contract.
-                        implementedContracts[endpoint.Contract.ConfigurationName] = endpoint.Contract;
+                        implementedContracts[contractName] = endpoint.Contract;
 
                         // Register the endpoint.
                         serviceDesc.Endpoints.Add(endpoint);
@@ -167,7 +167,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 }
                 if (!String.IsNullOrEmpty(sca.Namespace))
                 {
-                    serviceDesc.Name = sca.Namespace;
+                    serviceDesc.Namespace = sca.Namespace;
                 }
             }
 
@@ -225,20 +225,6 @@ namespace OpenRiaServices.DomainServices.Hosting
             ServiceMetadataBehavior serviceMetadataBehavior = ServiceUtility.EnsureBehavior<ServiceMetadataBehavior>(this.Description);
             serviceMetadataBehavior.HttpGetEnabled = this.BaseAddresses.Any(a => a.Scheme.Equals(Uri.UriSchemeHttp));
             serviceMetadataBehavior.HttpsGetEnabled = this.BaseAddresses.Any(a => a.Scheme.Equals(Uri.UriSchemeHttps));
-        }
-
-        /// <summary>
-        /// Creates a <see cref="DomainServiceEndpointFactory"/> from a <see cref="ProviderSettings"/> object.
-        /// </summary>
-        /// <param name="provider">The <see cref="ProviderSettings"/> object.</param>
-        /// <returns>A <see cref="DomainServiceEndpointFactory"/>.</returns>
-        private static DomainServiceEndpointFactory CreateEndpointFactoryInstance(ProviderSettings provider)
-        {
-            Type endpointFactoryType = Type.GetType(provider.Type, /* throwOnError */ true);
-            DomainServiceEndpointFactory endpointFactory = (DomainServiceEndpointFactory)Activator.CreateInstance(endpointFactoryType);
-            endpointFactory.Name = provider.Name;
-            endpointFactory.Parameters = provider.Parameters;
-            return endpointFactory;
         }
     }
 }

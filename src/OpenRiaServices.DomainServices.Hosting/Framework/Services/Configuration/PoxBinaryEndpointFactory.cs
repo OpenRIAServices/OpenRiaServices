@@ -81,7 +81,6 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped
             });
-            endpoint.Behaviors.Add(new SilverlightFaultBehavior());
             return endpoint;
         }
     }
