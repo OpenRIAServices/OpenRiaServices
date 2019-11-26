@@ -60,43 +60,43 @@ namespace OpenRiaServices.DomainServices.Hosting
             return null;
         }
 
-        public static void OperationInvoked(string methodName)
+        public static void OperationInvoked(string methodName, OperationContext context)
         {
             if (provider != null && provider.IsEnabled(operationInvokedEvent.Level, operationInvokedEvent.Keywords))
             {
-                provider.WriteEvent(ref operationInvokedEvent, new object[] { methodName, GetCallerInfo(), GetHostReference(), appDomain });
+                provider.WriteEvent(ref operationInvokedEvent, new object[] { methodName, GetCallerInfo(context), GetHostReference(context), appDomain });
             }
         }
 
-        public static void OperationCompleted(string methodName, long duration)
+        public static void OperationCompleted(string methodName, long duration, OperationContext context)
         {
             if (provider != null && provider.IsEnabled(operationCompletedEvent.Level, operationCompletedEvent.Keywords))
             {
-                provider.WriteEvent(ref operationCompletedEvent, new object[] { methodName, duration, GetHostReference(), appDomain });
+                provider.WriteEvent(ref operationCompletedEvent, new object[] { methodName, duration, GetHostReference(context), appDomain });
             }
         }
 
-        public static void OperationFailed(string methodName, long duration)
+        public static void OperationFailed(string methodName, long duration, OperationContext context)
         {
             if (provider != null && provider.IsEnabled(operationFailedEvent.Level, operationFailedEvent.Keywords))
             {
-                provider.WriteEvent(ref operationFailedEvent, new object[] { methodName, duration, GetHostReference(), appDomain });
+                provider.WriteEvent(ref operationFailedEvent, new object[] { methodName, duration, GetHostReference(context), appDomain });
             }
         }
 
-        public static void OperationFaulted(string methodName, long duration)
+        public static void OperationFaulted(string methodName, long duration, OperationContext context)
         {
             if (provider != null && provider.IsEnabled(operationFaultedEvent.Level, operationFaultedEvent.Keywords))
             {
-                provider.WriteEvent(ref operationFaultedEvent, new object[] { methodName, duration, GetHostReference(), appDomain });
+                provider.WriteEvent(ref operationFaultedEvent, new object[] { methodName, duration, GetHostReference(context), appDomain });
             }
         }
 
-        public static void ServiceException(Exception ex)
+        public static void ServiceException(Exception ex, OperationContext context)
         {
             if (provider != null && provider.IsEnabled(serviceExceptionEvent.Level, serviceExceptionEvent.Keywords))
             {
-                provider.WriteEvent(ref serviceExceptionEvent, new object[] { ex.ToString(), ex.GetType().ToString(), GetHostReference(), appDomain });
+                provider.WriteEvent(ref serviceExceptionEvent, new object[] { ex.ToString(), ex.GetType().ToString(), GetHostReference(context), appDomain });
             }
         }
 
@@ -110,10 +110,8 @@ namespace OpenRiaServices.DomainServices.Hosting
             return (long)new TimeSpan(GetTicks() - startTicks).TotalMilliseconds;
         }
 
-        private static string GetCallerInfo()
+        private static string GetCallerInfo(OperationContext context)
         {
-            OperationContext context = OperationContext.Current;
-
             object obj;
             if (((context != null) && (context.IncomingMessageProperties != null)) && context.IncomingMessageProperties.TryGetValue(RemoteEndpointMessageProperty.Name, out obj))
             {
@@ -126,11 +124,11 @@ namespace OpenRiaServices.DomainServices.Hosting
             return "null";
         }
 
-        private static string GetHostReference()
+        private static string GetHostReference(OperationContext context)
         {
-            if (OperationContext.Current != null)
+            if (context != null)
             {
-                ServiceHostBase host = OperationContext.Current.Host;
+                ServiceHostBase host = context.Host;
                 if (host != null && host.Extensions != null)
                 {
                     VirtualPathExtension extension = host.Extensions.Find<VirtualPathExtension>();
