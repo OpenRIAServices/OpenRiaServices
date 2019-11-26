@@ -67,10 +67,10 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
     {
         public static NameValueCollection LastParameters;
 
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
             CustomJsonEndpointFactory.LastParameters = this.Parameters;
-            return base.CreateEndpoints(description, serviceHost);
+            return base.CreateEndpoints(description, serviceHost, contractDescription);
         }
     }
 }

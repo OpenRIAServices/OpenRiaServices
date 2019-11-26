@@ -144,24 +144,11 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-#if !MEDIUM_TRUST
-        [Ignore]
-#endif
-        [TestMethod]
-        [Description("Verifies the SilverlightFaultBehavior can be created in partial trust")]
-        public void DomainServiceHost_MediumTrust_SilverlightFaultBehavior()
-        {
-            SandBoxer.ExecuteInMediumTrust(Callback_MediumTrust_SilverlightFaultBehavior);
-        }
 
-        public static void Callback_MediumTrust_SilverlightFaultBehavior()
-        {
-            new SilverlightFaultBehavior();
-        }
 
 #if !MEDIUM_TRUST
         [Ignore]
-#endif
+#endif        
         [TestMethod]
         [Description("Verifies the DomainServicesSection can be created in partial trust")]
         public void DomainServiceHost_MediumTrust_DomainServicesSection()
