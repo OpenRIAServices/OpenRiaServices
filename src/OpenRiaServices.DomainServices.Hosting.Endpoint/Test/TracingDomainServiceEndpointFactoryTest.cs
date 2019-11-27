@@ -50,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
             TracingDomainServiceEndpointFactory target = new TracingDomainServiceEndpointFactory();
             target.Name = "tracing";
             target.Parameters["maxEntries"] = "123";
-            IEnumerable<ServiceEndpoint> actual = target.CreateEndpoints(null, sh);
+            IEnumerable<ServiceEndpoint> actual = target.CreateEndpoints(null, sh, null);
             Assert.IsTrue(123 == InMemoryTraceListener.MaxEntries);
             Assert.IsNotNull(actual);
             ServiceEndpoint[] endpoints = actual.ToArray();
