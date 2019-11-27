@@ -11,8 +11,6 @@ using OpenRiaServices;
 
 namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 {
-    
-    
     /// <summary>
     ///This is a test class for TracingDomainServiceEndpointFactoryTest and is intended
     ///to contain all TracingDomainServiceEndpointFactoryTest Unit Tests
