@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -9,9 +8,9 @@ using System.Security.Principal;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Server;
 using System.Web;
-using System.Web.Configuration;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting.Configuration.Internal;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -113,10 +112,10 @@ namespace OpenRiaServices.DomainServices.Hosting
                 ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
                 implementedContracts = new Dictionary<string, ContractDescription>();
 
-                var config = Internal.DomainServiceConfiguration.Instance;
+                var config = DomainServieHostingConfiguration.Current;
                 var contract = CreateContract(this._domainServiceDescription);
 
-                foreach (DomainServiceEndpointFactory endpointFactory in config.Endpoints.Values)
+                foreach (DomainServiceEndpointFactory endpointFactory in config.EndpointFactories)
                 {
                     foreach (ServiceEndpoint endpoint in endpointFactory.CreateEndpoints(this._domainServiceDescription, this, contract))
                     {
@@ -158,14 +157,14 @@ namespace OpenRiaServices.DomainServices.Hosting
             ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
 
             // Use names from [ServiceContract], if specified.
-            ServiceContractAttribute sca = TypeDescriptor.GetAttributes(domainServiceType)[typeof(ServiceContractAttribute)] as ServiceContractAttribute;
-            if (sca != null)
+            if (TypeDescriptor.GetAttributes(domainServiceType)[typeof(ServiceContractAttribute)]
+                is ServiceContractAttribute sca)
             {
-                if (!String.IsNullOrEmpty(sca.Name))
+                if (!string.IsNullOrEmpty(sca.Name))
                 {
                     serviceDesc.Name = sca.Name;
                 }
-                if (!String.IsNullOrEmpty(sca.Namespace))
+                if (!string.IsNullOrEmpty(sca.Namespace))
                 {
                     serviceDesc.Namespace = sca.Namespace;
                 }
@@ -179,9 +178,11 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // Add domain service behavior which takes care of instantiating DomainServices.
             ServiceUtility.EnsureBehavior<DomainServiceBehavior>(contractDesc);
+            // Disable metadata generation by default
+            contractDesc.Behaviors.Add(new ServiceMetadataContractBehavior() { MetadataGenerationDisabled = true });
 
             // Load the ContractDescription from the DomainServiceDescription.
-            ServiceUtility.LoadContractDescription(contractDesc, description);
+            ServiceUtility.PopulateContractDescription(contractDesc, description);
 
             return contractDesc;
         }

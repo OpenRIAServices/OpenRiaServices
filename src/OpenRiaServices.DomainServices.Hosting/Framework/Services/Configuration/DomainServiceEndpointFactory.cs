@@ -68,8 +68,24 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
-        /// <param name="contractDescription">generated serice contract</param>
+        /// <param name="contractDescription">the default domain serice contract description</param>
         /// <returns>The endpoints that were created.</returns>
-        public abstract IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription);
+        public virtual IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
+        {
+            List<ServiceEndpoint> endpoints = new List<ServiceEndpoint>();
+            foreach (Uri address in serviceHost.BaseAddresses)
+            {
+                endpoints.Add(this.CreateEndpointForAddress(contractDescription, address));
+            }
+            return endpoints;
+        }
+
+        /// <summary>
+        /// Creates an endpoint based on the specified address.
+        /// </summary>
+        /// <param name="contract">The endpoint's contract.</param>
+        /// <param name="address">The endpoint's base address.</param>
+        /// <returns>An endpoint.</returns>
+        protected virtual ServiceEndpoint CreateEndpointForAddress(ContractDescription contract, Uri address) => throw new NotImplementedException();
     }
 }

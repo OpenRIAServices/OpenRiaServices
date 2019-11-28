@@ -53,7 +53,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         }
 
         // Populates a contract description from a domain service description.
-        public static void LoadContractDescription(ContractDescription contractDesc, DomainServiceDescription domainServiceDescription)
+        public static void PopulateContractDescription(ContractDescription contractDesc, DomainServiceDescription domainServiceDescription)
         {
             bool isMutable = false;
             OperationDescription operationDesc;

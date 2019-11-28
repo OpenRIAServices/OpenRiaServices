@@ -24,23 +24,13 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
         }
 
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
-        {
-            List<ServiceEndpoint> endpoints = new List<ServiceEndpoint>();
-            foreach (Uri address in serviceHost.BaseAddresses)
-            {
-                endpoints.Add(this.CreateEndpointForAddress(contractDescription, address));
-            }
-            return endpoints;
-        }
-
         /// <summary>
         /// Creates an endpoint based on the specified address.
         /// </summary>
         /// <param name="contract">The endpoint's contract.</param>
         /// <param name="address">The endpoint's base address.</param>
         /// <returns>An endpoint.</returns>
-        private ServiceEndpoint CreateEndpointForAddress(ContractDescription contract, Uri address)
+        protected override ServiceEndpoint CreateEndpointForAddress(ContractDescription contract, Uri address)
         {
             Binding binding = CreateBinding(address);
 
