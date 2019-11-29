@@ -63,26 +63,27 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             long startTicks = DiagnosticUtility.GetTicks();
             bool disableStackTraces = true;
-
+            var operationContext = OperationContext.Current;
             try
             {
-                DiagnosticUtility.OperationInvoked(this.Name);
+                WcfDomainServiceContext context = new WcfDomainServiceContext((IServiceProvider)operationContext.Host, this.operationType);
+                disableStackTraces = context.DisableStackTraces;
 
-                DomainService domainService = this.GetDomainService(instance);
-                disableStackTraces = domainService.GetDisableStackTraces();
+                DiagnosticUtility.OperationInvoked(this.Name, operationContext);
+                DomainService domainService = this.GetDomainService(instance, context);
 
                 // invoke the operation and process the result
                 this.ConvertInputs(inputs);
                 var result = await this.InvokeCoreAsync(domainService, inputs, disableStackTraces).ConfigureAwait(false);
                 result = this.ConvertReturnValue(result);
 
-                DiagnosticUtility.OperationCompleted(this.Name, DiagnosticUtility.GetDuration(startTicks));
+                DiagnosticUtility.OperationCompleted(this.Name, DiagnosticUtility.GetDuration(startTicks), operationContext);
 
                 return result;
             }
             catch (FaultException)
             {
-                DiagnosticUtility.OperationFaulted(this.Name, DiagnosticUtility.GetDuration(startTicks));
+                DiagnosticUtility.OperationFaulted(this.Name, DiagnosticUtility.GetDuration(startTicks), operationContext);
 
                 // if the exception has already been transformed to a fault
                 // just rethrow it
@@ -94,7 +95,7 @@ namespace OpenRiaServices.DomainServices.Hosting
                 {
                     throw;
                 }
-                DiagnosticUtility.OperationFailed(this.Name, DiagnosticUtility.GetDuration(startTicks));
+                DiagnosticUtility.OperationFailed(this.Name, DiagnosticUtility.GetDuration(startTicks), operationContext);
 
                 // We need to ensure that any time an exception is thrown by the
                 // service it is transformed to a properly sanitized/configured
@@ -103,14 +104,11 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
         }
 
-        private DomainService GetDomainService(object instance)
+        private DomainService GetDomainService(object instance, WcfDomainServiceContext context)
         {
             // create and initialize the DomainService for this request
             DomainServiceBehavior.DomainServiceInstanceInfo instanceInfo =
                 (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
-
-            IServiceProvider serviceProvider = (IServiceProvider)OperationContext.Current.Host;
-            WcfDomainServiceContext context = new WcfDomainServiceContext(serviceProvider, this.operationType);
 
             try
             {

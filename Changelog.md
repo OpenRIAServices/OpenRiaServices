@@ -6,18 +6,18 @@
 2. Client networking API the *DomainClient* is now based on Task instead of using the APM pattern with Begin/End methods
 3. Supported TargetFrameworks has changed
 4. Code generation now works against *netstandard 2.0* and *netcore 2.1+* clients
-5. AspNetMembership authentication (**AuthenticationBase** class) is moved to a new namespace and nuget package
-   * Add a reference to **OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
+5. AspNetMembership authentication (**AuthenticationBase** and related classes) are moved to a new namespace and nuget package
+   * Add a reference to *OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
 
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
-2. If you have been using **AuthenticationBase** class in your server project 
-   1. add the *OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership* nuget package to it
-   2. Replace *penRiaServices.DomainServices.Server.ApplicationServices* with *penRiaServices.DomainServices.Server.Authentication*
-   3. Add using for *penRiaServices.DomainServices.Server.Authentication.AspNetMembership* in file which uses *AuthenicationBase*
+2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.DomainServices.Server.ApplicationServices` namespace in your server project 
+   1. Add the *OpenRiaServices.Server.Authentication.AspNetMembership* nuget package to it
+   2. Replace *OpenRiaServices.DomainServices.Server.ApplicationServices* with *OpenRiaServices.DomainServices.Server.Authentication*
+   3. Add `using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;` in file which uses *AuthenicationBase*, *UserBase* or related classes.
 3. If you have compilation problems in your DomainServices because it overrides methods which do not exist 
-   then try to overridde the method with the same name but with "Async" as postfix, method signature will be different.
+   then try to overridde the method with the same name but with "Async" as postfix, method signatures will be different.
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
 4. Fix any additional compilation errors, use changes below for guidance about replacements.
    
@@ -27,12 +27,24 @@ For better scalability (can be done afterwards):
 1. Update your Query and Invoke methods so that they use async/await where relevant.
   E.g if you are using EF6, other ORM frameworks or do network or file access.
   
+## Samples
+
+A "new" samples repository is availible at https://github.com/OpenRIAServices/Samples
+
+It is currently quite empty but already demonstrates some of the following scenarios:
+* A simple WFP app on .Net framework
+   * Includes a number of queries/invokes for manually testing Task returning methods, GET/POST and exception handling 
+* A WFP app on .Net Core
+    * .net core and netstandard support
+    * Using Asp.Net Identity for authentication
+    * Writing your own custom Authentication logic
+    * Running OpenRiaServices in same project as Asp.Net MVC
   
 # 5.0.0 Unreleased
 
 ### Client
 
-* Complete Load/Invoke/Submit operation on the ´SynchronizationContext` of the caller instead of saving the SynchronizationContext (#211, #209 for submit)
+* Complete Load/Invoke/Submit and Authentication operations on the ´SynchronizationContext` of the caller instead of saving the SynchronizationContext (#211, #209 for submit, #216, #212)
   * This is a behavioral change which **might break** applications.
 This means that operations should be started on the UI thread if any data of the DomainContext or returned Operaitons are bound to the UI before completion.
 * Base SubmitChanges on SubmitChangesAsync (#209)
@@ -44,6 +56,7 @@ This means that operations should be started on the UI thread if any data of the
 * Base DomainContext.Invoke on DomainContext.InvokeAsync (#203)
     * Invoke operation will now cancel only if the web request is cancelled (and then *after* cancellation)
 * Ensure Completed event is always called when Load/Invoke/SubmitOperation finishes (#206)
+* AuthenticationService is rewritten to use TPM (`Task` based methods) instead of `APM` for the methods implementing the actual authentication operations (#212, #214, #216)
 * Pass in endpoint name in WcfDomainClientFactory to make it easier to derive from it (#218)
 * Hosting - new "PubInternal" types
   * behaviors for easy creation endpoints based on standard wcf (non REST) transports
@@ -59,6 +72,12 @@ This means that operations should be started on the UI thread if any data of the
    * new "PubInternal" types
      * behaviors for easy creation endpoints based on standard wcf (non REST) transports
 
+### Server
+* EntityFramework: Target IDbSet instead of DbSet with AttachAsModified extension methods (#215) 
+
+### Infrastructure
+
+* Improved test execution times by reducing waiting delays (parts in #212. 213)
 
 # 5.0.0 Preview 2
 

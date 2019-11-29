@@ -138,7 +138,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
             catch (Exception ex)
             {
-                DiagnosticUtility.ServiceException(ex);
+                DiagnosticUtility.ServiceException(ex, OperationContext.Current);
                 throw;
             }
         }
