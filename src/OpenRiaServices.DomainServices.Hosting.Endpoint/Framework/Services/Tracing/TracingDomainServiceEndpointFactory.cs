@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <summary>
         /// Creates an instance of the class. 
         /// </summary>
-        public TracingDomainServiceEndpointFactory() : base() { }
+        public TracingDomainServiceEndpointFactory() : base(string.Empty) { }
 
         /// <summary>
         /// Creates a set of WCF REST service endpoints in the <see cref="OpenRiaServices.DomainServices.Hosting.DomainServiceHost"/> which 

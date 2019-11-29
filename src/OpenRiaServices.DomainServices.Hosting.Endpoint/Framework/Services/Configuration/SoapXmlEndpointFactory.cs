@@ -15,8 +15,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// Initializes a new instance of the <see cref="SoapXmlEndpointFactory"/> class.
         /// </summary>
         public SoapXmlEndpointFactory()
+            : base("soap")
         {
-            this.Name = "soap";
         }
 
         /// <summary>

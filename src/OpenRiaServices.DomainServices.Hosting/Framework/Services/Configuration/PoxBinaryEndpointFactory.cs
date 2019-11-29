@@ -16,8 +16,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// Initializes a new instance of the <see cref="PoxBinaryEndpointFactory"/> class.
         /// </summary>
         public PoxBinaryEndpointFactory()
+            : base("binary")
         {
-            this.Name = "binary";
         }
 
         /// <summary>

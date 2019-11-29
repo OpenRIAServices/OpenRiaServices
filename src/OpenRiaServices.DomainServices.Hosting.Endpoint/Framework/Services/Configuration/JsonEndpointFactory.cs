@@ -17,8 +17,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// Initializes a new instance of the <see cref="JsonEndpointFactory"/> class.
         /// </summary>
         public JsonEndpointFactory()
+            : base("json")
         {
-            this.Name = "json";
         }
 
         /// <summary>

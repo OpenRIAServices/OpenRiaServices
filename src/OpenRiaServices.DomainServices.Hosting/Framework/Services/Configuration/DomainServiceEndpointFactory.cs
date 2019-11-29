@@ -11,14 +11,24 @@ namespace OpenRiaServices.DomainServices.Hosting
     /// </summary>
     public abstract class DomainServiceEndpointFactory
     {
-        private string _name = string.Empty;
+        private string _name;
         private NameValueCollection _parameters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceEndpointFactory"/> class.
         /// </summary>
         protected DomainServiceEndpointFactory()
+            : this(string.Empty)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DomainServiceEndpointFactory"/> class and the specified name
+        /// </summary>
+        /// <param name="name">the detfault <see cref="Name"/> of the endpoint</param>
+        protected DomainServiceEndpointFactory(string name)
+        {
+            this._name = name;
         }
 
         /// <summary>
@@ -45,7 +55,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <summary>
         /// Gets or sets a collection of key/value parameter pairs.
         /// </summary>
-        public NameValueCollection Parameters
+        internal NameValueCollection Parameters
         {
             get
             {
@@ -56,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
                 return this._parameters;
             }
-            internal set
+            set
             {
                 this._parameters = value;
             }

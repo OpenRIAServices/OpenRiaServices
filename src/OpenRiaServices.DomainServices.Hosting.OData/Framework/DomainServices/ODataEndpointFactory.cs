@@ -24,8 +24,8 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// Initialize a new instance
         /// </summary>
         public ODataEndpointFactory()
+            : base("odata")
         {
-            this.Name = "odata";
         }
 
         /// <summary>
