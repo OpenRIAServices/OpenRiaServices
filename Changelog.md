@@ -44,10 +44,20 @@ This means that operations should be started on the UI thread if any data of the
 * Base DomainContext.Invoke on DomainContext.InvokeAsync (#203)
     * Invoke operation will now cancel only if the web request is cancelled (and then *after* cancellation)
 * Ensure Completed event is always called when Load/Invoke/SubmitOperation finishes (#206)
+* Pass in endpoint name in WcfDomainClientFactory to make it easier to derive from it (#218)
+* Hosting - new "PubInternal" types
+  * behaviors for easy creation endpoints based on standard wcf (non REST) transports
 
 **Bugfix**
 * Handle early cancellation (Cancellation before actual request has been sent) in WebDomainClient (#210)
   * In earlier previews an exception was thrown instead of the operation beeing Cancelled
+  
+### Server
+* Hosting - Endpoint changes (#218)
+   * Reuse the same `ContractDescription` for multiple endpoints (endpoint name is not longer added)
+   * Dont add SilverlightFaultBehaviour by default to DomainServices
+   * new "PubInternal" types
+     * behaviors for easy creation endpoints based on standard wcf (non REST) transports
 
 
 # 5.0.0 Preview 2
