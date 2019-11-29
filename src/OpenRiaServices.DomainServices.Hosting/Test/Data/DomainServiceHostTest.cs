@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.Common.Test;
-using OpenRiaServices.DomainServices.Client.Test;
-//using OpenRiaServices.DomainServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Common.Test;
+using OpenRiaServices.DomainServices.Client.Test;
 
 namespace OpenRiaServices.DomainServices.Hosting.UnitTests
 {
@@ -104,10 +101,11 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
         [Description("Tests that EndpointFactory.Name returns a string by default and does not accept nulls.")]
         public void EndpointFactory_Name()
         {
-            PoxBinaryEndpointFactory factory = new PoxBinaryEndpointFactory();
+            var factory = new DomainServiceEndpointFactoryWithNoDefaultName();
 
-            // By default, Name returns an empty string.
-            Assert.AreEqual(String.Empty, factory.Name, "Incorrect default value.");
+            // By default, Name returns the default empty string.
+            Assert.AreEqual(string.Empty, factory.Name, "Incorrect default value.");
+            Assert.AreEqual("binary", (new PoxBinaryEndpointFactory()).Name, "Binary endpoint should have default name");
 
             // Name cannot be set to null.
             ExceptionHelper.ExpectArgumentNullException(delegate
@@ -115,6 +113,8 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
                 factory.Name = null;
             }, "value");
         }
+
+        private class DomainServiceEndpointFactoryWithNoDefaultName : DomainServiceEndpointFactory { }
 
         [TestMethod]
         [Description("Verifies that DomainServicesSection.InitializeDefaultInternal adds the default endpoints.")]
@@ -144,11 +144,10 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-
-
 #if !MEDIUM_TRUST
+
         [Ignore]
-#endif        
+#endif
         [TestMethod]
         [Description("Verifies the DomainServicesSection can be created in partial trust")]
         public void DomainServiceHost_MediumTrust_DomainServicesSection()
