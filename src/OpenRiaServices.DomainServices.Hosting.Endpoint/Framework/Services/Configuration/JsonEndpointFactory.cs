@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
 using System.ServiceModel.Web;
+using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -23,6 +18,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         public JsonEndpointFactory()
         {
+            this.Name = "json";
         }
 
         /// <summary>

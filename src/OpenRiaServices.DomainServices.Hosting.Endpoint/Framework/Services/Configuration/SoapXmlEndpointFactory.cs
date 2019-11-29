@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.DomainServices.Hosting.Behaviors;
 using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
@@ -20,6 +16,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         public SoapXmlEndpointFactory()
         {
+            this.Name = "soap";
         }
 
         /// <summary>

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -20,6 +17,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         public PoxBinaryEndpointFactory()
         {
+            this.Name = "binary";
         }
 
         /// <summary>

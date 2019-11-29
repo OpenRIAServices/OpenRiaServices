@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using OpenRiaServices.DomainServices.Client.Web.Behaviors;
+using OpenRiaServices.DomainServices.Client.Web.Internal;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
@@ -13,7 +13,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
     /// </summary>
     public class SoapDomainClientFactory : WcfDomainClientFactory
     {
-        private readonly SoapEndpointBehavior _soapBehavior;
+        private readonly WcfEndpointBehavior _soapBehavior;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SoapDomainClientFactory" /> class.
@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Client.Web
         public SoapDomainClientFactory()
             : base("soap")
         {
-            _soapBehavior = new SoapEndpointBehavior(this);
+            _soapBehavior = new WcfEndpointBehavior(this);
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.ServiceModel.Description;
 using OpenRiaServices.DomainServices.Server;
 
@@ -12,7 +11,7 @@ namespace OpenRiaServices.DomainServices.Hosting
     /// </summary>
     public abstract class DomainServiceEndpointFactory
     {
-        private string _name = String.Empty;
+        private string _name = string.Empty;
         private NameValueCollection _parameters;
 
         /// <summary>
@@ -72,7 +71,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <returns>The endpoints that were created.</returns>
         public virtual IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
-            List<ServiceEndpoint> endpoints = new List<ServiceEndpoint>();
+            var endpoints = new List<ServiceEndpoint>();
             foreach (Uri address in serviceHost.BaseAddresses)
             {
                 endpoints.Add(this.CreateEndpointForAddress(contractDescription, address));

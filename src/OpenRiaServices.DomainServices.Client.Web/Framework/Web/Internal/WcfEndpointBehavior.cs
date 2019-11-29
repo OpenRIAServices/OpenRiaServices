@@ -3,24 +3,29 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
-namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
+namespace OpenRiaServices.DomainServices.Client.Web.Internal
 {
     /// <summary>
     /// A endpoint behavior which injects a message inspector that adds query headers
     /// to <see cref="Message.Headers"/> for use with all standard WCF protocols which 
     /// support message headers.
     /// </summary>
-    sealed partial class SoapEndpointBehavior : IEndpointBehavior
+    public sealed partial class WcfEndpointBehavior : IEndpointBehavior
     {
         /// <summary>
         /// Message insepctor to use if it is set to a non-<c>null</c> value.
         /// </summary>
         private readonly IClientMessageInspector _cookieInspector;
-        private readonly QueryInspector _soapQueryInspector;
+        private readonly WcfQueryHeaderInspector _soapQueryInspector;
 
-        public SoapEndpointBehavior(WcfDomainClientFactory factory)
+        /// <summary>
+        /// Creates an instance which takes cookie bahaviour from the provided
+        /// <see cref="WcfDomainClientFactory"/>
+        /// </summary>
+        /// <param name="factory">factory from which to take the cookie behaviour</param>
+        public WcfEndpointBehavior(WcfDomainClientFactory factory)
         {
-            _soapQueryInspector = new QueryInspector();
+            _soapQueryInspector = new WcfQueryHeaderInspector();
             _cookieInspector = factory.SharedCookieMessageInspector;
         }
 
