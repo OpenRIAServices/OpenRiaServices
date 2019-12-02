@@ -30,14 +30,25 @@ namespace OpenRiaServices.DomainServices.Client.Web
         private readonly MethodInfo _createInstanceMethod;
         private readonly Dictionary<ChannelFactoryKey, ChannelFactory> _channelFactoryCache = new Dictionary<ChannelFactoryKey, ChannelFactory>();
         private readonly object _channelFactoryCacheLock = new object();
+        private readonly string _endpointSuffix;
         private CookieContainer _cookieContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WcfDomainClientFactory" /> class.
         /// </summary>
-        protected WcfDomainClientFactory()
+        /// <param name="endpointSuffix"> Suffix added to the uri part after ".svc" in order to select a specific protocol (wcf endpoint)
+        /// E.g  "binary", "soap"</param>
+        protected WcfDomainClientFactory(string endpointSuffix)
         {
+            if (endpointSuffix == null)
+                throw new ArgumentNullException(nameof(endpointSuffix));
+
             _createInstanceMethod = typeof(WcfDomainClientFactory).GetMethod(nameof(CreateInstance), BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // ensure endpoint suffix includes a starting "/"
+            this._endpointSuffix = endpointSuffix;
+            if (!_endpointSuffix.StartsWith("/"))
+                _endpointSuffix = "/" + _endpointSuffix;
 
             // Silverlight uses the browser's cookies by default, in which case we should not manage cookies manually
 #if SILVERLIGHT
@@ -211,7 +222,10 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// <param name="endpoint">Absolute service URI without protocol suffix such as "/binary"</param>
         /// <param name="requiresSecureEndpoint"><c>true</c> if communication must be secured, otherwise <c>false</c></param>
         /// <returns><see cref="EndpointAddress"/> where target uri has the protocol suffix ("/binary") set </returns>
-        protected abstract EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint);
+        protected virtual EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
+        {
+            return new EndpointAddress(new Uri(endpoint.OriginalString + _endpointSuffix, UriKind.Absolute));
+        }
 
         /// <summary>
         /// Setup the default WCF <see cref="Binding" /> for the server communication.
@@ -227,7 +241,6 @@ namespace OpenRiaServices.DomainServices.Client.Web
         /// this inspector is used by wcf based transports to setup cookie suport
         /// </summary>
         internal IClientMessageInspector SharedCookieMessageInspector { get; private set; }
-
 
         /// <summary>
         /// Immutable key for _channelFactoryCache, entries are stored by type nad uri

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.ServiceModel.Description;
 using OpenRiaServices.DomainServices.Server;
 
@@ -12,14 +11,24 @@ namespace OpenRiaServices.DomainServices.Hosting
     /// </summary>
     public abstract class DomainServiceEndpointFactory
     {
-        private string _name = String.Empty;
+        private string _name;
         private NameValueCollection _parameters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceEndpointFactory"/> class.
         /// </summary>
         protected DomainServiceEndpointFactory()
+            : this(string.Empty)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DomainServiceEndpointFactory"/> class and the specified name
+        /// </summary>
+        /// <param name="name">the detfault <see cref="Name"/> of the endpoint</param>
+        protected DomainServiceEndpointFactory(string name)
+        {
+            this._name = name;
         }
 
         /// <summary>
@@ -46,7 +55,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <summary>
         /// Gets or sets a collection of key/value parameter pairs.
         /// </summary>
-        public NameValueCollection Parameters
+        internal NameValueCollection Parameters
         {
             get
             {
@@ -57,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Hosting
 
                 return this._parameters;
             }
-            internal set
+            set
             {
                 this._parameters = value;
             }
@@ -68,7 +77,24 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
+        /// <param name="contractDescription">the default domain serice contract description</param>
         /// <returns>The endpoints that were created.</returns>
-        public abstract IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost);
+        public virtual IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
+        {
+            var endpoints = new List<ServiceEndpoint>();
+            foreach (Uri address in serviceHost.BaseAddresses)
+            {
+                endpoints.Add(this.CreateEndpointForAddress(contractDescription, address));
+            }
+            return endpoints;
+        }
+
+        /// <summary>
+        /// Creates an endpoint based on the specified address.
+        /// </summary>
+        /// <param name="contract">The endpoint's contract.</param>
+        /// <param name="address">The endpoint's base address.</param>
+        /// <returns>An endpoint.</returns>
+        protected virtual ServiceEndpoint CreateEndpointForAddress(ContractDescription contract, Uri address) => throw new NotImplementedException();
     }
 }

@@ -474,6 +474,10 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
         // Class to testthe channel factory extensibility.
         class CustomDomainClientFactory : Web.WcfDomainClientFactory
         {
+            public CustomDomainClientFactory()
+                : base("binary")
+            { }
+
             protected override Binding CreateBinding(Uri endpoint, bool requiresSecureEndpoint)
             {
                 return new CustomBinding(
@@ -482,12 +486,6 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
                         {
                             ManualAddressing = true
                         });
-            }
-
-            protected override EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
-            {
-                return new EndpointAddress(
-                        new Uri(endpoint.OriginalString + "/binary", UriKind.Absolute));
             }
 
             protected override ChannelFactory<TContract> CreateChannelFactory<TContract>(Uri endpoint, bool requiresSecureEndpoint)

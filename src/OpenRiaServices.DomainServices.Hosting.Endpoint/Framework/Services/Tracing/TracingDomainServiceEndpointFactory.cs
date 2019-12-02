@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// <summary>
         /// Creates an instance of the class. 
         /// </summary>
-        public TracingDomainServiceEndpointFactory() : base() { }
+        public TracingDomainServiceEndpointFactory() : base(string.Empty) { }
 
         /// <summary>
         /// Creates a set of WCF REST service endpoints in the <see cref="OpenRiaServices.DomainServices.Hosting.DomainServiceHost"/> which 
@@ -34,8 +34,9 @@ namespace OpenRiaServices.DomainServices.Hosting
         /// </summary>
         /// <param name="description">WCF RIA service description.</param>
         /// <param name="serviceHost">Service host to which endpoints will be added.</param>
+        /// <param name="contractDescription">contractDescritption for default endpoint</param>
         /// <returns>The collection of endpoints.</returns>
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
             if (serviceHost == null)
             {

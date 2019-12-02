@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using OpenRiaServices.DomainServices.Client.Web.Behaviors;
+using OpenRiaServices.DomainServices.Client.Web.Internal;
 
 namespace OpenRiaServices.DomainServices.Client.Web
 {
@@ -13,15 +13,15 @@ namespace OpenRiaServices.DomainServices.Client.Web
     /// </summary>
     public class SoapDomainClientFactory : WcfDomainClientFactory
     {
-        private const string EndpointSuffix = "/soap";
-        private readonly SoapEndpointBehavior _soapBehavior;
+        private readonly WcfEndpointBehavior _soapBehavior;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SoapDomainClientFactory" /> class.
         /// </summary>
         public SoapDomainClientFactory()
+            : base("soap")
         {
-            _soapBehavior = new SoapEndpointBehavior(this);
+            _soapBehavior = new WcfEndpointBehavior(this);
         }
 
         /// <summary>
@@ -48,17 +48,6 @@ namespace OpenRiaServices.DomainServices.Client.Web
                 ((IDisposable)factory)?.Dispose();
                 throw;
             }
-        }
-
-        /// <summary>
-        /// Appends "/soap" to the endpoint in order to connect to the soap endpoint
-        /// </summary>
-        /// <param name="endpoint">base endpoint (service uri)</param>
-        /// <param name="requiresSecureEndpoint">not used</param>
-        /// <returns>endpoint usefull to connect to soap endpoint of the service</returns>
-        protected override EndpointAddress CreateEndpointAddress(Uri endpoint, bool requiresSecureEndpoint)
-        {
-            return new EndpointAddress(new Uri(endpoint.OriginalString + EndpointSuffix, UriKind.Absolute));
         }
 
         /// <summary>

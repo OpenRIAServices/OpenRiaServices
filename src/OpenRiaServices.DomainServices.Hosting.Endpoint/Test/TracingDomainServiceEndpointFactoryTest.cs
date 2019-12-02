@@ -11,8 +11,6 @@ using OpenRiaServices;
 
 namespace OpenRiaServices.DomainServices.Hosting.Local.Test
 {
-    
-    
     /// <summary>
     ///This is a test class for TracingDomainServiceEndpointFactoryTest and is intended
     ///to contain all TracingDomainServiceEndpointFactoryTest Unit Tests
@@ -50,7 +48,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
             TracingDomainServiceEndpointFactory target = new TracingDomainServiceEndpointFactory();
             target.Name = "tracing";
             target.Parameters["maxEntries"] = "123";
-            IEnumerable<ServiceEndpoint> actual = target.CreateEndpoints(null, sh);
+            IEnumerable<ServiceEndpoint> actual = target.CreateEndpoints(null, sh, null);
             Assert.IsTrue(123 == InMemoryTraceListener.MaxEntries);
             Assert.IsNotNull(actual);
             ServiceEndpoint[] endpoints = actual.ToArray();

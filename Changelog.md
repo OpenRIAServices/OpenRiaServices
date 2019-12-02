@@ -57,10 +57,20 @@ This means that operations should be started on the UI thread if any data of the
     * Invoke operation will now cancel only if the web request is cancelled (and then *after* cancellation)
 * Ensure Completed event is always called when Load/Invoke/SubmitOperation finishes (#206)
 * AuthenticationService is rewritten to use TPM (`Task` based methods) instead of `APM` for the methods implementing the actual authentication operations (#212, #214, #216)
+* Pass in endpoint name in WcfDomainClientFactory to make it easier to derive from it (#218)
+* Hosting - new "PubInternal" types
+  * behaviors for easy creation endpoints based on standard wcf (non REST) transports
 
 **Bugfix**
 * Handle early cancellation (Cancellation before actual request has been sent) in WebDomainClient (#210)
   * In earlier previews an exception was thrown instead of the operation beeing Cancelled
+  
+### Server
+* Hosting - Endpoint changes (#218)
+   * Reuse the same `ContractDescription` for multiple endpoints (endpoint name is not longer added)
+   * Dont add SilverlightFaultBehaviour by default to DomainServices
+   * new "PubInternal" types
+     * behaviors for easy creation endpoints based on standard wcf (non REST) transports
 
 ### Server
 * EntityFramework: Target IDbSet instead of DbSet with AttachAsModified extension methods (#215) 

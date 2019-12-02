@@ -1,21 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Description;
+using System.ServiceModel.Web;
+using System.Text;
+using OpenRiaServices.DomainServices.Hosting.OData;
+using OpenRiaServices.DomainServices.Server;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
-    #region Namespaces
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.ServiceModel.Description;
-    using OpenRiaServices.DomainServices.Hosting.OData;
-    using OpenRiaServices.DomainServices.Server;
-    using System.ServiceModel.Web;
-    using System.Text;
-
-    #endregion
-
     /// <summary>
     /// Represents a Domain Data Service endpoint factory for <see cref="DomainService"/>s.
     /// </summary>
@@ -25,12 +21,21 @@ namespace OpenRiaServices.DomainServices.Hosting
         private DomainDataServiceMetadata domainDataServiceMetadata;
 
         /// <summary>
+        /// Initialize a new instance
+        /// </summary>
+        public ODataEndpointFactory()
+            : base("odata")
+        {
+        }
+
+        /// <summary>
         /// Creates endpoints based on the specified description.
         /// </summary>
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
+        /// <param name="contractDescription">the default contract descritpion</param>
         /// <returns>The endpoints that were created.</returns>
-        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost)
+        public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
             Debug.Assert(this.Name != null, "Name has not been set.");
             Debug.Assert(this.domainDataServiceMetadata == null, "this.domainDataServiceMetadata == null");
@@ -275,12 +280,14 @@ namespace OpenRiaServices.DomainServices.Hosting
                             operationDesc.Behaviors.Insert(0, (IOperationBehavior)Activator.CreateInstance(queryOperationType, operation));
                             contractDesc.Operations.Add(operationDesc);
                             break;
+
                         case DomainOperation.Invoke:
                             operationDesc = ODataEndpointFactory.CreateOperationDescription(contractDesc, operation);
                             // Add as first behavior such that our operation invoker is the first in the chain.
                             operationDesc.Behaviors.Insert(0, new DomainDataServiceInvokeOperationBehavior(operation));
                             contractDesc.Operations.Add(operationDesc);
                             break;
+
                         default:
                             break;
                     }

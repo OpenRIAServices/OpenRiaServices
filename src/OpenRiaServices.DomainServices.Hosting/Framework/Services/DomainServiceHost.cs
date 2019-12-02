@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -9,9 +8,9 @@ using System.Security.Principal;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Server;
 using System.Web;
-using System.Web.Configuration;
+using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.DomainServices.Hosting.Configuration.Internal;
 
 namespace OpenRiaServices.DomainServices.Hosting
 {
@@ -111,25 +110,24 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 Type domainServiceType = this._domainServiceDescription.DomainServiceType;
                 ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
-
                 implementedContracts = new Dictionary<string, ContractDescription>();
 
-                DomainServicesSection config = DomainServicesSection.Current;
-                foreach (ProviderSettings provider in config.Endpoints)
+                var config = DomainServieHostingConfiguration.Current;
+                var contract = CreateContract(this._domainServiceDescription);
+
+                foreach (DomainServiceEndpointFactory endpointFactory in config.EndpointFactories)
                 {
-                    DomainServiceEndpointFactory endpointFactory = DomainServiceHost.CreateEndpointFactoryInstance(provider);
-                    foreach (ServiceEndpoint endpoint in endpointFactory.CreateEndpoints(this._domainServiceDescription, this))
+                    foreach (ServiceEndpoint endpoint in endpointFactory.CreateEndpoints(this._domainServiceDescription, this, contract))
                     {
                         string contractName = endpoint.Contract.ConfigurationName;
 
-                        ContractDescription contract;
-                        if (implementedContracts.TryGetValue(contractName, out contract) && contract != endpoint.Contract)
+                        if (implementedContracts.TryGetValue(contractName, out var oldContract) && !object.ReferenceEquals(oldContract, endpoint.Contract))
                         {
                             throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceHost_DuplicateContractName, contract.ConfigurationName));
                         }
 
                         // Register the contract.
-                        implementedContracts[endpoint.Contract.ConfigurationName] = endpoint.Contract;
+                        implementedContracts[contractName] = endpoint.Contract;
 
                         // Register the endpoint.
                         serviceDesc.Endpoints.Add(endpoint);
@@ -143,6 +141,50 @@ namespace OpenRiaServices.DomainServices.Hosting
                 DiagnosticUtility.ServiceException(ex, OperationContext.Current);
                 throw;
             }
+        }
+
+
+        /// <summary>
+        /// Creates a contract from the specified description.
+        /// </summary>
+        /// <param name="description">The description to create a contract from.</param>
+        /// <returns>A <see cref="ContractDescription"/>.</returns>
+        private ContractDescription CreateContract(DomainServiceDescription description)
+        {
+            Type domainServiceType = description.DomainServiceType;
+
+            // PERF: We should consider just looking at [ServiceDescription] directly.
+            ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
+
+            // Use names from [ServiceContract], if specified.
+            if (TypeDescriptor.GetAttributes(domainServiceType)[typeof(ServiceContractAttribute)]
+                is ServiceContractAttribute sca)
+            {
+                if (!string.IsNullOrEmpty(sca.Name))
+                {
+                    serviceDesc.Name = sca.Name;
+                }
+                if (!string.IsNullOrEmpty(sca.Namespace))
+                {
+                    serviceDesc.Namespace = sca.Namespace;
+                }
+            }
+
+            ContractDescription contractDesc = new ContractDescription(serviceDesc.Name, serviceDesc.Namespace)
+            {
+                ConfigurationName = serviceDesc.ConfigurationName,
+                ContractType = domainServiceType
+            };
+
+            // Add domain service behavior which takes care of instantiating DomainServices.
+            ServiceUtility.EnsureBehavior<DomainServiceBehavior>(contractDesc);
+            // Disable metadata generation by default
+            contractDesc.Behaviors.Add(new ServiceMetadataContractBehavior() { MetadataGenerationDisabled = true });
+
+            // Load the ContractDescription from the DomainServiceDescription.
+            ServiceUtility.PopulateContractDescription(contractDesc, description);
+
+            return contractDesc;
         }
 
         /// <summary>
@@ -184,20 +226,6 @@ namespace OpenRiaServices.DomainServices.Hosting
             ServiceMetadataBehavior serviceMetadataBehavior = ServiceUtility.EnsureBehavior<ServiceMetadataBehavior>(this.Description);
             serviceMetadataBehavior.HttpGetEnabled = this.BaseAddresses.Any(a => a.Scheme.Equals(Uri.UriSchemeHttp));
             serviceMetadataBehavior.HttpsGetEnabled = this.BaseAddresses.Any(a => a.Scheme.Equals(Uri.UriSchemeHttps));
-        }
-
-        /// <summary>
-        /// Creates a <see cref="DomainServiceEndpointFactory"/> from a <see cref="ProviderSettings"/> object.
-        /// </summary>
-        /// <param name="provider">The <see cref="ProviderSettings"/> object.</param>
-        /// <returns>A <see cref="DomainServiceEndpointFactory"/>.</returns>
-        private static DomainServiceEndpointFactory CreateEndpointFactoryInstance(ProviderSettings provider)
-        {
-            Type endpointFactoryType = Type.GetType(provider.Type, /* throwOnError */ true);
-            DomainServiceEndpointFactory endpointFactory = (DomainServiceEndpointFactory)Activator.CreateInstance(endpointFactoryType);
-            endpointFactory.Name = provider.Name;
-            endpointFactory.Parameters = provider.Parameters;
-            return endpointFactory;
         }
     }
 }
