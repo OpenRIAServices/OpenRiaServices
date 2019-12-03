@@ -38,13 +38,13 @@ namespace OpenRiaServices.DomainServices.Hosting
 
             // invoke the query operation
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameters, includeTotalCount, query);
-            var res = await domainService.QueryAsync<TEntity>(queryDescription,  CancellationToken.None);
+            var res = await domainService.QueryAsync<TEntity>(queryDescription,  domainService.ServiceContext.CancellationToken);
 
             if (res.HasValidationErrors)
             {
                 return new QueryResult<TEntity>(res.ValidationErrors);
             }
-            IEnumerable<TEntity> results = (IEnumerable<TEntity>)res.Result;
+            IEnumerable<TEntity> results = res.Result;
             int totalCount = res.TotalCount;
 
             // Performance optimization: if there are no included associations, we can assume we don't need to flatten.
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             {
                 foreach (object entity in resultsQueue.Dequeue())
                 {
-                    if (visited.Contains(entity))
+                    if (!visited.Add(entity))
                     {
                         continue;
                     }
@@ -110,8 +110,6 @@ namespace OpenRiaServices.DomainServices.Hosting
                     {
                         result.Add(entity);
                     }
-
-                    visited.Add(entity);
 
                     // make sure to use the correct entity Type, taking inheritance into account
                     Type entityType = domainServiceDescription.GetSerializationType(entity.GetType());
@@ -149,7 +147,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         {
             if (query != null && query.QueryParts != null && query.QueryParts.Any())
             {
-                IQueryable queryable = Enumerable.Empty<TEntity>().AsQueryable();
+                IQueryable<TEntity> queryable = Enumerable.Empty<TEntity>().AsQueryable();
                 return QueryDeserializer.Deserialize(domainServiceDescription, queryable, query.QueryParts);
             }
 

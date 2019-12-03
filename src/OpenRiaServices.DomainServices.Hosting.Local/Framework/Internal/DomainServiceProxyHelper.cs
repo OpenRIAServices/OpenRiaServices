@@ -17,8 +17,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
     /// </summary>
     internal static class DomainServiceProxyHelper
     {
-        static readonly MethodInfo s_queryAsync = typeof(DomainService).GetMethod(nameof(DomainService.QueryAsync));
-
+        static readonly MethodInfo s_queryGeneric = typeof(DomainServiceProxyHelper).GetMethod(nameof(DomainServiceProxyHelper.QueryCore), BindingFlags.Static | BindingFlags.NonPublic);
 
         /// <summary>
         /// Helper method performs a query operation against a given proxy instance.
@@ -53,16 +52,28 @@ namespace OpenRiaServices.DomainServices.Hosting.Local
                 throw new InvalidOperationException(errorMessage);
             }
 
-            IEnumerable<ValidationResult> validationErrors;
             object[] parameterValues = parameters ?? Array.Empty<object>();
             QueryDescription queryDescription = new QueryDescription(queryOperation, parameterValues);
 
+            var actualMethod = s_queryGeneric.MakeGenericMethod(queryDescription.Method.AssociatedType);
+
+            try
+            {
+                return (IEnumerable)actualMethod.Invoke(null, new object[] { service, queryDescription });
+            }
+            catch (TargetInvocationException tie) when (tie.InnerException is object)
+            {
+                throw tie.InnerException;
+            }
+        }
+
+        private static IEnumerable QueryCore<T>(DomainService service, QueryDescription queryDescription)
+        {
             // TODO: Look into removing this blocking Wait
-            var actualMethod = s_queryAsync.MakeGenericMethod(queryDescription.Method.AssociatedType);
-            var queryResult = ((ValueTask<ServiceQueryResult>)actualMethod.Invoke(service, new object[] { queryDescription, CancellationToken.None }))
+            var queryResult = service.QueryAsync<T>(queryDescription, CancellationToken.None)
                 .GetAwaiter().GetResult();
 
-            validationErrors = queryResult.ValidationErrors;
+            var validationErrors = queryResult.ValidationErrors;
             var result = queryResult.Result;
 
             if (validationErrors != null && validationErrors.Any())

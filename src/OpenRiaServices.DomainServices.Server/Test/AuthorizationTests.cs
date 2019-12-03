@@ -38,7 +38,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             MockDataService dataService = new MockDataService(user);
             cities.Initialize(new WcfDomainServiceContext(dataService, DomainOperationType.Query));
             Exception expectedException = null;
-            ServiceQueryResult result;
+            ServiceQueryResult<Zip> result;
 
             try
             {

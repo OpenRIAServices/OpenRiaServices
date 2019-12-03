@@ -9,14 +9,14 @@ namespace OpenRiaServices.DomainServices.Server
     /// Represents the result of a query from <see cref="DomainService.QueryAsync"/>
     /// Which is either an IEnumerable/IQueryable with optionally a specific count, or one or more validation errors
     /// </summary>
-    public struct ServiceQueryResult
+    public struct ServiceQueryResult<T>
     {
         /// <summary>
-        /// Create a <see cref="ServiceQueryResult"/> which represents the result of a successfully executed query
+        /// Create a <see cref="ServiceQueryResult{T}"/> which represents the result of a successfully executed query
         /// </summary>
         /// <param name="result">the result of the query (before filtering from the client is applied)</param>
         /// <param name="totalResult">the total number of items for the type of entity returned by the query, or <c>null</c></param>
-        public ServiceQueryResult(IEnumerable result, int? totalResult)
+        public ServiceQueryResult(IEnumerable<T> result, int? totalResult)
         {
             Result = result;
             TotalCount = totalResult ?? DomainService.TotalCountUndefined;
@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.Server
         }
 
         /// <summary>
-        /// Create a <see cref="ServiceQueryResult"/> where there were validation errors which prevented a result from beein returned
+        /// Create a <see cref="ServiceQueryResult{T}"/> where there were validation errors which prevented a result from beein returned
         /// </summary>
         /// <param name="validationErrors">the validation errors, should <c>never</c> be modified after beeing passed in</param>
         public ServiceQueryResult(IReadOnlyCollection<ValidationResult> validationErrors)
@@ -42,7 +42,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// The result of the query, or <c>null</c> if <see cref="HasValidationErrors"/> is true
         /// </summary>
-        public IEnumerable Result { get; }
+        public IEnumerable<T> Result { get; }
 
         /// <summary>
         /// Total number of items for the entity type returned, or any of the special values 

@@ -265,7 +265,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// any paging applied to it.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> which may be used by hosting layer to request cancellation</param>
         /// <returns>The query results. May be null if there are no query results.</returns>
-        public async virtual ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
+        public async virtual ValueTask<ServiceQueryResult<T>> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
             IEnumerable enumerableResult = null;
             IReadOnlyCollection<T> enumeratedResult = null;
@@ -293,7 +293,7 @@ namespace OpenRiaServices.DomainServices.Server
                         validationErrorList.Add(new ValidationResult(error.ErrorMessage, error.MemberNames));
                     }
 
-                    return new ServiceQueryResult(validationErrorList);
+                    return new ServiceQueryResult<T>(validationErrorList);
                 }
 
                 object result = null;
@@ -338,7 +338,7 @@ namespace OpenRiaServices.DomainServices.Server
                     }
 
                     validationErrorList.Add(new ValidationResult(vex.ValidationResult.ErrorMessage, vex.ValidationResult.MemberNames));
-                    return new ServiceQueryResult(validationErrorList);
+                    return new ServiceQueryResult<T>(validationErrorList);
                 }
                 finally
                 {
@@ -415,7 +415,7 @@ namespace OpenRiaServices.DomainServices.Server
                 throw;
             }
 
-            return new ServiceQueryResult(enumeratedResult, totalCount);
+            return new ServiceQueryResult<T>(enumeratedResult, totalCount);
         }
 
         /// <summary>

@@ -937,7 +937,7 @@ namespace TestDomainServices
 
         private string query = string.Empty;
 
-        public override ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
+        public override ValueTask<ServiceQueryResult<T>> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
             if (queryDescription.Method.Name == "GetRoundtripQueryEntities" && queryDescription.Query != null)
             {
