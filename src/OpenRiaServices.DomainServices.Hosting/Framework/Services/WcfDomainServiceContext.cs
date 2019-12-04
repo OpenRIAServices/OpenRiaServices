@@ -24,6 +24,14 @@ namespace OpenRiaServices.DomainServices.Hosting
             _httpContext = HttpContext.Current;
 
             this.DisableStackTraces = _httpContext?.IsCustomErrorEnabled ?? true;
+
+            // Wire up cancellation token
+            // It might make sense in the future to also create a CancellationToken based on
+            // OperationContext.Current.Channel.OperationTimeout and combine it with the 
+            // disconnation token using System.Threading.CancellationTokenSource.CreateLinkedTokenSource
+            var httpResponse = _httpContext?.Response;
+            if (httpResponse != null)
+                base.CancellationToken = httpResponse.ClientDisconnectedToken;
         }
 
 
