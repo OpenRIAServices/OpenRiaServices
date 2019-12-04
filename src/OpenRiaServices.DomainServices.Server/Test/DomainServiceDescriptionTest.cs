@@ -3653,7 +3653,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
     [EnableClientAccess]
     public class DomainService_BaseMethodOverrides : DomainService
     {
-        public override ValueTask<ServiceQueryResult> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
+        public override ValueTask<ServiceQueryResult<T>> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
             return base.QueryAsync<T>(queryDescription, cancellationToken);
         }
