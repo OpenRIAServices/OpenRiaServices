@@ -40,7 +40,7 @@ It is currently quite empty but already demonstrates some of the following scena
     * Writing your own custom Authentication logic
     * Running OpenRiaServices in same project as Asp.Net MVC
   
-# 5.0.0 Unreleased
+# 5.0.0 Preview 3
 
 ### Client
 
@@ -71,6 +71,7 @@ This means that operations should be started on the UI thread if any data of the
    * Dont add SilverlightFaultBehaviour by default to DomainServices
    * new "PubInternal" types
      * behaviors for easy creation endpoints based on standard wcf (non REST) transports
+* Trigger cancellation on client disconnect (#222)
 
 ### Server
 * EntityFramework: Target IDbSet instead of DbSet with AttachAsModified extension methods (#215) 

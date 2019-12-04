@@ -65,7 +65,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// <see cref="CancellationToken"/> which may be used by hosting layer to request cancellation.
         /// </summary>
-        public CancellationToken CancellationToken { get; internal set; }
+        public CancellationToken CancellationToken { get; protected set; }
 
         #region IServiceProvider Members
 
