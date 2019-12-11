@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
-    <id>OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership</id>
+    <id>OpenRiaServices.Server.Authentication.AspNetMembership</id>
     <version>5.0.0-preview1</version>
     <title>OpenRiaServices.Server Asp.Net Membership Authentication</title>
     <authors>Outercurve RIA Services</authors>
