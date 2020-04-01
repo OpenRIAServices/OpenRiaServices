@@ -20,7 +20,7 @@
    then try to overridde the method with the same name but with "Async" as postfix, method signatures will be different.
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
 4. Fix any additional compilation errors, use changes below for guidance about replacements.
-   
+5. If you are using `OpenRiaServices.EntityFramework` the framework will now only call the `SaveChangesAsync` and not `SaveChanges` so if you are overriding `SaveChanges` make sure you do the same for `SaveChangesAsync`   
    
 For better scalability (can be done afterwards):
 
@@ -144,7 +144,6 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 2. `DomainContext.IsLoading` is no longer set to false directly on cancellation.
        Instead a load is only considered done until after it has been cancelled (or completed)
 
-
 ## Server
 
 1. DomainServices are now async #159 and many methods have been renamed with Async suffic
@@ -152,6 +151,7 @@ Most of the changes are **Brekaing changes**, even if many of them will only req
 Move Authenication related code from ..Server.ApplicationServices to
 * ..Server.Authentication
 * and ..Server.Authentication.AspNetMembership (AuthenticationBase, UserBase ..)
+3. * If you are using `OpenRiaServices.EntityFramework` the framework will now only call the `SaveChangesAsync` and not `SaveChanges` so if you are overriding `SaveChanges` make sure you do the same for `SaveChangesAsync`
 
 ## Other
 
