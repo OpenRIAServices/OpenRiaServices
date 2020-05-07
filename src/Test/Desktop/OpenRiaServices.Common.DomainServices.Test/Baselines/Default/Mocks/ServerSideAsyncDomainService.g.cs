@@ -7,13 +7,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
 namespace TestDomainServices
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.ServiceModel;
@@ -46,6 +46,8 @@ namespace TestDomainServices
         partial void OnIdChanged();
         partial void OnTextChanging(string value);
         partial void OnTextChanged();
+        partial void OnCustomUpdateRangeInvoking();
+        partial void OnCustomUpdateRangeInvoked();
 
         #endregion
 
@@ -109,12 +111,48 @@ namespace TestDomainServices
         }
 
         /// <summary>
+        /// Gets a value indicating whether the 'CustomUpdateRange' action has been invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool IsCustomUpdateRangeInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("CustomUpdateRange");
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the 'CustomUpdateRange' method can be invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool CanCustomUpdateRange
+        {
+            get
+            {
+                return base.CanInvokeAction("CustomUpdateRange");
+            }
+        }
+
+        /// <summary>
         /// Computes a value from the key fields that uniquely identifies this entity instance.
         /// </summary>
         /// <returns>An object instance that uniquely identifies this entity instance.</returns>
         public override object GetIdentity()
         {
             return this._id;
+        }
+
+        /// <summary>
+        /// Invokes the 'CustomUpdateRange' action on this entity.
+        /// </summary>
+        [DebuggerStepThrough()]
+        [EntityAction("CustomUpdateRange", AllowMultipleInvocations = false)]
+        public void CustomUpdateRange()
+        {
+            this.OnCustomUpdateRangeInvoking();
+            base.InvokeAction("CustomUpdateRange");
+            this.OnCustomUpdateRangeInvoked();
         }
     }
 
@@ -140,6 +178,8 @@ namespace TestDomainServices
         partial void OnIdChanged();
         partial void OnTextChanging(string value);
         partial void OnTextChanged();
+        partial void OnCustomUpdateRangeAsyncThrowsExceptionInvoking();
+        partial void OnCustomUpdateRangeAsyncThrowsExceptionInvoked();
 
         #endregion
 
@@ -203,12 +243,48 @@ namespace TestDomainServices
         }
 
         /// <summary>
+        /// Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' action has been invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool IsCustomUpdateRangeAsyncThrowsExceptionInvoked
+        {
+            get
+            {
+                return base.IsActionInvoked("CustomUpdateRangeAsyncThrowsException");
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' method can be invoked on this entity.
+        /// </summary>
+        [Display(AutoGenerateField = false)]
+        public bool CanCustomUpdateRangeAsyncThrowsException
+        {
+            get
+            {
+                return base.CanInvokeAction("CustomUpdateRangeAsyncThrowsException");
+            }
+        }
+
+        /// <summary>
         /// Computes a value from the key fields that uniquely identifies this entity instance.
         /// </summary>
         /// <returns>An object instance that uniquely identifies this entity instance.</returns>
         public override object GetIdentity()
         {
             return this._id;
+        }
+
+        /// <summary>
+        /// Invokes the 'CustomUpdateRangeAsyncThrowsException' action on this entity.
+        /// </summary>
+        [DebuggerStepThrough()]
+        [EntityAction("CustomUpdateRangeAsyncThrowsException", AllowMultipleInvocations = false)]
+        public void CustomUpdateRangeAsyncThrowsException()
+        {
+            this.OnCustomUpdateRangeAsyncThrowsExceptionInvoking();
+            base.InvokeAction("CustomUpdateRangeAsyncThrowsException");
+            this.OnCustomUpdateRangeAsyncThrowsExceptionInvoked();
         }
     }
 
@@ -365,6 +441,24 @@ namespace TestDomainServices
             parameters.Add("id", id);
             this.ValidateMethod("GetRangeByIdWithExceptionTaskQuery", parameters);
             return base.CreateQuery<RangeItem>("GetRangeByIdWithExceptionTask", parameters, false, false);
+        }
+
+        /// <summary>
+        /// Invokes the 'CustomUpdateRange' method of the specified <see cref="RangeItem"/> entity.
+        /// </summary>
+        /// <param name="rangeItem">The <see cref="RangeItem"/> entity instance.</param>
+        public void CustomUpdateRange(RangeItem rangeItem)
+        {
+            rangeItem.CustomUpdateRange();
+        }
+
+        /// <summary>
+        /// Invokes the 'CustomUpdateRangeAsyncThrowsException' method of the specified <see cref="RangeItem2"/> entity.
+        /// </summary>
+        /// <param name="rangeItem">The <see cref="RangeItem2"/> entity instance.</param>
+        public void CustomUpdateRangeAsyncThrowsException(RangeItem2 rangeItem)
+        {
+            rangeItem.CustomUpdateRangeAsyncThrowsException();
         }
 
         /// <summary>

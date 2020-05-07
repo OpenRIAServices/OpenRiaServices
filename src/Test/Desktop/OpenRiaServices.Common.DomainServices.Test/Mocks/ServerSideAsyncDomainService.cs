@@ -160,6 +160,29 @@ namespace TestDomainServices
         }
 
         /// <summary>
+        /// Custom Async update operation that performs a short delay.
+        /// </summary>
+        /// <param name="rangeItem"></param>
+        /// <returns></returns>
+        [EntityAction]
+        public async Task CustomUpdateRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+        }
+
+        /// <summary>
+        /// Custom Async update operation that throws an exception in task
+        /// </summary>
+        /// <param name="rangeItem"></param>
+        /// <returns></returns>
+        [EntityAction]
+        public async Task CustomUpdateRangeAsyncThrowsException(RangeItem2 rangeItem)
+        {
+            await Delay(5);
+            throw new DomainException(nameof(CustomUpdateRangeAsyncThrowsException), 28);
+        }
+
+        /// <summary>
         /// Delete operation
         /// </summary>
         /// <param name="rangeItem">Item to delete</param>

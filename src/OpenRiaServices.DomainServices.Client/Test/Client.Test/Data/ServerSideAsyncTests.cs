@@ -385,6 +385,34 @@ namespace OpenRiaServices.DomainServices.Client.Test
         }
 
         [TestMethod]
+        [Description("Tests that an async Task EntityAction operation is executed")]
+        public async Task EntityAction_TaskAsync()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem() { Text = "test" };
+            ctx.RangeItems.Attach(rangeItem);
+
+            rangeItem.CustomUpdateRange();
+
+            await ctx.SubmitChangesAsync();
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async EntityAction methods are propagated")]
+        public async Task EntityAction_TaskAsyncWithException_InTask()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem2() { Text = "test" };
+            ctx.RangeItem2s.Attach(rangeItem);
+
+            rangeItem.CustomUpdateRangeAsyncThrowsException();
+
+            await AssertDomainExceptionIsThrown(ctx.SubmitChangesAsync, 28);
+        }
+
+        [TestMethod]
         [Description("Tests that an async Task Delete operation is executed and waited for")]
         public async Task Delete_TaskAsync()
         {

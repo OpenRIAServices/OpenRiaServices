@@ -55,6 +55,10 @@ Namespace TestDomainServices
         End Sub
         Partial Private Sub OnTextChanged()
         End Sub
+        Partial Private Sub OnCustomUpdateRangeInvoking()
+        End Sub
+        Partial Private Sub OnCustomUpdateRangeInvoked()
+        End Sub
 
 #End Region
 
@@ -115,12 +119,43 @@ Namespace TestDomainServices
         End Property
 
         ''' <summary>
+        ''' Gets a value indicating whether the 'CustomUpdateRange' action has been invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=False)>
+        Public ReadOnly Property IsCustomUpdateRangeInvoked() As Boolean
+            Get
+                Return MyBase.IsActionInvoked("CustomUpdateRange")
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Gets a value indicating whether the 'CustomUpdateRange' method can be invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=False)>
+        Public ReadOnly Property CanCustomUpdateRange() As Boolean
+            Get
+                Return MyBase.CanInvokeAction("CustomUpdateRange")
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
             Return Me._id
         End Function
+
+        ''' <summary>
+        ''' Invokes the 'CustomUpdateRange' action on this entity.
+        ''' </summary>
+        <DebuggerStepThrough(),
+         EntityAction("CustomUpdateRange", AllowMultipleInvocations:=False)>
+        Public Sub CustomUpdateRange()
+            Me.OnCustomUpdateRangeInvoking()
+            MyBase.InvokeAction("CustomUpdateRange")
+            Me.OnCustomUpdateRangeInvoked()
+        End Sub
     End Class
 
     ''' <summary>
@@ -149,6 +184,10 @@ Namespace TestDomainServices
         Partial Private Sub OnTextChanging(ByVal value As String)
         End Sub
         Partial Private Sub OnTextChanged()
+        End Sub
+        Partial Private Sub OnCustomUpdateRangeAsyncThrowsExceptionInvoking()
+        End Sub
+        Partial Private Sub OnCustomUpdateRangeAsyncThrowsExceptionInvoked()
         End Sub
 
 #End Region
@@ -210,12 +249,43 @@ Namespace TestDomainServices
         End Property
 
         ''' <summary>
+        ''' Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' action has been invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=False)>
+        Public ReadOnly Property IsCustomUpdateRangeAsyncThrowsExceptionInvoked() As Boolean
+            Get
+                Return MyBase.IsActionInvoked("CustomUpdateRangeAsyncThrowsException")
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' method can be invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=False)>
+        Public ReadOnly Property CanCustomUpdateRangeAsyncThrowsException() As Boolean
+            Get
+                Return MyBase.CanInvokeAction("CustomUpdateRangeAsyncThrowsException")
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
             Return Me._id
         End Function
+
+        ''' <summary>
+        ''' Invokes the 'CustomUpdateRangeAsyncThrowsException' action on this entity.
+        ''' </summary>
+        <DebuggerStepThrough(),
+         EntityAction("CustomUpdateRangeAsyncThrowsException", AllowMultipleInvocations:=False)>
+        Public Sub CustomUpdateRangeAsyncThrowsException()
+            Me.OnCustomUpdateRangeAsyncThrowsExceptionInvoking()
+            MyBase.InvokeAction("CustomUpdateRangeAsyncThrowsException")
+            Me.OnCustomUpdateRangeAsyncThrowsExceptionInvoked()
+        End Sub
     End Class
 
     ''' <summary>
@@ -358,6 +428,22 @@ Namespace TestDomainServices
             Me.ValidateMethod("GetRangeByIdWithExceptionTaskQuery", parameters)
             Return MyBase.CreateQuery(Of RangeItem)("GetRangeByIdWithExceptionTask", parameters, False, False)
         End Function
+
+        ''' <summary>
+        ''' Invokes the 'CustomUpdateRange' method of the specified <see cref="RangeItem"/> entity.
+        ''' </summary>
+        ''' <param name="rangeItem">The <see cref="RangeItem"/> entity instance.</param>
+        Public Sub CustomUpdateRange(ByVal rangeItem As RangeItem)
+            rangeItem.CustomUpdateRange()
+        End Sub
+
+        ''' <summary>
+        ''' Invokes the 'CustomUpdateRangeAsyncThrowsException' method of the specified <see cref="RangeItem2"/> entity.
+        ''' </summary>
+        ''' <param name="rangeItem">The <see cref="RangeItem2"/> entity instance.</param>
+        Public Sub CustomUpdateRangeAsyncThrowsException(ByVal rangeItem As RangeItem2)
+            rangeItem.CustomUpdateRangeAsyncThrowsException()
+        End Sub
 
         ''' <summary>
         ''' Asynchronously invokes the 'AddNullableOne' method of the DomainService.
