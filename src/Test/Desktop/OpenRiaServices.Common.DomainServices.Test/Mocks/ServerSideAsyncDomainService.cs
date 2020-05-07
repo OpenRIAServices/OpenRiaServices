@@ -21,6 +21,17 @@ namespace TestDomainServices
         public string Text { get; set; }
     }
 
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")]
+    public class RangeItem2
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string Text { get; set; }
+    }
+
     [EnableClientAccess]
     public class ServerSideAsyncDomainService : DomainService
     {
@@ -48,6 +59,10 @@ namespace TestDomainServices
         public IQueryable<RangeItem> GetRange()
         {
             return _items.AsQueryable();
+        }
+        public IEnumerable<RangeItem2> GetRange2()
+        {
+            return Enumerable.Empty<RangeItem2>();
         }
 
         /// <summary>
@@ -95,6 +110,78 @@ namespace TestDomainServices
                 .ContinueWith(_ =>
                     _items.FirstOrDefault(a => a.Id == id)
                 );
+        }
+
+        /// <summary>
+        /// Insert operation
+        /// </summary>
+        /// <param name="rangeItem">Item to insert</param>
+        /// <returns></returns>
+        [Insert]
+        public async Task InsertRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+            rangeItem.Id = 42;
+        }
+
+        /// <summary>
+        /// Insert operation that throws exception in task
+        /// </summary>
+        /// <param name="rangeItem">Item to insert</param>
+        /// <returns></returns>
+        [Insert]
+        public async Task InsertRangeAsyncThrowsException(RangeItem2 rangeItem)
+        {
+            await Delay(5);
+            throw new DomainException(nameof(InsertRangeAsyncThrowsException), 25);
+        }
+
+        /// <summary>
+        /// Update operation that performs a short delay.
+        /// </summary>
+        /// <param name="rangeItem">Item to update</param>
+        /// <returns></returns>
+        [Update]
+        public async Task UpdateRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+        }
+
+        /// <summary>
+        /// Async update operation that throws an exception in task
+        /// </summary>
+        /// <param name="rangeItem"></param>
+        /// <returns></returns>
+        [Update]
+        public async Task UpdateRangeAsyncThrowsException(RangeItem2 rangeItem)
+        {
+            await Delay(5);
+            throw new DomainException(nameof(UpdateRangeAsyncThrowsException), 26);
+        }
+
+        /// <summary>
+        /// Delete operation
+        /// </summary>
+        /// <param name="rangeItem">Item to delete</param>
+        /// <returns></returns>
+        [Delete]
+        public async Task DeleteRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+            rangeItem.Text = "deleted";
+            Console.WriteLine(nameof(DeleteRangeAsync));
+        }
+
+        /// <summary>
+        /// Delete operation that throws an exception in task
+        /// </summary>
+        /// <param name="rangeItem"></param>
+        /// <returns></returns>
+        [Delete]
+        public async Task DeleteRangeAsyncThrowsException(RangeItem2 rangeItem)
+        {
+            await Delay(1);
+            throw new DomainException(nameof(DeleteRangeAsyncThrowsException), 27);
         }
 
         /// <summary>

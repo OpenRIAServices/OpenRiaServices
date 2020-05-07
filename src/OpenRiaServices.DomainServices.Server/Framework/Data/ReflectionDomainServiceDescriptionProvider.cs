@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Server
@@ -433,10 +434,14 @@ namespace OpenRiaServices.DomainServices.Server
             /// </summary>
             /// <param name="domainService">The <see cref="DomainService"/> instance the operation is being invoked on.</param>
             /// <param name="parameters">The parameters to pass to the method.</param>
+            /// <param name="cancellationToken">A cancellation token that can be used to signal cancellation of this operation</param>
+            /// <remarks>
+            ///  Parameter <paramref name="cancellationToken"/> is currently not used.
+            /// </remarks>
             /// <returns>The return value of the invoked method.</returns>
-            public override object Invoke(DomainService domainService, object[] parameters)
+            public override ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken)
             {
-                return this._method(domainService, parameters);
+                return UnwrapTaskResult(this._method(domainService, parameters));
             }
 
             private static IEnumerable<DomainOperationParameter> GetMethodParameters(MethodInfo methodInfo)

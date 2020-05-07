@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
@@ -318,7 +318,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             const int expectedErrorCode = 24;
             const string expectedMessage = "InvokeWithExceptionTask";
 
-            var invoke = ctx.InvokeWithException(delay:3);
+            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -329,6 +329,112 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(expectedMessage, dex.Message, "Wrong error message");
             });
             this.EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task Insert operation is executed and waited for")]
+        public async Task Insert_TaskAsync()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem() { Text = "insert" };
+            ctx.RangeItems.Add(rangeItem);
+            await ctx.SubmitChangesAsync();
+
+            Assert.AreEqual(42, rangeItem.Id);
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async Insert methods are propagated")]
+        public async Task Insert_TaskAsyncWithException_InTask()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem2() { Text = "insert failed" };
+            ctx.RangeItem2s.Add(rangeItem);
+
+            await AssertDomainExceptionIsThrown(ctx.SubmitChangesAsync, 25);
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task Update operation is executed and waited for")]
+        public async Task Update_TaskAsync()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem() { Text = "test" };
+            ctx.RangeItems.Attach(rangeItem);
+
+            rangeItem.Text = "updated";
+
+            await ctx.SubmitChangesAsync();
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async Update methods are propagated")]
+        public async Task Update_TaskAsyncWithException_InTask()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem2() { Text = "test" };
+            ctx.RangeItem2s.Attach(rangeItem);
+
+            rangeItem.Text = "updated";
+
+            await AssertDomainExceptionIsThrown(ctx.SubmitChangesAsync, 26);
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task Delete operation is executed and waited for")]
+        public async Task Delete_TaskAsync()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem() { Id = 42, Text = "test" };
+            ctx.RangeItems.Attach(rangeItem);
+
+            ctx.RangeItems.Remove(rangeItem);
+
+            await ctx.SubmitChangesAsync();
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async Delete methods are propagated")]
+        public async Task Delete_TaskAsyncWithException_InTask()
+        {
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+
+            var rangeItem = new RangeItem2() { Id = 42, Text = "test" };
+            ctx.RangeItem2s.Attach(rangeItem);
+
+            ctx.RangeItem2s.Remove(rangeItem);
+
+            await AssertDomainExceptionIsThrown(ctx.SubmitChangesAsync, 27);
+        }
+
+        /// <summary>
+        /// Asserts that executing <paramref name="action"/> throws a <see cref="DomainException"/> 
+        /// with the specified <paramref name="expectedErrorCode"/>.
+        /// </summary>
+        /// <param name="action">Action to execute</param>
+        /// <param name="expectedErrorCode">The expected errorCode</param>
+        /// <returns></returns>
+        private static async Task AssertDomainExceptionIsThrown(Func<Task> action, int expectedErrorCode)
+        {
+            try
+            {
+                await action();
+
+                Assert.Fail("No exception thrown");
+            }
+            catch (DomainException de)
+            {
+                Assert.AreEqual(expectedErrorCode, de.ErrorCode, "Wrong error code returned or expected operation was not executed");
+            }
+            catch
+            {
+                Assert.Fail("Wrong exception thrown");
+            }
         }
     }
 }

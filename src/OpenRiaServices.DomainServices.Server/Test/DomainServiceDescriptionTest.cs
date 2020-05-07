@@ -3223,7 +3223,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
         {
         }
 
-        public override object Invoke(DomainService domainService, object[] parameters)
+        public override ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

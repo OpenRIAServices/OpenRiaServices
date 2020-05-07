@@ -119,6 +119,100 @@ namespace TestDomainServices
     }
 
     /// <summary>
+    /// The 'RangeItem2' entity class.
+    /// </summary>
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")]
+    public sealed partial class RangeItem2 : Entity
+    {
+
+        private int _id;
+
+        private string _text;
+
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnIdChanging(int value);
+        partial void OnIdChanged();
+        partial void OnTextChanging(string value);
+        partial void OnTextChanged();
+
+        #endregion
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RangeItem2"/> class.
+        /// </summary>
+        public RangeItem2()
+        {
+            this.OnCreated();
+        }
+
+        /// <summary>
+        /// Gets or sets the 'Id' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue = true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int Id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((this._id != value))
+                {
+                    this.OnIdChanging(value);
+                    this.ValidateProperty("Id", value);
+                    this._id = value;
+                    this.RaisePropertyChanged("Id");
+                    this.OnIdChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the 'Text' value.
+        /// </summary>
+        [DataMember()]
+        public string Text
+        {
+            get
+            {
+                return this._text;
+            }
+            set
+            {
+                if ((this._text != value))
+                {
+                    this.OnTextChanging(value);
+                    this.RaiseDataMemberChanging("Text");
+                    this.ValidateProperty("Text", value);
+                    this._text = value;
+                    this.RaiseDataMemberChanged("Text");
+                    this.OnTextChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._id;
+        }
+    }
+
+    /// <summary>
     /// The DomainContext corresponding to the 'ServerSideAsyncDomainService' DomainService.
     /// </summary>
     public sealed partial class ServerSideAsyncDomainContext : DomainContext
@@ -174,6 +268,17 @@ namespace TestDomainServices
         }
 
         /// <summary>
+        /// Gets the set of <see cref="RangeItem2"/> entity instances that have been loaded into this <see cref="ServerSideAsyncDomainContext"/> instance.
+        /// </summary>
+        public EntitySet<RangeItem2> RangeItem2s
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<RangeItem2>();
+            }
+        }
+
+        /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetQueryableRange' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem"/> entity instances.</returns>
@@ -211,6 +316,16 @@ namespace TestDomainServices
         {
             this.ValidateMethod("GetRangeQuery", null);
             return base.CreateQuery<RangeItem>("GetRange", null, false, true);
+        }
+
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem2"/> entity instances using the 'GetRange2' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem2"/> entity instances.</returns>
+        public EntityQuery<RangeItem2> GetRange2Query()
+        {
+            this.ValidateMethod("GetRange2Query", null);
+            return base.CreateQuery<RangeItem2>("GetRange2", null, false, true);
         }
 
         /// <summary>
@@ -286,7 +401,7 @@ namespace TestDomainServices
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<Nullable<int>>> AddNullableOneAsync(Nullable<int> number, CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult<Nullable<int>>> AddNullableOneAsync(Nullable<int> number, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
@@ -328,7 +443,7 @@ namespace TestDomainServices
         /// <param name="number">The value for the 'number' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<int>> AddOneAsync(int number, CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult<int>> AddOneAsync(int number, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("number", number);
@@ -363,7 +478,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<TimeSpan>> GetLastDelayAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult<TimeSpan>> GetLastDelayAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             this.ValidateMethod("GetLastDelay", null);
             return this.InvokeOperationAsync<TimeSpan>("GetLastDelay", null, true, cancellationToken);
@@ -403,7 +518,7 @@ namespace TestDomainServices
         /// <param name="client">The value for the 'client' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult<string>> GreetAsync(string client, CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult<string>> GreetAsync(string client, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("client", client);
@@ -438,7 +553,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult> InvokeWithExceptionFirstAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult> InvokeWithExceptionFirstAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             this.ValidateMethod("InvokeWithExceptionFirst", null);
             return this.InvokeOperationAsync("InvokeWithExceptionFirst", null, true, cancellationToken);
@@ -478,7 +593,7 @@ namespace TestDomainServices
         /// <param name="delay">The value for the 'delay' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult> InvokeWithException(int delay, CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult> InvokeWithExceptionTaskAsync(int delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("delay", delay);
@@ -520,7 +635,7 @@ namespace TestDomainServices
         /// <param name="delay">The value for the 'delay' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public Task<InvokeResult> SleepAndSetLastDelayAsync(TimeSpan delay, CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult> SleepAndSetLastDelayAsync(TimeSpan delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("delay", delay);
@@ -604,8 +719,7 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRange", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeRespons" +
-                "e")]
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRange", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeResponse")]
             IAsyncResult BeginGetQueryableRange(AsyncCallback callback, object asyncState);
 
             /// <summary>
@@ -669,6 +783,23 @@ namespace TestDomainServices
             /// <param name="result">The IAsyncResult returned from 'BeginGetRange'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRange' operation.</returns>
             QueryResult<RangeItem> EndGetRange(IAsyncResult result);
+
+            /// <summary>
+            /// Asynchronously invokes the 'GetRange2' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetRange2", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetRange2Response")]
+            IAsyncResult BeginGetRange2(AsyncCallback callback, object asyncState);
+
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetRange2'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetRange2'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetRange2' operation.</returns>
+            QueryResult<RangeItem2> EndGetRange2(IAsyncResult result);
 
             /// <summary>
             /// Asynchronously invokes the 'GetRangeById' operation.
@@ -793,6 +924,23 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSleepAndSetLastDelay'.</param>
             void EndSleepAndSetLastDelay(IAsyncResult result);
+
+            /// <summary>
+            /// Asynchronously invokes the 'SubmitChanges' operation.
+            /// </summary>
+            /// <param name="changeSet">The change-set to submit.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/SubmitChanges", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/SubmitChangesResponse")]
+            IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
+
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
+            /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
+            IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);
         }
 
         internal sealed class ServerSideAsyncDomainContextEntityContainer : EntityContainer
@@ -800,7 +948,8 @@ namespace TestDomainServices
 
             public ServerSideAsyncDomainContextEntityContainer()
             {
-                this.CreateEntitySet<RangeItem>(EntitySetOperations.None);
+                this.CreateEntitySet<RangeItem>(EntitySetOperations.All);
+                this.CreateEntitySet<RangeItem2>(EntitySetOperations.All);
             }
         }
     }
