@@ -431,7 +431,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
         }
 
-        internal ValueTask<object> UnwrapTaskResult(object result)
+        private ValueTask<object> UnwrapTaskResult(object result)
         {
             if (!IsTaskAsync)
                 return new ValueTask<object>(result);
