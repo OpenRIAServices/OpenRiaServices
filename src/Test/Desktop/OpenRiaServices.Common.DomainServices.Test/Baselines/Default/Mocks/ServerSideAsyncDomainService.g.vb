@@ -39,7 +39,9 @@ Namespace TestDomainServices
 
         Private _text As String
 
-        Private _throwException As Boolean
+        Private _throwDomainException As Boolean
+
+        Private _throwValidationException As Boolean
 
 #Region "Extensibility Method Definitions"
 
@@ -57,9 +59,13 @@ Namespace TestDomainServices
         End Sub
         Partial Private Sub OnTextChanged()
         End Sub
-        Partial Private Sub OnThrowExceptionChanging(ByVal value As Boolean)
+        Partial Private Sub OnThrowDomainExceptionChanging(ByVal value As Boolean)
         End Sub
-        Partial Private Sub OnThrowExceptionChanged()
+        Partial Private Sub OnThrowDomainExceptionChanged()
+        End Sub
+        Partial Private Sub OnThrowValidationExceptionChanging(ByVal value As Boolean)
+        End Sub
+        Partial Private Sub OnThrowValidationExceptionChanged()
         End Sub
         Partial Private Sub OnCustomUpdateRangeInvoking()
         End Sub
@@ -125,22 +131,43 @@ Namespace TestDomainServices
         End Property
 
         ''' <summary>
-        ''' Gets or sets the 'ThrowException' value.
+        ''' Gets or sets the 'ThrowDomainException' value.
         ''' </summary>
         <DataMember()>
-        Public Property ThrowException() As Boolean
+        Public Property ThrowDomainException() As Boolean
             Get
-                Return Me._throwException
+                Return Me._throwDomainException
             End Get
             Set
-                If ((Me._throwException = Value) _
+                If ((Me._throwDomainException = Value) _
                             = False) Then
-                    Me.OnThrowExceptionChanging(Value)
-                    Me.RaiseDataMemberChanging("ThrowException")
-                    Me.ValidateProperty("ThrowException", Value)
-                    Me._throwException = Value
-                    Me.RaiseDataMemberChanged("ThrowException")
-                    Me.OnThrowExceptionChanged()
+                    Me.OnThrowDomainExceptionChanging(Value)
+                    Me.RaiseDataMemberChanging("ThrowDomainException")
+                    Me.ValidateProperty("ThrowDomainException", Value)
+                    Me._throwDomainException = Value
+                    Me.RaiseDataMemberChanged("ThrowDomainException")
+                    Me.OnThrowDomainExceptionChanged()
+                End If
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the 'ThrowValidationException' value.
+        ''' </summary>
+        <DataMember()>
+        Public Property ThrowValidationException() As Boolean
+            Get
+                Return Me._throwValidationException
+            End Get
+            Set
+                If ((Me._throwValidationException = Value) _
+                            = False) Then
+                    Me.OnThrowValidationExceptionChanging(Value)
+                    Me.RaiseDataMemberChanging("ThrowValidationException")
+                    Me.ValidateProperty("ThrowValidationException", Value)
+                    Me._throwValidationException = Value
+                    Me.RaiseDataMemberChanged("ThrowValidationException")
+                    Me.OnThrowValidationExceptionChanged()
                 End If
             End Set
         End Property

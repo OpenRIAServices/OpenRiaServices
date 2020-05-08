@@ -339,8 +339,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
             var rangeItem = new RangeItem();
 
-            // Act
             ctx.RangeItems.Add(rangeItem);
+
+            // Act
             await ctx.SubmitChangesAsync();
 
             // Verify
@@ -353,11 +354,14 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // Setup
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
-            var rangeItem = new RangeItem() { ThrowException = true };
+            var rangeItem = new RangeItem() { ThrowDomainException = true };
 
-            // Act, Verify
             ctx.RangeItems.Add(rangeItem);
-            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, false);
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "InsertRangeAsync");
+
+            // Verify
             Assert.AreEqual(25, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
         }
 
@@ -370,9 +374,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var rangeItem = new RangeItem() { Text = "test" };
             ctx.RangeItems.Attach(rangeItem);
 
+            rangeItem.Text = "updating";
+
             // Act, Verify
-            rangeItem.Text = "updated";
             await ctx.SubmitChangesAsync();
+            Assert.AreEqual("updated", rangeItem.Text);
         }
 
         [TestMethod]
@@ -381,13 +387,17 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // Setup
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
-            var rangeItem = new RangeItem() { ThrowException = true };
+            var rangeItem = new RangeItem() { ThrowDomainException = true };
             ctx.RangeItems.Attach(rangeItem);
 
-            // Act, Verify
-            rangeItem.Text = "updated";
-            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, false);
+            rangeItem.Text = "notupdating";
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "UpdateRangeAsync");
+
+            // Verify
             Assert.AreEqual(26, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
+            Assert.AreEqual("notupdating", rangeItem.Text);
         }
 
         [TestMethod]
@@ -399,9 +409,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var rangeItem = new RangeItem();
             ctx.RangeItems.Attach(rangeItem);
 
-            // Act, Verify
+            rangeItem.Text = "updating";
             rangeItem.CustomUpdateRange();
+
+            // Act, Verify
             await ctx.SubmitChangesAsync();
+            Assert.AreEqual("custom updated", rangeItem.Text);
         }
 
         [TestMethod]
@@ -410,12 +423,15 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // Setup
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
-            var rangeItem = new RangeItem() { ThrowException = true };
+            var rangeItem = new RangeItem() { ThrowDomainException = true };
             ctx.RangeItems.Attach(rangeItem);
 
-            // Act, Verify
             rangeItem.CustomUpdateRange();
-            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, false);
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "CustomUpdateRangeAsync");
+
+            // Verify
             Assert.AreEqual(28, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
         }
 
@@ -428,8 +444,9 @@ namespace OpenRiaServices.DomainServices.Client.Test
             var rangeItem = new RangeItem() { Id = 42 };
             ctx.RangeItems.Attach(rangeItem);
 
-            // Act, Verify
             ctx.RangeItems.Remove(rangeItem);
+
+            // Act, Verify
             await ctx.SubmitChangesAsync();
         }
 
@@ -439,13 +456,41 @@ namespace OpenRiaServices.DomainServices.Client.Test
         {
             // Setup
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
-            var rangeItem = new RangeItem() { Id = 42, Text = "delete", ThrowException = true };
+            var rangeItem = new RangeItem() { Id = 42, Text = "delete", ThrowDomainException = true };
             ctx.RangeItems.Attach(rangeItem);
 
-            // Act, Verify
             ctx.RangeItems.Remove(rangeItem);
-            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, false);
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "DeleteRangeAsync");
+
+            // Verify
             Assert.AreEqual(27, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
+        }
+
+        [TestMethod]
+        [Description("Test that thrown validation exceptions in task does not hinder execution of other operations")]
+        public async Task CUD_TaskAsyncWithValidationException_InTask()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItemCreated = new RangeItem() { ThrowValidationException = true };
+            var rangeItemUpdated = new RangeItem() { Id = -1, ThrowValidationException = true };
+            var rangeItemDeleted = new RangeItem() { Id = -2, ThrowValidationException = true };
+            ctx.RangeItems.Attach(rangeItemUpdated);
+            ctx.RangeItems.Attach(rangeItemDeleted);
+
+            ctx.RangeItems.Add(rangeItemCreated);
+            ctx.RangeItems.Remove(rangeItemDeleted);
+            rangeItemUpdated.Text = "updated";
+
+            // Act
+            var exception = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(ctx.SubmitChangesAsync);
+
+            // Verify
+            Assert.IsTrue(rangeItemCreated.HasValidationErrors);
+            Assert.IsTrue(rangeItemUpdated.HasValidationErrors);
+            Assert.IsTrue(rangeItemDeleted.HasValidationErrors);
         }
     }
 }

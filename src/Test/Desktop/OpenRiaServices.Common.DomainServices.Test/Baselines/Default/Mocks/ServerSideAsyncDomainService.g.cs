@@ -35,7 +35,9 @@ namespace TestDomainServices
 
         private string _text;
 
-        private bool _throwException;
+        private bool _throwDomainException;
+
+        private bool _throwValidationException;
 
         #region Extensibility Method Definitions
 
@@ -48,8 +50,10 @@ namespace TestDomainServices
         partial void OnIdChanged();
         partial void OnTextChanging(string value);
         partial void OnTextChanged();
-        partial void OnThrowExceptionChanging(bool value);
-        partial void OnThrowExceptionChanged();
+        partial void OnThrowDomainExceptionChanging(bool value);
+        partial void OnThrowDomainExceptionChanged();
+        partial void OnThrowValidationExceptionChanging(bool value);
+        partial void OnThrowValidationExceptionChanged();
         partial void OnCustomUpdateRangeInvoking();
         partial void OnCustomUpdateRangeInvoked();
 
@@ -115,25 +119,49 @@ namespace TestDomainServices
         }
 
         /// <summary>
-        /// Gets or sets the 'ThrowException' value.
+        /// Gets or sets the 'ThrowDomainException' value.
         /// </summary>
         [DataMember()]
-        public bool ThrowException
+        public bool ThrowDomainException
         {
             get
             {
-                return this._throwException;
+                return this._throwDomainException;
             }
             set
             {
-                if ((this._throwException != value))
+                if ((this._throwDomainException != value))
                 {
-                    this.OnThrowExceptionChanging(value);
-                    this.RaiseDataMemberChanging("ThrowException");
-                    this.ValidateProperty("ThrowException", value);
-                    this._throwException = value;
-                    this.RaiseDataMemberChanged("ThrowException");
-                    this.OnThrowExceptionChanged();
+                    this.OnThrowDomainExceptionChanging(value);
+                    this.RaiseDataMemberChanging("ThrowDomainException");
+                    this.ValidateProperty("ThrowDomainException", value);
+                    this._throwDomainException = value;
+                    this.RaiseDataMemberChanged("ThrowDomainException");
+                    this.OnThrowDomainExceptionChanged();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the 'ThrowValidationException' value.
+        /// </summary>
+        [DataMember()]
+        public bool ThrowValidationException
+        {
+            get
+            {
+                return this._throwValidationException;
+            }
+            set
+            {
+                if ((this._throwValidationException != value))
+                {
+                    this.OnThrowValidationExceptionChanging(value);
+                    this.RaiseDataMemberChanging("ThrowValidationException");
+                    this.ValidateProperty("ThrowValidationException", value);
+                    this._throwValidationException = value;
+                    this.RaiseDataMemberChanged("ThrowValidationException");
+                    this.OnThrowValidationExceptionChanged();
                 }
             }
         }

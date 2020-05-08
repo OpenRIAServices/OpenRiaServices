@@ -7,6 +7,7 @@ using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using System.Runtime.CompilerServices;
 
 namespace TestDomainServices
 {
@@ -21,7 +22,10 @@ namespace TestDomainServices
         public string Text { get; set; }
 
         [DataMember]
-        public bool ThrowException { get; set; }
+        public bool ThrowDomainException { get; set; }
+
+        [DataMember]
+        public bool ThrowValidationException { get; set; }
     }
 
     [EnableClientAccess]
@@ -109,8 +113,7 @@ namespace TestDomainServices
         public async Task InsertRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-            if (rangeItem.ThrowException)
-                throw new DomainException(nameof(InsertRangeAsync), 25);
+            ThrowExceptionIfSelected(rangeItem, 25);
             rangeItem.Id = 42;
         }
 
@@ -123,8 +126,8 @@ namespace TestDomainServices
         public async Task UpdateRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-            if (rangeItem.ThrowException)
-                throw new DomainException(nameof(UpdateRangeAsync), 26);
+            rangeItem.Text = "updated";
+            ThrowExceptionIfSelected(rangeItem, 26);
         }
 
         /// <summary>
@@ -136,8 +139,8 @@ namespace TestDomainServices
         public async Task CustomUpdateRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-            if (rangeItem.ThrowException)
-                throw new DomainException(nameof(CustomUpdateRangeAsync), 28);
+            rangeItem.Text = "custom updated";
+            ThrowExceptionIfSelected(rangeItem, 28);
         }
 
         /// <summary>
@@ -149,8 +152,7 @@ namespace TestDomainServices
         public async Task DeleteRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-            if (rangeItem.ThrowException)
-                throw new DomainException(nameof(DeleteRangeAsync), 27);
+            ThrowExceptionIfSelected(rangeItem, 27);
         }
 
         /// <summary>
@@ -262,6 +264,14 @@ namespace TestDomainServices
                 {
                     throw new DomainException("InvokeWithExceptionTask", 24);
                 });
+        }
+
+        private static void ThrowExceptionIfSelected(RangeItem rangeItem, int errorCode, [CallerMemberName] string methodName = null)
+        {
+            if (rangeItem.ThrowDomainException)
+                throw new DomainException(methodName, errorCode);
+            else if (rangeItem.ThrowValidationException)
+                throw new ValidationException(methodName);
         }
     }
 }
