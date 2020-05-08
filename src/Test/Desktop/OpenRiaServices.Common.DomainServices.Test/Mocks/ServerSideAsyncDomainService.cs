@@ -19,17 +19,9 @@ namespace TestDomainServices
 
         [DataMember]
         public string Text { get; set; }
-    }
-
-    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")]
-    public class RangeItem2
-    {
-        [Key]
-        [DataMember]
-        public int Id { get; set; }
 
         [DataMember]
-        public string Text { get; set; }
+        public bool ThrowException { get; set; }
     }
 
     [EnableClientAccess]
@@ -59,10 +51,6 @@ namespace TestDomainServices
         public IQueryable<RangeItem> GetRange()
         {
             return _items.AsQueryable();
-        }
-        public IEnumerable<RangeItem2> GetRange2()
-        {
-            return Enumerable.Empty<RangeItem2>();
         }
 
         /// <summary>
@@ -121,23 +109,13 @@ namespace TestDomainServices
         public async Task InsertRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
+            if (rangeItem.ThrowException)
+                throw new DomainException(nameof(InsertRangeAsync), 25);
             rangeItem.Id = 42;
         }
 
         /// <summary>
-        /// Insert operation that throws exception in task
-        /// </summary>
-        /// <param name="rangeItem">Item to insert</param>
-        /// <returns></returns>
-        [Insert]
-        public async Task InsertRangeAsyncThrowsException(RangeItem2 rangeItem)
-        {
-            await Delay(5);
-            throw new DomainException(nameof(InsertRangeAsyncThrowsException), 25);
-        }
-
-        /// <summary>
-        /// Update operation that performs a short delay.
+        /// Update operation
         /// </summary>
         /// <param name="rangeItem">Item to update</param>
         /// <returns></returns>
@@ -145,18 +123,8 @@ namespace TestDomainServices
         public async Task UpdateRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-        }
-
-        /// <summary>
-        /// Async update operation that throws an exception in task
-        /// </summary>
-        /// <param name="rangeItem"></param>
-        /// <returns></returns>
-        [Update]
-        public async Task UpdateRangeAsyncThrowsException(RangeItem2 rangeItem)
-        {
-            await Delay(5);
-            throw new DomainException(nameof(UpdateRangeAsyncThrowsException), 26);
+            if (rangeItem.ThrowException)
+                throw new DomainException(nameof(UpdateRangeAsync), 26);
         }
 
         /// <summary>
@@ -168,18 +136,8 @@ namespace TestDomainServices
         public async Task CustomUpdateRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-        }
-
-        /// <summary>
-        /// Custom Async update operation that throws an exception in task
-        /// </summary>
-        /// <param name="rangeItem"></param>
-        /// <returns></returns>
-        [EntityAction]
-        public async Task CustomUpdateRangeAsyncThrowsException(RangeItem2 rangeItem)
-        {
-            await Delay(5);
-            throw new DomainException(nameof(CustomUpdateRangeAsyncThrowsException), 28);
+            if (rangeItem.ThrowException)
+                throw new DomainException(nameof(CustomUpdateRangeAsync), 28);
         }
 
         /// <summary>
@@ -191,20 +149,8 @@ namespace TestDomainServices
         public async Task DeleteRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
-            rangeItem.Text = "deleted";
-            Console.WriteLine(nameof(DeleteRangeAsync));
-        }
-
-        /// <summary>
-        /// Delete operation that throws an exception in task
-        /// </summary>
-        /// <param name="rangeItem"></param>
-        /// <returns></returns>
-        [Delete]
-        public async Task DeleteRangeAsyncThrowsException(RangeItem2 rangeItem)
-        {
-            await Delay(1);
-            throw new DomainException(nameof(DeleteRangeAsyncThrowsException), 27);
+            if (rangeItem.ThrowException)
+                throw new DomainException(nameof(DeleteRangeAsync), 27);
         }
 
         /// <summary>
@@ -265,18 +211,6 @@ namespace TestDomainServices
         /// Tests invoke returning Task{reference type}
         /// </remarks>
         public Task<string> GreetAsync(string client)
-        {
-            return Delay(1)
-                .ContinueWith(t => string.Format("Hello {0}", client));
-        }
-
-        /// <summary>
-        /// Adds one to the number sent by client.
-        /// </summary>
-        /// <remarks>
-        /// Tests invoke returning Task{reference type}
-        /// </remarks>
-        public Task<string> GreetWithoutAsyncInName(string client)
         {
             return Delay(1)
                 .ContinueWith(t => string.Format("Hello {0}", client));

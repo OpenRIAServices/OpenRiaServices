@@ -39,6 +39,8 @@ Namespace TestDomainServices
 
         Private _text As String
 
+        Private _throwException As Boolean
+
 #Region "Extensibility Method Definitions"
 
         ''' <summary>
@@ -54,6 +56,10 @@ Namespace TestDomainServices
         Partial Private Sub OnTextChanging(ByVal value As String)
         End Sub
         Partial Private Sub OnTextChanged()
+        End Sub
+        Partial Private Sub OnThrowExceptionChanging(ByVal value As Boolean)
+        End Sub
+        Partial Private Sub OnThrowExceptionChanged()
         End Sub
         Partial Private Sub OnCustomUpdateRangeInvoking()
         End Sub
@@ -119,6 +125,27 @@ Namespace TestDomainServices
         End Property
 
         ''' <summary>
+        ''' Gets or sets the 'ThrowException' value.
+        ''' </summary>
+        <DataMember()>
+        Public Property ThrowException() As Boolean
+            Get
+                Return Me._throwException
+            End Get
+            Set
+                If ((Me._throwException = Value) _
+                            = False) Then
+                    Me.OnThrowExceptionChanging(Value)
+                    Me.RaiseDataMemberChanging("ThrowException")
+                    Me.ValidateProperty("ThrowException", Value)
+                    Me._throwException = Value
+                    Me.RaiseDataMemberChanged("ThrowException")
+                    Me.OnThrowExceptionChanged()
+                End If
+            End Set
+        End Property
+
+        ''' <summary>
         ''' Gets a value indicating whether the 'CustomUpdateRange' action has been invoked on this entity.
         ''' </summary>
         <Display(AutoGenerateField:=False)>
@@ -155,136 +182,6 @@ Namespace TestDomainServices
             Me.OnCustomUpdateRangeInvoking()
             MyBase.InvokeAction("CustomUpdateRange")
             Me.OnCustomUpdateRangeInvoked()
-        End Sub
-    End Class
-
-    ''' <summary>
-    ''' The 'RangeItem2' entity class.
-    ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")>
-    Partial Public NotInheritable Class RangeItem2
-        Inherits Entity
-
-        Private _id As Integer
-
-        Private _text As String
-
-#Region "Extensibility Method Definitions"
-
-        ''' <summary>
-        ''' This method is invoked from the constructor once initialization is complete and
-        ''' can be used for further object setup.
-        ''' </summary>
-        Partial Private Sub OnCreated()
-        End Sub
-        Partial Private Sub OnIdChanging(ByVal value As Integer)
-        End Sub
-        Partial Private Sub OnIdChanged()
-        End Sub
-        Partial Private Sub OnTextChanging(ByVal value As String)
-        End Sub
-        Partial Private Sub OnTextChanged()
-        End Sub
-        Partial Private Sub OnCustomUpdateRangeAsyncThrowsExceptionInvoking()
-        End Sub
-        Partial Private Sub OnCustomUpdateRangeAsyncThrowsExceptionInvoked()
-        End Sub
-
-#End Region
-
-
-        ''' <summary>
-        ''' Initializes a new instance of the <see cref="RangeItem2"/> class.
-        ''' </summary>
-        Public Sub New()
-            MyBase.New
-            Me.OnCreated()
-        End Sub
-
-        'The following attributes were not generated:
-        '
-        '- The attribute 'System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute' is not visible in the client project 'VBWpfClient'. Are you missing an assembly reference?
-        '<RoundtripOriginalAttribute()> _
-        '
-        ''' <summary>
-        ''' Gets or sets the 'Id' value.
-        ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key()>
-        Public Property Id() As Integer
-            Get
-                Return Me._id
-            End Get
-            Set
-                If ((Me._id = Value) _
-                            = False) Then
-                    Me.OnIdChanging(Value)
-                    Me.ValidateProperty("Id", Value)
-                    Me._id = Value
-                    Me.RaisePropertyChanged("Id")
-                    Me.OnIdChanged()
-                End If
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets or sets the 'Text' value.
-        ''' </summary>
-        <DataMember()>
-        Public Property Text() As String
-            Get
-                Return Me._text
-            End Get
-            Set
-                If (String.Equals(Me._text, Value) = False) Then
-                    Me.OnTextChanging(Value)
-                    Me.RaiseDataMemberChanging("Text")
-                    Me.ValidateProperty("Text", Value)
-                    Me._text = Value
-                    Me.RaiseDataMemberChanged("Text")
-                    Me.OnTextChanged()
-                End If
-            End Set
-        End Property
-
-        ''' <summary>
-        ''' Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' action has been invoked on this entity.
-        ''' </summary>
-        <Display(AutoGenerateField:=False)>
-        Public ReadOnly Property IsCustomUpdateRangeAsyncThrowsExceptionInvoked() As Boolean
-            Get
-                Return MyBase.IsActionInvoked("CustomUpdateRangeAsyncThrowsException")
-            End Get
-        End Property
-
-        ''' <summary>
-        ''' Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' method can be invoked on this entity.
-        ''' </summary>
-        <Display(AutoGenerateField:=False)>
-        Public ReadOnly Property CanCustomUpdateRangeAsyncThrowsException() As Boolean
-            Get
-                Return MyBase.CanInvokeAction("CustomUpdateRangeAsyncThrowsException")
-            End Get
-        End Property
-
-        ''' <summary>
-        ''' Computes a value from the key fields that uniquely identifies this entity instance.
-        ''' </summary>
-        ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
-        Public Overrides Function GetIdentity() As Object
-            Return Me._id
-        End Function
-
-        ''' <summary>
-        ''' Invokes the 'CustomUpdateRangeAsyncThrowsException' action on this entity.
-        ''' </summary>
-        <DebuggerStepThrough(),
-         EntityAction("CustomUpdateRangeAsyncThrowsException", AllowMultipleInvocations:=False)>
-        Public Sub CustomUpdateRangeAsyncThrowsException()
-            Me.OnCustomUpdateRangeAsyncThrowsExceptionInvoking()
-            MyBase.InvokeAction("CustomUpdateRangeAsyncThrowsException")
-            Me.OnCustomUpdateRangeAsyncThrowsExceptionInvoked()
         End Sub
     End Class
 
@@ -340,15 +237,6 @@ Namespace TestDomainServices
         End Property
 
         ''' <summary>
-        ''' Gets the set of <see cref="RangeItem2"/> entity instances that have been loaded into this <see cref="ServerSideAsyncDomainContext"/> instance.
-        ''' </summary>
-        Public ReadOnly Property RangeItem2s() As EntitySet(Of RangeItem2)
-            Get
-                Return MyBase.EntityContainer.GetEntitySet(Of RangeItem2)
-            End Get
-        End Property
-
-        ''' <summary>
         ''' Gets an EntityQuery instance that can be used to load <see cref="RangeItem"/> entity instances using the 'GetQueryableRange' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem"/> entity instances.</returns>
@@ -382,15 +270,6 @@ Namespace TestDomainServices
         Public Function GetRangeQuery() As EntityQuery(Of RangeItem)
             Me.ValidateMethod("GetRangeQuery", Nothing)
             Return MyBase.CreateQuery(Of RangeItem)("GetRange", Nothing, False, True)
-        End Function
-
-        ''' <summary>
-        ''' Gets an EntityQuery instance that can be used to load <see cref="RangeItem2"/> entity instances using the 'GetRange2' query.
-        ''' </summary>
-        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem2"/> entity instances.</returns>
-        Public Function GetRange2Query() As EntityQuery(Of RangeItem2)
-            Me.ValidateMethod("GetRange2Query", Nothing)
-            Return MyBase.CreateQuery(Of RangeItem2)("GetRange2", Nothing, False, True)
         End Function
 
         ''' <summary>
@@ -435,14 +314,6 @@ Namespace TestDomainServices
         ''' <param name="rangeItem">The <see cref="RangeItem"/> entity instance.</param>
         Public Sub CustomUpdateRange(ByVal rangeItem As RangeItem)
             rangeItem.CustomUpdateRange()
-        End Sub
-
-        ''' <summary>
-        ''' Invokes the 'CustomUpdateRangeAsyncThrowsException' method of the specified <see cref="RangeItem2"/> entity.
-        ''' </summary>
-        ''' <param name="rangeItem">The <see cref="RangeItem2"/> entity instance.</param>
-        Public Sub CustomUpdateRangeAsyncThrowsException(ByVal rangeItem As RangeItem2)
-            rangeItem.CustomUpdateRangeAsyncThrowsException()
         End Sub
 
         ''' <summary>
@@ -840,23 +711,6 @@ Namespace TestDomainServices
             Function EndGetRange(ByVal result As IAsyncResult) As QueryResult(Of RangeItem)
 
             ''' <summary>
-            ''' Asynchronously invokes the 'GetRange2' operation.
-            ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False),
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRange2", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRange2Response")>
-            Function BeginGetRange2(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetRange2'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetRange2'.</param>
-            ''' <returns>The 'QueryResult' returned from the 'GetRange2' operation.</returns>
-            Function EndGetRange2(ByVal result As IAsyncResult) As QueryResult(Of RangeItem2)
-
-            ''' <summary>
             ''' Asynchronously invokes the 'GetRangeById' operation.
             ''' </summary>
             ''' <param name="id">The value for the 'id' parameter of this action.</param>
@@ -1004,7 +858,6 @@ Namespace TestDomainServices
             Public Sub New()
                 MyBase.New
                 Me.CreateEntitySet(Of RangeItem)(EntitySetOperations.All)
-                Me.CreateEntitySet(Of RangeItem2)(EntitySetOperations.All)
             End Sub
         End Class
     End Class

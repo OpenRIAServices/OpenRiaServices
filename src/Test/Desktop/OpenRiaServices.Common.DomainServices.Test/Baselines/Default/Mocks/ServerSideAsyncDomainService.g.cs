@@ -35,6 +35,8 @@ namespace TestDomainServices
 
         private string _text;
 
+        private bool _throwException;
+
         #region Extensibility Method Definitions
 
         /// <summary>
@@ -46,6 +48,8 @@ namespace TestDomainServices
         partial void OnIdChanged();
         partial void OnTextChanging(string value);
         partial void OnTextChanged();
+        partial void OnThrowExceptionChanging(bool value);
+        partial void OnThrowExceptionChanged();
         partial void OnCustomUpdateRangeInvoking();
         partial void OnCustomUpdateRangeInvoked();
 
@@ -111,6 +115,30 @@ namespace TestDomainServices
         }
 
         /// <summary>
+        /// Gets or sets the 'ThrowException' value.
+        /// </summary>
+        [DataMember()]
+        public bool ThrowException
+        {
+            get
+            {
+                return this._throwException;
+            }
+            set
+            {
+                if ((this._throwException != value))
+                {
+                    this.OnThrowExceptionChanging(value);
+                    this.RaiseDataMemberChanging("ThrowException");
+                    this.ValidateProperty("ThrowException", value);
+                    this._throwException = value;
+                    this.RaiseDataMemberChanged("ThrowException");
+                    this.OnThrowExceptionChanged();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the 'CustomUpdateRange' action has been invoked on this entity.
         /// </summary>
         [Display(AutoGenerateField = false)]
@@ -157,138 +185,6 @@ namespace TestDomainServices
     }
 
     /// <summary>
-    /// The 'RangeItem2' entity class.
-    /// </summary>
-    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")]
-    public sealed partial class RangeItem2 : Entity
-    {
-
-        private int _id;
-
-        private string _text;
-
-        #region Extensibility Method Definitions
-
-        /// <summary>
-        /// This method is invoked from the constructor once initialization is complete and
-        /// can be used for further object setup.
-        /// </summary>
-        partial void OnCreated();
-        partial void OnIdChanging(int value);
-        partial void OnIdChanged();
-        partial void OnTextChanging(string value);
-        partial void OnTextChanged();
-        partial void OnCustomUpdateRangeAsyncThrowsExceptionInvoking();
-        partial void OnCustomUpdateRangeAsyncThrowsExceptionInvoked();
-
-        #endregion
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RangeItem2"/> class.
-        /// </summary>
-        public RangeItem2()
-        {
-            this.OnCreated();
-        }
-
-        /// <summary>
-        /// Gets or sets the 'Id' value.
-        /// </summary>
-        [DataMember()]
-        [Editable(false, AllowInitialValue = true)]
-        [Key()]
-        [RoundtripOriginal()]
-        public int Id
-        {
-            get
-            {
-                return this._id;
-            }
-            set
-            {
-                if ((this._id != value))
-                {
-                    this.OnIdChanging(value);
-                    this.ValidateProperty("Id", value);
-                    this._id = value;
-                    this.RaisePropertyChanged("Id");
-                    this.OnIdChanged();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the 'Text' value.
-        /// </summary>
-        [DataMember()]
-        public string Text
-        {
-            get
-            {
-                return this._text;
-            }
-            set
-            {
-                if ((this._text != value))
-                {
-                    this.OnTextChanging(value);
-                    this.RaiseDataMemberChanging("Text");
-                    this.ValidateProperty("Text", value);
-                    this._text = value;
-                    this.RaiseDataMemberChanged("Text");
-                    this.OnTextChanged();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' action has been invoked on this entity.
-        /// </summary>
-        [Display(AutoGenerateField = false)]
-        public bool IsCustomUpdateRangeAsyncThrowsExceptionInvoked
-        {
-            get
-            {
-                return base.IsActionInvoked("CustomUpdateRangeAsyncThrowsException");
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the 'CustomUpdateRangeAsyncThrowsException' method can be invoked on this entity.
-        /// </summary>
-        [Display(AutoGenerateField = false)]
-        public bool CanCustomUpdateRangeAsyncThrowsException
-        {
-            get
-            {
-                return base.CanInvokeAction("CustomUpdateRangeAsyncThrowsException");
-            }
-        }
-
-        /// <summary>
-        /// Computes a value from the key fields that uniquely identifies this entity instance.
-        /// </summary>
-        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
-        public override object GetIdentity()
-        {
-            return this._id;
-        }
-
-        /// <summary>
-        /// Invokes the 'CustomUpdateRangeAsyncThrowsException' action on this entity.
-        /// </summary>
-        [DebuggerStepThrough()]
-        [EntityAction("CustomUpdateRangeAsyncThrowsException", AllowMultipleInvocations = false)]
-        public void CustomUpdateRangeAsyncThrowsException()
-        {
-            this.OnCustomUpdateRangeAsyncThrowsExceptionInvoking();
-            base.InvokeAction("CustomUpdateRangeAsyncThrowsException");
-            this.OnCustomUpdateRangeAsyncThrowsExceptionInvoked();
-        }
-    }
-
-    /// <summary>
     /// The DomainContext corresponding to the 'ServerSideAsyncDomainService' DomainService.
     /// </summary>
     public sealed partial class ServerSideAsyncDomainContext : DomainContext
@@ -309,7 +205,7 @@ namespace TestDomainServices
         /// Initializes a new instance of the <see cref="ServerSideAsyncDomainContext"/> class.
         /// </summary>
         public ServerSideAsyncDomainContext() :
-            this(new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative))
+                this(new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative))
         {
         }
 
@@ -318,7 +214,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="serviceUri">The ServerSideAsyncDomainService service URI.</param>
         public ServerSideAsyncDomainContext(Uri serviceUri) :
-            this(DomainContext.CreateDomainClient(typeof(IServerSideAsyncDomainServiceContract), serviceUri, false))
+                this(DomainContext.CreateDomainClient(typeof(IServerSideAsyncDomainServiceContract), serviceUri, false))
         {
         }
 
@@ -327,7 +223,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
         public ServerSideAsyncDomainContext(DomainClient domainClient) :
-            base(domainClient)
+                base(domainClient)
         {
             this.OnCreated();
         }
@@ -340,17 +236,6 @@ namespace TestDomainServices
             get
             {
                 return base.EntityContainer.GetEntitySet<RangeItem>();
-            }
-        }
-
-        /// <summary>
-        /// Gets the set of <see cref="RangeItem2"/> entity instances that have been loaded into this <see cref="ServerSideAsyncDomainContext"/> instance.
-        /// </summary>
-        public EntitySet<RangeItem2> RangeItem2s
-        {
-            get
-            {
-                return base.EntityContainer.GetEntitySet<RangeItem2>();
             }
         }
 
@@ -392,16 +277,6 @@ namespace TestDomainServices
         {
             this.ValidateMethod("GetRangeQuery", null);
             return base.CreateQuery<RangeItem>("GetRange", null, false, true);
-        }
-
-        /// <summary>
-        /// Gets an EntityQuery instance that can be used to load <see cref="RangeItem2"/> entity instances using the 'GetRange2' query.
-        /// </summary>
-        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="RangeItem2"/> entity instances.</returns>
-        public EntityQuery<RangeItem2> GetRange2Query()
-        {
-            this.ValidateMethod("GetRange2Query", null);
-            return base.CreateQuery<RangeItem2>("GetRange2", null, false, true);
         }
 
         /// <summary>
@@ -450,15 +325,6 @@ namespace TestDomainServices
         public void CustomUpdateRange(RangeItem rangeItem)
         {
             rangeItem.CustomUpdateRange();
-        }
-
-        /// <summary>
-        /// Invokes the 'CustomUpdateRangeAsyncThrowsException' method of the specified <see cref="RangeItem2"/> entity.
-        /// </summary>
-        /// <param name="rangeItem">The <see cref="RangeItem2"/> entity instance.</param>
-        public void CustomUpdateRangeAsyncThrowsException(RangeItem2 rangeItem)
-        {
-            rangeItem.CustomUpdateRangeAsyncThrowsException();
         }
 
         /// <summary>
@@ -879,23 +745,6 @@ namespace TestDomainServices
             QueryResult<RangeItem> EndGetRange(IAsyncResult result);
 
             /// <summary>
-            /// Asynchronously invokes the 'GetRange2' operation.
-            /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            [OperationContract(AsyncPattern = true, Action = "http://tempuri.org/ServerSideAsyncDomainService/GetRange2", ReplyAction = "http://tempuri.org/ServerSideAsyncDomainService/GetRange2Response")]
-            IAsyncResult BeginGetRange2(AsyncCallback callback, object asyncState);
-
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetRange2'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetRange2'.</param>
-            /// <returns>The 'QueryResult' returned from the 'GetRange2' operation.</returns>
-            QueryResult<RangeItem2> EndGetRange2(IAsyncResult result);
-
-            /// <summary>
             /// Asynchronously invokes the 'GetRangeById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
@@ -1043,8 +892,8 @@ namespace TestDomainServices
             public ServerSideAsyncDomainContextEntityContainer()
             {
                 this.CreateEntitySet<RangeItem>(EntitySetOperations.All);
-                this.CreateEntitySet<RangeItem2>(EntitySetOperations.All);
             }
         }
     }
 }
+
