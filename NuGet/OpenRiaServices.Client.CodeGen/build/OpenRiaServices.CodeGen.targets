@@ -363,14 +363,13 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       <Output ItemName="OpenRiaClientLinkedFiles" TaskParameter="LinkedFiles" />
 
       <Output ItemName="FileWrites" TaskParameter="GeneratedFiles" />
-      <!-- <Output ItemName="FileWrites" TaskParameter="CopiedFiles" /> -->
-      <!--<Output ItemName="FileWrites" TaskParameter="OutputFiles" />-->
+      <Output ItemName="FileWrites" TaskParameter="CopiedFiles" /> 
     </CreateOpenRiaClientFilesTask>
 
     <ItemGroup>
       <!-- Inform the compiler of the newly generated and copied files -->
       <Compile Include="@(OpenRiaClientGeneratedFiles)" KeepDuplicates="false" />
-      <Compile Include="@(OpenRiaClientCopiedFiles)" KeepDuplicates="false" />
+      <Compile Include="@(OpenRiaClientSharedFiles)" KeepDuplicates="false" />
     </ItemGroup>
 
   </Target>

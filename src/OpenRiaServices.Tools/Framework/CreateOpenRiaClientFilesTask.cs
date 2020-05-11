@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Web.Compilation;
@@ -535,8 +533,7 @@ namespace OpenRiaServices.Tools
                 // We do the copy first so that we know which files are shared between projects
                 if (this.IsServerProjectAvailable)
                 {
-                    if (!LinkSharedFilesInsteadOfCopy)
-                        this.CopySharedFiles();
+                    this.CopySharedFiles();
                     this.GenerateClientProxies();
                 }
 
@@ -1146,25 +1143,10 @@ namespace OpenRiaServices.Tools
         /// <summary>
         /// Adds the given file name to the list returned by <see cref="CopiedFiles"/>.
         /// </summary>
-        /// <param name="sourceFilePath">The absolute path of a file.</param>
-        /// <param name="destinationFilePath">The absolute path of a file.</param>
-        /// 
-        private void AddCopiedFile(string sourceFilePath, string destinationFilePath)
+        /// <param name="fileName">The absolute path of a file.</param>
+        private void AddCopiedFile(string fileName)
         {
-            if (LinkSharedFilesInsteadOfCopy)
-            {
-                // ClientProjectDirectory is without "/" so add 1 to get relative path starting with "Generated_Code"
-                string relativePath = destinationFilePath.Substring(ClientProjectDirectory.Length + 1);
-                Debug.Assert(relativePath[0] == GeneratedCodeFolderName[0]);
-
-                var metadata = new SortedList(initialCapacity: 1) { { "Link", relativePath } };
-                this._copiedFiles.Add(new TaskItem(sourceFilePath, metadata));
-
-            }
-            else
-            {
-                this._copiedFiles.Add(new TaskItem(destinationFilePath));
-            }
+            this._copiedFiles.Add(new TaskItem(fileName));
         }
 
         /// <summary>
@@ -1234,6 +1216,9 @@ namespace OpenRiaServices.Tools
         /// </remarks>
         private void CopySharedFiles()
         {
+            if (LinkSharedFilesInsteadOfCopy)
+                return;
+
             Dictionary<string, IList<string>> sharedFilesByProject = this.SharedFilesByProject;
             HashSet<string> fileHash = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -1284,8 +1269,7 @@ namespace OpenRiaServices.Tools
             }
 
             // Keep track of all files that are logically copied, even if we find it is current
-            this.AddCopiedFile(sourceFilePath, destinationFilePath);
-
+            this.AddCopiedFile(destinationFilePath);
             // Don't do any work unless the inputs are newer.
             // Note: we are sensitive to a VS TextBuffer being dirty as being newer
             if (this.IsFileWriteTimeDifferent(sourceFilePath, destinationFilePath))
