@@ -353,7 +353,8 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
        IsClientApplication="$(OpenRiaGenerateApplicationContext)"
        UseFullTypeNames="$(OpenRiaClientUseFullTypeNames)"
        ClientAssemblySearchPaths="@(OpenRiaClientCodeGenClientAssemblySearchPath)"
-       CodeGeneratorName="$(OpenRiaClientCodeGeneratorName)">
+       CodeGeneratorName="$(OpenRiaClientCodeGeneratorName)"
+       CopyOrLinkSharedFiles="Link">
 
       <!-- Copy the task outputs to global item collections for other tasks -->
       <Output ItemName="OpenRiaClientGeneratedFiles" TaskParameter="GeneratedFiles" />
@@ -361,19 +362,17 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       <Output ItemName="OpenRiaClientCopiedFiles" TaskParameter="CopiedFiles" />
       <Output ItemName="OpenRiaClientLinkedFiles" TaskParameter="LinkedFiles" />
 
-      <!-- Inform the compiler of the newly generated and copied files -->
-      <Output ItemName="Compile" TaskParameter="GeneratedFiles" />
-      <Output ItemName="Compile" TaskParameter="CopiedFiles" />
-
       <Output ItemName="FileWrites" TaskParameter="GeneratedFiles" />
-      <Output ItemName="FileWrites" TaskParameter="CopiedFiles" />
-
+      <!-- <Output ItemName="FileWrites" TaskParameter="CopiedFiles" /> -->
+      <!--<Output ItemName="FileWrites" TaskParameter="OutputFiles" />-->
     </CreateOpenRiaClientFilesTask>
 
-  </Target>
+    <ItemGroup>
+      <!-- Inform the compiler of the newly generated and copied files -->
+      <Compile Include="@(OpenRiaClientGeneratedFiles)" KeepDuplicates="false" />
+      <Compile Include="@(OpenRiaClientCopiedFiles)" KeepDuplicates="false" />
+    </ItemGroup>
 
-  <!-- Import the WCF targets for proxy generation if it exists -->
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets"
-          Condition="'$(SilverlightVersion)' != '' and Exists('$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.VisualStudio.ServiceModel.targets')" />
+  </Target>
 
 </Project>

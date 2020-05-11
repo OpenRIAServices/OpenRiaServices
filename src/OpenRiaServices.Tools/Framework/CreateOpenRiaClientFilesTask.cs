@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Web.Compilation;
@@ -129,6 +131,14 @@ namespace OpenRiaServices.Tools
         public string CodeGeneratorName { get; set; }
 
         /// <summary>
+        /// Gets the string form of a boolean that indicates
+        /// whether the shared files should be copied (instead of linked).
+        /// </summary>
+        public string CopyOrLinkSharedFiles { set => LinkSharedFilesInsteadOfCopy = string.Equals(value, "Link", StringComparison.OrdinalIgnoreCase); }
+
+        private bool LinkSharedFilesInsteadOfCopy { get; set; } = true;
+
+        /// <summary>
         /// Gets the list of code files created by this task.
         /// </summary>
         /// <value>
@@ -161,9 +171,9 @@ namespace OpenRiaServices.Tools
             {
                 Dictionary<string, IList<string>> sharedFilesByProject = this.SharedFilesByProject;
                 List<ITaskItem> result = new List<ITaskItem>();
-                foreach (IList<string> files in sharedFilesByProject.Values)
+                foreach (var filesByProject in sharedFilesByProject)
                 {
-                    foreach (string file in files)
+                    foreach (string file in filesByProject.Value)
                     {
                         result.Add(new TaskItem(file));
                     }
@@ -305,11 +315,12 @@ namespace OpenRiaServices.Tools
         /// <value>
         /// This list is a concatenation of <see cref="GeneratedFiles"/> and <see cref="CopiedFiles"/>.
         /// </value>
-        internal IEnumerable<ITaskItem> OutputFiles
+        [Output]
+        public IEnumerable<ITaskItem> OutputFiles
         {
             get
             {
-                return this.GeneratedFiles.Concat(this.CopiedFiles);
+                return (LinkSharedFilesInsteadOfCopy) ? GeneratedFiles : GeneratedFiles.Concat(CopiedFiles);
             }
         }
 
@@ -377,7 +388,7 @@ namespace OpenRiaServices.Tools
         {
             get
             {
-                if(string.IsNullOrEmpty(ClientFrameworkPath))
+                if (string.IsNullOrEmpty(ClientFrameworkPath))
                     return TargetPlatform.Unknown;
 
                 if (ClientFrameworkPath.IndexOf("Silverlight", StringComparison.InvariantCultureIgnoreCase) != -1)
@@ -524,7 +535,8 @@ namespace OpenRiaServices.Tools
                 // We do the copy first so that we know which files are shared between projects
                 if (this.IsServerProjectAvailable)
                 {
-                    this.CopySharedFiles();
+                    if (!LinkSharedFilesInsteadOfCopy)
+                        this.CopySharedFiles();
                     this.GenerateClientProxies();
                 }
 
@@ -966,7 +978,7 @@ namespace OpenRiaServices.Tools
                 this._projectFileReader.Dispose();
                 this._projectFileReader = null;
             }
-            }
+        }
 
         /// <summary>
         /// Issue a build warning if we cannot find a PDB file for the given assembly
@@ -1134,10 +1146,25 @@ namespace OpenRiaServices.Tools
         /// <summary>
         /// Adds the given file name to the list returned by <see cref="CopiedFiles"/>.
         /// </summary>
-        /// <param name="fileName">The absolute path of a file.</param>
-        private void AddCopiedFile(string fileName)
+        /// <param name="sourceFilePath">The absolute path of a file.</param>
+        /// <param name="destinationFilePath">The absolute path of a file.</param>
+        /// 
+        private void AddCopiedFile(string sourceFilePath, string destinationFilePath)
         {
-            this._copiedFiles.Add(new TaskItem(fileName));
+            if (LinkSharedFilesInsteadOfCopy)
+            {
+                // ClientProjectDirectory is without "/" so add 1 to get relative path starting with "Generated_Code"
+                string relativePath = destinationFilePath.Substring(ClientProjectDirectory.Length + 1);
+                Debug.Assert(relativePath[0] == GeneratedCodeFolderName[0]);
+
+                var metadata = new SortedList(initialCapacity: 1) { { "Link", relativePath } };
+                this._copiedFiles.Add(new TaskItem(sourceFilePath, metadata));
+
+            }
+            else
+            {
+                this._copiedFiles.Add(new TaskItem(destinationFilePath));
+            }
         }
 
         /// <summary>
@@ -1257,7 +1284,7 @@ namespace OpenRiaServices.Tools
             }
 
             // Keep track of all files that are logically copied, even if we find it is current
-            this.AddCopiedFile(destinationFilePath);
+            this.AddCopiedFile(sourceFilePath, destinationFilePath);
 
             // Don't do any work unless the inputs are newer.
             // Note: we are sensitive to a VS TextBuffer being dirty as being newer
