@@ -14,6 +14,7 @@ namespace Cities
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.ServiceModel;
@@ -676,6 +677,20 @@ namespace Cities
         }
         
         /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="Zip"/> entity instances using the 'GetZipsWithDelay' query.
+        /// </summary>
+        /// <param name="delay">The value for the 'delay' parameter of the query.</param>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Zip"/> entity instances.</returns>
+        [DebuggerStepThrough()]
+        public EntityQuery<Zip> GetZipsWithDelayQuery(TimeSpan delay)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("delay", delay);
+            this.ValidateMethod("GetZipsWithDelayQuery", parameters);
+            return base.CreateQuery<Zip>("GetZipsWithDelay", parameters, false, true);
+        }
+        
+        /// <summary>
         /// Invokes the 'AssignCityZone' method of the specified <see cref="City"/> entity.
         /// </summary>
         /// <param name="city">The <see cref="City"/> entity instance.</param>
@@ -785,6 +800,57 @@ namespace Cities
             parameters.Add("msg", msg);
             this.ValidateMethod("Echo", parameters);
             return this.InvokeOperationAsync<string>("Echo", parameters, true, cancellationToken);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'EchoWithDelay' method of the DomainService.
+        /// </summary>
+        /// <param name="msg">The value for the 'msg' parameter of this action.</param>
+        /// <param name="delay">The value for the 'delay' parameter of this action.</param>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        [DebuggerStepThrough()]
+        public InvokeOperation<string> EchoWithDelay(string msg, TimeSpan delay, Action<InvokeOperation<string>> callback, object userState)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("msg", msg);
+            parameters.Add("delay", delay);
+            this.ValidateMethod("EchoWithDelay", parameters);
+            return this.InvokeOperation<string>("EchoWithDelay", typeof(string), parameters, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'EchoWithDelay' method of the DomainService.
+        /// </summary>
+        /// <param name="msg">The value for the 'msg' parameter of this action.</param>
+        /// <param name="delay">The value for the 'delay' parameter of this action.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        [DebuggerStepThrough()]
+        public InvokeOperation<string> EchoWithDelay(string msg, TimeSpan delay)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("msg", msg);
+            parameters.Add("delay", delay);
+            this.ValidateMethod("EchoWithDelay", parameters);
+            return this.InvokeOperation<string>("EchoWithDelay", typeof(string), parameters, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'EchoWithDelay' method of the DomainService.
+        /// </summary>
+        /// <param name="msg">The value for the 'msg' parameter of this action.</param>
+        /// <param name="delay">The value for the 'delay' parameter of this action.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        [DebuggerStepThrough()]
+        public System.Threading.Tasks.Task<InvokeResult<string>> EchoWithDelayAsync(string msg, TimeSpan delay, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("msg", msg);
+            parameters.Add("delay", delay);
+            this.ValidateMethod("EchoWithDelay", parameters);
+            return this.InvokeOperationAsync<string>("EchoWithDelay", parameters, true, cancellationToken);
         }
         
         /// <summary>
@@ -928,6 +994,25 @@ namespace Cities
             /// <param name="result">The IAsyncResult returned from 'BeginEcho'.</param>
             /// <returns>The 'String' returned from the 'Echo' operation.</returns>
             string EndEcho(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'EchoWithDelay' operation.
+            /// </summary>
+            /// <param name="msg">The value for the 'msg' parameter of this action.</param>
+            /// <param name="delay">The value for the 'delay' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/CityDomainService/EchoWithDelay", ReplyAction="http://tempuri.org/CityDomainService/EchoWithDelayResponse")]
+            IAsyncResult BeginEchoWithDelay(string msg, TimeSpan delay, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginEchoWithDelay'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginEchoWithDelay'.</param>
+            /// <returns>The 'String' returned from the 'EchoWithDelay' operation.</returns>
+            string EndEchoWithDelay(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCities' operation.
@@ -1152,6 +1237,24 @@ namespace Cities
             /// <param name="result">The IAsyncResult returned from 'BeginGetZipsIfUser'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetZipsIfUser' operation.</returns>
             QueryResult<Zip> EndGetZipsIfUser(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetZipsWithDelay' operation.
+            /// </summary>
+            /// <param name="delay">The value for the 'delay' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/CityDomainService/GetZipsWithDelay", ReplyAction="http://tempuri.org/CityDomainService/GetZipsWithDelayResponse")]
+            IAsyncResult BeginGetZipsWithDelay(TimeSpan delay, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetZipsWithDelay'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetZipsWithDelay'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetZipsWithDelay' operation.</returns>
+            QueryResult<Zip> EndGetZipsWithDelay(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'ResetData' operation.

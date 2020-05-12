@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
-using OpenRiaServices;
+using System.Threading.Tasks;
 using OpenRiaServices.DomainServices;
 using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
@@ -121,6 +121,15 @@ namespace Cities
         }
 
         [Query]
+        public async Task<IQueryable<Zip>> GetZipsWithDelay(TimeSpan delay)
+        {
+            // This method is used to test cancellation of query operations
+            // Since the method might return to soon otherwise we add a delay
+            await Task.Delay(delay, ServiceContext.CancellationToken);
+            return GetZips();
+        }
+
+        [Query]
         [RequiresAuthentication]
         public IQueryable<Zip> GetZipsIfAuthenticated()
         {
@@ -195,7 +204,6 @@ namespace Cities
         }
         #endregion
 
-#pragma warning disable 618 // Service should work with the "old" approach with [EntityAction]
         #region Domain Methods
         [EntityAction]
         [CustomValidation(typeof(CityMethodValidator), "ValidateMethod")]
@@ -284,6 +292,15 @@ namespace Cities
             return "Echo: " + msg;
         }
 
+        [Invoke]
+        public async Task<string> EchoWithDelay(string msg, TimeSpan delay)
+        {
+            // This method is used to test cancellation of invoke operations
+            // Since the method might return to soon otherwise we add a delay
+            await Task.Delay(delay, ServiceContext.CancellationToken);
+            return Echo(msg);
+        }
+
         // This service operation is invoked to reset any static data
         // we retain across instances
         [Invoke]
@@ -345,7 +362,6 @@ namespace Cities
             city.EditHistory = "touch=" + touchString;
         }
         #endregion //Derived CUD/Custom/Service methods
-#pragma warning restore 618
     }
 
     /// <summary>

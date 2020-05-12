@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using SSmDsWeb::OpenRiaServices.DomainServices.Client.Web.Behaviors;
 using OpenRiaServices.DomainServices.Client.Test;
 using System.Text;
+using System.Diagnostics;
 
 namespace OpenRiaServices.DomainServices.Client.Web.Test
 {
@@ -28,6 +29,8 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
     [TestClass]
     public class WebDomainClientTests : UnitTestBase
     {
+        private TimeSpan CancellationTestTimeout { get; } = Debugger.IsAttached ? TimeSpan.FromMinutes(1) : TimeSpan.FromSeconds(10);
+
         public Exception Error
         {
             get;
@@ -164,7 +167,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
             {
                 asyncResult = this.BeginInvokeRequestAndCancel();
             });
-            this.EnqueueConditional(() => asyncResult.IsCompleted);
+            this.EnqueueConditional(() => asyncResult.IsCompleted, (int)CancellationTestTimeout.TotalSeconds);
             this.EnqueueCallback(() =>
             {
                 Assert.IsTrue(asyncResult.IsCanceled, "Task should be cancelled");
@@ -194,7 +197,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
             {
                 asyncResult = this.BeginQueryRequestAndCancel();
             });
-            this.EnqueueConditional(() => asyncResult.IsCompleted);
+            this.EnqueueConditional(() => asyncResult.IsCompleted, (int)CancellationTestTimeout.TotalSeconds);
             this.EnqueueCallback(() =>
             {
                 Assert.IsTrue(asyncResult.IsCanceled, "Task should be cancelled");
@@ -354,10 +357,28 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
 
         private Task<InvokeCompletedResult> BeginInvokeRequest(CancellationToken cancellationToken = default)
         {
-            var parameters = new Dictionary<string, object>();
-            parameters.Add("msg", "foo");
+            var parameters = new Dictionary<string, object> { { "msg", "foo" } };
+            Task<InvokeCompletedResult> result = BeginInvokeRequest("Echo", parameters, cancellationToken);
+            return result;
+        }
 
-            InvokeArgs invokeArgs = new InvokeArgs("Echo", typeof(string), parameters, true /*hasSideEffects*/);
+        private Task<InvokeCompletedResult> BeginInvokeRequestAndCancel()
+        {
+            var cts = new CancellationTokenSource();
+            var parameters = new Dictionary<string, object>
+            {
+                { "msg", "foo" },
+                { "delay", CancellationTestTimeout }
+            };
+
+            var task = this.BeginInvokeRequest("EchoWithDelay", parameters, cts.Token);
+            cts.Cancel();
+            return task;
+        }
+
+        private Task<InvokeCompletedResult> BeginInvokeRequest(string operation, IDictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            InvokeArgs invokeArgs = new InvokeArgs(operation, typeof(string), parameters, true /*hasSideEffects*/);
             var result = this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
                 .ContinueWith(task =>
                 {
@@ -378,17 +399,9 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
             return result;
         }
 
-        private Task<InvokeCompletedResult> BeginInvokeRequestAndCancel()
+        private Task<QueryCompletedResult> BeginQueryRequest(string operation = "GetZips", Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            var cts = new CancellationTokenSource();
-            var task = this.BeginInvokeRequest(cts.Token);
-            cts.Cancel();
-            return task;
-        }
-
-        private Task<QueryCompletedResult> BeginQueryRequest(CancellationToken cancellationToken = default)
-        {
-            var result = this.DomainClient.QueryAsync(new EntityQuery<Zip>(this.DomainClient, "GetZips", null, true, false), cancellationToken);
+            var result = this.DomainClient.QueryAsync(new EntityQuery<Zip>(this.DomainClient, operation, parameters, true, false), cancellationToken);
             this.AssertInProgress(result);
             return result.ContinueWith(task =>
             {
@@ -409,7 +422,8 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
         private Task<QueryCompletedResult> BeginQueryRequestAndCancel()
         {
             var cts = new CancellationTokenSource();
-            var task = this.BeginQueryRequest(cts.Token);
+            var parameters = new Dictionary<string, object> { { "delay", CancellationTestTimeout } };
+            var task = this.BeginQueryRequest("GetZipsWithDelay", parameters, cts.Token);
             cts.Cancel();
             return task;
         }
@@ -463,7 +477,7 @@ namespace OpenRiaServices.DomainServices.Client.Web.Test
                 sb.Append("/");
             }
 
-            return new Uri(sb.ToString(), UriKind.Absolute);;
+            return new Uri(sb.ToString(), UriKind.Absolute); ;
         }
 
         private void CreateDomainContext()

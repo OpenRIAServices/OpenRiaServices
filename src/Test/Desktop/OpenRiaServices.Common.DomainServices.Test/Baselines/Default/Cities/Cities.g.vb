@@ -20,6 +20,7 @@ Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
+Imports System.Diagnostics
 Imports System.Linq
 Imports System.Runtime.Serialization
 Imports System.ServiceModel
@@ -618,6 +619,19 @@ Namespace Cities
         End Function
         
         ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="Zip"/> entity instances using the 'GetZipsWithDelay' query.
+        ''' </summary>
+        ''' <param name="delay">The value for the 'delay' parameter of the query.</param>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Zip"/> entity instances.</returns>
+        <DebuggerStepThrough()>  _
+        Public Function GetZipsWithDelayQuery(ByVal delay As TimeSpan) As EntityQuery(Of Zip)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("delay", delay)
+            Me.ValidateMethod("GetZipsWithDelayQuery", parameters)
+            Return MyBase.CreateQuery(Of Zip)("GetZipsWithDelay", parameters, false, true)
+        End Function
+        
+        ''' <summary>
         ''' Invokes the 'AssignCityZone' method of the specified <see cref="City"/> entity.
         ''' </summary>
         ''' <param name="city">The <see cref="City"/> entity instance.</param>
@@ -717,6 +731,54 @@ Namespace Cities
             parameters.Add("msg", msg)
             Me.ValidateMethod("Echo", parameters)
             Return Me.InvokeOperationAsync(Of String)("Echo", parameters, true, cancellationToken)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'EchoWithDelay' method of the DomainService.
+        ''' </summary>
+        ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
+        ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        <DebuggerStepThrough()>  _
+        Public Overloads Function EchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan, ByVal callback As Action(Of InvokeOperation(Of String)), ByVal userState As Object) As InvokeOperation(Of String)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("msg", msg)
+            parameters.Add("delay", delay)
+            Me.ValidateMethod("EchoWithDelay", parameters)
+            Return Me.InvokeOperation(Of String)("EchoWithDelay", GetType(String), parameters, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'EchoWithDelay' method of the DomainService.
+        ''' </summary>
+        ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
+        ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        <DebuggerStepThrough()>  _
+        Public Overloads Function EchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan) As InvokeOperation(Of String)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("msg", msg)
+            parameters.Add("delay", delay)
+            Me.ValidateMethod("EchoWithDelay", parameters)
+            Return Me.InvokeOperation(Of String)("EchoWithDelay", GetType(String), parameters, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'EchoWithDelay' method of the DomainService.
+        ''' </summary>
+        ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
+        ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        <DebuggerStepThrough()>  _
+        Public Function EchoWithDelayAsync(ByVal msg As String, ByVal delay As TimeSpan, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of String))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("msg", msg)
+            parameters.Add("delay", delay)
+            Me.ValidateMethod("EchoWithDelay", parameters)
+            Return Me.InvokeOperationAsync(Of String)("EchoWithDelay", parameters, true, cancellationToken)
         End Function
         
         ''' <summary>
@@ -849,6 +911,25 @@ Namespace Cities
             ''' <param name="result">The IAsyncResult returned from 'BeginEcho'.</param>
             ''' <returns>The 'String' returned from the 'Echo' operation.</returns>
             Function EndEcho(ByVal result As IAsyncResult) As String
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'EchoWithDelay' operation.
+            ''' </summary>
+            ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
+            ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true),  _
+             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/CityDomainService/EchoWithDelay", ReplyAction:="http://tempuri.org/CityDomainService/EchoWithDelayResponse")>  _
+            Function BeginEchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginEchoWithDelay'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginEchoWithDelay'.</param>
+            ''' <returns>The 'String' returned from the 'EchoWithDelay' operation.</returns>
+            Function EndEchoWithDelay(ByVal result As IAsyncResult) As String
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCities' operation.
@@ -1073,6 +1154,24 @@ Namespace Cities
             ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsIfUser'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipsIfUser' operation.</returns>
             Function EndGetZipsIfUser(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetZipsWithDelay' operation.
+            ''' </summary>
+            ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false),  _
+             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/CityDomainService/GetZipsWithDelay", ReplyAction:="http://tempuri.org/CityDomainService/GetZipsWithDelayResponse")>  _
+            Function BeginGetZipsWithDelay(ByVal delay As TimeSpan, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetZipsWithDelay'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsWithDelay'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetZipsWithDelay' operation.</returns>
+            Function EndGetZipsWithDelay(ByVal result As IAsyncResult) As QueryResult(Of Zip)
             
             ''' <summary>
             ''' Asynchronously invokes the 'ResetData' operation.
