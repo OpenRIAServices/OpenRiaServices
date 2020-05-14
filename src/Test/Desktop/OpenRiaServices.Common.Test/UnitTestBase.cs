@@ -376,14 +376,14 @@ namespace OpenRiaServices.Silverlight.Testing
 
         public void EnqueueConditional(Func<bool> conditionalDelegate, int timeoutInSeconds, string timeoutMessage)
         {
-            DateTime endTime = DateTime.Now.AddSeconds(timeoutInSeconds);
+            DateTime endTime = DateTime.UtcNow.AddSeconds(timeoutInSeconds);
 
             this.Enqueue(
                 () =>
                 {
                     while (!conditionalDelegate())
                     {
-                        if (DateTime.Now >= endTime)
+                        if (DateTime.UtcNow >= endTime)
                         {
                             UnitTestBase.NumberOfTimeouts++;
                             Assert.Fail(UnitTestBase.ComposeTimeoutMessage(timeoutInSeconds, timeoutMessage));
