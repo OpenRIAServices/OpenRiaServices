@@ -303,8 +303,7 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     try
                     {
-                        result = await queryDescription.Method
-                            .InvokeAsync(this, parameters, out totalCount, this.ServiceContext.CancellationToken)
+                        result = await queryDescription.Method.InvokeAsync(this, parameters, out totalCount, this.ServiceContext.CancellationToken)
                             .ConfigureAwait(false);
                     }
                     catch (TargetInvocationException tie)
@@ -784,8 +783,10 @@ namespace OpenRiaServices.DomainServices.Server
         /// <returns>True if the <see cref="ChangeSet"/> was processed successfully, false otherwise.</returns>
         protected virtual async ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
         {
-            await this.InvokeCudOperationsAsync().ConfigureAwait(false);
-            await this.InvokeCustomOperations().ConfigureAwait(false);
+            await this.InvokeCudOperationsAsync()
+                .ConfigureAwait(false);
+            await this.InvokeCustomOperations()
+                .ConfigureAwait(false);
 
             return !this.ChangeSet.HasError;
         }

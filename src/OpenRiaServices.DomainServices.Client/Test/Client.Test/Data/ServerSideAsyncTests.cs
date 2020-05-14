@@ -342,10 +342,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ctx.RangeItems.Add(rangeItem);
 
             // Act
-            await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync();
 
             // Verify
             Assert.AreEqual(42, rangeItem.Id);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
         }
 
         [TestMethod]
@@ -376,9 +377,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             rangeItem.Text = "updating";
 
-            // Act, Verify
-            await ctx.SubmitChangesAsync();
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
             Assert.AreEqual("updated", rangeItem.Text);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
         }
 
         [TestMethod]
@@ -412,9 +416,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             rangeItem.Text = "updating";
             rangeItem.CustomUpdateRange();
 
-            // Act, Verify
-            await ctx.SubmitChangesAsync();
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
             Assert.AreEqual("custom updated", rangeItem.Text);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
         }
 
         [TestMethod]
@@ -446,8 +453,11 @@ namespace OpenRiaServices.DomainServices.Client.Test
 
             ctx.RangeItems.Remove(rangeItem);
 
-            // Act, Verify
-            await ctx.SubmitChangesAsync();
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
         }
 
         [TestMethod]
