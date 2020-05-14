@@ -20,7 +20,6 @@ Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
-Imports System.Diagnostics
 Imports System.Linq
 Imports System.Runtime.Serialization
 Imports System.ServiceModel
@@ -623,7 +622,6 @@ Namespace Cities
         ''' </summary>
         ''' <param name="delay">The value for the 'delay' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Zip"/> entity instances.</returns>
-        <DebuggerStepThrough()>  _
         Public Function GetZipsWithDelayQuery(ByVal delay As TimeSpan) As EntityQuery(Of Zip)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("delay", delay)
@@ -741,7 +739,6 @@ Namespace Cities
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        <DebuggerStepThrough()>  _
         Public Overloads Function EchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan, ByVal callback As Action(Of InvokeOperation(Of String)), ByVal userState As Object) As InvokeOperation(Of String)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("msg", msg)
@@ -756,7 +753,6 @@ Namespace Cities
         ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
         ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        <DebuggerStepThrough()>  _
         Public Overloads Function EchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan) As InvokeOperation(Of String)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("msg", msg)
@@ -772,7 +768,6 @@ Namespace Cities
         ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        <DebuggerStepThrough()>  _
         Public Function EchoWithDelayAsync(ByVal msg As String, ByVal delay As TimeSpan, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of String))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("msg", msg)

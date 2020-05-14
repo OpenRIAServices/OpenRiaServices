@@ -14,7 +14,6 @@ namespace Cities
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Serialization;
     using System.ServiceModel;
@@ -681,7 +680,6 @@ namespace Cities
         /// </summary>
         /// <param name="delay">The value for the 'delay' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Zip"/> entity instances.</returns>
-        [DebuggerStepThrough()]
         public EntityQuery<Zip> GetZipsWithDelayQuery(TimeSpan delay)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -810,7 +808,6 @@ namespace Cities
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        [DebuggerStepThrough()]
         public InvokeOperation<string> EchoWithDelay(string msg, TimeSpan delay, Action<InvokeOperation<string>> callback, object userState)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -826,7 +823,6 @@ namespace Cities
         /// <param name="msg">The value for the 'msg' parameter of this action.</param>
         /// <param name="delay">The value for the 'delay' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        [DebuggerStepThrough()]
         public InvokeOperation<string> EchoWithDelay(string msg, TimeSpan delay)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -843,7 +839,6 @@ namespace Cities
         /// <param name="delay">The value for the 'delay' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        [DebuggerStepThrough()]
         public System.Threading.Tasks.Task<InvokeResult<string>> EchoWithDelayAsync(string msg, TimeSpan delay, CancellationToken cancellationToken = default(CancellationToken))
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
