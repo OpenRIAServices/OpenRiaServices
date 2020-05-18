@@ -1838,8 +1838,7 @@ namespace OpenRiaServices.DomainServices.Server
             }
 
             // return type should be void for domain operations which are not invoke or query
-            if ((operation != DomainOperation.Invoke && operation != DomainOperation.Query)
-                && (returnType != typeof(void) || operationEntry.IsTaskAsync))
+            if (operation != DomainOperation.Invoke && operation != DomainOperation.Query && returnType != typeof(void))
             {
                 error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, methodName));
                 return false;

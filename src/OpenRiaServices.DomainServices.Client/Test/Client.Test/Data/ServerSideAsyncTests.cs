@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
@@ -318,7 +318,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
             const int expectedErrorCode = 24;
             const string expectedMessage = "InvokeWithExceptionTask";
 
-            var invoke = ctx.InvokeWithException(delay:3);
+            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -329,6 +329,178 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 Assert.AreEqual(expectedMessage, dex.Message, "Wrong error message");
             });
             this.EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task Insert operation is executed and waited for")]
+        public async Task Insert_TaskAsync()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem();
+
+            ctx.RangeItems.Add(rangeItem);
+
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
+            Assert.AreEqual(42, rangeItem.Id);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async Insert methods are propagated")]
+        public async Task Insert_TaskAsyncWithException_InTask()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem() { ThrowDomainException = true };
+
+            ctx.RangeItems.Add(rangeItem);
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "InsertRangeAsync");
+
+            // Verify
+            Assert.AreEqual(25, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task Update operation is executed and waited for")]
+        public async Task Update_TaskAsync()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem() { Text = "test" };
+            ctx.RangeItems.Attach(rangeItem);
+
+            rangeItem.Text = "updating";
+
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
+            Assert.AreEqual("updated", rangeItem.Text);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async Update methods are propagated")]
+        public async Task Update_TaskAsyncWithException_InTask()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem() { ThrowDomainException = true };
+            ctx.RangeItems.Attach(rangeItem);
+
+            rangeItem.Text = "notupdating";
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "UpdateRangeAsync");
+
+            // Verify
+            Assert.AreEqual(26, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
+            Assert.AreEqual("notupdating", rangeItem.Text);
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task EntityAction operation is executed")]
+        public async Task EntityAction_TaskAsync()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem();
+            ctx.RangeItems.Attach(rangeItem);
+
+            rangeItem.Text = "updating";
+            rangeItem.CustomUpdateRange();
+
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
+            Assert.AreEqual("custom updated", rangeItem.Text);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async EntityAction methods are propagated")]
+        public async Task EntityAction_TaskAsyncWithException_InTask()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem() { ThrowDomainException = true };
+            ctx.RangeItems.Attach(rangeItem);
+
+            rangeItem.CustomUpdateRange();
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "CustomUpdateRangeAsync");
+
+            // Verify
+            Assert.AreEqual(28, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
+        }
+
+        [TestMethod]
+        [Description("Tests that an async Task Delete operation is executed and waited for")]
+        public async Task Delete_TaskAsync()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem() { Id = 42 };
+            ctx.RangeItems.Attach(rangeItem);
+
+            ctx.RangeItems.Remove(rangeItem);
+
+            // Act
+            var result = await ctx.SubmitChangesAsync();
+
+            // Verify
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
+        }
+
+        [TestMethod]
+        [Description("Test that exceptions thrown in Task from Task async Delete methods are propagated")]
+        public async Task Delete_TaskAsyncWithException_InTask()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItem = new RangeItem() { Id = 42, Text = "delete", ThrowDomainException = true };
+            ctx.RangeItems.Attach(rangeItem);
+
+            ctx.RangeItems.Remove(rangeItem);
+
+            // Act
+            var domainException = await ExceptionHelper.ExpectExceptionAsync<DomainException>(ctx.SubmitChangesAsync, "DeleteRangeAsync");
+
+            // Verify
+            Assert.AreEqual(27, domainException.ErrorCode, "Wrong error code returned or expected operation was not executed");
+        }
+
+        [TestMethod]
+        [Description("Test that thrown validation exceptions in task does not hinder execution of other operations")]
+        public async Task CUD_TaskAsyncWithValidationException_InTask()
+        {
+            // Setup
+            var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
+            var rangeItemCreated = new RangeItem() { ThrowValidationException = true };
+            var rangeItemUpdated = new RangeItem() { Id = -1, ThrowValidationException = true };
+            var rangeItemDeleted = new RangeItem() { Id = -2, ThrowValidationException = true };
+            ctx.RangeItems.Attach(rangeItemUpdated);
+            ctx.RangeItems.Attach(rangeItemDeleted);
+
+            ctx.RangeItems.Add(rangeItemCreated);
+            ctx.RangeItems.Remove(rangeItemDeleted);
+            rangeItemUpdated.Text = "updated";
+
+            // Act
+            var exception = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(ctx.SubmitChangesAsync);
+
+            // Verify
+            Assert.IsTrue(rangeItemCreated.HasValidationErrors);
+            Assert.IsTrue(rangeItemUpdated.HasValidationErrors);
+            Assert.IsTrue(rangeItemDeleted.HasValidationErrors);
         }
     }
 }

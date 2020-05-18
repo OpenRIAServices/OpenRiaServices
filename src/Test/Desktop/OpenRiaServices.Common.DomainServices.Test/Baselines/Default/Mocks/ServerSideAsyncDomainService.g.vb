@@ -31,13 +31,17 @@ Namespace TestDomainServices
     ''' <summary>
     ''' The 'RangeItem' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")> _
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/ServerSideAsyncDomainService")>
     Partial Public NotInheritable Class RangeItem
         Inherits Entity
 
         Private _id As Integer
 
         Private _text As String
+
+        Private _throwDomainException As Boolean
+
+        Private _throwValidationException As Boolean
 
 #Region "Extensibility Method Definitions"
 
@@ -55,6 +59,18 @@ Namespace TestDomainServices
         End Sub
         Partial Private Sub OnTextChanged()
         End Sub
+        Partial Private Sub OnThrowDomainExceptionChanging(ByVal value As Boolean)
+        End Sub
+        Partial Private Sub OnThrowDomainExceptionChanged()
+        End Sub
+        Partial Private Sub OnThrowValidationExceptionChanging(ByVal value As Boolean)
+        End Sub
+        Partial Private Sub OnThrowValidationExceptionChanged()
+        End Sub
+        Partial Private Sub OnCustomUpdateRangeInvoking()
+        End Sub
+        Partial Private Sub OnCustomUpdateRangeInvoked()
+        End Sub
 
 #End Region
 
@@ -63,35 +79,31 @@ Namespace TestDomainServices
         ''' Initializes a new instance of the <see cref="RangeItem"/> class.
         ''' </summary>
         Public Sub New()
-            MyBase.New()
+            MyBase.New
             Me.OnCreated()
         End Sub
 
         'The following attributes were not generated:
         '
-        '- The attribute 'System.ComponentModel.DataAnnotations.EditableAttribute' is not visible in the client project 'VBWpfApplication1'. Are you missing an assembly reference?
-        '<EditableAttribute(False, AllowInitialValue := True)> _
-        '
-        '- The attribute 'System.ComponentModel.DataAnnotations.KeyAttribute' is not visible in the client project 'VBWpfApplication1'. Are you missing an assembly reference?
-        '<KeyAttribute()> _
-        '
-        '- The attribute 'System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute' is not visible in the client project 'VBWpfApplication1'. Are you missing an assembly reference?
+        '- The attribute 'System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute' is not visible in the client project 'VBWpfClient'. Are you missing an assembly reference?
         '<RoundtripOriginalAttribute()> _
         '
         ''' <summary>
         ''' Gets or sets the 'Id' value.
         ''' </summary>
-        <DataMember()> _
+        <DataMember(),
+         Editable(False, AllowInitialValue:=True),
+         Key()>
         Public Property Id() As Integer
             Get
                 Return Me._id
             End Get
-            Set(value As Integer)
-                If ((Me._id = value) _
+            Set
+                If ((Me._id = Value) _
                             = False) Then
-                    Me.OnIdChanging(value)
-                    Me.ValidateProperty("Id", value)
-                    Me._id = value
+                    Me.OnIdChanging(Value)
+                    Me.ValidateProperty("Id", Value)
+                    Me._id = Value
                     Me.RaisePropertyChanged("Id")
                     Me.OnIdChanged()
                 End If
@@ -101,21 +113,83 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the 'Text' value.
         ''' </summary>
-        <DataMember()> _
+        <DataMember()>
         Public Property Text() As String
             Get
                 Return Me._text
             End Get
-            Set(value As String)
-                If (String.Equals(Me._text, value) = False) Then
-                    Me.OnTextChanging(value)
+            Set
+                If (String.Equals(Me._text, Value) = False) Then
+                    Me.OnTextChanging(Value)
                     Me.RaiseDataMemberChanging("Text")
-                    Me.ValidateProperty("Text", value)
-                    Me._text = value
+                    Me.ValidateProperty("Text", Value)
+                    Me._text = Value
                     Me.RaiseDataMemberChanged("Text")
                     Me.OnTextChanged()
                 End If
             End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the 'ThrowDomainException' value.
+        ''' </summary>
+        <DataMember()>
+        Public Property ThrowDomainException() As Boolean
+            Get
+                Return Me._throwDomainException
+            End Get
+            Set
+                If ((Me._throwDomainException = Value) _
+                            = False) Then
+                    Me.OnThrowDomainExceptionChanging(Value)
+                    Me.RaiseDataMemberChanging("ThrowDomainException")
+                    Me.ValidateProperty("ThrowDomainException", Value)
+                    Me._throwDomainException = Value
+                    Me.RaiseDataMemberChanged("ThrowDomainException")
+                    Me.OnThrowDomainExceptionChanged()
+                End If
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the 'ThrowValidationException' value.
+        ''' </summary>
+        <DataMember()>
+        Public Property ThrowValidationException() As Boolean
+            Get
+                Return Me._throwValidationException
+            End Get
+            Set
+                If ((Me._throwValidationException = Value) _
+                            = False) Then
+                    Me.OnThrowValidationExceptionChanging(Value)
+                    Me.RaiseDataMemberChanging("ThrowValidationException")
+                    Me.ValidateProperty("ThrowValidationException", Value)
+                    Me._throwValidationException = Value
+                    Me.RaiseDataMemberChanged("ThrowValidationException")
+                    Me.OnThrowValidationExceptionChanged()
+                End If
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets a value indicating whether the 'CustomUpdateRange' action has been invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=False)>
+        Public ReadOnly Property IsCustomUpdateRangeInvoked() As Boolean
+            Get
+                Return MyBase.IsActionInvoked("CustomUpdateRange")
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Gets a value indicating whether the 'CustomUpdateRange' method can be invoked on this entity.
+        ''' </summary>
+        <Display(AutoGenerateField:=False)>
+        Public ReadOnly Property CanCustomUpdateRange() As Boolean
+            Get
+                Return MyBase.CanInvokeAction("CustomUpdateRange")
+            End Get
         End Property
 
         ''' <summary>
@@ -125,6 +199,17 @@ Namespace TestDomainServices
         Public Overrides Function GetIdentity() As Object
             Return Me._id
         End Function
+
+        ''' <summary>
+        ''' Invokes the 'CustomUpdateRange' action on this entity.
+        ''' </summary>
+        <DebuggerStepThrough(),
+         EntityAction("CustomUpdateRange", AllowMultipleInvocations:=False)>
+        Public Sub CustomUpdateRange()
+            Me.OnCustomUpdateRangeInvoking()
+            MyBase.InvokeAction("CustomUpdateRange")
+            Me.OnCustomUpdateRangeInvoked()
+        End Sub
     End Class
 
     ''' <summary>
@@ -174,7 +259,7 @@ Namespace TestDomainServices
         ''' </summary>
         Public ReadOnly Property RangeItems() As EntitySet(Of RangeItem)
             Get
-                Return MyBase.EntityContainer.GetEntitySet(Of RangeItem)()
+                Return MyBase.EntityContainer.GetEntitySet(Of RangeItem)
             End Get
         End Property
 
@@ -251,6 +336,14 @@ Namespace TestDomainServices
         End Function
 
         ''' <summary>
+        ''' Invokes the 'CustomUpdateRange' method of the specified <see cref="RangeItem"/> entity.
+        ''' </summary>
+        ''' <param name="rangeItem">The <see cref="RangeItem"/> entity instance.</param>
+        Public Sub CustomUpdateRange(ByVal rangeItem As RangeItem)
+            rangeItem.CustomUpdateRange()
+        End Sub
+
+        ''' <summary>
         ''' Asynchronously invokes the 'AddNullableOne' method of the DomainService.
         ''' </summary>
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
@@ -282,7 +375,7 @@ Namespace TestDomainServices
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function AddNullableOneAsync(ByVal number As Nullable(Of Integer), Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of Nullable(Of Integer)))
+        Public Function AddNullableOneAsync(ByVal number As Nullable(Of Integer), Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of Nullable(Of Integer)))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
             Me.ValidateMethod("AddNullableOne", parameters)
@@ -321,7 +414,7 @@ Namespace TestDomainServices
         ''' <param name="number">The value for the 'number' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function AddOneAsync(ByVal number As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of Integer))
+        Public Function AddOneAsync(ByVal number As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of Integer))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("number", number)
             Me.ValidateMethod("AddOne", parameters)
@@ -353,7 +446,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function GetLastDelayAsync(Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of TimeSpan))
+        Public Function GetLastDelayAsync(Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of TimeSpan))
             Me.ValidateMethod("GetLastDelay", Nothing)
             Return Me.InvokeOperationAsync(Of TimeSpan)("GetLastDelay", Nothing, True, cancellationToken)
         End Function
@@ -390,7 +483,7 @@ Namespace TestDomainServices
         ''' <param name="client">The value for the 'client' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function GreetAsync(ByVal client As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult(Of String))
+        Public Function GreetAsync(ByVal client As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of String))
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("client", client)
             Me.ValidateMethod("Greet", parameters)
@@ -422,7 +515,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function InvokeWithExceptionFirstAsync(Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult)
+        Public Function InvokeWithExceptionFirstAsync(Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult)
             Me.ValidateMethod("InvokeWithExceptionFirst", Nothing)
             Return Me.InvokeOperationAsync("InvokeWithExceptionFirst", Nothing, True, cancellationToken)
         End Function
@@ -459,7 +552,7 @@ Namespace TestDomainServices
         ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function InvokeWithException(ByVal delay As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult)
+        Public Function InvokeWithExceptionTaskAsync(ByVal delay As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("delay", delay)
             Me.ValidateMethod("InvokeWithExceptionTask", parameters)
@@ -498,7 +591,7 @@ Namespace TestDomainServices
         ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function SleepAndSetLastDelayAsync(ByVal delay As TimeSpan, Optional ByVal cancellationToken As CancellationToken = Nothing) As Task(Of InvokeResult)
+        Public Function SleepAndSetLastDelayAsync(ByVal delay As TimeSpan, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
             parameters.Add("delay", delay)
             Me.ValidateMethod("SleepAndSetLastDelay", parameters)
@@ -516,7 +609,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Service contract for the 'ServerSideAsyncDomainService' DomainService.
         ''' </summary>
-        <ServiceContract()> _
+        <ServiceContract()>
         Public Interface IServerSideAsyncDomainServiceContract
 
             ''' <summary>
@@ -526,8 +619,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOne", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOne", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddNullableOneResponse")>
             Function BeginAddNullableOne(ByVal number As Nullable(Of Integer), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -544,8 +637,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddOne", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddOneResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/AddOne", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/AddOneResponse")>
             Function BeginAddOne(ByVal number As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -561,8 +654,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetLastDelay", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetLastDelayResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetLastDelay", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetLastDelayResponse")>
             Function BeginGetLastDelay(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -578,9 +671,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRange", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeRespons" & _
-                "e")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRange", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeResponse")>
             Function BeginGetQueryableRange(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -596,10 +688,10 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionFir" & _
-                "st", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionFir" & _
-                "stResponse")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionFir" &
+                "st", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionFir" &
+                "stResponse")>
             Function BeginGetQueryableRangeWithExceptionFirst(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -615,10 +707,10 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionTas" & _
-                "k", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionTas" & _
-                "kResponse")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionTas" &
+                "k", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetQueryableRangeWithExceptionTas" &
+                "kResponse")>
             Function BeginGetQueryableRangeWithExceptionTask(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -634,8 +726,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRange", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeResponse")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRange", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeResponse")>
             Function BeginGetRange(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -652,8 +744,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeById", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdResponse")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeById", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdResponse")>
             Function BeginGetRangeById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -670,9 +762,9 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionFirst", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionFirstRes" & _
-                "ponse")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionFirst", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionFirstRes" &
+                "ponse")>
             Function BeginGetRangeByIdWithExceptionFirst(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -689,9 +781,9 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(False), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionTask", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionTaskResp" & _
-                "onse")> _
+            <HasSideEffects(False),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionTask", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GetRangeByIdWithExceptionTaskResp" &
+                "onse")>
             Function BeginGetRangeByIdWithExceptionTask(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -708,8 +800,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/Greet", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GreetResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/Greet", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/GreetResponse")>
             Function BeginGreet(ByVal client As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -725,8 +817,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionFirst", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionFirstResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionFirst", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionFirstResponse")>
             Function BeginInvokeWithExceptionFirst(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -742,8 +834,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionTask", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionTaskResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionTask", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/InvokeWithExceptionTaskResponse")>
             Function BeginInvokeWithExceptionTask(ByVal delay As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -759,8 +851,8 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(True), _
-             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/SleepAndSetLastDelay", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/SleepAndSetLastDelayResponse")> _
+            <HasSideEffects(True),
+             OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/SleepAndSetLastDelay", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/SleepAndSetLastDelayResponse")>
             Function BeginSleepAndSetLastDelay(ByVal delay As TimeSpan, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
 
             ''' <summary>
@@ -768,14 +860,31 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSleepAndSetLastDelay'.</param>
             Sub EndSleepAndSetLastDelay(ByVal result As IAsyncResult)
+
+            ''' <summary>
+            ''' Asynchronously invokes the 'SubmitChanges' operation.
+            ''' </summary>
+            ''' <param name="changeSet">The change-set to submit.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <OperationContract(AsyncPattern:=True, Action:="http://tempuri.org/ServerSideAsyncDomainService/SubmitChanges", ReplyAction:="http://tempuri.org/ServerSideAsyncDomainService/SubmitChangesResponse")>
+            Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
+            ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
+            Function EndSubmitChanges(ByVal result As IAsyncResult) As IEnumerable(Of ChangeSetEntry)
         End Interface
 
         Friend NotInheritable Class ServerSideAsyncDomainContextEntityContainer
             Inherits EntityContainer
 
             Public Sub New()
-                MyBase.New()
-                Me.CreateEntitySet(Of RangeItem)(EntitySetOperations.None)
+                MyBase.New
+                Me.CreateEntitySet(Of RangeItem)(EntitySetOperations.All)
             End Sub
         End Class
     End Class

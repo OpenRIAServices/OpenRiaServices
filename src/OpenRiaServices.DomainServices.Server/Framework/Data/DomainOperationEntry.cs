@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.DomainServices.Server
@@ -352,8 +353,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// </summary>
         /// <param name="domainService">The <see cref="DomainService"/> instance the operation is being invoked on.</param>
         /// <param name="parameters">The parameters to pass to the method.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to signal cancellation of this operation</param>
         /// <returns>The return value of the invoked method.</returns>
-        public abstract object Invoke(DomainService domainService, object[] parameters);
+        public abstract ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the type of domain operation implemented by the method.
@@ -405,8 +407,9 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="domainService">The <see cref="DomainService"/> instance the operation is being invoked on.</param>
         /// <param name="parameters">The parameters to pass to the method.</param>
         /// <param name="totalCount">The total number of rows for the input query without any paging applied to it.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to signal cancellation of this operation</param>
         /// <returns>The return value of the invoked method.</returns>
-        internal object Invoke(DomainService domainService, object[] parameters, out int totalCount)
+        internal ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, out int totalCount, CancellationToken cancellationToken)
         {
             if (this.HasOutCountParameter)
             {
@@ -414,18 +417,21 @@ namespace OpenRiaServices.DomainServices.Server
                 parameters.CopyTo(parametersWithCount, 0);
                 parametersWithCount[parameters.Length] = 0;
 
-                object result = this.Invoke(domainService, parametersWithCount);
+                object result = this.InvokeAsync(domainService, parametersWithCount, cancellationToken)
+                    .GetAwaiter() // Cant use await since method has out parameter
+                    .GetResult();
+
                 totalCount = (int)parametersWithCount[parameters.Length];
-                return result;
+                return new ValueTask<object>(result);
             }
             else
             {
                 totalCount = DomainService.TotalCountUndefined;
-                return this.Invoke(domainService, parameters);
+                return this.InvokeAsync(domainService, parameters, cancellationToken);
             }
         }
 
-        internal ValueTask<object> UnwrapTaskResult(object result)
+        private protected ValueTask<object> UnwrapTaskResult(object result)
         {
             if (!IsTaskAsync)
                 return new ValueTask<object>(result);

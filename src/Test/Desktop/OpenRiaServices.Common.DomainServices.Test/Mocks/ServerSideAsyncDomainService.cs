@@ -7,6 +7,7 @@ using OpenRiaServices.DomainServices.Hosting;
 using OpenRiaServices.DomainServices.Server;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using System.Runtime.CompilerServices;
 
 namespace TestDomainServices
 {
@@ -19,6 +20,12 @@ namespace TestDomainServices
 
         [DataMember]
         public string Text { get; set; }
+
+        [DataMember]
+        public bool ThrowDomainException { get; set; }
+
+        [DataMember]
+        public bool ThrowValidationException { get; set; }
     }
 
     [EnableClientAccess]
@@ -98,6 +105,57 @@ namespace TestDomainServices
         }
 
         /// <summary>
+        /// Insert operation
+        /// </summary>
+        /// <param name="rangeItem">Item to insert</param>
+        /// <returns></returns>
+        [Insert]
+        public async Task InsertRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+            ThrowExceptionIfSelected(rangeItem, 25);
+            rangeItem.Id = 42;
+        }
+
+        /// <summary>
+        /// Update operation
+        /// </summary>
+        /// <param name="rangeItem">Item to update</param>
+        /// <returns></returns>
+        [Update]
+        public async Task UpdateRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+            rangeItem.Text = "updated";
+            ThrowExceptionIfSelected(rangeItem, 26);
+        }
+
+        /// <summary>
+        /// Custom Async update operation that performs a short delay.
+        /// </summary>
+        /// <param name="rangeItem"></param>
+        /// <returns></returns>
+        [EntityAction]
+        public async Task CustomUpdateRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+            rangeItem.Text = "custom updated";
+            ThrowExceptionIfSelected(rangeItem, 28);
+        }
+
+        /// <summary>
+        /// Delete operation
+        /// </summary>
+        /// <param name="rangeItem">Item to delete</param>
+        /// <returns></returns>
+        [Delete]
+        public async Task DeleteRangeAsync(RangeItem rangeItem)
+        {
+            await Delay(5);
+            ThrowExceptionIfSelected(rangeItem, 27);
+        }
+
+        /// <summary>
         /// Single item Query throwing exception directly
         /// </summary>
         /// <param name="id">The identifier.</param>
@@ -164,18 +222,6 @@ namespace TestDomainServices
         /// Adds one to the number sent by client.
         /// </summary>
         /// <remarks>
-        /// Tests invoke returning Task{reference type}
-        /// </remarks>
-        public Task<string> GreetWithoutAsyncInName(string client)
-        {
-            return Delay(1)
-                .ContinueWith(t => string.Format("Hello {0}", client));
-        }
-
-        /// <summary>
-        /// Adds one to the number sent by client.
-        /// </summary>
-        /// <remarks>
         /// Tests invoke returning Task{value type}
         /// </remarks>
         public Task<int> AddOneAsync(int number)
@@ -218,6 +264,14 @@ namespace TestDomainServices
                 {
                     throw new DomainException("InvokeWithExceptionTask", 24);
                 });
+        }
+
+        private static void ThrowExceptionIfSelected(RangeItem rangeItem, int errorCode, [CallerMemberName] string methodName = null)
+        {
+            if (rangeItem.ThrowDomainException)
+                throw new DomainException(methodName, errorCode);
+            else if (rangeItem.ThrowValidationException)
+                throw new ValidationException(methodName);
         }
     }
 }

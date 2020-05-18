@@ -303,11 +303,8 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     try
                     {
-                        result = queryDescription.Method.Invoke(this, parameters, out totalCount);
-                        if (queryDescription.Method.IsTaskAsync)
-                        {
-                            result = await queryDescription.Method.UnwrapTaskResult(result).ConfigureAwait(false);
-                        }
+                        result = await queryDescription.Method.InvokeAsync(this, parameters, out totalCount, this.ServiceContext.CancellationToken)
+                            .ConfigureAwait(false);
                     }
                     catch (TargetInvocationException tie)
                     {
@@ -449,11 +446,9 @@ namespace OpenRiaServices.DomainServices.Server
                 this.ServiceContext.Operation = invokeDescription.Method;
                 try
                 {
-                    object returnValue = invokeDescription.Method.Invoke(this, invokeDescription.ParameterValues);
-                    if (invokeDescription.Method.IsTaskAsync)
-                    {
-                        returnValue = await invokeDescription.Method.UnwrapTaskResult(returnValue).ConfigureAwait(false);
-                    }
+                    object returnValue = await invokeDescription.Method.InvokeAsync(this, invokeDescription.ParameterValues, cancellationToken)
+                        .ConfigureAwait(false);
+
                     return new ServiceInvokeResult(returnValue);
                 }
                 catch (TargetInvocationException tie)
@@ -786,12 +781,14 @@ namespace OpenRiaServices.DomainServices.Server
         /// This method invokes the <see cref="DomainOperationEntry"/> for each operation in the current <see cref="ChangeSet"/>.
         /// </summary>
         /// <returns>True if the <see cref="ChangeSet"/> was processed successfully, false otherwise.</returns>
-        protected virtual ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
+        protected virtual async ValueTask<bool> ExecuteChangeSetAsync(CancellationToken cancellationToken)
         {
-            this.InvokeCudOperations();
-            this.InvokeCustomOperations();
+            await this.InvokeCudOperationsAsync()
+                .ConfigureAwait(false);
+            await this.InvokeCustomOperations()
+                .ConfigureAwait(false);
 
-            return new ValueTask<bool>(!this.ChangeSet.HasError);
+            return !this.ChangeSet.HasError;
         }
 
         /// <summary>
@@ -1061,7 +1058,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Invokes all CUD operations in the current <see cref="ChangeSet"/>.
         /// </summary>
-        private void InvokeCudOperations()
+        private async Task InvokeCudOperationsAsync()
         {
             object[] parameters = new object[1];
             foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries
@@ -1085,7 +1082,9 @@ namespace OpenRiaServices.DomainServices.Server
                 }
 
                 parameters[0] = operation.Entity;
-                this.InvokeDomainOperationEntry(operation.DomainOperationEntry, parameters, operation);
+
+                await this.InvokeDomainOperationEntryAsync(operation.DomainOperationEntry, parameters, operation)
+                    .ConfigureAwait(false);
 
                 // Remove any associated entities if an error occurred.
                 if (operation.HasError)
@@ -1102,7 +1101,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <summary>
         /// Invokes all Custom operations in the <see cref="ChangeSet"/>.
         /// </summary>
-        private void InvokeCustomOperations()
+        private async Task InvokeCustomOperations()
         {
             foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
             {
@@ -1110,7 +1109,8 @@ namespace OpenRiaServices.DomainServices.Server
                 {
                     var customMethodOperation = this.ServiceDescription.GetCustomMethod(operation.Entity.GetType(), entityAction.Key);
                     object[] parameters = DomainService.GetCustomMethodParams(customMethodOperation, operation.Entity, entityAction.Value);
-                    this.InvokeDomainOperationEntry(customMethodOperation, parameters, operation);
+                    await this.InvokeDomainOperationEntryAsync(customMethodOperation, parameters, operation)
+                        .ConfigureAwait(false);
 
                     // Remove any associated entities if an error occurred.
                     if (operation.HasError)
@@ -1134,7 +1134,7 @@ namespace OpenRiaServices.DomainServices.Server
         /// <param name="parameters">The parameters to invoke domain operation entry with.</param>
         /// <param name="operation">The <see cref="ChangeSetEntry"/> object associated with the domain operation entry for logging errors (if any).</param>
         /// <returns>The result of the <see cref="DomainOperationEntry"/>.</returns>
-        private object InvokeDomainOperationEntry(DomainOperationEntry domainOperationEntry, object[] parameters, ChangeSetEntry operation)
+        private async ValueTask<object> InvokeDomainOperationEntryAsync(DomainOperationEntry domainOperationEntry, object[] parameters, ChangeSetEntry operation)
         {
             // invoke the domain operation entry and catch continuable errors if any
             this.ServiceContext.Operation = domainOperationEntry;
@@ -1143,7 +1143,8 @@ namespace OpenRiaServices.DomainServices.Server
             {
                 try
                 {
-                    return domainOperationEntry.Invoke(this, parameters);
+                    return await domainOperationEntry.InvokeAsync(this, parameters, this.ServiceContext.CancellationToken)
+                        .ConfigureAwait(false);
                 }
                 catch (TargetInvocationException tie)
                 {
@@ -1182,7 +1183,7 @@ namespace OpenRiaServices.DomainServices.Server
                 this.ServiceContext.Operation = null;
             }
 
-            return null;
+            return new ValueTask<object>((object)null);
         }
 
         /// <summary>
