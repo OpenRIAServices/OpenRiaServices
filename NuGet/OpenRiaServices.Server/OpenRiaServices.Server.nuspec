@@ -22,10 +22,10 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net46" />
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net472" />
     </frameworkAssemblies>	
 	<dependencies>
-		<group targetFramework="net46">
+		<group targetFramework="net472">
 			<dependency id="System.Threading.Tasks.Extensions" version="4.5.4"/>
 		</group>
 	</dependencies>
@@ -34,12 +34,12 @@
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net46\OpenRiaServices.DomainServices.Hosting.dll" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net46\OpenRiaServices.DomainServices.Hosting.pdb" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net46\OpenRiaServices.DomainServices.Hosting.xml" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.dll" target="lib\net46\OpenRiaServices.DomainServices.Server.dll" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.pdb" target="lib\net46\OpenRiaServices.DomainServices.Server.pdb" />
-    <file src="..\..\src\bin\Release\net46\OpenRiaServices.DomainServices.Server.xml" target="lib\net46\OpenRiaServices.DomainServices.Server.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net472\OpenRiaServices.DomainServices.Hosting.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net472\OpenRiaServices.DomainServices.Hosting.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net472\OpenRiaServices.DomainServices.Hosting.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.dll" target="lib\net472\OpenRiaServices.DomainServices.Server.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.pdb" target="lib\net472\OpenRiaServices.DomainServices.Server.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.xml" target="lib\net472\OpenRiaServices.DomainServices.Server.xml" />
     </files>
 </package>
