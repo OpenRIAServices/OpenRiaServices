@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 
@@ -69,15 +68,20 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
         }
 
 
-
-        public static string AbsolutePathFrom(this string relativePath, string currentDirectory, IFileSystem fileSystem)
+        /// <summary>
+        /// Get you an absolute path from a relativePath
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <param name="currentDirectory"></param>
+        /// <returns></returns>
+        public static string AbsolutePathFrom(this string relativePath, string currentDirectory)
         {
-            if (fileSystem.Path.IsPathRooted(relativePath))
+            if (Path.IsPathRooted(relativePath))
             {
                 return relativePath;
             }
 
-            currentDirectory = fileSystem.Path.GetFullPath(currentDirectory);
+            currentDirectory = Path.GetFullPath(currentDirectory);
             var driveletterAndColon = currentDirectory.Substring(0, 2);
             currentDirectory = currentDirectory.Remove(0, 3);
 
@@ -103,17 +107,6 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
 
             return
                 finalDirectoryPathPart.Reverse().Aggregate(new StringBuilder(driveletterAndColon), (sb, s) => sb.Append("\\").Append(s)).ToString();
-        }
-
-        /// <summary>
-        /// Get you an absolute path from a relativePath
-        /// </summary>
-        /// <param name="relativePath"></param>
-        /// <param name="currentDirectory"></param>
-        /// <returns></returns>
-        public static string AbsolutePathFrom(this string relativePath, string currentDirectory)
-        {
-            return AbsolutePathFrom(relativePath, currentDirectory, new FileSystem());
         }
     }
 
