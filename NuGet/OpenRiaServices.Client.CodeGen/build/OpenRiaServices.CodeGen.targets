@@ -23,7 +23,12 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     <!-- Use SilverlightApplication if present, otherwise check if we are building an exe -->
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(SilverlightApplication)' != '' ">$(SilverlightApplication)</OpenRiaGenerateApplicationContext>
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(OutputType)'=='exe' ">true</OpenRiaGenerateApplicationContext>
+  
   </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true'">
+         <_AvoidExpensiveCalculation>true</_AvoidExpensiveCalculation>
+     </PropertyGroup>
   
   <!--
     ============================================================

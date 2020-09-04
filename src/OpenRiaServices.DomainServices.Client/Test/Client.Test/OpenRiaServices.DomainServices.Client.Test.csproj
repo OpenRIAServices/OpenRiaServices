@@ -95,6 +95,13 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Test\WebsiteFullTrust\WebsiteFullTrust.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <PrivateAssets>All</PrivateAssets>
+      <Private>false</Private>
+      <ExcludeAssets>All</ExcludeAssets>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
     <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
