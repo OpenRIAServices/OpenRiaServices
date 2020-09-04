@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFramework>net46</TargetFramework>
-    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET46;</DefineConstants>
+    <TargetFramework>net472</TargetFramework>
+    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;net472;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />

@@ -4,7 +4,7 @@
     <NoWarn>618</NoWarn>
     <RootNamespace>CodeFirstModels</RootNamespace>
     <AssemblyName>CodeFirstModels</AssemblyName>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <DefineConstants>$(DefineConstants);DBCONTEXT</DefineConstants>
   </PropertyGroup>
   <Target Name="WriteProjectPath">
