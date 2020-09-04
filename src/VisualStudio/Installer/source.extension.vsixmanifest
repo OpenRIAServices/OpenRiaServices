@@ -16,7 +16,7 @@ For 4.6.0+</Description>
         <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Enterprise" />
     </Installation>
     <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7.2,)" />
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" AssemblyName="|OpenRiaServices.VisualStudio.DomainServices.Tools;AssemblyName|" />
