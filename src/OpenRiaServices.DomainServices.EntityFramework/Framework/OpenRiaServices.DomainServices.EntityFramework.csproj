@@ -5,7 +5,7 @@
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET46;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

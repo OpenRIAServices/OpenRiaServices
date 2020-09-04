@@ -4,7 +4,7 @@
     <TargetFramework>net46</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
   </ItemGroup>
   <ItemGroup>
