@@ -45,6 +45,10 @@ namespace OpenRiaServices.DomainServices.Hosting
                 binding.Security.Transport.ClientCredentialType = ServiceUtility.CredentialType;
             }
 
+            // Enable metadata generation
+            if (contract.Behaviors.Find<ServiceMetadataContractBehavior>() is var metadataBehaviour)
+                metadataBehaviour.MetadataGenerationDisabled = false;
+
             ServiceEndpoint endpoint = new ServiceEndpoint(contract, binding, new EndpointAddress(address.OriginalString + "/" + this.Name));
             endpoint.Behaviors.Add(new SoapQueryBehavior());
             return endpoint;

@@ -20,9 +20,11 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Services" />    
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +94,13 @@
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Test\WebsiteFullTrust\WebsiteFullTrust.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <PrivateAssets>All</PrivateAssets>
+      <Private>false</Private>
+      <ExcludeAssets>All</ExcludeAssets>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
     </ProjectReference>
     <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
