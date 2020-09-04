@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

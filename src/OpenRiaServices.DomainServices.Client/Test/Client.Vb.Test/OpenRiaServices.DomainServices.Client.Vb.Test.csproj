@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
     <NoWarn>108</NoWarn>
     <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
