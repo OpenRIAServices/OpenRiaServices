@@ -26,6 +26,11 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <VSIXSubPath>OpenRiaServices</VSIXSubPath>
+    <!-- Prevent invalid resource from beeing generated in InitializeComponent for xaml dialogs -->
+    <AssemblyVersion>
+    </AssemblyVersion>
+    <Version>
+    </Version>
   </PropertyGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
@@ -194,6 +199,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj">
+      <Project>{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}</Project>
+      <Name>OpenRiaServices.DomainServices.EntityFramework</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj">
       <Project>{82539B51-6BB5-4C04-B37D-4FA850E397CF}</Project>
       <Name>OpenRiaServices.DomainServices.Hosting.OData</Name>
@@ -260,7 +271,6 @@
   <ItemGroup>
     <Page Include="Dialog\LinkRiaDialogWindow.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
