@@ -23,12 +23,9 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     <!-- Use SilverlightApplication if present, otherwise check if we are building an exe -->
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(SilverlightApplication)' != '' ">$(SilverlightApplication)</OpenRiaGenerateApplicationContext>
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(OutputType)'=='exe' ">true</OpenRiaGenerateApplicationContext>
-  
+    <OpenRiaSharedFilesMode Condition="'$(OpenRiaSharedFilesMode)' ==''">Link</OpenRiaSharedFilesMode>
+    <_OpenRiaDesignTimeBuild Condition="'$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true'">true</_OpenRiaDesignTimeBuild> 
   </PropertyGroup>
-    
-    <PropertyGroup Condition="'$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true'">
-         <_AvoidExpensiveCalculation>true</_AvoidExpensiveCalculation>
-     </PropertyGroup>
   
   <!--
     ============================================================
@@ -326,6 +323,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
       IsClientApplication:        [optional] (string) boolean, where "true" means the client project is an application
       UseFullTypeNames:           [optional] (string) boolean where "true" means fully qualified type names should be generated
       CodeGeneratorName:          [optional] the name of the code generator to use
+      SharedFilesMode             [optional] "Link" (default) or "Copy"
       
     Outputs are:
       GeneratedFiles:             the list of all generated code files (does not include copied files)
@@ -354,7 +352,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
        UseFullTypeNames="$(OpenRiaClientUseFullTypeNames)"
        ClientAssemblySearchPaths="@(OpenRiaClientCodeGenClientAssemblySearchPath)"
        CodeGeneratorName="$(OpenRiaClientCodeGeneratorName)"
-       CopyOrLinkSharedFiles="Link">
+       SharedFilesMode="$(OpenRiaSharedFilesMode)">
 
       <!-- Copy the task outputs to global item collections for other tasks -->
       <Output ItemName="OpenRiaClientGeneratedFiles" TaskParameter="GeneratedFiles" />

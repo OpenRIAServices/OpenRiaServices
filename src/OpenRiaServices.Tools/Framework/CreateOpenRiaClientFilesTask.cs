@@ -132,7 +132,7 @@ namespace OpenRiaServices.Tools
         /// Gets the string form of a boolean that indicates
         /// whether the shared files should be copied (instead of linked).
         /// </summary>
-        public string CopyOrLinkSharedFiles { set => LinkSharedFilesInsteadOfCopy = string.Equals(value, "Link", StringComparison.OrdinalIgnoreCase); }
+        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value, "Copy", StringComparison.OrdinalIgnoreCase); }
 
         private bool LinkSharedFilesInsteadOfCopy { get; set; } = true;
 
