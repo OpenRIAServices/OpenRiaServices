@@ -18,14 +18,13 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "SFT")]
         [Description("SharedSourceFiles locates shared types between projects")]
         [TestMethod]
         public void SharedSourceFiles_Types()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("SFT", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             List<string> sourceFiles = CodeGenHelper.ClientClassLibSourceFiles(clientProjectPath);
             ConsoleLogger logger = new ConsoleLogger();
@@ -57,14 +56,13 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "SFT")]
         [Description("SharedSourceFiles locates shared methods between projects")]
         [TestMethod]
         public void SharedSourceFiles_Methods()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("SFT", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             List<string> sourceFiles = CodeGenHelper.ClientClassLibSourceFiles(clientProjectPath);
             ConsoleLogger logger = new ConsoleLogger();

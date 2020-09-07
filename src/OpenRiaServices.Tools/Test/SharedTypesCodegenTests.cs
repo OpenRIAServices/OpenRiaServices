@@ -119,7 +119,6 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "STT")]
         [Description("CreateOpenRiaClientFilesTask produces error when detecting existing generated entity")]
         [TestMethod]
         public void SharedTypes_CodeGen_Errors_On_Existing_Generated_Entity()
@@ -128,7 +127,7 @@ namespace OpenRiaServices.Tools.Test
 
             try
             {
-                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("STT", /*includeClientOutputAssembly*/ true);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("", /*includeClientOutputAssembly*/ true);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
 
                 bool success = task.Execute();

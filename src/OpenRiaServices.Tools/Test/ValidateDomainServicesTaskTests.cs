@@ -8,12 +8,11 @@ namespace OpenRiaServices.Tools.Test
     [TestClass]
     public class ValidateDomainServicesTaskTests
     {
-        [DeploymentItem(@"ProjectPath.txt", "VDST1")]
         [Description("ValidateDomainServicesTask runs succesfully for a well-formed DomainService")]
         [TestMethod]
         public void ValidateDomainServicesTaskRunsSuccessfully()
         {
-            ValidateDomainServicesTask task = CodeGenHelper.CreateValidateDomainServicesTask("VDST1");
+            ValidateDomainServicesTask task = CodeGenHelper.CreateValidateDomainServicesTask("");
             Assert.IsTrue(task.Execute(),
                 "Validation should have completed without error");
         }

@@ -16,7 +16,6 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "CLRCF1")]
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CleanRiaClientFiles_Deletes_Generated_Files()
@@ -28,7 +27,7 @@ namespace OpenRiaServices.Tools.Test
                 // ====================================================
                 // Test setup -- generate code by calling Create task
                 // ====================================================
-                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CLRCF1", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("", /*includeClientOutputAssembly*/ false);
                 bool success = task.Execute();
                 if (!success)
                 {
