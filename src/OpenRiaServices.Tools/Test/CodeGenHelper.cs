@@ -87,6 +87,15 @@ namespace OpenRiaServices.Tools.Test
         }
 
         /// <summary>
+        /// Assert that <paramref name="items"/> contains all the files specified in <paramref name="shortNames"/>
+        /// </summary>
+        public static void AssertOutputContainsFiles(ITaskItem[] items, string[] shortNames)
+        {
+            foreach (var shortName in shortNames)
+                GetOutputFile(items, shortName); // GetOutputFile assert that the file exists
+        }
+
+        /// <summary>
         /// Returns the name of the assembly built by the server project
         /// </summary>
         /// <param name="serverProjectPath"></param>
