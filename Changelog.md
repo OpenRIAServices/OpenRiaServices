@@ -39,6 +39,17 @@ It is currently quite empty but already demonstrates some of the following scena
     * Using Asp.Net Identity for authentication
     * Writing your own custom Authentication logic
     * Running OpenRiaServices in same project as Asp.Net MVC
+
+# 5.0.0 RC
+
+* Updated required version of .Net Framework to 4.7.2 (#241)
+* Updated dependencies including EntityFramework to latests availible versions #240
+* Create, Update and Delete methods on server can now return Task #226
+* New handling of shared files #229
+  Instead of copying all ".shared" files to the `Generated_Code` folder the server version is referenced instead
+  * This should build faster builds and allows find all references, refactoring etc to work for shared files
+  * It is possible to opt out of the new behaviour by adding `<OpenRiaSharedFilesMode>Copy</OpenRiaSharedFilesMode>` in the project file
+  * The tooling is updated with a new option
   
 # 5.0.0 Preview 3
 
