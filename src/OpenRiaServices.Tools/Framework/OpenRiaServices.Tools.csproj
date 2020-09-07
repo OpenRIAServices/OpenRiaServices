@@ -54,6 +54,12 @@
     <Content Include="Pdb\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\NuGet\OpenRiaServices.Client.CodeGen\build\OpenRiaServices.CodeGen.targets" Link="build\OpenRiaServices.CodeGen.targets" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.11.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="build\" />
   </ItemGroup>
 </Project>
