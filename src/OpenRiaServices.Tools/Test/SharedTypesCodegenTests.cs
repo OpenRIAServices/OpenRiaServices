@@ -20,22 +20,33 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "STT")]
-        [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types")]
+        [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types (OpenRiaSharedFilesMode = Copy)")]
         [TestMethod]
-        public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties()
+        public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties_Copy()
         {
-            CreateOpenRiaClientFilesTask task = null;
-            string[] expectedOutputFiles = new string[] {
-                "ServerClassLib.g.cs",          // generated
+            SharedTypes_CodeGen_Skips_Shared_Types_And_Properties(OpenRiaSharedFilesMode.Copy);
+        }
+
+        [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types (OpenRiaSharedFilesMode = Link)")]
+        [TestMethod]
+        public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties_Link()
+        {
+            SharedTypes_CodeGen_Skips_Shared_Types_And_Properties(OpenRiaSharedFilesMode.Link);
+        }
+
+        private static void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties(OpenRiaSharedFilesMode sharedFilesMode)
+        {
+            string expectedGeneratedCodeFile = "ServerClassLib.g.cs";
+            string[] expectedSharedFiles = new string[] {
                 "TestEntity.shared.cs",         // via server project
                 "TestComplexType.shared.cs",    // via server project
                 "ServerClassLib2.shared.cs"     // via P2P
             };
 
+            CreateOpenRiaClientFilesTask task = null;
             try
             {
-                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("STT", /*includeClientOutputAssembly*/ false);
+                task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(string.Empty, /*includeClientOutputAssembly*/ false);
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
 
                 // Work Item 199139:
@@ -45,7 +56,7 @@ namespace OpenRiaServices.Tools.Test
                 // Note: Our assembly resolution code is only exercised when running against an installed product. When
                 // we're running locally, resolution occurs without error.
                 task.ServerReferenceAssemblies = task.ServerReferenceAssemblies.Where(item => !item.ItemSpec.Contains("ServerClassLib2")).ToArray();
-
+                task.SharedFilesMode = sharedFilesMode.ToString();
                 bool success = task.Execute();
                 if (!success)
                 {
@@ -53,9 +64,18 @@ namespace OpenRiaServices.Tools.Test
                 }
 
                 ITaskItem[] outputFiles = task.OutputFiles.ToArray();
-                Assert.AreEqual(expectedOutputFiles.Length, outputFiles.Length);
 
-                string generatedFile = CodeGenHelper.GetOutputFile(outputFiles, expectedOutputFiles[0]);
+                if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
+                {
+                    Assert.AreEqual(1 + expectedSharedFiles.Length, outputFiles.Length);
+                }
+                else
+                {
+                    Assert.AreEqual(1, outputFiles.Length);
+                }
+
+                string generatedFile = CodeGenHelper.GetOutputFile(outputFiles, expectedGeneratedCodeFile);
+                CodeGenHelper.AssertOutputContainsFiles(task.SharedFiles, expectedSharedFiles);
 
                 string generatedCode = string.Empty;
                 using (StreamReader t1 = new StreamReader(generatedFile))

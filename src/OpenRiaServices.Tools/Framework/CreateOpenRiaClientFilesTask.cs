@@ -132,7 +132,7 @@ namespace OpenRiaServices.Tools
         /// Gets the string form of a boolean that indicates
         /// whether the shared files should be copied (instead of linked).
         /// </summary>
-        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value, "Copy", StringComparison.OrdinalIgnoreCase); }
+        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value,  OpenRiaSharedFilesMode.Copy.ToString(), StringComparison.OrdinalIgnoreCase); }
 
         private bool LinkSharedFilesInsteadOfCopy { get; set; } = true;
 
@@ -1216,10 +1216,13 @@ namespace OpenRiaServices.Tools
         /// </remarks>
         private void CopySharedFiles()
         {
+            Dictionary<string, IList<string>> sharedFilesByProject = this.SharedFilesByProject;
+
+            // SharedFilesByProject initializes important information about service links
+            // Dont exit until after initialization
             if (LinkSharedFilesInsteadOfCopy)
                 return;
 
-            Dictionary<string, IList<string>> sharedFilesByProject = this.SharedFilesByProject;
             HashSet<string> fileHash = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             // Each separate project's set of files is copied under a unique folder under GeneratedCode.

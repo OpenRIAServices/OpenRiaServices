@@ -19,27 +19,27 @@ namespace OpenRiaServices.Tools.Test
     public class CreateOpenRiaClientFilesTaskTests
     {
         // Expected shared and linked files from ServerClassLib/ServerClassLib2
-        private static readonly string[] expectedServerNamedSharedFiles = new string[] { 
+        private static readonly string[] expectedServerNamedSharedFiles = new string[] {
                         "TestEntity.shared.cs",
                         "TestComplexType.shared.cs",};
 
-        private static readonly string[] expectedServerLinkedFiles = new string[] { 
-                        "TestEntity.linked.cs", 
+        private static readonly string[] expectedServerLinkedFiles = new string[] {
+                        "TestEntity.linked.cs",
                         "TestComplexType.linked.cs",
-                        "TestValidator.linked.cs", 
-                        "SharedClass.cs", 
-                        "CodelessType.linked.cs", 
+                        "TestValidator.linked.cs",
+                        "SharedClass.cs",
+                        "CodelessType.linked.cs",
                         "CodelessTypeNoClientCompile.linked.cs"};
 
         // comes from ServerClassLib
         private static readonly string[] expectedServerSharedFiles = expectedServerNamedSharedFiles.Concat(expectedServerLinkedFiles).ToArray();
 
         // comes from p2p ref to ServerClassLib2
-        private static readonly string[] expectedServer2NamedSharedFiles = new string[] { 
+        private static readonly string[] expectedServer2NamedSharedFiles = new string[] {
                         "ServerClassLib2.shared.cs" };
 
         // comes from ClientClassLib
-        private static readonly string[] expectedClientLinkedFiles = new string[] { 
+        private static readonly string[] expectedClientLinkedFiles = new string[] {
                         "TestEntity.reverse.linked.cs"};
 
         public CreateOpenRiaClientFilesTaskTests()
@@ -126,7 +126,7 @@ namespace OpenRiaServices.Tools.Test
                 task.ServerReferenceAssemblies = Array.Empty<TaskItem>();
 
                 task.GenerateClientProxies();
- 
+
                 ITaskItem[] generatedFiles = task.OutputFiles.ToArray();
                 Assert.IsNotNull(generatedFiles);
                 Assert.AreEqual(0, generatedFiles.Length);
@@ -293,13 +293,33 @@ namespace OpenRiaServices.Tools.Test
         [DeploymentItem(@"ProjectPath.txt", "CRCF5")]
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
-        public void CreateRiaClientFiles_Validate_Generated_Files()
+        public void CreateRiaClientFiles_Validate_Generated_Files_Copy()
         {
+            CreateRiaClientFiles_Validate_Generated_Files(OpenRiaSharedFilesMode.Copy);
+        }
+
+        [DeploymentItem(@"ProjectPath.txt", "CRCF5")]
+        [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
+        [TestMethod]
+        public void CreateRiaClientFiles_Validate_Generated_Files_Link()
+        {
+            CreateRiaClientFiles_Validate_Generated_Files(OpenRiaSharedFilesMode.Link);
+        }
+
+        public void CreateRiaClientFiles_Validate_Generated_Files(OpenRiaSharedFilesMode sharedFilesMode)
+        {
+            string[] expectedSharedFiles = new[]
+            {
+                "TestEntity.shared.cs",
+                "TestComplexType.shared.cs",
+            };
+
             CreateOpenRiaClientFilesTask task = null;
 
             try
             {
                 task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("CRCF5", /*includeClientOutputAssembly*/ false);
+                task.SharedFilesMode = sharedFilesMode.ToString();
                 bool success = task.Execute();
                 if (!success)
                 {
@@ -311,16 +331,24 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(3, files.Length, "Code gen should have generated 3 code files");
+                Assert.AreEqual(sharedFilesMode == OpenRiaSharedFilesMode.Copy ? 3 : 1, files.Length, "Code gen should have generated 3 code files");
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
 
-                string copiedFile = Path.Combine(generatedCodeOutputFolder, "TestEntity.shared.cs");
-                Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
 
-                copiedFile = Path.Combine(generatedCodeOutputFolder, "TestComplexType.shared.cs");
-                Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
+                foreach (var sharedFile in expectedSharedFiles)
+                {
+                    if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
+                    {
+                        string copiedFile = Path.Combine(generatedCodeOutputFolder, sharedFile);
+                        Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
+                    }
+                    else
+                    {
+                        CodeGenHelper.GetOutputFile(task.SharedFiles, sharedFile);
+                    }
+                }
 
                 string outputFolder = task.OutputPath;
                 Assert.IsTrue(Directory.Exists(outputFolder), "Expected task to have created " + outputFolder);
@@ -344,10 +372,17 @@ namespace OpenRiaServices.Tools.Test
                 // ----------------------------------------------
                 string[] copiedFilesFromTask = task.CopiedFiles.Select<ITaskItem, string>(i => i.ItemSpec).ToArray();
                 string mockProjectPath = Path.Combine(generatedCodeOutputFolder, "Mock");
-                Assert.AreEqual(expectedServerNamedSharedFiles.Length + expectedServer2NamedSharedFiles.Length, copiedFilesFromTask.Length, "Unexpected number of copied files");
-                TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, expectedServerNamedSharedFiles);
-                mockProjectPath = Path.Combine(Path.Combine(generatedCodeOutputFolder, "ServerClassLib2"), "Mock");
-                TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, expectedServer2NamedSharedFiles);
+                if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
+                {
+                    Assert.AreEqual(expectedServerNamedSharedFiles.Length + expectedServer2NamedSharedFiles.Length, copiedFilesFromTask.Length, "Unexpected number of copied files");
+                    TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, expectedServerNamedSharedFiles);
+                    mockProjectPath = Path.Combine(Path.Combine(generatedCodeOutputFolder, "ServerClassLib2"), "Mock");
+                    TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, expectedServer2NamedSharedFiles);
+                }
+                else
+                {
+                    CollectionAssert.AreEqual(Array.Empty<string>(), copiedFilesFromTask, "No files should have been copied");
+                }
 
                 // ---------------------------------------------
                 // OpenRiaFiles.txt should have been generated
@@ -361,8 +396,11 @@ namespace OpenRiaServices.Tools.Test
                 {
                     fileListContents = t1.ReadToEnd();
                 }
-                Assert.IsTrue(fileListContents.Contains("ServerClassLib.g.cs"), "Expected file list to have ServerClassLib.g.cs but instead had " + fileListContents);
-                Assert.IsTrue(fileListContents.Contains("TestEntity.shared.cs"), "Expected file list to have TestEntity.shared.cs but instead had " + fileListContents);
+
+                // Files list 
+                bool shouldCopy = (sharedFilesMode == OpenRiaSharedFilesMode.Copy);
+                foreach (var sharedFile in expectedSharedFiles)
+                    Assert.AreEqual(shouldCopy, fileListContents.Contains(sharedFile), "Checking if OpenRiaFiles.txt contains '{0}' with mode '{1}' actual content is '{2}'", sharedFile, sharedFilesMode, fileListContents);
 
 
                 // ---------------------------------------------
@@ -412,14 +450,13 @@ namespace OpenRiaServices.Tools.Test
                 string riaLinkList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaLinks.txt");
                 Assert.IsTrue(File.Exists(riaLinkList), "Expected code gen to have created " + riaLinkList + " but saw:" +
                     Environment.NewLine + generatedFiles);
-
             }
             finally
             {
                 CodeGenHelper.DeleteTempFolder(task);
             }
         }
-        
+
         [DeploymentItem(@"ProjectPath.txt", "CRCF11")]
         [Description("CreateOpenRiaClientFilesTask can access web.config using ASP.NET AppDomain")]
         [TestMethod]
@@ -684,7 +721,7 @@ namespace OpenRiaServices.Tools.Test
                 string riaFilesListPath = task.FileListPath();
                 Assert.IsTrue(File.Exists(riaFilesListPath), "Expected file for generated files");
                 string[] contents = File.ReadAllLines(riaFilesListPath);
-                for (int i = 1; i < contents.Length; i ++)
+                for (int i = 1; i < contents.Length; i++)
                 {
                     Assert.IsTrue(!Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
                 }
@@ -1107,5 +1144,5 @@ namespace OpenRiaServices.Tools.Test
             return result;
         }
 
-   }
+    }
 }
