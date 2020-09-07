@@ -87,6 +87,7 @@
     <Compile Include="Helpers\VsConstants.cs" />
     <Compile Include="Helpers\VSUtility.cs" />
     <Compile Include="OpenRiaServicesPackage.cs" />
+    <Compile Include="OpenRiaSharedFilesMode.cs" />
     <Compile Include="PkgCmdID.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
