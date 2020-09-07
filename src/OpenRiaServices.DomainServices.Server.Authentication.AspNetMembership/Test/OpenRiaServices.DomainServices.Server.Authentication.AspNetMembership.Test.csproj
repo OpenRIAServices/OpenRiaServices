@@ -3,7 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\ServerTestHelper.cs" Link="Shared\ServerTestHelper.cs" />

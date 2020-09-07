@@ -4,7 +4,7 @@
     <NoWarn>618</NoWarn>
     <RootNamespace>DbContextModels</RootNamespace>
     <AssemblyName>DbContextModels</AssemblyName>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
     <Message Text="Writing project path" />
