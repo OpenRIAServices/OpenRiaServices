@@ -5,7 +5,7 @@
     <Description>Open Ria Services Library - Client and Server projects with code generation</Description>
     <Icon>OpenRiaServicesLibrary.ico</Icon>
     <ProjectType>CSharp</ProjectType>
-    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+    <RequiredFrameworkVersion>4.7.2</RequiredFrameworkVersion>
     <SortOrder>1000</SortOrder>
     <TemplateID>d0c855c5-11b4-4f93-9505-80c4cd7eae14</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
@@ -33,7 +33,7 @@
     <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
   </WizardExtension>
   <WizardExtension>
-    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
     <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.RiaServicesLibraryWizard</FullClassName>
   </WizardExtension>
   <WizardData>
