@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RootNamespace.TestNamespace;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests <see cref="WebContextGenerator"/> members.

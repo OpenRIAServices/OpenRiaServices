@@ -8,13 +8,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.Server;
 using System.Text;
 using System.Web.Hosting;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Tools.SharedTypes;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Stateless dispatcher class that discovers and invokes the appropriate
@@ -28,7 +28,7 @@ namespace OpenRiaServices.DomainServices.Tools
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
         private ComposablePartCatalog _partCatalog;
-        private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.DomainServices.Server.dll";
+        private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
@@ -88,7 +88,7 @@ namespace OpenRiaServices.DomainServices.Tools
         }
 
         /// <summary>
-        /// Tries to loads the OpenRiaServices.DomainServices.Server assembly from the server projects references.
+        /// Tries to loads the OpenRiaServices.Server assembly from the server projects references.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="loggingService">The logging service.</param>
@@ -104,7 +104,7 @@ namespace OpenRiaServices.DomainServices.Tools
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
                 if (serverAssembly != null)
                 {
-                    // Since this assembly (OpenRiaServices.DomainServices.Tools) requires the Server assembly to be loaded
+                    // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
                     // before the final call to AssemblyUtilities.SetAssemblyResolver (when the DomainServiceCatalog is instanciated)
                     // we need to setup our assembly resolver with the server assembly in case the server version is signed
                     // but this version is unsigned
@@ -153,7 +153,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         /// <param name="host">The host for code generation.</param>
         /// <param name="options">The options to use for code generation.</param>
-        /// <param name="domainServiceTypes">The set of <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> types for which to generate code.</param>
+        /// <param name="domainServiceTypes">The set of <see cref="OpenRiaServices.Server.DomainService"/> types for which to generate code.</param>
         /// <param name="compositionAssemblies">The optional set of assemblies to use to create the MEF composition container.</param>
         /// <param name="codeGeneratorName">Optional generator name.  A <c>null</c> or empty value will select the default generator.</param>
         /// <returns>The generated source code or <c>null</c> if none was generated.</returns>
@@ -174,7 +174,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// </summary>
         /// <param name="host">The host for code generation.</param>
         /// <param name="options">The options to use for code generation.</param>
-        /// <param name="catalog">The catalog containing the <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> types.</param>
+        /// <param name="catalog">The catalog containing the <see cref="OpenRiaServices.Server.DomainService"/> types.</param>
         /// <param name="compositionAssemblies">The optional set of assemblies to use to create the MEF composition container.</param>
         /// <param name="codeGeneratorName">Optional generator name.  A <c>null</c> or empty value will select the default generator.</param>
         /// <returns>The generated source code or <c>null</c> if none was generated.</returns>

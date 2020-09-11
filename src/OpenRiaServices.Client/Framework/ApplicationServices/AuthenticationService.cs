@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.ApplicationServices
 {
     /// <summary>
     /// Service that is responsible for authenticating, loading, and saving the current user. 

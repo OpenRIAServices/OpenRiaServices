@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Interface to handle collection changed events through a weak listener.

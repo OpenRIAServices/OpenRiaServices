@@ -1,4 +1,4 @@
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.Tools.TextTemplate
 {
     using System;
     using System.Collections.Generic;
@@ -8,9 +8,9 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Tools;
+    using OpenRiaServices;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.Tools;
 
     /// <summary>
     /// Base class to generate proxy for a data contract type.

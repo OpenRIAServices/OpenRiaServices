@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// DataMemberAttribute custom attribute builder.

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace OpenRiaServices.DomainServices.WindowsAzure
+namespace OpenRiaServices.WindowsAzure
 {
     /// <summary>
     /// <see cref="CustomTypeDescriptor"/> used to provide default metadata for entity types made available

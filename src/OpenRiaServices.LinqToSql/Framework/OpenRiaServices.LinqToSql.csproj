@@ -11,9 +11,9 @@
     <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs" Link="MetadataPropertyDescriptorWrapper.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptionContextBase.cs" Link="TypeDescriptionContextBase.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\TypeDescriptorBase.cs" Link="TypeDescriptorBase.cs" />
+    <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs" Link="MetadataPropertyDescriptorWrapper.cs" />
+    <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\TypeDescriptionContextBase.cs" Link="TypeDescriptionContextBase.cs" />
+    <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\TypeDescriptorBase.cs" Link="TypeDescriptorBase.cs" />
     <Compile Condition=" '$(RunCodeAnalysis)' != 'true' " Remove="GlobalSuppressions.cs" />
     <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -22,6 +22,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
 </Project>

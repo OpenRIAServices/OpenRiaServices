@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Provides a base upon which classes implementing <see cref="IDomainClientFactory"/> should derive.

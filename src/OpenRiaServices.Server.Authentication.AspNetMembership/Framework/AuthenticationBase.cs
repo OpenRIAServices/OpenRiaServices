@@ -13,7 +13,7 @@ using System.Web.Configuration;
 using System.Web.Profile;
 using System.Web.Security;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership
+namespace OpenRiaServices.Server.Authentication.AspNetMembership
 {
     /// <summary>
     /// <see cref="DomainService"/> that encapsulates the authentication domain.

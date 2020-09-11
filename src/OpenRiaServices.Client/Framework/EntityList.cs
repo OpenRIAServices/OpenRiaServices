@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Observable list of entities. This list stays in sync with its <see cref="Source"/>

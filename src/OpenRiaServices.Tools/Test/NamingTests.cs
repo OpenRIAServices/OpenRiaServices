@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Summary description for NamingTests

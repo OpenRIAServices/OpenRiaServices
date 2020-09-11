@@ -5,7 +5,7 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenRiaServices.DomainServices.Hosting.Test.TestDomainServices")]
+[assembly: AssemblyTitle("OpenRiaServices.Hosting.Test.TestDomainServices")]
 [assembly: AssemblyDescription("Unit tests for WCF RIA Services")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]

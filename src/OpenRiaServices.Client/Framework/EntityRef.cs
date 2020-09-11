@@ -7,9 +7,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Internal;
+using OpenRiaServices.Client.Internal;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Represents an reference to an associated entity.

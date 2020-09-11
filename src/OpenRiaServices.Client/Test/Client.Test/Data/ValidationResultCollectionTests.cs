@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
     using System.ComponentModel.DataAnnotations;

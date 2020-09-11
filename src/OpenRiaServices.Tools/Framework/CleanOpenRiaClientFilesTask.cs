@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Custom MSBuild task to delete all generated files created by <see cref="CreateOpenRiaClientFilesTask"/>

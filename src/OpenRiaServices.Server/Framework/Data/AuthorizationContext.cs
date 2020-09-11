@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
+using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
 namespace System.ComponentModel.DataAnnotations
 {
@@ -55,9 +55,9 @@ namespace System.ComponentModel.DataAnnotations
         /// template's state.
         /// </para>
         /// <para>
-        /// The <see cref="OpenRiaServices.DomainServices.Server.DomainService.AuthorizationContext"/> 
+        /// The <see cref="OpenRiaServices.Server.DomainService.AuthorizationContext"/> 
         /// property allows such a template to be set into the
-        /// <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> for all authorization requests.
+        /// <see cref="OpenRiaServices.Server.DomainService"/> for all authorization requests.
         /// </para>
         /// </remarks>
         /// <param name="serviceProvider">Optional parent <see cref="IServiceProvider"/> to which calls to

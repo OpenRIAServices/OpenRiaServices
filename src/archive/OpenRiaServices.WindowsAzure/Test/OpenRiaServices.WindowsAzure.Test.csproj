@@ -40,8 +40,8 @@
     <ProjectGuid>{8F638ABB-4EC6-428B-9D35-514317AECF51}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.WindowsAzure.Test</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.WindowsAzure.Test</AssemblyName>
+    <RootNamespace>OpenRiaServices.WindowsAzure.Test</RootNamespace>
+    <AssemblyName>OpenRiaServices.WindowsAzure.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -89,13 +89,13 @@
     <Compile Include="TableMetadataProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
+      <Name>OpenRiaServices.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.WindowsAzure.csproj">
+    <ProjectReference Include="..\Framework\OpenRiaServices.WindowsAzure.csproj">
       <Project>{62CEDA36-AE80-411D-8A55-2D417A86960B}</Project>
-      <Name>OpenRiaServices.DomainServices.WindowsAzure</Name>
+      <Name>OpenRiaServices.WindowsAzure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

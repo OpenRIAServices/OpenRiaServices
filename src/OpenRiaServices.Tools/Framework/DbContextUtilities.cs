@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Provides DbContext Utilities using late binding so as not to take a direct dependency on EntityFramework 4.1.
@@ -187,7 +187,7 @@ namespace OpenRiaServices.DomainServices.Tools
             }
         }
 #else
-        private const string DbDomainServiceTypeName = @"OpenRiaServices.DomainServices.EntityFramework.DbDomainService`1";       
+        private const string DbDomainServiceTypeName = @"OpenRiaServices.EntityFramework.DbDomainService`1";       
 
         /// <summary>
         /// Returns the DbContext type given the <see cref="DomainService"/> type. Uses late binding so as to avoid adding a reference to EF 4.1.

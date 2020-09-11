@@ -11,9 +11,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     [TestClass]
     public class EntityValidationTests : UnitTestBase
@@ -805,34 +805,34 @@ namespace OpenRiaServices.DomainServices.Client.Test
             ExceptionHelper.ExpectException<MissingMethodException>(delegate
             {
                 ValidationUtilities.GetMethod(entity, "NonExistentMethod", parameters);
-            }, string.Format(Resource.ValidationUtilities_MethodNotFound, "OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation", "NonExistentMethod", parameters.Length, "'OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation'"));
+            }, string.Format(Resource.ValidationUtilities_MethodNotFound, "OpenRiaServices.Client.Test.MockEntity_Validation", "NonExistentMethod", parameters.Length, "'OpenRiaServices.Client.Test.MockEntity_Validation'"));
 
             // calling with empty parameter collection
             parameters = new object[] { };
             ExceptionHelper.ExpectException<MissingMethodException>(delegate
             {
                 ValidationUtilities.GetMethod(entity, "Method", parameters);
-            }, string.Format(Resource.ValidationUtilities_MethodNotFound_ZeroParams, "OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation", "Method"));
+            }, string.Format(Resource.ValidationUtilities_MethodNotFound_ZeroParams, "OpenRiaServices.Client.Test.MockEntity_Validation", "Method"));
 
             // calling with null parameter collection
             parameters = null;
             ExceptionHelper.ExpectException<MissingMethodException>(delegate
             {
                 ValidationUtilities.GetMethod(entity, "Method", parameters);
-            }, string.Format(Resource.ValidationUtilities_MethodNotFound_ZeroParams, "OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation", "Method"));
+            }, string.Format(Resource.ValidationUtilities_MethodNotFound_ZeroParams, "OpenRiaServices.Client.Test.MockEntity_Validation", "Method"));
 
             // calling with different data types and null in parameter collection, method takes less parameters
             parameters = new object[] { 1, true, "hello", null, entity, new object() };
             ExceptionHelper.ExpectException<MissingMethodException>(delegate
             {
                 ValidationUtilities.GetMethod(entity, "Method", parameters);
-            }, string.Format(Resource.ValidationUtilities_MethodNotFound, "OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation", "Method", 6, "'System.Int32', 'System.Boolean', 'System.String', null, 'OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation', 'System.Object'"));
+            }, string.Format(Resource.ValidationUtilities_MethodNotFound, "OpenRiaServices.Client.Test.MockEntity_Validation", "Method", 6, "'System.Int32', 'System.Boolean', 'System.String', null, 'OpenRiaServices.Client.Test.MockEntity_Validation', 'System.Object'"));
 
             // calling with different data types and null in parameter collection, method takes same number of parameters
             ExceptionHelper.ExpectException<MissingMethodException>(delegate
             {
                 ValidationUtilities.GetMethod(entity, "MethodWith6Params", parameters);
-            }, string.Format(Resource.ValidationUtilities_MethodNotFound, "OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation", "MethodWith6Params", 6, "'System.Int32', 'System.Boolean', 'System.String', null, 'OpenRiaServices.DomainServices.Client.Test.MockEntity_Validation', 'System.Object'"));
+            }, string.Format(Resource.ValidationUtilities_MethodNotFound, "OpenRiaServices.Client.Test.MockEntity_Validation", "MethodWith6Params", 6, "'System.Int32', 'System.Boolean', 'System.String', null, 'OpenRiaServices.Client.Test.MockEntity_Validation', 'System.Object'"));
 
         }
 

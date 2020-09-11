@@ -6,9 +6,9 @@
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\ServerTestHelper.cs" Link="Shared\ServerTestHelper.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\MockUser.cs" Link="Shared\MockUser.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Test\MockDataService.cs" Link="Shared\MockDataService.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Test\ServerTestHelper.cs" Link="Shared\ServerTestHelper.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Test\MockUser.cs" Link="Shared\MockUser.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Test\MockDataService.cs" Link="Shared\MockDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
@@ -29,6 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
   </ItemGroup>
 </Project>

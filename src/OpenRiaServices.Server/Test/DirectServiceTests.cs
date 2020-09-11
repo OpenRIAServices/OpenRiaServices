@@ -10,16 +10,16 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Security.Principal;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.EntityFramework;
+using OpenRiaServices.Hosting;
 using System.Text;
 using System.Threading;
 using System.Web;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     using System.Security;
     using System.Threading.Tasks;

@@ -14,9 +14,9 @@ using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDomainServices.NamedUpdates;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     [TestClass]
     public class CustomMethodTests : UnitTestBase

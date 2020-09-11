@@ -8,8 +8,8 @@ namespace DataTests.Northwind.LTSBuddy
     using System.Data.Linq;
     using System.Linq;
     using DataTests.Northwind.LTS;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // The MetadataTypeAttribute identifies CategoryBuddyMetadata as the class

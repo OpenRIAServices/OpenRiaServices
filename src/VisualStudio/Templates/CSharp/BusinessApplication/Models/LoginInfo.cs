@@ -2,8 +2,8 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     using $safeprojectname$.Web.Resources;
 
     /// <summary>

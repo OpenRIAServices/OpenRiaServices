@@ -7,12 +7,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Client.Test.Utilities;
+using OpenRiaServices.Client.Test.Utilities;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.ApplicationServices.Test
 {
     public class AuthenticationDomainClient : DomainClient
     {

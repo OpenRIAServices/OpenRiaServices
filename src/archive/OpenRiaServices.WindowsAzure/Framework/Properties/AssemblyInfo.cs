@@ -8,8 +8,8 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenRiaServices.DomainServices.WindowsAzure")]
-[assembly: AssemblyDescription("OpenRiaServices.DomainServices.WindowsAzure.dll")]
+[assembly: AssemblyTitle("OpenRiaServices.WindowsAzure")]
+[assembly: AssemblyDescription("OpenRiaServices.WindowsAzure.dll")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Outercurve Foundation")]
 [assembly: AssemblyProduct("Open RIA Services")]
@@ -25,7 +25,7 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("fd3dcea7-4ea9-4de9-9575-c149f09d3985")]
 
-[assembly: InternalsVisibleTo("OpenRiaServices.DomainServices.WindowsAzure.Test")]
+[assembly: InternalsVisibleTo("OpenRiaServices.WindowsAzure.Test")]
 
 [assembly: CLSCompliant(false)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

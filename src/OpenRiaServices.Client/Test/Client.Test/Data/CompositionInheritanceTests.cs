@@ -12,9 +12,9 @@ using TestDomainServices;
 
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     /// <summary>
     /// Tests for compositional hierarchy features.

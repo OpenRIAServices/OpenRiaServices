@@ -5,9 +5,9 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal class SubmitOperationBehavior : IOperationBehavior
     {

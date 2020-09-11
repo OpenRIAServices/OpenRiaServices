@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     /// <summary>
     /// Summary description for DomainMethodServerTest

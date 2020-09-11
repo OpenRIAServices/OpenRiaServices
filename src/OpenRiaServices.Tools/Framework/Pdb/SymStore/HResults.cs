@@ -1,4 +1,4 @@
-namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
+namespace OpenRiaServices.Tools.Pdb.SymStore
 {
     internal enum HResult
     {

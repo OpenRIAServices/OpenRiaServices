@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.Tools.TextTemplate
 {
     using System;
     
@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class EntityGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.DataContractProxyGenerator
+    public partial class EntityGenerator : OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator
     {
         /// <summary>
         /// Create the template output

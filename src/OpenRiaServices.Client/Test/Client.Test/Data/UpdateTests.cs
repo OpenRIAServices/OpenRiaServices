@@ -11,9 +11,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
 using OpenRiaServices.Silverlight.Testing;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     /// <summary>
     /// End to end update scenario tests. These tests do a one time TestClass level test database

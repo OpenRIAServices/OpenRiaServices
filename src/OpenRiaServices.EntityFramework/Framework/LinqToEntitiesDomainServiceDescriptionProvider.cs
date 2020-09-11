@@ -9,9 +9,9 @@ using System.Data.Metadata.Edm;
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     internal class LinqToEntitiesDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {

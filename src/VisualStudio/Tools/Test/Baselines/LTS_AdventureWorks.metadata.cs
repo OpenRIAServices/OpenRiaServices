@@ -9,8 +9,8 @@ namespace DataTests.AdventureWorks.LTSBuddy
     using System.Linq;
     using System.Xml.Linq;
     using DataTests.AdventureWorks.LTS;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // The MetadataTypeAttribute identifies AddressBuddyMetadata as the class

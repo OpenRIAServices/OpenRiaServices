@@ -6,9 +6,9 @@ using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal class DomainServiceBehavior : IContractBehavior
     {

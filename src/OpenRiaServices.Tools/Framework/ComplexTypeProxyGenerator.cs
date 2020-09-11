@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Proxy generator for a complex type.

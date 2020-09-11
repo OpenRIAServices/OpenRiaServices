@@ -1,7 +1,7 @@
 ﻿using System;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Server.UnitTesting
+namespace OpenRiaServices.Server.UnitTesting
 {
     internal class OperationContext
     {

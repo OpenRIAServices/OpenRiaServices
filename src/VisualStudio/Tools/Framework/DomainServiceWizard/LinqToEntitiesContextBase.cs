@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {

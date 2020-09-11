@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>OpenRiaServices.DomainServices.Tools.Test.T4Generator</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.Tools.Test.T4Generator</AssemblyName>
+    <RootNamespace>OpenRiaServices.Tools.Test.T4Generator</RootNamespace>
+    <AssemblyName>OpenRiaServices.Tools.Test.T4Generator</AssemblyName>
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
@@ -26,7 +26,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
-    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.Tools.csproj" />
   </ItemGroup>
 </Project>

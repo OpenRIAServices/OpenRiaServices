@@ -2,10 +2,10 @@
 using System.Data.Linq;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Server;
+using OpenRiaServices.Hosting;
 using DataTests.AdventureWorks.LTS;
-using OpenRiaServices.DomainServices.LinqToSql;
+using OpenRiaServices.LinqToSql;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract
 [assembly: ContractNamespace("http://schemas.datacontract.org/2004/07/DataTests.AdventureWorks",

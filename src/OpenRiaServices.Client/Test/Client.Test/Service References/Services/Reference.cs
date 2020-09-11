@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.DomainServices.Client.Test.Services {
+namespace OpenRiaServices.Client.Test.Services {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -41,12 +41,12 @@ namespace OpenRiaServices.DomainServices.Client.Test.Services {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface TestServicesChannel : OpenRiaServices.DomainServices.Client.Test.Services.TestServices, System.ServiceModel.IClientChannel {
+    public interface TestServicesChannel : OpenRiaServices.Client.Test.Services.TestServices, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class TestServicesClient : System.ServiceModel.ClientBase<OpenRiaServices.DomainServices.Client.Test.Services.TestServices>, OpenRiaServices.DomainServices.Client.Test.Services.TestServices {
+    public partial class TestServicesClient : System.ServiceModel.ClientBase<OpenRiaServices.Client.Test.Services.TestServices>, OpenRiaServices.Client.Test.Services.TestServices {
         
         private BeginOperationDelegate onBeginCreateNewDatabaseDelegate;
         

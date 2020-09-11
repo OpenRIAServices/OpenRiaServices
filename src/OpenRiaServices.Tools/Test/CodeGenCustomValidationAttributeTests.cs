@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Summary description for domain service code gen

@@ -19,9 +19,9 @@ namespace TestDomainServices
     using System.ServiceModel;
     using System.Threading.Tasks;
     using System.Xml.Linq;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>

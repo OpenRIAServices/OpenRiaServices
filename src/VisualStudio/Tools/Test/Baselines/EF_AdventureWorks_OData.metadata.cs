@@ -8,8 +8,8 @@ namespace AdventureWorksModelBuddy
     using System.Data.Entity.Core.Objects.DataClasses;
     using System.Linq;
     using AdventureWorksModel;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // The MetadataTypeAttribute identifies AddressBuddyMetadata as the class

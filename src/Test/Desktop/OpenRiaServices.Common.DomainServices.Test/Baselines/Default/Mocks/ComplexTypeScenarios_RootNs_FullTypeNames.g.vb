@@ -22,7 +22,7 @@ Namespace TestDomainServices
     <Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class Address
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _addressLine1 As String
         
@@ -182,7 +182,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class ComplexInheritance_Child
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _a1 As Integer
         
@@ -319,7 +319,7 @@ Namespace TestDomainServices
     <Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class ComplexType_Parent
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _contactInfo As Global.RootNamespaceName.TestDomainServices.ContactInfo
         
@@ -438,7 +438,7 @@ Namespace TestDomainServices
         ''' Invokes the 'TestAutoSync' action on this entity.
         ''' </summary>
         ''' <param name="phone">The value to pass to the server method's 'phone' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("TestAutoSync", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("TestAutoSync", AllowMultipleInvocations:=false)>  _
         Public Sub TestAutoSync(ByVal phone As Global.RootNamespaceName.TestDomainServices.Phone)
             Me.OnTestAutoSyncInvoking(phone)
             MyBase.InvokeAction("TestAutoSync", phone)
@@ -529,7 +529,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="child">The value to pass to the server method's 'child' parameter.</param>
         ''' <param name="children">The value to pass to the server method's 'children' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("ChooseHighestStubOrChild", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("ChooseHighestStubOrChild", AllowMultipleInvocations:=false)>  _
         Public Sub ChooseHighestStubOrChild(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
             Me.OnChooseHighestStubOrChildInvoking(child, children)
             MyBase.InvokeAction("ChooseHighestStubOrChild", child, children)
@@ -543,7 +543,7 @@ Namespace TestDomainServices
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices"),  _
      Global.System.Runtime.Serialization.KnownTypeAttribute(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandchild))>  _
     Partial Public Class ComplexTypeInheritance_EntityGrandparent
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _id As Integer
         
@@ -607,7 +607,7 @@ Namespace TestDomainServices
     ''' The DomainContext corresponding to the 'ComplexTypes_DomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class ComplexTypes_DomainContext
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -633,14 +633,14 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="serviceUri">The ComplexTypes_DomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypes_DomainContext.IComplexTypes_DomainServiceContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypes_DomainContext.IComplexTypes_DomainServiceContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="ComplexTypes_DomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -648,7 +648,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="ComplexTypeInheritance_EntityGrandparent"/> entity instances that have been loaded into this <see cref="ComplexTypes_DomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property ComplexTypeInheritance_EntityGrandparents() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
+        Public ReadOnly Property ComplexTypeInheritance_EntityGrandparents() As Global.OpenRiaServices.Client.EntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
             End Get
@@ -658,7 +658,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="ComplexTypeInheritance_EntityGrandparent"/> entity instances using the 'GetStub' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="ComplexTypeInheritance_EntityGrandparent"/> entity instances.</returns>
-        Public Function GetStubQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
+        Public Function GetStubQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
             Me.ValidateMethod("GetStubQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)("GetStub", Nothing, false, true)
         End Function
@@ -681,7 +681,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GetHighestChild(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
+        Public Overloads Function GetHighestChild(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("child", child)
             parameters.Add("children", children)
@@ -695,7 +695,7 @@ Namespace TestDomainServices
         ''' <param name="child">The value for the 'child' parameter of this action.</param>
         ''' <param name="children">The value for the 'children' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GetHighestChild(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
+        Public Overloads Function GetHighestChild(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("child", child)
             parameters.Add("children", children)
@@ -710,7 +710,7 @@ Namespace TestDomainServices
         ''' <param name="children">The value for the 'children' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function GetHighestChildAsync(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child))
+        Public Function GetHighestChildAsync(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("child", child)
             parameters.Add("children", children)
@@ -725,7 +725,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GetInheritedMember(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
+        Public Overloads Function GetInheritedMember(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("child", child)
             Me.ValidateMethod("GetInheritedMember", parameters)
@@ -737,7 +737,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="child">The value for the 'child' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GetInheritedMember(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
+        Public Overloads Function GetInheritedMember(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("child", child)
             Me.ValidateMethod("GetInheritedMember", parameters)
@@ -750,7 +750,7 @@ Namespace TestDomainServices
         ''' <param name="child">The value for the 'child' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function GetInheritedMemberAsync(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child))
+        Public Function GetInheritedMemberAsync(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("child", child)
             Me.ValidateMethod("GetInheritedMember", parameters)
@@ -761,7 +761,7 @@ Namespace TestDomainServices
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.RootNamespaceName.TestDomainServices.ComplexTypes_DomainContext.ComplexTypes_DomainContextEntityContainer()
         End Function
         
@@ -781,7 +781,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/GetHighestChild", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/GetHighestChildResponse")>  _
             Function BeginGetHighestChild(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal children() As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -799,7 +799,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/GetInheritedMember", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/GetInheritedMemberResponse")>  _
             Function BeginGetInheritedMember(ByVal child As Global.RootNamespaceName.TestDomainServices.ComplexInheritance_Child, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -816,7 +816,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/GetStub", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/GetStubResponse")>  _
             Function BeginGetStub(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -825,7 +825,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetStub'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetStub' operation.</returns>
-            Function EndGetStub(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
+            Function EndGetStub(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -835,22 +835,22 @@ Namespace TestDomainServices
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/SubmitChanges", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class ComplexTypes_DomainContextEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexTypeInheritance_EntityGrandparent)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -859,7 +859,7 @@ Namespace TestDomainServices
     ''' The DomainContext corresponding to the 'ComplexTypes_InvokeOperationsOnly' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class ComplexTypes_InvokeOperationsOnly
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -885,14 +885,14 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="serviceUri">The ComplexTypes_InvokeOperationsOnly service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypes_InvokeOperationsOnly.IComplexTypes_InvokeOperationsOnlyContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypes_InvokeOperationsOnly.IComplexTypes_InvokeOperationsOnlyContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="ComplexTypes_InvokeOperationsOnly"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -904,7 +904,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
+        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("address", address)
             Me.ValidateMethod("RoundtripAddress", parameters)
@@ -916,7 +916,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="address">The value for the 'address' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
+        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("address", address)
             Me.ValidateMethod("RoundtripAddress", parameters)
@@ -929,7 +929,7 @@ Namespace TestDomainServices
         ''' <param name="address">The value for the 'address' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function RoundtripAddressAsync(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.Address))
+        Public Function RoundtripAddressAsync(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.Address))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("address", address)
             Me.ValidateMethod("RoundtripAddress", parameters)
@@ -943,7 +943,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function UpdateContact(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function UpdateContact(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("contact", contact)
             Me.ValidateMethod("UpdateContact", parameters)
@@ -955,7 +955,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="contact">The value for the 'contact' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function UpdateContact(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function UpdateContact(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo) As Global.OpenRiaServices.Client.InvokeOperation
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("contact", contact)
             Me.ValidateMethod("UpdateContact", parameters)
@@ -968,7 +968,7 @@ Namespace TestDomainServices
         ''' <param name="contact">The value for the 'contact' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function UpdateContactAsync(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult)
+        Public Function UpdateContactAsync(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("contact", contact)
             Me.ValidateMethod("UpdateContact", parameters)
@@ -979,7 +979,7 @@ Namespace TestDomainServices
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.RootNamespaceName.TestDomainServices.ComplexTypes_InvokeOperationsOnly.ComplexTypes_InvokeOperationsOnlyEntityContainer()
         End Function
         
@@ -996,7 +996,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/RoundtripAddress", ReplyAction:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/RoundtripAddressResponse")>  _
             Function BeginRoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -1014,7 +1014,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/UpdateContact", ReplyAction:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/UpdateContactResponse")>  _
             Function BeginUpdateContact(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -1026,7 +1026,7 @@ Namespace TestDomainServices
         End Interface
         
         Friend NotInheritable Class ComplexTypes_InvokeOperationsOnlyEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
@@ -1038,7 +1038,7 @@ Namespace TestDomainServices
     ''' The DomainContext corresponding to the 'ComplexTypes_TestService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class ComplexTypes_TestContext
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -1064,14 +1064,14 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="serviceUri">The ComplexTypes_TestService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypes_TestContext.IComplexTypes_TestServiceContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.RootNamespaceName.TestDomainServices.ComplexTypes_TestContext.IComplexTypes_TestServiceContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="ComplexTypes_TestContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -1079,7 +1079,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="ComplexType_Parent"/> entity instances that have been loaded into this <see cref="ComplexTypes_TestContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property ComplexType_Parents() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
+        Public ReadOnly Property ComplexType_Parents() As Global.OpenRiaServices.Client.EntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
             End Get
@@ -1089,7 +1089,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="ComplexType_Parent"/> entity instances using the 'GetParents' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="ComplexType_Parent"/> entity instances.</returns>
-        Public Function GetParentsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
+        Public Function GetParentsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
             Me.ValidateMethod("GetParentsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)("GetParents", Nothing, false, true)
         End Function
@@ -1110,7 +1110,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnHomeAddress(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
+        Public Overloads Function ReturnHomeAddress(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("contact", contact)
             Me.ValidateMethod("ReturnHomeAddress", parameters)
@@ -1122,7 +1122,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="contact">The value for the 'contact' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnHomeAddress(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
+        Public Overloads Function ReturnHomeAddress(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("contact", contact)
             Me.ValidateMethod("ReturnHomeAddress", parameters)
@@ -1135,7 +1135,7 @@ Namespace TestDomainServices
         ''' <param name="contact">The value for the 'contact' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnHomeAddressAsync(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.Address))
+        Public Function ReturnHomeAddressAsync(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.Address))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("contact", contact)
             Me.ValidateMethod("ReturnHomeAddress", parameters)
@@ -1149,7 +1149,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
+        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("address", address)
             Me.ValidateMethod("RoundtripAddress", parameters)
@@ -1161,7 +1161,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="address">The value for the 'address' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
+        Public Overloads Function RoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.RootNamespaceName.TestDomainServices.Address)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("address", address)
             Me.ValidateMethod("RoundtripAddress", parameters)
@@ -1174,7 +1174,7 @@ Namespace TestDomainServices
         ''' <param name="address">The value for the 'address' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function RoundtripAddressAsync(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.Address))
+        Public Function RoundtripAddressAsync(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.RootNamespaceName.TestDomainServices.Address))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("address", address)
             Me.ValidateMethod("RoundtripAddress", parameters)
@@ -1185,7 +1185,7 @@ Namespace TestDomainServices
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.RootNamespaceName.TestDomainServices.ComplexTypes_TestContext.ComplexTypes_TestContextEntityContainer()
         End Function
         
@@ -1202,7 +1202,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/GetParents", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/GetParentsResponse")>  _
             Function BeginGetParents(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -1211,7 +1211,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetParents'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetParents' operation.</returns>
-            Function EndGetParents(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
+            Function EndGetParents(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)
             
             ''' <summary>
             ''' Asynchronously invokes the 'ReturnHomeAddress' operation.
@@ -1220,7 +1220,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/ReturnHomeAddress", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/ReturnHomeAddressResponse")>  _
             Function BeginReturnHomeAddress(ByVal contact As Global.RootNamespaceName.TestDomainServices.ContactInfo, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -1238,7 +1238,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/RoundtripAddress", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/RoundtripAddressResponse")>  _
             Function BeginRoundtripAddress(ByVal address As Global.RootNamespaceName.TestDomainServices.Address, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -1257,22 +1257,22 @@ Namespace TestDomainServices
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/SubmitChanges", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class ComplexTypes_TestContextEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.RootNamespaceName.TestDomainServices.ComplexType_Parent)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -1289,7 +1289,7 @@ Namespace TestDomainServices
     <Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class ContactInfo
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _homeAddress As Global.RootNamespaceName.TestDomainServices.Address
         
@@ -1404,7 +1404,7 @@ Namespace TestDomainServices
     <Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class Phone
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _areaCode As String
         

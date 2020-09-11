@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 
 namespace System.Linq.Dynamic
 {

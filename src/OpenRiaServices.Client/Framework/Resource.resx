@@ -127,7 +127,7 @@
     <value>Faild to construct generic WebDomainClient</value>
   </data>
   <data name="DomainClientFactory_MissingClientWebReference" xml:space="preserve">
-    <value>You must reference the assembly 'OpenRiaServices.DomainServices.Client.Web'</value>
+    <value>You must reference the assembly 'OpenRiaServices.Client.Web'</value>
   </data>
   <data name="DomainClientFactory_ServiceContractMustBeAnInterface" xml:space="preserve">
     <value>Service contract must be an interface</value>

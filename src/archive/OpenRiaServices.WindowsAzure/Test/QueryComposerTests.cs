@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.WindowsAzure.Test
+namespace OpenRiaServices.WindowsAzure.Test
 {
     [TestClass]
     public class QueryComposerTests

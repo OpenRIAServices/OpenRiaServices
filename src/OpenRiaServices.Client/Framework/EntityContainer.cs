@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Represents a cache of Entities in the form of a collection of <see cref="EntitySet"/>s.

@@ -2,7 +2,7 @@
 {
     using System.ComponentModel;
     using System.Globalization;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.ApplicationServices;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;

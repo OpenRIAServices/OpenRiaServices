@@ -1,4 +1,4 @@
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
 

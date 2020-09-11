@@ -1,5 +1,5 @@
-﻿<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
-<#@ import namespace="OpenRiaServices.DomainServices" #>
+﻿<#@ import namespace="OpenRiaServices.Tools" #>
+<#@ import namespace="OpenRiaServices" #>
 
 <#+
 	/// <summary>

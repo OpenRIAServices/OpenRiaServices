@@ -19,7 +19,7 @@ namespace RootNamespace
     /// This context extends the base to make application services and types available
     /// for consumption from code and xaml.
     /// </remarks>
-    public sealed partial class WebContext : global::OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase
+    public sealed partial class WebContext : global::OpenRiaServices.Client.ApplicationServices.WebContextBase
     {
         
         #region Extensibility Method Definitions
@@ -52,7 +52,7 @@ namespace RootNamespace
         {
             get
             {
-                return ((global::RootNamespace.WebContext)(global::OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Current));
+                return ((global::RootNamespace.WebContext)(global::OpenRiaServices.Client.ApplicationServices.WebContextBase.Current));
             }
         }
     }
@@ -64,7 +64,7 @@ namespace RootNamespace.TestNamespace
     /// <summary>
     /// The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     /// </summary>
-    public sealed partial class AuthenticationService1 : global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+    public sealed partial class AuthenticationService1 : global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
     {
         
         #region Extensibility Method Definitions
@@ -91,7 +91,7 @@ namespace RootNamespace.TestNamespace
         /// </summary>
         /// <param name="serviceUri">The AuthenticationService1 service URI.</param>
         public AuthenticationService1(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::RootNamespace.TestNamespace.AuthenticationService1.IAuthenticationService1Contract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::RootNamespace.TestNamespace.AuthenticationService1.IAuthenticationService1Contract), serviceUri, false))
         {
         }
         
@@ -99,7 +99,7 @@ namespace RootNamespace.TestNamespace
         /// Initializes a new instance of the <see cref="AuthenticationService1"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public AuthenticationService1(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public AuthenticationService1(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -108,7 +108,7 @@ namespace RootNamespace.TestNamespace
         /// <summary>
         /// Gets the set of <see cref="User1"/> entity instances that have been loaded into this <see cref="AuthenticationService1"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::RootNamespace.TestNamespace.User1> User1s
+        public global::OpenRiaServices.Client.EntitySet<global::RootNamespace.TestNamespace.User1> User1s
         {
             get
             {
@@ -120,7 +120,7 @@ namespace RootNamespace.TestNamespace
         /// Gets an EntityQuery instance that can be used to load <see cref="User1"/> entity instances using the 'GetUser' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="User1"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User1> GetUserQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User1> GetUserQuery()
         {
             this.ValidateMethod("GetUserQuery", null);
             return base.CreateQuery<global::RootNamespace.TestNamespace.User1>("GetUser", null, false, false);
@@ -134,7 +134,7 @@ namespace RootNamespace.TestNamespace
         /// <param name="isPersistent">The value for the 'isPersistent' parameter of the query.</param>
         /// <param name="customData">The value for the 'customData' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="User1"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User1> LoginQuery(string userName, string password, bool isPersistent, string customData)
+        public global::OpenRiaServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User1> LoginQuery(string userName, string password, bool isPersistent, string customData)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("userName", userName);
@@ -149,7 +149,7 @@ namespace RootNamespace.TestNamespace
         /// Gets an EntityQuery instance that can be used to load <see cref="User1"/> entity instances using the 'Logout' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="User1"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User1> LogoutQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User1> LogoutQuery()
         {
             this.ValidateMethod("LogoutQuery", null);
             return base.CreateQuery<global::RootNamespace.TestNamespace.User1>("Logout", null, true, false);
@@ -159,7 +159,7 @@ namespace RootNamespace.TestNamespace
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::RootNamespace.TestNamespace.AuthenticationService1.AuthenticationService1EntityContainer();
         }
@@ -177,7 +177,7 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/GetUser", ReplyAction="http://tempuri.org/AuthenticationService1/GetUserResponse")]
             global::System.IAsyncResult BeginGetUser(global::System.AsyncCallback callback, object asyncState);
             
@@ -186,7 +186,7 @@ namespace RootNamespace.TestNamespace
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetUser'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetUser' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndGetUser(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndGetUser(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'Login' operation.
@@ -198,7 +198,7 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(true)]
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/Login", ReplyAction="http://tempuri.org/AuthenticationService1/LoginResponse")]
             global::System.IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, global::System.AsyncCallback callback, object asyncState);
             
@@ -207,7 +207,7 @@ namespace RootNamespace.TestNamespace
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginLogin'.</param>
             /// <returns>The 'QueryResult' returned from the 'Login' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndLogin(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndLogin(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'Logout' operation.
@@ -215,7 +215,7 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(true)]
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/Logout", ReplyAction="http://tempuri.org/AuthenticationService1/LogoutResponse")]
             global::System.IAsyncResult BeginLogout(global::System.AsyncCallback callback, object asyncState);
             
@@ -224,7 +224,7 @@ namespace RootNamespace.TestNamespace
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginLogout'.</param>
             /// <returns>The 'QueryResult' returned from the 'Logout' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndLogout(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndLogout(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -234,22 +234,22 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/SubmitChanges", ReplyAction="http://tempuri.org/AuthenticationService1/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class AuthenticationService1EntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class AuthenticationService1EntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public AuthenticationService1EntityContainer()
             {
-                this.CreateEntitySet<global::RootNamespace.TestNamespace.User1>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::RootNamespace.TestNamespace.User1>(global::OpenRiaServices.Client.EntitySetOperations.Edit);
             }
         }
     }
@@ -257,7 +257,7 @@ namespace RootNamespace.TestNamespace
     /// <summary>
     /// The DomainContext corresponding to the 'AuthenticationService2' DomainService.
     /// </summary>
-    public sealed partial class AuthenticationService2 : global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+    public sealed partial class AuthenticationService2 : global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
     {
         
         #region Extensibility Method Definitions
@@ -284,7 +284,7 @@ namespace RootNamespace.TestNamespace
         /// </summary>
         /// <param name="serviceUri">The AuthenticationService2 service URI.</param>
         public AuthenticationService2(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::RootNamespace.TestNamespace.AuthenticationService2.IAuthenticationService2Contract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::RootNamespace.TestNamespace.AuthenticationService2.IAuthenticationService2Contract), serviceUri, false))
         {
         }
         
@@ -292,7 +292,7 @@ namespace RootNamespace.TestNamespace
         /// Initializes a new instance of the <see cref="AuthenticationService2"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public AuthenticationService2(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public AuthenticationService2(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -301,7 +301,7 @@ namespace RootNamespace.TestNamespace
         /// <summary>
         /// Gets the set of <see cref="User2"/> entity instances that have been loaded into this <see cref="AuthenticationService2"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::RootNamespace.TestNamespace.User2> User2s
+        public global::OpenRiaServices.Client.EntitySet<global::RootNamespace.TestNamespace.User2> User2s
         {
             get
             {
@@ -313,7 +313,7 @@ namespace RootNamespace.TestNamespace
         /// Gets an EntityQuery instance that can be used to load <see cref="User2"/> entity instances using the 'GetUser' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="User2"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User2> GetUserQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User2> GetUserQuery()
         {
             this.ValidateMethod("GetUserQuery", null);
             return base.CreateQuery<global::RootNamespace.TestNamespace.User2>("GetUser", null, false, false);
@@ -327,7 +327,7 @@ namespace RootNamespace.TestNamespace
         /// <param name="isPersistent">The value for the 'isPersistent' parameter of the query.</param>
         /// <param name="customData">The value for the 'customData' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="User2"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User2> LoginQuery(string userName, string password, bool isPersistent, string customData)
+        public global::OpenRiaServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User2> LoginQuery(string userName, string password, bool isPersistent, string customData)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("userName", userName);
@@ -342,7 +342,7 @@ namespace RootNamespace.TestNamespace
         /// Gets an EntityQuery instance that can be used to load <see cref="User2"/> entity instances using the 'Logout' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="User2"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User2> LogoutQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::RootNamespace.TestNamespace.User2> LogoutQuery()
         {
             this.ValidateMethod("LogoutQuery", null);
             return base.CreateQuery<global::RootNamespace.TestNamespace.User2>("Logout", null, true, false);
@@ -352,7 +352,7 @@ namespace RootNamespace.TestNamespace
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::RootNamespace.TestNamespace.AuthenticationService2.AuthenticationService2EntityContainer();
         }
@@ -370,7 +370,7 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/GetUser", ReplyAction="http://tempuri.org/AuthenticationService2/GetUserResponse")]
             global::System.IAsyncResult BeginGetUser(global::System.AsyncCallback callback, object asyncState);
             
@@ -379,7 +379,7 @@ namespace RootNamespace.TestNamespace
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetUser'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetUser' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::RootNamespace.TestNamespace.User2> EndGetUser(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User2> EndGetUser(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'Login' operation.
@@ -391,7 +391,7 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(true)]
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/Login", ReplyAction="http://tempuri.org/AuthenticationService2/LoginResponse")]
             global::System.IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, global::System.AsyncCallback callback, object asyncState);
             
@@ -400,7 +400,7 @@ namespace RootNamespace.TestNamespace
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginLogin'.</param>
             /// <returns>The 'QueryResult' returned from the 'Login' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::RootNamespace.TestNamespace.User2> EndLogin(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User2> EndLogin(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'Logout' operation.
@@ -408,7 +408,7 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(true)]
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/Logout", ReplyAction="http://tempuri.org/AuthenticationService2/LogoutResponse")]
             global::System.IAsyncResult BeginLogout(global::System.AsyncCallback callback, object asyncState);
             
@@ -417,7 +417,7 @@ namespace RootNamespace.TestNamespace
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginLogout'.</param>
             /// <returns>The 'QueryResult' returned from the 'Logout' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::RootNamespace.TestNamespace.User2> EndLogout(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User2> EndLogout(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -427,22 +427,22 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/SubmitChanges", ReplyAction="http://tempuri.org/AuthenticationService2/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class AuthenticationService2EntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class AuthenticationService2EntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public AuthenticationService2EntityContainer()
             {
-                this.CreateEntitySet<global::RootNamespace.TestNamespace.User2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::RootNamespace.TestNamespace.User2>(global::OpenRiaServices.Client.EntitySetOperations.Edit);
             }
         }
     }
@@ -451,7 +451,7 @@ namespace RootNamespace.TestNamespace
     /// The 'User1' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/RootNamespace.TestNamespace")]
-    public sealed partial class User1 : global::OpenRiaServices.DomainServices.Client.Entity, global::System.Security.Principal.IIdentity, global::System.Security.Principal.IPrincipal
+    public sealed partial class User1 : global::OpenRiaServices.Client.Entity, global::System.Security.Principal.IIdentity, global::System.Security.Principal.IPrincipal
     {
         
         private string _name = string.Empty;
@@ -602,7 +602,7 @@ namespace RootNamespace.TestNamespace
     /// The 'User2' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/RootNamespace.TestNamespace")]
-    public sealed partial class User2 : global::OpenRiaServices.DomainServices.Client.Entity, global::System.Security.Principal.IIdentity, global::System.Security.Principal.IPrincipal
+    public sealed partial class User2 : global::OpenRiaServices.Client.Entity, global::System.Security.Principal.IIdentity, global::System.Security.Principal.IPrincipal
     {
         
         private string _name = string.Empty;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using NHibernate.Cfg;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.NHibernate
+namespace OpenRiaServices.NHibernate
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public sealed class NHibernateMetadataProviderAttribute : DomainServiceDescriptionProviderAttribute

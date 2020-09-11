@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Data.DomainServices
 {

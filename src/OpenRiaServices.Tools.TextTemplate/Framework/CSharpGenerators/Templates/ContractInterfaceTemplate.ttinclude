@@ -43,7 +43,7 @@ public interface <#= this.ContractInterfaceName #>
 	private void GenerateContractMethod(DomainOperationEntry operation)
 	{
 #>
-[OpenRiaServices.DomainServices.Client.HasSideEffects(<#= DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower() #>)]
+[OpenRiaServices.Client.HasSideEffects(<#= DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower() #>)]
 <#+
 		this.GenerateContractMethodAttributes(operation.Name);
 #>

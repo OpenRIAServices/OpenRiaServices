@@ -80,8 +80,8 @@
     </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.Controls.DomainServices.csproj" />
   </ItemGroup>

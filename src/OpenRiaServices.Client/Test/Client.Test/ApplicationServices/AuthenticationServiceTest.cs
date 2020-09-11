@@ -5,15 +5,15 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Security.Principal;
 using System.Threading;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="AuthenticationService"/> members.

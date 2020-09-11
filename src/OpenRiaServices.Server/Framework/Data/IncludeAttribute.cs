@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Attribute applied to an association member to indicate that the associated entities should be

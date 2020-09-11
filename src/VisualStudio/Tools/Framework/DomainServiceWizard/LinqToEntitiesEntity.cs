@@ -3,8 +3,8 @@ using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.EntityFramework;
+using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {

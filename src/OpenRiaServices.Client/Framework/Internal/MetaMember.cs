@@ -1,11 +1,11 @@
-﻿using OpenRiaServices.DomainServices.Server.Data;
+﻿using OpenRiaServices.Server.Data;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace OpenRiaServices.DomainServices.Client.Internal
+namespace OpenRiaServices.Client.Internal
 {
     /// <summary>
     /// INTERNAL - Public API surface might change from version to version.

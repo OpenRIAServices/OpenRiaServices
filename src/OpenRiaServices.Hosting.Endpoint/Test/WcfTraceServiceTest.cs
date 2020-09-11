@@ -1,4 +1,4 @@
-﻿using OpenRiaServices.DomainServices.Hosting;
+﻿using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -7,7 +7,7 @@ using System.ServiceModel.Syndication;
 using System.ServiceModel.Channels;
 using System.Text;
 
-namespace OpenRiaServices.DomainServices.Hosting.Local.Test
+namespace OpenRiaServices.Hosting.Local.Test
 {
     /// <summary>
     ///This is a test class for WcfTraceServiceTest and is intended
@@ -18,7 +18,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
     {
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
+        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationFeedTest()
         {
             SyndicationFeed actual = WcfTraceService.CreateTraceSyndicationFeed();
@@ -27,7 +27,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
+        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceXmlTest()
         {
             Stream actual = WcfTraceService.CreateTraceXml();
@@ -37,7 +37,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
+        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceHtmlTest()
         {
             Stream actual = WcfTraceService.CreateTraceHtml();
@@ -50,7 +50,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
+        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationItemTest()
         {
             SyndicationItem actual = WcfTraceService.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
@@ -66,7 +66,7 @@ namespace OpenRiaServices.DomainServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.DomainServices.Hosting.Endpoint.dll")]
+        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void InstanceTest()
         {
             WcfTraceService actual;

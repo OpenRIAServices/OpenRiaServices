@@ -1,6 +1,6 @@
 ﻿<#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
+<#@ import namespace="OpenRiaServices.Server" #>
 <#@ include file="AttributeGeneratorTemplate.ttinclude" #>
 
 <#+

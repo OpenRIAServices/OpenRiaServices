@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web.Security;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
+namespace OpenRiaServices.Server.Authentication.AspNetMembership.Test
 {
     public class MockRoleProvider : RoleProvider
     {

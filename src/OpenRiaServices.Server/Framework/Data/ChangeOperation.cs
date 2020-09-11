@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Server
+﻿namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Enumeration of the types of update operations that

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Represents an unrecoverable error that occurred during the

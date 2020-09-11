@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.EntityFramework;
+using OpenRiaServices.Server;
+using OpenRiaServices.Hosting;
 using DbContextModels.AdventureWorks;
 
 namespace TestDomainServices.DbCtx

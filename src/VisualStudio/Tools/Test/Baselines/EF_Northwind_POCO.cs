@@ -9,9 +9,9 @@ namespace BizLogic.Test
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     using NorthwindPOCOModel;
-    using OpenRiaServices.DomainServices.EntityFramework;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.EntityFramework;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // Implements application logic using the NorthwindEntities context.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// PropertyDescriptor for general domain Type properties.

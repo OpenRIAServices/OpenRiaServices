@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using System.Windows.Data;
 
 namespace OpenRiaServices.Data.DomainServices

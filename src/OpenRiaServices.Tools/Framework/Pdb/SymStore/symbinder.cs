@@ -1,5 +1,5 @@
 // These interfaces serve as an extension to the BCL's SymbolStore interfaces.
-namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore 
+namespace OpenRiaServices.Tools.Pdb.SymStore 
 {
     using System;
     using System.Diagnostics.SymbolStore;

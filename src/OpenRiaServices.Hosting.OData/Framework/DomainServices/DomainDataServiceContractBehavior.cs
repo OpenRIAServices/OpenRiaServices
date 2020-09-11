@@ -1,7 +1,7 @@
 using System;
 using System.ServiceModel;
 
-namespace OpenRiaServices.DomainServices.Hosting.OData
+namespace OpenRiaServices.Hosting.OData
 {
     #region Namespaces
     
@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     using System.ServiceModel.Channels;
     using System.ServiceModel.Description;
     using System.ServiceModel.Dispatcher;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Server;
     
     #endregion
 

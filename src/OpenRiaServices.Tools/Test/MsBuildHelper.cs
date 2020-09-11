@@ -8,7 +8,7 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Helper class for common MSBuild tasks

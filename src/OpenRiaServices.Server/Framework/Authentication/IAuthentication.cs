@@ -1,11 +1,11 @@
-﻿namespace OpenRiaServices.DomainServices.Server.Authentication
+﻿namespace OpenRiaServices.Server.Authentication
 {
     /// <summary>
     /// An interface for a <see cref="DomainService"/> that encapsulates the authentication domain. A
     /// domain service implementing this interface will be used to populate the user on the client.
     /// </summary>
     /// <remarks>
-    /// <c>OpenRiaServices.DomainServices.Client.ApplicationServices.WebAuthenticationService</c>
+    /// <c>OpenRiaServices.Client.ApplicationServices.WebAuthenticationService</c>
     /// will work with the <c>DomainContext</c> generated for any domain service implementing this
     /// interface.
     /// <para>

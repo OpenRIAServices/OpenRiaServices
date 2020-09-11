@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 
 namespace Cities
 {

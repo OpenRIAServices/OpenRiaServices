@@ -16,9 +16,9 @@ using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 #endif
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
 #if DBCONTEXT
     using ConcurrencyMode = System.Data.Entity.Core.Metadata.Edm.ConcurrencyMode;

@@ -22,10 +22,10 @@ namespace TestDomainServices
     // [CustomValidationAttribute(typeof(TestDomainServices.ServerOnlyValidator), "IsObjectValid")]
     // 
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class A : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class A : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.B> _b;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.B> _b;
         
         private int _bid1;
         
@@ -84,7 +84,7 @@ namespace TestDomainServices
             {
                 if ((this._b == null))
                 {
-                    this._b = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.B>(this, "B", this.FilterB);
+                    this._b = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.B>(this, "B", this.FilterB);
                 }
                 return this._b.Entity;
             }
@@ -316,10 +316,10 @@ namespace TestDomainServices
     /// The 'B' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class B : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class B : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.C> _cs;
+        private global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.C> _cs;
         
         private int _id1;
         
@@ -353,13 +353,13 @@ namespace TestDomainServices
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("B_C", "ID1, ID2", "BID1, BID2")]
         [global::System.ComponentModel.DataAnnotations.DisplayAttribute(Description="Cs")]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.C> Cs
+        public global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.C> Cs
         {
             get
             {
                 if ((this._cs == null))
                 {
-                    this._cs = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.C>(this, "Cs", this.FilterCs);
+                    this._cs = new global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.C>(this, "Cs", this.FilterCs);
                 }
                 return this._cs;
             }
@@ -429,7 +429,7 @@ namespace TestDomainServices
         /// <returns>An object instance that uniquely identifies this entity instance.</returns>
         public override object GetIdentity()
         {
-            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._id1, this._id2);
+            return global::OpenRiaServices.Client.EntityKey.Create(this._id1, this._id2);
         }
     }
     
@@ -437,16 +437,16 @@ namespace TestDomainServices
     /// The 'C' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class C : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class C : global::OpenRiaServices.Client.Entity
     {
         
         private int _bid1;
         
         private int _bid2;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref1;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref1;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref2;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref2;
         
         private int _did_Ref1;
         
@@ -542,7 +542,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref1 == null))
                 {
-                    this._d_Ref1 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref1", this.FilterD_Ref1);
+                    this._d_Ref1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref1", this.FilterD_Ref1);
                 }
                 return this._d_Ref1.Entity;
             }
@@ -585,7 +585,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref2 == null))
                 {
-                    this._d_Ref2 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref2", this.FilterD_Ref2);
+                    this._d_Ref2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref2", this.FilterD_Ref2);
                 }
                 return this._d_Ref2.Entity;
             }
@@ -709,20 +709,20 @@ namespace TestDomainServices
     /// The 'D' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class D : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class D : global::OpenRiaServices.Client.Entity
     {
         
         private byte[] _binaryData;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.C> _c;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.C> _c;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d1;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d1;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d2;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d2;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D> _d2_BackRef;
+        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d2_BackRef;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.D> _ds;
+        private global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.D> _ds;
         
         private int _dSelfRef_ID1;
         
@@ -799,7 +799,7 @@ namespace TestDomainServices
             {
                 if ((this._c == null))
                 {
-                    this._c = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.C>(this, "C", this.FilterC);
+                    this._c = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.C>(this, "C", this.FilterC);
                 }
                 return this._c.Entity;
             }
@@ -834,7 +834,7 @@ namespace TestDomainServices
             {
                 if ((this._d1 == null))
                 {
-                    this._d1 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D1", this.FilterD1);
+                    this._d1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D1", this.FilterD1);
                 }
                 return this._d1.Entity;
             }
@@ -877,7 +877,7 @@ namespace TestDomainServices
             {
                 if ((this._d2 == null))
                 {
-                    this._d2 = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2", this.FilterD2);
+                    this._d2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2", this.FilterD2);
                 }
                 return this._d2.Entity;
             }
@@ -920,7 +920,7 @@ namespace TestDomainServices
             {
                 if ((this._d2_BackRef == null))
                 {
-                    this._d2_BackRef = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2_BackRef", this.FilterD2_BackRef);
+                    this._d2_BackRef = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2_BackRef", this.FilterD2_BackRef);
                 }
                 return this._d2_BackRef.Entity;
             }
@@ -949,13 +949,13 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="D"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("D_D", "ID", "DSelfRef_ID1")]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.D> Ds
+        public global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.D> Ds
         {
             get
             {
                 if ((this._ds == null))
                 {
-                    this._ds = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::TestDomainServices.D>(this, "Ds", this.FilterDs, this.AttachDs, this.DetachDs);
+                    this._ds = new global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.D>(this, "Ds", this.FilterDs, this.AttachDs, this.DetachDs);
                 }
                 return this._ds;
             }
@@ -1154,7 +1154,7 @@ namespace TestDomainServices
     /// The 'SpecialDataTypes' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class SpecialDataTypes : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class SpecialDataTypes : global::OpenRiaServices.Client.Entity
     {
         
         private global::System.Collections.Generic.IEnumerable<global::System.Nullable<bool>> _booleanProperty;
@@ -1276,7 +1276,7 @@ namespace TestDomainServices
     /// The 'TestEntity_DataMemberBuddy' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class TestEntity_DataMemberBuddy : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class TestEntity_DataMemberBuddy : global::OpenRiaServices.Client.Entity
     {
         
         private int _id;
@@ -1369,7 +1369,7 @@ namespace TestDomainServices
     /// <summary>
     /// The DomainContext corresponding to the 'TestProvider_Scenarios_CodeGen' DomainService.
     /// </summary>
-    public sealed partial class TestProvider_Scenarios_CodeGen : global::OpenRiaServices.DomainServices.Client.DomainContext
+    public sealed partial class TestProvider_Scenarios_CodeGen : global::OpenRiaServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -1396,7 +1396,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="serviceUri">The TestProvider_Scenarios_CodeGen service URI.</param>
         public TestProvider_Scenarios_CodeGen(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TestProvider_Scenarios_CodeGen.ITestProvider_Scenarios_CodeGenContract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TestProvider_Scenarios_CodeGen.ITestProvider_Scenarios_CodeGenContract), serviceUri, false))
         {
         }
         
@@ -1404,7 +1404,7 @@ namespace TestDomainServices
         /// Initializes a new instance of the <see cref="TestProvider_Scenarios_CodeGen"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public TestProvider_Scenarios_CodeGen(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public TestProvider_Scenarios_CodeGen(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -1413,7 +1413,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="D"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.D> Ds
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.D> Ds
         {
             get
             {
@@ -1424,7 +1424,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="A"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.A> As
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.A> As
         {
             get
             {
@@ -1435,7 +1435,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="B"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.B> Bs
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.B> Bs
         {
             get
             {
@@ -1446,7 +1446,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="C"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.C> Cs
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.C> Cs
         {
             get
             {
@@ -1457,7 +1457,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="SpecialDataTypes"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.SpecialDataTypes> SpecialDataTypes
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.SpecialDataTypes> SpecialDataTypes
         {
             get
             {
@@ -1468,7 +1468,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="TestEntity_DataMemberBuddy"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TestEntity_DataMemberBuddy> TestEntity_DataMemberBuddies
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TestEntity_DataMemberBuddy> TestEntity_DataMemberBuddies
         {
             get
             {
@@ -1479,7 +1479,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the set of <see cref="Turkishİ2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios_CodeGen"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.Turkishİ2> Turkishİ2s
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.Turkishİ2> Turkishİ2s
         {
             get
             {
@@ -1491,7 +1491,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'FetchDs2' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> FetchDs2Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> FetchDs2Query()
         {
             this.ValidateMethod("FetchDs2Query", null);
             return base.CreateQuery<global::TestDomainServices.D>("FetchDs2", null, false, true);
@@ -1501,7 +1501,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'FindDs6' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> FindDs6Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> FindDs6Query()
         {
             this.ValidateMethod("FindDs6Query", null);
             return base.CreateQuery<global::TestDomainServices.D>("FindDs6", null, false, true);
@@ -1511,7 +1511,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'Get_Images' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> Get_ImagesQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> Get_ImagesQuery()
         {
             this.ValidateMethod("Get_ImagesQuery", null);
             return base.CreateQuery<global::TestDomainServices.D>("Get_Images", null, false, true);
@@ -1522,7 +1522,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="kind">The value for the 'kind' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> Get_Images_OfKindQuery(global::System.Nullable<global::TestDomainServices.ImageKindEnum> kind)
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> Get_Images_OfKindQuery(global::System.Nullable<global::TestDomainServices.ImageKindEnum> kind)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("kind", kind);
@@ -1534,7 +1534,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.A> GetAsQuery()
         {
             this.ValidateMethod("GetAsQuery", null);
             return base.CreateQuery<global::TestDomainServices.A>("GetAs", null, false, false);
@@ -1544,7 +1544,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAsWithSideEffects' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.A> GetAsWithSideEffectsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.A> GetAsWithSideEffectsQuery()
         {
             this.ValidateMethod("GetAsWithSideEffectsQuery", null);
             return base.CreateQuery<global::TestDomainServices.A>("GetAsWithSideEffects", null, true, false);
@@ -1554,7 +1554,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="B"/> entity instances using the 'GetBs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="B"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.B> GetBsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.B> GetBsQuery()
         {
             this.ValidateMethod("GetBsQuery", null);
             return base.CreateQuery<global::TestDomainServices.B>("GetBs", null, false, true);
@@ -1564,7 +1564,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="C"/> entity instances using the 'GetCs' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="C"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.C> GetCsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.C> GetCsQuery()
         {
             this.ValidateMethod("GetCsQuery", null);
             return base.CreateQuery<global::TestDomainServices.C>("GetCs", null, false, true);
@@ -1574,7 +1574,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="SpecialDataTypes"/> entity instances using the 'GetSpecialDataTypes' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="SpecialDataTypes"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.SpecialDataTypes> GetSpecialDataTypesQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.SpecialDataTypes> GetSpecialDataTypesQuery()
         {
             this.ValidateMethod("GetSpecialDataTypesQuery", null);
             return base.CreateQuery<global::TestDomainServices.SpecialDataTypes>("GetSpecialDataTypes", null, false, true);
@@ -1584,7 +1584,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="TestEntity_DataMemberBuddy"/> entity instances using the 'GetTestEntity_DataMemberBuddys' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="TestEntity_DataMemberBuddy"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TestEntity_DataMemberBuddy> GetTestEntity_DataMemberBuddysQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TestEntity_DataMemberBuddy> GetTestEntity_DataMemberBuddysQuery()
         {
             this.ValidateMethod("GetTestEntity_DataMemberBuddysQuery", null);
             return base.CreateQuery<global::TestDomainServices.TestEntity_DataMemberBuddy>("GetTestEntity_DataMemberBuddys", null, false, true);
@@ -1594,7 +1594,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="Turkishİ2"/> entity instances using the 'GetTurkishİ2' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Turkishİ2"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.Turkishİ2> GetTurkishİ2Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.Turkishİ2> GetTurkishİ2Query()
         {
             this.ValidateMethod("GetTurkishİ2Query", null);
             return base.CreateQuery<global::TestDomainServices.Turkishİ2>("GetTurkishİ2", null, false, true);
@@ -1604,7 +1604,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'GettyImages' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> GettyImagesQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> GettyImagesQuery()
         {
             this.ValidateMethod("GettyImagesQuery", null);
             return base.CreateQuery<global::TestDomainServices.D>("GettyImages", null, false, true);
@@ -1614,7 +1614,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'QueryDs3' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> QueryDs3Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> QueryDs3Query()
         {
             this.ValidateMethod("QueryDs3Query", null);
             return base.CreateQuery<global::TestDomainServices.D>("QueryDs3", null, false, true);
@@ -1624,7 +1624,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'RandomNameButStillAQuery' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> RandomNameButStillAQueryQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> RandomNameButStillAQueryQuery()
         {
             this.ValidateMethod("RandomNameButStillAQueryQuery", null);
             return base.CreateQuery<global::TestDomainServices.D>("RandomNameButStillAQuery", null, false, true);
@@ -1634,7 +1634,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'RetrieveDs4' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> RetrieveDs4Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> RetrieveDs4Query()
         {
             this.ValidateMethod("RetrieveDs4Query", null);
             return base.CreateQuery<global::TestDomainServices.D>("RetrieveDs4", null, false, true);
@@ -1644,7 +1644,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'RetrieveDs5' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> RetrieveDs5Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> RetrieveDs5Query()
         {
             this.ValidateMethod("RetrieveDs5Query", null);
             return base.CreateQuery<global::TestDomainServices.D>("RetrieveDs5", null, false, true);
@@ -1654,7 +1654,7 @@ namespace TestDomainServices
         /// Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'SelectDs1' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.D> SelectDs1Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.D> SelectDs1Query()
         {
             this.ValidateMethod("SelectDs1Query", null);
             return base.CreateQuery<global::TestDomainServices.D>("SelectDs1", null, false, true);
@@ -1667,7 +1667,7 @@ namespace TestDomainServices
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::OpenRiaServices.DomainServices.Client.InvokeOperation OnlineMethod(global::TestDomainServices.D x, global::System.Action<global::OpenRiaServices.DomainServices.Client.InvokeOperation> callback, object userState)
+        public global::OpenRiaServices.Client.InvokeOperation OnlineMethod(global::TestDomainServices.D x, global::System.Action<global::OpenRiaServices.Client.InvokeOperation> callback, object userState)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("x", x);
@@ -1680,7 +1680,7 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="x">The value for the 'x' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::OpenRiaServices.DomainServices.Client.InvokeOperation OnlineMethod(global::TestDomainServices.D x)
+        public global::OpenRiaServices.Client.InvokeOperation OnlineMethod(global::TestDomainServices.D x)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("x", x);
@@ -1694,7 +1694,7 @@ namespace TestDomainServices
         /// <param name="x">The value for the 'x' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public global::System.Threading.Tasks.Task<global::OpenRiaServices.DomainServices.Client.InvokeResult> OnlineMethodAsync(global::TestDomainServices.D x, global::System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.InvokeResult> OnlineMethodAsync(global::TestDomainServices.D x, global::System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("x", x);
@@ -1706,7 +1706,7 @@ namespace TestDomainServices
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.TestProvider_Scenarios_CodeGen.TestProvider_Scenarios_CodeGenEntityContainer();
         }
@@ -1724,7 +1724,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/FetchDs2", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/FetchDs2Response")]
             global::System.IAsyncResult BeginFetchDs2(global::System.AsyncCallback callback, object asyncState);
             
@@ -1733,7 +1733,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginFetchDs2'.</param>
             /// <returns>The 'QueryResult' returned from the 'FetchDs2' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndFetchDs2(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndFetchDs2(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'FindDs6' operation.
@@ -1741,7 +1741,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/FindDs6", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/FindDs6Response")]
             global::System.IAsyncResult BeginFindDs6(global::System.AsyncCallback callback, object asyncState);
             
@@ -1750,7 +1750,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginFindDs6'.</param>
             /// <returns>The 'QueryResult' returned from the 'FindDs6' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndFindDs6(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndFindDs6(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'Get_Images' operation.
@@ -1758,7 +1758,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_ImagesResponse")]
             global::System.IAsyncResult BeginGet_Images(global::System.AsyncCallback callback, object asyncState);
             
@@ -1767,7 +1767,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGet_Images'.</param>
             /// <returns>The 'QueryResult' returned from the 'Get_Images' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndGet_Images(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndGet_Images(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'Get_Images_OfKind' operation.
@@ -1776,7 +1776,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images_OfKind", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/Get_Images_OfKindResponse")]
             global::System.IAsyncResult BeginGet_Images_OfKind(global::System.Nullable<global::TestDomainServices.ImageKindEnum> kind, global::System.AsyncCallback callback, object asyncState);
             
@@ -1785,7 +1785,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGet_Images_OfKind'.</param>
             /// <returns>The 'QueryResult' returned from the 'Get_Images_OfKind' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndGet_Images_OfKind(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndGet_Images_OfKind(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetAs' operation.
@@ -1793,7 +1793,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAs", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsResponse")]
             global::System.IAsyncResult BeginGetAs(global::System.AsyncCallback callback, object asyncState);
             
@@ -1802,7 +1802,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetAs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetAs' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAs(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.A> EndGetAs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetAsWithSideEffects' operation.
@@ -1810,7 +1810,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(true)]
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsWithSideEffects", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetAsWithSideEffectsResponse")]
             global::System.IAsyncResult BeginGetAsWithSideEffects(global::System.AsyncCallback callback, object asyncState);
             
@@ -1819,7 +1819,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetAsWithSideEffects'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetAsWithSideEffects' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.A> EndGetAsWithSideEffects(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.A> EndGetAsWithSideEffects(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetBs' operation.
@@ -1827,7 +1827,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetBs", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetBsResponse")]
             global::System.IAsyncResult BeginGetBs(global::System.AsyncCallback callback, object asyncState);
             
@@ -1836,7 +1836,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetBs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetBs' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.B> EndGetBs(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.B> EndGetBs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCs' operation.
@@ -1844,7 +1844,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetCs", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetCsResponse")]
             global::System.IAsyncResult BeginGetCs(global::System.AsyncCallback callback, object asyncState);
             
@@ -1853,7 +1853,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCs'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCs' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.C> EndGetCs(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.C> EndGetCs(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetSpecialDataTypes' operation.
@@ -1861,7 +1861,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetSpecialDataTypes", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetSpecialDataTypesResponse")]
             global::System.IAsyncResult BeginGetSpecialDataTypes(global::System.AsyncCallback callback, object asyncState);
             
@@ -1870,7 +1870,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetSpecialDataTypes'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetSpecialDataTypes' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.SpecialDataTypes> EndGetSpecialDataTypes(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.SpecialDataTypes> EndGetSpecialDataTypes(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTestEntity_DataMemberBuddys' operation.
@@ -1878,7 +1878,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTestEntity_DataMemberBuddys", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTestEntity_DataMemberBuddysR" +
                 "esponse")]
             global::System.IAsyncResult BeginGetTestEntity_DataMemberBuddys(global::System.AsyncCallback callback, object asyncState);
@@ -1888,7 +1888,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTestEntity_DataMemberBuddys'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTestEntity_DataMemberBuddys' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TestEntity_DataMemberBuddy> EndGetTestEntity_DataMemberBuddys(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TestEntity_DataMemberBuddy> EndGetTestEntity_DataMemberBuddys(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTurkishİ2' operation.
@@ -1896,7 +1896,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTurkishİ2", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GetTurkishİ2Response")]
             global::System.IAsyncResult BeginGetTurkishİ2(global::System.AsyncCallback callback, object asyncState);
             
@@ -1905,7 +1905,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTurkishİ2'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTurkishİ2' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.Turkishİ2> EndGetTurkishİ2(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.Turkishİ2> EndGetTurkishİ2(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GettyImages' operation.
@@ -1913,7 +1913,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/GettyImages", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/GettyImagesResponse")]
             global::System.IAsyncResult BeginGettyImages(global::System.AsyncCallback callback, object asyncState);
             
@@ -1922,7 +1922,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGettyImages'.</param>
             /// <returns>The 'QueryResult' returned from the 'GettyImages' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndGettyImages(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndGettyImages(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'OnlineMethod' operation.
@@ -1931,7 +1931,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(true)]
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/OnlineMethod", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/OnlineMethodResponse")]
             global::System.IAsyncResult BeginOnlineMethod(global::TestDomainServices.D x, global::System.AsyncCallback callback, object asyncState);
             
@@ -1947,7 +1947,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/QueryDs3", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/QueryDs3Response")]
             global::System.IAsyncResult BeginQueryDs3(global::System.AsyncCallback callback, object asyncState);
             
@@ -1956,7 +1956,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginQueryDs3'.</param>
             /// <returns>The 'QueryResult' returned from the 'QueryDs3' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndQueryDs3(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndQueryDs3(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'RandomNameButStillAQuery' operation.
@@ -1964,7 +1964,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/RandomNameButStillAQuery", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/RandomNameButStillAQueryRespons" +
                 "e")]
             global::System.IAsyncResult BeginRandomNameButStillAQuery(global::System.AsyncCallback callback, object asyncState);
@@ -1974,7 +1974,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginRandomNameButStillAQuery'.</param>
             /// <returns>The 'QueryResult' returned from the 'RandomNameButStillAQuery' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndRandomNameButStillAQuery(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndRandomNameButStillAQuery(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'RetrieveDs4' operation.
@@ -1982,7 +1982,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs4", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs4Response")]
             global::System.IAsyncResult BeginRetrieveDs4(global::System.AsyncCallback callback, object asyncState);
             
@@ -1991,7 +1991,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginRetrieveDs4'.</param>
             /// <returns>The 'QueryResult' returned from the 'RetrieveDs4' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndRetrieveDs4(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndRetrieveDs4(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'RetrieveDs5' operation.
@@ -1999,7 +1999,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs5", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/RetrieveDs5Response")]
             global::System.IAsyncResult BeginRetrieveDs5(global::System.AsyncCallback callback, object asyncState);
             
@@ -2008,7 +2008,7 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginRetrieveDs5'.</param>
             /// <returns>The 'QueryResult' returned from the 'RetrieveDs5' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndRetrieveDs5(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndRetrieveDs5(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SelectDs1' operation.
@@ -2016,7 +2016,7 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/TestProvider_Scenarios_CodeGen/SelectDs1", ReplyAction="http://tempuri.org/TestProvider_Scenarios_CodeGen/SelectDs1Response")]
             global::System.IAsyncResult BeginSelectDs1(global::System.AsyncCallback callback, object asyncState);
             
@@ -2025,21 +2025,21 @@ namespace TestDomainServices
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSelectDs1'.</param>
             /// <returns>The 'QueryResult' returned from the 'SelectDs1' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.D> EndSelectDs1(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.D> EndSelectDs1(global::System.IAsyncResult result);
         }
         
-        internal sealed class TestProvider_Scenarios_CodeGenEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class TestProvider_Scenarios_CodeGenEntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public TestProvider_Scenarios_CodeGenEntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.A>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.B>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.C>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.D>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.SpecialDataTypes>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TestEntity_DataMemberBuddy>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.Turkishİ2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.A>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.B>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.C>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.D>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.SpecialDataTypes>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TestEntity_DataMemberBuddy>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.Turkishİ2>(global::OpenRiaServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -2048,7 +2048,7 @@ namespace TestDomainServices
     /// The 'Turkishİ2' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices")]
-    public sealed partial class Turkishİ2 : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Turkishİ2 : global::OpenRiaServices.Client.Entity
     {
         
         private string _data;

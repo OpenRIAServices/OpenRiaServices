@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     using System.Collections.Generic;
     using System.Globalization;

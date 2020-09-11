@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.WindowsAzure
+namespace OpenRiaServices.WindowsAzure
 {
     /// <summary>
     /// Attribute that declares a table-specific <see cref="DomainServiceDescriptionProvider"/>.

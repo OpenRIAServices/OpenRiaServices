@@ -7,26 +7,26 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     using System.ComponentModel;
     using System.Globalization;
     using System.Collections.Generic;
     using System.Linq;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Tools.TextTemplate;
-    using OpenRiaServices.DomainServices.Tools;
-    using OpenRiaServices.DomainServices;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Tools.TextTemplate;
+    using OpenRiaServices.Tools;
+    using OpenRiaServices;
     using System.Reflection;
-    using OpenRiaServices.DomainServices.Server.Authentication;
+    using OpenRiaServices.Server.Authentication;
 
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CSharpDomainContextGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.DomainContextGenerator
+    public partial class CSharpDomainContextGenerator : OpenRiaServices.Tools.TextTemplate.DomainContextGenerator
     {
         /// <summary>
         /// Create the template output
@@ -54,8 +54,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Client;
-using OpenRiaServices.DomainServices.Client.ApplicationServices;
+using OpenRiaServices.Client;
+using OpenRiaServices.Client.ApplicationServices;
 ");
 
 
@@ -66,10 +66,10 @@ using OpenRiaServices.DomainServices.Client.ApplicationServices;
     /// </summary>
 	protected virtual void GenerateClassDeclaration()
 	{	
-		string baseType = "OpenRiaServices.DomainServices.Client.DomainContext";
+		string baseType = "OpenRiaServices.Client.DomainContext";
 		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
 		{
-			baseType = @"global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+			baseType = @"global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase";
 		}
 		 
 
@@ -106,7 +106,7 @@ this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\t\t\r\npublic ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
-this.Write("(Uri serviceUri) : \r\n\tthis(OpenRiaServices.DomainServices.Client.DomainContext.Cr" +
+this.Write("(Uri serviceUri) : \r\n\tthis(OpenRiaServices.Client.DomainContext.Cr" +
         "eateDomainClient(typeof(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
@@ -707,7 +707,7 @@ this.Write("\r\n");
 	private void GenerateContractMethod(DomainOperationEntry operation)
 	{
 
-this.Write("[OpenRiaServices.DomainServices.Client.HasSideEffects(");
+this.Write("[OpenRiaServices.Client.HasSideEffects(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower()));
 

@@ -5,7 +5,7 @@ using System.IO;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AdventureWorksModel;
 using NorthwindModel;

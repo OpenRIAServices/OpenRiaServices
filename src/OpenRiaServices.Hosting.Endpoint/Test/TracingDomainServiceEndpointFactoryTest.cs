@@ -1,15 +1,15 @@
 ﻿using System.ServiceModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Server;
+using OpenRiaServices.Hosting;
 using System.ServiceModel.Description;
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using OpenRiaServices;
 
-namespace OpenRiaServices.DomainServices.Hosting.Local.Test
+namespace OpenRiaServices.Hosting.Local.Test
 {
     /// <summary>
     ///This is a test class for TracingDomainServiceEndpointFactoryTest and is intended

@@ -5,11 +5,11 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     [TestClass]
     public class QueryAttributeTests

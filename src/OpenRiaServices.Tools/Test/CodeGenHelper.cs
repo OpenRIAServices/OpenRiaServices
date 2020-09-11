@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
 
     public static class CodeGenHelper

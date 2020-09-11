@@ -8,8 +8,8 @@ namespace NorthwindModelBuddy
     using System.Data.Entity.Core.Objects.DataClasses;
     using System.Linq;
     using NorthwindModel;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // The MetadataTypeAttribute identifies CategoryBuddyMetadata as the class

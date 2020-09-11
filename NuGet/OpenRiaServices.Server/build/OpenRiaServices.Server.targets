@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.ValidateDomainServicesTask"
-             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" />
+  <UsingTask TaskName="OpenRiaServices.Tools.ValidateDomainServicesTask"
+             AssemblyFile="OpenRiaServices.Tools.dll" />
 
   <!--
     ============================================================
@@ -60,9 +60,9 @@
       <!-- Only run validation in Web Application Projects -->
       <_RIAProjectIsWebApplication>$(ProjectTypeGuids.ToLowerInvariant().Contains(349c5851-65df-11da-9384-00065b846f21))</_RIAProjectIsWebApplication>
 
-      <!-- Only run validation when the Project references OpenRiaServices.DomainServices.Server -->
+      <!-- Only run validation when the Project references OpenRiaServices.Server -->
       <_RIAProjectReferences>@(Reference)</_RIAProjectReferences>
-      <_RIAProjectReferencesIncludeDomainService>$(_RIAProjectReferences.Contains(OpenRiaServices.DomainServices.Server))</_RIAProjectReferencesIncludeDomainService>
+      <_RIAProjectReferencesIncludeDomainService>$(_RIAProjectReferences.Contains(OpenRiaServices.Server))</_RIAProjectReferencesIncludeDomainService>
 
       <!-- Only run validation for Projects that do not have a Silverlight link -->
       <_RIAProjectDoesNotLinkSilverlight>True</_RIAProjectDoesNotLinkSilverlight>

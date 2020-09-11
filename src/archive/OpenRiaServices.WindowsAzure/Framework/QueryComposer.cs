@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace OpenRiaServices.DomainServices.WindowsAzure
+namespace OpenRiaServices.WindowsAzure
 {
     /// <summary>
     /// Used to compose two separate queries into a single query

@@ -60,8 +60,8 @@
     <Reference Include="System.Net" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Controls.Data.Input" />
-    <Reference Include="OpenRiaServices.DomainServices.Client" />
-    <Reference Include="OpenRiaServices.DomainServices.Client.Web" />
+    <Reference Include="OpenRiaServices.Client" />
+    <Reference Include="OpenRiaServices.Client.Web" />
     <Reference Include="System.ServiceModel.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />

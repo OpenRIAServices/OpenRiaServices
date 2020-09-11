@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices
+namespace OpenRiaServices
 {
 #if SILVERLIGHT
      /// <summary>

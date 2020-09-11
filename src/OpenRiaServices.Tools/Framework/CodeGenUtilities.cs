@@ -7,9 +7,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices;
+using OpenRiaServices;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// A collection of code generation utilities.

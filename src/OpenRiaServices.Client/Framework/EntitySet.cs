@@ -9,13 +9,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Internal;
+using OpenRiaServices.Client.Internal;
 
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
 #endif
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Represents a collection of <see cref="Entity"/> instances.

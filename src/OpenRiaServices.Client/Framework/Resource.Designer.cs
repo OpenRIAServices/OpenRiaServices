@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.DomainServices.Client {
+namespace OpenRiaServices.Client {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace OpenRiaServices.DomainServices.Client {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.DomainServices.Client.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.Client.Resource", typeof(Resource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -124,7 +124,7 @@ namespace OpenRiaServices.DomainServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must reference the assembly &apos;OpenRiaServices.DomainServices.Client.Web&apos;.
+        ///   Looks up a localized string similar to You must reference the assembly &apos;OpenRiaServices.Client.Web&apos;.
         /// </summary>
         internal static string DomainClientFactory_MissingClientWebReference {
             get {

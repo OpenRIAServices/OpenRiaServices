@@ -17,10 +17,10 @@ using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.Description
 using System.Reflection;
 #endif
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     using Cities;
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     [TestClass]
     public class EntityContainerTests : UnitTestBase

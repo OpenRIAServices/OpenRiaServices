@@ -7,9 +7,9 @@ using System.Reflection;
 using NHibernate.Cfg;
 using NHibernate.Mapping;
 using NHibernate.Type;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.NHibernate
+namespace OpenRiaServices.NHibernate
 {
     internal class NHibernateTypeDescriptor : CustomTypeDescriptor
     {

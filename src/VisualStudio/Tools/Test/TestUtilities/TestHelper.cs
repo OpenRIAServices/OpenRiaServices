@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
-using OpenRiaServices.DomainServices.LinqToSql;
-using ToolHelper = OpenRiaServices.DomainServices.Tools.Test.TestHelper;
+using OpenRiaServices.LinqToSql;
+using ToolHelper = OpenRiaServices.Tools.Test.TestHelper;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
 {

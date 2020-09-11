@@ -19,9 +19,9 @@ namespace System
     using System.ServiceModel;
     using System.Subsystem;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -308,9 +308,9 @@ namespace System.Subsystem
     using System.Runtime.Serialization;
     using System.ServiceModel;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -596,9 +596,9 @@ namespace SystemExtensions
     using System.Runtime.Serialization;
     using System.ServiceModel;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using TestDomainServices;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

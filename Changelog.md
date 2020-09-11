@@ -12,10 +12,10 @@
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
-2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.DomainServices.Server.ApplicationServices` namespace in your server project 
+2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.Server.ApplicationServices` namespace in your server project 
    1. Add the *OpenRiaServices.Server.Authentication.AspNetMembership* nuget package to it
-   2. Replace *OpenRiaServices.DomainServices.Server.ApplicationServices* with *OpenRiaServices.DomainServices.Server.Authentication*
-   3. Add `using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;` in file which uses *AuthenicationBase*, *UserBase* or related classes.
+   2. Replace *OpenRiaServices.Server.ApplicationServices* with *OpenRiaServices.Server.Authentication*
+   3. Add `using OpenRiaServices.Server.Authentication.AspNetMembership;` in file which uses *AuthenicationBase*, *UserBase* or related classes.
 3. If you have compilation problems in your DomainServices because it overrides methods which do not exist 
    then try to overridde the method with the same name but with "Async" as postfix, method signatures will be different.
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
@@ -170,7 +170,7 @@ Move Authenication related code from ..Server.ApplicationServices to
 ## Client
 
 	
-1. Add transport (OpenRiaServices.DomainServices.Client.Web) to netstandard 2.0 nuget.
+1. Add transport (OpenRiaServices.Client.Web) to netstandard 2.0 nuget.
   This provides the SoapDomainClientFactory for netstandard / netcoreapp assemblies.
    
 # 4.6.1
@@ -201,7 +201,7 @@ Move Authenication related code from ..Server.ApplicationServices to
   * native support for all platforms supporting netstandard 2
   * Run this code before creating first DomainContext, 
   ``` csharp
-  DomainContext.DomainClientFactory = new OpenRiaServices.DomainServices.Client.Web.SoapDomainClientFactory()
+  DomainContext.DomainClientFactory = new OpenRiaServices.Client.Web.SoapDomainClientFactory()
 {
     ServerBaseUri = "https://my.site.com/",
 };

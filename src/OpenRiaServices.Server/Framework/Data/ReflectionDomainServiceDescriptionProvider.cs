@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Default reflection based description provider that implements both the attribute

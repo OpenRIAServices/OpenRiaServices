@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using System.Windows.Data;
 
 namespace OpenRiaServices.Data.DomainServices

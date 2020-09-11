@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Security.Principal;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
 namespace Cities
 {

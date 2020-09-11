@@ -5,9 +5,9 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
-using OpenRiaServices.DomainServices.Client.Web.Behaviors;
+using OpenRiaServices.Client.Web.Behaviors;
 
-namespace OpenRiaServices.DomainServices.Client.Web
+namespace OpenRiaServices.Client.Web
 {
     /// <summary>
     /// Creates <see cref="WebDomainClient{TContract}"/> instances

@@ -1,6 +1,6 @@
 ﻿extern alias SSmDsClient;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Helper class used to force a value type to be allocated on the heap

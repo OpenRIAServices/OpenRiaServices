@@ -1,12 +1,12 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.EntityGenerator" linePragmas="false" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.EntityGenerator" linePragmas="false" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Tools.TextTemplate" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
+<#@ import namespace="OpenRiaServices.Server" #>
+<#@ import namespace="OpenRiaServices.Tools.TextTemplate" #>
+<#@ import namespace="OpenRiaServices.Tools" #>
 <#@ import namespace="System.Runtime.Serialization" #>
 
 <#@ include file="Templates\DataContractGeneratorTemplate.ttinclude" #>
@@ -32,7 +32,7 @@
 		var customMethodAttribute = customMethod.OperationAttribute as EntityActionAttribute;
 		bool allowMultipleInvocations = customMethodAttribute != null && customMethodAttribute.AllowMultipleInvocations;
 #>
-[OpenRiaServices.DomainServices.Client.EntityAction("<#= customMethod.Name #>", AllowMultipleInvocations = <#= allowMultipleInvocations.ToString().ToLower() #>)]
+[OpenRiaServices.Client.EntityAction("<#= customMethod.Name #>", AllowMultipleInvocations = <#= allowMultipleInvocations.ToString().ToLower() #>)]
 public void <#= customMethod.Name #>(<#+
 this.GenerateParameterDeclaration(domainOperationparameterList, true);
 #>)
@@ -126,7 +126,7 @@ return this.<#= keyNames[0] #>;
 <#+
 				}
 #>
-return OpenRiaServices.DomainServices.Client.EntityKey.Create(<#+
+return OpenRiaServices.Client.EntityKey.Create(<#+
 for(int i = 0; i < keyNames.Count(); i++)
 {
 	#>this.<#= keyNames[i] #><#+

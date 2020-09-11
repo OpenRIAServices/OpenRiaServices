@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,9 +13,9 @@ using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDomainServices.NamedUpdates;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     [TestClass]
     public class InheritanceTests : UnitTestBase

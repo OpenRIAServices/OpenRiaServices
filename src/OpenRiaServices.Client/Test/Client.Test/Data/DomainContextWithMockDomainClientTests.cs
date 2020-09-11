@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using OpenRiaServices.Silverlight.Testing;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
+    using Resources = SSmDsClient::OpenRiaServices.Client.Resources;
 
     [TestClass]
     public class DomainContextWithMockDomainClientTests : UnitTestBase

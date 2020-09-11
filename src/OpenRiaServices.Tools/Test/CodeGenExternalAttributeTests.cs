@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices;
 using DataTests.Scenarios.EF.Northwind;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DomainObjectResource = OpenRiaServices.DomainServices.Server.Resource;
+using DomainObjectResource = OpenRiaServices.Server.Resource;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Unit tests to verify the code generation behavior of properties marked with ExternalReferenceAttribute.

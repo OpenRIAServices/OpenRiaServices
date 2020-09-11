@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Represents an invoke operation to be processed by a <see cref="DomainService"/>

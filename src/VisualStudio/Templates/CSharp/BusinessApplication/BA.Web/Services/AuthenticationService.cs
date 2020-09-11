@@ -1,9 +1,9 @@
 ﻿namespace $safeprojectname$
 {
     using System.Security.Authentication;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Server.ApplicationServices;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.Server.ApplicationServices;
     using System.Threading;
 
     // TODO: Switch to a secure endpoint when deploying the application.

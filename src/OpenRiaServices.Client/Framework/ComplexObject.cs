@@ -7,9 +7,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Client.Internal;
+using OpenRiaServices.Client.Internal;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Base class for all complex objects.

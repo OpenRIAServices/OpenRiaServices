@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace OpenRiaServices.DomainServices
+namespace OpenRiaServices
 {
     internal class BinaryTypeUtility
     {

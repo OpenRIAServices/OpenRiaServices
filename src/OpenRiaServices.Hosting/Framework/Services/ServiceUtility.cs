@@ -9,15 +9,15 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
 
-// WARNING: Keep this file in sync with OpenRiaServices.DomainServices.Hosting
+// WARNING: Keep this file in sync with OpenRiaServices.Hosting
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal static class ServiceUtility
     {
@@ -585,7 +585,7 @@ namespace OpenRiaServices.DomainServices.Hosting
             public WebServiceHostInspector()
                 : base(
                     typeof(WebServiceHostInspector.Service),
-                    new Uri("http://OpenRiaServices.DomainServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
+                    new Uri("http://OpenRiaServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
             { }
 
             public AuthenticationSchemes AuthenticationScheme

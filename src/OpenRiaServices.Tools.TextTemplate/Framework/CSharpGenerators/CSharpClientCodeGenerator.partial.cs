@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     /// <summary>
     /// Generator to generate DomainService proxies in C#.

@@ -59,9 +59,9 @@ steps:
   displayName: 'Run tests'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
+     **\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
      src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*Test.dll
-     !src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.DomainServices.*Test.dll
+     !src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
      !**\obj\**
 
     runOnlyImpactedTests: false

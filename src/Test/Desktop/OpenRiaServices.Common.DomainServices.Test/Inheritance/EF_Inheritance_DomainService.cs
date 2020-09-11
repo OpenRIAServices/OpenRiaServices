@@ -1,9 +1,9 @@
 ﻿namespace DataTests.Inheritance.EF
 {
     using System.Linq;
-    using OpenRiaServices.DomainServices.EntityFramework;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.EntityFramework;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
 
     /// <summary>
     /// DomainService that demonstrates simple inheritance using EF models

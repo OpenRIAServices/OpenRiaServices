@@ -1,6 +1,6 @@
 using System.ServiceModel;
 
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.Tools.TextTemplate
 {
     using System;
     using System.Collections.Generic;
@@ -8,10 +8,10 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
     using System.Globalization;
     using System.Linq;
     using OpenRiaServices;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Tools.SharedTypes;
+    using OpenRiaServices;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.Tools.SharedTypes;
 
     /// <summary>
     /// Proxy generator for DomainServices.

@@ -5,9 +5,9 @@ Option Strict On
 Option Explicit On
 
 Imports DataTests.AdventureWorks.LTS
-Imports OpenRiaServices.DomainServices.Hosting
-Imports OpenRiaServices.DomainServices.LinqToSql
-Imports OpenRiaServices.DomainServices.Server
+Imports OpenRiaServices.Hosting
+Imports OpenRiaServices.LinqToSql
+Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel

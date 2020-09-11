@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Microsoft.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Server.Authentication;
+using OpenRiaServices.Server.Authentication;
 
-namespace OpenRiaServices.DomainServices.Server.Test.Authentication
+namespace OpenRiaServices.Server.Test.Authentication
 {
     /// <summary>
     /// Tests <see cref="AuthenticationCodeProcessor"/> codegen with a barrage of negative tests.

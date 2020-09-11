@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Attribute applied to a <see cref="DomainService"/> type to specify the <see cref="DomainServiceDescriptionProvider"/>

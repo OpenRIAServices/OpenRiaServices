@@ -1,8 +1,8 @@
 ﻿using System;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests for VirtualType

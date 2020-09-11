@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace OpenRiaServices.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.Tools.SharedTypes
 {
     /// <summary>
     /// Factory interface to allow creation of <see cref="ISourceFileProvider"/> instances.

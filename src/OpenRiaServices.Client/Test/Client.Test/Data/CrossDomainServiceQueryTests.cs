@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
 using OpenRiaServices.Silverlight.Testing;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Any test cases added to this class will be run against the set of all domain services,

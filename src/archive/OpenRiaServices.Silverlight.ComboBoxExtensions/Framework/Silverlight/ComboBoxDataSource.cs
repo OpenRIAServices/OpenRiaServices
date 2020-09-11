@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Silverlight.ComboBoxExtensions
 {

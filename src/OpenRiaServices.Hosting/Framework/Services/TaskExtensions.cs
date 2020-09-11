@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     static class TaskExtensions
     {

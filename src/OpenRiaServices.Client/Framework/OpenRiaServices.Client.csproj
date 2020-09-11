@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\CompositionAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\CompositionAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">

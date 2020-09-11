@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Abstraction to permit code gen task to report errors

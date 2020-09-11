@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools
+﻿namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// General purpose interface to allow errors and warnings to be logged

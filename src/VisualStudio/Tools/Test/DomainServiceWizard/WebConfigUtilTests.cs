@@ -5,7 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Configuration;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Hosting;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

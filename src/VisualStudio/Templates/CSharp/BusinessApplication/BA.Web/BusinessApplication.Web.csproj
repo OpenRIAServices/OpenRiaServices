@@ -41,11 +41,11 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="OpenRiaServices.DomainServices.Server" />
+    <Reference Include="OpenRiaServices.Server" />
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="OpenRiaServices.DomainServices.Hosting" />
+    <Reference Include="OpenRiaServices.Hosting" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>

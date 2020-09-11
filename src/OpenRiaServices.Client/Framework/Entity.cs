@@ -9,9 +9,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Client.Internal;
+using OpenRiaServices.Client.Internal;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Base class for all entity types.
@@ -1971,7 +1971,7 @@ namespace OpenRiaServices.DomainServices.Client
     }
 }
 
-namespace OpenRiaServices.DomainServices.Client.EntityExtensions
+namespace OpenRiaServices.Client.EntityExtensions
 {
     public static class EntityExtensions
     {

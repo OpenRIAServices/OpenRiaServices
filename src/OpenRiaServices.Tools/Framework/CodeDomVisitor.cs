@@ -2,7 +2,7 @@
 using System.CodeDom;
 using System.Linq;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Visits a CodeCompileUnit class.

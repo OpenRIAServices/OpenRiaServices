@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Enumeration of the types of operations that can be performed on an <see cref="Entity"/>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Services.Client;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.WindowsAzure
+namespace OpenRiaServices.WindowsAzure
 {
     /// <summary>
     /// <see cref="DomainService"/> for using with Windows Azure Table Storage.

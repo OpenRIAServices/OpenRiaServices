@@ -7,10 +7,10 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
 using System.Text;
-using OpenRiaServices.DomainServices.Hosting.OData;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Hosting.OData;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Represents a Domain Data Service endpoint factory for <see cref="DomainService"/>s.

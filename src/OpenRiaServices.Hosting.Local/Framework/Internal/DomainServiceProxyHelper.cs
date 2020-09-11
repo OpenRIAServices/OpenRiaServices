@@ -8,9 +8,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting.Local
+namespace OpenRiaServices.Hosting.Local
 {
     /// <summary>
     /// Used to perform Submit, Invoke and Query operations on a <see cref="DomainService"/> proxy instances.

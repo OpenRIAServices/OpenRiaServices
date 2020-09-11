@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Hosting.Local.Test
+namespace OpenRiaServices.Hosting.Local.Test
 {
     using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

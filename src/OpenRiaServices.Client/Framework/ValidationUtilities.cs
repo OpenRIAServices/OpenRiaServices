@@ -7,19 +7,19 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
+using OpenRiaServices;
 
 #if SERVERFX
-using DataResource = OpenRiaServices.DomainServices.Server.Resource;
+using DataResource = OpenRiaServices.Server.Resource;
 #else
-using DataResource = OpenRiaServices.DomainServices.Client.Resource;
-using OpenRiaServices.DomainServices.Client.Internal;
+using DataResource = OpenRiaServices.Client.Resource;
+using OpenRiaServices.Client.Internal;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 #else
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 #endif
 {
     internal static class ValidationUtilities

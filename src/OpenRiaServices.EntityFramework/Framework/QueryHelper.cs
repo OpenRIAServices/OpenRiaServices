@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     static class QueryHelper
     {

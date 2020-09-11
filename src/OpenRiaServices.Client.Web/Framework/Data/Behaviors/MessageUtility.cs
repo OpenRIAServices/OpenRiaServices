@@ -12,10 +12,10 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 #else
-using OpenRiaServices.DomainServices.Client.Web.Behaviors;
-namespace OpenRiaServices.DomainServices.Client
+using OpenRiaServices.Client.Web.Behaviors;
+namespace OpenRiaServices.Client
 #endif
 {
     /// <summary>

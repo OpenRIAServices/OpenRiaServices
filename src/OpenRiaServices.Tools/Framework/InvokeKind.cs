@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools
+﻿namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Defines the type of client side invoke operation to generate

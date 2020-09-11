@@ -8,7 +8,7 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Client.Web;
+using OpenRiaServices.Client.Web;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows;
 #endif
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Default <see cref="DomainClient"/> implementation using WCF
@@ -533,7 +533,7 @@ namespace OpenRiaServices.DomainServices.Client
                 // Only proceed if we can determine a root uri
                 if ((current == null) || (current.Host == null) || (current.Host.Source == null))
                 {
-                    throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_UnableToDetermineHostUri);
+                    throw new InvalidOperationException(OpenRiaServices.Client.Resource.DomainClient_UnableToDetermineHostUri);
                 }
 
                 string sourceUri = current.Host.Source.AbsoluteUri;

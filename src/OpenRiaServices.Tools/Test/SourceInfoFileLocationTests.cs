@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
-using OpenRiaServices.DomainServices.Tools.SourceLocation;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Tools.SharedTypes;
+using OpenRiaServices.Tools.SourceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
 using Test.Microsoft.VisualStudio.ServiceModel.DomainServices.Intellisense;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests SourceInfoAttribute -- a dynamically generated type used in Live Intellisense

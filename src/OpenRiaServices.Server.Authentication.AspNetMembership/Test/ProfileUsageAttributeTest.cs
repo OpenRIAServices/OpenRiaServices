@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
+namespace OpenRiaServices.Server.Authentication.AspNetMembership.Test
 {
     /// <summary>
     /// Tests <see cref="ProfileUsageAttribute"/> members.

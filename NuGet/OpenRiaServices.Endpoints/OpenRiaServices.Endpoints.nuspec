@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      OpenRiaServices.Endpoints provides the OpenRiaServices.DomainServices.Hosting.Endpoint assembly, which serves the SOAP and JSON endpoints for Domain Services.
+      OpenRiaServices.Endpoints provides the OpenRiaServices.Hosting.Endpoint assembly, which serves the SOAP and JSON endpoints for Domain Services.
 
       The necessary web.config entries are added with this package as well.
     </description>
@@ -26,8 +26,8 @@
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" target="lib\net472\OpenRiaServices.DomainServices.Hosting.Endpoint.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" target="lib\net472\OpenRiaServices.DomainServices.Hosting.Endpoint.pdb" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" target="lib\net472\OpenRiaServices.DomainServices.Hosting.Endpoint.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Endpoint.dll" target="lib\net472\OpenRiaServices.Hosting.Endpoint.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Endpoint.pdb" target="lib\net472\OpenRiaServices.Hosting.Endpoint.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Endpoint.xml" target="lib\net472\OpenRiaServices.Hosting.Endpoint.xml" />
   </files>
 </package>

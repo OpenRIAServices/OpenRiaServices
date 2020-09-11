@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Tools.SourceLocation;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Tools.SourceLocation;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests PdbReader

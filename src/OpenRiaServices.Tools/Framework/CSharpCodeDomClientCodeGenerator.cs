@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools
+﻿namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// CodeDom-based client proxy code generator for C#.

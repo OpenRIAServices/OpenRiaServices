@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace OpenRiaServices.DomainServices.Serialization
+namespace OpenRiaServices.Serialization
 {
     /// <summary>
     /// Represents a EntityAction when communicating between DomainClient and DomainService.
@@ -48,7 +48,7 @@ namespace OpenRiaServices.DomainServices.Serialization
     }
 }
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     using Serialization;
 

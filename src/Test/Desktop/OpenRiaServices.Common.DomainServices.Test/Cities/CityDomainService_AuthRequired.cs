@@ -1,4 +1,4 @@
-﻿using OpenRiaServices.DomainServices.Server;
+﻿using OpenRiaServices.Server;
 
 namespace Cities
 {

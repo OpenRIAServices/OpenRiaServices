@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      OpenRiaServices.OData provides the OpenRiaServices.DomainServices.Hosting.OData assembly, which provides the read only OData endpoint for Domain Services.
+      OpenRiaServices.OData provides the OpenRiaServices.Hosting.OData assembly, which provides the read only OData endpoint for Domain Services.
 
       The necessary web.config entries are added with this package as well.
       
@@ -28,8 +28,8 @@
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.OData.dll" target="lib\net472\OpenRiaServices.DomainServices.Hosting.OData.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.OData.pdb" target="lib\net472\OpenRiaServices.DomainServices.Hosting.OData.pdb" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.OData.xml" target="lib\net472\OpenRiaServices.DomainServices.Hosting.OData.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.OData.dll" target="lib\net472\OpenRiaServices.Hosting.OData.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.OData.pdb" target="lib\net472\OpenRiaServices.Hosting.OData.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.OData.xml" target="lib\net472\OpenRiaServices.Hosting.OData.xml" />
   </files>
 </package>

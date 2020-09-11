@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Client
+﻿namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Used to control identity cache behavior when loading entities.

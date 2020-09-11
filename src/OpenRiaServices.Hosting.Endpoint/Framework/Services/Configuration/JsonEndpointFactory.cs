@@ -2,9 +2,9 @@
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Represents a JSON endpoint factory for <see cref="DomainService"/>s.

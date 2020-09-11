@@ -157,7 +157,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs">
+    <Compile Include="..\..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs">
       <Link>Design.Common\ExceptionHandlingUtility.cs</Link>
     </Compile>
     <Compile Include="..\MetadataBase.cs">

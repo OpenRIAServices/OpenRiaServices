@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace OpenRiaServices.DomainServices.Hosting.Test.Data
+namespace OpenRiaServices.Hosting.Test.Data
 {
     [TestClass]
     public class MessageUtilityTest

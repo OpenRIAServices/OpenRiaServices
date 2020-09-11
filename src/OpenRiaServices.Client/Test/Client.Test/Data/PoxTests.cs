@@ -6,9 +6,9 @@ using System.ServiceModel.Channels;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 
-namespace OpenRiaServices.DomainServices.Client.Web.Test
+namespace OpenRiaServices.Client.Web.Test
 {
     [TestClass]
     public class PoxTests

@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Class representing an asynchronous operation.

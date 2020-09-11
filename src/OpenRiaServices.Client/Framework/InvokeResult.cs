@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Interface for non-generic access to <see cref="InvokeResult{T}"/>

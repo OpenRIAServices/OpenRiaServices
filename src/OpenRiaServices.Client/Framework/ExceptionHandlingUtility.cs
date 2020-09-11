@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices
+namespace OpenRiaServices
 {
     internal static class ExceptionHandlingUtility
     {

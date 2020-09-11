@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using Mono.Cecil;
 
-namespace OpenRiaServices.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.Tools.SharedTypes
 {
     /// <summary>
     /// Internal class to maintain a set of known assemblies

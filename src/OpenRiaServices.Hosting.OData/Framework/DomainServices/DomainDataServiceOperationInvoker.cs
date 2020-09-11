@@ -1,15 +1,15 @@
 using System;
 using System.ServiceModel;
-using TaskExtensions = OpenRiaServices.DomainServices.Hosting.TaskExtensions;
+using TaskExtensions = OpenRiaServices.Hosting.TaskExtensions;
 using System.ComponentModel;
 using System.Net;
 using System.Reflection;
 using System.ServiceModel.Dispatcher;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using System.Web;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Hosting.OData
+namespace OpenRiaServices.Hosting.OData
 {
 
     /// <summary>Base class for all operation invokers supported on the domain data service endpoint.</summary>

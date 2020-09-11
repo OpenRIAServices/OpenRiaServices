@@ -62,17 +62,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\CodeDomVisitor.cs" Link="DomainServiceWizard\CodeDomVisitor.cs" />
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Tools\Framework\DbContextUtilities.cs" Link="DomainServiceWizard\DbContextUtilities.cs" />
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="DomainServiceWizard\TypeUtility.cs" />
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.Designer.cs" Link="MetadataResource.Designer.cs">
+    <Compile Include="..\..\..\OpenRiaServices.Tools\Framework\CodeDomVisitor.cs" Link="DomainServiceWizard\CodeDomVisitor.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.Tools\Framework\DbContextUtilities.cs" Link="DomainServiceWizard\DbContextUtilities.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="DomainServiceWizard\TypeUtility.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.EntityFramework\Framework\MetadataResource.Designer.cs" Link="MetadataResource.Designer.cs">
       <DependentUpon>MetadataResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataWorkspaceUtilities.cs" Link="MetadataWorkspaceUtilities.cs" />
-    <Compile Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\ObjectContextUtilities.cs" Link="ObjectContextUtilities.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.EntityFramework\Framework\MetadataWorkspaceUtilities.cs" Link="MetadataWorkspaceUtilities.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.EntityFramework\Framework\ObjectContextUtilities.cs" Link="ObjectContextUtilities.cs" />
     <Compile Update="LocalDB.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -92,7 +92,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\MetadataResource.resx" Link="MetadataResource.resx">
+    <EmbeddedResource Include="..\..\..\OpenRiaServices.EntityFramework\Framework\MetadataResource.resx" Link="MetadataResource.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
@@ -106,9 +106,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.OData\Framework\OpenRiaServices.Hosting.OData.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
 </Project>

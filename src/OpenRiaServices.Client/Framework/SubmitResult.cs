@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// The result of a sucessfully completed submit operation

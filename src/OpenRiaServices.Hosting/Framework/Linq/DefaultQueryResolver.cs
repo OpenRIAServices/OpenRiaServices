@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
 namespace System.Linq.Dynamic
 {

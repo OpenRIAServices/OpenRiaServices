@@ -6,9 +6,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using OpenRiaServices.DomainServices.Client.Data;
+using OpenRiaServices.Client.Data;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Represents an asynchronous load operation
@@ -92,7 +92,7 @@ namespace OpenRiaServices.DomainServices.Client
 
         /// <summary>
         /// Gets the total server entity count for the query used by this operation. Automatic
-        /// evaluation of the total server entity count requires the property <see cref="OpenRiaServices.DomainServices.Client.EntityQuery.IncludeTotalCount"/>
+        /// evaluation of the total server entity count requires the property <see cref="OpenRiaServices.Client.EntityQuery.IncludeTotalCount"/>
         /// on the query for the load operation to be set to <c>true</c>.
         /// </summary>
         public int TotalEntityCount => this.Result != null ? this.Result.TotalEntityCount : 0;

@@ -10,17 +10,17 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\DomainException.cs" Link="Data\DomainException.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\DomainIdentifierAttribute.cs" Link="Data\DomainIdentifierAttribute.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExternalReferenceAttribute.cs" Link="Data\ExternalAttribute.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\RoundtripOriginalAttribute.cs" Link="Data\RoundtripOriginalAttribute.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\Serialization\KeyValue.cs" Link="Data\Serialization\KeyValue.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="Data\TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ValidationUtilities.cs" Link="Data\ValidationUtilities.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Data\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ValidationResultInfo.cs" Link="Data\ValidationResultInfo.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Authentication\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainException.cs" Link="Data\DomainException.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainIdentifierAttribute.cs" Link="Data\DomainIdentifierAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExternalReferenceAttribute.cs" Link="Data\ExternalAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\RoundtripOriginalAttribute.cs" Link="Data\RoundtripOriginalAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Serialization\KeyValue.cs" Link="Data\Serialization\KeyValue.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Data\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ValidationUtilities.cs" Link="Data\ValidationUtilities.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Data\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ValidationResultInfo.cs" Link="Data\ValidationResultInfo.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Authentication\SerializationUtility.cs" />
     <Compile Update="Data\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -37,7 +37,7 @@
     <EmbeddedResource Update="Data\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Server</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Server</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources.resx">

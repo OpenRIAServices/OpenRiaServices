@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Hosting.Behaviors;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Hosting.Behaviors;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Represents a SOAP w/ XML encoding endpoint factory for <see cref="DomainService"/>s.

@@ -9,7 +9,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Core.Objects.DataClasses;
 using System.Globalization;
 using System.IO;
-using OpenRiaServices.DomainServices.EntityFramework;
+using OpenRiaServices.EntityFramework;
 using System.Text;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools

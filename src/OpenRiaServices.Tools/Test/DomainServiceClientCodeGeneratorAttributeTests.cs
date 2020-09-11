@@ -6,13 +6,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.Tools;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests the <see cref="DomainServiceProxyGeneratorAttribute"/> class

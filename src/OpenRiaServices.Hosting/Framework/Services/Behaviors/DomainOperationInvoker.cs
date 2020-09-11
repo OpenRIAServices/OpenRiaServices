@@ -4,9 +4,9 @@ using System.ServiceModel;
 using System.ServiceModel.Dispatcher;
 using System.Threading.Tasks;
 using System.Web;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal abstract class DomainOperationInvoker : IOperationInvoker
     {

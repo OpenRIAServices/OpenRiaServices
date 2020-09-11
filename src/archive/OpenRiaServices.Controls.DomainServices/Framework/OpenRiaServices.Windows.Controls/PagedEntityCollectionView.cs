@@ -9,7 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using System.Windows.Common;
 using System.Windows.Data;
 

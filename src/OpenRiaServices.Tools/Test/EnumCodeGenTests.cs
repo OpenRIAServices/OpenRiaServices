@@ -7,15 +7,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server;
+using OpenRiaServices.Tools.SharedTypes;
+using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using DomainService_Resource = OpenRiaServices.DomainServices.Server.Resource;
+using DomainService_Resource = OpenRiaServices.Server.Resource;
 using ComponentModelDescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     using EnumGen.Tests;
     using EnumGen.Tests2;
@@ -515,7 +515,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 namespace EnumGen.Tests
 {
     using System.Runtime.Serialization;
-    using OpenRiaServices.DomainServices.Tools.Test;
+    using OpenRiaServices.Tools.Test;
     using EnumGen.Tests2;
 
     #region Enum_Basic

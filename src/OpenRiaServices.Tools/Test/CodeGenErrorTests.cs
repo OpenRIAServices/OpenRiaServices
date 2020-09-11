@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
@@ -24,7 +24,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             ConsoleLogger logger = new ConsoleLogger();
             string generatedCode = TestHelper.GenerateCode("C#", typeof(DomainService_InvokeOpReturnsInvalidType), logger);
-            TestHelper.AssertHasErrorThatStartsWith(logger, string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidInvokeOperation_ReturnType, "GetAssembly"));
+            TestHelper.AssertHasErrorThatStartsWith(logger, string.Format(OpenRiaServices.Server.Resource.InvalidInvokeOperation_ReturnType, "GetAssembly"));
         }
 
         [TestMethod]
@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             ConsoleLogger logger = new ConsoleLogger();
             string generatedCode = TestHelper.GenerateCode("C#", typeof(DomainService_InvokeOpReturnsInvalidTypes), logger);
-            TestHelper.AssertHasErrorThatStartsWith(logger, string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidInvokeOperation_ReturnType, "GetAssemblies"));
+            TestHelper.AssertHasErrorThatStartsWith(logger, string.Format(OpenRiaServices.Server.Resource.InvalidInvokeOperation_ReturnType, "GetAssemblies"));
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             ConsoleLogger logger = new ConsoleLogger();
             string generatedCode = TestHelper.GenerateCode("C#", typeof(DomainService_InvalidUpdateMethod), logger);
-            TestHelper.AssertHasErrorThatStartsWith(logger, string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidInsertUpdateDeleteMethod_IncorrectParameterLength, "UpdateEntity"));
+            TestHelper.AssertHasErrorThatStartsWith(logger, string.Format(OpenRiaServices.Server.Resource.InvalidInsertUpdateDeleteMethod_IncorrectParameterLength, "UpdateEntity"));
         }
 
         [TestMethod]
@@ -55,35 +55,35 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void CodeGen_NoSelectMethod()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainMethod_ParamMustBeEntity, "entity", "Update");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainMethod_ParamMustBeEntity, "entity", "Update");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_NoSelectMethod), error);
         }
 
         [TestMethod]
         public void CodeGen_VoidReturning_Select()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainOperationEntry_InvalidQueryOperationReturnType, typeof(void), "Get");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainOperationEntry_InvalidQueryOperationReturnType, typeof(void), "Get");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_VoidReturning_Select), error);
         }
 
         [TestMethod]
         public void CodeGen_OverloadedMethod_Select()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainOperationEntryOverload_NotSupported, "Get");
+            string error = string.Format(OpenRiaServices.Server.Resource.DomainOperationEntryOverload_NotSupported, "Get");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_OverloadedMethod_Select), error);
         }
 
         [TestMethod]
         public void CodeGen_NoParameter_Insert()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidInsertUpdateDeleteMethod_IncorrectParameterLength, "InsertNewEntity", "1");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidInsertUpdateDeleteMethod_IncorrectParameterLength, "InsertNewEntity", "1");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_NoParameter_Insert), error);
         }
 
         [TestMethod]
         public void CodeGen_WrongParameterType_Select()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainOperationEntry_ParamMustBeSimple, "Get", "s");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainOperationEntry_ParamMustBeSimple, "Get", "s");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_WrongParameterType_Select), error);
         }
 
@@ -100,35 +100,35 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [TestMethod]
         public void CodeGen_NonVoidReturning_Insert()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt", "E");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt", "E");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_NonVoidReturningInsert), error);
         }
 
         [TestMethod]
         public void CodeGen_NonVoidReturning_Update()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_NonVoidReturningUpdate), error);
         }
 
         [TestMethod]
         public void CodeGen_NonVoidReturning_Delete()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_NonVoidReturningDelete), error);
         }
 
         [TestMethod]
         public void CodeGen_NonVoidReturning_DomainMethod()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidDomainOperationEntry_NonQueryMustReturnVoid, "ReturnInt");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_NonVoidReturningDomainMethod), error);
         }
 
         [TestMethod]
         public void CodeGen_Include_NonAssociation()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.InvalidInclude_NonAssociationMember, typeof(Bug523677_Entity1).Name, "E");
+            string error = string.Format(OpenRiaServices.Server.Resource.InvalidInclude_NonAssociationMember, typeof(Bug523677_Entity1).Name, "E");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Bug523677_Entity1_DomainService), error);
         }
 
@@ -136,7 +136,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [WorkItem(566732)]
         public void CodeGen_EntityWithStructProperty()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.Invalid_Entity_Property, typeof(Mock_CG_Entity_WithStructProperty).FullName, "StructProperty");
+            string error = string.Format(OpenRiaServices.Server.Resource.Invalid_Entity_Property, typeof(Mock_CG_Entity_WithStructProperty).FullName, "StructProperty");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Entity_WithStructProperty_DomainService), error);
         }
 
@@ -144,7 +144,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("DomainService with EnableServiceAccess=false.")]
         public void CodeGen_InaccessibleProvider()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Tools.Resource.ClientCodeGen_InvalidDomainServiceType, typeof(InaccessibleProvider).Name);
+            string error = string.Format(OpenRiaServices.Tools.Resource.ClientCodeGen_InvalidDomainServiceType, typeof(InaccessibleProvider).Name);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(InaccessibleProvider), error);
         }
 
@@ -152,7 +152,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("DomainService with a shadowing domain operation entry.")]
         public void CodeGen_ShadowingDomainOperationEntry()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainOperationEntryOverload_NotSupported, "Get");
+            string error = string.Format(OpenRiaServices.Server.Resource.DomainOperationEntryOverload_NotSupported, "Get");
             TestHelper.GenerateCodeAssertFailure("C#", typeof(DomainServiceWithShadowingMethod), error);
         }
 
@@ -160,7 +160,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("Abstract DomainService.")]
         public void CodeGen_AbstractProvider()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, typeof(AbstractProvider).FullName);
+            string error = string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, typeof(AbstractProvider).FullName);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(AbstractProvider), error);
         }
 
@@ -168,7 +168,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("Generic DomainService.")]
         public void CodeGen_GenericProvider()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, typeof(GenericDomainService<>).FullName);
+            string error = string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, typeof(GenericDomainService<>).FullName);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(GenericDomainService<>), error);
         }
 
@@ -176,7 +176,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("DomainService which doesn't derive from the DomainService base-class.")]
         public void CodeGen_NonProvider()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, typeof(NonDomainService).FullName);
+            string error = string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, typeof(NonDomainService).FullName);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(NonDomainService), error);
         }
 
@@ -184,7 +184,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("DomainService references entity type with an invalid include")]
         public void CodeGen_Attribute_Entity_Invalid_Include()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.Invalid_Include_Invalid_Entity, "StringField", typeof(Mock_CG_Attr_Entity_Invalid_Include).Name, "String", OpenRiaServices.DomainServices.Server.Resource.EntityTypes_Cannot_Be_Primitives);
+            string error = string.Format(OpenRiaServices.Server.Resource.Invalid_Include_Invalid_Entity, "StringField", typeof(Mock_CG_Attr_Entity_Invalid_Include).Name, "String", OpenRiaServices.Server.Resource.EntityTypes_Cannot_Be_Primitives);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Attr_Entity_Invalid_Include_DomainService), error);
         }
 
@@ -192,7 +192,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("DomainService references entity type with an excluded key")]
         public void CodeGen_Attribute_Entity_Excluded_Key()
         {
-            string error = string.Format(OpenRiaServices.DomainServices.Server.Resource.Entity_Has_No_Key_Properties, typeof(Mock_CG_Attr_Entity_Excluded_Key).Name, typeof(Mock_CG_Attr_Entity_Excluded_Key_DomainService).Name);
+            string error = string.Format(OpenRiaServices.Server.Resource.Entity_Has_No_Key_Properties, typeof(Mock_CG_Attr_Entity_Excluded_Key).Name, typeof(Mock_CG_Attr_Entity_Excluded_Key_DomainService).Name);
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Attr_Entity_Excluded_Key_DomainService), error);
         }
 
@@ -216,7 +216,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("Verifies errors are generated when a non-simple type is used as a Dictionary generic argument.")]
         public void CodeGen_DictionaryMember_InvalidGenericArg()
         {
-            string error = "Entity 'OpenRiaServices.DomainServices.Tools.Test.CodeGenErrorTests+Mock_CG_Entity_InvalidDictionaryMember' has a property 'UnsupportedMemberType' with an unsupported type.";
+            string error = "Entity 'OpenRiaServices.Tools.Test.CodeGenErrorTests+Mock_CG_Entity_InvalidDictionaryMember' has a property 'UnsupportedMemberType' with an unsupported type.";
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Entity_InvalidDictionaryMember_DomainService), error);
         }
 
@@ -224,7 +224,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         [Description("Verifies errors are generated when an Entity type is used as a Dictionary generic argument.")]
         public void CodeGen_DictionaryMember_InvalidGenericArg_EntityUsedAsDictionaryTypeArg()
         {
-            string error = "Entity 'OpenRiaServices.DomainServices.Tools.Test.CodeGenErrorTests+Mock_CG_Entity_InvalidDictionaryMember_EntityUsedAsDictionaryTypeArg' has a property 'EntityUsedAsDictionaryTypeArg' with an unsupported type.";
+            string error = "Entity 'OpenRiaServices.Tools.Test.CodeGenErrorTests+Mock_CG_Entity_InvalidDictionaryMember_EntityUsedAsDictionaryTypeArg' has a property 'EntityUsedAsDictionaryTypeArg' with an unsupported type.";
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_CG_Entity_InvalidDictionaryMember_EntityUsedAsDictionaryTypeArg_DomainService), error);
         }
 

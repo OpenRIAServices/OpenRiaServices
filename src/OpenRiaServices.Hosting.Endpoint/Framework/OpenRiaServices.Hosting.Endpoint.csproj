@@ -3,7 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFramework>net472</TargetFramework>
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
-    <RootNamespace>OpenRiaServices.DomainServices.Hosting</RootNamespace>
+    <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -23,14 +23,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="EndpointResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>EndpointResource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Hosting</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

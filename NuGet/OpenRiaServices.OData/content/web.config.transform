@@ -2,7 +2,7 @@
   <system.serviceModel>
     <domainServices>
       <endpoints>
-        <add name="OData" type="OpenRiaServices.DomainServices.Hosting.ODataEndpointFactory, OpenRiaServices.DomainServices.Hosting.OData" />  
+        <add name="OData" type="OpenRiaServices.Hosting.ODataEndpointFactory, OpenRiaServices.Hosting.OData" />  
       </endpoints>
     </domainServices>
   </system.serviceModel>

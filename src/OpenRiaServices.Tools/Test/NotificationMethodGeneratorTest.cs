@@ -1,11 +1,11 @@
 ﻿using System.CodeDom;
 using System.Collections.Generic;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     [TestClass()]
     public class NotificationMethodGeneratorTest
@@ -46,8 +46,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         private static XmlReader XmlReader;
 
         [
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTestCodeSnippets.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTestCodeSnippets.xml"),
         DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "PartialMethodsSnippetBlockArgs", DataAccessMethod.Sequential),
         TestMethod()
         ]
@@ -100,7 +100,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "OnCreatedMethodInvokeExpressionArgs", DataAccessMethod.Sequential),
         TestMethod()
         ]
@@ -117,7 +117,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "GetMethodInvokeExpressionStatementFor1Args", DataAccessMethod.Sequential),
         TestMethod()
         ]
@@ -157,7 +157,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "AddMethodFor1Args", DataAccessMethod.Sequential),
         TestMethod()
         ]
@@ -182,7 +182,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "AddMethodFor2Args", DataAccessMethod.Sequential),
         TestMethod()
         ]
@@ -220,7 +220,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         }
 
         [
-        DeploymentItem("OpenRiaServices.DomainServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
+        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "AddMethodFor3Args", DataAccessMethod.Sequential),
         TestMethod()
         ]

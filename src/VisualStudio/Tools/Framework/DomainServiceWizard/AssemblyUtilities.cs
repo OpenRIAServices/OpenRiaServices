@@ -8,7 +8,7 @@ using System.Text;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
-    //// DEVNOTE: this was copied from AssemblyUtilities in OpenRiaServices.DomainServices.Tools.
+    //// DEVNOTE: this was copied from AssemblyUtilities in OpenRiaServices.Tools.
     //// It was modified to use Action<string> instead of ILogger
     //// It was not shared because of dependencies on ILogger and resource strings.
 

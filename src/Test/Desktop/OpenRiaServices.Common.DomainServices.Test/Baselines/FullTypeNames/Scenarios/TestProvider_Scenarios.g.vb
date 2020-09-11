@@ -27,9 +27,9 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class A
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _b As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.B)
+        Private _b As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.B)
         
         Private _bid1 As Integer
         
@@ -100,7 +100,7 @@ Namespace TestDomainServices
         Public Property B() As Global.TestDomainServices.B
             Get
                 If (Me._b Is Nothing) Then
-                    Me._b = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.B)(Me, "B", AddressOf Me.FilterB)
+                    Me._b = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.B)(Me, "B", AddressOf Me.FilterB)
                 End If
                 Return Me._b.Entity
             End Get
@@ -300,9 +300,9 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class B
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _cs As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)
+        Private _cs As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.C)
         
         Private _id1 As Integer
         
@@ -341,10 +341,10 @@ Namespace TestDomainServices
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("B_C", "ID1, ID2", "BID1, BID2"),  _
          Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="Cs")>  _
-        Public ReadOnly Property Cs() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)
+        Public ReadOnly Property Cs() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.C)
             Get
                 If (Me._cs Is Nothing) Then
-                    Me._cs = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.C)(Me, "Cs", AddressOf Me.FilterCs)
+                    Me._cs = New Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.C)(Me, "Cs", AddressOf Me.FilterCs)
                 End If
                 Return Me._cs
             End Get
@@ -405,7 +405,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
-            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._id1, Me._id2)
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me._id1, Me._id2)
         End Function
     End Class
     
@@ -414,15 +414,15 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class C
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _bid1 As Integer
         
         Private _bid2 As Integer
         
-        Private _d_Ref1 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d_Ref1 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _d_Ref2 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d_Ref2 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
         Private _did_Ref1 As Integer
         
@@ -520,7 +520,7 @@ Namespace TestDomainServices
         Public Property D_Ref1() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
-                    Me._d_Ref1 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
+                    Me._d_Ref1 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
                 End If
                 Return Me._d_Ref1.Entity
             End Get
@@ -553,7 +553,7 @@ Namespace TestDomainServices
         Public Property D_Ref2() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
-                    Me._d_Ref2 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
+                    Me._d_Ref2 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
                 End If
                 Return Me._d_Ref2.Entity
             End Get
@@ -661,11 +661,11 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class Cart
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _cartId As Integer
         
-        Private _items As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)
+        Private _items As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)
         
         #Region "Extensibility Method Definitions"
 
@@ -720,10 +720,10 @@ Namespace TestDomainServices
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("CartItem_Cart", "CartId", "CartItemId"),  _
          Global.System.ComponentModel.DataAnnotations.EditableAttribute(false),  _
          Global.System.ComponentModel.ReadOnlyAttribute(true)>  _
-        Public ReadOnly Property Items() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)
+        Public ReadOnly Property Items() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)
             Get
                 If (Me._items Is Nothing) Then
-                    Me._items = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)(Me, "Items", AddressOf Me.FilterItems, AddressOf Me.AttachItems, AddressOf Me.DetachItems)
+                    Me._items = New Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)(Me, "Items", AddressOf Me.FilterItems, AddressOf Me.AttachItems, AddressOf Me.DetachItems)
                 End If
                 Return Me._items
             End Get
@@ -755,9 +755,9 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class CartItem
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _cart As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.Cart)
+        Private _cart As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.Cart)
         
         Private _cartId As Integer
         
@@ -804,7 +804,7 @@ Namespace TestDomainServices
         Public Property Cart() As Global.TestDomainServices.Cart
             Get
                 If (Me._cart Is Nothing) Then
-                    Me._cart = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.Cart)(Me, "Cart", AddressOf Me.FilterCart)
+                    Me._cart = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.Cart)(Me, "Cart", AddressOf Me.FilterCart)
                 End If
                 Return Me._cart.Entity
             End Get
@@ -912,7 +912,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class CityWithCacheData
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _cacheData As String
         
@@ -1025,7 +1025,7 @@ Namespace TestDomainServices
                         OrElse (Me._stateName Is Nothing)) Then
                 Return Nothing
             End If
-            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._name, Me._stateName)
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me._name, Me._stateName)
         End Function
     End Class
     
@@ -1034,19 +1034,19 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class D
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _binaryData() As Byte
         
-        Private _c As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.C)
+        Private _c As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.C)
         
-        Private _d1 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d1 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _d2 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d2 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _d2_BackRef As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d2_BackRef As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
-        Private _ds As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)
+        Private _ds As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.D)
         
         Private _dSelfRef_ID1 As Integer
         
@@ -1129,7 +1129,7 @@ Namespace TestDomainServices
         Public Property C() As Global.TestDomainServices.C
             Get
                 If (Me._c Is Nothing) Then
-                    Me._c = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.C)(Me, "C", AddressOf Me.FilterC)
+                    Me._c = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.C)(Me, "C", AddressOf Me.FilterC)
                 End If
                 Return Me._c.Entity
             End Get
@@ -1157,7 +1157,7 @@ Namespace TestDomainServices
         Public Property D1() As Global.TestDomainServices.D
             Get
                 If (Me._d1 Is Nothing) Then
-                    Me._d1 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D1", AddressOf Me.FilterD1)
+                    Me._d1 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D1", AddressOf Me.FilterD1)
                 End If
                 Return Me._d1.Entity
             End Get
@@ -1190,7 +1190,7 @@ Namespace TestDomainServices
         Public Property D2() As Global.TestDomainServices.D
             Get
                 If (Me._d2 Is Nothing) Then
-                    Me._d2 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2", AddressOf Me.FilterD2)
+                    Me._d2 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2", AddressOf Me.FilterD2)
                 End If
                 Return Me._d2.Entity
             End Get
@@ -1223,7 +1223,7 @@ Namespace TestDomainServices
         Public Property D2_BackRef() As Global.TestDomainServices.D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
-                    Me._d2_BackRef = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2_BackRef", AddressOf Me.FilterD2_BackRef)
+                    Me._d2_BackRef = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2_BackRef", AddressOf Me.FilterD2_BackRef)
                 End If
                 Return Me._d2_BackRef.Entity
             End Get
@@ -1248,10 +1248,10 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("D_D", "ID", "DSelfRef_ID1")>  _
-        Public ReadOnly Property Ds() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)
+        Public ReadOnly Property Ds() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.D)
             Get
                 If (Me._ds Is Nothing) Then
-                    Me._ds = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.D)(Me, "Ds", AddressOf Me.FilterDs, AddressOf Me.AttachDs, AddressOf Me.DetachDs)
+                    Me._ds = New Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.D)(Me, "Ds", AddressOf Me.FilterDs, AddressOf Me.AttachDs, AddressOf Me.DetachDs)
                 End If
                 Return Me._ds
             End Get
@@ -1410,7 +1410,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class Entity_TestEditableAttribute
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _editableFalse As String
         
@@ -2385,7 +2385,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
-            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._key_EditableFalse, Me._key_EditableFalse_AllowInitialValueTrue, Me._key_EditableTrue, Me._key_EditableTrue_AllowInitialValueFalse, Me._key_ReadOnlyFalse, Me._key_ReadOnlyTrue, Me._key_Timestamp, Me._key_Timestamp_ReadOnlyFalse, Me._key_Timestamp_ReadOnlyTrue, Me._keyField)
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me._key_EditableFalse, Me._key_EditableFalse_AllowInitialValueTrue, Me._key_EditableTrue, Me._key_EditableTrue_AllowInitialValueFalse, Me._key_ReadOnlyFalse, Me._key_ReadOnlyTrue, Me._key_Timestamp, Me._key_Timestamp_ReadOnlyFalse, Me._key_Timestamp_ReadOnlyTrue, Me._keyField)
         End Function
     End Class
     
@@ -2394,7 +2394,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="CustomNamespace", Name:="CustomName")>  _
     Partial Public NotInheritable Class EntityWithDataContract
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _data As String
         
@@ -2485,7 +2485,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class EntityWithDataContract2
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _data As String
         
@@ -2576,7 +2576,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class EntityWithDefaultDefaultValue
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _boolProp As Boolean
         
@@ -2754,7 +2754,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class EntityWithXElement
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _id As Integer
         
@@ -2845,7 +2845,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class MixedType
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _binaryProp() As Byte
         
@@ -4612,7 +4612,7 @@ Namespace TestDomainServices
         ''' <param name="g">The value to pass to the server method's 'g' parameter.</param>
         ''' <param name="en">The value to pass to the server method's 'en' parameter.</param>
         ''' <param name="dto">The value to pass to the server method's 'dto' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("TestNullablePredefined", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("TestNullablePredefined", AllowMultipleInvocations:=false)>  _
         Public Sub TestNullablePredefined(ByVal d As Global.System.Nullable(Of Decimal), ByVal dt As Global.System.Nullable(Of Date), ByVal ts As Global.System.Nullable(Of Global.System.TimeSpan), ByVal g As Global.System.Nullable(Of Global.System.Guid), ByVal en As Global.System.Nullable(Of Global.TestDomainServices.TestEnum), ByVal dto As Global.System.Nullable(Of Global.System.DateTimeOffset))
             Me.OnTestNullablePredefinedInvoking(d, dt, ts, g, en, dto)
             MyBase.InvokeAction("TestNullablePredefined", d, dt, ts, g, en, dto)
@@ -4634,7 +4634,7 @@ Namespace TestDomainServices
         ''' <param name="ch">The value to pass to the server method's 'ch' parameter.</param>
         ''' <param name="d">The value to pass to the server method's 'd' parameter.</param>
         ''' <param name="s">The value to pass to the server method's 's' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("TestNullablePrimitive", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("TestNullablePrimitive", AllowMultipleInvocations:=false)>  _
         Public Sub TestNullablePrimitive(ByVal b1 As Global.System.Nullable(Of Boolean), ByVal b2 As Global.System.Nullable(Of Byte), ByVal sb As Global.System.Nullable(Of SByte), ByVal int16 As Global.System.Nullable(Of Short), ByVal uint16 As Global.System.Nullable(Of UShort), ByVal int32 As Global.System.Nullable(Of Integer), ByVal uint32 As Global.System.Nullable(Of UInteger), ByVal int64 As Global.System.Nullable(Of Long), ByVal uint64 As Global.System.Nullable(Of ULong), ByVal ch As Global.System.Nullable(Of Char), ByVal d As Global.System.Nullable(Of Double), ByVal s As Global.System.Nullable(Of Single))
             Me.OnTestNullablePrimitiveInvoking(b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s)
             MyBase.InvokeAction("TestNullablePrimitive", b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s)
@@ -4656,7 +4656,7 @@ Namespace TestDomainServices
         ''' <param name="en">The value to pass to the server method's 'en' parameter.</param>
         ''' <param name="dictionary">The value to pass to the server method's 'dictionary' parameter.</param>
         ''' <param name="dto">The value to pass to the server method's 'dto' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("TestPredefined", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("TestPredefined", AllowMultipleInvocations:=false)>  _
         Public Sub TestPredefined(ByVal s As String, ByVal d As Decimal, ByVal dt As Date, ByVal ts As Global.System.TimeSpan, ByVal strings As Global.System.Collections.Generic.IEnumerable(Of String), ByVal uri As Global.System.Uri, ByVal g As Global.System.Guid, ByVal b() As Byte, ByVal bArray() As Byte, ByVal en As Global.TestDomainServices.TestEnum, ByVal dictionary As Global.System.Collections.Generic.Dictionary(Of String, String), ByVal dto As Global.System.DateTimeOffset)
             Me.OnTestPredefinedInvoking(s, d, dt, ts, strings, uri, g, b, bArray, en, dictionary, dto)
             MyBase.InvokeAction("TestPredefined", s, d, dt, ts, strings, uri, g, b, bArray, en, dictionary, dto)
@@ -4678,7 +4678,7 @@ Namespace TestDomainServices
         ''' <param name="ch">The value to pass to the server method's 'ch' parameter.</param>
         ''' <param name="d">The value to pass to the server method's 'd' parameter.</param>
         ''' <param name="s">The value to pass to the server method's 's' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("TestPrimitive", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("TestPrimitive", AllowMultipleInvocations:=false)>  _
         Public Sub TestPrimitive(ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single)
             Me.OnTestPrimitiveInvoking(b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s)
             MyBase.InvokeAction("TestPrimitive", b1, b2, sb, int16, uint16, int32, uint32, int64, uint64, ch, d, s)
@@ -4691,7 +4691,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class MultipartKeyTestEntity1
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _a As Integer
         
@@ -4836,7 +4836,7 @@ Namespace TestDomainServices
                         OrElse (Me._c Is Nothing)) Then
                 Return Nothing
             End If
-            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._a, Me._b, Me._c, Me._d)
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me._a, Me._b, Me._c, Me._d)
         End Function
     End Class
     
@@ -4845,7 +4845,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class MultipartKeyTestEntity2
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _a As Integer
         
@@ -4932,7 +4932,7 @@ Namespace TestDomainServices
             If (Me._b Is Nothing) Then
                 Return Nothing
             End If
-            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._a, Me._b)
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me._a, Me._b)
         End Function
     End Class
     
@@ -4941,7 +4941,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class MultipartKeyTestEntity3
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _a As Integer
         
@@ -5057,7 +5057,7 @@ Namespace TestDomainServices
             If (Me._c Is Nothing) Then
                 Return Nothing
             End If
-            Return Global.OpenRiaServices.DomainServices.Client.EntityKey.Create(Me._a, Me._b, Me._c)
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me._a, Me._b, Me._c)
         End Function
     End Class
     
@@ -5066,15 +5066,15 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class NullableFKChild
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _data As String
         
         Private _id As Integer
         
-        Private _parent As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)
+        Private _parent As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)
         
-        Private _parent2 As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)
+        Private _parent2 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)
         
         Private _parentID As Global.System.Nullable(Of Integer)
         
@@ -5166,7 +5166,7 @@ Namespace TestDomainServices
         Public Property Parent() As Global.TestDomainServices.NullableFKParent
             Get
                 If (Me._parent Is Nothing) Then
-                    Me._parent = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent", AddressOf Me.FilterParent)
+                    Me._parent = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent", AddressOf Me.FilterParent)
                 End If
                 Return Me._parent.Entity
             End Get
@@ -5199,7 +5199,7 @@ Namespace TestDomainServices
         Public Property Parent2() As Global.TestDomainServices.NullableFKParent
             Get
                 If (Me._parent2 Is Nothing) Then
-                    Me._parent2 = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent2", AddressOf Me.FilterParent2)
+                    Me._parent2 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent2", AddressOf Me.FilterParent2)
                 End If
                 Return Me._parent2.Entity
             End Get
@@ -5289,11 +5289,11 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class NullableFKParent
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _child As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKChild)
+        Private _child As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKChild)
         
-        Private _children As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)
+        Private _children As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)
         
         Private _data As String
         
@@ -5334,7 +5334,7 @@ Namespace TestDomainServices
         Public Property Child() As Global.TestDomainServices.NullableFKChild
             Get
                 If (Me._child Is Nothing) Then
-                    Me._child = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKChild)(Me, "Child", AddressOf Me.FilterChild)
+                    Me._child = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKChild)(Me, "Child", AddressOf Me.FilterChild)
                 End If
                 Return Me._child.Entity
             End Get
@@ -5359,10 +5359,10 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="NullableFKChild"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("Parent_Child", "ID", "ParentID")>  _
-        Public ReadOnly Property Children() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)
+        Public ReadOnly Property Children() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)
             Get
                 If (Me._children Is Nothing) Then
-                    Me._children = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)(Me, "Children", AddressOf Me.FilterChildren, AddressOf Me.AttachChildren, AddressOf Me.DetachChildren)
+                    Me._children = New Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)(Me, "Children", AddressOf Me.FilterChildren, AddressOf Me.AttachChildren, AddressOf Me.DetachChildren)
                 End If
                 Return Me._children
             End Get
@@ -5441,7 +5441,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class POCONoValidation
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _a As String
         
@@ -5636,7 +5636,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class RoundtripOriginal_TestEntity
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _id As Integer
         
@@ -5757,9 +5757,9 @@ Namespace TestDomainServices
     <Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class RoundtripOriginal_TestEntity2
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _assocProp As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
+        Private _assocProp As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
         
         Private _id As Integer
         
@@ -5806,7 +5806,7 @@ Namespace TestDomainServices
         Public Property AssocProp() As Global.TestDomainServices.RoundtripOriginal_TestEntity
             Get
                 If (Me._assocProp Is Nothing) Then
-                    Me._assocProp = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.FilterAssocProp)
+                    Me._assocProp = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.FilterAssocProp)
                 End If
                 Return Me._assocProp.Entity
             End Get
@@ -5902,7 +5902,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class RoundtripQueryEntity
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _id As Integer
         
@@ -6045,7 +6045,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TestCT
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _ctProp1 As Integer
         
@@ -6126,11 +6126,11 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TestCycles
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _includedT As Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.TestCycles)
+        Private _includedT As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.TestCycles)
         
-        Private _includedTs As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)
+        Private _includedTs As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)
         
         Private _name As String
         
@@ -6171,7 +6171,7 @@ Namespace TestDomainServices
         Public Property IncludedT() As Global.TestDomainServices.TestCycles
             Get
                 If (Me._includedT Is Nothing) Then
-                    Me._includedT = New Global.OpenRiaServices.DomainServices.Client.EntityRef(Of Global.TestDomainServices.TestCycles)(Me, "IncludedT", AddressOf Me.FilterIncludedT)
+                    Me._includedT = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.TestCycles)(Me, "IncludedT", AddressOf Me.FilterIncludedT)
                 End If
                 Return Me._includedT.Entity
             End Get
@@ -6201,10 +6201,10 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="TestCycles"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.AssociationAttribute("TestCycle_Parent", "Name", "ParentName")>  _
-        Public ReadOnly Property IncludedTs() As Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)
+        Public ReadOnly Property IncludedTs() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)
             Get
                 If (Me._includedTs Is Nothing) Then
-                    Me._includedTs = New Global.OpenRiaServices.DomainServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)(Me, "IncludedTs", AddressOf Me.FilterIncludedTs, AddressOf Me.AttachIncludedTs, AddressOf Me.DetachIncludedTs)
+                    Me._includedTs = New Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)(Me, "IncludedTs", AddressOf Me.FilterIncludedTs, AddressOf Me.AttachIncludedTs, AddressOf Me.DetachIncludedTs)
                 End If
                 Return Me._includedTs
             End Get
@@ -6283,7 +6283,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TestEntityForInvokeOperations
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _ctProp As Global.TestDomainServices.TestCT
         
@@ -6400,7 +6400,7 @@ Namespace TestDomainServices
     ''' The DomainContext corresponding to the 'TestProvider_Scenarios' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class TestProvider_Scenarios
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -6426,14 +6426,14 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="serviceUri">The TestProvider_Scenarios service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.TestProvider_Scenarios.ITestProvider_ScenariosContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.TestProvider_Scenarios.ITestProvider_ScenariosContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="TestProvider_Scenarios"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -6441,7 +6441,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="TestSideEffects"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property TestSideEffects() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TestSideEffects)
+        Public ReadOnly Property TestSideEffects() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.TestSideEffects)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TestSideEffects)
             End Get
@@ -6450,7 +6450,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="A"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property [As]() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.A)
+        Public ReadOnly Property [As]() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.A)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.A)
             End Get
@@ -6459,7 +6459,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="B"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property Bs() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.B)
+        Public ReadOnly Property Bs() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.B)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.B)
             End Get
@@ -6468,7 +6468,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="CartItem"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property CartItems() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.CartItem)
+        Public ReadOnly Property CartItems() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.CartItem)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.CartItem)
             End Get
@@ -6477,7 +6477,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="Cart"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property Carts() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.Cart)
+        Public ReadOnly Property Carts() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.Cart)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.Cart)
             End Get
@@ -6486,7 +6486,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="CityWithCacheData"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property CityWithCacheDatas() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.CityWithCacheData)
+        Public ReadOnly Property CityWithCacheDatas() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.CityWithCacheData)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.CityWithCacheData)
             End Get
@@ -6495,7 +6495,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="C"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property Cs() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.C)
+        Public ReadOnly Property Cs() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.C)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.C)
             End Get
@@ -6504,7 +6504,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="D"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property Ds() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.D)
+        Public ReadOnly Property Ds() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.D)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.D)
             End Get
@@ -6513,7 +6513,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="EntityWithDataContract"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property EntityWithDataContracts() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithDataContract)
+        Public ReadOnly Property EntityWithDataContracts() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithDataContract)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.EntityWithDataContract)
             End Get
@@ -6522,7 +6522,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="EntityWithDataContract2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property EntityWithDataContract2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithDataContract2)
+        Public ReadOnly Property EntityWithDataContract2s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithDataContract2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.EntityWithDataContract2)
             End Get
@@ -6531,7 +6531,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="EntityWithSpecialTypeName"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property EntityWithSpecialTypeNames() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
+        Public ReadOnly Property EntityWithSpecialTypeNames() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
             End Get
@@ -6540,7 +6540,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="Entity_TestEditableAttribute"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property Entity_TestEditableAttributes() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.Entity_TestEditableAttribute)
+        Public ReadOnly Property Entity_TestEditableAttributes() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.Entity_TestEditableAttribute)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.Entity_TestEditableAttribute)
             End Get
@@ -6549,7 +6549,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="EntityWithDefaultDefaultValue"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property EntityWithDefaultDefaultValues() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
+        Public ReadOnly Property EntityWithDefaultDefaultValues() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
             End Get
@@ -6558,7 +6558,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="MixedType"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property MixedTypes() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.MixedType)
+        Public ReadOnly Property MixedTypes() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.MixedType)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.MixedType)
             End Get
@@ -6567,7 +6567,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="MultipartKeyTestEntity1"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property MultipartKeyTestEntity1s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity1)
+        Public ReadOnly Property MultipartKeyTestEntity1s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity1)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity1)
             End Get
@@ -6576,7 +6576,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="MultipartKeyTestEntity2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property MultipartKeyTestEntity2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity2)
+        Public ReadOnly Property MultipartKeyTestEntity2s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity2)
             End Get
@@ -6585,7 +6585,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="MultipartKeyTestEntity3"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property MultipartKeyTestEntity3s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity3)
+        Public ReadOnly Property MultipartKeyTestEntity3s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity3)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity3)
             End Get
@@ -6594,7 +6594,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="NullableFKParent"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property NullableFKParents() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NullableFKParent)
+        Public ReadOnly Property NullableFKParents() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NullableFKParent)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NullableFKParent)
             End Get
@@ -6603,7 +6603,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="POCONoValidation"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property POCONoValidations() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.POCONoValidation)
+        Public ReadOnly Property POCONoValidations() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.POCONoValidation)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.POCONoValidation)
             End Get
@@ -6612,7 +6612,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="RoundtripOriginal_TestEntity2"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property RoundtripOriginal_TestEntity2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
+        Public ReadOnly Property RoundtripOriginal_TestEntity2s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
             End Get
@@ -6621,7 +6621,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="RoundtripOriginal_TestEntity"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property RoundtripOriginal_TestEntities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
+        Public ReadOnly Property RoundtripOriginal_TestEntities() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
             End Get
@@ -6630,7 +6630,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="RoundtripQueryEntity"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property RoundtripQueryEntities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.RoundtripQueryEntity)
+        Public ReadOnly Property RoundtripQueryEntities() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.RoundtripQueryEntity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.RoundtripQueryEntity)
             End Get
@@ -6639,7 +6639,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="TestCycles"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property TestCycles() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TestCycles)
+        Public ReadOnly Property TestCycles() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.TestCycles)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TestCycles)
             End Get
@@ -6648,7 +6648,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="TestEntityForInvokeOperations"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property TestEntityForInvokeOperations() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TestEntityForInvokeOperations)
+        Public ReadOnly Property TestEntityForInvokeOperations() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.TestEntityForInvokeOperations)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TestEntityForInvokeOperations)
             End Get
@@ -6657,7 +6657,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="TimestampEntityA"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property TimestampEntityAs() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TimestampEntityA)
+        Public ReadOnly Property TimestampEntityAs() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.TimestampEntityA)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TimestampEntityA)
             End Get
@@ -6666,7 +6666,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="TimestampEntityB"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property TimestampEntityBs() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.TimestampEntityB)
+        Public ReadOnly Property TimestampEntityBs() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.TimestampEntityB)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.TimestampEntityB)
             End Get
@@ -6675,7 +6675,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the set of <see cref="EntityWithXElement"/> entity instances that have been loaded into this <see cref="TestProvider_Scenarios"/> instance.
         ''' </summary>
-        Public ReadOnly Property EntityWithXElements() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithXElement)
+        Public ReadOnly Property EntityWithXElements() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.EntityWithXElement)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.EntityWithXElement)
             End Get
@@ -6686,7 +6686,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="name">The value for the 'name' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TestSideEffects"/> entity instances.</returns>
-        Public Function CreateAndGetSideEffectsObjectsQuery(ByVal name As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TestSideEffects)
+        Public Function CreateAndGetSideEffectsObjectsQuery(ByVal name As String) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.TestSideEffects)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("name", name)
             Me.ValidateMethod("CreateAndGetSideEffectsObjectsQuery", parameters)
@@ -6697,7 +6697,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAReturnNull' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        Public Function GetAReturnNullQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
+        Public Function GetAReturnNullQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.A)
             Me.ValidateMethod("GetAReturnNullQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.A)("GetAReturnNull", Nothing, false, false)
         End Function
@@ -6706,7 +6706,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        Public Function GetAsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
+        Public Function GetAsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.A)
             Me.ValidateMethod("GetAsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.A)("GetAs", Nothing, false, false)
         End Function
@@ -6715,7 +6715,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="A"/> entity instances using the 'GetAsReturnNull' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        Public Function GetAsReturnNullQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
+        Public Function GetAsReturnNullQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.A)
             Me.ValidateMethod("GetAsReturnNullQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.A)("GetAsReturnNull", Nothing, false, true)
         End Function
@@ -6724,7 +6724,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="B"/> entity instances using the 'GetBs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="B"/> entity instances.</returns>
-        Public Function GetBsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.B)
+        Public Function GetBsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.B)
             Me.ValidateMethod("GetBsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.B)("GetBs", Nothing, false, true)
         End Function
@@ -6733,7 +6733,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CartItem"/> entity instances using the 'GetCartItems' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CartItem"/> entity instances.</returns>
-        Public Function GetCartItemsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CartItem)
+        Public Function GetCartItemsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CartItem)
             Me.ValidateMethod("GetCartItemsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CartItem)("GetCartItems", Nothing, false, true)
         End Function
@@ -6742,7 +6742,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="Cart"/> entity instances using the 'GetCarts' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Cart"/> entity instances.</returns>
-        Public Function GetCartsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.Cart)
+        Public Function GetCartsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.Cart)
             Me.ValidateMethod("GetCartsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.Cart)("GetCarts", Nothing, false, true)
         End Function
@@ -6751,7 +6751,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCities", Nothing, false, true)
         End Function
@@ -6761,7 +6761,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="state">The value for the 'state' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesInStateQuery(ByVal state As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesInStateQuery(ByVal state As String) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("state", state)
             Me.ValidateMethod("GetCitiesInStateQuery", parameters)
@@ -6773,7 +6773,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="state">The value for the 'state' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesInStateWithCachingQuery(ByVal state As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesInStateWithCachingQuery(ByVal state As String) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("state", state)
             Me.ValidateMethod("GetCitiesInStateWithCachingQuery", parameters)
@@ -6785,7 +6785,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="state">The value for the 'state' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesInStateWithCaching2Query(ByVal state As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesInStateWithCaching2Query(ByVal state As String) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("state", state)
             Me.ValidateMethod("GetCitiesInStateWithCaching2Query", parameters)
@@ -6796,7 +6796,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationAny' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCacheLocationAnyQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCacheLocationAnyQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCacheLocationAnyQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCacheLocationAny", Nothing, false, true)
         End Function
@@ -6805,7 +6805,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationDownstream' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCacheLocationDownstreamQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCacheLocationDownstreamQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCacheLocationDownstreamQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCacheLocationDownstream", Nothing, false, true)
         End Function
@@ -6814,7 +6814,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationServer' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCacheLocationServerQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCacheLocationServerQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCacheLocationServerQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCacheLocationServer", Nothing, false, true)
         End Function
@@ -6823,7 +6823,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCacheLocationServerAndClient' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCacheLocationServerAndClientQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCacheLocationServerAndClientQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCacheLocationServerAndClientQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCacheLocationServerAndClient", Nothing, false, true)
         End Function
@@ -6832,7 +6832,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCaching' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCachingQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCachingQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCachingQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCaching", Nothing, false, true)
         End Function
@@ -6841,7 +6841,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCaching2' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCaching2Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCaching2Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCaching2Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCaching2", Nothing, false, true)
         End Function
@@ -6850,7 +6850,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCachingAndThrow' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCachingAndThrowQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCachingAndThrowQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCachingAndThrowQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCachingAndThrow", Nothing, false, true)
         End Function
@@ -6859,7 +6859,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCachingVaryByHeaders' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCachingVaryByHeadersQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCachingVaryByHeadersQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCachingVaryByHeadersQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCachingVaryByHeaders", Nothing, false, true)
         End Function
@@ -6868,7 +6868,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="CityWithCacheData"/> entity instances using the 'GetCitiesWithCachingViaCacheProfile' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CityWithCacheData"/> entity instances.</returns>
-        Public Function GetCitiesWithCachingViaCacheProfileQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
+        Public Function GetCitiesWithCachingViaCacheProfileQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.CityWithCacheData)
             Me.ValidateMethod("GetCitiesWithCachingViaCacheProfileQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.CityWithCacheData)("GetCitiesWithCachingViaCacheProfile", Nothing, false, true)
         End Function
@@ -6877,7 +6877,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="C"/> entity instances using the 'GetCs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="C"/> entity instances.</returns>
-        Public Function GetCsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.C)
+        Public Function GetCsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.C)
             Me.ValidateMethod("GetCsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.C)("GetCs", Nothing, false, true)
         End Function
@@ -6886,7 +6886,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="D"/> entity instances using the 'GetDs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="D"/> entity instances.</returns>
-        Public Function GetDsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.D)
+        Public Function GetDsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.D)
             Me.ValidateMethod("GetDsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.D)("GetDs", Nothing, false, true)
         End Function
@@ -6895,7 +6895,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="EntityWithDataContract"/> entity instances using the 'GetEntitiesWithDataContracts' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithDataContract"/> entity instances.</returns>
-        Public Function GetEntitiesWithDataContractsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithDataContract)
+        Public Function GetEntitiesWithDataContractsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithDataContract)
             Me.ValidateMethod("GetEntitiesWithDataContractsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.EntityWithDataContract)("GetEntitiesWithDataContracts", Nothing, false, true)
         End Function
@@ -6904,7 +6904,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="EntityWithDataContract2"/> entity instances using the 'GetEntitiesWithDataContracts2' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithDataContract2"/> entity instances.</returns>
-        Public Function GetEntitiesWithDataContracts2Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithDataContract2)
+        Public Function GetEntitiesWithDataContracts2Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithDataContract2)
             Me.ValidateMethod("GetEntitiesWithDataContracts2Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.EntityWithDataContract2)("GetEntitiesWithDataContracts2", Nothing, false, true)
         End Function
@@ -6913,7 +6913,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="EntityWithSpecialTypeName"/> entity instances using the 'GetEntitiesWithSpecialTypeName' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithSpecialTypeName"/> entity instances.</returns>
-        Public Function GetEntitiesWithSpecialTypeNameQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
+        Public Function GetEntitiesWithSpecialTypeNameQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
             Me.ValidateMethod("GetEntitiesWithSpecialTypeNameQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)("GetEntitiesWithSpecialTypeName", Nothing, false, true)
         End Function
@@ -6922,7 +6922,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="Entity_TestEditableAttribute"/> entity instances using the 'GetEntity_TestEditableAttributes' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Entity_TestEditableAttribute"/> entity instances.</returns>
-        Public Function GetEntity_TestEditableAttributesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.Entity_TestEditableAttribute)
+        Public Function GetEntity_TestEditableAttributesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.Entity_TestEditableAttribute)
             Me.ValidateMethod("GetEntity_TestEditableAttributesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.Entity_TestEditableAttribute)("GetEntity_TestEditableAttributes", Nothing, false, true)
         End Function
@@ -6931,7 +6931,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="EntityWithDefaultDefaultValue"/> entity instances using the 'GetEntityWithDefaultValue' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithDefaultDefaultValue"/> entity instances.</returns>
-        Public Function GetEntityWithDefaultValueQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
+        Public Function GetEntityWithDefaultValueQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
             Me.ValidateMethod("GetEntityWithDefaultValueQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)("GetEntityWithDefaultValue", Nothing, false, true)
         End Function
@@ -6940,7 +6940,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="MixedType"/> entity instances using the 'GetMixedTypes' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        Public Function GetMixedTypesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+        Public Function GetMixedTypesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Me.ValidateMethod("GetMixedTypesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.MixedType)("GetMixedTypes", Nothing, false, true)
         End Function
@@ -6963,7 +6963,7 @@ Namespace TestDomainServices
         ''' <param name="broiled">The value for the 'broiled' parameter of the query.</param>
         ''' <param name="cheese">The value for the 'cheese' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        Public Function GetMixedTypes_BadAttributesQuery(ByVal broiled As Char, ByVal cheese As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+        Public Function GetMixedTypes_BadAttributesQuery(ByVal broiled As Char, ByVal cheese As String) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("broiled", broiled)
             parameters.Add("cheese", cheese)
@@ -7015,7 +7015,7 @@ Namespace TestDomainServices
                     ByVal g As Global.System.Nullable(Of Global.System.Guid),  _
                     ByVal en As Global.System.Nullable(Of Global.TestDomainServices.TestEnum),  _
                     ByVal nullableTimeSpans As Global.System.Collections.Generic.IEnumerable(Of Global.System.Nullable(Of Global.System.TimeSpan)),  _
-                    ByVal nullableDictionaryDateTime As Global.System.Collections.Generic.Dictionary(Of Date, Global.System.Nullable(Of Date))) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+                    ByVal nullableDictionaryDateTime As Global.System.Collections.Generic.Dictionary(Of Date, Global.System.Nullable(Of Date))) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("idToChange", idToChange)
             parameters.Add("b1", b1)
@@ -7085,7 +7085,7 @@ Namespace TestDomainServices
                     ByVal dictionaryString As Global.System.Collections.Generic.Dictionary(Of String, String),  _
                     ByVal dictionaryTestEnum As Global.System.Collections.Generic.Dictionary(Of Global.TestDomainServices.TestEnum, Global.TestDomainServices.TestEnum),  _
                     ByVal dictionaryXElement As Global.System.Collections.Generic.Dictionary(Of Global.System.Xml.Linq.XElement, Global.System.Xml.Linq.XElement),  _
-                    ByVal dictionaryDateTimeOffset As Global.System.Collections.Generic.Dictionary(Of Global.System.DateTimeOffset, Global.System.DateTimeOffset)) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+                    ByVal dictionaryDateTimeOffset As Global.System.Collections.Generic.Dictionary(Of Global.System.DateTimeOffset, Global.System.DateTimeOffset)) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("idToChange", idToChange)
             parameters.Add("s", s)
@@ -7128,7 +7128,7 @@ Namespace TestDomainServices
         ''' <param name="d">The value for the 'd' parameter of the query.</param>
         ''' <param name="s">The value for the 's' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        Public Function GetMixedTypes_PrimitiveQuery(ByVal idToChange As String, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+        Public Function GetMixedTypes_PrimitiveQuery(ByVal idToChange As String, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("idToChange", idToChange)
             parameters.Add("b1", b1)
@@ -7151,7 +7151,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="MixedType"/> entity instances using the 'GetMixedTypesThrow' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        Public Function GetMixedTypesThrowQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+        Public Function GetMixedTypesThrowQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Me.ValidateMethod("GetMixedTypesThrowQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.MixedType)("GetMixedTypesThrow", Nothing, false, true)
         End Function
@@ -7160,7 +7160,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="MixedType"/> entity instances using the 'GetMixedTypeSuperset' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MixedType"/> entity instances.</returns>
-        Public Function GetMixedTypeSupersetQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
+        Public Function GetMixedTypeSupersetQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MixedType)
             Me.ValidateMethod("GetMixedTypeSupersetQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.MixedType)("GetMixedTypeSuperset", Nothing, false, true)
         End Function
@@ -7169,7 +7169,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="MultipartKeyTestEntity1"/> entity instances using the 'GetMultipartKeyTestEntity1s' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MultipartKeyTestEntity1"/> entity instances.</returns>
-        Public Function GetMultipartKeyTestEntity1sQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MultipartKeyTestEntity1)
+        Public Function GetMultipartKeyTestEntity1sQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MultipartKeyTestEntity1)
             Me.ValidateMethod("GetMultipartKeyTestEntity1sQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.MultipartKeyTestEntity1)("GetMultipartKeyTestEntity1s", Nothing, false, true)
         End Function
@@ -7178,7 +7178,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="MultipartKeyTestEntity2"/> entity instances using the 'GetMultipartKeyTestEntity2s' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MultipartKeyTestEntity2"/> entity instances.</returns>
-        Public Function GetMultipartKeyTestEntity2sQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MultipartKeyTestEntity2)
+        Public Function GetMultipartKeyTestEntity2sQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MultipartKeyTestEntity2)
             Me.ValidateMethod("GetMultipartKeyTestEntity2sQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.MultipartKeyTestEntity2)("GetMultipartKeyTestEntity2s", Nothing, false, true)
         End Function
@@ -7187,7 +7187,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="MultipartKeyTestEntity3"/> entity instances using the 'GetMultipartKeyTestEntity3s' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MultipartKeyTestEntity3"/> entity instances.</returns>
-        Public Function GetMultipartKeyTestEntity3sQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.MultipartKeyTestEntity3)
+        Public Function GetMultipartKeyTestEntity3sQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.MultipartKeyTestEntity3)
             Me.ValidateMethod("GetMultipartKeyTestEntity3sQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.MultipartKeyTestEntity3)("GetMultipartKeyTestEntity3s", Nothing, false, true)
         End Function
@@ -7196,7 +7196,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="NullableFKParent"/> entity instances using the 'GetNullableFKParents' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="NullableFKParent"/> entity instances.</returns>
-        Public Function GetNullableFKParentsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NullableFKParent)
+        Public Function GetNullableFKParentsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NullableFKParent)
             Me.ValidateMethod("GetNullableFKParentsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NullableFKParent)("GetNullableFKParents", Nothing, false, true)
         End Function
@@ -7205,7 +7205,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="POCONoValidation"/> entity instances using the 'GetPOCONoValidations' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="POCONoValidation"/> entity instances.</returns>
-        Public Function GetPOCONoValidationsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.POCONoValidation)
+        Public Function GetPOCONoValidationsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.POCONoValidation)
             Me.ValidateMethod("GetPOCONoValidationsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.POCONoValidation)("GetPOCONoValidations", Nothing, false, true)
         End Function
@@ -7214,7 +7214,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="RoundtripOriginal_TestEntity2"/> entity instances using the 'GetRoundtripOriginal_ClassAttribute_TestEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RoundtripOriginal_TestEntity2"/> entity instances.</returns>
-        Public Function GetRoundtripOriginal_ClassAttribute_TestEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
+        Public Function GetRoundtripOriginal_ClassAttribute_TestEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
             Me.ValidateMethod("GetRoundtripOriginal_ClassAttribute_TestEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)("GetRoundtripOriginal_ClassAttribute_TestEntities", Nothing, false, true)
         End Function
@@ -7223,7 +7223,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="RoundtripOriginal_TestEntity"/> entity instances using the 'GetRoundtripOriginal_TestEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RoundtripOriginal_TestEntity"/> entity instances.</returns>
-        Public Function GetRoundtripOriginal_TestEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
+        Public Function GetRoundtripOriginal_TestEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
             Me.ValidateMethod("GetRoundtripOriginal_TestEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)("GetRoundtripOriginal_TestEntities", Nothing, false, true)
         End Function
@@ -7232,7 +7232,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="RoundtripQueryEntity"/> entity instances using the 'GetRoundtripQueryEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="RoundtripQueryEntity"/> entity instances.</returns>
-        Public Function GetRoundtripQueryEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.RoundtripQueryEntity)
+        Public Function GetRoundtripQueryEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.RoundtripQueryEntity)
             Me.ValidateMethod("GetRoundtripQueryEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.RoundtripQueryEntity)("GetRoundtripQueryEntities", Nothing, false, true)
         End Function
@@ -7241,7 +7241,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="TestCycles"/> entity instances using the 'GetTestCyclesRoot' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TestCycles"/> entity instances.</returns>
-        Public Function GetTestCyclesRootQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TestCycles)
+        Public Function GetTestCyclesRootQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.TestCycles)
             Me.ValidateMethod("GetTestCyclesRootQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TestCycles)("GetTestCyclesRoot", Nothing, false, true)
         End Function
@@ -7250,7 +7250,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="TestCycles"/> entity instances using the 'GetTestCyclesTier1' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TestCycles"/> entity instances.</returns>
-        Public Function GetTestCyclesTier1Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TestCycles)
+        Public Function GetTestCyclesTier1Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.TestCycles)
             Me.ValidateMethod("GetTestCyclesTier1Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TestCycles)("GetTestCyclesTier1", Nothing, false, true)
         End Function
@@ -7259,7 +7259,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="TestEntityForInvokeOperations"/> entity instances using the 'GetTestEntityForInvokeOperations' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TestEntityForInvokeOperations"/> entity instances.</returns>
-        Public Function GetTestEntityForInvokeOperationsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TestEntityForInvokeOperations)
+        Public Function GetTestEntityForInvokeOperationsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.TestEntityForInvokeOperations)
             Me.ValidateMethod("GetTestEntityForInvokeOperationsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TestEntityForInvokeOperations)("GetTestEntityForInvokeOperations", Nothing, false, true)
         End Function
@@ -7268,7 +7268,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="TimestampEntityA"/> entity instances using the 'GetTimestampEntityAs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TimestampEntityA"/> entity instances.</returns>
-        Public Function GetTimestampEntityAsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TimestampEntityA)
+        Public Function GetTimestampEntityAsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.TimestampEntityA)
             Me.ValidateMethod("GetTimestampEntityAsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TimestampEntityA)("GetTimestampEntityAs", Nothing, false, true)
         End Function
@@ -7277,7 +7277,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="TimestampEntityB"/> entity instances using the 'GetTimestampEntityBs' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="TimestampEntityB"/> entity instances.</returns>
-        Public Function GetTimestampEntityBsQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.TimestampEntityB)
+        Public Function GetTimestampEntityBsQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.TimestampEntityB)
             Me.ValidateMethod("GetTimestampEntityBsQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.TimestampEntityB)("GetTimestampEntityBs", Nothing, false, true)
         End Function
@@ -7286,7 +7286,7 @@ Namespace TestDomainServices
         ''' Gets an EntityQuery instance that can be used to load <see cref="EntityWithXElement"/> entity instances using the 'GetXElemEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="EntityWithXElement"/> entity instances.</returns>
-        Public Function GetXElemEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithXElement)
+        Public Function GetXElemEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.EntityWithXElement)
             Me.ValidateMethod("GetXElemEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.EntityWithXElement)("GetXElemEntities", Nothing, false, true)
         End Function
@@ -7297,7 +7297,7 @@ Namespace TestDomainServices
         ''' <param name="a">The value for the 'a' parameter of the query.</param>
         ''' <param name="b">The value for the 'b' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="A"/> entity instances.</returns>
-        Public Function QueryWithParamValidationQuery(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String) As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.A)
+        Public Function QueryWithParamValidationQuery(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String) As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.A)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("b", b)
@@ -7386,7 +7386,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function IncrementBid1ForA(ByVal a As Global.TestDomainServices.A, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function IncrementBid1ForA(ByVal a As Global.TestDomainServices.A, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             Me.ValidateMethod("IncrementBid1ForA", parameters)
@@ -7398,7 +7398,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="a">The value for the 'a' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function IncrementBid1ForA(ByVal a As Global.TestDomainServices.A) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function IncrementBid1ForA(ByVal a As Global.TestDomainServices.A) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             Me.ValidateMethod("IncrementBid1ForA", parameters)
@@ -7411,7 +7411,7 @@ Namespace TestDomainServices
         ''' <param name="a">The value for the 'a' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function IncrementBid1ForAAsync(ByVal a As Global.TestDomainServices.A, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Integer))
+        Public Function IncrementBid1ForAAsync(ByVal a As Global.TestDomainServices.A, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             Me.ValidateMethod("IncrementBid1ForA", parameters)
@@ -7426,7 +7426,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function IncrementBid1ForABy(ByVal a As Global.TestDomainServices.A, <Global.System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)> ByVal delta As Integer, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function IncrementBid1ForABy(ByVal a As Global.TestDomainServices.A, <Global.System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)> ByVal delta As Integer, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("delta", delta)
@@ -7440,7 +7440,7 @@ Namespace TestDomainServices
         ''' <param name="a">The value for the 'a' parameter of this action.</param>
         ''' <param name="delta">The value for the 'delta' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function IncrementBid1ForABy(ByVal a As Global.TestDomainServices.A, <Global.System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)> ByVal delta As Integer) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function IncrementBid1ForABy(ByVal a As Global.TestDomainServices.A, <Global.System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)> ByVal delta As Integer) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("delta", delta)
@@ -7455,7 +7455,7 @@ Namespace TestDomainServices
         ''' <param name="delta">The value for the 'delta' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function IncrementBid1ForAByAsync(ByVal a As Global.TestDomainServices.A, <Global.System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)> ByVal delta As Integer, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Integer))
+        Public Function IncrementBid1ForAByAsync(ByVal a As Global.TestDomainServices.A, <Global.System.ComponentModel.DataAnnotations.RangeAttribute(5, 10)> ByVal delta As Integer, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("delta", delta)
@@ -7472,7 +7472,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function InvokeOperationWithParamValidation(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function InvokeOperationWithParamValidation(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("b", b)
@@ -7488,7 +7488,7 @@ Namespace TestDomainServices
         ''' <param name="b">The value for the 'b' parameter of this action.</param>
         ''' <param name="entity">The value for the 'entity' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function InvokeOperationWithParamValidation(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function InvokeOperationWithParamValidation(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("b", b)
@@ -7505,7 +7505,7 @@ Namespace TestDomainServices
         ''' <param name="entity">The value for the 'entity' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function InvokeOperationWithParamValidationAsync(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Boolean))
+        Public Function InvokeOperationWithParamValidationAsync(<Global.System.ComponentModel.DataAnnotations.RangeAttribute(0, 10)> ByVal a As Integer, <Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(2)> ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("a", a)
             parameters.Add("b", b)
@@ -7521,7 +7521,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function InvokeOpWithIEnumerableParam(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
+        Public Overloads Function InvokeOpWithIEnumerableParam(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("list", list)
             Me.ValidateMethod("InvokeOpWithIEnumerableParam", parameters)
@@ -7533,7 +7533,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="list">The value for the 'list' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function InvokeOpWithIEnumerableParam(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
+        Public Overloads Function InvokeOpWithIEnumerableParam(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("list", list)
             Me.ValidateMethod("InvokeOpWithIEnumerableParam", parameters)
@@ -7546,7 +7546,7 @@ Namespace TestDomainServices
         ''' <param name="list">The value for the 'list' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function InvokeOpWithIEnumerableParamAsync(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)))
+        Public Function InvokeOpWithIEnumerableParamAsync(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("list", list)
             Me.ValidateMethod("InvokeOpWithIEnumerableParam", parameters)
@@ -7560,7 +7560,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function InvokeOpWithIEnumerableParamAndNoSideEffects(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
+        Public Overloads Function InvokeOpWithIEnumerableParamAndNoSideEffects(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("list", list)
             Me.ValidateMethod("InvokeOpWithIEnumerableParamAndNoSideEffects", parameters)
@@ -7572,7 +7572,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="list">The value for the 'list' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function InvokeOpWithIEnumerableParamAndNoSideEffects(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
+        Public Overloads Function InvokeOpWithIEnumerableParamAndNoSideEffects(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("list", list)
             Me.ValidateMethod("InvokeOpWithIEnumerableParamAndNoSideEffects", parameters)
@@ -7585,7 +7585,7 @@ Namespace TestDomainServices
         ''' <param name="list">The value for the 'list' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function InvokeOpWithIEnumerableParamAndNoSideEffectsAsync(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)))
+        Public Function InvokeOpWithIEnumerableParamAndNoSideEffectsAsync(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("list", list)
             Me.ValidateMethod("InvokeOpWithIEnumerableParamAndNoSideEffects", parameters)
@@ -7598,7 +7598,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function MethodRequiresAuthentication(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function MethodRequiresAuthentication(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("MethodRequiresAuthentication", Nothing)
             Return Me.InvokeOperation("MethodRequiresAuthentication", GetType(Global.System.Void), Nothing, true, callback, userState)
         End Function
@@ -7607,7 +7607,7 @@ Namespace TestDomainServices
         ''' Asynchronously invokes the 'MethodRequiresAuthentication' method of the DomainService.
         ''' </summary>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function MethodRequiresAuthentication() As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function MethodRequiresAuthentication() As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("MethodRequiresAuthentication", Nothing)
             Return Me.InvokeOperation("MethodRequiresAuthentication", GetType(Global.System.Void), Nothing, true, Nothing, Nothing)
         End Function
@@ -7617,7 +7617,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function MethodRequiresAuthenticationAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult)
+        Public Function MethodRequiresAuthenticationAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult)
             Me.ValidateMethod("MethodRequiresAuthentication", Nothing)
             Return Me.InvokeOperationAsync("MethodRequiresAuthentication", Nothing, true, cancellationToken)
         End Function
@@ -7628,7 +7628,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnHttpMethodWithoutSideEffects_Online(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)
+        Public Overloads Function ReturnHttpMethodWithoutSideEffects_Online(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of String)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of String)
             Me.ValidateMethod("ReturnHttpMethodWithoutSideEffects_Online", Nothing)
             Return Me.InvokeOperation(Of String)("ReturnHttpMethodWithoutSideEffects_Online", GetType(String), Nothing, false, callback, userState)
         End Function
@@ -7637,7 +7637,7 @@ Namespace TestDomainServices
         ''' Asynchronously invokes the 'ReturnHttpMethodWithoutSideEffects_Online' method of the DomainService.
         ''' </summary>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnHttpMethodWithoutSideEffects_Online() As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)
+        Public Overloads Function ReturnHttpMethodWithoutSideEffects_Online() As Global.OpenRiaServices.Client.InvokeOperation(Of String)
             Me.ValidateMethod("ReturnHttpMethodWithoutSideEffects_Online", Nothing)
             Return Me.InvokeOperation(Of String)("ReturnHttpMethodWithoutSideEffects_Online", GetType(String), Nothing, false, Nothing, Nothing)
         End Function
@@ -7647,7 +7647,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnHttpMethodWithoutSideEffects_OnlineAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of String))
+        Public Function ReturnHttpMethodWithoutSideEffects_OnlineAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of String))
             Me.ValidateMethod("ReturnHttpMethodWithoutSideEffects_Online", Nothing)
             Return Me.InvokeOperationAsync(Of String)("ReturnHttpMethodWithoutSideEffects_Online", Nothing, false, cancellationToken)
         End Function
@@ -7658,7 +7658,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnHttpMethodWithSideEffects_Online(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)
+        Public Overloads Function ReturnHttpMethodWithSideEffects_Online(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of String)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of String)
             Me.ValidateMethod("ReturnHttpMethodWithSideEffects_Online", Nothing)
             Return Me.InvokeOperation(Of String)("ReturnHttpMethodWithSideEffects_Online", GetType(String), Nothing, true, callback, userState)
         End Function
@@ -7667,7 +7667,7 @@ Namespace TestDomainServices
         ''' Asynchronously invokes the 'ReturnHttpMethodWithSideEffects_Online' method of the DomainService.
         ''' </summary>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnHttpMethodWithSideEffects_Online() As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)
+        Public Overloads Function ReturnHttpMethodWithSideEffects_Online() As Global.OpenRiaServices.Client.InvokeOperation(Of String)
             Me.ValidateMethod("ReturnHttpMethodWithSideEffects_Online", Nothing)
             Return Me.InvokeOperation(Of String)("ReturnHttpMethodWithSideEffects_Online", GetType(String), Nothing, true, Nothing, Nothing)
         End Function
@@ -7677,7 +7677,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnHttpMethodWithSideEffects_OnlineAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of String))
+        Public Function ReturnHttpMethodWithSideEffects_OnlineAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of String))
             Me.ValidateMethod("ReturnHttpMethodWithSideEffects_Online", Nothing)
             Return Me.InvokeOperationAsync(Of String)("ReturnHttpMethodWithSideEffects_Online", Nothing, true, cancellationToken)
         End Function
@@ -7689,7 +7689,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsBinary_Online(ByVal value() As Byte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte())), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte())
+        Public Overloads Function ReturnsBinary_Online(ByVal value() As Byte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Byte())), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Byte())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsBinary_Online", parameters)
@@ -7701,7 +7701,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsBinary_Online(ByVal value() As Byte) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte())
+        Public Overloads Function ReturnsBinary_Online(ByVal value() As Byte) As Global.OpenRiaServices.Client.InvokeOperation(Of Byte())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsBinary_Online", parameters)
@@ -7714,7 +7714,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsBinary_OnlineAsync(ByVal value() As Byte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Byte()))
+        Public Function ReturnsBinary_OnlineAsync(ByVal value() As Byte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Byte()))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsBinary_Online", parameters)
@@ -7728,7 +7728,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsBoolean_Online(ByVal value As Boolean, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function ReturnsBoolean_Online(ByVal value As Boolean, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsBoolean_Online", parameters)
@@ -7740,7 +7740,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsBoolean_Online(ByVal value As Boolean) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function ReturnsBoolean_Online(ByVal value As Boolean) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsBoolean_Online", parameters)
@@ -7753,7 +7753,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsBoolean_OnlineAsync(ByVal value As Boolean, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Boolean))
+        Public Function ReturnsBoolean_OnlineAsync(ByVal value As Boolean, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsBoolean_Online", parameters)
@@ -7767,7 +7767,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsByte_Online(ByVal value As Byte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte)
+        Public Overloads Function ReturnsByte_Online(ByVal value As Byte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Byte)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Byte)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsByte_Online", parameters)
@@ -7779,7 +7779,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsByte_Online(ByVal value As Byte) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte)
+        Public Overloads Function ReturnsByte_Online(ByVal value As Byte) As Global.OpenRiaServices.Client.InvokeOperation(Of Byte)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsByte_Online", parameters)
@@ -7792,7 +7792,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsByte_OnlineAsync(ByVal value As Byte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Byte))
+        Public Function ReturnsByte_OnlineAsync(ByVal value As Byte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Byte))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsByte_Online", parameters)
@@ -7806,7 +7806,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsByteArray_Online(ByVal value() As Byte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte())), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte())
+        Public Overloads Function ReturnsByteArray_Online(ByVal value() As Byte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Byte())), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Byte())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsByteArray_Online", parameters)
@@ -7818,7 +7818,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsByteArray_Online(ByVal value() As Byte) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Byte())
+        Public Overloads Function ReturnsByteArray_Online(ByVal value() As Byte) As Global.OpenRiaServices.Client.InvokeOperation(Of Byte())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsByteArray_Online", parameters)
@@ -7831,7 +7831,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsByteArray_OnlineAsync(ByVal value() As Byte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Byte()))
+        Public Function ReturnsByteArray_OnlineAsync(ByVal value() As Byte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Byte()))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsByteArray_Online", parameters)
@@ -7845,7 +7845,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsChar_Online(ByVal value As Char, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Char)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Char)
+        Public Overloads Function ReturnsChar_Online(ByVal value As Char, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Char)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Char)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsChar_Online", parameters)
@@ -7857,7 +7857,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsChar_Online(ByVal value As Char) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Char)
+        Public Overloads Function ReturnsChar_Online(ByVal value As Char) As Global.OpenRiaServices.Client.InvokeOperation(Of Char)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsChar_Online", parameters)
@@ -7870,7 +7870,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsChar_OnlineAsync(ByVal value As Char, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Char))
+        Public Function ReturnsChar_OnlineAsync(ByVal value As Char, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Char))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsChar_Online", parameters)
@@ -7884,7 +7884,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTime_Online(ByVal value As Date, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Date)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Date)
+        Public Overloads Function ReturnsDateTime_Online(ByVal value As Date, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Date)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Date)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTime_Online", parameters)
@@ -7896,7 +7896,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTime_Online(ByVal value As Date) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Date)
+        Public Overloads Function ReturnsDateTime_Online(ByVal value As Date) As Global.OpenRiaServices.Client.InvokeOperation(Of Date)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTime_Online", parameters)
@@ -7909,7 +7909,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDateTime_OnlineAsync(ByVal value As Date, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Date))
+        Public Function ReturnsDateTime_OnlineAsync(ByVal value As Date, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Date))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTime_Online", parameters)
@@ -7923,7 +7923,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTimeOffset_Online(ByVal value As Global.System.DateTimeOffset, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.DateTimeOffset)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.DateTimeOffset)
+        Public Overloads Function ReturnsDateTimeOffset_Online(ByVal value As Global.System.DateTimeOffset, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.DateTimeOffset)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.DateTimeOffset)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimeOffset_Online", parameters)
@@ -7935,7 +7935,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTimeOffset_Online(ByVal value As Global.System.DateTimeOffset) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.DateTimeOffset)
+        Public Overloads Function ReturnsDateTimeOffset_Online(ByVal value As Global.System.DateTimeOffset) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.DateTimeOffset)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimeOffset_Online", parameters)
@@ -7948,7 +7948,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDateTimeOffset_OnlineAsync(ByVal value As Global.System.DateTimeOffset, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.DateTimeOffset))
+        Public Function ReturnsDateTimeOffset_OnlineAsync(ByVal value As Global.System.DateTimeOffset, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.DateTimeOffset))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimeOffset_Online", parameters)
@@ -7962,7 +7962,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTimeOffsets_Online(ByVal value() As Global.System.DateTimeOffset, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.DateTimeOffset())), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.DateTimeOffset())
+        Public Overloads Function ReturnsDateTimeOffsets_Online(ByVal value() As Global.System.DateTimeOffset, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.DateTimeOffset())), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.DateTimeOffset())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimeOffsets_Online", parameters)
@@ -7974,7 +7974,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTimeOffsets_Online(ByVal value() As Global.System.DateTimeOffset) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.DateTimeOffset())
+        Public Overloads Function ReturnsDateTimeOffsets_Online(ByVal value() As Global.System.DateTimeOffset) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.DateTimeOffset())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimeOffsets_Online", parameters)
@@ -7987,7 +7987,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDateTimeOffsets_OnlineAsync(ByVal value() As Global.System.DateTimeOffset, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.DateTimeOffset()))
+        Public Function ReturnsDateTimeOffsets_OnlineAsync(ByVal value() As Global.System.DateTimeOffset, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.DateTimeOffset()))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimeOffsets_Online", parameters)
@@ -8001,7 +8001,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTimes_Online(ByVal value() As Date, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Date())), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Date())
+        Public Overloads Function ReturnsDateTimes_Online(ByVal value() As Date, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Date())), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Date())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimes_Online", parameters)
@@ -8013,7 +8013,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDateTimes_Online(ByVal value() As Date) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Date())
+        Public Overloads Function ReturnsDateTimes_Online(ByVal value() As Date) As Global.OpenRiaServices.Client.InvokeOperation(Of Date())
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimes_Online", parameters)
@@ -8026,7 +8026,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDateTimes_OnlineAsync(ByVal value() As Date, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Date()))
+        Public Function ReturnsDateTimes_OnlineAsync(ByVal value() As Date, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Date()))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDateTimes_Online", parameters)
@@ -8040,7 +8040,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDecimal_Online(ByVal value As Decimal, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Decimal)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Decimal)
+        Public Overloads Function ReturnsDecimal_Online(ByVal value As Decimal, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Decimal)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Decimal)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDecimal_Online", parameters)
@@ -8052,7 +8052,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDecimal_Online(ByVal value As Decimal) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Decimal)
+        Public Overloads Function ReturnsDecimal_Online(ByVal value As Decimal) As Global.OpenRiaServices.Client.InvokeOperation(Of Decimal)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDecimal_Online", parameters)
@@ -8065,7 +8065,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDecimal_OnlineAsync(ByVal value As Decimal, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Decimal))
+        Public Function ReturnsDecimal_OnlineAsync(ByVal value As Decimal, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Decimal))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDecimal_Online", parameters)
@@ -8079,7 +8079,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDictionary(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.Dictionary(Of String, Integer))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.Dictionary(Of String, Integer))
+        Public Overloads Function ReturnsDictionary(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.Dictionary(Of String, Integer))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.Dictionary(Of String, Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDictionary", parameters)
@@ -8091,7 +8091,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDictionary(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.Dictionary(Of String, Integer))
+        Public Overloads Function ReturnsDictionary(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.Dictionary(Of String, Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDictionary", parameters)
@@ -8104,7 +8104,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDictionaryAsync(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Collections.Generic.Dictionary(Of String, Integer)))
+        Public Function ReturnsDictionaryAsync(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Collections.Generic.Dictionary(Of String, Integer)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDictionary", parameters)
@@ -8118,7 +8118,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDouble_Online(ByVal value As Double, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Double)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Double)
+        Public Overloads Function ReturnsDouble_Online(ByVal value As Double, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Double)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Double)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDouble_Online", parameters)
@@ -8130,7 +8130,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsDouble_Online(ByVal value As Double) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Double)
+        Public Overloads Function ReturnsDouble_Online(ByVal value As Double) As Global.OpenRiaServices.Client.InvokeOperation(Of Double)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDouble_Online", parameters)
@@ -8143,7 +8143,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsDouble_OnlineAsync(ByVal value As Double, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Double))
+        Public Function ReturnsDouble_OnlineAsync(ByVal value As Double, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Double))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsDouble_Online", parameters)
@@ -8158,7 +8158,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsEntity_Online(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.TestDomainServices.MixedType)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.TestDomainServices.MixedType)
+        Public Overloads Function ReturnsEntity_Online(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.TestDomainServices.MixedType)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.TestDomainServices.MixedType)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             parameters.Add("id", id)
@@ -8172,7 +8172,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="id">The value for the 'id' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsEntity_Online(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.TestDomainServices.MixedType)
+        Public Overloads Function ReturnsEntity_Online(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.TestDomainServices.MixedType)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             parameters.Add("id", id)
@@ -8187,7 +8187,7 @@ Namespace TestDomainServices
         ''' <param name="id">The value for the 'id' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsEntity_OnlineAsync(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.TestDomainServices.MixedType))
+        Public Function ReturnsEntity_OnlineAsync(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.TestDomainServices.MixedType))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             parameters.Add("id", id)
@@ -8202,7 +8202,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsEntityCollection_Online(ByVal value As Integer, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType))
+        Public Overloads Function ReturnsEntityCollection_Online(ByVal value As Integer, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsEntityCollection_Online", parameters)
@@ -8214,7 +8214,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsEntityCollection_Online(ByVal value As Integer) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType))
+        Public Overloads Function ReturnsEntityCollection_Online(ByVal value As Integer) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsEntityCollection_Online", parameters)
@@ -8227,7 +8227,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsEntityCollection_OnlineAsync(ByVal value As Integer, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType)))
+        Public Function ReturnsEntityCollection_OnlineAsync(ByVal value As Integer, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.MixedType)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsEntityCollection_Online", parameters)
@@ -8241,7 +8241,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsEnum_Online(ByVal value As Global.TestDomainServices.TestEnum, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.TestDomainServices.TestEnum)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.TestDomainServices.TestEnum)
+        Public Overloads Function ReturnsEnum_Online(ByVal value As Global.TestDomainServices.TestEnum, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.TestDomainServices.TestEnum)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.TestDomainServices.TestEnum)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsEnum_Online", parameters)
@@ -8253,7 +8253,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsEnum_Online(ByVal value As Global.TestDomainServices.TestEnum) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.TestDomainServices.TestEnum)
+        Public Overloads Function ReturnsEnum_Online(ByVal value As Global.TestDomainServices.TestEnum) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.TestDomainServices.TestEnum)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsEnum_Online", parameters)
@@ -8266,7 +8266,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsEnum_OnlineAsync(ByVal value As Global.TestDomainServices.TestEnum, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.TestDomainServices.TestEnum))
+        Public Function ReturnsEnum_OnlineAsync(ByVal value As Global.TestDomainServices.TestEnum, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.TestDomainServices.TestEnum))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsEnum_Online", parameters)
@@ -8280,7 +8280,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsGuid_Online(ByVal value As Global.System.Guid, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Guid)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Guid)
+        Public Overloads Function ReturnsGuid_Online(ByVal value As Global.System.Guid, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Guid)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Guid)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsGuid_Online", parameters)
@@ -8292,7 +8292,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsGuid_Online(ByVal value As Global.System.Guid) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Guid)
+        Public Overloads Function ReturnsGuid_Online(ByVal value As Global.System.Guid) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Guid)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsGuid_Online", parameters)
@@ -8305,7 +8305,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsGuid_OnlineAsync(ByVal value As Global.System.Guid, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Guid))
+        Public Function ReturnsGuid_OnlineAsync(ByVal value As Global.System.Guid, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Guid))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsGuid_Online", parameters)
@@ -8319,7 +8319,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsInt16_Online(ByVal value As Short, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Short)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Short)
+        Public Overloads Function ReturnsInt16_Online(ByVal value As Short, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Short)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Short)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt16_Online", parameters)
@@ -8331,7 +8331,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsInt16_Online(ByVal value As Short) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Short)
+        Public Overloads Function ReturnsInt16_Online(ByVal value As Short) As Global.OpenRiaServices.Client.InvokeOperation(Of Short)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt16_Online", parameters)
@@ -8344,7 +8344,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsInt16_OnlineAsync(ByVal value As Short, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Short))
+        Public Function ReturnsInt16_OnlineAsync(ByVal value As Short, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Short))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt16_Online", parameters)
@@ -8358,7 +8358,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsInt32_Online(ByVal value As Integer, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function ReturnsInt32_Online(ByVal value As Integer, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt32_Online", parameters)
@@ -8370,7 +8370,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsInt32_Online(ByVal value As Integer) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function ReturnsInt32_Online(ByVal value As Integer) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt32_Online", parameters)
@@ -8383,7 +8383,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsInt32_OnlineAsync(ByVal value As Integer, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Integer))
+        Public Function ReturnsInt32_OnlineAsync(ByVal value As Integer, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt32_Online", parameters)
@@ -8397,7 +8397,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsInt64_Online(ByVal value As Long, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Long)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Long)
+        Public Overloads Function ReturnsInt64_Online(ByVal value As Long, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Long)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Long)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt64_Online", parameters)
@@ -8409,7 +8409,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsInt64_Online(ByVal value As Long) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Long)
+        Public Overloads Function ReturnsInt64_Online(ByVal value As Long) As Global.OpenRiaServices.Client.InvokeOperation(Of Long)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt64_Online", parameters)
@@ -8422,7 +8422,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsInt64_OnlineAsync(ByVal value As Long, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Long))
+        Public Function ReturnsInt64_OnlineAsync(ByVal value As Long, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Long))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsInt64_Online", parameters)
@@ -8436,7 +8436,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableBoolean_Online(ByVal value As Global.System.Nullable(Of Boolean), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Boolean))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Boolean))
+        Public Overloads Function ReturnsNullableBoolean_Online(ByVal value As Global.System.Nullable(Of Boolean), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Boolean))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableBoolean_Online", parameters)
@@ -8448,7 +8448,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableBoolean_Online(ByVal value As Global.System.Nullable(Of Boolean)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Boolean))
+        Public Overloads Function ReturnsNullableBoolean_Online(ByVal value As Global.System.Nullable(Of Boolean)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableBoolean_Online", parameters)
@@ -8461,7 +8461,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableBoolean_OnlineAsync(ByVal value As Global.System.Nullable(Of Boolean), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Boolean)))
+        Public Function ReturnsNullableBoolean_OnlineAsync(ByVal value As Global.System.Nullable(Of Boolean), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Boolean)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableBoolean_Online", parameters)
@@ -8475,7 +8475,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableByte_Online(ByVal value As Global.System.Nullable(Of Byte), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Byte))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Byte))
+        Public Overloads Function ReturnsNullableByte_Online(ByVal value As Global.System.Nullable(Of Byte), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Byte))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Byte))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableByte_Online", parameters)
@@ -8487,7 +8487,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableByte_Online(ByVal value As Global.System.Nullable(Of Byte)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Byte))
+        Public Overloads Function ReturnsNullableByte_Online(ByVal value As Global.System.Nullable(Of Byte)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Byte))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableByte_Online", parameters)
@@ -8500,7 +8500,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableByte_OnlineAsync(ByVal value As Global.System.Nullable(Of Byte), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Byte)))
+        Public Function ReturnsNullableByte_OnlineAsync(ByVal value As Global.System.Nullable(Of Byte), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Byte)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableByte_Online", parameters)
@@ -8514,7 +8514,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableChar_Online(ByVal value As Global.System.Nullable(Of Char), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Char))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Char))
+        Public Overloads Function ReturnsNullableChar_Online(ByVal value As Global.System.Nullable(Of Char), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Char))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Char))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableChar_Online", parameters)
@@ -8526,7 +8526,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableChar_Online(ByVal value As Global.System.Nullable(Of Char)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Char))
+        Public Overloads Function ReturnsNullableChar_Online(ByVal value As Global.System.Nullable(Of Char)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Char))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableChar_Online", parameters)
@@ -8539,7 +8539,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableChar_OnlineAsync(ByVal value As Global.System.Nullable(Of Char), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Char)))
+        Public Function ReturnsNullableChar_OnlineAsync(ByVal value As Global.System.Nullable(Of Char), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Char)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableChar_Online", parameters)
@@ -8553,7 +8553,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDateTime_Online(ByVal value As Global.System.Nullable(Of Date), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Date))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Date))
+        Public Overloads Function ReturnsNullableDateTime_Online(ByVal value As Global.System.Nullable(Of Date), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Date))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Date))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDateTime_Online", parameters)
@@ -8565,7 +8565,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDateTime_Online(ByVal value As Global.System.Nullable(Of Date)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Date))
+        Public Overloads Function ReturnsNullableDateTime_Online(ByVal value As Global.System.Nullable(Of Date)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Date))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDateTime_Online", parameters)
@@ -8578,7 +8578,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableDateTime_OnlineAsync(ByVal value As Global.System.Nullable(Of Date), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Date)))
+        Public Function ReturnsNullableDateTime_OnlineAsync(ByVal value As Global.System.Nullable(Of Date), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Date)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDateTime_Online", parameters)
@@ -8592,7 +8592,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDateTimeOffset_Online(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.DateTimeOffset))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.DateTimeOffset))
+        Public Overloads Function ReturnsNullableDateTimeOffset_Online(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.DateTimeOffset))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.DateTimeOffset))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDateTimeOffset_Online", parameters)
@@ -8604,7 +8604,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDateTimeOffset_Online(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.DateTimeOffset))
+        Public Overloads Function ReturnsNullableDateTimeOffset_Online(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.DateTimeOffset))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDateTimeOffset_Online", parameters)
@@ -8617,7 +8617,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableDateTimeOffset_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.System.DateTimeOffset)))
+        Public Function ReturnsNullableDateTimeOffset_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.System.DateTimeOffset)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDateTimeOffset_Online", parameters)
@@ -8631,7 +8631,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDecimal_Online(ByVal value As Global.System.Nullable(Of Decimal), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Decimal))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Decimal))
+        Public Overloads Function ReturnsNullableDecimal_Online(ByVal value As Global.System.Nullable(Of Decimal), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Decimal))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Decimal))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDecimal_Online", parameters)
@@ -8643,7 +8643,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDecimal_Online(ByVal value As Global.System.Nullable(Of Decimal)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Decimal))
+        Public Overloads Function ReturnsNullableDecimal_Online(ByVal value As Global.System.Nullable(Of Decimal)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Decimal))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDecimal_Online", parameters)
@@ -8656,7 +8656,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableDecimal_OnlineAsync(ByVal value As Global.System.Nullable(Of Decimal), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Decimal)))
+        Public Function ReturnsNullableDecimal_OnlineAsync(ByVal value As Global.System.Nullable(Of Decimal), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Decimal)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDecimal_Online", parameters)
@@ -8670,7 +8670,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDouble_Online(ByVal value As Global.System.Nullable(Of Double), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Double))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Double))
+        Public Overloads Function ReturnsNullableDouble_Online(ByVal value As Global.System.Nullable(Of Double), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Double))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Double))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDouble_Online", parameters)
@@ -8682,7 +8682,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableDouble_Online(ByVal value As Global.System.Nullable(Of Double)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Double))
+        Public Overloads Function ReturnsNullableDouble_Online(ByVal value As Global.System.Nullable(Of Double)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Double))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDouble_Online", parameters)
@@ -8695,7 +8695,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableDouble_OnlineAsync(ByVal value As Global.System.Nullable(Of Double), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Double)))
+        Public Function ReturnsNullableDouble_OnlineAsync(ByVal value As Global.System.Nullable(Of Double), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Double)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableDouble_Online", parameters)
@@ -8709,7 +8709,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableEnum_Online(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum))
+        Public Overloads Function ReturnsNullableEnum_Online(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableEnum_Online", parameters)
@@ -8721,7 +8721,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableEnum_Online(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum))
+        Public Overloads Function ReturnsNullableEnum_Online(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableEnum_Online", parameters)
@@ -8734,7 +8734,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableEnum_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum)))
+        Public Function ReturnsNullableEnum_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.TestDomainServices.TestEnum)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableEnum_Online", parameters)
@@ -8748,7 +8748,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableGuid_Online(ByVal value As Global.System.Nullable(Of Global.System.Guid), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.Guid))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.Guid))
+        Public Overloads Function ReturnsNullableGuid_Online(ByVal value As Global.System.Nullable(Of Global.System.Guid), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.Guid))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.Guid))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableGuid_Online", parameters)
@@ -8760,7 +8760,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableGuid_Online(ByVal value As Global.System.Nullable(Of Global.System.Guid)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.Guid))
+        Public Overloads Function ReturnsNullableGuid_Online(ByVal value As Global.System.Nullable(Of Global.System.Guid)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.Guid))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableGuid_Online", parameters)
@@ -8773,7 +8773,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableGuid_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.System.Guid), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.System.Guid)))
+        Public Function ReturnsNullableGuid_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.System.Guid), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.System.Guid)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableGuid_Online", parameters)
@@ -8787,7 +8787,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableInt16_Online(ByVal value As Global.System.Nullable(Of Short), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Short))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Short))
+        Public Overloads Function ReturnsNullableInt16_Online(ByVal value As Global.System.Nullable(Of Short), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Short))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Short))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt16_Online", parameters)
@@ -8799,7 +8799,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableInt16_Online(ByVal value As Global.System.Nullable(Of Short)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Short))
+        Public Overloads Function ReturnsNullableInt16_Online(ByVal value As Global.System.Nullable(Of Short)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Short))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt16_Online", parameters)
@@ -8812,7 +8812,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableInt16_OnlineAsync(ByVal value As Global.System.Nullable(Of Short), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Short)))
+        Public Function ReturnsNullableInt16_OnlineAsync(ByVal value As Global.System.Nullable(Of Short), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Short)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt16_Online", parameters)
@@ -8826,7 +8826,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableInt32_Online(ByVal value As Global.System.Nullable(Of Integer), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Integer))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Integer))
+        Public Overloads Function ReturnsNullableInt32_Online(ByVal value As Global.System.Nullable(Of Integer), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Integer))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt32_Online", parameters)
@@ -8838,7 +8838,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableInt32_Online(ByVal value As Global.System.Nullable(Of Integer)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Integer))
+        Public Overloads Function ReturnsNullableInt32_Online(ByVal value As Global.System.Nullable(Of Integer)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt32_Online", parameters)
@@ -8851,7 +8851,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableInt32_OnlineAsync(ByVal value As Global.System.Nullable(Of Integer), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Integer)))
+        Public Function ReturnsNullableInt32_OnlineAsync(ByVal value As Global.System.Nullable(Of Integer), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Integer)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt32_Online", parameters)
@@ -8865,7 +8865,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableInt64_Online(ByVal value As Global.System.Nullable(Of Long), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Long))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Long))
+        Public Overloads Function ReturnsNullableInt64_Online(ByVal value As Global.System.Nullable(Of Long), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Long))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Long))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt64_Online", parameters)
@@ -8877,7 +8877,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableInt64_Online(ByVal value As Global.System.Nullable(Of Long)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Long))
+        Public Overloads Function ReturnsNullableInt64_Online(ByVal value As Global.System.Nullable(Of Long)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Long))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt64_Online", parameters)
@@ -8890,7 +8890,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableInt64_OnlineAsync(ByVal value As Global.System.Nullable(Of Long), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Long)))
+        Public Function ReturnsNullableInt64_OnlineAsync(ByVal value As Global.System.Nullable(Of Long), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Long)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableInt64_Online", parameters)
@@ -8904,7 +8904,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableSByte_Online(ByVal value As Global.System.Nullable(Of SByte), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of SByte))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of SByte))
+        Public Overloads Function ReturnsNullableSByte_Online(ByVal value As Global.System.Nullable(Of SByte), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of SByte))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of SByte))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableSByte_Online", parameters)
@@ -8916,7 +8916,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableSByte_Online(ByVal value As Global.System.Nullable(Of SByte)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of SByte))
+        Public Overloads Function ReturnsNullableSByte_Online(ByVal value As Global.System.Nullable(Of SByte)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of SByte))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableSByte_Online", parameters)
@@ -8929,7 +8929,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableSByte_OnlineAsync(ByVal value As Global.System.Nullable(Of SByte), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of SByte)))
+        Public Function ReturnsNullableSByte_OnlineAsync(ByVal value As Global.System.Nullable(Of SByte), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of SByte)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableSByte_Online", parameters)
@@ -8943,7 +8943,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableSingle_Online(ByVal value As Global.System.Nullable(Of Single), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Single))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Single))
+        Public Overloads Function ReturnsNullableSingle_Online(ByVal value As Global.System.Nullable(Of Single), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Single))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Single))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableSingle_Online", parameters)
@@ -8955,7 +8955,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableSingle_Online(ByVal value As Global.System.Nullable(Of Single)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Single))
+        Public Overloads Function ReturnsNullableSingle_Online(ByVal value As Global.System.Nullable(Of Single)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Single))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableSingle_Online", parameters)
@@ -8968,7 +8968,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableSingle_OnlineAsync(ByVal value As Global.System.Nullable(Of Single), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Single)))
+        Public Function ReturnsNullableSingle_OnlineAsync(ByVal value As Global.System.Nullable(Of Single), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Single)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableSingle_Online", parameters)
@@ -8982,7 +8982,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableTimeSpan_Online(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.TimeSpan))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.TimeSpan))
+        Public Overloads Function ReturnsNullableTimeSpan_Online(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.TimeSpan))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.TimeSpan))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableTimeSpan_Online", parameters)
@@ -8994,7 +8994,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableTimeSpan_Online(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.TimeSpan))
+        Public Overloads Function ReturnsNullableTimeSpan_Online(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of Global.System.TimeSpan))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableTimeSpan_Online", parameters)
@@ -9007,7 +9007,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableTimeSpan_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.System.TimeSpan)))
+        Public Function ReturnsNullableTimeSpan_OnlineAsync(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of Global.System.TimeSpan)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableTimeSpan_Online", parameters)
@@ -9021,7 +9021,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableUInt16_Online(ByVal value As Global.System.Nullable(Of UShort), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of UShort))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of UShort))
+        Public Overloads Function ReturnsNullableUInt16_Online(ByVal value As Global.System.Nullable(Of UShort), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of UShort))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of UShort))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt16_Online", parameters)
@@ -9033,7 +9033,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableUInt16_Online(ByVal value As Global.System.Nullable(Of UShort)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of UShort))
+        Public Overloads Function ReturnsNullableUInt16_Online(ByVal value As Global.System.Nullable(Of UShort)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of UShort))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt16_Online", parameters)
@@ -9046,7 +9046,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableUInt16_OnlineAsync(ByVal value As Global.System.Nullable(Of UShort), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of UShort)))
+        Public Function ReturnsNullableUInt16_OnlineAsync(ByVal value As Global.System.Nullable(Of UShort), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of UShort)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt16_Online", parameters)
@@ -9060,7 +9060,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableUInt32_Online(ByVal value As Global.System.Nullable(Of UInteger), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of UInteger))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of UInteger))
+        Public Overloads Function ReturnsNullableUInt32_Online(ByVal value As Global.System.Nullable(Of UInteger), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of UInteger))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of UInteger))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt32_Online", parameters)
@@ -9072,7 +9072,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableUInt32_Online(ByVal value As Global.System.Nullable(Of UInteger)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of UInteger))
+        Public Overloads Function ReturnsNullableUInt32_Online(ByVal value As Global.System.Nullable(Of UInteger)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of UInteger))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt32_Online", parameters)
@@ -9085,7 +9085,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableUInt32_OnlineAsync(ByVal value As Global.System.Nullable(Of UInteger), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of UInteger)))
+        Public Function ReturnsNullableUInt32_OnlineAsync(ByVal value As Global.System.Nullable(Of UInteger), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of UInteger)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt32_Online", parameters)
@@ -9099,7 +9099,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableUInt64_Online(ByVal value As Global.System.Nullable(Of ULong), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of ULong))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of ULong))
+        Public Overloads Function ReturnsNullableUInt64_Online(ByVal value As Global.System.Nullable(Of ULong), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of ULong))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of ULong))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt64_Online", parameters)
@@ -9111,7 +9111,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsNullableUInt64_Online(ByVal value As Global.System.Nullable(Of ULong)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Nullable(Of ULong))
+        Public Overloads Function ReturnsNullableUInt64_Online(ByVal value As Global.System.Nullable(Of ULong)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Nullable(Of ULong))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt64_Online", parameters)
@@ -9124,7 +9124,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsNullableUInt64_OnlineAsync(ByVal value As Global.System.Nullable(Of ULong), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Nullable(Of ULong)))
+        Public Function ReturnsNullableUInt64_OnlineAsync(ByVal value As Global.System.Nullable(Of ULong), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Nullable(Of ULong)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsNullableUInt64_Online", parameters)
@@ -9138,7 +9138,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsSByte_Online(ByVal value As SByte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of SByte)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of SByte)
+        Public Overloads Function ReturnsSByte_Online(ByVal value As SByte, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of SByte)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of SByte)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsSByte_Online", parameters)
@@ -9150,7 +9150,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsSByte_Online(ByVal value As SByte) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of SByte)
+        Public Overloads Function ReturnsSByte_Online(ByVal value As SByte) As Global.OpenRiaServices.Client.InvokeOperation(Of SByte)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsSByte_Online", parameters)
@@ -9163,7 +9163,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsSByte_OnlineAsync(ByVal value As SByte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of SByte))
+        Public Function ReturnsSByte_OnlineAsync(ByVal value As SByte, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of SByte))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsSByte_Online", parameters)
@@ -9177,7 +9177,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsSingle_Online(ByVal value As Single, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Single)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Single)
+        Public Overloads Function ReturnsSingle_Online(ByVal value As Single, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Single)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Single)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsSingle_Online", parameters)
@@ -9189,7 +9189,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsSingle_Online(ByVal value As Single) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Single)
+        Public Overloads Function ReturnsSingle_Online(ByVal value As Single) As Global.OpenRiaServices.Client.InvokeOperation(Of Single)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsSingle_Online", parameters)
@@ -9202,7 +9202,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsSingle_OnlineAsync(ByVal value As Single, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Single))
+        Public Function ReturnsSingle_OnlineAsync(ByVal value As Single, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Single))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsSingle_Online", parameters)
@@ -9216,7 +9216,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsString_Online(ByVal value As String, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)
+        Public Overloads Function ReturnsString_Online(ByVal value As String, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of String)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of String)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsString_Online", parameters)
@@ -9228,7 +9228,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsString_Online(ByVal value As String) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of String)
+        Public Overloads Function ReturnsString_Online(ByVal value As String) As Global.OpenRiaServices.Client.InvokeOperation(Of String)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsString_Online", parameters)
@@ -9241,7 +9241,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsString_OnlineAsync(ByVal value As String, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of String))
+        Public Function ReturnsString_OnlineAsync(ByVal value As String, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of String))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsString_Online", parameters)
@@ -9255,7 +9255,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsStrings_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of String))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of String))
+        Public Overloads Function ReturnsStrings_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of String))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of String))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsStrings_Online", parameters)
@@ -9267,7 +9267,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsStrings_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of String))
+        Public Overloads Function ReturnsStrings_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of String))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsStrings_Online", parameters)
@@ -9280,7 +9280,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsStrings_OnlineAsync(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of String)))
+        Public Function ReturnsStrings_OnlineAsync(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of String)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsStrings_Online", parameters)
@@ -9294,7 +9294,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsTimeSpan_Online(ByVal value As Global.System.TimeSpan, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.TimeSpan)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.TimeSpan)
+        Public Overloads Function ReturnsTimeSpan_Online(ByVal value As Global.System.TimeSpan, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.TimeSpan)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.TimeSpan)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsTimeSpan_Online", parameters)
@@ -9306,7 +9306,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsTimeSpan_Online(ByVal value As Global.System.TimeSpan) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.TimeSpan)
+        Public Overloads Function ReturnsTimeSpan_Online(ByVal value As Global.System.TimeSpan) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.TimeSpan)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsTimeSpan_Online", parameters)
@@ -9319,7 +9319,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsTimeSpan_OnlineAsync(ByVal value As Global.System.TimeSpan, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.TimeSpan))
+        Public Function ReturnsTimeSpan_OnlineAsync(ByVal value As Global.System.TimeSpan, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.TimeSpan))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsTimeSpan_Online", parameters)
@@ -9333,7 +9333,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsTimeSpans_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan))), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan))
+        Public Overloads Function ReturnsTimeSpans_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan), ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan))), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsTimeSpans_Online", parameters)
@@ -9345,7 +9345,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsTimeSpans_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan))
+        Public Overloads Function ReturnsTimeSpans_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan)) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsTimeSpans_Online", parameters)
@@ -9358,7 +9358,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsTimeSpans_OnlineAsync(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan)))
+        Public Function ReturnsTimeSpans_OnlineAsync(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan), Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan)))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsTimeSpans_Online", parameters)
@@ -9372,7 +9372,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUInt16_Online(ByVal value As UShort, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of UShort)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of UShort)
+        Public Overloads Function ReturnsUInt16_Online(ByVal value As UShort, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of UShort)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of UShort)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt16_Online", parameters)
@@ -9384,7 +9384,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUInt16_Online(ByVal value As UShort) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of UShort)
+        Public Overloads Function ReturnsUInt16_Online(ByVal value As UShort) As Global.OpenRiaServices.Client.InvokeOperation(Of UShort)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt16_Online", parameters)
@@ -9397,7 +9397,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsUInt16_OnlineAsync(ByVal value As UShort, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of UShort))
+        Public Function ReturnsUInt16_OnlineAsync(ByVal value As UShort, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of UShort))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt16_Online", parameters)
@@ -9411,7 +9411,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUInt32_Online(ByVal value As UInteger, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of UInteger)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of UInteger)
+        Public Overloads Function ReturnsUInt32_Online(ByVal value As UInteger, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of UInteger)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of UInteger)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt32_Online", parameters)
@@ -9423,7 +9423,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUInt32_Online(ByVal value As UInteger) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of UInteger)
+        Public Overloads Function ReturnsUInt32_Online(ByVal value As UInteger) As Global.OpenRiaServices.Client.InvokeOperation(Of UInteger)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt32_Online", parameters)
@@ -9436,7 +9436,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsUInt32_OnlineAsync(ByVal value As UInteger, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of UInteger))
+        Public Function ReturnsUInt32_OnlineAsync(ByVal value As UInteger, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of UInteger))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt32_Online", parameters)
@@ -9450,7 +9450,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUInt64_Online(ByVal value As ULong, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of ULong)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of ULong)
+        Public Overloads Function ReturnsUInt64_Online(ByVal value As ULong, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of ULong)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of ULong)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt64_Online", parameters)
@@ -9462,7 +9462,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUInt64_Online(ByVal value As ULong) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of ULong)
+        Public Overloads Function ReturnsUInt64_Online(ByVal value As ULong) As Global.OpenRiaServices.Client.InvokeOperation(Of ULong)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt64_Online", parameters)
@@ -9475,7 +9475,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsUInt64_OnlineAsync(ByVal value As ULong, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of ULong))
+        Public Function ReturnsUInt64_OnlineAsync(ByVal value As ULong, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of ULong))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUInt64_Online", parameters)
@@ -9489,7 +9489,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUri_Online(ByVal value As Global.System.Uri, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Uri)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Uri)
+        Public Overloads Function ReturnsUri_Online(ByVal value As Global.System.Uri, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Uri)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Uri)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUri_Online", parameters)
@@ -9501,7 +9501,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsUri_Online(ByVal value As Global.System.Uri) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Uri)
+        Public Overloads Function ReturnsUri_Online(ByVal value As Global.System.Uri) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Uri)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUri_Online", parameters)
@@ -9514,7 +9514,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsUri_OnlineAsync(ByVal value As Global.System.Uri, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Uri))
+        Public Function ReturnsUri_OnlineAsync(ByVal value As Global.System.Uri, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Uri))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsUri_Online", parameters)
@@ -9528,7 +9528,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsXElement(ByVal value As Global.System.Xml.Linq.XElement, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Xml.Linq.XElement)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Xml.Linq.XElement)
+        Public Overloads Function ReturnsXElement(ByVal value As Global.System.Xml.Linq.XElement, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Xml.Linq.XElement)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Xml.Linq.XElement)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsXElement", parameters)
@@ -9540,7 +9540,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ReturnsXElement(ByVal value As Global.System.Xml.Linq.XElement) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Global.System.Xml.Linq.XElement)
+        Public Overloads Function ReturnsXElement(ByVal value As Global.System.Xml.Linq.XElement) As Global.OpenRiaServices.Client.InvokeOperation(Of Global.System.Xml.Linq.XElement)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsXElement", parameters)
@@ -9553,7 +9553,7 @@ Namespace TestDomainServices
         ''' <param name="value">The value for the 'value' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ReturnsXElementAsync(ByVal value As Global.System.Xml.Linq.XElement, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Global.System.Xml.Linq.XElement))
+        Public Function ReturnsXElementAsync(ByVal value As Global.System.Xml.Linq.XElement, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Global.System.Xml.Linq.XElement))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("value", value)
             Me.ValidateMethod("ReturnsXElement", parameters)
@@ -9567,7 +9567,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function RoundtripDouble(ByVal d As Double, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Double)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Double)
+        Public Overloads Function RoundtripDouble(ByVal d As Double, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Double)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Double)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("d", d)
             Me.ValidateMethod("RoundtripDouble", parameters)
@@ -9579,7 +9579,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="d">The value for the 'd' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function RoundtripDouble(ByVal d As Double) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Double)
+        Public Overloads Function RoundtripDouble(ByVal d As Double) As Global.OpenRiaServices.Client.InvokeOperation(Of Double)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("d", d)
             Me.ValidateMethod("RoundtripDouble", parameters)
@@ -9592,7 +9592,7 @@ Namespace TestDomainServices
         ''' <param name="d">The value for the 'd' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function RoundtripDoubleAsync(ByVal d As Double, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Double))
+        Public Function RoundtripDoubleAsync(ByVal d As Double, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Double))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("d", d)
             Me.ValidateMethod("RoundtripDouble", parameters)
@@ -9646,8 +9646,8 @@ Namespace TestDomainServices
                     ByVal en As Global.System.Nullable(Of Global.TestDomainServices.TestEnum),  _
                     ByVal nullableTimeSpans As Global.System.Collections.Generic.IEnumerable(Of Global.System.Nullable(Of Global.System.TimeSpan)),  _
                     ByVal dto As Global.System.Nullable(Of Global.System.DateTimeOffset),  _
-                    ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)),  _
-                    ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+                    ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)),  _
+                    ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("b1", b1)
@@ -9717,7 +9717,7 @@ Namespace TestDomainServices
                     ByVal g As Global.System.Nullable(Of Global.System.Guid),  _
                     ByVal en As Global.System.Nullable(Of Global.TestDomainServices.TestEnum),  _
                     ByVal nullableTimeSpans As Global.System.Collections.Generic.IEnumerable(Of Global.System.Nullable(Of Global.System.TimeSpan)),  _
-                    ByVal dto As Global.System.Nullable(Of Global.System.DateTimeOffset)) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+                    ByVal dto As Global.System.Nullable(Of Global.System.DateTimeOffset)) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("b1", b1)
@@ -9789,7 +9789,7 @@ Namespace TestDomainServices
                     ByVal en As Global.System.Nullable(Of Global.TestDomainServices.TestEnum),  _
                     ByVal nullableTimeSpans As Global.System.Collections.Generic.IEnumerable(Of Global.System.Nullable(Of Global.System.TimeSpan)),  _
                     ByVal dto As Global.System.Nullable(Of Global.System.DateTimeOffset),  _
-                    Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Boolean))
+                    Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("b1", b1)
@@ -9852,8 +9852,8 @@ Namespace TestDomainServices
                     ByVal guids() As Global.System.Guid,  _
                     ByVal ulongs() As ULong,  _
                     ByVal dto As Global.System.DateTimeOffset,  _
-                    ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)),  _
-                    ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+                    ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)),  _
+                    ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("s", s)
@@ -9893,7 +9893,7 @@ Namespace TestDomainServices
         ''' <param name="ulongs">The value for the 'ulongs' parameter of this action.</param>
         ''' <param name="dto">The value for the 'dto' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function TestPredefined_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal s As String, ByVal d As Decimal, ByVal dt As Date, ByVal ts As Global.System.TimeSpan, ByVal strings As Global.System.Collections.Generic.IEnumerable(Of String), ByVal uri As Global.System.Uri, ByVal g As Global.System.Guid, ByVal b() As Byte, ByVal x As Global.System.Xml.Linq.XElement, ByVal bArray() As Byte, ByVal en As Global.TestDomainServices.TestEnum, ByVal guids() As Global.System.Guid, ByVal ulongs() As ULong, ByVal dto As Global.System.DateTimeOffset) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function TestPredefined_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal s As String, ByVal d As Decimal, ByVal dt As Date, ByVal ts As Global.System.TimeSpan, ByVal strings As Global.System.Collections.Generic.IEnumerable(Of String), ByVal uri As Global.System.Uri, ByVal g As Global.System.Guid, ByVal b() As Byte, ByVal x As Global.System.Xml.Linq.XElement, ByVal bArray() As Byte, ByVal en As Global.TestDomainServices.TestEnum, ByVal guids() As Global.System.Guid, ByVal ulongs() As ULong, ByVal dto As Global.System.DateTimeOffset) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("s", s)
@@ -9950,7 +9950,7 @@ Namespace TestDomainServices
                     ByVal guids() As Global.System.Guid,  _
                     ByVal ulongs() As ULong,  _
                     ByVal dto As Global.System.DateTimeOffset,  _
-                    Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Boolean))
+                    Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("s", s)
@@ -9990,7 +9990,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function TestPrimitive_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function TestPrimitive_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("b1", b1)
@@ -10026,7 +10026,7 @@ Namespace TestDomainServices
         ''' <param name="d">The value for the 'd' parameter of this action.</param>
         ''' <param name="s">The value for the 's' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function TestPrimitive_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Boolean)
+        Public Overloads Function TestPrimitive_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single) As Global.OpenRiaServices.Client.InvokeOperation(Of Boolean)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("b1", b1)
@@ -10063,7 +10063,7 @@ Namespace TestDomainServices
         ''' <param name="s">The value for the 's' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function TestPrimitive_OnlineAsync(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Boolean))
+        Public Function TestPrimitive_OnlineAsync(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Boolean))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("entity", entity)
             parameters.Add("b1", b1)
@@ -10088,7 +10088,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ThrowOnlineException(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function ThrowOnlineException(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("ThrowOnlineException", Nothing)
             Return Me.InvokeOperation("ThrowOnlineException", GetType(Global.System.Void), Nothing, true, callback, userState)
         End Function
@@ -10097,7 +10097,7 @@ Namespace TestDomainServices
         ''' Asynchronously invokes the 'ThrowOnlineException' method of the DomainService.
         ''' </summary>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ThrowOnlineException() As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function ThrowOnlineException() As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("ThrowOnlineException", Nothing)
             Return Me.InvokeOperation("ThrowOnlineException", GetType(Global.System.Void), Nothing, true, Nothing, Nothing)
         End Function
@@ -10107,7 +10107,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ThrowOnlineExceptionAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult)
+        Public Function ThrowOnlineExceptionAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult)
             Me.ValidateMethod("ThrowOnlineException", Nothing)
             Return Me.InvokeOperationAsync("ThrowOnlineException", Nothing, true, cancellationToken)
         End Function
@@ -10118,7 +10118,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ThrowValidationException(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function ThrowValidationException(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("ThrowValidationException", Nothing)
             Return Me.InvokeOperation("ThrowValidationException", GetType(Global.System.Void), Nothing, true, callback, userState)
         End Function
@@ -10127,7 +10127,7 @@ Namespace TestDomainServices
         ''' Asynchronously invokes the 'ThrowValidationException' method of the DomainService.
         ''' </summary>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function ThrowValidationException() As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function ThrowValidationException() As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("ThrowValidationException", Nothing)
             Return Me.InvokeOperation("ThrowValidationException", GetType(Global.System.Void), Nothing, true, Nothing, Nothing)
         End Function
@@ -10137,7 +10137,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function ThrowValidationExceptionAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult)
+        Public Function ThrowValidationExceptionAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult)
             Me.ValidateMethod("ThrowValidationException", Nothing)
             Return Me.InvokeOperationAsync("ThrowValidationException", Nothing, true, cancellationToken)
         End Function
@@ -10151,7 +10151,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function VariousParameterTypes(<Global.System.ComponentModel.DataAnnotations.RequiredAttribute()> ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function VariousParameterTypes(<Global.System.ComponentModel.DataAnnotations.RequiredAttribute()> ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean, ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation(Of Integer)), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("str", str)
             parameters.Add("integer", [integer])
@@ -10167,7 +10167,7 @@ Namespace TestDomainServices
         ''' <param name="integer">The value for the 'integer' parameter of this action.</param>
         ''' <param name="boolean">The value for the 'boolean' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function VariousParameterTypes(<Global.System.ComponentModel.DataAnnotations.RequiredAttribute()> ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation(Of Integer)
+        Public Overloads Function VariousParameterTypes(<Global.System.ComponentModel.DataAnnotations.RequiredAttribute()> ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean) As Global.OpenRiaServices.Client.InvokeOperation(Of Integer)
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("str", str)
             parameters.Add("integer", [integer])
@@ -10184,7 +10184,7 @@ Namespace TestDomainServices
         ''' <param name="boolean">The value for the 'boolean' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function VariousParameterTypesAsync(<Global.System.ComponentModel.DataAnnotations.RequiredAttribute()> ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult(Of Integer))
+        Public Function VariousParameterTypesAsync(<Global.System.ComponentModel.DataAnnotations.RequiredAttribute()> ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean, Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult(Of Integer))
             Dim parameters As Global.System.Collections.Generic.Dictionary(Of String, Object) = New Global.System.Collections.Generic.Dictionary(Of String, Object)()
             parameters.Add("str", str)
             parameters.Add("integer", [integer])
@@ -10199,7 +10199,7 @@ Namespace TestDomainServices
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function VoidMethod(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.DomainServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function VoidMethod(ByVal callback As Global.System.Action(Of Global.OpenRiaServices.Client.InvokeOperation), ByVal userState As Object) As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("VoidMethod", Nothing)
             Return Me.InvokeOperation("VoidMethod", GetType(Global.System.Void), Nothing, true, callback, userState)
         End Function
@@ -10208,7 +10208,7 @@ Namespace TestDomainServices
         ''' Asynchronously invokes the 'VoidMethod' method of the DomainService.
         ''' </summary>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function VoidMethod() As Global.OpenRiaServices.DomainServices.Client.InvokeOperation
+        Public Overloads Function VoidMethod() As Global.OpenRiaServices.Client.InvokeOperation
             Me.ValidateMethod("VoidMethod", Nothing)
             Return Me.InvokeOperation("VoidMethod", GetType(Global.System.Void), Nothing, true, Nothing, Nothing)
         End Function
@@ -10218,7 +10218,7 @@ Namespace TestDomainServices
         ''' </summary>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function VoidMethodAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.DomainServices.Client.InvokeResult)
+        Public Function VoidMethodAsync(Optional ByVal cancellationToken As Global.System.Threading.CancellationToken = Nothing) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.InvokeResult)
             Me.ValidateMethod("VoidMethod", Nothing)
             Return Me.InvokeOperationAsync("VoidMethod", Nothing, true, cancellationToken)
         End Function
@@ -10227,7 +10227,7 @@ Namespace TestDomainServices
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.TestDomainServices.TestProvider_Scenarios.TestProvider_ScenariosEntityContainer()
         End Function
         
@@ -10254,7 +10254,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/CreateAndGetSideEffectsObjects", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/CreateAndGetSideEffectsObjectsResponse")>  _
             Function BeginCreateAndGetSideEffectsObjects(ByVal name As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10263,7 +10263,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginCreateAndGetSideEffectsObjects'.</param>
             ''' <returns>The 'QueryResult' returned from the 'CreateAndGetSideEffectsObjects' operation.</returns>
-            Function EndCreateAndGetSideEffectsObjects(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TestSideEffects)
+            Function EndCreateAndGetSideEffectsObjects(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.TestSideEffects)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetAReturnNull' operation.
@@ -10271,7 +10271,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetAReturnNull", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetAReturnNullResponse")>  _
             Function BeginGetAReturnNull(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10280,7 +10280,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetAReturnNull'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetAReturnNull' operation.</returns>
-            Function EndGetAReturnNull(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
+            Function EndGetAReturnNull(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.A)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetAs' operation.
@@ -10288,7 +10288,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetAs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetAsResponse")>  _
             Function BeginGetAs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10297,7 +10297,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetAs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetAs' operation.</returns>
-            Function EndGetAs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
+            Function EndGetAs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.A)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetAsReturnNull' operation.
@@ -10305,7 +10305,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetAsReturnNull", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetAsReturnNullResponse")>  _
             Function BeginGetAsReturnNull(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10314,7 +10314,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetAsReturnNull'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetAsReturnNull' operation.</returns>
-            Function EndGetAsReturnNull(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
+            Function EndGetAsReturnNull(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.A)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetBs' operation.
@@ -10322,7 +10322,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetBs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetBsResponse")>  _
             Function BeginGetBs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10331,7 +10331,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetBs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetBs' operation.</returns>
-            Function EndGetBs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.B)
+            Function EndGetBs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.B)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCartItems' operation.
@@ -10339,7 +10339,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCartItems", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCartItemsResponse")>  _
             Function BeginGetCartItems(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10348,7 +10348,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCartItems'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCartItems' operation.</returns>
-            Function EndGetCartItems(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CartItem)
+            Function EndGetCartItems(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CartItem)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCarts' operation.
@@ -10356,7 +10356,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCarts", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCartsResponse")>  _
             Function BeginGetCarts(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10365,7 +10365,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCarts'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCarts' operation.</returns>
-            Function EndGetCarts(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.Cart)
+            Function EndGetCarts(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.Cart)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCities' operation.
@@ -10373,7 +10373,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCities", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesResponse")>  _
             Function BeginGetCities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10382,7 +10382,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCities' operation.</returns>
-            Function EndGetCities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesInState' operation.
@@ -10391,7 +10391,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesInState", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateResponse")>  _
             Function BeginGetCitiesInState(ByVal state As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10400,7 +10400,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesInState'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesInState' operation.</returns>
-            Function EndGetCitiesInState(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesInState(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesInStateWithCaching' operation.
@@ -10409,7 +10409,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCachingResponse")>  _
             Function BeginGetCitiesInStateWithCaching(ByVal state As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10418,7 +10418,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesInStateWithCaching'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesInStateWithCaching' operation.</returns>
-            Function EndGetCitiesInStateWithCaching(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesInStateWithCaching(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesInStateWithCaching2' operation.
@@ -10427,7 +10427,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching2", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesInStateWithCaching2Response")>  _
             Function BeginGetCitiesInStateWithCaching2(ByVal state As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10436,7 +10436,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesInStateWithCaching2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesInStateWithCaching2' operation.</returns>
-            Function EndGetCitiesInStateWithCaching2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesInStateWithCaching2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCacheLocationAny' operation.
@@ -10444,7 +10444,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationAny", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationAnyResponse")>  _
             Function BeginGetCitiesWithCacheLocationAny(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10453,7 +10453,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationAny'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationAny' operation.</returns>
-            Function EndGetCitiesWithCacheLocationAny(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCacheLocationAny(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCacheLocationDownstream' operation.
@@ -10461,7 +10461,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationDownstream", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationDownstreamRes"& _ 
                 "ponse")>  _
             Function BeginGetCitiesWithCacheLocationDownstream(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -10471,7 +10471,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationDownstream'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationDownstream' operation.</returns>
-            Function EndGetCitiesWithCacheLocationDownstream(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCacheLocationDownstream(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCacheLocationServer' operation.
@@ -10479,7 +10479,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServer", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerRespons"& _ 
                 "e")>  _
             Function BeginGetCitiesWithCacheLocationServer(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -10489,7 +10489,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationServer'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationServer' operation.</returns>
-            Function EndGetCitiesWithCacheLocationServer(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCacheLocationServer(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCacheLocationServerAndClient' operation.
@@ -10497,7 +10497,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerAndClie"& _ 
                 "nt", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCacheLocationServerAndClie"& _ 
                 "ntResponse")>  _
@@ -10508,7 +10508,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCacheLocationServerAndClient'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCacheLocationServerAndClient' operation.</returns>
-            Function EndGetCitiesWithCacheLocationServerAndClient(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCacheLocationServerAndClient(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCaching' operation.
@@ -10516,7 +10516,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingResponse")>  _
             Function BeginGetCitiesWithCaching(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10525,7 +10525,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCaching'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCaching' operation.</returns>
-            Function EndGetCitiesWithCaching(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCaching(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCaching2' operation.
@@ -10533,7 +10533,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching2", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCaching2Response")>  _
             Function BeginGetCitiesWithCaching2(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10542,7 +10542,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCaching2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCaching2' operation.</returns>
-            Function EndGetCitiesWithCaching2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCaching2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCachingAndThrow' operation.
@@ -10550,7 +10550,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingAndThrow", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingAndThrowResponse")>  _
             Function BeginGetCitiesWithCachingAndThrow(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10559,7 +10559,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCachingAndThrow'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCachingAndThrow' operation.</returns>
-            Function EndGetCitiesWithCachingAndThrow(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCachingAndThrow(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCachingVaryByHeaders' operation.
@@ -10567,7 +10567,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingVaryByHeaders", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingVaryByHeadersRespon"& _ 
                 "se")>  _
             Function BeginGetCitiesWithCachingVaryByHeaders(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -10577,7 +10577,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCachingVaryByHeaders'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCachingVaryByHeaders' operation.</returns>
-            Function EndGetCitiesWithCachingVaryByHeaders(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCachingVaryByHeaders(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithCachingViaCacheProfile' operation.
@@ -10585,7 +10585,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingViaCacheProfile", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCitiesWithCachingViaCacheProfileResp"& _ 
                 "onse")>  _
             Function BeginGetCitiesWithCachingViaCacheProfile(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -10595,7 +10595,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithCachingViaCacheProfile'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithCachingViaCacheProfile' operation.</returns>
-            Function EndGetCitiesWithCachingViaCacheProfile(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
+            Function EndGetCitiesWithCachingViaCacheProfile(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.CityWithCacheData)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCs' operation.
@@ -10603,7 +10603,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetCs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetCsResponse")>  _
             Function BeginGetCs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10612,7 +10612,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCs' operation.</returns>
-            Function EndGetCs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.C)
+            Function EndGetCs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.C)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetDs' operation.
@@ -10620,7 +10620,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetDs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetDsResponse")>  _
             Function BeginGetDs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10629,7 +10629,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetDs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetDs' operation.</returns>
-            Function EndGetDs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.D)
+            Function EndGetDs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.D)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntitiesWithDataContracts' operation.
@@ -10637,7 +10637,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContractsResponse")>  _
             Function BeginGetEntitiesWithDataContracts(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10646,7 +10646,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntitiesWithDataContracts'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntitiesWithDataContracts' operation.</returns>
-            Function EndGetEntitiesWithDataContracts(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithDataContract)
+            Function EndGetEntitiesWithDataContracts(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithDataContract)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntitiesWithDataContracts2' operation.
@@ -10654,7 +10654,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts2", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithDataContracts2Response")>  _
             Function BeginGetEntitiesWithDataContracts2(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10663,7 +10663,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntitiesWithDataContracts2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntitiesWithDataContracts2' operation.</returns>
-            Function EndGetEntitiesWithDataContracts2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithDataContract2)
+            Function EndGetEntitiesWithDataContracts2(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithDataContract2)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntitiesWithSpecialTypeName' operation.
@@ -10671,7 +10671,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithSpecialTypeName", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetEntitiesWithSpecialTypeNameResponse")>  _
             Function BeginGetEntitiesWithSpecialTypeName(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10680,7 +10680,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntitiesWithSpecialTypeName'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntitiesWithSpecialTypeName' operation.</returns>
-            Function EndGetEntitiesWithSpecialTypeName(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
+            Function EndGetEntitiesWithSpecialTypeName(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntity_TestEditableAttributes' operation.
@@ -10688,7 +10688,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetEntity_TestEditableAttributes", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetEntity_TestEditableAttributesRespons"& _ 
                 "e")>  _
             Function BeginGetEntity_TestEditableAttributes(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -10698,7 +10698,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntity_TestEditableAttributes'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntity_TestEditableAttributes' operation.</returns>
-            Function EndGetEntity_TestEditableAttributes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.Entity_TestEditableAttribute)
+            Function EndGetEntity_TestEditableAttributes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.Entity_TestEditableAttribute)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntityWithDefaultValue' operation.
@@ -10706,7 +10706,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetEntityWithDefaultValue", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetEntityWithDefaultValueResponse")>  _
             Function BeginGetEntityWithDefaultValue(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10715,7 +10715,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntityWithDefaultValue'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntityWithDefaultValue' operation.</returns>
-            Function EndGetEntityWithDefaultValue(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
+            Function EndGetEntityWithDefaultValue(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypes' operation.
@@ -10723,7 +10723,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesResponse")>  _
             Function BeginGetMixedTypes(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10732,7 +10732,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypes' operation.</returns>
-            Function EndGetMixedTypes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypes_BadAttributes' operation.
@@ -10742,7 +10742,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_BadAttributes", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_BadAttributesResponse")>  _
             Function BeginGetMixedTypes_BadAttributes(ByVal broiled As Char, ByVal cheese As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10751,7 +10751,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_BadAttributes'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypes_BadAttributes' operation.</returns>
-            Function EndGetMixedTypes_BadAttributes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypes_BadAttributes(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypes_Nullable' operation.
@@ -10779,7 +10779,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_Nullable", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_NullableResponse")>  _
             Function BeginGetMixedTypes_Nullable( _
                         ByVal idToChange As String,  _
@@ -10810,7 +10810,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_Nullable'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypes_Nullable' operation.</returns>
-            Function EndGetMixedTypes_Nullable(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypes_Nullable(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypes_Predefined' operation.
@@ -10838,7 +10838,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_Predefined", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PredefinedResponse")>  _
             Function BeginGetMixedTypes_Predefined( _
                         ByVal idToChange As String,  _
@@ -10869,7 +10869,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_Predefined'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypes_Predefined' operation.</returns>
-            Function EndGetMixedTypes_Predefined(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypes_Predefined(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypes_Primitive' operation.
@@ -10890,7 +10890,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_Primitive", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypes_PrimitiveResponse")>  _
             Function BeginGetMixedTypes_Primitive(ByVal idToChange As String, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10899,7 +10899,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypes_Primitive'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypes_Primitive' operation.</returns>
-            Function EndGetMixedTypes_Primitive(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypes_Primitive(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypesThrow' operation.
@@ -10907,7 +10907,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesThrow", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypesThrowResponse")>  _
             Function BeginGetMixedTypesThrow(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10916,7 +10916,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypesThrow'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypesThrow' operation.</returns>
-            Function EndGetMixedTypesThrow(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypesThrow(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMixedTypeSuperset' operation.
@@ -10924,7 +10924,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypeSuperset", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMixedTypeSupersetResponse")>  _
             Function BeginGetMixedTypeSuperset(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10933,7 +10933,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMixedTypeSuperset'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMixedTypeSuperset' operation.</returns>
-            Function EndGetMixedTypeSuperset(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
+            Function EndGetMixedTypeSuperset(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MixedType)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMultipartKeyTestEntity1s' operation.
@@ -10941,7 +10941,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity1s", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity1sResponse")>  _
             Function BeginGetMultipartKeyTestEntity1s(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10950,7 +10950,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMultipartKeyTestEntity1s'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMultipartKeyTestEntity1s' operation.</returns>
-            Function EndGetMultipartKeyTestEntity1s(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MultipartKeyTestEntity1)
+            Function EndGetMultipartKeyTestEntity1s(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MultipartKeyTestEntity1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMultipartKeyTestEntity2s' operation.
@@ -10958,7 +10958,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity2s", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity2sResponse")>  _
             Function BeginGetMultipartKeyTestEntity2s(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10967,7 +10967,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMultipartKeyTestEntity2s'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMultipartKeyTestEntity2s' operation.</returns>
-            Function EndGetMultipartKeyTestEntity2s(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MultipartKeyTestEntity2)
+            Function EndGetMultipartKeyTestEntity2s(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MultipartKeyTestEntity2)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetMultipartKeyTestEntity3s' operation.
@@ -10975,7 +10975,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity3s", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetMultipartKeyTestEntity3sResponse")>  _
             Function BeginGetMultipartKeyTestEntity3s(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -10984,7 +10984,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetMultipartKeyTestEntity3s'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetMultipartKeyTestEntity3s' operation.</returns>
-            Function EndGetMultipartKeyTestEntity3s(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.MultipartKeyTestEntity3)
+            Function EndGetMultipartKeyTestEntity3s(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.MultipartKeyTestEntity3)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetNullableFKParents' operation.
@@ -10992,7 +10992,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetNullableFKParents", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetNullableFKParentsResponse")>  _
             Function BeginGetNullableFKParents(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11001,7 +11001,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetNullableFKParents'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetNullableFKParents' operation.</returns>
-            Function EndGetNullableFKParents(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NullableFKParent)
+            Function EndGetNullableFKParents(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NullableFKParent)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPOCONoValidations' operation.
@@ -11009,7 +11009,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetPOCONoValidations", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetPOCONoValidationsResponse")>  _
             Function BeginGetPOCONoValidations(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11018,7 +11018,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetPOCONoValidations'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetPOCONoValidations' operation.</returns>
-            Function EndGetPOCONoValidations(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.POCONoValidation)
+            Function EndGetPOCONoValidations(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.POCONoValidation)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetRoundtripOriginal_ClassAttribute_TestEntities' operation.
@@ -11026,7 +11026,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_ClassAttribute_Tes"& _ 
                 "tEntities", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_ClassAttribute_Tes"& _ 
                 "tEntitiesResponse")>  _
@@ -11037,7 +11037,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetRoundtripOriginal_ClassAttribute_TestEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetRoundtripOriginal_ClassAttribute_TestEntities' operation.</returns>
-            Function EndGetRoundtripOriginal_ClassAttribute_TestEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
+            Function EndGetRoundtripOriginal_ClassAttribute_TestEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetRoundtripOriginal_TestEntities' operation.
@@ -11045,7 +11045,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_TestEntities", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetRoundtripOriginal_TestEntitiesRespon"& _ 
                 "se")>  _
             Function BeginGetRoundtripOriginal_TestEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -11055,7 +11055,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetRoundtripOriginal_TestEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetRoundtripOriginal_TestEntities' operation.</returns>
-            Function EndGetRoundtripOriginal_TestEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
+            Function EndGetRoundtripOriginal_TestEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetRoundtripQueryEntities' operation.
@@ -11063,7 +11063,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetRoundtripQueryEntities", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetRoundtripQueryEntitiesResponse")>  _
             Function BeginGetRoundtripQueryEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11072,7 +11072,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetRoundtripQueryEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetRoundtripQueryEntities' operation.</returns>
-            Function EndGetRoundtripQueryEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.RoundtripQueryEntity)
+            Function EndGetRoundtripQueryEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.RoundtripQueryEntity)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTestCyclesRoot' operation.
@@ -11080,7 +11080,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesRoot", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesRootResponse")>  _
             Function BeginGetTestCyclesRoot(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11089,7 +11089,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTestCyclesRoot'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTestCyclesRoot' operation.</returns>
-            Function EndGetTestCyclesRoot(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TestCycles)
+            Function EndGetTestCyclesRoot(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.TestCycles)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTestCyclesTier1' operation.
@@ -11097,7 +11097,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesTier1", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetTestCyclesTier1Response")>  _
             Function BeginGetTestCyclesTier1(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11106,7 +11106,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTestCyclesTier1'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTestCyclesTier1' operation.</returns>
-            Function EndGetTestCyclesTier1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TestCycles)
+            Function EndGetTestCyclesTier1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.TestCycles)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTestEntityForInvokeOperations' operation.
@@ -11114,7 +11114,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetTestEntityForInvokeOperations", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetTestEntityForInvokeOperationsRespons"& _ 
                 "e")>  _
             Function BeginGetTestEntityForInvokeOperations(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -11124,7 +11124,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTestEntityForInvokeOperations'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTestEntityForInvokeOperations' operation.</returns>
-            Function EndGetTestEntityForInvokeOperations(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TestEntityForInvokeOperations)
+            Function EndGetTestEntityForInvokeOperations(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.TestEntityForInvokeOperations)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTimestampEntityAs' operation.
@@ -11132,7 +11132,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityAs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityAsResponse")>  _
             Function BeginGetTimestampEntityAs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11141,7 +11141,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTimestampEntityAs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTimestampEntityAs' operation.</returns>
-            Function EndGetTimestampEntityAs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TimestampEntityA)
+            Function EndGetTimestampEntityAs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.TimestampEntityA)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetTimestampEntityBs' operation.
@@ -11149,7 +11149,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityBs", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetTimestampEntityBsResponse")>  _
             Function BeginGetTimestampEntityBs(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11158,7 +11158,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetTimestampEntityBs'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetTimestampEntityBs' operation.</returns>
-            Function EndGetTimestampEntityBs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.TimestampEntityB)
+            Function EndGetTimestampEntityBs(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.TimestampEntityB)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetXElemEntities' operation.
@@ -11166,7 +11166,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/GetXElemEntities", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/GetXElemEntitiesResponse")>  _
             Function BeginGetXElemEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11175,7 +11175,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetXElemEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetXElemEntities' operation.</returns>
-            Function EndGetXElemEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithXElement)
+            Function EndGetXElemEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.EntityWithXElement)
             
             ''' <summary>
             ''' Asynchronously invokes the 'IncrementBid1ForA' operation.
@@ -11184,7 +11184,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForA", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForAResponse")>  _
             Function BeginIncrementBid1ForA(ByVal a As Global.TestDomainServices.A, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11203,7 +11203,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForABy", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/IncrementBid1ForAByResponse")>  _
             Function BeginIncrementBid1ForABy(ByVal a As Global.TestDomainServices.A, ByVal delta As Integer, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11223,7 +11223,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/InvokeOperationWithParamValidation", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/InvokeOperationWithParamValidationRespo"& _ 
                 "nse")>  _
             Function BeginInvokeOperationWithParamValidation(ByVal a As Integer, ByVal b As String, ByVal entity As Global.TestDomainServices.CityWithCacheData, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -11242,7 +11242,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParam", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamResponse")>  _
             Function BeginInvokeOpWithIEnumerableParam(ByVal list As Global.System.Collections.Generic.IEnumerable(Of Global.TestDomainServices.TestEntityForInvokeOperations), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11260,7 +11260,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamAndNoSideEf"& _ 
                 "fects", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/InvokeOpWithIEnumerableParamAndNoSideEf"& _ 
                 "fectsResponse")>  _
@@ -11279,7 +11279,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/MethodRequiresAuthentication", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/MethodRequiresAuthenticationResponse")>  _
             Function BeginMethodRequiresAuthentication(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11297,7 +11297,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/QueryWithParamValidation", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/QueryWithParamValidationResponse")>  _
             Function BeginQueryWithParamValidation(ByVal a As Integer, ByVal b As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11306,7 +11306,7 @@ Namespace TestDomainServices
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginQueryWithParamValidation'.</param>
             ''' <returns>The 'QueryResult' returned from the 'QueryWithParamValidation' operation.</returns>
-            Function EndQueryWithParamValidation(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.A)
+            Function EndQueryWithParamValidation(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.A)
             
             ''' <summary>
             ''' Asynchronously invokes the 'ReturnHttpMethodWithoutSideEffects_Online' operation.
@@ -11314,7 +11314,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithoutSideEffects_Onli"& _ 
                 "ne", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithoutSideEffects_Onli"& _ 
                 "neResponse")>  _
@@ -11333,7 +11333,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithSideEffects_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnHttpMethodWithSideEffects_OnlineR"& _ 
                 "esponse")>  _
             Function BeginReturnHttpMethodWithSideEffects_Online(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -11352,7 +11352,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsBinary_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsBinary_OnlineResponse")>  _
             Function BeginReturnsBinary_Online(ByVal value() As Byte, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11370,7 +11370,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsBoolean_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsBoolean_OnlineResponse")>  _
             Function BeginReturnsBoolean_Online(ByVal value As Boolean, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11388,7 +11388,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsByte_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsByte_OnlineResponse")>  _
             Function BeginReturnsByte_Online(ByVal value As Byte, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11406,7 +11406,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsByteArray_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsByteArray_OnlineResponse")>  _
             Function BeginReturnsByteArray_Online(ByVal value() As Byte, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11424,7 +11424,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsChar_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsChar_OnlineResponse")>  _
             Function BeginReturnsChar_Online(ByVal value As Char, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11442,7 +11442,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTime_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTime_OnlineResponse")>  _
             Function BeginReturnsDateTime_Online(ByVal value As Date, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11460,7 +11460,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffset_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffset_OnlineResponse")>  _
             Function BeginReturnsDateTimeOffset_Online(ByVal value As Global.System.DateTimeOffset, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11478,7 +11478,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffsets_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimeOffsets_OnlineResponse")>  _
             Function BeginReturnsDateTimeOffsets_Online(ByVal value() As Global.System.DateTimeOffset, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11496,7 +11496,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimes_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDateTimes_OnlineResponse")>  _
             Function BeginReturnsDateTimes_Online(ByVal value() As Date, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11514,7 +11514,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDecimal_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDecimal_OnlineResponse")>  _
             Function BeginReturnsDecimal_Online(ByVal value As Decimal, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11532,7 +11532,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDictionary", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDictionaryResponse")>  _
             Function BeginReturnsDictionary(ByVal value As Global.System.Collections.Generic.Dictionary(Of String, Integer), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11550,7 +11550,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsDouble_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsDouble_OnlineResponse")>  _
             Function BeginReturnsDouble_Online(ByVal value As Double, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11569,7 +11569,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsEntity_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsEntity_OnlineResponse")>  _
             Function BeginReturnsEntity_Online(ByVal value As Global.TestDomainServices.MixedType, ByVal id As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11587,7 +11587,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsEntityCollection_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsEntityCollection_OnlineResponse")>  _
             Function BeginReturnsEntityCollection_Online(ByVal value As Integer, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11605,7 +11605,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsEnum_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsEnum_OnlineResponse")>  _
             Function BeginReturnsEnum_Online(ByVal value As Global.TestDomainServices.TestEnum, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11623,7 +11623,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsGuid_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsGuid_OnlineResponse")>  _
             Function BeginReturnsGuid_Online(ByVal value As Global.System.Guid, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11641,7 +11641,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsInt16_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsInt16_OnlineResponse")>  _
             Function BeginReturnsInt16_Online(ByVal value As Short, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11659,7 +11659,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsInt32_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsInt32_OnlineResponse")>  _
             Function BeginReturnsInt32_Online(ByVal value As Integer, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11677,7 +11677,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsInt64_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsInt64_OnlineResponse")>  _
             Function BeginReturnsInt64_Online(ByVal value As Long, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11695,7 +11695,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableBoolean_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableBoolean_OnlineResponse")>  _
             Function BeginReturnsNullableBoolean_Online(ByVal value As Global.System.Nullable(Of Boolean), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11713,7 +11713,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableByte_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableByte_OnlineResponse")>  _
             Function BeginReturnsNullableByte_Online(ByVal value As Global.System.Nullable(Of Byte), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11731,7 +11731,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableChar_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableChar_OnlineResponse")>  _
             Function BeginReturnsNullableChar_Online(ByVal value As Global.System.Nullable(Of Char), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11749,7 +11749,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTime_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTime_OnlineResponse")>  _
             Function BeginReturnsNullableDateTime_Online(ByVal value As Global.System.Nullable(Of Date), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11767,7 +11767,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTimeOffset_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDateTimeOffset_OnlineRes"& _ 
                 "ponse")>  _
             Function BeginReturnsNullableDateTimeOffset_Online(ByVal value As Global.System.Nullable(Of Global.System.DateTimeOffset), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -11786,7 +11786,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDecimal_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDecimal_OnlineResponse")>  _
             Function BeginReturnsNullableDecimal_Online(ByVal value As Global.System.Nullable(Of Decimal), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11804,7 +11804,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDouble_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableDouble_OnlineResponse")>  _
             Function BeginReturnsNullableDouble_Online(ByVal value As Global.System.Nullable(Of Double), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11822,7 +11822,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableEnum_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableEnum_OnlineResponse")>  _
             Function BeginReturnsNullableEnum_Online(ByVal value As Global.System.Nullable(Of Global.TestDomainServices.TestEnum), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11840,7 +11840,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableGuid_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableGuid_OnlineResponse")>  _
             Function BeginReturnsNullableGuid_Online(ByVal value As Global.System.Nullable(Of Global.System.Guid), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11858,7 +11858,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt16_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt16_OnlineResponse")>  _
             Function BeginReturnsNullableInt16_Online(ByVal value As Global.System.Nullable(Of Short), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11876,7 +11876,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt32_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt32_OnlineResponse")>  _
             Function BeginReturnsNullableInt32_Online(ByVal value As Global.System.Nullable(Of Integer), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11894,7 +11894,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt64_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableInt64_OnlineResponse")>  _
             Function BeginReturnsNullableInt64_Online(ByVal value As Global.System.Nullable(Of Long), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11912,7 +11912,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSByte_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSByte_OnlineResponse")>  _
             Function BeginReturnsNullableSByte_Online(ByVal value As Global.System.Nullable(Of SByte), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11930,7 +11930,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSingle_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableSingle_OnlineResponse")>  _
             Function BeginReturnsNullableSingle_Online(ByVal value As Global.System.Nullable(Of Single), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11948,7 +11948,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableTimeSpan_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableTimeSpan_OnlineResponse")>  _
             Function BeginReturnsNullableTimeSpan_Online(ByVal value As Global.System.Nullable(Of Global.System.TimeSpan), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11966,7 +11966,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt16_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt16_OnlineResponse")>  _
             Function BeginReturnsNullableUInt16_Online(ByVal value As Global.System.Nullable(Of UShort), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -11984,7 +11984,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt32_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt32_OnlineResponse")>  _
             Function BeginReturnsNullableUInt32_Online(ByVal value As Global.System.Nullable(Of UInteger), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12002,7 +12002,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt64_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsNullableUInt64_OnlineResponse")>  _
             Function BeginReturnsNullableUInt64_Online(ByVal value As Global.System.Nullable(Of ULong), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12020,7 +12020,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsSByte_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsSByte_OnlineResponse")>  _
             Function BeginReturnsSByte_Online(ByVal value As SByte, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12038,7 +12038,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsSingle_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsSingle_OnlineResponse")>  _
             Function BeginReturnsSingle_Online(ByVal value As Single, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12056,7 +12056,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsString_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsString_OnlineResponse")>  _
             Function BeginReturnsString_Online(ByVal value As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12074,7 +12074,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsStrings_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsStrings_OnlineResponse")>  _
             Function BeginReturnsStrings_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of String), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12092,7 +12092,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpan_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpan_OnlineResponse")>  _
             Function BeginReturnsTimeSpan_Online(ByVal value As Global.System.TimeSpan, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12110,7 +12110,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpans_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsTimeSpans_OnlineResponse")>  _
             Function BeginReturnsTimeSpans_Online(ByVal value As Global.System.Collections.Generic.IEnumerable(Of Global.System.TimeSpan), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12128,7 +12128,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt16_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt16_OnlineResponse")>  _
             Function BeginReturnsUInt16_Online(ByVal value As UShort, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12146,7 +12146,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt32_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt32_OnlineResponse")>  _
             Function BeginReturnsUInt32_Online(ByVal value As UInteger, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12164,7 +12164,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt64_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsUInt64_OnlineResponse")>  _
             Function BeginReturnsUInt64_Online(ByVal value As ULong, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12182,7 +12182,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsUri_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsUri_OnlineResponse")>  _
             Function BeginReturnsUri_Online(ByVal value As Global.System.Uri, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12200,7 +12200,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ReturnsXElement", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ReturnsXElementResponse")>  _
             Function BeginReturnsXElement(ByVal value As Global.System.Xml.Linq.XElement, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12218,7 +12218,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/RoundtripDouble", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/RoundtripDoubleResponse")>  _
             Function BeginRoundtripDouble(ByVal d As Double, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12255,7 +12255,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/TestNullable_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/TestNullable_OnlineResponse")>  _
             Function BeginTestNullable_Online( _
                         ByVal entity As Global.TestDomainServices.MixedType,  _
@@ -12309,7 +12309,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/TestPredefined_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/TestPredefined_OnlineResponse")>  _
             Function BeginTestPredefined_Online( _
                         ByVal entity As Global.TestDomainServices.MixedType,  _
@@ -12356,7 +12356,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/TestPrimitive_Online", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/TestPrimitive_OnlineResponse")>  _
             Function BeginTestPrimitive_Online(ByVal entity As Global.TestDomainServices.MixedType, ByVal b1 As Boolean, ByVal b2 As Byte, ByVal sb As SByte, ByVal int16 As Short, ByVal uint16 As UShort, ByVal int32 As Integer, ByVal uint32 As UInteger, ByVal int64 As Long, ByVal uint64 As ULong, ByVal ch As Char, ByVal d As Double, ByVal s As Single, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12373,7 +12373,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ThrowOnlineException", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ThrowOnlineExceptionResponse")>  _
             Function BeginThrowOnlineException(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12389,7 +12389,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/ThrowValidationException", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/ThrowValidationExceptionResponse")>  _
             Function BeginThrowValidationException(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12408,7 +12408,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/VariousParameterTypes", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/VariousParameterTypesResponse")>  _
             Function BeginVariousParameterTypes(ByVal str As String, ByVal [integer] As Integer, ByVal [boolean] As Boolean, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12425,7 +12425,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(true),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/VoidMethod", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/VoidMethodResponse")>  _
             Function BeginVoidMethod(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -12443,49 +12443,49 @@ Namespace TestDomainServices
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/TestProvider_Scenarios/SubmitChanges", ReplyAction:="http://tempuri.org/TestProvider_Scenarios/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class TestProvider_ScenariosEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.A)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.B)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.C)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Add)
-                Me.CreateEntitySet(Of Global.TestDomainServices.Cart)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Add)
-                Me.CreateEntitySet(Of Global.TestDomainServices.CartItem)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Add)
-                Me.CreateEntitySet(Of Global.TestDomainServices.CityWithCacheData)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.D)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Add)
-                Me.CreateEntitySet(Of Global.TestDomainServices.Entity_TestEditableAttribute)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithDataContract)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithDataContract2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithXElement)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.MixedType)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity1)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity3)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.NullableFKChild)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.NullableFKParent)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.POCONoValidation)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.All)
-                Me.CreateEntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.RoundtripQueryEntity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TestCycles)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TestEntityForInvokeOperations)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TestSideEffects)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TimestampEntityA)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.TimestampEntityB)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.A)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.B)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.C)(Global.OpenRiaServices.Client.EntitySetOperations.Add)
+                Me.CreateEntitySet(Of Global.TestDomainServices.Cart)(Global.OpenRiaServices.Client.EntitySetOperations.Add)
+                Me.CreateEntitySet(Of Global.TestDomainServices.CartItem)(Global.OpenRiaServices.Client.EntitySetOperations.Add)
+                Me.CreateEntitySet(Of Global.TestDomainServices.CityWithCacheData)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.D)(Global.OpenRiaServices.Client.EntitySetOperations.Add)
+                Me.CreateEntitySet(Of Global.TestDomainServices.Entity_TestEditableAttribute)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithDataContract)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithDataContract2)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithDefaultDefaultValue)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.EntityWithXElement)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.MixedType)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity1)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity2)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.MultipartKeyTestEntity3)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NullableFKChild)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NullableFKParent)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.POCONoValidation)(Global.OpenRiaServices.Client.EntitySetOperations.All)
+                Me.CreateEntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.RoundtripOriginal_TestEntity2)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.RoundtripQueryEntity)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.Saleテ.EntityWithSpecialTypeName)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TestCycles)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TestEntityForInvokeOperations)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TestSideEffects)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TimestampEntityA)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.TimestampEntityB)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -12495,7 +12495,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TestSideEffects
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _name As String
         
@@ -12611,7 +12611,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TimestampEntityA
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _id As Integer
         
@@ -12757,7 +12757,7 @@ Namespace TestDomainServices
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TimestampEntityB
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _id As Integer
         
@@ -12906,7 +12906,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' The DomainContext corresponding to the 'CalculatorDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class CalculatorDomainContext
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -12932,14 +12932,14 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="serviceUri">The CalculatorDomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.CalculatorDomainContext.ICalculatorDomainServiceContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.CalculatorDomainContext.ICalculatorDomainServiceContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="CalculatorDomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -12947,7 +12947,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="CalculatorValue"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property CalculatorValues() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
+        Public ReadOnly Property CalculatorValues() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
             End Get
@@ -12956,7 +12956,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="CalculatorValueOldCodeGen"/> entity instances that have been loaded into this <see cref="CalculatorDomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property CalculatorValueOldCodeGens() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
+        Public ReadOnly Property CalculatorValueOldCodeGens() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
             End Get
@@ -12966,7 +12966,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="CalculatorValue"/> entity instances using the 'GetEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValue"/> entity instances.</returns>
-        Public Function GetEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
+        Public Function GetEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
             Me.ValidateMethod("GetEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)("GetEntities", Nothing, false, true)
         End Function
@@ -12975,7 +12975,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="CalculatorValueOldCodeGen"/> entity instances using the 'GetEntitiesOldCodeGen' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="CalculatorValueOldCodeGen"/> entity instances.</returns>
-        Public Function GetEntitiesOldCodeGenQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
+        Public Function GetEntitiesOldCodeGenQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
             Me.ValidateMethod("GetEntitiesOldCodeGenQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)("GetEntitiesOldCodeGen", Nothing, false, true)
         End Function
@@ -13011,7 +13011,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.TestDomainServices.NamedUpdates.CalculatorDomainContext.CalculatorDomainContextEntityContainer()
         End Function
         
@@ -13028,7 +13028,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/CalculatorDomainService/GetEntities", ReplyAction:="http://tempuri.org/CalculatorDomainService/GetEntitiesResponse")>  _
             Function BeginGetEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -13037,7 +13037,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
+            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntitiesOldCodeGen' operation.
@@ -13045,7 +13045,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/CalculatorDomainService/GetEntitiesOldCodeGen", ReplyAction:="http://tempuri.org/CalculatorDomainService/GetEntitiesOldCodeGenResponse")>  _
             Function BeginGetEntitiesOldCodeGen(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -13054,7 +13054,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntitiesOldCodeGen'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntitiesOldCodeGen' operation.</returns>
-            Function EndGetEntitiesOldCodeGen(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
+            Function EndGetEntitiesOldCodeGen(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -13064,23 +13064,23 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/CalculatorDomainService/SubmitChanges", ReplyAction:="http://tempuri.org/CalculatorDomainService/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class CalculatorDomainContextEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValue)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.CalculatorValueOldCodeGen)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -13090,7 +13090,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class CalculatorValue
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -13229,7 +13229,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'Add' action on this entity.
         ''' </summary>
         ''' <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("Add", AllowMultipleInvocations:=true)>  _
+        <Global.OpenRiaServices.Client.EntityAction("Add", AllowMultipleInvocations:=true)>  _
         Public Sub Add(ByVal rhs As Decimal)
             Me.OnAddInvoking(rhs)
             MyBase.InvokeAction("Add", rhs)
@@ -13240,7 +13240,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'Multiply' action on this entity.
         ''' </summary>
         ''' <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("Multiply", AllowMultipleInvocations:=true)>  _
+        <Global.OpenRiaServices.Client.EntityAction("Multiply", AllowMultipleInvocations:=true)>  _
         Public Sub Multiply(ByVal rhs As Decimal)
             Me.OnMultiplyInvoking(rhs)
             MyBase.InvokeAction("Multiply", rhs)
@@ -13253,7 +13253,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class CalculatorValueOldCodeGen
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -13368,7 +13368,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'AddTwice' action on this entity.
         ''' </summary>
         ''' <param name="rhs">The value to pass to the server method's 'rhs' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("AddTwice", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("AddTwice", AllowMultipleInvocations:=false)>  _
         Public Sub AddTwice(ByVal rhs As Decimal)
             Me.OnAddTwiceInvoking(rhs)
             MyBase.InvokeAction("AddTwice", rhs)
@@ -13381,7 +13381,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockComplexObject1
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _property1 As Global.TestDomainServices.NamedUpdates.MockComplexObject1
         
@@ -13464,7 +13464,7 @@ Namespace TestDomainServices.NamedUpdates
     <Global.System.ComponentModel.DataAnnotations.CustomValidationAttribute(GetType(Global.TestDomainServices.DynamicTestValidator), "Validate"),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockComplexObject2
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _property1 As Global.TestDomainServices.NamedUpdates.MockComplexObject2
         
@@ -13546,7 +13546,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockComplexObject3
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _commonArray() As Global.TestDomainServices.NamedUpdates.MockComplexObject4
         
@@ -13629,7 +13629,7 @@ Namespace TestDomainServices.NamedUpdates
     <Global.System.ComponentModel.DataAnnotations.CustomValidationAttribute(GetType(Global.TestDomainServices.DynamicTestValidator), "Validate"),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockComplexObject4
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _property1 As Global.TestDomainServices.NamedUpdates.MockComplexObject4
         
@@ -13684,7 +13684,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockEntity1
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -13849,7 +13849,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'NamedUpdateMethod' action on this entity.
         ''' </summary>
         ''' <param name="newProperty1">The value to pass to the server method's 'newProperty1' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateMethod", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateMethod", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateMethod(ByVal newProperty1 As String)
             Me.OnNamedUpdateMethodInvoking(newProperty1)
             MyBase.InvokeAction("NamedUpdateMethod", newProperty1)
@@ -13862,7 +13862,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockEntity2
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -14027,7 +14027,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'NamedUpdateMethod' action on this entity.
         ''' </summary>
         ''' <param name="newProperty1">The value to pass to the server method's 'newProperty1' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateMethod", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateMethod", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateMethod(ByVal newProperty1 As String)
             Me.OnNamedUpdateMethodInvoking(newProperty1)
             MyBase.InvokeAction("NamedUpdateMethod", newProperty1)
@@ -14040,7 +14040,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockEntity3
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -14257,7 +14257,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="array">The value to pass to the server method's 'array' parameter.</param>
         ''' <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateWithParamValidation", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateWithParamValidation", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateWithParamValidation(<Global.System.ComponentModel.DataAnnotations.CustomValidationAttribute(GetType(Global.TestDomainServices.DynamicTestValidator), "Validate")> ByVal array() As Global.TestDomainServices.NamedUpdates.MockComplexObject1, <Global.System.ComponentModel.DataAnnotations.CustomValidationAttribute(GetType(Global.TestDomainServices.DynamicTestValidator), "Validate")> ByVal complexObject As Global.TestDomainServices.NamedUpdates.MockComplexObject1)
             Me.OnNamedUpdateWithParamValidationInvoking(array, complexObject)
             MyBase.InvokeAction("NamedUpdateWithParamValidation", array, complexObject)
@@ -14269,7 +14269,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="array">The value to pass to the server method's 'array' parameter.</param>
         ''' <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateWithPropValidation", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateWithPropValidation", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateWithPropValidation(ByVal array() As Global.TestDomainServices.NamedUpdates.MockComplexObject1, ByVal complexObject As Global.TestDomainServices.NamedUpdates.MockComplexObject1)
             Me.OnNamedUpdateWithPropValidationInvoking(array, complexObject)
             MyBase.InvokeAction("NamedUpdateWithPropValidation", array, complexObject)
@@ -14283,7 +14283,7 @@ Namespace TestDomainServices.NamedUpdates
     <Global.System.ComponentModel.DataAnnotations.CustomValidationAttribute(GetType(Global.TestDomainServices.DynamicTestValidator), "Validate"),  _
      Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockEntity4
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -14476,7 +14476,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="array">The value to pass to the server method's 'array' parameter.</param>
         ''' <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateWithTypeValidation", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateWithTypeValidation", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateWithTypeValidation(ByVal array() As Global.TestDomainServices.NamedUpdates.MockComplexObject2, ByVal complexObject As Global.TestDomainServices.NamedUpdates.MockComplexObject2)
             Me.OnNamedUpdateWithTypeValidationInvoking(array, complexObject)
             MyBase.InvokeAction("NamedUpdateWithTypeValidation", array, complexObject)
@@ -14489,7 +14489,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockEntity5
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _commonArray() As Global.TestDomainServices.NamedUpdates.MockComplexObject4
         
@@ -14708,7 +14708,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'NamedUpdateWithCommonProperties' action on this entity.
         ''' </summary>
         ''' <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateWithCommonProperties", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateWithCommonProperties", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateWithCommonProperties(ByVal complexObject As Global.TestDomainServices.NamedUpdates.MockComplexObject3)
             Me.OnNamedUpdateWithCommonPropertiesInvoking(complexObject)
             MyBase.InvokeAction("NamedUpdateWithCommonProperties", complexObject)
@@ -14721,7 +14721,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.NamedUpdates")>  _
     Partial Public NotInheritable Class MockEntity6
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -14886,7 +14886,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Invokes the 'NamedUpdateWithNoEntityValidation' action on this entity.
         ''' </summary>
         ''' <param name="complexObject">The value to pass to the server method's 'complexObject' parameter.</param>
-        <Global.OpenRiaServices.DomainServices.Client.EntityAction("NamedUpdateWithNoEntityValidation", AllowMultipleInvocations:=false)>  _
+        <Global.OpenRiaServices.Client.EntityAction("NamedUpdateWithNoEntityValidation", AllowMultipleInvocations:=false)>  _
         Public Sub NamedUpdateWithNoEntityValidation(ByVal complexObject As Global.TestDomainServices.NamedUpdates.MockComplexObject2)
             Me.OnNamedUpdateWithNoEntityValidationInvoking(complexObject)
             MyBase.InvokeAction("NamedUpdateWithNoEntityValidation", complexObject)
@@ -14898,7 +14898,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' The DomainContext corresponding to the 'NamedUpdate_CustomAndUpdate' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class NamedUpdate_CustomAndUpdate
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -14924,14 +14924,14 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="serviceUri">The NamedUpdate_CustomAndUpdate service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.INamedUpdate_CustomAndUpdateContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.INamedUpdate_CustomAndUpdateContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="NamedUpdate_CustomAndUpdate"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -14939,7 +14939,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity2"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomAndUpdate"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
+        Public ReadOnly Property MockEntity2s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
             End Get
@@ -14949,7 +14949,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity2"/> entity instances using the 'GetEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity2"/> entity instances.</returns>
-        Public Function GetEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
+        Public Function GetEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
             Me.ValidateMethod("GetEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity2)("GetEntities", Nothing, false, true)
         End Function
@@ -14967,7 +14967,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate.NamedUpdate_CustomAndUpdateEntityContainer()
         End Function
         
@@ -14983,7 +14983,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomAndUpdate/GetEntities", ReplyAction:="http://tempuri.org/NamedUpdate_CustomAndUpdate/GetEntitiesResponse")>  _
             Function BeginGetEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -14992,7 +14992,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
+            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity2)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -15002,22 +15002,22 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomAndUpdate/SubmitChanges", ReplyAction:="http://tempuri.org/NamedUpdate_CustomAndUpdate/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class NamedUpdate_CustomAndUpdateEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity2)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -15026,7 +15026,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' The DomainContext corresponding to the 'NamedUpdate_CustomOnly' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class NamedUpdate_CustomOnly
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -15052,14 +15052,14 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="serviceUri">The NamedUpdate_CustomOnly service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.INamedUpdate_CustomOnlyContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.INamedUpdate_CustomOnlyContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="NamedUpdate_CustomOnly"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -15067,7 +15067,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity1"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomOnly"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity1s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
+        Public ReadOnly Property MockEntity1s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
             End Get
@@ -15077,7 +15077,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity1"/> entity instances using the 'GetEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity1"/> entity instances.</returns>
-        Public Function GetEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
+        Public Function GetEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
             Me.ValidateMethod("GetEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity1)("GetEntities", Nothing, false, true)
         End Function
@@ -15095,7 +15095,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomOnly.NamedUpdate_CustomOnlyEntityContainer()
         End Function
         
@@ -15111,7 +15111,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomOnly/GetEntities", ReplyAction:="http://tempuri.org/NamedUpdate_CustomOnly/GetEntitiesResponse")>  _
             Function BeginGetEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -15120,7 +15120,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
+            Function EndGetEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity1)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -15130,22 +15130,22 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomOnly/SubmitChanges", ReplyAction:="http://tempuri.org/NamedUpdate_CustomOnly/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class NamedUpdate_CustomOnlyEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity1)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity1)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -15154,7 +15154,7 @@ Namespace TestDomainServices.NamedUpdates
     ''' The DomainContext corresponding to the 'NamedUpdate_CustomValidation' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class NamedUpdate_CustomValidation
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -15180,14 +15180,14 @@ Namespace TestDomainServices.NamedUpdates
         ''' </summary>
         ''' <param name="serviceUri">The NamedUpdate_CustomValidation service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.INamedUpdate_CustomValidationContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.INamedUpdate_CustomValidationContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="NamedUpdate_CustomValidation"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -15195,7 +15195,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity3"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity3s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
+        Public ReadOnly Property MockEntity3s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
             End Get
@@ -15204,7 +15204,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity4"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity4s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
+        Public ReadOnly Property MockEntity4s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
             End Get
@@ -15213,7 +15213,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity5"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity5s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
+        Public ReadOnly Property MockEntity5s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
             End Get
@@ -15222,7 +15222,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' <summary>
         ''' Gets the set of <see cref="MockEntity6"/> entity instances that have been loaded into this <see cref="NamedUpdate_CustomValidation"/> instance.
         ''' </summary>
-        Public ReadOnly Property MockEntity6s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
+        Public ReadOnly Property MockEntity6s() As Global.OpenRiaServices.Client.EntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
             End Get
@@ -15232,7 +15232,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity3"/> entity instances using the 'GetEntities3' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity3"/> entity instances.</returns>
-        Public Function GetEntities3Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
+        Public Function GetEntities3Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
             Me.ValidateMethod("GetEntities3Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity3)("GetEntities3", Nothing, false, true)
         End Function
@@ -15241,7 +15241,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity4"/> entity instances using the 'GetEntities4' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity4"/> entity instances.</returns>
-        Public Function GetEntities4Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
+        Public Function GetEntities4Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
             Me.ValidateMethod("GetEntities4Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity4)("GetEntities4", Nothing, false, true)
         End Function
@@ -15250,7 +15250,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity5"/> entity instances using the 'GetEntities5' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity5"/> entity instances.</returns>
-        Public Function GetEntities5Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
+        Public Function GetEntities5Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
             Me.ValidateMethod("GetEntities5Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity5)("GetEntities5", Nothing, false, true)
         End Function
@@ -15259,7 +15259,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockEntity6"/> entity instances using the 'GetEntities6' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity6"/> entity instances.</returns>
-        Public Function GetEntities6Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
+        Public Function GetEntities6Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
             Me.ValidateMethod("GetEntities6Query", Nothing)
             Return MyBase.CreateQuery(Of Global.TestDomainServices.NamedUpdates.MockEntity6)("GetEntities6", Nothing, false, true)
         End Function
@@ -15316,7 +15316,7 @@ Namespace TestDomainServices.NamedUpdates
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.TestDomainServices.NamedUpdates.NamedUpdate_CustomValidation.NamedUpdate_CustomValidationEntityContainer()
         End Function
         
@@ -15337,7 +15337,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities3", ReplyAction:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities3Response")>  _
             Function BeginGetEntities3(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -15346,7 +15346,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities3'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities3' operation.</returns>
-            Function EndGetEntities3(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
+            Function EndGetEntities3(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity3)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntities4' operation.
@@ -15354,7 +15354,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities4", ReplyAction:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities4Response")>  _
             Function BeginGetEntities4(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -15363,7 +15363,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities4'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities4' operation.</returns>
-            Function EndGetEntities4(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
+            Function EndGetEntities4(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity4)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntities5' operation.
@@ -15371,7 +15371,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities5", ReplyAction:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities5Response")>  _
             Function BeginGetEntities5(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -15380,7 +15380,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities5'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities5' operation.</returns>
-            Function EndGetEntities5(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
+            Function EndGetEntities5(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity5)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetEntities6' operation.
@@ -15388,7 +15388,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities6", ReplyAction:="http://tempuri.org/NamedUpdate_CustomValidation/GetEntities6Response")>  _
             Function BeginGetEntities6(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -15397,7 +15397,7 @@ Namespace TestDomainServices.NamedUpdates
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetEntities6'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetEntities6' operation.</returns>
-            Function EndGetEntities6(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
+            Function EndGetEntities6(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.TestDomainServices.NamedUpdates.MockEntity6)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
@@ -15407,25 +15407,25 @@ Namespace TestDomainServices.NamedUpdates
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/NamedUpdate_CustomValidation/SubmitChanges", ReplyAction:="http://tempuri.org/NamedUpdate_CustomValidation/SubmitChangesResponse")>  _
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
+            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.DomainServices.Client.ChangeSetEntry)
+            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
         End Interface
         
         Friend NotInheritable Class NamedUpdate_CustomValidationEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity3)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity4)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity5)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
-                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity6)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity3)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity4)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity5)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
+                Me.CreateEntitySet(Of Global.TestDomainServices.NamedUpdates.MockEntity6)(Global.OpenRiaServices.Client.EntitySetOperations.Edit)
             End Sub
         End Class
     End Class
@@ -15438,7 +15438,7 @@ Namespace TestDomainServices.Saleテ
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices.Sale%E3%83%86")>  _
     Partial Public NotInheritable Class EntityWithSpecialTypeName
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _data As String
         

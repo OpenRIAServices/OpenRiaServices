@@ -7,16 +7,16 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.Test.T4Generator
+namespace OpenRiaServices.Tools.Test.T4Generator
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Server;
     using System.Text;
-    using OpenRiaServices.DomainServices.Tools;
+    using OpenRiaServices.Tools;
     
     /// <summary>
     /// Class to produce the template output

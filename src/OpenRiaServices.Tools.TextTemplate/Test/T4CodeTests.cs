@@ -2,13 +2,13 @@
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Tools.Test;
-using OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Tools.Test;
+using OpenRiaServices.Tools.TextTemplate.CSharpGenerators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
+namespace OpenRiaServices.Tools.TextTemplate.Test
 {
     [TestClass]
     public class T4CodeTests

@@ -8,9 +8,9 @@ using System.ServiceModel.Description;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Common.Test;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 
-namespace OpenRiaServices.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="DomainServiceHost"/> members.
@@ -162,7 +162,7 @@ namespace OpenRiaServices.DomainServices.Hosting.UnitTests
     }
 
     [EnableClientAccess]
-    public class MyDomainService : OpenRiaServices.DomainServices.Server.DomainService
+    public class MyDomainService : OpenRiaServices.Server.DomainService
     {
         public IQueryable<MyDomainService_Entity> GetEntities()
         {

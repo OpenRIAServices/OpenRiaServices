@@ -12,12 +12,12 @@ using System.Runtime.Serialization;
 #endif
 
 #if SERVERFX
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 #else
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 #endif
 
-namespace OpenRiaServices.DomainServices
+namespace OpenRiaServices
 {
     internal static class TypeUtility
     {
@@ -32,7 +32,7 @@ namespace OpenRiaServices.DomainServices
             "31bf3856ad364e35", // System.ComponentModel.DataAnnotations
             "b03f5f7f11d50a3a", // Microsoft.VisualBasic, Microsoft.CSharp, System.Configuration
             "7cec85d7bea7798e",  // Silverlight system assemblies
-            OpenRiaServicesPublicKeyToken, // OpenRiaServices.DomainServices.
+            OpenRiaServicesPublicKeyToken, // OpenRiaServices.
         };
 
         /// <summary>
@@ -42,19 +42,19 @@ namespace OpenRiaServices.DomainServices
         private static readonly HashSet<string> OpenRiaServicesAssemblyNames =
         new HashSet<string>(StringComparer.Ordinal)
         {
-            "OpenRiaServices.DomainServices.Client",
-            "OpenRiaServices.DomainServices.Client.Web",
-            "OpenRiaServices.DomainServices.EntityFramework",
-            "OpenRiaServices.DomainServices.EntityFramework.EF4",
-            "OpenRiaServices.DomainServices.Hosting",
-            "OpenRiaServices.DomainServices.Hosting.Endpoint",
-            "OpenRiaServices.DomainServices.Hosting.Local",
-            "OpenRiaServices.DomainServices.Hosting.OData",
-            "OpenRiaServices.DomainServices.LinqToSql",
-            "OpenRiaServices.DomainServices.Server",
-            "OpenRiaServices.DomainServices.Server.UnitTesting",
-            "OpenRiaServices.DomainServices.Tools",
-            "OpenRiaServices.DomainServices.Tools.TextTemplate"
+            "OpenRiaServices.Client",
+            "OpenRiaServices.Client.Web",
+            "OpenRiaServices.EntityFramework",
+            "OpenRiaServices.EntityFramework.EF4",
+            "OpenRiaServices.Hosting",
+            "OpenRiaServices.Hosting.Endpoint",
+            "OpenRiaServices.Hosting.Local",
+            "OpenRiaServices.Hosting.OData",
+            "OpenRiaServices.LinqToSql",
+            "OpenRiaServices.Server",
+            "OpenRiaServices.Server.UnitTesting",
+            "OpenRiaServices.Tools",
+            "OpenRiaServices.Tools.TextTemplate"
         };
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace OpenRiaServices.DomainServices
         /// <summary>
         /// Performs a quick check to determine if an assembly can contain DomainService implementations
         /// by checking that the assembly 
-        /// 1. References the OpenRiaServices.DomainServices.Server assembly (even classes inheriting 
+        /// 1. References the OpenRiaServices.Server assembly (even classes inheriting 
         /// indirectly must reference the assembly to compile) 
         /// 2. Excludes system assemblies (including OpenRiaServices framework assemblies).
         /// </summary>
@@ -552,7 +552,7 @@ namespace OpenRiaServices.DomainServices
         {
             return !assembly.IsSystemAssembly()
                     && assembly.GetReferencedAssemblies()
-                        .Any(reference => string.Equals(reference.Name, "OpenRiaServices.DomainServices.Server", StringComparison.OrdinalIgnoreCase));
+                        .Any(reference => string.Equals(reference.Name, "OpenRiaServices.Server", StringComparison.OrdinalIgnoreCase));
         }
 #endif
         /// <summary>

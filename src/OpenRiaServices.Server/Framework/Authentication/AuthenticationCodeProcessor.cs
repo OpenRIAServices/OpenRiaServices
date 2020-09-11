@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication
+namespace OpenRiaServices.Server.Authentication
 {
     /// <summary>
     /// <see cref="CodeProcessor"/> implementation that sets the base class of both the
@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Server.Authentication
         #region Constants
 
         private const string AuthenticationDomainContextBaseName =
-            "OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+            "OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase";
 
         #endregion
 

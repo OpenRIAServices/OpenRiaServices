@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using Cities;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;

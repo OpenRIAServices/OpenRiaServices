@@ -21,8 +21,8 @@
             "System.ComponentModel",
             "System.ComponentModel.DataAnnotations",
             "System.Linq", 
-            "OpenRiaServices.DomainServices.Hosting",
-            "OpenRiaServices.DomainServices.Server",
+            "OpenRiaServices.Hosting",
+            "OpenRiaServices.Server",
         };
 
         /// <summary>
@@ -31,7 +31,7 @@
         public static readonly string[] LinqToSqlImports = 
         { 
             "System.Data.Linq",
-            "OpenRiaServices.DomainServices.LinqToSql",
+            "OpenRiaServices.LinqToSql",
         };
 
         /// <summary>
@@ -40,7 +40,7 @@
         public static readonly string[] LinqToEntitiesImports = 
         { 
             "System.Data.Entity",
-            "OpenRiaServices.DomainServices.EntityFramework",
+            "OpenRiaServices.EntityFramework",
         };
 
         /// <summary>
@@ -51,23 +51,23 @@
             "System.Data",
             "System.Data.Entity",
             "System.Data.Entity.Infrastructure",
-            "OpenRiaServices.DomainServices.EntityFramework"
+            "OpenRiaServices.EntityFramework"
         };
 
         /// <summary>
         /// The assembly name for the LinqToSql DomainService provider.
         /// </summary>
-        public static readonly string LinqToSqlDomainServiceAssemblyName = "OpenRiaServices.DomainServices.LinqToSql";
+        public static readonly string LinqToSqlDomainServiceAssemblyName = "OpenRiaServices.LinqToSql";
 
         /// <summary>
         /// The type name of the domain service factory we will register in the web.config
         /// </summary>
-        public static readonly string DomainServiceModuleTypeName = "OpenRiaServices.DomainServices.Hosting.DomainServiceHttpModule";
+        public static readonly string DomainServiceModuleTypeName = "OpenRiaServices.Hosting.DomainServiceHttpModule";
 
         /// <summary>
         /// The assembly name of the assembly containing the domain service factory type
         /// </summary>
-        public static readonly string HostingAssemblyName = "OpenRiaServices.DomainServices.Hosting";
+        public static readonly string HostingAssemblyName = "OpenRiaServices.Hosting";
 
         /// <summary>
         /// Effectively typeof(DomainService).Name
@@ -124,7 +124,7 @@
         /// <summary>
         /// Effectively the name portion of typeof(DbDomainService).AssemblyName (i.e. without Version, Culture, etc.)
         /// </summary>
-        public const string DbDomainServiceAssemblyShortName = @"OpenRiaServices.DomainServices.EntityFramework";
+        public const string DbDomainServiceAssemblyShortName = @"OpenRiaServices.EntityFramework";
         
         /// <summary>
         /// Effectively typeof(DbContext).FullName
@@ -134,7 +134,7 @@
         /// <summary>
         /// Effectively typeof(DbContext).Namespace
         /// </summary>
-        public const string DbContextNamespace = @"OpenRiaServices.DomainServices.EntityFramework";
+        public const string DbContextNamespace = @"OpenRiaServices.EntityFramework";
 
         /// <summary>
         /// Effectively typeof(IObjectContextAdapter).FullName

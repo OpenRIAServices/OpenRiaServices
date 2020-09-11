@@ -6,8 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices;
+using OpenRiaServices.Client;
 using System.Windows.Common;
 
 namespace OpenRiaServices.Controls

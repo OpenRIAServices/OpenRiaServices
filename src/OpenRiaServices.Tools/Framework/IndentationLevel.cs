@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools
+﻿namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// This enum is designed to be used with type snippet generators.

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Principal;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     public class MockUser : IPrincipal, IIdentity
     {

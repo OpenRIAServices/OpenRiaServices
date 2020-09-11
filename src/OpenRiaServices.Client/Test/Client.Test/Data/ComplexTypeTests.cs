@@ -9,13 +9,13 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     using System.Reflection;
     using Internal;
     using TestDomainServices;
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
-    using TypeUtility = SSmDsClient::OpenRiaServices.DomainServices.TypeUtility;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
+    using TypeUtility = SSmDsClient::OpenRiaServices.TypeUtility;
 
     [TestClass]
     public partial class ComplexTypeTests : UnitTestBase

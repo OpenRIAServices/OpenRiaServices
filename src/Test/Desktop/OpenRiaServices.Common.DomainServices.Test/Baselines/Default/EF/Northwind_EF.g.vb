@@ -14,9 +14,9 @@ Option Strict On
 Option Explicit On
 
 Imports NorthwindModel
-Imports OpenRiaServices.DomainServices
-Imports OpenRiaServices.DomainServices.Client
-Imports OpenRiaServices.DomainServices.Client.ApplicationServices
+Imports OpenRiaServices
+Imports OpenRiaServices.Client
+Imports OpenRiaServices.Client.ApplicationServices
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel

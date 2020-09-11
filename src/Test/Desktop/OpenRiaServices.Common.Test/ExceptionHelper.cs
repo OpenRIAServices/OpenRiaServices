@@ -10,7 +10,7 @@ using System.Web;
 #endif
 
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     public delegate void GenericDelegate();
     public delegate Task AsyncDelegate();

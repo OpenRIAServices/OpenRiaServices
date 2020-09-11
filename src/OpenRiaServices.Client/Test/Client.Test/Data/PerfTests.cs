@@ -8,7 +8,7 @@ using TestDomainServices;
 using TestDomainServices.LTS;
 using OpenRiaServices.Silverlight.Testing;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     [TestClass]
     public class PerfTests : DomainContextTestBase<Catalog>

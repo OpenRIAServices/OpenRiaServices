@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using OpenRiaServices.DomainServices.Client.Web.Internal;
+using OpenRiaServices.Client.Web.Internal;
 
-namespace OpenRiaServices.DomainServices.Client.Web
+namespace OpenRiaServices.Client.Web
 {
     /// <summary>
     /// For connecting to services using the /soap endpoint based on <see cref="BasicHttpBinding"/>.

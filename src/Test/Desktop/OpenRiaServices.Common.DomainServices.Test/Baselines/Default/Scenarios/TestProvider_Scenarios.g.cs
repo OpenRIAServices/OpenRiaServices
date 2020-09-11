@@ -21,9 +21,9 @@ namespace TestDomainServices
     using System.Threading.Tasks;
     using System.Xml.Linq;
     using CustomNamespace;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     using TestDomainServices.Saleテ;
     
     
@@ -13668,9 +13668,9 @@ namespace TestDomainServices.NamedUpdates
     using System.Runtime.Serialization;
     using System.ServiceModel;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     using TestDomainServices;
     
     
@@ -16355,9 +16355,9 @@ namespace TestDomainServices.Saleテ
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>

@@ -3,7 +3,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 
-namespace OpenRiaServices.DomainServices.Client.Web.Internal
+namespace OpenRiaServices.Client.Web.Internal
 {
     /// <summary>
     /// A endpoint behavior which injects a message inspector that adds query headers

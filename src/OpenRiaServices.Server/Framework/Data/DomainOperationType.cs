@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Server
+﻿namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Enumeration of the core operations a <see cref="DomainService"/> can perform.

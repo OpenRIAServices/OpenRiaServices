@@ -1,4 +1,4 @@
-﻿using OpenRiaServices.DomainServices.Client;
+﻿using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Controls.DomainServices.Test
 {

@@ -17,9 +17,9 @@ namespace DataTests.AdventureWorks.LTS
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -2451,9 +2451,9 @@ namespace TestDomainServices.LTS
     using System.ServiceModel;
     using System.Threading.Tasks;
     using DataTests.AdventureWorks.LTS;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test.Utilities
+namespace OpenRiaServices.Tools.Test.Utilities
 {
     [TestClass]
     public sealed class TestInitializer

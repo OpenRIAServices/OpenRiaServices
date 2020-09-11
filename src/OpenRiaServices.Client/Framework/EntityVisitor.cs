@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Internal;
+using OpenRiaServices.Client.Internal;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Visits all EntityCollection/EntityRef members of an entity, allowing

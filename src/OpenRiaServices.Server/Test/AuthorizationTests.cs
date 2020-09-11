@@ -5,12 +5,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Cities;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

@@ -7,21 +7,21 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices;
+    using OpenRiaServices.Server;
     using System.Linq;
     using System.Reflection;
     using System.Collections.Generic;
     using System;
-    using OpenRiaServices.DomainServices.Server.Authentication;
+    using OpenRiaServices.Server.Authentication;
 
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CSharpWebContextGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.WebContextGenerator
+    public partial class CSharpWebContextGenerator : OpenRiaServices.Tools.TextTemplate.WebContextGenerator
     {
         /// <summary>
         /// Create the template output
@@ -56,7 +56,7 @@ this.Write("\r\n");
 	protected virtual void GenerateClassDeclaration()
 	{
 
-this.Write("public sealed partial class WebContext : OpenRiaServices.DomainServices.Client.Ap" +
+this.Write("public sealed partial class WebContext : OpenRiaServices.Client.Ap" +
         "plicationServices.WebContextBase\r\n");
 
 
@@ -88,7 +88,7 @@ this.Write("partial void OnCreated();\r\n");
 	{
 
 this.Write("public new static WebContext Current\r\n{\r\n    get\r\n    {\r\n        return ((WebCont" +
-        "ext)(OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Cu" +
+        "ext)(OpenRiaServices.Client.ApplicationServices.WebContextBase.Cu" +
         "rrent));\r\n    }\r\n}\r\n");
 
 

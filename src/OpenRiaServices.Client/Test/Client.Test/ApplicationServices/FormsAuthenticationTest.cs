@@ -1,10 +1,10 @@
-﻿using OpenRiaServices.DomainServices.Client.Test;
+﻿using OpenRiaServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using RootNamespace.TestNamespace;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.ApplicationServices.Test
 {
     /// <summary>
     /// Tests <see cref="FormsAuthentication"/> members.

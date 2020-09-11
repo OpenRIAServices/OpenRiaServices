@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Controls
 {

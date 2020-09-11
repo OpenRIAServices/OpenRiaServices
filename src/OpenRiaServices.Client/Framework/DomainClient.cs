@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Base class for all <see cref="DomainClient"/> implementations. A <see cref="DomainClient"/> is
@@ -30,7 +30,7 @@ namespace OpenRiaServices.DomainServices.Client
             {
                 if (this._entityTypes != null)
                 {
-                    throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
+                    throw new InvalidOperationException(OpenRiaServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
                 }
                 this._entityTypes = new ReadOnlyCollection<Type>(value.ToList());
             }
@@ -85,7 +85,7 @@ namespace OpenRiaServices.DomainServices.Client
 
             if (changeSet.IsEmpty)
             {
-                throw new InvalidOperationException(OpenRiaServices.DomainServices.Client.Resource.DomainClient_EmptyChangeSet);
+                throw new InvalidOperationException(OpenRiaServices.Client.Resource.DomainClient_EmptyChangeSet);
             }
 
             // call the actual implementation 

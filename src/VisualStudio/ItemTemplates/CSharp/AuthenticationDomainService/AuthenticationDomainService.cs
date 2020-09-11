@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Authentication.AspNetMembership;
 
 namespace $rootnamespace$
 {

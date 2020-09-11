@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using DataTests.AdventureWorks.LTS;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Test context that can be used to perform load operations directly for testing purposes

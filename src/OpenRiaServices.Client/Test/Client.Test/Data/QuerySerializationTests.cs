@@ -13,12 +13,12 @@ using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
 using VbExpressions;
-using DomainServiceDescription = DomainServices::OpenRiaServices.DomainServices.Server.DomainServiceDescription;
+using DomainServiceDescription = DomainServices::OpenRiaServices.Server.DomainServiceDescription;
 using NorthwindDomainService = DomainServicesTests::TestDomainServices.LTS.Northwind;
-using LinqResource = SSmDsWeb::OpenRiaServices.DomainServices.Client.Resources;
+using LinqResource = SSmDsWeb::OpenRiaServices.Client.Resources;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Tests of both the client and server query serialization pieces via internal direct access to those
@@ -1150,12 +1150,12 @@ namespace OpenRiaServices.DomainServices.Client.Test
             return SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data, TranslateQueryParts(queryParts));
         }
 
-        private List<WebRia::OpenRiaServices.DomainServices.Hosting.ServiceQueryPart> TranslateQueryParts(List<ServiceQueryPart> queryParts)
+        private List<WebRia::OpenRiaServices.Hosting.ServiceQueryPart> TranslateQueryParts(List<ServiceQueryPart> queryParts)
         {
-            List<WebRia::OpenRiaServices.DomainServices.Hosting.ServiceQueryPart> returnParts = new List<WebRia::OpenRiaServices.DomainServices.Hosting.ServiceQueryPart>();
+            List<WebRia::OpenRiaServices.Hosting.ServiceQueryPart> returnParts = new List<WebRia::OpenRiaServices.Hosting.ServiceQueryPart>();
             foreach (ServiceQueryPart part in queryParts)
             {
-                WebRia::OpenRiaServices.DomainServices.Hosting.ServiceQueryPart newPart = new WebRia::OpenRiaServices.DomainServices.Hosting.ServiceQueryPart(part.QueryOperator, part.Expression);
+                WebRia::OpenRiaServices.Hosting.ServiceQueryPart newPart = new WebRia::OpenRiaServices.Hosting.ServiceQueryPart(part.QueryOperator, part.Expression);
                 returnParts.Add(newPart);
             }
             return returnParts;

@@ -1,7 +1,7 @@
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Server;
 
     /// <summary>
     /// C# Generator for DomainService proxies.
@@ -132,11 +132,11 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
             {
                 if (operation.ReturnType == typeof(void))
                 {
-                    returnTypeName = "OpenRiaServices.DomainServices.Client.QueryResult";
+                    returnTypeName = "OpenRiaServices.Client.QueryResult";
                 }
                 else
                 {
-                    returnTypeName = "OpenRiaServices.DomainServices.Client.QueryResult<" + CodeGenUtilities.GetTypeName(CodeGenUtilities.TranslateType(operation.AssociatedType)) + ">";
+                    returnTypeName = "OpenRiaServices.Client.QueryResult<" + CodeGenUtilities.GetTypeName(CodeGenUtilities.TranslateType(operation.AssociatedType)) + ">";
                 }
             }
             else

@@ -10,9 +10,9 @@ using System.Data.Metadata.Edm;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     /// <summary>
     /// Metadata context for LINQ To Entities domain services

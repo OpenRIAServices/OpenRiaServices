@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.ApplicationServices;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;

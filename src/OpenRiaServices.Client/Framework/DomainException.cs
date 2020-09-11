@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
-using OpenRiaServices.DomainServices;
+using OpenRiaServices;
 #if !SILVERLIGHT
 using System.Runtime.Serialization;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 #else
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 #endif
 {
     /// <summary>

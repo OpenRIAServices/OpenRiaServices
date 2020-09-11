@@ -18,16 +18,16 @@
     <Reference Include="system" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\Behaviors\MessageUtility.cs" Link="Services\Behaviors\MessageUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="Linq\BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="Linq\TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Services\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Services\DynamicMethodUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\Data\MetaType.cs" Link="Services\MetaType.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\QueryResult.cs" Link="Services\QueryResult.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\Behaviors\MessageUtility.cs" Link="Services\Behaviors\MessageUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Linq\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Linq\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Services\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Services\DynamicMethodUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\MetaType.cs" Link="Services\MetaType.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\QueryResult.cs" Link="Services\QueryResult.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
     <Compile Update="Services\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -48,7 +48,7 @@
     <EmbeddedResource Update="Services\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Hosting</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Hosting</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Linq\Resource.resx">
       <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>
@@ -57,6 +57,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
 </Project>

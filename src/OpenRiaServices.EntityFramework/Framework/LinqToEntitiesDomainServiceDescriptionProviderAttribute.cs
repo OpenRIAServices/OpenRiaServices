@@ -6,9 +6,9 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Objects;
 #endif
 using System.Globalization;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     /// <summary>
     /// Attribute applied to a <see cref="DomainService"/> that exposes LINQ to Entities mapped

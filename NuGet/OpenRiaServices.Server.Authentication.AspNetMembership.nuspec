@@ -30,8 +30,8 @@ Common Types:
 	</dependencies>
   </metadata>
   <files>
-    <file src="..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.dll" target="lib\net472\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.dll" />
-    <file src="..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.pdb" target="lib\net472\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.pdb" />
-    <file src="..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.xml" target="lib\net472\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.xml" />
+    <file src="..\src\bin\Release\net472\OpenRiaServices.Server.Authentication.AspNetMembership.dll" target="lib\net472\OpenRiaServices.Server.Authentication.AspNetMembership.dll" />
+    <file src="..\src\bin\Release\net472\OpenRiaServices.Server.Authentication.AspNetMembership.pdb" target="lib\net472\OpenRiaServices.Server.Authentication.AspNetMembership.pdb" />
+    <file src="..\src\bin\Release\net472\OpenRiaServices.Server.Authentication.AspNetMembership.xml" target="lib\net472\OpenRiaServices.Server.Authentication.AspNetMembership.xml" />
     </files>
 </package>

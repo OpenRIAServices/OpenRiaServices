@@ -7,15 +7,15 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     using System.ComponentModel;
     using System.Collections.Generic;
     using System.Linq;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Tools.TextTemplate;
-    using OpenRiaServices.DomainServices.Tools;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.Tools.TextTemplate;
+    using OpenRiaServices.Tools;
     using System.Runtime.Serialization;
     using System.Reflection;
     
@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CSharpEntityGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.EntityGenerator
+    public partial class CSharpEntityGenerator : OpenRiaServices.Tools.TextTemplate.EntityGenerator
     {
         /// <summary>
         /// Create the template output
@@ -56,7 +56,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
 		var customMethodAttribute = customMethod.OperationAttribute as EntityActionAttribute;
 		bool allowMultipleInvocations = customMethodAttribute != null && customMethodAttribute.AllowMultipleInvocations;
 
-this.Write("[OpenRiaServices.DomainServices.Client.EntityAction(\"");
+this.Write("[OpenRiaServices.Client.EntityAction(\"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(customMethod.Name));
 
@@ -223,7 +223,7 @@ this.Write(")\r\n{\r\n\treturn null;\r\n}\r\n");
 
 				}
 
-this.Write("return OpenRiaServices.DomainServices.Client.EntityKey.Create(");
+this.Write("return OpenRiaServices.Client.EntityKey.Create(");
 
 
 for(int i = 0; i < keyNames.Count(); i++)

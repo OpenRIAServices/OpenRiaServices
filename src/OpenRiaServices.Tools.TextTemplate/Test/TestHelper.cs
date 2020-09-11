@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Tools.Test;
+using OpenRiaServices.Tools.Test;
 using System.Reflection;
 using System.IO;
-using OpenRiaServices.DomainServices.Tools.TextTemplate.Test;
+using OpenRiaServices.Tools.TextTemplate.Test;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     public class TestHelper
     {
@@ -219,8 +219,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 
         private static bool AreTypesEqual(Type t1, Type t2)
         {
-            string t1Name = OpenRiaServices.DomainServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t1);
-            string t2Name = OpenRiaServices.DomainServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t2);
+            string t1Name = OpenRiaServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t1);
+            string t2Name = OpenRiaServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t2);
             if (t1Name == t2Name)
             {
                 return true;

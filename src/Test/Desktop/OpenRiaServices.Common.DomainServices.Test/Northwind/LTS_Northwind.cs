@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 using DataTests.Northwind.LTS;
-using OpenRiaServices.DomainServices.LinqToSql;
+using OpenRiaServices.LinqToSql;
 using TestDomainServices.Testing;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract

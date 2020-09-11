@@ -1,4 +1,4 @@
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.Tools.TextTemplate
 {
     using System;
     using System.Collections.Generic;
@@ -6,11 +6,11 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices;
+    using OpenRiaServices.Server;
     using System.Text;
-    using OpenRiaServices.DomainServices.Tools;
-    using OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators;
+    using OpenRiaServices.Tools;
+    using OpenRiaServices.Tools.TextTemplate.CSharpGenerators;
 
     /// <summary>
     /// Generator class to generate a domain service proxy using Text Templates.

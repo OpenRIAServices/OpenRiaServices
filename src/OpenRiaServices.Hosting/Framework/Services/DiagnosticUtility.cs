@@ -10,7 +10,7 @@ using System.ServiceModel.Channels;
 using System.Web.Configuration;
 using System.Web.Hosting;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal static class DiagnosticUtility
     {

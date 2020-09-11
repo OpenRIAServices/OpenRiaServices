@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     public abstract partial class ComplexObject : INotifyDataErrorInfo
     {

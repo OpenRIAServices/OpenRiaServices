@@ -2,8 +2,8 @@
   <system.serviceModel>
     <domainServices>
       <endpoints>
-        <add name="soap" type="OpenRiaServices.DomainServices.Hosting.SoapXmlEndpointFactory, OpenRiaServices.DomainServices.Hosting.Endpoint" />    
-        <add name="json" type="OpenRiaServices.DomainServices.Hosting.JsonEndpointFactory, OpenRiaServices.DomainServices.Hosting.Endpoint" />  
+        <add name="soap" type="OpenRiaServices.Hosting.SoapXmlEndpointFactory, OpenRiaServices.Hosting.Endpoint" />    
+        <add name="json" type="OpenRiaServices.Hosting.JsonEndpointFactory, OpenRiaServices.Hosting.Endpoint" />  
       </endpoints>
     </domainServices>
   </system.serviceModel>

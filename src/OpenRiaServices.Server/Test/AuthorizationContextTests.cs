@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client.Test;
-using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
+using OpenRiaServices.Client.Test;
+using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     [TestClass]
     public class AuthorizationContextTests

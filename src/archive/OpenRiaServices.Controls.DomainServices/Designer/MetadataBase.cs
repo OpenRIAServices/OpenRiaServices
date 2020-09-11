@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Controls;
-using OpenRiaServices.DomainServices;
+using OpenRiaServices;
 using System.Xml.Linq;
 using Microsoft.Windows.Design.Metadata;
 using SSW = Silverlight::System.Windows;

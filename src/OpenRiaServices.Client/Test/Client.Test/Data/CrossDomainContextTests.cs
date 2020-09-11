@@ -10,9 +10,9 @@ using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     /// <summary>
     /// Verifies the behavior of cross-domain context entity and entity collection references.

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using Microsoft.Build.Framework;
-using ConsoleLogger = OpenRiaServices.DomainServices.Server.Test.Utilities.ConsoleLogger;
+using ConsoleLogger = OpenRiaServices.Server.Test.Utilities.ConsoleLogger;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     class MockBuildEngine : IBuildEngine
     {

@@ -9,7 +9,7 @@ using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Common.Test;
 
-namespace OpenRiaServices.DomainServices.Hosting.OData.Test
+namespace OpenRiaServices.Hosting.OData.Test
 {
     /// <summary>
     /// Provides a helper class for tests that rely on a local web

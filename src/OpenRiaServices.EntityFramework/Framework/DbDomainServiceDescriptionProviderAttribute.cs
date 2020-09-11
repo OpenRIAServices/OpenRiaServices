@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Globalization;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     /// <summary>
     /// Attribute applied to a <see cref="DbDomainService{DbContext}"/> that exposes LINQ to Entities mapped

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>OpenRiaServices.DomainServices.Hosting.Test</RootNamespace>
+    <RootNamespace>OpenRiaServices.Hosting.Test</RootNamespace>
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
@@ -21,9 +21,9 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj" />
-    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.Endpoint.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.Endpoint.csproj" />
   </ItemGroup>
 </Project>
