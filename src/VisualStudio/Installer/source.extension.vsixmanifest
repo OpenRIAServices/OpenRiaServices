@@ -20,9 +20,9 @@ For 4.6.0+</Description>
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" AssemblyName="|OpenRiaServices.VisualStudio.DomainServices.Tools;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Hosting" Path="|OpenRiaServices.DomainServices.Hosting|" AssemblyName="|OpenRiaServices.DomainServices.Hosting;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Hosting.OData" Path="|OpenRiaServices.DomainServices.Hosting.OData|" AssemblyName="|OpenRiaServices.DomainServices.Hosting.OData;AssemblyName|" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.Server" Path="|OpenRiaServices.DomainServices.Server|" AssemblyName="|OpenRiaServices.DomainServices.Server;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting" Path="|OpenRiaServices.Hosting|" AssemblyName="|OpenRiaServices.Hosting;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.OData" Path="|OpenRiaServices.Hosting.OData|" AssemblyName="|OpenRiaServices.Hosting.OData;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Server" Path="|OpenRiaServices.Server|" AssemblyName="|OpenRiaServices.Server;AssemblyName|" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.dll" AssemblyName="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.SqlServer.dll" AssemblyName="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" Path="ItemTemplates" d:TargetPath="|AuthenticationDomainService;TemplateProjectOutputGroup|" d:ProjectName="AuthenticationDomainService" d:VsixSubPath="ItemTemplates" />
@@ -35,7 +35,7 @@ For 4.6.0+</Description>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:TargetPath="|BusinessApplicationProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="OpenRiaServicesLibrary" d:TargetPath="|OpenRiaServicesLibrary;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.DomainServices.EntityFramework" Path="|OpenRiaServices.DomainServices.EntityFramework|" AssemblyName="|OpenRiaServices.DomainServices.EntityFramework;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.EntityFramework" Path="|OpenRiaServices.EntityFramework|" AssemblyName="|OpenRiaServices.EntityFramework;AssemblyName|" />
   </Assets>
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />

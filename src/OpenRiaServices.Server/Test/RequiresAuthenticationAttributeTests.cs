@@ -6,9 +6,9 @@ using System.Globalization;
 using System.Security.Principal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
+using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     [TestClass]
     public class RequiresAuthentiationAttributeTests

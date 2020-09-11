@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.Tools.SharedTypes
 {
     /// <summary>
     /// Internal class to maintain mapping between file names and an internally generated integer ID.

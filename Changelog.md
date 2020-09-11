@@ -12,10 +12,10 @@
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
-2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.DomainServices.Server.ApplicationServices` namespace in your server project 
+2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.Server.ApplicationServices` namespace in your server project 
    1. Add the *OpenRiaServices.Server.Authentication.AspNetMembership* nuget package to it
-   2. Replace *OpenRiaServices.DomainServices.Server.ApplicationServices* with *OpenRiaServices.DomainServices.Server.Authentication*
-   3. Add `using OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership;` in file which uses *AuthenicationBase*, *UserBase* or related classes.
+   2. Replace *OpenRiaServices.Server.ApplicationServices* with *OpenRiaServices.Server.Authentication*
+   3. Add `using OpenRiaServices.Server.Authentication.AspNetMembership;` in file which uses *AuthenicationBase*, *UserBase* or related classes.
 3. If you have compilation problems in your DomainServices because it overrides methods which do not exist 
    then try to overridde the method with the same name but with "Async" as postfix, method signatures will be different.
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
@@ -66,6 +66,7 @@ This means that operations should be started on the UI thread if any data of the
   * In earlier previews an exception was thrown instead of the operation beeing Cancelled
   
 ### Server
+
 * Hosting - Endpoint changes (#218)
    * Reuse the same `ContractDescription` for multiple endpoints (endpoint name is not longer added)
    * Dont add SilverlightFaultBehaviour by default to DomainServices
@@ -74,6 +75,7 @@ This means that operations should be started on the UI thread if any data of the
 * Trigger cancellation on client disconnect (#222)
 
 ### Server
+
 * EntityFramework: Target IDbSet instead of DbSet with AttachAsModified extension methods (#215) 
 
 ### Infrastructure

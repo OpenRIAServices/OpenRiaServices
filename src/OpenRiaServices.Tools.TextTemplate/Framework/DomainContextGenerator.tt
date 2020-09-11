@@ -1,1 +1,1 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.CodeGeneratorTextTemplate" linePragmas="false" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplate" linePragmas="false" #>

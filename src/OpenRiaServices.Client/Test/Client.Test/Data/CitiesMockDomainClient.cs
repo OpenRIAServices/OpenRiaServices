@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client;
-using OpenRiaServices.DomainServices.Client.Test.Utilities;
+using OpenRiaServices.Client;
+using OpenRiaServices.Client.Test.Utilities;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Sample DomainClient implementation that operates on a set of in memory data for testing purposes.

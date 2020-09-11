@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace OpenRiaServices.DomainServices.NHibernate
+namespace OpenRiaServices.NHibernate
 {
     public static class Inflector
     {

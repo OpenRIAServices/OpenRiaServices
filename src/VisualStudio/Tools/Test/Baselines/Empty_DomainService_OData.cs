@@ -6,8 +6,8 @@ namespace BizLogic.Test
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // TODO: Create methods containing your application logic.

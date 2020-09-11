@@ -4,8 +4,8 @@ Option Infer On
 Option Strict On
 Option Explicit On
 
-Imports OpenRiaServices.DomainServices.Hosting
-Imports OpenRiaServices.DomainServices.Server
+Imports OpenRiaServices.Hosting
+Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel

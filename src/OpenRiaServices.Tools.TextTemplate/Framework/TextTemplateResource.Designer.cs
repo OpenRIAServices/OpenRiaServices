@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate {
+namespace OpenRiaServices.Tools.TextTemplate {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.DomainServices.Tools.TextTemplate.TextTemplateResource", typeof(TextTemplateResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.Tools.TextTemplate.TextTemplateResource", typeof(TextTemplateResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -97,7 +97,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator supports only C# code generation. Please use the default code generator for VB code generation..
+        ///   Looks up a localized string similar to OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator supports only C# code generation. Please use the default code generator for VB code generation..
         /// </summary>
         internal static string NonCSharpLanguageNotSupported {
             get {

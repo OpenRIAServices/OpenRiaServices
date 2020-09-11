@@ -7,21 +7,21 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System.Runtime.Serialization;
     using System.Reflection;
     using System.Collections.Generic;
     using System;
     using System.Linq;
-    using OpenRiaServices.DomainServices.Tools;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Tools;
+    using OpenRiaServices.Server;
     
     /// <summary>
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CSharpEnumGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.EnumGenerator
+    public partial class CSharpEnumGenerator : OpenRiaServices.Tools.TextTemplate.EnumGenerator
     {
         /// <summary>
         /// Create the template output

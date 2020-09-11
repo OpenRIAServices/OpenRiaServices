@@ -6,9 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Linq.Mapping;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.LinqToSql
+namespace OpenRiaServices.LinqToSql
 {
     /// <summary>
     /// CustomTypeDescriptor for LINQ To SQL entities

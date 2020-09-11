@@ -1,5 +1,5 @@
 ﻿using System;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using System.Windows.Input;
 using Cities;
 using Microsoft.Silverlight.Testing;

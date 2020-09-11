@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Security.Principal;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Represents the execution context for a <see cref="DomainService"/> request.

@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.StorageClient;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.WindowsAzure.Test
+namespace OpenRiaServices.WindowsAzure.Test
 {
     [TestClass]
     public class TableMetadataProviderTests

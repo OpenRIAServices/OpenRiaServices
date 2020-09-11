@@ -4,7 +4,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using System.Web;
 using System.Web.Configuration;
 

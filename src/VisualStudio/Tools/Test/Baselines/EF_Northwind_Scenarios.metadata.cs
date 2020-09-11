@@ -7,8 +7,8 @@ namespace DataTests.Scenarios.EF.NorthwindBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using DataTests.Scenarios.EF.Northwind;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // The MetadataTypeAttribute identifies AddressCTBuddyMetadata as the class

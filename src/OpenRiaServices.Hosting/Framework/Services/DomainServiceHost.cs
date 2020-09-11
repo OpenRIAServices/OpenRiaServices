@@ -9,10 +9,10 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using System.Web;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Hosting.Configuration.Internal;
+using OpenRiaServices.Server;
+using OpenRiaServices.Hosting.Configuration.Internal;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Provides a host for domain services.

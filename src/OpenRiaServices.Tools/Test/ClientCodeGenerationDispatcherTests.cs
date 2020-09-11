@@ -7,14 +7,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Tools.Test.T4Generator;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Tools.Test.T4Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests the MEF-based dispatcher to choose a code generator
@@ -207,7 +207,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location, typeof(TextTemplate::OpenRiaServices.DomainServices.Tools.TextTemplate.ClientCodeGenerator).Assembly.Location };
+                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location, typeof(TextTemplate::OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator).Assembly.Location };
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, /*generatorName*/ null);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");

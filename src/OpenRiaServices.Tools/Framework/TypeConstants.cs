@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools
+﻿namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Since this code generator doesn't have assembly references to the server/client
@@ -8,108 +8,108 @@
     internal static class TypeConstants
     {
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.InvokeOperation' type name.
+        /// The 'OpenRiaServices.Client.InvokeOperation' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string InvokeOperationTypeFullName = "OpenRiaServices.DomainServices.Client.InvokeOperation";
+        public const string InvokeOperationTypeFullName = "OpenRiaServices.Client.InvokeOperation";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.InvokeResult' type name.
+        /// The 'OpenRiaServices.Client.InvokeResult' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string InvokeResultTypeFullName = "OpenRiaServices.DomainServices.Client.InvokeResult";
+        public const string InvokeResultTypeFullName = "OpenRiaServices.Client.InvokeResult";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityQuery' type name.
+        /// The 'OpenRiaServices.Client.EntityQuery' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityQueryTypeFullName = "OpenRiaServices.DomainServices.Client.EntityQuery";
+        public const string EntityQueryTypeFullName = "OpenRiaServices.Client.EntityQuery";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityKey' type name.
+        /// The 'OpenRiaServices.Client.EntityKey' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityKeyTypeFullName = "OpenRiaServices.DomainServices.Client.EntityKey";
+        public const string EntityKeyTypeFullName = "OpenRiaServices.Client.EntityKey";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntitySet' type name.
+        /// The 'OpenRiaServices.Client.EntitySet' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntitySetTypeFullName = "OpenRiaServices.DomainServices.Client.EntitySet";
+        public const string EntitySetTypeFullName = "OpenRiaServices.Client.EntitySet";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.DomainContext' type name.
+        /// The 'OpenRiaServices.Client.DomainContext' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string DomainContextTypeFullName = "OpenRiaServices.DomainServices.Client.DomainContext";
+        public const string DomainContextTypeFullName = "OpenRiaServices.Client.DomainContext";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityContainer' type name.
+        /// The 'OpenRiaServices.Client.EntityContainer' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityContainerTypeFullName = "OpenRiaServices.DomainServices.Client.EntityContainer";
+        public const string EntityContainerTypeFullName = "OpenRiaServices.Client.EntityContainer";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntitySetOperations' type name.
+        /// The 'OpenRiaServices.Client.EntitySetOperations' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntitySetOperationsTypeFullName = "OpenRiaServices.DomainServices.Client.EntitySetOperations";
+        public const string EntitySetOperationsTypeFullName = "OpenRiaServices.Client.EntitySetOperations";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.ChangeSetEntry' type name.
+        /// The 'OpenRiaServices.Client.ChangeSetEntry' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string ChangeSetEntryTypeFullName = "OpenRiaServices.DomainServices.Client.ChangeSetEntry";
+        public const string ChangeSetEntryTypeFullName = "OpenRiaServices.Client.ChangeSetEntry";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityRef' type name.
+        /// The 'OpenRiaServices.Client.EntityRef' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityRefTypeFullName = "OpenRiaServices.DomainServices.Client.EntityRef";
+        public const string EntityRefTypeFullName = "OpenRiaServices.Client.EntityRef";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityCollection' type name.
+        /// The 'OpenRiaServices.Client.EntityCollection' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityCollectionTypeFullName = "OpenRiaServices.DomainServices.Client.EntityCollection";
+        public const string EntityCollectionTypeFullName = "OpenRiaServices.Client.EntityCollection";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityType' type name.
+        /// The 'OpenRiaServices.Client.EntityType' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityTypeFullName = "OpenRiaServices.DomainServices.Client.Entity";
+        public const string EntityTypeFullName = "OpenRiaServices.Client.Entity";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.ComplexObject' type name.
+        /// The 'OpenRiaServices.Client.ComplexObject' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string ComplexObjectTypeFullName = "OpenRiaServices.DomainServices.Client.ComplexObject";
+        public const string ComplexObjectTypeFullName = "OpenRiaServices.Client.ComplexObject";
 
         /// <summary>
         /// The full DomainClient type name.
@@ -117,7 +117,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string DomainClientTypeFullName = "OpenRiaServices.DomainServices.Client.DomainClient";
+        public const string DomainClientTypeFullName = "OpenRiaServices.Client.DomainClient";
 
         /// <summary>
         /// The full WebDomainClient type name.
@@ -125,7 +125,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string WebDomainClientTypeFullName = "OpenRiaServices.DomainServices.Client.WebDomainClient";
+        public const string WebDomainClientTypeFullName = "OpenRiaServices.Client.WebDomainClient";
 
         /// <summary>
         /// The default DomainClient type name.
@@ -141,7 +141,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string WebContextBaseName = "OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase";
+        public const string WebContextBaseName = "OpenRiaServices.Client.ApplicationServices.WebContextBase";
 
         /// <summary>
         /// The full ServiceQuery type name.
@@ -149,7 +149,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string ServiceQueryTypeFullName = "OpenRiaServices.DomainServices.Client.ServiceQuery";
+        public const string ServiceQueryTypeFullName = "OpenRiaServices.Client.ServiceQuery";
 
         /// <summary>
         /// The full DomainServiceFault type name.
@@ -157,7 +157,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string DomainServiceFaultFullName = "OpenRiaServices.DomainServices.Client.DomainServiceFault";
+        public const string DomainServiceFaultFullName = "OpenRiaServices.Client.DomainServiceFault";
 
         /// <summary>
         /// The the full QueryResult type name.
@@ -165,7 +165,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string QueryResultFullName = "OpenRiaServices.DomainServices.Client.QueryResult";
+        public const string QueryResultFullName = "OpenRiaServices.Client.QueryResult";
 
         /// <summary>
         /// The 'System.Collections.Generic.IEnumerable' type name.
@@ -176,37 +176,37 @@
         public const string IEnumerableFullName = "System.Collections.Generic.IEnumerable";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.HasSideEffects' type name.
+        /// The 'OpenRiaServices.Client.HasSideEffects' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string HasSideEffectsFullName = "OpenRiaServices.DomainServices.Client.HasSideEffects";
+        public const string HasSideEffectsFullName = "OpenRiaServices.Client.HasSideEffects";
 
         /// <summary>
-        /// The 'OpenRiaServices.DomainServices.Client.EntityActionAttribute' type name.
+        /// The 'OpenRiaServices.Client.EntityActionAttribute' type name.
         /// </summary>
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string EntityActionAttributeFullName = "OpenRiaServices.DomainServices.Client.EntityAction";
+        public const string EntityActionAttributeFullName = "OpenRiaServices.Client.EntityAction";
 
         // TODO: Enable when WebContextGenerator.cs supports Forms Authentication.  
         ///// <summary>
-        ///// The 'OpenRiaServices.DomainServices.Client.ApplicationServices.FormsAuthentication' type name.
+        ///// The 'OpenRiaServices.Client.ApplicationServices.FormsAuthentication' type name.
         ///// </summary>
         ///// <remarks>
         ///// Used during code generation.
         ///// </remarks>
-        //public const string FormsAuthenticationName = "OpenRiaServices.DomainServices.Client.ApplicationServices.FormsAuthentication";
+        //public const string FormsAuthenticationName = "OpenRiaServices.Client.ApplicationServices.FormsAuthentication";
 
         // TODO: Enable when WebContextGenerator.cs supports Windows Authentication.  
         ///// <summary>
-        ///// The 'OpenRiaServices.DomainServices.Client.ApplicationServices.WindowsAuthentication' type name.
+        ///// The 'OpenRiaServices.Client.ApplicationServices.WindowsAuthentication' type name.
         ///// </summary>
         ///// <remarks>
         ///// Used during code generation.
         ///// </remarks>
-        //public const string WindowsAuthenticationName = "OpenRiaServices.DomainServices.Client.ApplicationServices.WindowsAuthentication";
+        //public const string WindowsAuthenticationName = "OpenRiaServices.Client.ApplicationServices.WindowsAuthentication";
     }
 }

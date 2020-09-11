@@ -7,18 +7,18 @@ using System.Data.Linq;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.EntityFramework;
+using OpenRiaServices.Hosting;
 using System.Xml.Linq;
 using Cities;
-using OpenRiaServices.DomainServices.LinqToSql;
+using OpenRiaServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

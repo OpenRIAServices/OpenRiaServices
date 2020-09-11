@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Web.Hosting;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal sealed class DomainServiceVirtualFile : VirtualFile
     {

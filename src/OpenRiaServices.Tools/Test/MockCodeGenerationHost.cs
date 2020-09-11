@@ -10,13 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Tools.SourceLocation;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices;
+using OpenRiaServices.Tools.SourceLocation;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     internal class MockCodeGenerationHost : ICodeGenerationHost
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Client.Data
+namespace OpenRiaServices.Client.Data
 {
     /// <summary>
     /// Default DomainClientFactory which tries to create Domain clients using WebDomainClient.
     /// This class is only intended as a fallback to the old approach of creating domain clients, 
-    /// in case the user references an old "OpenRiaServices.DomainServices.Client.Web" without a DomainClientFactory implementation.
+    /// in case the user references an old "OpenRiaServices.Client.Web" without a DomainClientFactory implementation.
     /// </summary>
     sealed class DefaultDomainClientFactory : DomainClientFactory
     {
@@ -17,8 +17,8 @@ namespace OpenRiaServices.DomainServices.Client.Data
         public DefaultDomainClientFactory()
         {
             // Look for the WebDomainClient in an assembly with the same version and with same signing key as this assembly
-            var webDomainClientName = "OpenRiaServices.DomainServices.Client.WebDomainClient`1, "
-                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+            var webDomainClientName = "OpenRiaServices.Client.WebDomainClient`1, "
+                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.Client", "OpenRiaServices.Client.Web");
             _webDomainClientType = Type.GetType(webDomainClientName);
         }
 

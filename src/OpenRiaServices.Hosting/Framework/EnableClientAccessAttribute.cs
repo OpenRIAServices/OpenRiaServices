@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
-    /// Attribute used to mark a <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> as 
+    /// Attribute used to mark a <see cref="OpenRiaServices.Server.DomainService"/> as 
     /// accessible to clients.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
@@ -21,7 +21,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="OpenRiaServices.DomainServices.Server.DomainService"/>
+        /// Gets or sets a value indicating whether the <see cref="OpenRiaServices.Server.DomainService"/>
         /// may only be accessed using a secure endpoint.
         /// </summary>
         public bool RequiresSecureEndpoint { get; set; }

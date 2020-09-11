@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-public class Mock_CG_Attr_Entity_Missing_Namespace_DomainService : OpenRiaServices.DomainServices.Tools.Test.GenericDomainService<Mock_CG_Attr_Entity_Missing_Namespace> { }
+public class Mock_CG_Attr_Entity_Missing_Namespace_DomainService : OpenRiaServices.Tools.Test.GenericDomainService<Mock_CG_Attr_Entity_Missing_Namespace> { }
 
 public partial class Mock_CG_Attr_Entity_Missing_Namespace
 {
@@ -11,7 +11,7 @@ public partial class Mock_CG_Attr_Entity_Missing_Namespace
     public string StringProperty { get; set; }
 }
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Summary description for domain service code gen

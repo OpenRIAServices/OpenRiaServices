@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Client.Test.Utilities
+namespace OpenRiaServices.Client.Test.Utilities
 {
     internal static class TaskHelper
     {

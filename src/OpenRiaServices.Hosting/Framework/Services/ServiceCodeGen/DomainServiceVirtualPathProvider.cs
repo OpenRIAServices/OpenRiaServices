@@ -6,13 +6,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Compilation;
 using System.Web.Hosting;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Takes care of generating a service file when a physical one doesn't exist.

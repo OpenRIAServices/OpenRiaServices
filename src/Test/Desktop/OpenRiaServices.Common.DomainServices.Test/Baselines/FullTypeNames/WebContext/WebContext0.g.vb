@@ -23,7 +23,7 @@ Option Explicit On
 ''' for consumption from code and xaml.
 ''' </remarks>
 Partial Public NotInheritable Class WebContext
-    Inherits Global.OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase
+    Inherits Global.OpenRiaServices.Client.ApplicationServices.WebContextBase
     
     #Region "Extensibility Method Definitions"
 
@@ -54,7 +54,7 @@ Partial Public NotInheritable Class WebContext
     ''' <seealso cref="System.Windows.Application.ApplicationLifetimeObjects"/>
     Public Shadows Shared ReadOnly Property Current() As Global.RootNamespace.WebContext
         Get
-            Return CType(Global.OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Current,Global.RootNamespace.WebContext)
+            Return CType(Global.OpenRiaServices.Client.ApplicationServices.WebContextBase.Current,Global.RootNamespace.WebContext)
         End Get
     End Property
 End Class

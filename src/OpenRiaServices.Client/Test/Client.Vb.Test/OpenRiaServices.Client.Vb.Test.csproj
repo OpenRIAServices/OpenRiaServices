@@ -4,7 +4,7 @@
     <TargetFramework>net472</TargetFramework>
     <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
     <NoWarn>108</NoWarn>
-    <RootNamespace>OpenRiaServices.DomainServices.Client.Test</RootNamespace>
+    <RootNamespace>OpenRiaServices.Client.Test</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
@@ -67,11 +67,11 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj">
+    <ProjectReference Include="..\..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\Framework\OpenRiaServices.DomainServices.Client.csproj">
+    <ProjectReference Include="..\..\Framework\OpenRiaServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbDomainClients\VbDomainClients.vbproj" />

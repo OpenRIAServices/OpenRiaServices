@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDomainServices.TypeNameConflictResolution;
 using TestDomainServices.TypeNameConflictResolution.ExternalConflicts;
 
-using ServerResource = OpenRiaServices.DomainServices.Server.Resource;
+using ServerResource = OpenRiaServices.Server.Resource;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Summary description for domain service code gen

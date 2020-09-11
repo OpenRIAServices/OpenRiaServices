@@ -16,7 +16,7 @@ namespace DbContextModels.Northwind
     /// The 'Category' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Category : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Category : global::OpenRiaServices.Client.Entity
     {
         
         private int _categoryID;
@@ -27,7 +27,7 @@ namespace DbContextModels.Northwind
         
         private byte[] _picture;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> _products;
+        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> _products;
         
         #region Extensibility Method Definitions
 
@@ -161,13 +161,13 @@ namespace DbContextModels.Northwind
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Category_Product", "CategoryID", "CategoryID")]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> Products
+        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> Products
         {
             get
             {
                 if ((this._products == null))
                 {
-                    this._products = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Product>(this, "Products", this.FilterProducts, this.AttachProducts, this.DetachProducts);
+                    this._products = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product>(this, "Products", this.FilterProducts, this.AttachProducts, this.DetachProducts);
                 }
                 return this._products;
             }
@@ -202,7 +202,7 @@ namespace DbContextModels.Northwind
     /// The 'Customer' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Customer : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Customer : global::OpenRiaServices.Client.Entity
     {
         
         private string _address;
@@ -221,7 +221,7 @@ namespace DbContextModels.Northwind
         
         private string _fax;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> _orders;
+        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> _orders;
         
         private string _phone;
         
@@ -493,13 +493,13 @@ namespace DbContextModels.Northwind
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Customer_Order", "CustomerID", "CustomerID")]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> Orders
+        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> Orders
         {
             get
             {
                 if ((this._orders == null))
                 {
-                    this._orders = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order>(this, "Orders", this.FilterOrders, this.AttachOrders, this.DetachOrders);
+                    this._orders = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order>(this, "Orders", this.FilterOrders, this.AttachOrders, this.DetachOrders);
                 }
                 return this._orders;
             }
@@ -615,10 +615,10 @@ namespace DbContextModels.Northwind
     /// The 'Order' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Order : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Order : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Customer> _customer;
+        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Customer> _customer;
         
         private string _customerID;
         
@@ -628,7 +628,7 @@ namespace DbContextModels.Northwind
         
         private global::System.Nullable<decimal> _freight;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> _order_Details;
+        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> _order_Details;
         
         private global::System.Nullable<global::System.DateTime> _orderDate;
         
@@ -711,7 +711,7 @@ namespace DbContextModels.Northwind
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Customer>(this, "Customer", this.FilterCustomer);
                 }
                 return this._customer.Entity;
             }
@@ -852,13 +852,13 @@ namespace DbContextModels.Northwind
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
+        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
         {
             get
             {
                 if ((this._order_Details == null))
                 {
-                    this._order_Details = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
+                    this._order_Details = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
                 }
                 return this._order_Details;
             }
@@ -1191,16 +1191,16 @@ namespace DbContextModels.Northwind
     /// The 'Order_Detail' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Order_Detail : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Order_Detail : global::OpenRiaServices.Client.Entity
     {
         
         private float _discount;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Order> _order;
+        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Order> _order;
         
         private int _orderID;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Product> _product;
+        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Product> _product;
         
         private int _productID;
         
@@ -1273,7 +1273,7 @@ namespace DbContextModels.Northwind
             {
                 if ((this._order == null))
                 {
-                    this._order = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Order>(this, "Order", this.FilterOrder);
+                    this._order = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Order>(this, "Order", this.FilterOrder);
                 }
                 return this._order.Entity;
             }
@@ -1343,7 +1343,7 @@ namespace DbContextModels.Northwind
             {
                 if ((this._product == null))
                 {
-                    this._product = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Product>(this, "Product", this.FilterProduct);
+                    this._product = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Product>(this, "Product", this.FilterProduct);
                 }
                 return this._product.Entity;
             }
@@ -1471,7 +1471,7 @@ namespace DbContextModels.Northwind
         /// <returns>An object instance that uniquely identifies this entity instance.</returns>
         public override object GetIdentity()
         {
-            return global::OpenRiaServices.DomainServices.Client.EntityKey.Create(this._orderID, this._productID);
+            return global::OpenRiaServices.Client.EntityKey.Create(this._orderID, this._productID);
         }
     }
     
@@ -1479,10 +1479,10 @@ namespace DbContextModels.Northwind
     /// The 'Product' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Product : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Product : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Category> _category;
+        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Category> _category;
         
         private global::System.Nullable<int> _categoryID;
         
@@ -1490,7 +1490,7 @@ namespace DbContextModels.Northwind
         
         private bool _discontinued;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> _order_Details;
+        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> _order_Details;
         
         private int _productID;
         
@@ -1569,7 +1569,7 @@ namespace DbContextModels.Northwind
             {
                 if ((this._category == null))
                 {
-                    this._category = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Category>(this, "Category", this.FilterCategory);
+                    this._category = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Category>(this, "Category", this.FilterCategory);
                 }
                 return this._category.Entity;
             }
@@ -1683,13 +1683,13 @@ namespace DbContextModels.Northwind
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
+        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
         {
             get
             {
                 if ((this._order_Details == null))
                 {
-                    this._order_Details = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
+                    this._order_Details = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
                 }
                 return this._order_Details;
             }
@@ -2010,7 +2010,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Invokes the 'DiscontinueProduct' action on this entity.
         /// </summary>
-        [global::OpenRiaServices.DomainServices.Client.EntityAction("DiscontinueProduct", AllowMultipleInvocations=false)]
+        [global::OpenRiaServices.Client.EntityAction("DiscontinueProduct", AllowMultipleInvocations=false)]
         public void DiscontinueProduct()
         {
             this.OnDiscontinueProductInvoking();
@@ -2023,7 +2023,7 @@ namespace DbContextModels.Northwind
     /// The 'ProductInfo' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class ProductInfo : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class ProductInfo : global::OpenRiaServices.Client.Entity
     {
         
         private string _categoryName;
@@ -2173,14 +2173,14 @@ namespace DbContextModels.Northwind
     /// The 'Region' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Region : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Region : global::OpenRiaServices.Client.Entity
     {
         
         private string _regionDescription;
         
         private int _regionID;
         
-        private global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> _territories;
+        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> _territories;
         
         #region Extensibility Method Definitions
 
@@ -2262,13 +2262,13 @@ namespace DbContextModels.Northwind
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Region_Territory", "RegionID", "RegionID")]
         [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
-        public global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> Territories
+        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> Territories
         {
             get
             {
                 if ((this._territories == null))
                 {
-                    this._territories = new global::OpenRiaServices.DomainServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory>(this, "Territories", this.FilterTerritories, this.AttachTerritories, this.DetachTerritories);
+                    this._territories = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory>(this, "Territories", this.FilterTerritories, this.AttachTerritories, this.DetachTerritories);
                 }
                 return this._territories;
             }
@@ -2303,10 +2303,10 @@ namespace DbContextModels.Northwind
     /// The 'Territory' entity class.
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
-    public sealed partial class Territory : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Territory : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Region> _region;
+        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Region> _region;
         
         private int _regionID;
         
@@ -2349,7 +2349,7 @@ namespace DbContextModels.Northwind
             {
                 if ((this._region == null))
                 {
-                    this._region = new global::OpenRiaServices.DomainServices.Client.EntityRef<global::DbContextModels.Northwind.Region>(this, "Region", this.FilterRegion);
+                    this._region = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Region>(this, "Region", this.FilterRegion);
                 }
                 return this._region.Entity;
             }
@@ -2483,7 +2483,7 @@ namespace TestDomainServices.DbCtx
     /// <summary>
     /// The DomainContext corresponding to the 'Northwind' DomainService.
     /// </summary>
-    public sealed partial class Northwind : global::OpenRiaServices.DomainServices.Client.DomainContext
+    public sealed partial class Northwind : global::OpenRiaServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -2510,7 +2510,7 @@ namespace TestDomainServices.DbCtx
         /// </summary>
         /// <param name="serviceUri">The Northwind service URI.</param>
         public Northwind(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.DbCtx.Northwind.INorthwindContract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.DbCtx.Northwind.INorthwindContract), serviceUri, false))
         {
         }
         
@@ -2518,7 +2518,7 @@ namespace TestDomainServices.DbCtx
         /// Initializes a new instance of the <see cref="Northwind"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public Northwind(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public Northwind(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -2527,7 +2527,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="Category"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.Category> Categories
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Category> Categories
         {
             get
             {
@@ -2538,7 +2538,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="Customer"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.Customer> Customers
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Customer> Customers
         {
             get
             {
@@ -2549,7 +2549,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="Order_Detail"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.Order_Detail> Order_Details
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Order_Detail> Order_Details
         {
             get
             {
@@ -2560,7 +2560,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="Order"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.Order> Orders
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Order> Orders
         {
             get
             {
@@ -2571,7 +2571,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="Product"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.Product> Products
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Product> Products
         {
             get
             {
@@ -2582,7 +2582,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="ProductInfo"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.ProductInfo> ProductInfos
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.ProductInfo> ProductInfos
         {
             get
             {
@@ -2593,7 +2593,7 @@ namespace TestDomainServices.DbCtx
         /// <summary>
         /// Gets the set of <see cref="Region"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::DbContextModels.Northwind.Region> Regions
+        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Region> Regions
         {
             get
             {
@@ -2605,7 +2605,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="Category"/> entity instances using the 'GetCategories' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Category"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Category> GetCategoriesQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Category> GetCategoriesQuery()
         {
             this.ValidateMethod("GetCategoriesQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.Category>("GetCategories", null, false, true);
@@ -2615,7 +2615,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="Customer"/> entity instances using the 'GetCustomers' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Customer"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Customer> GetCustomersQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Customer> GetCustomersQuery()
         {
             this.ValidateMethod("GetCustomersQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.Customer>("GetCustomers", null, false, true);
@@ -2625,7 +2625,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="Order_Detail"/> entity instances using the 'GetOrderDetails' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Order_Detail"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Order_Detail> GetOrderDetailsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Order_Detail> GetOrderDetailsQuery()
         {
             this.ValidateMethod("GetOrderDetailsQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.Order_Detail>("GetOrderDetails", null, false, true);
@@ -2635,7 +2635,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="Order"/> entity instances using the 'GetOrders' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Order"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Order> GetOrdersQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Order> GetOrdersQuery()
         {
             this.ValidateMethod("GetOrdersQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.Order>("GetOrders", null, false, true);
@@ -2646,7 +2646,7 @@ namespace TestDomainServices.DbCtx
         /// </summary>
         /// <param name="id">The value for the 'id' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Product"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Product> GetProductByIdQuery(int id)
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Product> GetProductByIdQuery(int id)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("id", id);
@@ -2658,7 +2658,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="ProductInfo"/> entity instances using the 'GetProductInfos' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="ProductInfo"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.ProductInfo> GetProductInfosQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.ProductInfo> GetProductInfosQuery()
         {
             this.ValidateMethod("GetProductInfosQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.ProductInfo>("GetProductInfos", null, false, true);
@@ -2668,7 +2668,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="Product"/> entity instances using the 'GetProducts' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Product"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Product> GetProductsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Product> GetProductsQuery()
         {
             this.ValidateMethod("GetProductsQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.Product>("GetProducts", null, false, true);
@@ -2679,7 +2679,7 @@ namespace TestDomainServices.DbCtx
         /// </summary>
         /// <param name="id">The value for the 'id' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Region"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Region> GetRegionByIdQuery(int id)
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Region> GetRegionByIdQuery(int id)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("id", id);
@@ -2691,7 +2691,7 @@ namespace TestDomainServices.DbCtx
         /// Gets an EntityQuery instance that can be used to load <see cref="Region"/> entity instances using the 'GetRegions' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Region"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::DbContextModels.Northwind.Region> GetRegionsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Region> GetRegionsQuery()
         {
             this.ValidateMethod("GetRegionsQuery", null);
             return base.CreateQuery<global::DbContextModels.Northwind.Region>("GetRegions", null, false, true);
@@ -2710,7 +2710,7 @@ namespace TestDomainServices.DbCtx
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.DbCtx.Northwind.NorthwindEntityContainer();
         }
@@ -2728,7 +2728,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
             
@@ -2737,7 +2737,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCategories'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCategories' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Category> EndGetCategories(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Category> EndGetCategories(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCustomers' operation.
@@ -2745,7 +2745,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
             
@@ -2754,7 +2754,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Customer> EndGetCustomers(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Customer> EndGetCustomers(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrderDetails' operation.
@@ -2762,7 +2762,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
             
@@ -2771,7 +2771,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetOrderDetails'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrderDetails' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Order_Detail> EndGetOrderDetails(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Order_Detail> EndGetOrderDetails(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrders' operation.
@@ -2779,7 +2779,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
             
@@ -2788,7 +2788,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetOrders'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrders' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Order> EndGetOrders(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Order> EndGetOrders(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductById' operation.
@@ -2797,7 +2797,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
             
@@ -2806,7 +2806,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetProductById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductById' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Product> EndGetProductById(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Product> EndGetProductById(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductInfos' operation.
@@ -2814,7 +2814,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
             
@@ -2823,7 +2823,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetProductInfos'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductInfos' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.ProductInfo> EndGetProductInfos(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.ProductInfo> EndGetProductInfos(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProducts' operation.
@@ -2831,7 +2831,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
             
@@ -2840,7 +2840,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetProducts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProducts' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Product> EndGetProducts(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Product> EndGetProducts(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegionById' operation.
@@ -2849,7 +2849,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
             
@@ -2858,7 +2858,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRegionById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegionById' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Region> EndGetRegionById(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Region> EndGetRegionById(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegions' operation.
@@ -2866,7 +2866,7 @@ namespace TestDomainServices.DbCtx
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
             
@@ -2875,7 +2875,7 @@ namespace TestDomainServices.DbCtx
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRegions'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegions' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::DbContextModels.Northwind.Region> EndGetRegions(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Region> EndGetRegions(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -2885,29 +2885,29 @@ namespace TestDomainServices.DbCtx
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
+            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
             /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.DomainServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
         }
         
-        internal sealed class NorthwindEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class NorthwindEntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public NorthwindEntityContainer()
             {
-                this.CreateEntitySet<global::DbContextModels.Northwind.Category>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Customer>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Order>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Order_Detail>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Product>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.ProductInfo>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Region>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Territory>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Category>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Customer>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Order>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Order_Detail>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Product>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.ProductInfo>(global::OpenRiaServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Region>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::DbContextModels.Northwind.Territory>(global::OpenRiaServices.Client.EntitySetOperations.All);
             }
         }
     }

@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Web.Profile;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
+namespace OpenRiaServices.Server.Authentication.AspNetMembership.Test
 {
     public class MockProfileProvider : ProfileProvider
     {

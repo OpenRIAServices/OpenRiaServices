@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Resx = OpenRiaServices.DomainServices.Hosting.EndpointResource;
+using Resx = OpenRiaServices.Hosting.EndpointResource;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// An implementation of <see cref="System.Diagnostics.TraceListener"/> that collects WCF traces in memory. The class is intended to be used in 

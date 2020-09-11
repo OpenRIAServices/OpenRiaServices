@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices
+namespace OpenRiaServices
 {
     /// <summary>
     /// Attribute used to indicate that an association references entities belonging to an external

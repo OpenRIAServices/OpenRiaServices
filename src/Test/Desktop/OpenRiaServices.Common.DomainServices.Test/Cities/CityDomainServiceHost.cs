@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Hosting;
 
 namespace Cities
 {

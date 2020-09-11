@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Silverlight.Testing
 {

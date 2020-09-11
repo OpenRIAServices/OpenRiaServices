@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      OpenRiaServices.Server provides the OpenRiaServices.DomainServices.Hosting and OpenRiaServices.DomainServices.Server assemblies.
+      OpenRiaServices.Server provides the OpenRiaServices.Hosting and OpenRiaServices.Server assemblies.
 
       The web.config.transform adds the necessary configSections, HTTP modules, and system.serviceModel elements to make your Domain Services available at runtime.
 
@@ -34,12 +34,12 @@
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Tools.dll" target="build\OpenRiaServices.DomainServices.Tools.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.dll" target="lib\net472\OpenRiaServices.DomainServices.Hosting.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.pdb" target="lib\net472\OpenRiaServices.DomainServices.Hosting.pdb" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Hosting.xml" target="lib\net472\OpenRiaServices.DomainServices.Hosting.xml" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.dll" target="lib\net472\OpenRiaServices.DomainServices.Server.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.pdb" target="lib\net472\OpenRiaServices.DomainServices.Server.pdb" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.DomainServices.Server.xml" target="lib\net472\OpenRiaServices.DomainServices.Server.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Tools.dll" target="build\OpenRiaServices.Tools.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.dll" target="lib\net472\OpenRiaServices.Hosting.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.pdb" target="lib\net472\OpenRiaServices.Hosting.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.xml" target="lib\net472\OpenRiaServices.Hosting.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.dll" target="lib\net472\OpenRiaServices.Server.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.pdb" target="lib\net472\OpenRiaServices.Server.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.xml" target="lib\net472\OpenRiaServices.Server.xml" />
     </files>
 </package>

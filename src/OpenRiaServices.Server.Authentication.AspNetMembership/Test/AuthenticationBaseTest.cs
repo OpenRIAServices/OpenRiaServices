@@ -3,13 +3,13 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Server.Test;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.Server.Test;
 using System.Web.Profile;
 using System.Web.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test
+namespace OpenRiaServices.Server.Authentication.AspNetMembership.Test
 {
     /// <summary>
     /// Summary description for AuthenticationBaseTest

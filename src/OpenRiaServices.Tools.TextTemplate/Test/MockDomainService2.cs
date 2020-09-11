@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 using System.ComponentModel.DataAnnotations;
 
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.Test
+namespace OpenRiaServices.Tools.TextTemplate.Test
 {
     [EnableClientAccess]
     public class TestDomainService1 : DomainService

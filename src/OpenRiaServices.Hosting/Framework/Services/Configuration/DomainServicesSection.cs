@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 using System.Web.Configuration;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Configures the <see cref="DomainService"/>s in this application.

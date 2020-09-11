@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using OpenRiaServices.DomainServices;
+using OpenRiaServices;
 using System.Text;
 
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate
+namespace OpenRiaServices.Tools.TextTemplate
 {
     internal static class CodeGenUtilities
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Summary description for domain service code gen
@@ -33,7 +33,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 " // " + Resource.ClientCodeGen_Attribute_FailedToGenerate +
                 " // " + 
                 " // - " + string.Format(Resource.ClientCodeGen_ValidationAttribute_ResourcePropertyNotFound, typeof(StringLengthAttribute), "InvalidPropertyName", typeof(Mock_CG_Attr_Entity_StringLength_ResourceType)) +
-                " // [StringLengthAttribute(10, ErrorMessageResourceName = \"InvalidPropertyName\", ErrorMessageResourceType = typeof(OpenRiaServices.DomainServices.Tools.Test.Mock_CG_Attr_Entity_StringLength_ResourceType))]" +
+                " // [StringLengthAttribute(10, ErrorMessageResourceName = \"InvalidPropertyName\", ErrorMessageResourceType = typeof(OpenRiaServices.Tools.Test.Mock_CG_Attr_Entity_StringLength_ResourceType))]" +
                 " // [DataMember()] public string StringProperty");
         }
 
@@ -62,7 +62,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 " // " + Resource.ClientCodeGen_Attribute_FailedToGenerate +
                 " // " +
                 " // - " + string.Format(Resource.ClientCodeGen_ValidationAttribute_Requires_ResourceType_And_Name, typeof(StringLengthAttribute), "Mock_CG_Attr_Entity_StringLength_ResourceType", "<unspecified>") +
-                " // [StringLengthAttribute(10, ErrorMessageResourceType = typeof(OpenRiaServices.DomainServices.Tools.Test.Mock_CG_Attr_Entity_StringLength_ResourceType))]" +
+                " // [StringLengthAttribute(10, ErrorMessageResourceType = typeof(OpenRiaServices.Tools.Test.Mock_CG_Attr_Entity_StringLength_ResourceType))]" +
                 " // ");
         }
 

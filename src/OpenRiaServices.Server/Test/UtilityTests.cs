@@ -9,10 +9,10 @@ using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.Descri
 using TestDomainServices;
 using Address = TestDomainServices.Address;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
-    using BinaryTypeUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.DomainServices.BinaryTypeUtility;
-    using SerializationUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.DomainServices.SerializationUtility;
+    using BinaryTypeUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.BinaryTypeUtility;
+    using SerializationUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.SerializationUtility;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>

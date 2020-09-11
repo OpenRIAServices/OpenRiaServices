@@ -1,14 +1,14 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.DomainContextGenerator" linePragmas="false" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.DomainContextGenerator" linePragmas="false" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>
 <#@ import namespace="System.Globalization" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Hosting" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server.ApplicationServices" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Tools.TextTemplate" #>
+<#@ import namespace="OpenRiaServices.Server" #>
+<#@ import namespace="OpenRiaServices.Hosting" #>
+<#@ import namespace="OpenRiaServices.Server.ApplicationServices" #>
+<#@ import namespace="OpenRiaServices.Tools.TextTemplate" #>
 <#@ include file="Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude" #>
 <#@ include file="Templates\InvokeOperationProxyGeneratorTemplate.ttinclude" #>
 <#@ include file="Templates\ContractInterfaceTemplate.ttinclude" #>
@@ -28,8 +28,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Client;
-using OpenRiaServices.DomainServices.Client.ApplicationServices;
+using OpenRiaServices.Client;
+using OpenRiaServices.Client.ApplicationServices;
 <#+
 	}
 
@@ -38,10 +38,10 @@ using OpenRiaServices.DomainServices.Client.ApplicationServices;
     /// </summary>
 	protected virtual void GenerateClassDeclaration()
 	{	
-		string baseType = "OpenRiaServices.DomainServices.Client.DomainContext";
+		string baseType = "OpenRiaServices.Client.DomainContext";
 		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
 		{
-			baseType = @"global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+			baseType = @"global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase";
 		}
 		 
 #>
@@ -63,7 +63,7 @@ public <#= this.DomainContextTypeName #>() :
 }
 		
 public <#= this.DomainContextTypeName #>(Uri serviceUri) : 
-	this(OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
+	this(OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
 {
 	
 }

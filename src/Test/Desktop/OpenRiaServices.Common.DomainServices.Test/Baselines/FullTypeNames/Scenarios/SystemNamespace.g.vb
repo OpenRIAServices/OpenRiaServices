@@ -20,7 +20,7 @@ Namespace System
     ''' The DomainContext corresponding to the 'SystemDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class SystemDomainContext
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -46,14 +46,14 @@ Namespace System
         ''' </summary>
         ''' <param name="serviceUri">The SystemDomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.System.SystemDomainContext.ISystemDomainServiceContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.System.SystemDomainContext.ISystemDomainServiceContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="SystemDomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -61,7 +61,7 @@ Namespace System
         ''' <summary>
         ''' Gets the set of <see cref="SystemEntity"/> entity instances that have been loaded into this <see cref="SystemDomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property SystemEntities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.System.SystemEntity)
+        Public ReadOnly Property SystemEntities() As Global.OpenRiaServices.Client.EntitySet(Of Global.System.SystemEntity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.System.SystemEntity)
             End Get
@@ -71,7 +71,7 @@ Namespace System
         ''' Gets an EntityQuery instance that can be used to load <see cref="SystemEntity"/> entity instances using the 'GetSystemEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="SystemEntity"/> entity instances.</returns>
-        Public Function GetSystemEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.System.SystemEntity)
+        Public Function GetSystemEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.System.SystemEntity)
             Me.ValidateMethod("GetSystemEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.System.SystemEntity)("GetSystemEntities", Nothing, false, true)
         End Function
@@ -80,7 +80,7 @@ Namespace System
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.System.SystemDomainContext.SystemDomainContextEntityContainer()
         End Function
         
@@ -96,7 +96,7 @@ Namespace System
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/SystemDomainService/GetSystemEntities", ReplyAction:="http://tempuri.org/SystemDomainService/GetSystemEntitiesResponse")>  _
             Function BeginGetSystemEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -105,15 +105,15 @@ Namespace System
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetSystemEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetSystemEntities' operation.</returns>
-            Function EndGetSystemEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.System.SystemEntity)
+            Function EndGetSystemEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.System.SystemEntity)
         End Interface
         
         Friend NotInheritable Class SystemDomainContextEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.System.SystemEntity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.System.SystemEntity)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -124,7 +124,7 @@ Namespace System
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/System"),  _
      Global.System.SystemNamespaceAttribute()>  _
     Partial Public NotInheritable Class SystemEntity
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -285,7 +285,7 @@ Namespace System.Subsystem
     ''' The DomainContext corresponding to the 'SubsystemDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class SubsystemDomainContext
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -311,14 +311,14 @@ Namespace System.Subsystem
         ''' </summary>
         ''' <param name="serviceUri">The SubsystemDomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.System.Subsystem.SubsystemDomainContext.ISubsystemDomainServiceContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.System.Subsystem.SubsystemDomainContext.ISubsystemDomainServiceContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="SubsystemDomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -326,7 +326,7 @@ Namespace System.Subsystem
         ''' <summary>
         ''' Gets the set of <see cref="SubsystemEntity"/> entity instances that have been loaded into this <see cref="SubsystemDomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property SubsystemEntities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.System.Subsystem.SubsystemEntity)
+        Public ReadOnly Property SubsystemEntities() As Global.OpenRiaServices.Client.EntitySet(Of Global.System.Subsystem.SubsystemEntity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.System.Subsystem.SubsystemEntity)
             End Get
@@ -336,7 +336,7 @@ Namespace System.Subsystem
         ''' Gets an EntityQuery instance that can be used to load <see cref="SubsystemEntity"/> entity instances using the 'GetSubsystemEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="SubsystemEntity"/> entity instances.</returns>
-        Public Function GetSubsystemEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.System.Subsystem.SubsystemEntity)
+        Public Function GetSubsystemEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.System.Subsystem.SubsystemEntity)
             Me.ValidateMethod("GetSubsystemEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.System.Subsystem.SubsystemEntity)("GetSubsystemEntities", Nothing, false, true)
         End Function
@@ -345,7 +345,7 @@ Namespace System.Subsystem
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.System.Subsystem.SubsystemDomainContext.SubsystemDomainContextEntityContainer()
         End Function
         
@@ -361,7 +361,7 @@ Namespace System.Subsystem
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/SubsystemDomainService/GetSubsystemEntities", ReplyAction:="http://tempuri.org/SubsystemDomainService/GetSubsystemEntitiesResponse")>  _
             Function BeginGetSubsystemEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -370,15 +370,15 @@ Namespace System.Subsystem
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetSubsystemEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetSubsystemEntities' operation.</returns>
-            Function EndGetSubsystemEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.System.Subsystem.SubsystemEntity)
+            Function EndGetSubsystemEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.System.Subsystem.SubsystemEntity)
         End Interface
         
         Friend NotInheritable Class SubsystemDomainContextEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.System.Subsystem.SubsystemEntity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.System.Subsystem.SubsystemEntity)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -388,7 +388,7 @@ Namespace System.Subsystem
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/System.Subsystem")>  _
     Partial Public NotInheritable Class SubsystemEntity
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -549,7 +549,7 @@ Namespace SystemExtensions
     ''' The DomainContext corresponding to the 'SystemExtensionsDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class SystemExtensionsDomainContext
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -575,14 +575,14 @@ Namespace SystemExtensions
         ''' </summary>
         ''' <param name="serviceUri">The SystemExtensionsDomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.SystemExtensions.SystemExtensionsDomainContext.ISystemExtensionsDomainServiceContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.SystemExtensions.SystemExtensionsDomainContext.ISystemExtensionsDomainServiceContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="SystemExtensionsDomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -590,7 +590,7 @@ Namespace SystemExtensions
         ''' <summary>
         ''' Gets the set of <see cref="SystemExtensionsEntity"/> entity instances that have been loaded into this <see cref="SystemExtensionsDomainContext"/> instance.
         ''' </summary>
-        Public ReadOnly Property SystemExtensionsEntities() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.SystemExtensions.SystemExtensionsEntity)
+        Public ReadOnly Property SystemExtensionsEntities() As Global.OpenRiaServices.Client.EntitySet(Of Global.SystemExtensions.SystemExtensionsEntity)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.SystemExtensions.SystemExtensionsEntity)
             End Get
@@ -600,7 +600,7 @@ Namespace SystemExtensions
         ''' Gets an EntityQuery instance that can be used to load <see cref="SystemExtensionsEntity"/> entity instances using the 'GetSystemExtensionsEntities' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="SystemExtensionsEntity"/> entity instances.</returns>
-        Public Function GetSystemExtensionsEntitiesQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.SystemExtensions.SystemExtensionsEntity)
+        Public Function GetSystemExtensionsEntitiesQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.SystemExtensions.SystemExtensionsEntity)
             Me.ValidateMethod("GetSystemExtensionsEntitiesQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.SystemExtensions.SystemExtensionsEntity)("GetSystemExtensionsEntities", Nothing, false, true)
         End Function
@@ -609,7 +609,7 @@ Namespace SystemExtensions
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.SystemExtensions.SystemExtensionsDomainContext.SystemExtensionsDomainContextEntityContainer()
         End Function
         
@@ -625,7 +625,7 @@ Namespace SystemExtensions
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntities", ReplyAction:="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntitiesRespo"& _ 
                 "nse")>  _
             Function BeginGetSystemExtensionsEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
@@ -635,15 +635,15 @@ Namespace SystemExtensions
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetSystemExtensionsEntities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetSystemExtensionsEntities' operation.</returns>
-            Function EndGetSystemExtensionsEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.SystemExtensions.SystemExtensionsEntity)
+            Function EndGetSystemExtensionsEntities(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.SystemExtensions.SystemExtensionsEntity)
         End Interface
         
         Friend NotInheritable Class SystemExtensionsDomainContextEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.SystemExtensions.SystemExtensionsEntity)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.SystemExtensions.SystemExtensionsEntity)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -653,7 +653,7 @@ Namespace SystemExtensions
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/SystemExtensions")>  _
     Partial Public NotInheritable Class SystemExtensionsEntity
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         

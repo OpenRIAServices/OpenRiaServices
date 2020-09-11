@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication
+namespace OpenRiaServices.Server.Authentication
 {
     /// <summary>
     /// Attribute that marks a <see cref="DomainService"/> as an authentication service.

@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using OpenRiaServices.DomainServices.Tools.SourceLocation;
+using OpenRiaServices.Tools.SourceLocation;
 
-namespace OpenRiaServices.DomainServices.Tools.SharedTypes
+namespace OpenRiaServices.Tools.SharedTypes
 {
     /// <summary>
     /// Implementation of <see cref="ISharedCodeService"/> based on a set of

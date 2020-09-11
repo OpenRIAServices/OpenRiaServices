@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,10 +11,10 @@ using System.ComponentModel.DataAnnotations;
 using OpenRiaServices.Silverlight.Testing;
 using System.Collections;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
-    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
+    using Resources = SSmDsClient::OpenRiaServices.Client.Resources;
 
     #region Test Classes
     public class TestOperation : OperationBase
@@ -322,7 +322,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.DomainServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
 
                     throw;
                 }
@@ -337,7 +337,7 @@ namespace OpenRiaServices.DomainServices.Client.Test
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.DomainServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
 
                     throw;
                 }

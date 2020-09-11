@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using OpenRiaServices.DomainServices.Client;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client;
+using OpenRiaServices.Client.Test;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

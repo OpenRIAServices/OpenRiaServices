@@ -10,9 +10,9 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Client.Data;
+using OpenRiaServices.Client.Data;
 
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 {
     /// <summary>
     /// A <see cref="DomainContext"/> is a stateful client side representation of a DomainService, providing
@@ -1124,9 +1124,9 @@ namespace OpenRiaServices.DomainServices.Client
         {
             // 1; Check if any known DomainClientFactory can be found
 
-            // Check for DomainClient in OpenRiaServices.DomainServices.Client.Web assembly
-            var typeName = "OpenRiaServices.DomainServices.Client.WebDomainClientFactory, "
-                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client.Web");
+            // Check for DomainClient in OpenRiaServices.Client.Web assembly
+            var typeName = "OpenRiaServices.Client.WebDomainClientFactory, "
+                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.Client", "OpenRiaServices.Client.Web");
             var webDomainClientFactoryType = Type.GetType(typeName);
             if (webDomainClientFactoryType != null)
                 return (IDomainClientFactory)Activator.CreateInstance(webDomainClientFactoryType);

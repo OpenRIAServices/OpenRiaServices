@@ -20,7 +20,7 @@ Option Explicit On
 ''' </summary>
 <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest")>  _
 Partial Public NotInheritable Class VBRootNamespaceDomainObject
-    Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+    Inherits Global.OpenRiaServices.Client.Entity
     
     Private _key As Integer
     
@@ -84,7 +84,7 @@ End Class
 ''' The DomainContext corresponding to the 'VBRootNamespaceTestDomainService' DomainService.
 ''' </summary>
 Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
-    Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+    Inherits Global.OpenRiaServices.Client.DomainContext
     
     #Region "Extensibility Method Definitions"
 
@@ -110,14 +110,14 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
     ''' </summary>
     ''' <param name="serviceUri">The VBRootNamespaceTestDomainService service URI.</param>
     Public Sub New(ByVal serviceUri As Global.System.Uri)
-        Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.VBRootNamespaceTestDomainContext.IVBRootNamespaceTestDomainServiceContract), serviceUri, false))
+        Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.VBRootNamespaceTestDomainContext.IVBRootNamespaceTestDomainServiceContract), serviceUri, false))
     End Sub
     
     ''' <summary>
     ''' Initializes a new instance of the <see cref="VBRootNamespaceTestDomainContext"/> class with the specified <paramref name="domainClient"/>.
     ''' </summary>
     ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-    Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+    Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
         MyBase.New(domainClient)
         Me.OnCreated
     End Sub
@@ -125,7 +125,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
     ''' <summary>
     ''' Gets the set of <see cref="VBRootNamespaceDomainObject"/> entity instances that have been loaded into this <see cref="VBRootNamespaceTestDomainContext"/> instance.
     ''' </summary>
-    Public ReadOnly Property VBRootNamespaceDomainObjects() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
+    Public ReadOnly Property VBRootNamespaceDomainObjects() As Global.OpenRiaServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
         Get
             Return MyBase.EntityContainer.GetEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
         End Get
@@ -134,7 +134,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
     ''' <summary>
     ''' Gets the set of <see cref="VBRootNamespaceDomainObject4"/> entity instances that have been loaded into this <see cref="VBRootNamespaceTestDomainContext"/> instance.
     ''' </summary>
-    Public ReadOnly Property VBRootNamespaceDomainObject4s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
+    Public ReadOnly Property VBRootNamespaceDomainObject4s() As Global.OpenRiaServices.Client.EntitySet(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
         Get
             Return MyBase.EntityContainer.GetEntitySet(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
         End Get
@@ -144,7 +144,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
     ''' Gets an EntityQuery instance that can be used to load <see cref="VBRootNamespaceDomainObject"/> entity instances using the 'M' query.
     ''' </summary>
     ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="VBRootNamespaceDomainObject"/> entity instances.</returns>
-    Public Function MQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
+    Public Function MQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
         Me.ValidateMethod("MQuery", Nothing)
         Return MyBase.CreateQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)("M", Nothing, false, true)
     End Function
@@ -153,7 +153,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
     ''' Gets an EntityQuery instance that can be used to load <see cref="VBRootNamespaceDomainObject4"/> entity instances using the 'M4' query.
     ''' </summary>
     ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="VBRootNamespaceDomainObject4"/> entity instances.</returns>
-    Public Function M4Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
+    Public Function M4Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
         Me.ValidateMethod("M4Query", Nothing)
         Return MyBase.CreateQuery(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)("M4", Nothing, false, true)
     End Function
@@ -162,7 +162,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
     ''' Creates a new EntityContainer for this DomainContext's EntitySets.
     ''' </summary>
     ''' <returns>A new container instance.</returns>
-    Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+    Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
         Return New Global.VBRootNamespaceTest.VBRootNamespaceTestDomainContext.VBRootNamespaceTestDomainContextEntityContainer()
     End Function
     
@@ -178,7 +178,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
         ''' <param name="callback">Callback to invoke on completion.</param>
         ''' <param name="asyncState">Optional state object.</param>
         ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-        <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+        <Global.OpenRiaServices.Client.HasSideEffects(false),  _
          Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/VBRootNamespaceTestDomainService/M", ReplyAction:="http://tempuri.org/VBRootNamespaceTestDomainService/MResponse")>  _
         Function BeginM(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
         
@@ -187,7 +187,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
         ''' </summary>
         ''' <param name="result">The IAsyncResult returned from 'BeginM'.</param>
         ''' <returns>The 'QueryResult' returned from the 'M' operation.</returns>
-        Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
+        Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)
         
         ''' <summary>
         ''' Asynchronously invokes the 'M4' operation.
@@ -195,7 +195,7 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
         ''' <param name="callback">Callback to invoke on completion.</param>
         ''' <param name="asyncState">Optional state object.</param>
         ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-        <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+        <Global.OpenRiaServices.Client.HasSideEffects(false),  _
          Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/VBRootNamespaceTestDomainService/M4", ReplyAction:="http://tempuri.org/VBRootNamespaceTestDomainService/M4Response")>  _
         Function BeginM4(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
         
@@ -204,16 +204,16 @@ Partial Public NotInheritable Class VBRootNamespaceTestDomainContext
         ''' </summary>
         ''' <param name="result">The IAsyncResult returned from 'BeginM4'.</param>
         ''' <returns>The 'QueryResult' returned from the 'M4' operation.</returns>
-        Function EndM4(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
+        Function EndM4(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)
     End Interface
     
     Friend NotInheritable Class VBRootNamespaceTestDomainContextEntityContainer
-        Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Inherits Global.OpenRiaServices.Client.EntityContainer
         
         Public Sub New()
             MyBase.New
-            Me.CreateEntitySet(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-            Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+            Me.CreateEntitySet(Of Global.VBRootNamespaceTest.Other.VBRootNamespaceDomainObject4)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+            Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceDomainObject)(Global.OpenRiaServices.Client.EntitySetOperations.None)
         End Sub
     End Class
 End Class
@@ -225,7 +225,7 @@ Namespace Inner
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest.Inner")>  _
     Partial Public NotInheritable Class VBRootNamespaceDomainObjectInsideInner
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -289,7 +289,7 @@ Namespace Inner
     ''' The DomainContext corresponding to the 'VBRootNamespaceTestProviderInsideInner' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class VBRootNamespaceTestProviderInsideInner
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -315,14 +315,14 @@ Namespace Inner
         ''' </summary>
         ''' <param name="serviceUri">The VBRootNamespaceTestProviderInsideInner service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner.IVBRootNamespaceTestProviderInsideInnerContract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner.IVBRootNamespaceTestProviderInsideInnerContract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="VBRootNamespaceTestProviderInsideInner"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -330,7 +330,7 @@ Namespace Inner
         ''' <summary>
         ''' Gets the set of <see cref="VBRootNamespaceDomainObjectInsideInner"/> entity instances that have been loaded into this <see cref="VBRootNamespaceTestProviderInsideInner"/> instance.
         ''' </summary>
-        Public ReadOnly Property VBRootNamespaceDomainObjectInsideInners() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
+        Public ReadOnly Property VBRootNamespaceDomainObjectInsideInners() As Global.OpenRiaServices.Client.EntitySet(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
             End Get
@@ -339,7 +339,7 @@ Namespace Inner
         ''' <summary>
         ''' Gets the set of <see cref="VBRootNamespaceDomainObject3"/> entity instances that have been loaded into this <see cref="VBRootNamespaceTestProviderInsideInner"/> instance.
         ''' </summary>
-        Public ReadOnly Property VBRootNamespaceDomainObject3s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
+        Public ReadOnly Property VBRootNamespaceDomainObject3s() As Global.OpenRiaServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
             End Get
@@ -349,7 +349,7 @@ Namespace Inner
         ''' Gets an EntityQuery instance that can be used to load <see cref="VBRootNamespaceDomainObjectInsideInner"/> entity instances using the 'M' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="VBRootNamespaceDomainObjectInsideInner"/> entity instances.</returns>
-        Public Function MQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
+        Public Function MQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
             Me.ValidateMethod("MQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)("M", Nothing, false, true)
         End Function
@@ -358,7 +358,7 @@ Namespace Inner
         ''' Gets an EntityQuery instance that can be used to load <see cref="VBRootNamespaceDomainObject3"/> entity instances using the 'M1' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="VBRootNamespaceDomainObject3"/> entity instances.</returns>
-        Public Function M1Query() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
+        Public Function M1Query() As Global.OpenRiaServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
             Me.ValidateMethod("M1Query", Nothing)
             Return MyBase.CreateQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)("M1", Nothing, false, true)
         End Function
@@ -367,7 +367,7 @@ Namespace Inner
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner.VBRootNamespaceTestProviderInsideInnerEntityContainer()
         End Function
         
@@ -383,7 +383,7 @@ Namespace Inner
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/VBRootNamespaceTestProviderInsideInner/M", ReplyAction:="http://tempuri.org/VBRootNamespaceTestProviderInsideInner/MResponse")>  _
             Function BeginM(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -392,7 +392,7 @@ Namespace Inner
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginM'.</param>
             ''' <returns>The 'QueryResult' returned from the 'M' operation.</returns>
-            Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
+            Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)
             
             ''' <summary>
             ''' Asynchronously invokes the 'M1' operation.
@@ -400,7 +400,7 @@ Namespace Inner
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/VBRootNamespaceTestProviderInsideInner/M1", ReplyAction:="http://tempuri.org/VBRootNamespaceTestProviderInsideInner/M1Response")>  _
             Function BeginM1(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -409,16 +409,16 @@ Namespace Inner
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginM1'.</param>
             ''' <returns>The 'QueryResult' returned from the 'M1' operation.</returns>
-            Function EndM1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
+            Function EndM1(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)
         End Interface
         
         Friend NotInheritable Class VBRootNamespaceTestProviderInsideInnerEntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
-                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.Inner.VBRootNamespaceDomainObjectInsideInner)(Global.OpenRiaServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceDomainObject3)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -431,7 +431,7 @@ Namespace Other
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest.Other")>  _
     Partial Public NotInheritable Class VBRootNamespaceDomainObject4
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -499,7 +499,7 @@ Namespace VBRootNamespaceTest2
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest2")>  _
     Partial Public NotInheritable Class VBRootNamespaceDomainObject2
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -563,7 +563,7 @@ Namespace VBRootNamespaceTest2
     ''' The DomainContext corresponding to the 'VBRootNamespaceTestDomainService2' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class VBRootNamespaceTestDomainService2
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -589,14 +589,14 @@ Namespace VBRootNamespaceTest2
         ''' </summary>
         ''' <param name="serviceUri">The VBRootNamespaceTestDomainService2 service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceTestDomainService2.IVBRootNamespaceTestDomainService2Contract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceTestDomainService2.IVBRootNamespaceTestDomainService2Contract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="VBRootNamespaceTestDomainService2"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -604,7 +604,7 @@ Namespace VBRootNamespaceTest2
         ''' <summary>
         ''' Gets the set of <see cref="VBRootNamespaceDomainObject2"/> entity instances that have been loaded into this <see cref="VBRootNamespaceTestDomainService2"/> instance.
         ''' </summary>
-        Public ReadOnly Property VBRootNamespaceDomainObject2s() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
+        Public ReadOnly Property VBRootNamespaceDomainObject2s() As Global.OpenRiaServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
             End Get
@@ -614,7 +614,7 @@ Namespace VBRootNamespaceTest2
         ''' Gets an EntityQuery instance that can be used to load <see cref="VBRootNamespaceDomainObject2"/> entity instances using the 'M' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="VBRootNamespaceDomainObject2"/> entity instances.</returns>
-        Public Function MQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
+        Public Function MQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
             Me.ValidateMethod("MQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)("M", Nothing, false, true)
         End Function
@@ -623,7 +623,7 @@ Namespace VBRootNamespaceTest2
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceTestDomainService2.VBRootNamespaceTestDomainService2EntityContainer()
         End Function
         
@@ -639,7 +639,7 @@ Namespace VBRootNamespaceTest2
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/VBRootNamespaceTestDomainService2/M", ReplyAction:="http://tempuri.org/VBRootNamespaceTestDomainService2/MResponse")>  _
             Function BeginM(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -648,15 +648,15 @@ Namespace VBRootNamespaceTest2
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginM'.</param>
             ''' <returns>The 'QueryResult' returned from the 'M' operation.</returns>
-            Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
+            Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)
         End Interface
         
         Friend NotInheritable Class VBRootNamespaceTestDomainService2EntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest2.VBRootNamespaceDomainObject2)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -669,7 +669,7 @@ Namespace VBRootNamespaceTest3
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest3")>  _
     Partial Public NotInheritable Class ComplexType
-        Inherits Global.OpenRiaServices.DomainServices.Client.ComplexObject
+        Inherits Global.OpenRiaServices.Client.ComplexObject
         
         Private _prop As Integer
         
@@ -724,7 +724,7 @@ Namespace VBRootNamespaceTest3
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest3")>  _
     Partial Public NotInheritable Class VBRootNamespaceDomainObject3
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _key As Integer
         
@@ -789,7 +789,7 @@ Namespace VBRootNamespaceTest3
     ''' </summary>
     <Global.System.Runtime.Serialization.DataContractAttribute([Namespace]:="http://schemas.datacontract.org/2004/07/VBRootNamespaceTest3")>  _
     Partial Public NotInheritable Class VBRootNamespaceEntityWithComplexProperty
-        Inherits Global.OpenRiaServices.DomainServices.Client.Entity
+        Inherits Global.OpenRiaServices.Client.Entity
         
         Private _complexProp As Global.VBRootNamespaceTest.VBRootNamespaceTest3.ComplexType
         
@@ -880,7 +880,7 @@ Namespace VBRootNamespaceTest3
     ''' The DomainContext corresponding to the 'VBRootNamespaceTestDomainService3' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class VBRootNamespaceTestDomainService3
-        Inherits Global.OpenRiaServices.DomainServices.Client.DomainContext
+        Inherits Global.OpenRiaServices.Client.DomainContext
         
         #Region "Extensibility Method Definitions"
 
@@ -906,14 +906,14 @@ Namespace VBRootNamespaceTest3
         ''' </summary>
         ''' <param name="serviceUri">The VBRootNamespaceTestDomainService3 service URI.</param>
         Public Sub New(ByVal serviceUri As Global.System.Uri)
-            Me.New(Global.OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceTestDomainService3.IVBRootNamespaceTestDomainService3Contract), serviceUri, false))
+            Me.New(Global.OpenRiaServices.Client.DomainContext.CreateDomainClient(GetType(Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceTestDomainService3.IVBRootNamespaceTestDomainService3Contract), serviceUri, false))
         End Sub
         
         ''' <summary>
         ''' Initializes a new instance of the <see cref="VBRootNamespaceTestDomainService3"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        Public Sub New(ByVal domainClient As Global.OpenRiaServices.DomainServices.Client.DomainClient)
+        Public Sub New(ByVal domainClient As Global.OpenRiaServices.Client.DomainClient)
             MyBase.New(domainClient)
             Me.OnCreated
         End Sub
@@ -921,7 +921,7 @@ Namespace VBRootNamespaceTest3
         ''' <summary>
         ''' Gets the set of <see cref="VBRootNamespaceEntityWithComplexProperty"/> entity instances that have been loaded into this <see cref="VBRootNamespaceTestDomainService3"/> instance.
         ''' </summary>
-        Public ReadOnly Property VBRootNamespaceEntityWithComplexProperties() As Global.OpenRiaServices.DomainServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
+        Public ReadOnly Property VBRootNamespaceEntityWithComplexProperties() As Global.OpenRiaServices.Client.EntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
             Get
                 Return MyBase.EntityContainer.GetEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
             End Get
@@ -931,7 +931,7 @@ Namespace VBRootNamespaceTest3
         ''' Gets an EntityQuery instance that can be used to load <see cref="VBRootNamespaceEntityWithComplexProperty"/> entity instances using the 'M' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="VBRootNamespaceEntityWithComplexProperty"/> entity instances.</returns>
-        Public Function MQuery() As Global.OpenRiaServices.DomainServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
+        Public Function MQuery() As Global.OpenRiaServices.Client.EntityQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
             Me.ValidateMethod("MQuery", Nothing)
             Return MyBase.CreateQuery(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)("M", Nothing, false, true)
         End Function
@@ -940,7 +940,7 @@ Namespace VBRootNamespaceTest3
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
-        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.DomainServices.Client.EntityContainer
+        Protected Overrides Function CreateEntityContainer() As Global.OpenRiaServices.Client.EntityContainer
             Return New Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceTestDomainService3.VBRootNamespaceTestDomainService3EntityContainer()
         End Function
         
@@ -956,7 +956,7 @@ Namespace VBRootNamespaceTest3
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.DomainServices.Client.HasSideEffects(false),  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
              Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/VBRootNamespaceTestDomainService3/M", ReplyAction:="http://tempuri.org/VBRootNamespaceTestDomainService3/MResponse")>  _
             Function BeginM(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
@@ -965,15 +965,15 @@ Namespace VBRootNamespaceTest3
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginM'.</param>
             ''' <returns>The 'QueryResult' returned from the 'M' operation.</returns>
-            Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.DomainServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
+            Function EndM(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)
         End Interface
         
         Friend NotInheritable Class VBRootNamespaceTestDomainService3EntityContainer
-            Inherits Global.OpenRiaServices.DomainServices.Client.EntityContainer
+            Inherits Global.OpenRiaServices.Client.EntityContainer
             
             Public Sub New()
                 MyBase.New
-                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)(Global.OpenRiaServices.DomainServices.Client.EntitySetOperations.None)
+                Me.CreateEntitySet(Of Global.VBRootNamespaceTest.VBRootNamespaceTest3.VBRootNamespaceEntityWithComplexProperty)(Global.OpenRiaServices.Client.EntitySetOperations.None)
             End Sub
         End Class
     End Class

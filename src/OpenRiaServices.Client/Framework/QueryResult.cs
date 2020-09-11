@@ -5,9 +5,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 #else
-namespace OpenRiaServices.DomainServices.Client
+namespace OpenRiaServices.Client
 #endif
 {
     /// <summary>

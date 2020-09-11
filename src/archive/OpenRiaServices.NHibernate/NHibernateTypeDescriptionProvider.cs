@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using NHibernate.Cfg;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.NHibernate
+namespace OpenRiaServices.NHibernate
 {
     /// <summary>
     /// DomainServiceDescriptionProvider used to extend Type description by applying additional

@@ -2,9 +2,9 @@
 {
     using System.Linq;
     using System.Runtime.Serialization;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.LinqToSql;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.LinqToSql;
 
     /// <summary>
     /// DomainService that demonstrates simple inheritance using EF models

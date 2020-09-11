@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools.SourceLocation
+﻿namespace OpenRiaServices.Tools.SourceLocation
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     using System.Reflection;
     using System.Text;
     using System.Threading;
-    using OpenRiaServices.DomainServices.Tools.SharedTypes;
+    using OpenRiaServices.Tools.SharedTypes;
 
     /// <summary>
     /// Implementation of <see cref="ISourceFileProviderFactory"/> that returns

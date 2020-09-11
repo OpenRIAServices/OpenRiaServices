@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Client;
 using System.Xml.Linq;
 using Cities;
 using Microsoft.Silverlight.Testing;
@@ -14,10 +14,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
-    using TypeUtility = SSmDsClient::OpenRiaServices.DomainServices.TypeUtility;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
+    using TypeUtility = SSmDsClient::OpenRiaServices.TypeUtility;
 
     [TestClass]
     public class InvokeOperationTests : UnitTestBase

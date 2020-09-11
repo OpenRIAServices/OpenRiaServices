@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataTests.AdventureWorks.LTS;
 
-namespace OpenRiaServices.DomainServices.Client.Web.Test
+namespace OpenRiaServices.Client.Web.Test
 {
     /// <summary>
     /// These tests was moved from the file "DomainClientTests".

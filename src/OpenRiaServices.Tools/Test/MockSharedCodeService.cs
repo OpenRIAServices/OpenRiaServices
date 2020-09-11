@@ -10,13 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Tools.SourceLocation;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices;
+using OpenRiaServices.Tools.SourceLocation;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TypeUtility = SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility;
+using TypeUtility = SystemWebDomainServices::OpenRiaServices.TypeUtility;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// This mock class support the ISharedCodeService used for detecting shared
@@ -258,7 +258,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
         {
             // If this isn't a system assembly, we know immediately that
             // it's not a shared framework type
-            if (!SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(t.Assembly))
+            if (!SystemWebDomainServices::OpenRiaServices.TypeUtility.IsSystemAssembly(t.Assembly))
             {
                 return false;
             }
@@ -291,7 +291,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             Type systemType = Type.GetType(typeName, /*throwOnError*/ false);
             if (systemType != null)
             {
-                if (!SystemWebDomainServices::OpenRiaServices.DomainServices.TypeUtility.IsSystemAssembly(systemType.Assembly))
+                if (!SystemWebDomainServices::OpenRiaServices.TypeUtility.IsSystemAssembly(systemType.Assembly))
                 {
                     return false;
                 }

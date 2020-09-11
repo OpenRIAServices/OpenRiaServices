@@ -6,12 +6,12 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="QueryProcessor"/> members.

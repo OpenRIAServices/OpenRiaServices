@@ -2,7 +2,7 @@
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="EnableClientAccessAttribute"/> members.

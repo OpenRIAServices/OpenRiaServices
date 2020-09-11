@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Client
+﻿namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Enumeration of the possible states an <see cref="Entity"/>

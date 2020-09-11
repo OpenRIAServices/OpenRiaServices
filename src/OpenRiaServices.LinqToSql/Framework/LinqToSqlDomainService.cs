@@ -6,10 +6,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Server;
-using ChangeSet = OpenRiaServices.DomainServices.Server.ChangeSet;
+using OpenRiaServices.Server;
+using ChangeSet = OpenRiaServices.Server.ChangeSet;
 
-namespace OpenRiaServices.DomainServices.LinqToSql
+namespace OpenRiaServices.LinqToSql
 {
     /// <summary>
     /// Base class for DomainServices operating on LINQ To SQL data models

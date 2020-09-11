@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.EntityFramework
+﻿namespace OpenRiaServices.EntityFramework
 {
     /// <summary>
     /// Information about an Association

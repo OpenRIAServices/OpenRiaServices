@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting.Local
+namespace OpenRiaServices.Hosting.Local
 {
     // TODO: use these summary comments (or similar) when bug 597393 is addressed.
     ///// <summary>
     ///// This exception is used to indicate operational errors occurring during the
-    ///// invocation of <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> operations.
+    ///// invocation of <see cref="OpenRiaServices.Server.DomainService"/> operations.
     ///// </summary>
 
     /// <summary>
-    /// This exception is raised by generated <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> proxies 
-    /// when errors are encountered during invocation of <see cref="OpenRiaServices.DomainServices.Server.DomainService"/> 
+    /// This exception is raised by generated <see cref="OpenRiaServices.Server.DomainService"/> proxies 
+    /// when errors are encountered during invocation of <see cref="OpenRiaServices.Server.DomainService"/> 
     /// operations.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly",

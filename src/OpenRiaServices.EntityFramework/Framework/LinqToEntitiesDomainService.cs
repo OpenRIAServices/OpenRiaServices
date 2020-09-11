@@ -14,9 +14,9 @@ using System.Data.Objects;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     /// <summary>
     /// Base class for DomainServices operating on LINQ To Entities data models

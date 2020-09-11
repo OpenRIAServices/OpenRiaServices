@@ -13,25 +13,25 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\CustomValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\CustomValidationCustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DataMemberAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DataMemberAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DisplayCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DisplayCustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\DomainIdentifierAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DomainIdentifierAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\EditableAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\EditableAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ICustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ICustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\RangeCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\RangeCustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\StandardCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\StandardCustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\UIHintCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\UIHintCustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\MetadataPipeline\ValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ValidationCustomAttributeBuilder.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\Naming.cs" Link="Utilities\Naming.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\SharedTypes\VirtualType.cs" Link="Utilities\VirtualType.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\BinaryTypeUtility.cs" Link="Utilities\BinaryTypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\TypeUtility.cs" Link="Utilities\TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.DomainServices.Server\Framework\TypeDescriptorExtensions.cs" Link="Utilities\TypeDescriptorExtensions.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\CustomValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\CustomValidationCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\DataMemberAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DataMemberAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\DisplayCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DisplayCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\DomainIdentifierAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\DomainIdentifierAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\EditableAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\EditableAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\ICustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ICustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\RangeCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\RangeCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\StandardCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\StandardCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\UIHintCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\UIHintCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\ValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ValidationCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\Naming.cs" Link="Utilities\Naming.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\SharedTypes\VirtualType.cs" Link="Utilities\VirtualType.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Utilities\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Utilities\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="Utilities\TypeDescriptorExtensions.cs" />
     <Compile Update="CodeGeneratorTextTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -182,12 +182,12 @@
     <EmbeddedResource Update="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>OpenRiaServices.DomainServices.Tools</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
 </Project>

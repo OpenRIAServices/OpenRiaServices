@@ -143,7 +143,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             get
             {
                 // TEntity is defined as "Entity, new()" for some types,
-                // see OpenRiaServices.DomainServices.Server.ChangeSet.GetOriginal for an example.
+                // see OpenRiaServices.Server.ChangeSet.GetOriginal for an example.
                 return CodeGenUtilities.IsValidGenericTypeParam(this.ClrType);
             }
         }

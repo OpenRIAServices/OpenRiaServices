@@ -3,9 +3,9 @@ using System.ServiceModel.Channels;
 using System.Xml;
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 #else
-namespace OpenRiaServices.DomainServices.Client.Web
+namespace OpenRiaServices.Client.Web
 #endif
 {
     /// <summary>

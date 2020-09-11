@@ -17,9 +17,9 @@ namespace DataTests.Northwind.LTS
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -2507,9 +2507,9 @@ namespace NorthwindModel
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -4986,9 +4986,9 @@ namespace TestDomainServices.EF
     using System.ServiceModel;
     using System.Threading.Tasks;
     using NorthwindModel;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -5433,9 +5433,9 @@ namespace TestDomainServices.LTS
     using System.ServiceModel;
     using System.Threading.Tasks;
     using DataTests.Northwind.LTS;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>

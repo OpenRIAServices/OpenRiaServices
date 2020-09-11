@@ -6,8 +6,8 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 
 namespace TestDomainServices
 {

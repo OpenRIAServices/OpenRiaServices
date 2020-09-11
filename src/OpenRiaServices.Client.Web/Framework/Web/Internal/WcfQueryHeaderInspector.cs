@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
 
-namespace OpenRiaServices.DomainServices.Client.Web.Internal
+namespace OpenRiaServices.Client.Web.Internal
 {
     /// <summary>
     ///  Inspector which handles serialization of query parameters and adds them 

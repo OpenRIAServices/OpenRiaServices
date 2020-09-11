@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 
-namespace OpenRiaServices.DomainServices.Hosting.Configuration.Internal
+namespace OpenRiaServices.Hosting.Configuration.Internal
 {
     /// <summary>
     /// internal use, will probably change between minor releases

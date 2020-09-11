@@ -10,9 +10,9 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 #else
-namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
+namespace OpenRiaServices.Client.Web.Behaviors
 #endif
 {
     internal class WebHttpQueryStringConverter : QueryStringConverter

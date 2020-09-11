@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Client
+﻿namespace OpenRiaServices.Client
 {
     /// <summary>
     /// Enumeration representing possible domain operation error statuses.

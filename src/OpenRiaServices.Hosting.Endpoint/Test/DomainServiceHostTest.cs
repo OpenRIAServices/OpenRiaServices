@@ -7,12 +7,12 @@ using System.Linq;
 using OpenRiaServices;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Hosting.UnitTests
+namespace OpenRiaServices.Hosting.UnitTests
 {
     /// <summary>
     /// Tests <see cref="DomainServiceHost"/> members.

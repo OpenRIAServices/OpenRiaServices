@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.Tools;
 
-namespace OpenRiaServices.DomainServices.Server.Test.Utilities
+namespace OpenRiaServices.Server.Test.Utilities
 {
     /// <summary>
     /// Console-based logger that implements <see cref="ILogger"/> interface,

@@ -175,7 +175,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         // WARNING:
-        // This code is copied verbatim from the OpenRiaServices.DomainServices.Tools.ClientProxyGenerator class
+        // This code is copied verbatim from the OpenRiaServices.Tools.ClientProxyGenerator class
         // changes in this code will likely be required to be ported to that class as well.
         // See ClientProxyGenerator class for details.
         private string FixupVBOptionStatements(string code)

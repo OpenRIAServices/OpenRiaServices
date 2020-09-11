@@ -7,9 +7,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server.Data;
+using OpenRiaServices.Server.Data;
 
-namespace OpenRiaServices.DomainServices.Client.Internal
+namespace OpenRiaServices.Client.Internal
 {
     /// <summary>
     /// INTERNAL - Public API surface might change from version to version.

@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     
@@ -15,7 +15,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CSharpClientCodeGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.ClientCodeGenerator
+    public partial class CSharpClientCodeGenerator : OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator
     {
         /// <summary>
         /// Create the template output

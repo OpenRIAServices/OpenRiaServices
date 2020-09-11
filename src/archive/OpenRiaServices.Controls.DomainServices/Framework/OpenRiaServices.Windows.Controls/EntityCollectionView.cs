@@ -7,8 +7,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices;
+using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Controls
 {

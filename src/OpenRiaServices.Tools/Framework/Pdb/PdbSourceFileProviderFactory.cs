@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools.SourceLocation
+﻿namespace OpenRiaServices.Tools.SourceLocation
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using System.Diagnostics.SymbolStore;
     using System.Globalization;
     using System.Reflection;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Tools.Pdb.SymStore;
-    using OpenRiaServices.DomainServices.Tools.SharedTypes;
+    using OpenRiaServices;
+    using OpenRiaServices.Tools.Pdb.SymStore;
+    using OpenRiaServices.Tools.SharedTypes;
 
     /// <summary>
     /// PDB-based implementation of <see cref="ISourceFileProvider"/> to locate source files for types or methods.

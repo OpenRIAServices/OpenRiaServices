@@ -3,22 +3,22 @@ extern alias SSmDsWeb;
 
 using System;
 using System.Security.Principal;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using MockUser = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
-using UserType = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.UserType;
+using MockUser = OpenRiaServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
+using UserType = OpenRiaServices.Client.ApplicationServices.Test.AuthenticationDomainClient.UserType;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.ApplicationServices.Test
 {
     using System.Threading;
     using System.Threading.Tasks;
 #if SILVERLIGHT
-    using Resource = SSmDsWeb::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsWeb::OpenRiaServices.Client.Resource;
 #else
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 #endif
 
 

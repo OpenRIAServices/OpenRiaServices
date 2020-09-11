@@ -5,13 +5,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests for SharedAssembliesManaged service
@@ -84,17 +84,17 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                 // We should detect properties from derived types
                 sharedTypeLocation = GetSharedPropertyLocation(sa, "ServerClassLib.TestDomainSharedContext", "ValidationContext");
                 Assert.IsNotNull(sharedTypeLocation, "Expected to detect properties from base classes (DomainContext.ValidationContext)");
-                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
+                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.Client");
 
                 // We should not detect internal properties
-                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ValidationErrors");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.Client.Entity", "ValidationErrors");
                 Assert.IsNotNull(sharedTypeLocation, "Should detect properties in other assemblies");
-                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.DomainServices.Client");
+                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.Client");
 
-                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "ParentAssociation");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.Client.Entity", "ParentAssociation");
                 Assert.IsNull(sharedTypeLocation, "Expected to not detect internal properties");
 
-                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.DomainServices.Client.Entity", "IsMergingState");
+                sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.Client.Entity", "IsMergingState");
                 Assert.IsNull(sharedTypeLocation, "Expected to not detect protected internal properties");
             }
 

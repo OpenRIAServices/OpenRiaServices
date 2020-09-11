@@ -7,8 +7,8 @@
     <ProjectGuid>{D0E5DE1F-299B-41F7-95BA-9E2B7F6D0642}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.NHibernate</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.NHibernate</AssemblyName>
+    <RootNamespace>OpenRiaServices.NHibernate</RootNamespace>
+    <AssemblyName>OpenRiaServices.NHibernate</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -57,9 +57,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+    <ProjectReference Include="..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
+      <Name>OpenRiaServices.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

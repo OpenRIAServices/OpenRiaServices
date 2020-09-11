@@ -25,71 +25,71 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		test.runsettings = test.runsettings
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server", "OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server", "OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools", "OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools", "OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting", "OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting", "OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.Test", "OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj", "{A94B2843-C68E-4548-9168-63469D625932}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.Test", "OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj", "{A94B2843-C68E-4548-9168-63469D625932}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Test", "OpenRiaServices.DomainServices.Hosting\Test\OpenRiaServices.DomainServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Test", "OpenRiaServices.Hosting\Test\OpenRiaServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.Test", "Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.DomainServices.Test", "Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj", "{AA5C3992-1C78-4751-8E1C-421A34FD7E76}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Test", "OpenRiaServices.DomainServices.Server\Test\OpenRiaServices.DomainServices.Server.Test.csproj", "{CDEDEFB0-D36F-4367-B611-977099403B60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.Test", "OpenRiaServices.Server\Test\OpenRiaServices.Server.Test.csproj", "{CDEDEFB0-D36F-4367-B611-977099403B60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib\ClientClassLib.csproj", "{3AB9EA3C-D906-4930-AC3D-B4773F929D99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib", "OpenRiaServices.Tools\Test\ClientClassLib\ClientClassLib.csproj", "{3AB9EA3C-D906-4930-AC3D-B4773F929D99}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib\ServerClassLib.csproj", "{FE9777B2-ED24-4464-9D35-42A628B00EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib", "OpenRiaServices.Tools\Test\ServerClassLib\ServerClassLib.csproj", "{FE9777B2-ED24-4464-9D35-42A628B00EF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ClientClassLib2\ClientClassLib2.csproj", "{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientClassLib2", "OpenRiaServices.Tools\Test\ClientClassLib2\ClientClassLib2.csproj", "{C241CE1B-F3FA-41C3-B682-9C2FF3AF3805}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib2", "OpenRiaServices.DomainServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClassLib2", "OpenRiaServices.Tools\Test\ServerClassLib2\ServerClassLib2.csproj", "{E18F4826-0BF5-4350-9C2F-8A7C5A703CEC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Local", "OpenRiaServices.DomainServices.Hosting.Local\Framework\OpenRiaServices.DomainServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Local", "OpenRiaServices.Hosting.Local\Framework\OpenRiaServices.Hosting.Local.csproj", "{0EE13EF8-BD66-4095-926C-A81B6350F8EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Local.Test", "OpenRiaServices.DomainServices.Hosting.Local\Test\OpenRiaServices.DomainServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Local.Test", "OpenRiaServices.Hosting.Local\Test\OpenRiaServices.Hosting.Local.Test.csproj", "{7E3F2770-7A6C-4D56-9040-C16966BB6A1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.LinqToSql", "OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.LinqToSql", "OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj", "{E9141C78-4083-4ED9-B0C3-591BF5986488}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbExpressions", "OpenRiaServices.DomainServices.Client\Test\VbExpressions\VbExpressions.vbproj", "{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbExpressions", "OpenRiaServices.Client\Test\VbExpressions\VbExpressions.vbproj", "{8B3B0B41-BEC3-4345-8F3E-AA84854A42D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWap", "OpenRiaServices.DomainServices.Tools\Test\TestWap\TestWap.csproj", "{D08C2165-DC46-407B-9CCC-40ED1972F552}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWap", "OpenRiaServices.Tools\Test\TestWap\TestWap.csproj", "{D08C2165-DC46-407B-9CCC-40ED1972F552}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Endpoint", "OpenRiaServices.DomainServices.Hosting.Endpoint\Framework\OpenRiaServices.DomainServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Endpoint", "OpenRiaServices.Hosting.Endpoint\Framework\OpenRiaServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.Endpoint.Test", "OpenRiaServices.DomainServices.Hosting.Endpoint\Test\OpenRiaServices.DomainServices.Hosting.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Endpoint.Test", "OpenRiaServices.Hosting.Endpoint\Test\OpenRiaServices.Hosting.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFPOCOModels", "Test\Desktop\EFPOCOModels\EFPOCOModels.csproj", "{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteFullTrust", "Test\WebsiteFullTrust\WebsiteFullTrust.csproj", "{FB928CDD-D223-4921-B97D-EB16EEE7D2AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.OData", "OpenRiaServices.DomainServices.Hosting.OData\Framework\OpenRiaServices.DomainServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.OData", "OpenRiaServices.Hosting.OData\Framework\OpenRiaServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Hosting.OData.Test", "OpenRiaServices.DomainServices.Hosting.OData\Test\OpenRiaServices.DomainServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.OData.Test", "OpenRiaServices.Hosting.OData\Test\OpenRiaServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.DomainServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeLoadExceptionProject", "Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj", "{2265A098-F256-418D-9D11-9FD6561E8D42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.TextTemplate", "OpenRiaServices.DomainServices.Tools.TextTemplate\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.TextTemplate", "OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Tools.TextTemplate.Test", "OpenRiaServices.DomainServices.Tools.TextTemplate\Test\OpenRiaServices.DomainServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.TextTemplate.Test", "OpenRiaServices.Tools.TextTemplate\Test\OpenRiaServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.EntityFramework", "OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj", "{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.EntityFramework", "OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj", "{72137DB5-8A91-4FF8-A292-5F6E73A66CD6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDbContextModels", "OpenRiaServices.DomainServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj", "{A87DF95C-1852-480D-8FDC-4468D4EB738E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDbContextModels", "OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj", "{A87DF95C-1852-480D-8FDC-4468D4EB738E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCodeFirstModels", "OpenRiaServices.DomainServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj", "{A94B2843-C68E-4548-9168-63469D625935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCodeFirstModels", "OpenRiaServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj", "{A94B2843-C68E-4548-9168-63469D625935}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.UnitTesting", "OpenRiaServices.DomainServices.Server.UnitTesting\Framework\OpenRiaServices.DomainServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.UnitTesting", "OpenRiaServices.Server.UnitTesting\Framework\OpenRiaServices.Server.UnitTesting.csproj", "{707294BD-86CF-4C3D-B9C9-A869A34AA6E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client", "OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj", "{687A8B88-6B00-4807-B889-C682CC381A27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client", "OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj", "{687A8B88-6B00-4807-B889-C682CC381A27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Web", "OpenRiaServices.DomainServices.Client.Web\Framework\OpenRiaServices.DomainServices.Client.Web.csproj", "{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.Web", "OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj", "{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{5612B0C3-4314-4795-ACA9-DDC5F25AE04D}"
 EndProject
@@ -123,17 +123,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessApplicationProjectT
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeGen", "CodeGen", "{6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Vb.Test", "OpenRiaServices.DomainServices.Client\Test\Client.Vb.Test\OpenRiaServices.DomainServices.Client.Vb.Test.csproj", "{4E62015B-4084-4E39-9112-44224C1EB9BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.Vb.Test", "OpenRiaServices.Client\Test\Client.Vb.Test\OpenRiaServices.Client.Vb.Test.csproj", "{4E62015B-4084-4E39-9112-44224C1EB9BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.Test", "OpenRiaServices.DomainServices.Client\Test\Client.Test\OpenRiaServices.DomainServices.Client.Test.csproj", "{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.Test", "OpenRiaServices.Client\Test\Client.Test\OpenRiaServices.Client.Test.csproj", "{0B7C1448-CD9B-4836-A2CF-BF08AA6C1828}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbDomainClients", "OpenRiaServices.DomainServices.Client\Test\VbDomainClients\VbDomainClients.vbproj", "{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbDomainClients", "OpenRiaServices.Client\Test\VbDomainClients\VbDomainClients.vbproj", "{EC82BE8A-90AC-4432-9BF2-9F134E93EDB6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Client.External.Test", "OpenRiaServices.DomainServices.Client\Test\Client.External.Test\OpenRiaServices.DomainServices.Client.External.Test.csproj", "{8F117F6B-6A2F-403B-9500-1D383151E769}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.External.Test", "OpenRiaServices.Client\Test\Client.External.Test\OpenRiaServices.Client.External.Test.csproj", "{8F117F6B-6A2F-403B-9500-1D383151E769}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership", "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.csproj", "{B2183838-A948-47FD-8AB4-E8E7C5CD4477}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.Authentication.AspNetMembership", "OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj", "{B2183838-A948-47FD-8AB4-E8E7C5CD4477}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test", "OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership\Test\OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership.Test.csproj", "{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.Authentication.AspNetMembership.Test", "OpenRiaServices.Server.Authentication.AspNetMembership\Test\OpenRiaServices.Server.Authentication.AspNetMembership.Test.csproj", "{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

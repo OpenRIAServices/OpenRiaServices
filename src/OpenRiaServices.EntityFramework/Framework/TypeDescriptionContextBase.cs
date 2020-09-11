@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Base class for LTS and EF type description contexts

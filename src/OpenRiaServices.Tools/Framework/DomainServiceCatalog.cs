@@ -5,11 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Represents a catalog of DomainServices.
@@ -204,7 +204,7 @@ namespace OpenRiaServices.DomainServices.Tools
             foreach (KeyValuePair<Assembly, bool> pair in this._loadedAssemblies)
             {
                 // Performance optimization: standard Microsoft assemblies are excluded from this search
-                // and assembly must reference OpenRiaServices.DomainServices.Server
+                // and assembly must reference OpenRiaServices.Server
                 if (pair.Value)
                 {
                     // Utility autorecovers and logs for common exceptions

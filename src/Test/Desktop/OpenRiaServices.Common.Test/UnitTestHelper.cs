@@ -7,15 +7,15 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #if SERVERFX
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Hosting;
 #else
 
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.DomainServices.Hosting.Test
+namespace OpenRiaServices.Hosting.Test
 #else
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 #endif
 {
     [System.Security.SecuritySafeCritical]  // Because our assembly is [APTCA] and we are used from partial trust tests

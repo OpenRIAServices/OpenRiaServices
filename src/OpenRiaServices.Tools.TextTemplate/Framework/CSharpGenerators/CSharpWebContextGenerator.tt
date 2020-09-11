@@ -1,8 +1,8 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.WebContextGenerator" linePragmas="false" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.WebContextGenerator" linePragmas="false" #>
 
-<#@ import namespace="OpenRiaServices.DomainServices" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server.ApplicationServices" #>
+<#@ import namespace="OpenRiaServices" #>
+<#@ import namespace="OpenRiaServices.Server" #>
+<#@ import namespace="OpenRiaServices.Server.ApplicationServices" #>
 <#@ import namespace="System.Linq" #>
 
 <#@ include file="Templates\Utility.ttinclude" #>
@@ -24,7 +24,7 @@ namespace <#= ns #>
 	protected virtual void GenerateClassDeclaration()
 	{
 #>
-public sealed partial class WebContext : OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase
+public sealed partial class WebContext : OpenRiaServices.Client.ApplicationServices.WebContextBase
 <#+
 	}
 	
@@ -58,7 +58,7 @@ public new static WebContext Current
 {
     get
     {
-        return ((WebContext)(OpenRiaServices.DomainServices.Client.ApplicationServices.WebContextBase.Current));
+        return ((WebContext)(OpenRiaServices.Client.ApplicationServices.WebContextBase.Current));
     }
 }
 <#+

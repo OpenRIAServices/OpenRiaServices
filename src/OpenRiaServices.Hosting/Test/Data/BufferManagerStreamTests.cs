@@ -5,9 +5,9 @@ using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 
-namespace OpenRiaServices.DomainServices.Hosting.Test.Data
+namespace OpenRiaServices.Hosting.Test.Data
 {
     [TestClass]
     public class BufferManagerStreamTests

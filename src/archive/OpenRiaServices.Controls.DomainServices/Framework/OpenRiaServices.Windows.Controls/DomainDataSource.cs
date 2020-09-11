@@ -9,8 +9,8 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices;
+using OpenRiaServices.Client;
 using System.Windows.Common;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -22,7 +22,7 @@ namespace OpenRiaServices.Controls
 
     /// <summary>
     /// A component to simplify the interaction between the user interface and data from a
-    /// <see cref="OpenRiaServices.DomainServices.Client.DomainContext"/>. With the
+    /// <see cref="OpenRiaServices.Client.DomainContext"/>. With the
     /// DomainDataSource, you can <see cref="Load">load</see>, <see cref="FilterDescriptors">filter</see>,
     /// <see cref="GroupDescriptors">group</see>, and <see cref="SortDescriptors">sort</see> data easily.
     /// <para>
@@ -685,7 +685,7 @@ namespace OpenRiaServices.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="OpenRiaServices.DomainServices.Client.DomainContext"/>
+        /// Gets or sets the <see cref="OpenRiaServices.Client.DomainContext"/>
         /// instance used for executing the load and submit operations.
         /// </summary>
         public DomainContext DomainContext
@@ -2016,7 +2016,7 @@ namespace OpenRiaServices.Controls
         /// method of cancellation differs slightly from canceling a submit via the
         /// <see cref="SubmittingChanges"/> event.
         /// <para>
-        /// Upon completion of the operation, check the <see cref="OpenRiaServices.DomainServices.Client.OperationBase.IsCanceled"/>
+        /// Upon completion of the operation, check the <see cref="OpenRiaServices.Client.OperationBase.IsCanceled"/>
         /// property to determine whether or not the operation was successfully canceled. Note that cancellation
         /// of the operation does not guarantee state changes were prevented from happening on the server.
         /// </para>
@@ -2910,7 +2910,7 @@ namespace OpenRiaServices.Controls
 
         /// <summary>
         /// Invoke a load operation for the specified <see cref="LoadType"/>. The <see cref="EntityQuery"/> will be
-        /// composed and the <see cref="DomainContext"/>'s <see cref="OpenRiaServices.DomainServices.Client.DomainContext.Load"/>
+        /// composed and the <see cref="DomainContext"/>'s <see cref="OpenRiaServices.Client.DomainContext.Load"/>
         /// method will be called.
         /// </summary>
         /// <remarks>

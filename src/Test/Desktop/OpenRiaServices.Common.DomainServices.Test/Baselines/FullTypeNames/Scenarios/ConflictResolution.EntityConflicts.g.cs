@@ -15,7 +15,7 @@ namespace TestDomainServices.TypeNameConflictResolution
     /// <summary>
     /// The DomainContext corresponding to the 'BaseTypeConflicts' DomainService.
     /// </summary>
-    public sealed partial class BaseTypeConflicts : global::OpenRiaServices.DomainServices.Client.DomainContext
+    public sealed partial class BaseTypeConflicts : global::OpenRiaServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -42,7 +42,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// </summary>
         /// <param name="serviceUri">The BaseTypeConflicts service URI.</param>
         public BaseTypeConflicts(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.IBaseTypeConflictsContract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.IBaseTypeConflictsContract), serviceUri, false))
         {
         }
         
@@ -50,7 +50,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// Initializes a new instance of the <see cref="BaseTypeConflicts"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public BaseTypeConflicts(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public BaseTypeConflicts(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -59,7 +59,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// <summary>
         /// Gets the set of <see cref="DomainContext"/> entity instances that have been loaded into this <see cref="BaseTypeConflicts"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.DomainContext> DomainContexts
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.DomainContext> DomainContexts
         {
             get
             {
@@ -70,7 +70,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// <summary>
         /// Gets the set of <see cref="Entity"/> entity instances that have been loaded into this <see cref="BaseTypeConflicts"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.Entity> Entities
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.Entity> Entities
         {
             get
             {
@@ -82,7 +82,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// Gets an EntityQuery instance that can be used to load <see cref="DomainContext"/> entity instances using the 'GetDataContexts' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="DomainContext"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.DomainContext> GetDataContextsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.DomainContext> GetDataContextsQuery()
         {
             this.ValidateMethod("GetDataContextsQuery", null);
             return base.CreateQuery<global::TestDomainServices.TypeNameConflictResolution.DomainContext>("GetDataContexts", null, false, true);
@@ -92,7 +92,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// Gets an EntityQuery instance that can be used to load <see cref="Entity"/> entity instances using the 'GetEntities' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Entity"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.Entity> GetEntitiesQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.Entity> GetEntitiesQuery()
         {
             this.ValidateMethod("GetEntitiesQuery", null);
             return base.CreateQuery<global::TestDomainServices.TypeNameConflictResolution.Entity>("GetEntities", null, false, true);
@@ -102,7 +102,7 @@ namespace TestDomainServices.TypeNameConflictResolution
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts.BaseTypeConflictsEntityContainer();
         }
@@ -120,7 +120,7 @@ namespace TestDomainServices.TypeNameConflictResolution
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/BaseTypeConflicts/GetDataContexts", ReplyAction="http://tempuri.org/BaseTypeConflicts/GetDataContextsResponse")]
             global::System.IAsyncResult BeginGetDataContexts(global::System.AsyncCallback callback, object asyncState);
             
@@ -129,7 +129,7 @@ namespace TestDomainServices.TypeNameConflictResolution
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetDataContexts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetDataContexts' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.DomainContext> EndGetDataContexts(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.DomainContext> EndGetDataContexts(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetEntities' operation.
@@ -137,7 +137,7 @@ namespace TestDomainServices.TypeNameConflictResolution
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/BaseTypeConflicts/GetEntities", ReplyAction="http://tempuri.org/BaseTypeConflicts/GetEntitiesResponse")]
             global::System.IAsyncResult BeginGetEntities(global::System.AsyncCallback callback, object asyncState);
             
@@ -146,16 +146,16 @@ namespace TestDomainServices.TypeNameConflictResolution
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEntities' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.Entity> EndGetEntities(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.Entity> EndGetEntities(global::System.IAsyncResult result);
         }
         
-        internal sealed class BaseTypeConflictsEntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class BaseTypeConflictsEntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public BaseTypeConflictsEntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.DomainContext>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.Entity>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.DomainContext>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.Entity>(global::OpenRiaServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -165,7 +165,7 @@ namespace TestDomainServices.TypeNameConflictResolution
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion")]
-    public sealed partial class DomainContext : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class DomainContext : global::OpenRiaServices.Client.Entity
     {
         
         private int _dataContextID;
@@ -232,7 +232,7 @@ namespace TestDomainServices.TypeNameConflictResolution
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion")]
-    public sealed partial class Entity : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class Entity : global::OpenRiaServices.Client.Entity
     {
         
         private string _name;
@@ -301,7 +301,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     /// <summary>
     /// The DomainContext corresponding to the 'DomainServiceScenario1' DomainService.
     /// </summary>
-    public sealed partial class DomainServiceScenario1 : global::OpenRiaServices.DomainServices.Client.DomainContext
+    public sealed partial class DomainServiceScenario1 : global::OpenRiaServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -329,7 +329,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// </summary>
         /// <param name="serviceUri">The DomainServiceScenario1 service URI.</param>
         public DomainServiceScenario1(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.IDomainServiceScenario1Contract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.IDomainServiceScenario1Contract), serviceUri, false))
         {
         }
         
@@ -337,7 +337,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Initializes a new instance of the <see cref="DomainServiceScenario1"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public DomainServiceScenario1(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public DomainServiceScenario1(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -346,7 +346,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// <summary>
         /// Gets the set of <see cref="MockEntity1"/> entity instances that have been loaded into this <see cref="DomainServiceScenario1"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1> MockEntity1s
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1> MockEntity1s
         {
             get
             {
@@ -357,7 +357,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// <summary>
         /// Gets the set of <see cref="MockEntity2"/> entity instances that have been loaded into this <see cref="DomainServiceScenario1"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2> MockEntity2s
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2> MockEntity2s
         {
             get
             {
@@ -369,7 +369,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity1"/> entity instances using the 'GetTEntity1' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity1"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1> GetTEntity1Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1> GetTEntity1Query()
         {
             this.ValidateMethod("GetTEntity1Query", null);
             return base.CreateQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1>("GetTEntity1", null, false, true);
@@ -379,7 +379,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity2"/> entity instances using the 'GetTEntity2' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity2"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2> GetTEntity2Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2> GetTEntity2Query()
         {
             this.ValidateMethod("GetTEntity2Query", null);
             return base.CreateQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2>("GetTEntity2", null, false, true);
@@ -389,7 +389,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario1.DomainServiceScenario1EntityContainer();
         }
@@ -407,7 +407,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/DomainServiceScenario1/GetTEntity1", ReplyAction="http://tempuri.org/DomainServiceScenario1/GetTEntity1Response")]
             global::System.IAsyncResult BeginGetTEntity1(global::System.AsyncCallback callback, object asyncState);
             
@@ -416,7 +416,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTEntity1'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTEntity1' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1> EndGetTEntity1(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1> EndGetTEntity1(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTEntity2' operation.
@@ -424,7 +424,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/DomainServiceScenario1/GetTEntity2", ReplyAction="http://tempuri.org/DomainServiceScenario1/GetTEntity2Response")]
             global::System.IAsyncResult BeginGetTEntity2(global::System.AsyncCallback callback, object asyncState);
             
@@ -433,16 +433,16 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTEntity2'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTEntity2' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2> EndGetTEntity2(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2> EndGetTEntity2(global::System.IAsyncResult result);
         }
         
-        internal sealed class DomainServiceScenario1EntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class DomainServiceScenario1EntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public DomainServiceScenario1EntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity1>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity2>(global::OpenRiaServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -450,7 +450,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     /// <summary>
     /// The DomainContext corresponding to the 'DomainServiceScenario2' DomainService.
     /// </summary>
-    public sealed partial class DomainServiceScenario2 : global::OpenRiaServices.DomainServices.Client.DomainContext
+    public sealed partial class DomainServiceScenario2 : global::OpenRiaServices.Client.DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -478,7 +478,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// </summary>
         /// <param name="serviceUri">The DomainServiceScenario2 service URI.</param>
         public DomainServiceScenario2(global::System.Uri serviceUri) : 
-                this(global::OpenRiaServices.DomainServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.IDomainServiceScenario2Contract), serviceUri, false))
+                this(global::OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.IDomainServiceScenario2Contract), serviceUri, false))
         {
         }
         
@@ -486,7 +486,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Initializes a new instance of the <see cref="DomainServiceScenario2"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public DomainServiceScenario2(global::OpenRiaServices.DomainServices.Client.DomainClient domainClient) : 
+        public DomainServiceScenario2(global::OpenRiaServices.Client.DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
@@ -495,7 +495,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// <summary>
         /// Gets the set of <see cref="MockEntity1"/> entity instances that have been loaded into this <see cref="DomainServiceScenario2"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1> MockEntity1s
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1> MockEntity1s
         {
             get
             {
@@ -506,7 +506,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// <summary>
         /// Gets the set of <see cref="MockEntity2"/> entity instances that have been loaded into this <see cref="DomainServiceScenario2"/> instance.
         /// </summary>
-        public global::OpenRiaServices.DomainServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2> MockEntity2s
+        public global::OpenRiaServices.Client.EntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2> MockEntity2s
         {
             get
             {
@@ -518,7 +518,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity1"/> entity instances using the 'GetTEntity1' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity1"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1> GetTEntity1Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1> GetTEntity1Query()
         {
             this.ValidateMethod("GetTEntity1Query", null);
             return base.CreateQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1>("GetTEntity1", null, false, true);
@@ -528,7 +528,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Gets an EntityQuery instance that can be used to load <see cref="MockEntity2"/> entity instances using the 'GetTEntity2' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="MockEntity2"/> entity instances.</returns>
-        public global::OpenRiaServices.DomainServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2> GetTEntity2Query()
+        public global::OpenRiaServices.Client.EntityQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2> GetTEntity2Query()
         {
             this.ValidateMethod("GetTEntity2Query", null);
             return base.CreateQuery<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2>("GetTEntity2", null, false, true);
@@ -538,7 +538,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
-        protected override global::OpenRiaServices.DomainServices.Client.EntityContainer CreateEntityContainer()
+        protected override global::OpenRiaServices.Client.EntityContainer CreateEntityContainer()
         {
             return new global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2.DomainServiceScenario2EntityContainer();
         }
@@ -556,7 +556,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/DomainServiceScenario2/GetTEntity1", ReplyAction="http://tempuri.org/DomainServiceScenario2/GetTEntity1Response")]
             global::System.IAsyncResult BeginGetTEntity1(global::System.AsyncCallback callback, object asyncState);
             
@@ -565,7 +565,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTEntity1'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTEntity1' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1> EndGetTEntity1(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1> EndGetTEntity1(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetTEntity2' operation.
@@ -573,7 +573,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.DomainServices.Client.HasSideEffects(false)]
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
             [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/DomainServiceScenario2/GetTEntity2", ReplyAction="http://tempuri.org/DomainServiceScenario2/GetTEntity2Response")]
             global::System.IAsyncResult BeginGetTEntity2(global::System.AsyncCallback callback, object asyncState);
             
@@ -582,16 +582,16 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetTEntity2'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetTEntity2' operation.</returns>
-            global::OpenRiaServices.DomainServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2> EndGetTEntity2(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2> EndGetTEntity2(global::System.IAsyncResult result);
         }
         
-        internal sealed class DomainServiceScenario2EntityContainer : global::OpenRiaServices.DomainServices.Client.EntityContainer
+        internal sealed class DomainServiceScenario2EntityContainer : global::OpenRiaServices.Client.EntityContainer
         {
             
             public DomainServiceScenario2EntityContainer()
             {
-                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
-                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1>(global::OpenRiaServices.DomainServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1.MockEntity2>(global::OpenRiaServices.Client.EntitySetOperations.None);
+                this.CreateEntitySet<global::TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace2.MockEntity1>(global::OpenRiaServices.Client.EntitySetOperations.None);
             }
         }
     }
@@ -605,7 +605,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion.ExternalConflicts.Namespace1")]
-    public sealed partial class MockEntity1 : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class MockEntity1 : global::OpenRiaServices.Client.Entity
     {
         
         private int _entityID;
@@ -672,7 +672,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion.ExternalConflicts.Namespace1")]
-    public sealed partial class MockEntity2 : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class MockEntity2 : global::OpenRiaServices.Client.Entity
     {
         
         private int _entityID;
@@ -743,7 +743,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion.ExternalConflicts.Namespace2")]
-    public sealed partial class MockEntity1 : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class MockEntity1 : global::OpenRiaServices.Client.Entity
     {
         
         private int _entityID;
@@ -810,7 +810,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     /// </summary>
     [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/TestDomainServices.TypeNameConflictResolu" +
         "tion.ExternalConflicts.Namespace2")]
-    public sealed partial class MockEntity2 : global::OpenRiaServices.DomainServices.Client.Entity
+    public sealed partial class MockEntity2 : global::OpenRiaServices.Client.Entity
     {
         
         private int _entityID;

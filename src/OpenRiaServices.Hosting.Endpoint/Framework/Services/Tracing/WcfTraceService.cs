@@ -12,9 +12,9 @@ using System.Text;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
-using Resx = OpenRiaServices.DomainServices.Hosting.EndpointResource;
+using Resx = OpenRiaServices.Hosting.EndpointResource;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// A class implementing a WCF REST service that exposes WCF traces collected by <see cref="InMemoryTraceListener"/> as 

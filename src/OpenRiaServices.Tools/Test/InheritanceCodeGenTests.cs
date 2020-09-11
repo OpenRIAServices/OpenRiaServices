@@ -5,16 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using DomainService_Resource = OpenRiaServices.DomainServices.Server.Resource;
+using DomainService_Resource = OpenRiaServices.Server.Resource;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     using Inheritance.Tests;
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
-    using OpenRiaServices.DomainServices.Server.Test.Utilities;
+    using OpenRiaServices.Server.Test.Utilities;
 
     /// <summary>
     /// Tests CustomAttributeGenerator
@@ -1030,7 +1030,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                         ? @"namespace Inheritance.Tests
                             {
                                 using System;
-                                using OpenRiaServices.DomainServices.Client;
+                                using OpenRiaServices.Client;
                                 public sealed partial class Inherit_Basic_Derived : Inherit_Basic_Root
                                 {
                                     partial void OnCreated() {}
@@ -1054,7 +1054,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                             Option Explicit On
 
                             Imports System
-                            Imports OpenRiaServices.DomainServices.Client
+                            Imports OpenRiaServices.Client
 
                             Namespace Inheritance.Tests
                                 
@@ -1841,8 +1841,8 @@ namespace OpenRiaServices.DomainServices.Tools.Test
 // Avoid the System namespace or VB treats System as its root namespace
 namespace Inheritance.Tests
 {
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Tools.Test;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Tools.Test;
 
     #region Inherit_Basic
 

@@ -35,7 +35,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.DomainServices.Client\Framework\OpenRiaServices.DomainServices.Client.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
     <ProjectReference Include="..\ClientClassLib2\ClientClassLib2.csproj" />
   </ItemGroup>
 </Project>

@@ -5,17 +5,17 @@ using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
-using Resx = OpenRiaServices.DomainServices.Hosting.EndpointResource;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
+using Resx = OpenRiaServices.Hosting.EndpointResource;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
-    /// Represents a tracing endpoint factory for a <see cref="OpenRiaServices.DomainServices.Hosting.DomainServiceHost"/>. Adding
+    /// Represents a tracing endpoint factory for a <see cref="OpenRiaServices.Hosting.DomainServiceHost"/>. Adding
     /// this endpoint factory to the domain service host results in exposing traces of all WCF services running in the application domain over 
     /// a WCF REST endpoint in the ATOM, XML, or HTML format. In order to enable this functionality, in addition to adding this endpoint factory to the 
-    /// <see cref="OpenRiaServices.DomainServices.Hosting.DomainServiceHost"/>, one must register the <see cref="InMemoryTraceListener"/> for the 
+    /// <see cref="OpenRiaServices.Hosting.DomainServiceHost"/>, one must register the <see cref="InMemoryTraceListener"/> for the 
     /// System.ServiceModel traces through the system.diagnostics section in the configuration file.
     /// </summary>
     public class TracingDomainServiceEndpointFactory : DomainServiceEndpointFactory
@@ -26,7 +26,7 @@ namespace OpenRiaServices.DomainServices.Hosting
         public TracingDomainServiceEndpointFactory() : base(string.Empty) { }
 
         /// <summary>
-        /// Creates a set of WCF REST service endpoints in the <see cref="OpenRiaServices.DomainServices.Hosting.DomainServiceHost"/> which 
+        /// Creates a set of WCF REST service endpoints in the <see cref="OpenRiaServices.Hosting.DomainServiceHost"/> which 
         /// expose traces of WCF services in the ATOM, XML, or HTML format. One WCF REST endpoint is added for each HTTP or HTTPS base address from the specified serviceHost.
         /// The address of the endpoint is obtained by appending the name of the TracingDomainServiceEndpointFactory as specified in the domainServices section of the configuration file
         /// to the base address. Furthermore, the UriTemplate of each of the endpoints is specified by the <see cref="WcfTraceService"/> service contract and allows for selection of the 

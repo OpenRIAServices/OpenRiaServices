@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Specialized;
 
-namespace OpenRiaServices.DomainServices.Client.Data
+namespace OpenRiaServices.Client.Data
 {
     /// <summary>
     /// Class used for representing resettable collections used to optimize <see cref="LoadOperation"/> collections.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Server.Authentication.AspNetMembership
+namespace OpenRiaServices.Server.Authentication.AspNetMembership
 {
     /// <summary>
     /// Attribute that describes how a property is backed in an ASP.NET profile. It can 

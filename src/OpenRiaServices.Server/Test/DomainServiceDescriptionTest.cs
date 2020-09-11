@@ -14,23 +14,23 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Common.Test;
-using OpenRiaServices.DomainServices.Client.Test;
-using OpenRiaServices.DomainServices.EntityFramework;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Client.Test;
+using OpenRiaServices.EntityFramework;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
 using System.Threading;
 using Cities;
-using OpenRiaServices.DomainServices.LinqToSql;
+using OpenRiaServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.TypeDescriptorExtensions;
+using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Server.TypeDescriptorExtensions;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     using System.Threading.Tasks;
-    using MetaType = SystemWebDomainServices::OpenRiaServices.DomainServices.Server.MetaType;
+    using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
 
 
     /// <summary>
@@ -1384,7 +1384,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -1394,7 +1394,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -1404,7 +1404,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -1414,7 +1414,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
-            }, string.Format(OpenRiaServices.DomainServices.Server.Resource.DomainService_InvalidType, t.FullName));
+            }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
         [TestMethod]
@@ -2135,7 +2135,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
                 {
                     ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
                 },
-                string.Format(OpenRiaServices.DomainServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
+                string.Format(OpenRiaServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
                     typeof(AdventureWorksModel.AdventureWorksEntities))
                 );
 
@@ -2153,7 +2153,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             {
                 ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
             },
-                                                           string.Format(OpenRiaServices.DomainServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
+                                                           string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
                                                                typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
                 );
         }

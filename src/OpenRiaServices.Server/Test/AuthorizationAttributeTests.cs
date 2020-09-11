@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     [TestClass]
     public class AuthorizationAttributeTests
@@ -247,7 +247,7 @@ namespace OpenRiaServices.DomainServices.Server.Test
             }
         }
 
-        [OpenRiaServices.DomainServices.Hosting.EnableClientAccess]
+        [OpenRiaServices.Hosting.EnableClientAccess]
         public class AuthorizationTestDomainService : DomainService
         {
             [Invoke]

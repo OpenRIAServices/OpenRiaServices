@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.VisualBasic;
 using System.Collections.Immutable;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     public class CompilerHelper
     {
@@ -237,10 +237,10 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             string projectDir = Path.GetDirectoryName(projectPath);
 
             // Folder of project we want to build
-            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.DomainServices.Client.Web\Framework"));
+            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Client.Web\Framework"));
 
             string projectOutputDir = Path.Combine(testProjectDir, outputPath);
-            string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.DomainServices.Client.Web.csproj");
+            string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.Client.Web.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)

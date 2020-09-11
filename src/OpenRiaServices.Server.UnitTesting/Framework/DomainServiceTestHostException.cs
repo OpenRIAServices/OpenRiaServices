@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.DomainServices.Server.UnitTesting
+namespace OpenRiaServices.Server.UnitTesting
 {
     /// <summary>
     /// <see cref="Exception"/> thrown by the <see cref="DomainServiceTestHost{TDomainService}"/>

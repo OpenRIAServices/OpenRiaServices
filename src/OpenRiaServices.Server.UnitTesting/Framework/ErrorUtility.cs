@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Server.UnitTesting
+namespace OpenRiaServices.Server.UnitTesting
 {
     /// <summary>
     /// Utility to for identifying and reporting error conditions

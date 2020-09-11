@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenRiaServices.DomainServices.Hosting.OData
+namespace OpenRiaServices.Hosting.OData
 {
     #region Namespace
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace OpenRiaServices.DomainServices.Hosting.OData
     using System.ServiceModel.Description;
     using System.Threading;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Server;
 
     #endregion
 

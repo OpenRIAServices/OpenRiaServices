@@ -1,5 +1,5 @@
 ﻿using System;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 
 namespace ServerClassLib
 {

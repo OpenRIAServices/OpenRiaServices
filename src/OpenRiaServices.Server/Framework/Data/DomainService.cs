@@ -9,9 +9,9 @@ using System.Reflection;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using DataAnnotationsResources = OpenRiaServices.DomainServices.Server.Resource;
+using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
-namespace OpenRiaServices.DomainServices.Server
+namespace OpenRiaServices.Server
 {
     /// <summary>
     /// Base class for all <see cref="DomainService"/>s.

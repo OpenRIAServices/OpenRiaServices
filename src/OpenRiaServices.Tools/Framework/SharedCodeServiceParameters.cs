@@ -1,7 +1,7 @@
 ﻿using System;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Tools.SharedTypes;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Internal data class that allows parameters to be

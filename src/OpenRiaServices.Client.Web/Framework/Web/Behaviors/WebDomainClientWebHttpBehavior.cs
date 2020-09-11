@@ -13,7 +13,7 @@ using System.ServiceModel.Web;
 using System.Windows.Browser;
 #endif
 
-namespace OpenRiaServices.DomainServices.Client.Web.Behaviors
+namespace OpenRiaServices.Client.Web.Behaviors
 {
     internal class WebDomainClientWebHttpBehavior : WebHttpBehavior
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// This class is responsible for managing the cache of

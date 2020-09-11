@@ -8,7 +8,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Threading;
 
-namespace OpenRiaServices.DomainServices.Client.Web
+namespace OpenRiaServices.Client.Web
 {
 #if NETSTANDARD
     /// <summary>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Client.Test.IntegrationTests
+namespace OpenRiaServices.Client.Test.IntegrationTests
 {
     [TestClass]
     public class SoapXmlEndpointTests

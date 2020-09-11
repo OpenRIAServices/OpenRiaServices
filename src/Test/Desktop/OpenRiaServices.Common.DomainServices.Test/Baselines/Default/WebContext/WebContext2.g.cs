@@ -16,9 +16,9 @@ namespace RootNamespace
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
@@ -76,15 +76,15 @@ namespace RootNamespace.TestNamespace
     using System.Runtime.Serialization;
     using System.ServiceModel;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>
     /// The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     /// </summary>
-    public sealed partial class AuthenticationService1 : global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+    public sealed partial class AuthenticationService1 : global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
     {
         
         #region Extensibility Method Definitions
@@ -277,7 +277,7 @@ namespace RootNamespace.TestNamespace
     /// <summary>
     /// The DomainContext corresponding to the 'AuthenticationService2' DomainService.
     /// </summary>
-    public sealed partial class AuthenticationService2 : global::OpenRiaServices.DomainServices.Client.ApplicationServices.AuthenticationDomainContextBase
+    public sealed partial class AuthenticationService2 : global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
     {
         
         #region Extensibility Method Definitions

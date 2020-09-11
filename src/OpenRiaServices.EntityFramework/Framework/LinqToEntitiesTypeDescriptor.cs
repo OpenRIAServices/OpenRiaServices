@@ -17,9 +17,9 @@ using System.Data.Objects.DataClasses;
 #endif
 
 using System.Linq;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.EntityFramework
+namespace OpenRiaServices.EntityFramework
 {
     /// <summary>
     /// CustomTypeDescriptor for LINQ To Entities

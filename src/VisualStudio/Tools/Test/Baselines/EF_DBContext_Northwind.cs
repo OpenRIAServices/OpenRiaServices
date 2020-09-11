@@ -10,9 +10,9 @@ namespace BizLogic.Test
     using System.Data.Entity.Infrastructure;
     using System.Linq;
     using DbContextModels.Northwind;
-    using OpenRiaServices.DomainServices.EntityFramework;
-    using OpenRiaServices.DomainServices.Hosting;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.EntityFramework;
+    using OpenRiaServices.Hosting;
+    using OpenRiaServices.Server;
     
     
     // Implements application logic using the DbCtxNorthwindEntities context.

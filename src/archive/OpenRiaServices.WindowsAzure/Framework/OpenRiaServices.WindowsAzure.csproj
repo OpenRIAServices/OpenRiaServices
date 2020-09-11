@@ -7,7 +7,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet|AnyCPU'">
     <OutputPath>bin\MyGet\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugNet40\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\DebugNet40\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\DebugNet40\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -27,7 +27,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNet40|AnyCPU'">
     <OutputPath>bin\ReleaseNet40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\ReleaseNet40\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\ReleaseNet40\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MyGet40|AnyCPU'">
     <OutputPath>bin\MyGet40\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\MyGet40\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\MyGet40\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,12 +53,12 @@
     <ProjectGuid>{62CEDA36-AE80-411D-8A55-2D417A86960B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenRiaServices.DomainServices.WindowsAzure</RootNamespace>
-    <AssemblyName>OpenRiaServices.DomainServices.WindowsAzure</AssemblyName>
+    <RootNamespace>OpenRiaServices.WindowsAzure</RootNamespace>
+    <AssemblyName>OpenRiaServices.WindowsAzure</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <OutputPath>..\..\bin\$(Configuration)\Desktop\</OutputPath>
-    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.DomainServices.WindowsAzure.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\$(Configuration)\Desktop\OpenRiaServices.WindowsAzure.XML</DocumentationFile>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -67,20 +67,20 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Release\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CodeCov|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE;CODECOV</DefineConstants>
-    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.DomainServices.WindowsAzure.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\CodeCov\Desktop\OpenRiaServices.WindowsAzure.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime">
@@ -112,9 +112,9 @@
     <Compile Include="TableEntityMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
-      <Name>OpenRiaServices.DomainServices.Server</Name>
+      <Name>OpenRiaServices.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

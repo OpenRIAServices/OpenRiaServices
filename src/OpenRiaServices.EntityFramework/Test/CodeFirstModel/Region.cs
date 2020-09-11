@@ -2,7 +2,7 @@ namespace CodeFirstModels
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Server;
     
     public partial class Region
     {

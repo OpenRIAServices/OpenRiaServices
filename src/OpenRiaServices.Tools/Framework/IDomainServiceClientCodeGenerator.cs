@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Tools
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Common interface for code generators that produce client code from 
-    /// <see cref="OpenRiaServices.DomainServices.Server.DomainServiceDescription"/> instances.
+    /// <see cref="OpenRiaServices.Server.DomainServiceDescription"/> instances.
     /// </summary>
     /// <remarks>
     /// Implementations of this interface are expected to be stateless objects
@@ -22,7 +22,7 @@ namespace OpenRiaServices.DomainServices.Tools
         /// Errors and warnings should be reported using the <paramref name="codeGenerationHost"/>.
         /// </remarks>
         /// <param name="codeGenerationHost">The <see cref="ICodeGenerationHost"/> object hosting code generation.</param>
-        /// <param name="domainServiceDescriptions">The set of <see cref="OpenRiaServices.DomainServices.Server.DomainServiceDescription"/> 
+        /// <param name="domainServiceDescriptions">The set of <see cref="OpenRiaServices.Server.DomainServiceDescription"/> 
         /// instances for which code generation is required.</param>
         /// <param name="options">The options for code generation.</param>
         /// <returns>The generated code.  This value may be empty or <c>null</c> if errors occurred or there was no work to do.</returns>

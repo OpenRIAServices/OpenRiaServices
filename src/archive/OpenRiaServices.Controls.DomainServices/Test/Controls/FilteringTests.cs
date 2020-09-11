@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Client;
+using OpenRiaServices.Client;
 using System.Windows.Common;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -2783,7 +2783,7 @@ namespace OpenRiaServices.Controls.DomainServices.Test
             /// <param name="queryName">The <see cref="DomainDataSource.QueryName"/> to use for the test.</param>
             /// <param name="scenarios">The scenarios to test.</param>
             private void TestScenarios<TEntity>(DomainContext domainContext, string queryName, params FilterScenario<TEntity>[] scenarios)
-                where TEntity : OpenRiaServices.DomainServices.Client.Entity
+                where TEntity : OpenRiaServices.Client.Entity
             {
                 foreach (FilterScenario<TEntity> scenario in scenarios)
                 {

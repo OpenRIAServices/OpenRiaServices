@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Hosting;
-using OpenRiaServices.DomainServices.Server;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Hosting;
+using OpenRiaServices.Server;
+using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Tests CustomAttributeGenerator
@@ -133,7 +133,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                                         typeof(Mock_CG_Attr_Gen_TestAttribute),
                                         "MockProject");
 
-            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::OpenRiaServices.DomainServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::OpenRiaServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
                                         typeof(Mock_CG_Attr_Gen_TestAttribute),
                                         "MockProject");
 
-            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::OpenRiaServices.DomainServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "[Mock_CG_Attr_Gen_Test(typeof(global::OpenRiaServices.Tools.Test.Mock_CG_Attr_Gen_Type))]");
         }
 
         [TestMethod]

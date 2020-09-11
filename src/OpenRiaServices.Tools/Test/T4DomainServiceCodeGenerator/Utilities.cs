@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenRiaServices.DomainServices.Tools.Test.T4Generator
+namespace OpenRiaServices.Tools.Test.T4Generator
 {
     public static class Utilities
     {

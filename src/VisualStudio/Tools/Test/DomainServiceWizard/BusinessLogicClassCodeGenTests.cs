@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 using AdventureWorksModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestHelper = OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities.TestHelper;
-using OpenRiaServices.DomainServices.Tools.Test;
+using OpenRiaServices.Tools.Test;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
@@ -54,7 +54,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for an empty model with an OData endpoing")]
         public void BusinessLogicClass_CodeGen_Empty_OData_CSharp()
         {
-            string[] references = new string[] { "OpenRiaServices.DomainServices.Hosting.OData" };
+            string[] references = new string[] { "OpenRiaServices.Hosting.OData" };
             this.ValidateCodeGen("C#", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -62,7 +62,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for an empty model with an OData endpoint")]
         public void BusinessLogicClass_CodeGen_Empty_OData_VB()
         {
-            string[] references = new string[] { "OpenRiaServices.DomainServices.Hosting.OData" };
+            string[] references = new string[] { "OpenRiaServices.Hosting.OData" };
             this.ValidateCodeGen("VB", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -70,7 +70,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_Scenarios_CSharp()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("C#", typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios), "EF_Northwind_Scenarios", references);
         }
 
@@ -78,7 +78,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_Scenarios_VB()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("VB", typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios), "EF_Northwind_Scenarios", references);
         }
 
@@ -86,7 +86,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind POCO model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_CSharp()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("C#", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO", references);
         }
 
@@ -94,7 +94,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind POCO model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_VB()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("VB", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO", references);
         }
 
@@ -102,7 +102,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind POCO model with root namespace same as namespace")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_VB_RootNs()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("VB", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO_RootNS", references, false, "BizLogic.Test", "BizLogic.Test");
         }
 
@@ -110,7 +110,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for LTS Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_Scenarios_CSharp()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("C#", typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios), "LTS_Northwind_Scenarios", references);
         }
 
@@ -118,7 +118,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_Scenarios_VB()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("VB", typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios), "LTS_Northwind_Scenarios", references);
         }
 
@@ -126,7 +126,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_CSharp()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("C#", typeof(NorthwindModel.NorthwindEntities), "EF_Northwind", references);
         }
 
@@ -134,7 +134,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF Northwind model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_VB()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("VB", typeof(NorthwindModel.NorthwindEntities), "EF_Northwind", references);
         }
 
@@ -142,7 +142,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for LTS Northwind model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_CSharp()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("C#", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind", references);
         }
 
@@ -150,7 +150,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS Northwind model")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_VB()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("VB", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind", references);
         }
 
@@ -158,7 +158,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS Northwind model with rootnamespace")]
         public void BusinessLogicClass_CodeGen_LTS_Northwind_VB_RootNs()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("VB", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind_RootNs", references, false, "BizLogic.Test", "BizLogic.Test");
         }
 
@@ -166,7 +166,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_CSharp()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("C#", typeof(AdventureWorksEntities), "EF_AdventureWorks", references);
         }
 
@@ -174,7 +174,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_VB()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks", references);
         }
 
@@ -182,7 +182,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_CSharp()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework", "OpenRiaServices.DomainServices.Hosting.OData" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.OData" };
             this.ValidateCodeGen("C#", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -190,7 +190,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_VB()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.DomainServices.EntityFramework", "OpenRiaServices.DomainServices.Hosting.OData" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.OData" };
             this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -198,7 +198,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for LTS AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_LTS_AdventureWorks_CSharp()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("C#", typeof(DataTests.AdventureWorks.LTS.AdventureWorks), "LTS_AdventureWorks", references);
         }
 
@@ -206,7 +206,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for LTS AdventureWorks model")]
         public void BusinessLogicClass_CodeGen_LTS_AdventureWorks_VB()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("VB", typeof(DataTests.AdventureWorks.LTS.AdventureWorks), "LTS_AdventureWorks", references);
         }
 
@@ -214,7 +214,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for BuddyMetadataScenarios model that contains custom scenarios")]
         public void BusinessLogicClass_CodeGen_LTS_BuddyMetadataScenarios_CSharp()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("C#", typeof(DataModels.ScenarioModels.BuddyMetadataScenariosDataContext), "BuddyMetadataScenarios", references);
         }
 
@@ -222,7 +222,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for BuddyMetadataScenarios model that contains custom scenarios")]
         public void BusinessLogicClass_CodeGen_LTS_BuddyMetadataScenarios_VB()
         {
-            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.DomainServices.LinqToSql" };
+            string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
             this.ValidateCodeGen("VB", typeof(DataModels.ScenarioModels.BuddyMetadataScenariosDataContext), "BuddyMetadataScenarios", references);
         }
 

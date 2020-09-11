@@ -7,15 +7,15 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
+namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
     using System.ComponentModel;
     using System.Collections.Generic;
     using System.Linq;
-    using OpenRiaServices.DomainServices.Server;
-    using OpenRiaServices.DomainServices.Tools.TextTemplate;
-    using OpenRiaServices.DomainServices.Tools;
+    using OpenRiaServices.Server;
+    using OpenRiaServices.Tools.TextTemplate;
+    using OpenRiaServices.Tools;
     using System.Runtime.Serialization;
     using System.Reflection;
     
@@ -23,7 +23,7 @@ namespace OpenRiaServices.DomainServices.Tools.TextTemplate.CSharpGenerators
     /// Class to produce the template output
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
-    public partial class CSharpComplexObjectGenerator : OpenRiaServices.DomainServices.Tools.TextTemplate.ComplexObjectGenerator
+    public partial class CSharpComplexObjectGenerator : OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator
     {
         /// <summary>
         /// Create the template output

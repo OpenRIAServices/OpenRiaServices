@@ -3,12 +3,12 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {
     // WARNING:
-    // Most of this code is copied verbatim from the OpenRiaServices.DomainServices.Server.Tools.ClientProxyGenerator class
+    // Most of this code is copied verbatim from the OpenRiaServices.Server.Tools.ClientProxyGenerator class
     // changes in this code will likely be required to be ported to that class as well.
     // See ClientProxyCodeDomVisitor class for details.
     internal sealed class DomainServiceFixupCodeDomVisitor : CodeDomVisitor

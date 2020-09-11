@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Hosting
+﻿namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Encapsulates the settings the user specified for the query method.

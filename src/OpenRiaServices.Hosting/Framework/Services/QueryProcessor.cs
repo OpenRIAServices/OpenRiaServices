@@ -9,9 +9,9 @@ using System.Linq.Dynamic;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     /// <summary>
     /// Class encapsulating query deserialization and operation execution, including

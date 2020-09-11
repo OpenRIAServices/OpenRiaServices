@@ -1,7 +1,7 @@
-﻿namespace OpenRiaServices.DomainServices.Hosting.OData
+﻿namespace OpenRiaServices.Hosting.OData
 {
     #region Namespaces
-    using OpenRiaServices.DomainServices.Server;
+    using OpenRiaServices.Server;
 
     #endregion
 

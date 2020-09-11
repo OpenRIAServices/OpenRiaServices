@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using OpenRiaServices.DomainServices;
-using OpenRiaServices.DomainServices.Client;
-using OpenRiaServices.DomainServices.Client.ApplicationServices;
+using OpenRiaServices;
+using OpenRiaServices.Client;
+using OpenRiaServices.Client.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,9 +47,9 @@ namespace GlobalNamespaceTest
     using System.ServiceModel;
     using System.Threading;
     using System.Threading.Tasks;
-    using OpenRiaServices.DomainServices;
-    using OpenRiaServices.DomainServices.Client;
-    using OpenRiaServices.DomainServices.Client.ApplicationServices;
+    using OpenRiaServices;
+    using OpenRiaServices.Client;
+    using OpenRiaServices.Client.ApplicationServices;
     
     
     /// <summary>

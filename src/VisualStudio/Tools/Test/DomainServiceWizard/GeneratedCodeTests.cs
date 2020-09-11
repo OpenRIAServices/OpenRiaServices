@@ -1,6 +1,6 @@
 ﻿// #define UPDATE_BASELINES    // uncomment to update baselines in bulk
 using System.Linq;
-using OpenRiaServices.DomainServices.Client.Test;
+using OpenRiaServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

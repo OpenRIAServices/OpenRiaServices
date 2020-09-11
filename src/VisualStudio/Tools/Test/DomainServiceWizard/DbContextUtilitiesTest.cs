@@ -1,4 +1,4 @@
-﻿using OpenRiaServices.DomainServices.Tools;
+﻿using OpenRiaServices.Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.DomainServiceWizard
@@ -48,11 +48,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.DomainServiceWi
         [Description("Tests if GetDbContext() returns the DbContext type if the current type derives from it and null otherwise.")]
         public void TestGetDbContextType()
         {
-            OpenRiaServices.DomainServices.Tools.DbContextUtilities.ResetDbContextTypeReference();
-            Assert.IsNull(OpenRiaServices.DomainServices.Tools.DbContextUtilities.GetDbContextTypeReference(typeof(ITestInterface)));
+            OpenRiaServices.Tools.DbContextUtilities.ResetDbContextTypeReference();
+            Assert.IsNull(OpenRiaServices.Tools.DbContextUtilities.GetDbContextTypeReference(typeof(ITestInterface)));
 
-            OpenRiaServices.DomainServices.Tools.DbContextUtilities.ResetDbContextTypeReference();
-            Assert.IsNotNull(OpenRiaServices.DomainServices.Tools.DbContextUtilities.GetDbContextTypeReference(typeof(CodeFirstModels.EFCFNorthwindEntities)));
+            OpenRiaServices.Tools.DbContextUtilities.ResetDbContextTypeReference();
+            Assert.IsNotNull(OpenRiaServices.Tools.DbContextUtilities.GetDbContextTypeReference(typeof(CodeFirstModels.EFCFNorthwindEntities)));
         }
     }
     

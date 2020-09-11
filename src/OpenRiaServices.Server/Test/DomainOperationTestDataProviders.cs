@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRiaServices.DomainServices.Hosting;
+using OpenRiaServices.Hosting;
 using Cities;
 
-namespace OpenRiaServices.DomainServices.Server.Test
+namespace OpenRiaServices.Server.Test
 {
     #region Valid domain method test providers
     [EnableClientAccess]

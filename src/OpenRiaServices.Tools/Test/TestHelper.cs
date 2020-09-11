@@ -8,15 +8,15 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Policy;
 using System.Text;
-using OpenRiaServices.DomainServices.Tools;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
-using OpenRiaServices.DomainServices.Tools.Test;
+using OpenRiaServices.Tools;
+using OpenRiaServices.Tools.SharedTypes;
+using OpenRiaServices.Tools.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
+using OpenRiaServices.Server.Test.Utilities;
 using System.Globalization;
 using Microsoft.Build.Exceptions;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     public class TestHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using MockUser = OpenRiaServices.DomainServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
+using MockUser = OpenRiaServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
 
-namespace OpenRiaServices.DomainServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.ApplicationServices.Test
 {
     public class AuthenticationDomainContext : AuthenticationDomainContextBase
     {

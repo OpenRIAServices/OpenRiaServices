@@ -6,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Threading;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 
-namespace OpenRiaServices.DomainServices.Server.UnitTesting
+namespace OpenRiaServices.Server.UnitTesting
 {
     /// <summary>
     /// Host for invoking <see cref="DomainService"/> operations from a test environment

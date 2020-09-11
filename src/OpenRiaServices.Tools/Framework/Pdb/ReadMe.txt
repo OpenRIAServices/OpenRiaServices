@@ -10,6 +10,6 @@ The following changes were made to the code:
   1) Made FxCop and StyleCop clean
   2) Removed all unnecessary code for PDB writers
   3) Removed ILDB support
-  4) Modified the namespace to live in OpenRiaServices.DomainServices.Tools.Pdb and Pdb.SymStore
+  4) Modified the namespace to live in OpenRiaServices.Tools.Pdb and Pdb.SymStore
   5) Made all types internal rather than public
   

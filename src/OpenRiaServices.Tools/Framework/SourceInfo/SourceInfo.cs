@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools.SourceLocation
+﻿namespace OpenRiaServices.Tools.SourceLocation
 {
     using System;
     using System.Collections.Generic;

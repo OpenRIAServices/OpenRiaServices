@@ -1,5 +1,5 @@
 // These interfaces serve as an extension to the BCL's SymbolStore interfaces.
-namespace OpenRiaServices.DomainServices.Tools.Pdb.SymStore
+namespace OpenRiaServices.Tools.Pdb.SymStore
 {
     // Interface does not need to be marked with the serializable attribute
     using System.Diagnostics.SymbolStore;

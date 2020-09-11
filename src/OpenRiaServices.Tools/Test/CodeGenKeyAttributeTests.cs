@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using OpenRiaServices.DomainServices.Server.Test.Utilities;
-using OpenRiaServices.DomainServices.Tools.SharedTypes;
+using OpenRiaServices.Server.Test.Utilities;
+using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace OpenRiaServices.DomainServices.Tools.Test
+namespace OpenRiaServices.Tools.Test
 {
     /// <summary>
     /// Test that have to deal with [Key] attribute on entities
@@ -20,7 +20,7 @@ namespace OpenRiaServices.DomainServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             string generatedCode = TestHelper.GenerateCode("C#", typeof(Mock_CG_Attr_Entity_Missing_Key_DomainService), logger);
             Assert.IsTrue(string.IsNullOrEmpty(generatedCode));
-            TestHelper.AssertContainsErrors(logger, string.Format(OpenRiaServices.DomainServices.Server.Resource.Entity_Has_No_Key_Properties, typeof(Mock_CG_Attr_Entity_Missing_Key).Name, typeof(Mock_CG_Attr_Entity_Missing_Key_DomainService).Name));
+            TestHelper.AssertContainsErrors(logger, string.Format(OpenRiaServices.Server.Resource.Entity_Has_No_Key_Properties, typeof(Mock_CG_Attr_Entity_Missing_Key).Name, typeof(Mock_CG_Attr_Entity_Missing_Key_DomainService).Name));
         }
 
         [TestMethod]

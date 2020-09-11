@@ -19,11 +19,11 @@ using TestDomainServices;
 using TestDomainServices.LTS;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
-namespace OpenRiaServices.DomainServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     using TestDomainServices.Saleテ;
-    using Resource = SSmDsClient::OpenRiaServices.DomainServices.Client.Resource;
-    using Resources = SSmDsClient::OpenRiaServices.DomainServices.Client.Resources;
+    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
+    using Resources = SSmDsClient::OpenRiaServices.Client.Resources;
 
     /// <summary>
     /// Non provider specific query tests.

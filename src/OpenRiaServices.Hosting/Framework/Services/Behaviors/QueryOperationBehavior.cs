@@ -7,13 +7,13 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using OpenRiaServices.DomainServices.Server;
+using OpenRiaServices.Server;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.DomainServices.Hosting
+namespace OpenRiaServices.Hosting
 {
     internal class QueryOperationBehavior<TEntity> : IOperationBehavior, IQueryOperationSettings
     {
@@ -231,49 +231,49 @@ namespace OpenRiaServices.DomainServices.Hosting
             }
 
             /// <summary>
-            /// Converts the specified <see cref="System.Web.UI.OutputCacheLocation"/> enum value to a <see cref="OpenRiaServices.DomainServices.Server"/> enum value.
+            /// Converts the specified <see cref="System.Web.UI.OutputCacheLocation"/> enum value to a <see cref="OpenRiaServices.Server"/> enum value.
             /// </summary>
             /// <param name="outputCacheLocation">The <see cref="System.Web.UI.OutputCacheLocation"/>.</param>
-            /// <returns>The equivalent <see cref="OpenRiaServices.DomainServices.Server.OutputCacheLocation"/> value.</returns>
-            private static OpenRiaServices.DomainServices.Server.OutputCacheLocation GetCacheLocation(System.Web.UI.OutputCacheLocation outputCacheLocation)
+            /// <returns>The equivalent <see cref="OpenRiaServices.Server.OutputCacheLocation"/> value.</returns>
+            private static OpenRiaServices.Server.OutputCacheLocation GetCacheLocation(System.Web.UI.OutputCacheLocation outputCacheLocation)
             {
                 switch (outputCacheLocation)
                 {
                     case System.Web.UI.OutputCacheLocation.Any:
-                        return OpenRiaServices.DomainServices.Server.OutputCacheLocation.Any;
+                        return OpenRiaServices.Server.OutputCacheLocation.Any;
                     case System.Web.UI.OutputCacheLocation.Client:
-                        return OpenRiaServices.DomainServices.Server.OutputCacheLocation.Client;
+                        return OpenRiaServices.Server.OutputCacheLocation.Client;
                     case System.Web.UI.OutputCacheLocation.Downstream:
-                        return OpenRiaServices.DomainServices.Server.OutputCacheLocation.Downstream;
+                        return OpenRiaServices.Server.OutputCacheLocation.Downstream;
                     case System.Web.UI.OutputCacheLocation.Server:
-                        return OpenRiaServices.DomainServices.Server.OutputCacheLocation.Server;
+                        return OpenRiaServices.Server.OutputCacheLocation.Server;
                     case System.Web.UI.OutputCacheLocation.ServerAndClient:
-                        return OpenRiaServices.DomainServices.Server.OutputCacheLocation.ServerAndClient;
+                        return OpenRiaServices.Server.OutputCacheLocation.ServerAndClient;
                     default:
-                        return OpenRiaServices.DomainServices.Server.OutputCacheLocation.None;
+                        return OpenRiaServices.Server.OutputCacheLocation.None;
                 }
             }
 
             /// <summary>
-            /// Converts the specified <see cref="OpenRiaServices.DomainServices.Server.OutputCacheLocation"/> enum value to a <see cref="HttpCacheability"/> enum value.
+            /// Converts the specified <see cref="OpenRiaServices.Server.OutputCacheLocation"/> enum value to a <see cref="HttpCacheability"/> enum value.
             /// </summary>
-            /// <param name="outputCacheLocation">The <see cref="OpenRiaServices.DomainServices.Server.OutputCacheLocation"/>.</param>
+            /// <param name="outputCacheLocation">The <see cref="OpenRiaServices.Server.OutputCacheLocation"/>.</param>
             /// <returns>The equivalent <see cref="HttpCacheability"/> value.</returns>
-            private static HttpCacheability GetCacheability(OpenRiaServices.DomainServices.Server.OutputCacheLocation outputCacheLocation)
+            private static HttpCacheability GetCacheability(OpenRiaServices.Server.OutputCacheLocation outputCacheLocation)
             {
                 // Following conversion is taken from System.Web.UI.Page.InitOutputCache.
                 switch (outputCacheLocation)
                 {
-                    case OpenRiaServices.DomainServices.Server.OutputCacheLocation.Client:
+                    case OpenRiaServices.Server.OutputCacheLocation.Client:
                         return HttpCacheability.Private;
-                    case OpenRiaServices.DomainServices.Server.OutputCacheLocation.Any:
-                    case OpenRiaServices.DomainServices.Server.OutputCacheLocation.Downstream:
+                    case OpenRiaServices.Server.OutputCacheLocation.Any:
+                    case OpenRiaServices.Server.OutputCacheLocation.Downstream:
                         return HttpCacheability.Public;
-                    case OpenRiaServices.DomainServices.Server.OutputCacheLocation.Server:
+                    case OpenRiaServices.Server.OutputCacheLocation.Server:
                         return HttpCacheability.Server;
-                    case OpenRiaServices.DomainServices.Server.OutputCacheLocation.ServerAndClient:
+                    case OpenRiaServices.Server.OutputCacheLocation.ServerAndClient:
                         return HttpCacheability.ServerAndPrivate;
-                    case OpenRiaServices.DomainServices.Server.OutputCacheLocation.None:
+                    case OpenRiaServices.Server.OutputCacheLocation.None:
                     default:
                         return HttpCacheability.NoCache;
                 }

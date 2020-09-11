@@ -1,12 +1,12 @@
-﻿<#@ template language="C#" inherits="OpenRiaServices.DomainServices.Tools.TextTemplate.ComplexObjectGenerator" linePragmas="false" #>
+﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator" linePragmas="false" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Server" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Tools.TextTemplate" #>
-<#@ import namespace="OpenRiaServices.DomainServices.Tools" #>
+<#@ import namespace="OpenRiaServices.Server" #>
+<#@ import namespace="OpenRiaServices.Tools.TextTemplate" #>
+<#@ import namespace="OpenRiaServices.Tools" #>
 <#@ import namespace="System.Runtime.Serialization" #>
 
 <#@ include file="Templates\Utility.ttinclude" #>

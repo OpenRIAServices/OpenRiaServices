@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace OpenRiaServices.DomainServices.NHibernate
+namespace OpenRiaServices.NHibernate
 {
     internal class PropertyDescriptorWrapper : PropertyDescriptor
     {
