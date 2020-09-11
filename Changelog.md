@@ -66,6 +66,7 @@ This means that operations should be started on the UI thread if any data of the
   * In earlier previews an exception was thrown instead of the operation beeing Cancelled
   
 ### Server
+
 * Hosting - Endpoint changes (#218)
    * Reuse the same `ContractDescription` for multiple endpoints (endpoint name is not longer added)
    * Dont add SilverlightFaultBehaviour by default to DomainServices
@@ -74,6 +75,7 @@ This means that operations should be started on the UI thread if any data of the
 * Trigger cancellation on client disconnect (#222)
 
 ### Server
+
 * EntityFramework: Target IDbSet instead of DbSet with AttachAsModified extension methods (#215) 
 
 ### Infrastructure
@@ -170,7 +172,7 @@ Move Authenication related code from ..Server.ApplicationServices to
 ## Client
 
 	
-1. Add transport (OpenRiaServices.Client.Web) to netstandard 2.0 nuget.
+1. Add transport (OpenRiaServices.DomainServices.Client.Web) to netstandard 2.0 nuget.
   This provides the SoapDomainClientFactory for netstandard / netcoreapp assemblies.
    
 # 4.6.1
@@ -201,7 +203,7 @@ Move Authenication related code from ..Server.ApplicationServices to
   * native support for all platforms supporting netstandard 2
   * Run this code before creating first DomainContext, 
   ``` csharp
-  DomainContext.DomainClientFactory = new OpenRiaServices.Client.Web.SoapDomainClientFactory()
+  DomainContext.DomainClientFactory = new OpenRiaServices.DomainServices.Client.Web.SoapDomainClientFactory()
 {
     ServerBaseUri = "https://my.site.com/",
 };
