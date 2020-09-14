@@ -6,12 +6,14 @@
 2. Client networking API the *DomainClient* is now based on Task instead of using the APM pattern with Begin/End methods
 3. Supported TargetFrameworks has changed
 4. Code generation now works against *netstandard 2.0* and *netcore 2.1+* clients
+5. **Major namespace changes** *DomainServices* is dropped from namespaces and assemblies
 5. AspNetMembership authentication (**AuthenticationBase** and related classes) are moved to a new namespace and nuget package
    * Add a reference to *OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
 
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
+2. Seach and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files
 2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.Server.ApplicationServices` namespace in your server project 
    1. Add the *OpenRiaServices.Server.Authentication.AspNetMembership* nuget package to it
    2. Replace *OpenRiaServices.Server.ApplicationServices* with *OpenRiaServices.Server.Authentication*
@@ -42,6 +44,8 @@ It is currently quite empty but already demonstrates some of the following scena
 
 # 5.0.0 RC
 
+* "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs.
+  * **IMPORTANT** Seach and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
 * Updated required version of .Net Framework to 4.7.2 (#241)
 * Updated dependencies including EntityFramework to latests availible versions #240
 * Create, Update and Delete methods on server can now return Task #226
