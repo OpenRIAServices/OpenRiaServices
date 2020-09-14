@@ -25,7 +25,7 @@
     <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
   </WizardExtension>
   <WizardExtension>
-    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
     <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.AuthenticationDomainServiceWizard</FullClassName>
   </WizardExtension>
   <WizardData>

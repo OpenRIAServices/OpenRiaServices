@@ -13,7 +13,7 @@
         <LocationField>Enabled</LocationField>
         <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
         <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
-        <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+        <RequiredFrameworkVersion>4.7.2</RequiredFrameworkVersion>
       <LanguageTag>csharp</LanguageTag>
       <!-- We should add Andoird, iOS, Linuz, macOS with netstandard client -->
       <PlatformTag>Windows</PlatformTag>
@@ -90,7 +90,7 @@
     </packages>
   </WizardData>
   <WizardExtension>
-    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
+    <Assembly>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8</Assembly>
     <FullClassName>OpenRiaServices.VisualStudio.DomainServices.Tools.BusinessApplicationProjectTemplateWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>

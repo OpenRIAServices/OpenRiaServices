@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);SERVERFX;WIZARD;DBCONTEXT;VS14</DefineConstants>
     <AssemblyName>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0</AssemblyName>
     <VsVersion Condition=" '$(VsVersion)' == '' ">14.0</VsVersion>
