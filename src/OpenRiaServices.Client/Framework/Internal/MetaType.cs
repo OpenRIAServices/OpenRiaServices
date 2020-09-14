@@ -130,7 +130,7 @@ namespace OpenRiaServices.Client.Internal
 
             if (!_requiresValidation && HasComplexMembers)
             {
-                // Reqursivly search properties on all complex members for validation attribues to 
+                // Reqursivly search properties on all complex members for validation attribues and IValidatableObject to 
                 // determine if validation is required
                 var visitedTypes = new HashSet<Type>() { type };
                 foreach (var member in Members)
@@ -258,9 +258,8 @@ namespace OpenRiaServices.Client.Internal
         public IEnumerable<Type> ChildTypes => this._childTypes;
 
         /// <summary>
-        /// Gets a value indicating whether the Type has any Type or member level
-        /// validation attributes applied. The check is recursive through any complex
-        /// type members.
+        /// Gets a value indicating whether the Type requires any Type or member level
+        /// validation. The check is recursive through any complex type members.
         /// </summary>
         public bool RequiresValidation => this._requiresValidation;
 
@@ -271,13 +270,13 @@ namespace OpenRiaServices.Client.Internal
         public bool HasComposition { get; }
 
         /// <summary>
-        /// Gets the Type level validation errors for the underlying Type.
+        /// Gets the Type level validation attributes for the underlying Type.
         /// </summary>
         public IEnumerable<ValidationAttribute> ValidationAttributes => _validationAttributes;
 
         /// <summary>
         /// This recursive function visits every property in the type tree. For each property,
-        /// we inspect the attributes and set meta attributes as needed.
+        /// we inspect the type and attributes if validation is required.
         /// </summary>
         /// <param name="type">The root type to calculate attributes for.</param>
         /// <param name="visited">Visited set for recursion.</param>
