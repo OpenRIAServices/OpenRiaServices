@@ -223,7 +223,8 @@ namespace OpenRiaServices.Server
 
             if (!this._requiresValidation)
             {
-                this._requiresValidation = TypeDescriptor.GetAttributes(this._type)[typeof(ValidationAttribute)] != null;
+                this._requiresValidation = TypeDescriptor.GetAttributes(this._type)[typeof(ValidationAttribute)] != null
+                    || type.GetInterface(typeof(IValidatableObject).FullName) != null;
             }
 
             // visit all data members

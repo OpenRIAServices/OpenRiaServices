@@ -122,7 +122,7 @@ namespace OpenRiaServices.Client.Internal
             this.Type = type;
 
             _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this.Type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
-            _requiresValidation = _requiresValidation || _validationAttributes.Any();
+            _requiresValidation = _requiresValidation || _validationAttributes.Any() || type.GetInterface(typeof(IValidatableObject).FullName) != null;
 
             // for identity purposes, we need to make sure values are always ordered
             KeyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
@@ -303,6 +303,9 @@ namespace OpenRiaServices.Client.Internal
 
             // Check for type level validation
             if (TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true))
+                return true;
+
+            if (type.GetInterface(typeof(IValidatableObject).FullName) != null)
                 return true;
 
             // visit all data members
