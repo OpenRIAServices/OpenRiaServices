@@ -8,7 +8,8 @@
 4. Code generation now works against *netstandard 2.0* and *netcore 2.1+* clients
 5. AspNetMembership authentication (**AuthenticationBase** and related classes) are moved to a new namespace and nuget package
    * Add a reference to *OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
-
+6. Full support for IValidatableObject validation (earlier versions only validated IValidatableObject if ValidationAttribute also was specified)
+   
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
