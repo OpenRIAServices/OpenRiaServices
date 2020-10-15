@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Server.UnitTesting
@@ -139,6 +142,20 @@ namespace OpenRiaServices.Server.UnitTesting
         #region Query
 
         /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the results
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entity to return</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <returns>The entities returned from the specified operation</returns>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, IEnumerable<TEntity>>> queryOperation, CancellationToken ct = default) 
+            where TEntity : class
+        {
+            return this.QueryCoreAsync<TEntity>(queryOperation, ct);
+        }
+
+        /// <summary>
         /// Invokes the specified <paramref name="queryOperation"/> and returns the results
         /// </summary>
         /// <typeparam name="TEntity">The type of entity to return</typeparam>
@@ -215,6 +232,18 @@ namespace OpenRiaServices.Server.UnitTesting
         }
 
         /// <summary>
+        /// Invokes the insert operation for the specified entity
+        /// </summary>
+        /// <typeparam name="TEntity">The entity type</typeparam>
+        /// <param name="entity">The entity to insert</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public Task InsertAsync<TEntity>(TEntity entity, CancellationToken ct = default) where TEntity : class
+        {
+            return this.SubmitCoreAsync(DomainOperation.Insert, /* submitOperation */ null, entity, /* original */ null, ct);
+        }
+
+        /// <summary>
         /// Invokes the insert operation for the specified entity and returns the validation errors
         /// and whether the operation completed successfully
         /// </summary>
@@ -245,6 +274,18 @@ namespace OpenRiaServices.Server.UnitTesting
         #endregion
 
         #region Update
+        /// <summary>
+        /// Invokes the update operation for the specified entity
+        /// </summary>
+        /// <typeparam name="TEntity">The entity type</typeparam>
+        /// <param name="entity">The entity to update</param>
+        /// <param name="original">The original version of the entity. This parameter can be <c>null</c>.</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public Task UpdateAsync<TEntity>(TEntity entity, TEntity original = null, CancellationToken ct = default) where TEntity : class
+        {
+            return this.SubmitCoreAsync<TEntity>(DomainOperation.Update, /* submitOperation */ null, entity, original, ct);
+        }
 
         /// <summary>
         /// Invokes the update operation for the specified entity
@@ -256,6 +297,23 @@ namespace OpenRiaServices.Server.UnitTesting
         public void Update<TEntity>(TEntity entity, TEntity original = null) where TEntity : class
         {
             this.SubmitCore<TEntity>(DomainOperation.Update, /* submitOperation */ null, entity, original);
+        }
+
+        /// <summary>
+        /// Invokes the update operation for the specified entity
+        /// </summary>
+        /// <remarks>
+        /// This method can be used for custom-named Update operations
+        /// </remarks>
+        /// <typeparam name="TEntity">The entity type</typeparam>
+        /// <param name="updateOperation">The <see cref="Expression"/> identifying the update operation to invoke</param>
+        /// <param name="original">The original version of the entity. This parameter can be <c>null</c>.</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public Task UpdateAsync<TEntity>(Expression<Action<TDomainService>> updateOperation, TEntity original = null, CancellationToken ct = default)
+            where TEntity : class
+        {
+            return this.SubmitCoreAsync<TEntity>(DomainOperation.Update, updateOperation, /* entity */ null, original, ct);
         }
 
         /// <summary>
@@ -349,6 +407,19 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <typeparam name="TEntity">The entity type</typeparam>
         /// <param name="entity">The entity to delete</param>
         /// <param name="original">The original version of the entity. This parameter can be <c>null</c>.</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public Task DeleteAsync<TEntity>(TEntity entity, TEntity original = null, CancellationToken ct = default) where TEntity : class
+        {
+            return this.SubmitCoreAsync<TEntity>(DomainOperation.Delete, /* submitOperation */ null, entity, original, ct);
+        }
+
+        /// <summary>
+        /// Invokes the delete operation for the specified entity
+        /// </summary>
+        /// <typeparam name="TEntity">The entity type</typeparam>
+        /// <param name="entity">The entity to delete</param>
+        /// <param name="original">The original version of the entity. This parameter can be <c>null</c>.</param>
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
         public void Delete<TEntity>(TEntity entity, TEntity original = null) where TEntity : class
         {
@@ -406,6 +477,22 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <summary>
         /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
         /// </summary>
+        /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
+        /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
+        /// <see cref="Update{TEntity}(TEntity, TEntity)"/> and <see cref="Delete{TEntity}(TEntity, TEntity)"/>
+        /// </remarks>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> to execute</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        public Task SubmitAsync(ChangeSet changeSet, CancellationToken ct = default)
+        {
+            OperationContext context = this.CreateOperationContext(DomainOperationType.Submit);
+            return SubmitChangeSetCoreAsync(context, changeSet, ct);
+        }
+
+        /// <summary>
+        /// Invokes all <see cref="ChangeSetEntry"/> in the <see cref="ChangeSet"/>.
+        /// </summary>
         /// <returns><c>true</c> if the Submit was performed without any errors; otherwise <c>false</c></returns>
         /// <remarks>This method is intended to allow testing Submit with multiple entities at once.
         /// To test CUD operations for single entities have a look at <see cref="Insert{TEntity}(TEntity)"/>, 
@@ -441,6 +528,17 @@ namespace OpenRiaServices.Server.UnitTesting
         #region Invoke
 
         /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> asynchronously
+        /// </summary>
+        /// <param name="invokeOperation"></param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <returns></returns>
+        public Task InvokeAsync(Expression<Action<TDomainService>> invokeOperation, CancellationToken ct = default)
+        {
+            return this.InvokeCoreAsync<object>(invokeOperation, ct);
+        }
+
+        /// <summary>
         /// Invokes the specified <paramref name="invokeOperation"/>
         /// </summary>
         /// <remarks>
@@ -454,6 +552,45 @@ namespace OpenRiaServices.Server.UnitTesting
         }
 
         /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> asynchronously
+        /// </summary>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task<typeparamref name="TResult"/>"/> as return type,
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// identifying the operation to invoke</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public Task InvokeAsync<TResult>(Expression<Func<TDomainService, Task>> invokeOperation, CancellationToken ct = default)
+        {
+            return this.InvokeCoreAsync<object>(invokeOperation, ct);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/>
+        /// </summary>
+        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task"/> as return type,
+        /// identifying the operation to invoke</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public void Invoke(Expression<Func<TDomainService, Task>> invokeOperation)
+        {
+            this.InvokeCore<object>(invokeOperation);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> asynchronously and returns the result
+        /// </summary>
+        /// <remarks>
+        /// This method should not be used to invoke query, insert, update, or delete operations
+        /// </remarks>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public Task<TResult> InvokeAsync<TResult>(Expression<Func<TDomainService, TResult>> invokeOperation, CancellationToken ct = default)
+        {
+            return this.InvokeCoreAsync<TResult>(invokeOperation, ct);
+        }
+
+        /// <summary>
         /// Invokes the specified <paramref name="invokeOperation"/> and returns the result
         /// </summary>
         /// <remarks>
@@ -463,6 +600,33 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
         public TResult Invoke<TResult>(Expression<Func<TDomainService, TResult>> invokeOperation)
+        {
+            return this.InvokeCore<TResult>(invokeOperation);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> asynchronously and returns the result
+        /// </summary>
+        /// <remarks>
+        /// This method should not be used to invoke query, insert, update, or delete operations
+        /// </remarks>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public Task<TResult> InvokeAsync<TResult>(Expression<Func<TDomainService, Task<TResult>>> invokeOperation, CancellationToken ct = default)
+        {
+            return this.InvokeCoreAsync<TResult>(invokeOperation, ct);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> and returns the result
+        /// </summary>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task<typeparamref name="TResult"/>"/> as return type,
+        /// identifying the operation to invoke</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public TResult Invoke<TResult>(Expression<Func<TDomainService, Task<TResult>>> invokeOperation)
         {
             return this.InvokeCore<TResult>(invokeOperation);
         }
@@ -495,7 +659,42 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="result">The result of the operation</param>
         /// <param name="validationErrors">The validation errors that occurred</param>
         /// <returns>Whether the operation completed without error</returns>
+        public bool TryInvoke<TResult>(Expression<Func<TDomainService, Task>> invokeOperation, out IList<ValidationResult> validationErrors)
+        {
+            object result;
+            return this.TryInvokeCore<object>(invokeOperation, out result, out validationErrors);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> and returns the result, the validation errors,
+        /// and whether the operation completed successfully
+        /// </summary>
+        /// <remarks>
+        /// This method should not be used to invoke query, insert, update, or delete operations
+        /// </remarks>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
+        /// <param name="result">The result of the operation</param>
+        /// <param name="validationErrors">The validation errors that occurred</param>
+        /// <returns>Whether the operation completed without error</returns>
         public bool TryInvoke<TResult>(Expression<Func<TDomainService, TResult>> invokeOperation, out TResult result, out IList<ValidationResult> validationErrors)
+        {
+            return this.TryInvokeCore<TResult>(invokeOperation, out result, out validationErrors);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> and returns the result, the validation errors,
+        /// and whether the operation completed successfully
+        /// </summary>
+        /// <remarks>
+        /// This method should not be used to invoke query, insert, update, or delete operations
+        /// </remarks>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
+        /// <param name="result">The result of the operation</param>
+        /// <param name="validationErrors">The validation errors that occurred</param>
+        /// <returns>Whether the operation completed without error</returns>
+        public bool TryInvoke<TResult>(Expression<Func<TDomainService, Task<TResult>>> invokeOperation, out TResult result, out IList<ValidationResult> validationErrors)
         {
             return this.TryInvokeCore<TResult>(invokeOperation, out result, out validationErrors);
         }
@@ -513,13 +712,27 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
         private IEnumerable<TEntity> QueryCore<TEntity>(Expression queryOperation) where TEntity : class
         {
+            return QueryCoreAsync<TEntity>(queryOperation, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> and returns the results
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entity to return</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <returns>The entities returned from the specified operation</returns>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        private async Task<IEnumerable<TEntity>> QueryCoreAsync<TEntity>(Expression queryOperation, CancellationToken ct) where TEntity : class
+        {
             OperationContext context = this.CreateOperationContext(DomainOperationType.Query);
 
             QueryDescription queryDescription = Utility.GetQueryDescription(context, queryOperation);
 
-            var queryTask = context.DomainService.QueryAsync<TEntity>(queryDescription, CancellationToken.None);
-            // TODO: Remove blocking wait
-            var queryResult = queryTask.GetAwaiter().GetResult();
+            var queryResult = await context.DomainService.QueryAsync<TEntity>(queryDescription, ct);
+    
             ErrorUtility.AssertNoValidationErrors(context, queryResult.ValidationErrors);
 
             IEnumerable entities = queryResult.Result;
@@ -571,6 +784,30 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
         private void SubmitCore<TEntity>(DomainOperation operationType, Expression submitOperation, TEntity entity, TEntity original) where TEntity : class
         {
+            SubmitCoreAsync(operationType, submitOperation, entity, original, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Invokes an operation according to the specified <paramref name="operationType"/> and entity
+        /// </summary>
+        /// <typeparam name="TEntity">The entity type</typeparam>
+        /// <param name="operationType">The type of operation to invoke</param>
+        /// <param name="submitOperation">
+        /// The <see cref="Expression"/> identifying the operation to invoke. This parameter can be <c>null</c>
+        /// as long as <paramref name="entity"/> is not.
+        /// </param>
+        /// <param name="entity">
+        /// The entity to pass to the operation. This parameter can be <c>null</c> as long as
+        /// <paramref name="submitOperation"/> is not.
+        /// </param>
+        /// <param name="original">The original version of the entity. This parameter can be <c>null</c>.</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        private Task SubmitCoreAsync<TEntity>(DomainOperation operationType, Expression submitOperation, TEntity entity, TEntity original, CancellationToken ct)
+            where TEntity : class
+        {
             OperationContext context = this.CreateOperationContext(DomainOperationType.Submit);
 
             ChangeSetEntry changeSetEntry;
@@ -592,7 +829,7 @@ namespace OpenRiaServices.Server.UnitTesting
             }
             ChangeSet changeSet = Utility.CreateChangeSet(changeSetEntry);
 
-            SubmitChangeSetCore(context, changeSet);
+            return SubmitChangeSetCoreAsync(context, changeSet, ct);
         }
 
         /// <summary>
@@ -646,9 +883,20 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
         private static void SubmitChangeSetCore(OperationContext context, ChangeSet changeSet)
         {
-            // TODO: Remove blocking await
-            context.DomainService.SubmitAsync(changeSet, CancellationToken.None)
-                .GetAwaiter().GetResult();
+            SubmitChangeSetCoreAsync(context, changeSet, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Invokes one or several operation according to the specified <paramref name="changeSet"/>
+        /// </summary>
+        /// <param name="context"><see cref="OperationContext"/> for the current operation</param>
+        /// <param name="changeSet">The <see cref="ChangeSet"/> identifying the operations to invoke.</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any <see cref="ChangeSet"/> errors</exception>
+        private static async Task SubmitChangeSetCoreAsync(OperationContext context, ChangeSet changeSet, CancellationToken ct)
+        {
+            await context.DomainService.SubmitAsync(changeSet, CancellationToken.None);
 
             ErrorUtility.AssertNoChangeSetErrors(context, changeSet);
         }
@@ -677,12 +925,24 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
         private TResult InvokeCore<TResult>(Expression invokeOperation)
         {
+            return InvokeCoreAsync<TResult>(invokeOperation, CancellationToken.None)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="invokeOperation"/> and returns the result
+        /// </summary>
+        /// <typeparam name="TResult">The result type</typeparam>
+        /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        private async Task<TResult> InvokeCoreAsync<TResult>(Expression invokeOperation, CancellationToken ct)
+        {
             OperationContext context = this.CreateOperationContext(DomainOperationType.Invoke);
 
             InvokeDescription invokeDescription = Utility.GetInvokeDescription(context, invokeOperation);
 
-            // TODO: Remove blocking wait
-            var invokeResult = context.DomainService.InvokeAsync(invokeDescription, CancellationToken.None).GetAwaiter().GetResult();
+            var invokeResult = await context.DomainService.InvokeAsync(invokeDescription, ct);
             ErrorUtility.AssertNoValidationErrors(context, invokeResult.ValidationErrors);
             TResult result = (TResult)invokeResult.Result;
 
