@@ -149,7 +149,21 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="ct">The <see cref="CancellationToken"/></param>
         /// <returns>The entities returned from the specified operation</returns>
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
-        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, IEnumerable<TEntity>>> queryOperation, CancellationToken ct = default) 
+        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, Task<IQueryable<TEntity>>>> queryOperation, CancellationToken ct = default) 
+            where TEntity : class
+        {
+            return this.QueryCoreAsync<TEntity>(queryOperation, ct);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the results
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entity to return</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <returns>The entities returned from the specified operation</returns>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, IQueryable<TEntity>>> queryOperation, CancellationToken ct = default)
             where TEntity : class
         {
             return this.QueryCoreAsync<TEntity>(queryOperation, ct);

@@ -293,12 +293,20 @@ namespace Cities
         }
 
         [Invoke]
-        public async Task<string> EchoWithDelayAsync(string msg, TimeSpan delay)
+        public async Task<string> EchoWithDelay(string msg, TimeSpan delay)
         {
             // This method is used to test cancellation of invoke operations
             // Since the method might return to soon otherwise we add a delay
-            await Task.Delay(delay, ServiceContext.CancellationToken);
+            await Delay(delay);
             return Echo(msg);
+        }
+
+        [Invoke]
+        public Task Delay(TimeSpan delay)
+        {
+            // This method is used to test cancellation of invoke operations
+            // Since the method might return to soon otherwise we add a delay
+            return Task.Delay(delay, ServiceContext.CancellationToken);
         }
 
         // This service operation is invoked to reset any static data
