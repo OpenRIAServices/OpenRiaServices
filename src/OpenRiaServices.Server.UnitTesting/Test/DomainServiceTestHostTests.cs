@@ -18,7 +18,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 		[TestMethod]
 		public async Task AssertInvokeAsyncReturnsCorrectType()
 		{
-            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
@@ -30,7 +30,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public void AssertInvokeWithTaskReturnsTResult()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
@@ -43,7 +43,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         public void AssertInvokeWithTaskVoidReturnDoesNotThrowError()
         {
             var domainService = new DummyDomainService();
-            var testHost = new UnitTesting.DomainServiceTestHost<DummyDomainService>(() => domainService);
+            var testHost = new DomainServiceTestHost<DummyDomainService>(() => domainService);
 
             testHost.Invoke(s => s.DummyInvoke());
 
@@ -54,7 +54,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         public async Task AssertInvokeAsyncWithTaskVoidReturnDoesNotThrowError()
         {
             var domainService = new DummyDomainService();
-            var testHost = new UnitTesting.DomainServiceTestHost<DummyDomainService>(() => domainService);
+            var testHost = new DomainServiceTestHost<DummyDomainService>(() => domainService);
 
             await testHost.InvokeAsync(s => s.DummyInvoke());
 
@@ -64,7 +64,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task AssertInvokeAsyncWithoutTaskReturnsTResult()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
@@ -76,7 +76,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task AssertQueryAsync()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new DomainServiceTestHost<CityDomainService>();
 
             var result = await testHost.QueryAsync(s => s.GetZips(), CancellationToken.None);
 
@@ -86,7 +86,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task QueryAsync()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new DomainServiceTestHost<CityDomainService>();
 
             var result = await testHost.QueryAsync(s => s.GetZipsWithDelay(TimeSpan.FromMilliseconds(1)), CancellationToken.None);
 
@@ -96,11 +96,11 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task SumbitAsync()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
             var changeSetEntries = new HashSet<ChangeSetEntry> 
             {
-                new ChangeSetEntry { Operation = DomainOperation.Insert, Entity = new Zip() }
+                new ChangeSetEntry { Operation = DomainOperation.Insert, Entity = new RangeItem() }
             };
             var changeSet = new ChangeSet(changeSetEntries);
 
@@ -110,7 +110,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task InsertAsync()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<ServerSideAsyncDomainService>();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
             var rangeItem = new RangeItem();
 
@@ -122,7 +122,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task UpdateAsync()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<ServerSideAsyncDomainService>();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
             var rangeItem = new RangeItem();
 
@@ -134,7 +134,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task DeleteAsync()
         {
-            var testHost = new UnitTesting.DomainServiceTestHost<ServerSideAsyncDomainService>();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
             var rangeItem = new RangeItem();
 

@@ -458,7 +458,6 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
-            Assert.AreEqual("deleted", rangeItem.Text);
         }
 
         [TestMethod]
