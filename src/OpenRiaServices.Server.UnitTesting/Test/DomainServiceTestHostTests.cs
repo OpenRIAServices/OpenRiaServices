@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TestDomainServices;
 using TestDomainServices.TypeNameConflictResolution;
 
 namespace OpenRiaServices.Server.UnitTesting.Test
@@ -17,11 +18,11 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 		[TestMethod]
 		public async Task AssertInvokeAsyncReturnsCorrectType()
 		{
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
-            var result = await cityDomainServiceTestHost.InvokeAsync(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1)), CancellationToken.None);
+            var result = await testHost.InvokeAsync(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1)), CancellationToken.None);
             
             Assert.AreEqual(expectedResult, result);
         }
@@ -29,11 +30,11 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public void AssertInvokeWithTaskReturnsTResult()
         {
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
-            var result = cityDomainServiceTestHost.Invoke(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1)));
+            var result = testHost.Invoke(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1)));
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -41,19 +42,33 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public void AssertInvokeWithTaskVoidReturnDoesNotThrowError()
         {
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var domainService = new DummyDomainService();
+            var testHost = new UnitTesting.DomainServiceTestHost<DummyDomainService>(() => domainService);
 
-            cityDomainServiceTestHost.Invoke(s => s.Delay(TimeSpan.FromMilliseconds(1)));
+            testHost.Invoke(s => s.DummyInvoke());
+
+            Assert.IsTrue(domainService.IsInvoked, "The method should be invoked");
+        }
+
+        [TestMethod]
+        public async Task AssertInvokeAsyncWithTaskVoidReturnDoesNotThrowError()
+        {
+            var domainService = new DummyDomainService();
+            var testHost = new UnitTesting.DomainServiceTestHost<DummyDomainService>(() => domainService);
+
+            await testHost.InvokeAsync(s => s.DummyInvoke());
+
+            Assert.IsTrue(domainService.IsInvoked, "The method should be invoked");
         }
 
         [TestMethod]
         public async Task AssertInvokeAsyncWithoutTaskReturnsTResult()
         {
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
-            var result = await cityDomainServiceTestHost.InvokeAsync(s => s.Echo("Hello"), CancellationToken.None);
+            var result = await testHost.InvokeAsync(s => s.Echo("Hello"), CancellationToken.None);
 
             Assert.AreEqual(expectedResult, result);
         }
@@ -61,27 +76,27 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task AssertQueryAsync()
         {
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
 
-            var result = await cityDomainServiceTestHost.QueryAsync(s => s.GetZips(), CancellationToken.None);
-
-            Assert.AreEqual(3, result.Count());
-        }
-
-        [TestMethod]
-        public async Task AssertQueryAsyncTask()
-        {
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
-
-            var result = await cityDomainServiceTestHost.QueryAsync(s => s.GetZipsWithDelay(TimeSpan.FromMilliseconds(1)), CancellationToken.None);
+            var result = await testHost.QueryAsync(s => s.GetZips(), CancellationToken.None);
 
             Assert.AreEqual(3, result.Count());
         }
 
         [TestMethod]
-        public async Task AssertSumbitAsyncDoesNotThrow()
+        public async Task QueryAsync()
         {
-            var cityDomainServiceTestHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
+
+            var result = await testHost.QueryAsync(s => s.GetZipsWithDelay(TimeSpan.FromMilliseconds(1)), CancellationToken.None);
+
+            Assert.AreEqual(3, result.Count());
+        }
+
+        [TestMethod]
+        public async Task SumbitAsync()
+        {
+            var testHost = new UnitTesting.DomainServiceTestHost<CityDomainService>();
 
             var changeSetEntries = new HashSet<ChangeSetEntry> 
             {
@@ -89,7 +104,55 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             };
             var changeSet = new ChangeSet(changeSetEntries);
 
-            await cityDomainServiceTestHost.SubmitAsync(changeSet, CancellationToken.None);
+            await testHost.SubmitAsync(changeSet, CancellationToken.None);
+        }
+
+        [TestMethod]
+        public async Task InsertAsync()
+        {
+            var testHost = new UnitTesting.DomainServiceTestHost<ServerSideAsyncDomainService>();
+
+            var rangeItem = new RangeItem();
+
+            await testHost.InsertAsync(rangeItem, CancellationToken.None);
+
+            Assert.AreEqual(42, rangeItem.Id);
+        }
+
+        [TestMethod]
+        public async Task UpdateAsync()
+        {
+            var testHost = new UnitTesting.DomainServiceTestHost<ServerSideAsyncDomainService>();
+
+            var rangeItem = new RangeItem();
+
+            await testHost.UpdateAsync(rangeItem);
+
+            Assert.AreEqual("updated", rangeItem.Text);
+        }
+
+        [TestMethod]
+        public async Task DeleteAsync()
+        {
+            var testHost = new UnitTesting.DomainServiceTestHost<ServerSideAsyncDomainService>();
+
+            var rangeItem = new RangeItem();
+
+            await testHost.DeleteAsync(rangeItem);
+
+            Assert.AreEqual("deleted", rangeItem.Text);
+        }
+
+        public class DummyDomainService : DomainService
+        {
+            public bool IsInvoked { get; set; }
+
+            [Invoke]
+            public async Task DummyInvoke()
+            {
+                await Task.Delay(10);
+                IsInvoked = true;
+            }
         }
 
     }

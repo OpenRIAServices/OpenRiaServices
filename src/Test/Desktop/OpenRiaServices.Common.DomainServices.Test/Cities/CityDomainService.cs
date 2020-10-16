@@ -297,16 +297,8 @@ namespace Cities
         {
             // This method is used to test cancellation of invoke operations
             // Since the method might return to soon otherwise we add a delay
-            await Delay(delay);
+            await Task.Delay(delay, ServiceContext.CancellationToken);
             return Echo(msg);
-        }
-
-        [Invoke]
-        public Task Delay(TimeSpan delay)
-        {
-            // This method is used to test cancellation of invoke operations
-            // Since the method might return to soon otherwise we add a delay
-            return Task.Delay(delay, ServiceContext.CancellationToken);
         }
 
         // This service operation is invoked to reset any static data
