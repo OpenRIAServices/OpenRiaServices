@@ -670,7 +670,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="result">The result of the operation</param>
         /// <param name="validationErrors">The validation errors that occurred</param>
         /// <returns>Whether the operation completed without error</returns>
-        public bool TryInvoke<TResult>(Expression<Func<TDomainService, Task>> invokeOperation, out IList<ValidationResult> validationErrors)
+        public bool TryInvoke(Expression<Func<TDomainService, Task>> invokeOperation, out IList<ValidationResult> validationErrors)
         {
             return this.TryInvokeCore<object>(invokeOperation, out var _, out validationErrors);
         }
