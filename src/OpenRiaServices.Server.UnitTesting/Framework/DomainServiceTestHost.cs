@@ -665,9 +665,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <remarks>
         /// This method should not be used to invoke query, insert, update, or delete operations
         /// </remarks>
-        /// <typeparam name="TResult">The result type</typeparam>
         /// <param name="invokeOperation">The <see cref="Expression"/> identifying the operation to invoke</param>
-        /// <param name="result">The result of the operation</param>
         /// <param name="validationErrors">The validation errors that occurred</param>
         /// <returns>Whether the operation completed without error</returns>
         public bool TryInvoke(Expression<Func<TDomainService, Task>> invokeOperation, out IList<ValidationResult> validationErrors)
