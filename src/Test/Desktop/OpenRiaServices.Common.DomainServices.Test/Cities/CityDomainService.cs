@@ -293,7 +293,7 @@ namespace Cities
         }
 
         [Invoke]
-        public async Task<string> EchoWithDelayAsync(string msg, TimeSpan delay)
+        public async Task<string> EchoWithDelay(string msg, TimeSpan delay)
         {
             // This method is used to test cancellation of invoke operations
             // Since the method might return to soon otherwise we add a delay

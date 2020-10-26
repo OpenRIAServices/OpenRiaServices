@@ -152,6 +152,7 @@ namespace TestDomainServices
         public async Task DeleteRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
+            rangeItem.Text = "deleted";
             ThrowExceptionIfSelected(rangeItem, 27);
         }
 
