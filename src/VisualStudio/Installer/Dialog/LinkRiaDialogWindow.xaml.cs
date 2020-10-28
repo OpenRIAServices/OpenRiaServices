@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using EnvDTE;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.Tools;
 using OpenRiaServices.VisualStudio.Installer.Helpers;
 
 namespace OpenRiaServices.VisualStudio.Installer.Dialog
