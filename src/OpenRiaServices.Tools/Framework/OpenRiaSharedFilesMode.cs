@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.DomainServices.Tools
+﻿namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Determine how ".shared" files should be handled by code generation
