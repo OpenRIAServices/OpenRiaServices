@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using EnvDTE;
 using Microsoft.Build.Evaluation;
-using OpenRiaServices.DomainServices.Tools;
+using OpenRiaServices.Tools;
 using OpenRiaServices.VisualStudio.Installer.Helpers;
 using Project = EnvDTE.Project;
 
