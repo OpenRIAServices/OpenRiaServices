@@ -129,6 +129,14 @@ namespace OpenRiaServices.Tools
         public string CodeGeneratorName { get; set; }
 
         /// <summary>
+        /// Gets the string form of a boolean that indicates
+        /// whether the shared files should be copied (instead of linked).
+        /// </summary>
+        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value,  OpenRiaSharedFilesMode.Copy.ToString(), StringComparison.OrdinalIgnoreCase); }
+
+        private bool LinkSharedFilesInsteadOfCopy { get; set; } = true;
+
+        /// <summary>
         /// Gets the list of code files created by this task.
         /// </summary>
         /// <value>
@@ -161,9 +169,9 @@ namespace OpenRiaServices.Tools
             {
                 Dictionary<string, IList<string>> sharedFilesByProject = this.SharedFilesByProject;
                 List<ITaskItem> result = new List<ITaskItem>();
-                foreach (IList<string> files in sharedFilesByProject.Values)
+                foreach (var filesByProject in sharedFilesByProject)
                 {
-                    foreach (string file in files)
+                    foreach (string file in filesByProject.Value)
                     {
                         result.Add(new TaskItem(file));
                     }
@@ -305,11 +313,12 @@ namespace OpenRiaServices.Tools
         /// <value>
         /// This list is a concatenation of <see cref="GeneratedFiles"/> and <see cref="CopiedFiles"/>.
         /// </value>
-        internal IEnumerable<ITaskItem> OutputFiles
+        [Output]
+        public IEnumerable<ITaskItem> OutputFiles
         {
             get
             {
-                return this.GeneratedFiles.Concat(this.CopiedFiles);
+                return (LinkSharedFilesInsteadOfCopy) ? GeneratedFiles : GeneratedFiles.Concat(CopiedFiles);
             }
         }
 
@@ -377,7 +386,7 @@ namespace OpenRiaServices.Tools
         {
             get
             {
-                if(string.IsNullOrEmpty(ClientFrameworkPath))
+                if (string.IsNullOrEmpty(ClientFrameworkPath))
                     return TargetPlatform.Unknown;
 
                 if (ClientFrameworkPath.IndexOf("Silverlight", StringComparison.InvariantCultureIgnoreCase) != -1)
@@ -966,7 +975,7 @@ namespace OpenRiaServices.Tools
                 this._projectFileReader.Dispose();
                 this._projectFileReader = null;
             }
-            }
+        }
 
         /// <summary>
         /// Issue a build warning if we cannot find a PDB file for the given assembly
@@ -1208,6 +1217,12 @@ namespace OpenRiaServices.Tools
         private void CopySharedFiles()
         {
             Dictionary<string, IList<string>> sharedFilesByProject = this.SharedFilesByProject;
+
+            // SharedFilesByProject initializes important information about service links
+            // Dont exit until after initialization
+            if (LinkSharedFilesInsteadOfCopy)
+                return;
+
             HashSet<string> fileHash = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             // Each separate project's set of files is copied under a unique folder under GeneratedCode.
@@ -1258,7 +1273,6 @@ namespace OpenRiaServices.Tools
 
             // Keep track of all files that are logically copied, even if we find it is current
             this.AddCopiedFile(destinationFilePath);
-
             // Don't do any work unless the inputs are newer.
             // Note: we are sensitive to a VS TextBuffer being dirty as being newer
             if (this.IsFileWriteTimeDifferent(sourceFilePath, destinationFilePath))

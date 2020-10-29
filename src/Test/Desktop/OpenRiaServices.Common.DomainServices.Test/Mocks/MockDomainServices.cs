@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices;
-using OpenRiaServices;
 using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;

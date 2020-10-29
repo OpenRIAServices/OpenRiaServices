@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EnvDTE;
 using Microsoft.Build.Evaluation;
+using OpenRiaServices.Tools;
 using OpenRiaServices.VisualStudio.Installer.Helpers;
 using Project = EnvDTE.Project;
 
@@ -14,6 +16,8 @@ namespace OpenRiaServices.VisualStudio.Installer
         private const string LinkedPropertyName = "LinkedOpenRiaServerProject";
         private const string DisableFastUpToDateCheckPropertyName = "DisableFastUpToDateCheck";
         private const string OpenRiaGenerateApplicationContextPropertyName = "OpenRiaGenerateApplicationContext";
+        private const string OpenRiaSharedFilesModePropertyName = "OpenRiaSharedFilesMode";
+        private const string OpenRiaClientUseFullTypeNamesPropertyName = "OpenRiaClientUseFullTypeNames";
 
         private readonly Project _riaProject;
         private readonly DTE _dte;
@@ -93,12 +97,18 @@ namespace OpenRiaServices.VisualStudio.Installer
         {
             get
             {
-                return GetBooleanProperty(nameof(OpenRiaClientUseFullTypeNames));
+                return GetBooleanProperty(OpenRiaClientUseFullTypeNamesPropertyName);
             }
             set
             {
-                SetBooleanProperty(nameof(OpenRiaClientUseFullTypeNames), value);
+                SetBooleanProperty(OpenRiaClientUseFullTypeNamesPropertyName, value);
             }
+        }
+
+        public OpenRiaSharedFilesMode? OpenRiaSharedFilesMode
+        {
+            get => GetEnumProperty<OpenRiaSharedFilesMode>(OpenRiaSharedFilesModePropertyName);
+            set => SetEnumProperty<OpenRiaSharedFilesMode>(OpenRiaSharedFilesModePropertyName, value);
         }
 
         private bool? GetBooleanProperty(string name)
@@ -131,6 +141,41 @@ namespace OpenRiaServices.VisualStudio.Installer
             else
             {
                 project.SetProperty(name, "true");
+            }
+        }
+
+
+        private TEnum? GetEnumProperty<TEnum>(string name) where TEnum  : struct
+        {
+            var project = this._riaProject.AsMSBuildProject();
+            string value = project.GetProperty(name)?.EvaluatedValue;
+            if (string.IsNullOrEmpty(value))
+            {
+                return null;
+            }
+
+            TEnum result;
+            if (Enum.TryParse(value, true, out result))
+                return result;
+            else
+                return null;
+        }
+
+        private void SetEnumProperty<TEnum>(string name, TEnum? value) where TEnum : struct
+        {
+            var project = this._riaProject.AsMSBuildProject();
+
+            if (value == null)
+            {
+                ProjectProperty projectProperty = project.GetProperty(name);
+                if (projectProperty != null)
+                {
+                    project.RemoveProperty(projectProperty);
+                }
+            }
+            else
+            {
+                project.SetProperty(name, value.ToString());
             }
         }
 

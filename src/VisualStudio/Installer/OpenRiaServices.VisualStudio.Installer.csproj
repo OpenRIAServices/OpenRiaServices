@@ -73,6 +73,9 @@
     <PackageReference Include="VSSDK.ComponentModelHost" Version="12.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaSharedFilesMode.cs">
+      <Link>Dialog\OpenRiaSharedFilesMode.cs</Link>
+    </Compile>
     <Compile Include="Dialog\LinkRiaDialogWindow.xaml.cs">
       <DependentUpon>LinkRiaDialogWindow.xaml</DependentUpon>
     </Compile>

@@ -25,7 +25,7 @@ namespace OpenRiaServices.Hosting.Local
         /// <param name="domainService">The type of <see cref="DomainService"/> to perform this query operation against.</param>
         /// <param name="context">The current context.</param>
         /// <param name="domainServiceInstances">The list of tracked <see cref="DomainService"/> instances that any newly created
-        /// <see cref="DomainServices"/> will be added to.</param>
+        /// <see cref="DomainService"/> will be added to.</param>
         /// <param name="queryName">The name of the query to invoke.</param>
         /// <param name="parameters">The query parameters.</param>
         /// <returns>The query results. May be null if there are no query results.</returns>
@@ -91,7 +91,7 @@ namespace OpenRiaServices.Hosting.Local
         /// <param name="domainService">The type of <see cref="DomainService"/> to perform this query operation against.</param>
         /// <param name="context">The current context.</param>
         /// <param name="domainServiceInstances">The list of tracked <see cref="DomainService"/> instances that any newly created
-        /// <see cref="DomainServices"/> will be added to.</param>
+        /// <see cref="DomainService"/> will be added to.</param>
         /// <param name="currentOriginalEntityMap">The mapping of current and original entities used with the utility <see cref="DomainServiceProxy.AssociateOriginal"/> method.</param>
         /// <param name="entity">The entity being submitted.</param>
         /// <param name="operationName">The name of the submit operation. For CUD operations, this can be null.</param>
@@ -145,7 +145,7 @@ namespace OpenRiaServices.Hosting.Local
         /// <param name="domainService">The type of <see cref="DomainService"/> to perform this query operation against.</param>
         /// <param name="context">The current context.</param>
         /// <param name="domainServiceInstances">The list of tracked <see cref="DomainService"/> instances that any newly created
-        /// <see cref="DomainServices"/> will be added to.</param>
+        /// <see cref="DomainService"/> will be added to.</param>
         /// <param name="name">The name of the operation to invoke.</param>
         /// <param name="parameters">The operation parameters.</param>
         /// <returns>The result of the invoke operation.</returns>

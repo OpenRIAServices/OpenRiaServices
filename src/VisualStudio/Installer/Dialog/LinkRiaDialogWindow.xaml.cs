@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using EnvDTE;
+using OpenRiaServices.Tools;
 using OpenRiaServices.VisualStudio.Installer.Helpers;
 
 namespace OpenRiaServices.VisualStudio.Installer.Dialog
@@ -44,7 +45,6 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
         private void VsDialogWindow_Initialized(object sender, System.EventArgs e)
         {
             Dispatcher.VerifyAccess();
-
             var noneComboBoxItem = new ComboBoxItem { DataContext = null, Content = "<No Project Set>" };
             //load our combobox items
             this.Projects.Items.Add(noneComboBoxItem);
@@ -60,8 +60,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             this.OpenRiaGenerateApplicationContext.IsChecked = this._linker.OpenRiaGenerateApplicationContext;
             this.OpenRiaClientUseFullTypeNames.IsChecked = this._linker.OpenRiaClientUseFullTypeNames;
             this.DisableFastUpToDateCheckBox.IsChecked = this._linker.DisableFastUpToDateCheck;
-
-
+            this.SharedFilesMode.SelectedValue = this._linker.OpenRiaSharedFilesMode;
             this.Projects.SelectionChanged += new SelectionChangedEventHandler(this.Projects_SelectionChanged);
 
 
@@ -72,7 +71,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
         }
 
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void Save_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             Dispatcher.VerifyAccess();
 
@@ -90,6 +89,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Dialog
             this._linker.DisableFastUpToDateCheck = this.DisableFastUpToDateCheckBox.IsChecked;
             this._linker.OpenRiaClientUseFullTypeNames = this.OpenRiaClientUseFullTypeNames.IsChecked;
             this._linker.OpenRiaGenerateApplicationContext = this.OpenRiaGenerateApplicationContext.IsChecked;
+            this._linker.OpenRiaSharedFilesMode = (OpenRiaSharedFilesMode?)this.SharedFilesMode.SelectedValue;
 
             _project.Save();
 
