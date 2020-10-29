@@ -18,7 +18,18 @@ namespace OpenRiaServices.Tools.Test
 
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
-        public void CleanRiaClientFiles_Deletes_Generated_Files()
+        public void CleanRiaClientFiles_Deletes_Generated_Files_Copy()
+        {
+            CleanRiaClientFiles_Deletes_Generated_Files(OpenRiaSharedFilesMode.Copy);
+        }
+        [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
+        [TestMethod]
+        public void CleanRiaClientFiles_Deletes_Generated_Files_Link()
+        {
+            CleanRiaClientFiles_Deletes_Generated_Files(OpenRiaSharedFilesMode.Link);
+        }
+
+        public void CleanRiaClientFiles_Deletes_Generated_Files(OpenRiaSharedFilesMode sharedFilesMode)
         {
             CreateOpenRiaClientFilesTask task = null;
             MockBuildEngine mockBuildEngine;
@@ -28,6 +39,7 @@ namespace OpenRiaServices.Tools.Test
                 // Test setup -- generate code by calling Create task
                 // ====================================================
                 task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("", /*includeClientOutputAssembly*/ false);
+                task.SharedFilesMode = sharedFilesMode.ToString();
                 bool success = task.Execute();
                 if (!success)
                 {
@@ -39,16 +51,24 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(3, files.Length, "Code gen should have generated 3 code files");
+
+                if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
+                {
+                    Assert.AreEqual(3, files.Length, "Code gen should have generated 3 code files");
+
+                    string copiedFile = Path.Combine(generatedCodeOutputFolder, "TestEntity.shared.cs");
+                    Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
+
+                    copiedFile = Path.Combine(generatedCodeOutputFolder, "TestComplexType.shared.cs");
+                    Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
+                }
+                else
+                {
+                    Assert.AreEqual(1, files.Length, "Code gen should have generated 1 code files");
+                }
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
-
-                string copiedFile = Path.Combine(generatedCodeOutputFolder, "TestEntity.shared.cs");
-                Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
-
-                copiedFile = Path.Combine(generatedCodeOutputFolder, "TestComplexType.shared.cs");
-                Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
 
                 string outputFolder = task.OutputPath;
                 Assert.IsTrue(Directory.Exists(outputFolder), "Expected task to have created " + outputFolder);
