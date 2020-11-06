@@ -26,7 +26,9 @@ namespace OpenRiaServices.Tools
                 typeof(ScaffoldColumnAttribute),
                 typeof(ScaffoldTableAttribute),
                 typeof(SerializableAttribute),
-                typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute)
+                typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute),
+                typeof(System.Diagnostics.DebuggerStepThroughAttribute),
+                typeof(System.Runtime.CompilerServices.AsyncStateMachineAttribute),
             };
 
         /// <summary>
