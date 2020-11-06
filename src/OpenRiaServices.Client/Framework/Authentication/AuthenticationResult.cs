@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Abstract base type for all the results returned by calls for

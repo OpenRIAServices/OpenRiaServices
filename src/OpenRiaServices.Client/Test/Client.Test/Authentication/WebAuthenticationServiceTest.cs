@@ -8,10 +8,10 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using MockUser = OpenRiaServices.Client.ApplicationServices.Test.AuthenticationDomainClient.MockUser;
-using UserType = OpenRiaServices.Client.ApplicationServices.Test.AuthenticationDomainClient.UserType;
+using MockUser = OpenRiaServices.Client.Authentication.Test.AuthenticationDomainClient.MockUser;
+using UserType = OpenRiaServices.Client.Authentication.Test.AuthenticationDomainClient.UserType;
 
-namespace OpenRiaServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.Authentication.Test
 {
     using System.Threading;
     using System.Threading.Tasks;

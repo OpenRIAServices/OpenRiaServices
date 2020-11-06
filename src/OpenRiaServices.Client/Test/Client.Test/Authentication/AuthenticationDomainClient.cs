@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using OpenRiaServices.Client.Test.Utilities;
 
-namespace OpenRiaServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.Authentication.Test
 {
     public class AuthenticationDomainClient : DomainClient
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Principal;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Result of an Login request

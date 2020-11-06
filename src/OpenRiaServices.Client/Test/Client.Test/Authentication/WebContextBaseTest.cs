@@ -10,7 +10,7 @@ using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.Descri
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.Authentication.Test
 {
     /// <summary>
     /// Tests <see cref="WebContextBase"/> members.

@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// <see cref="AuthenticationService"/> that performs Windows authentication using
     /// a <see cref="OpenRiaServices.Client.DomainContext"/> generated from a domain service
-    /// implementing <c>OpenRiaServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
+    /// implementing <c>OpenRiaServices.Server.Authentication.IAuthentication&lt;T&gt;</c>.
     /// </summary>
     public class WindowsAuthentication : WebAuthenticationService
     {

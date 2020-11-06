@@ -23,7 +23,7 @@ namespace TestDomainServices
     using CustomNamespace;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     using TestDomainServices.Saleテ;
     
     
@@ -13670,7 +13670,7 @@ namespace TestDomainServices.NamedUpdates
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     using TestDomainServices;
     
     
@@ -16357,7 +16357,7 @@ namespace TestDomainServices.Saleテ
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>

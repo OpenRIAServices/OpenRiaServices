@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Reflection;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// <see cref="DomainContext"/> generated as the base class for providers implementing
-    /// <c>OpenRiaServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
+    /// <c>OpenRiaServices.Server.Authentication.IAuthentication&lt;T&gt;</c>.
     /// </summary>
     [DomainIdentifier("Authentication", IsApplicationService = true)]
     public abstract class AuthenticationDomainContextBase : DomainContext
