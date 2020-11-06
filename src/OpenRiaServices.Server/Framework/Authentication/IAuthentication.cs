@@ -5,7 +5,7 @@
     /// domain service implementing this interface will be used to populate the user on the client.
     /// </summary>
     /// <remarks>
-    /// <c>OpenRiaServices.Client.ApplicationServices.WebAuthenticationService</c>
+    /// <c>OpenRiaServices.Client.Authentication.WebAuthenticationService</c>
     /// will work with the <c>DomainContext</c> generated for any domain service implementing this
     /// interface.
     /// <para>

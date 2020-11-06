@@ -19,7 +19,7 @@ namespace RootNamespace
     /// This context extends the base to make application services and types available
     /// for consumption from code and xaml.
     /// </remarks>
-    public sealed partial class WebContext : global::OpenRiaServices.Client.ApplicationServices.WebContextBase
+    public sealed partial class WebContext : global::OpenRiaServices.Client.Authentication.WebContextBase
     {
         
         #region Extensibility Method Definitions
@@ -52,7 +52,7 @@ namespace RootNamespace
         {
             get
             {
-                return ((global::RootNamespace.WebContext)(global::OpenRiaServices.Client.ApplicationServices.WebContextBase.Current));
+                return ((global::RootNamespace.WebContext)(global::OpenRiaServices.Client.Authentication.WebContextBase.Current));
             }
         }
         
@@ -75,7 +75,7 @@ namespace RootNamespace.TestNamespace
     /// <summary>
     /// The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     /// </summary>
-    public sealed partial class AuthenticationService1 : global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
+    public sealed partial class AuthenticationService1 : global::OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase
     {
         
         #region Extensibility Method Definitions

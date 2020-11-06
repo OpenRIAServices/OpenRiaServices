@@ -40,7 +40,7 @@ namespace OpenRiaServices.Tools
             "System.Threading.Tasks",                                      // Task
             "OpenRiaServices",                              // [DomainIdentifier], etc
             "OpenRiaServices.Client",                       // DomainContext, etc
-            "OpenRiaServices.Client.ApplicationServices",   // WebContextBase, etc
+            "OpenRiaServices.Client.Authentication",   // WebContextBase, etc
         };
 
         private CodeCompileUnit _compileUnit;

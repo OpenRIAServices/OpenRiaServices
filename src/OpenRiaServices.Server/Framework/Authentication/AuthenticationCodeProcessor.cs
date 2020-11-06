@@ -21,7 +21,7 @@ namespace OpenRiaServices.Server.Authentication
         #region Constants
 
         private const string AuthenticationDomainContextBaseName =
-            "OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+            "OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase";
 
         #endregion
 

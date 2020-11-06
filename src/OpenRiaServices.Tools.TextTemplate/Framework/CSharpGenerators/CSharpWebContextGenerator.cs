@@ -88,7 +88,7 @@ this.Write("partial void OnCreated();\r\n");
 	{
 
 this.Write("public new static WebContext Current\r\n{\r\n    get\r\n    {\r\n        return ((WebCont" +
-        "ext)(OpenRiaServices.Client.ApplicationServices.WebContextBase.Cu" +
+        "ext)(OpenRiaServices.Client.Authentication.WebContextBase.Cu" +
         "rrent));\r\n    }\r\n}\r\n");
 
 

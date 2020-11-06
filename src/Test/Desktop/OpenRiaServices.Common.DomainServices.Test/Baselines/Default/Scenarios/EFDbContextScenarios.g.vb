@@ -16,7 +16,7 @@ Option Explicit On
 Imports DbContextModels.Northwind
 Imports OpenRiaServices
 Imports OpenRiaServices.Client
-Imports OpenRiaServices.Client.ApplicationServices
+Imports OpenRiaServices.Client.Authentication
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel

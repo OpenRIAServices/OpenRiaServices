@@ -24,7 +24,7 @@ namespace <#= ns #>
 	protected virtual void GenerateClassDeclaration()
 	{
 #>
-public sealed partial class WebContext : OpenRiaServices.Client.ApplicationServices.WebContextBase
+public sealed partial class WebContext : OpenRiaServices.Client.Authentication.WebContextBase
 <#+
 	}
 	
@@ -58,7 +58,7 @@ public new static WebContext Current
 {
     get
     {
-        return ((WebContext)(OpenRiaServices.Client.ApplicationServices.WebContextBase.Current));
+        return ((WebContext)(OpenRiaServices.Client.Authentication.WebContextBase.Current));
     }
 }
 <#+

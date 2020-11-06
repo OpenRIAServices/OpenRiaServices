@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;

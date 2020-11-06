@@ -141,7 +141,7 @@
         /// <remarks>
         /// Used during code generation.
         /// </remarks>
-        public const string WebContextBaseName = "OpenRiaServices.Client.ApplicationServices.WebContextBase";
+        public const string WebContextBaseName = "OpenRiaServices.Client.Authentication.WebContextBase";
 
         /// <summary>
         /// The full ServiceQuery type name.
@@ -193,20 +193,20 @@
 
         // TODO: Enable when WebContextGenerator.cs supports Forms Authentication.  
         ///// <summary>
-        ///// The 'OpenRiaServices.Client.ApplicationServices.FormsAuthentication' type name.
+        ///// The 'OpenRiaServices.Client.Authentication.FormsAuthentication' type name.
         ///// </summary>
         ///// <remarks>
         ///// Used during code generation.
         ///// </remarks>
-        //public const string FormsAuthenticationName = "OpenRiaServices.Client.ApplicationServices.FormsAuthentication";
+        //public const string FormsAuthenticationName = "OpenRiaServices.Client.Authentication.FormsAuthentication";
 
         // TODO: Enable when WebContextGenerator.cs supports Windows Authentication.  
         ///// <summary>
-        ///// The 'OpenRiaServices.Client.ApplicationServices.WindowsAuthentication' type name.
+        ///// The 'OpenRiaServices.Client.Authentication.WindowsAuthentication' type name.
         ///// </summary>
         ///// <remarks>
         ///// Used during code generation.
         ///// </remarks>
-        //public const string WindowsAuthenticationName = "OpenRiaServices.Client.ApplicationServices.WindowsAuthentication";
+        //public const string WindowsAuthenticationName = "OpenRiaServices.Client.Authentication.WindowsAuthentication";
     }
 }
