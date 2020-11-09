@@ -1,5 +1,4 @@
-﻿using OpenRiaServices.Server.Data;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
