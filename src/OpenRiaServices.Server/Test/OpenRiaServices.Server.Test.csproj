@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server.UnitTesting\Framework\OpenRiaServices.Server.UnitTesting.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj" />
