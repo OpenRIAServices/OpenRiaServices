@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>OpenRiaServices.Hosting.Test</RootNamespace>
     <TargetFramework>net472</TargetFramework>
     <Version>1.0.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
   </ItemGroup>
   <ItemGroup>
@@ -12,18 +12,18 @@
       <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Activation" />
-    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj" />
-    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.Endpoint.csproj" />
-    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.Endpoint.csproj" />
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.WCF.csproj" />
   </ItemGroup>
 </Project>

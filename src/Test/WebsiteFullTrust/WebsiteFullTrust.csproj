@@ -102,9 +102,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Endpoint\Framework\OpenRiaServices.Hosting.Endpoint.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Endpoint\Framework\OpenRiaServices.Hosting.WCF.Endpoint.csproj">
       <Project>{063022B7-FAF8-43FB-B605-30A5F29910C1}</Project>
-      <Name>OpenRiaServices.Hosting.Endpoint</Name>
+      <Name>OpenRiaServices.Hosting.WCF.Endpoint</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj">
       <Project>{b2183838-a948-47fd-8ab4-e8e7c5cd4477}</Project>
@@ -125,9 +125,9 @@
       <Name>OpenRiaServices.Server</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.WCF.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.Hosting</Name>
+      <Name>OpenRiaServices.Hosting.WCF</Name>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">

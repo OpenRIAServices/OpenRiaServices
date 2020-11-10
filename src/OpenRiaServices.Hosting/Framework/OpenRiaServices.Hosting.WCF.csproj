@@ -3,6 +3,7 @@
     <TargetFramework>net472</TargetFramework>
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -24,9 +25,9 @@
     <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Services\DynamicMethodUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\MetaType.cs" Link="Services\MetaType.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
-    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="Services\DomainServiceFault.cs" />
-    <Compile Include="..\..\OpenRiaServices.Client\Framework\QueryResult.cs" Link="Services\QueryResult.cs" />
-    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="Services\ServiceQueryPart.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\QueryResult.cs" Link="QueryResult.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="ServiceQueryPart.cs" />
     <Compile Update="Services\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -3,6 +3,7 @@
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>OpenRiaServices.Hosting.OData</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -16,7 +17,7 @@
     <Reference Include="System.Data.Linq.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.WCF.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
   <ItemGroup>

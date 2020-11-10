@@ -29,11 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server", "O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools", "OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj", "{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting", "OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.WCF", "OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.WCF.csproj", "{E3844512-48A8-451A-9BE4-AC7793016B9D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.Test", "OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj", "{A94B2843-C68E-4548-9168-63469D625932}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Test", "OpenRiaServices.Hosting\Test\OpenRiaServices.Hosting.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.WCF.Test", "OpenRiaServices.Hosting\Test\OpenRiaServices.Hosting.WCF.Test.csproj", "{AD7E4B98-337B-4855-BD1E-E34F938CA71A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Common.Test", "Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj", "{AFEA4CCA-4B98-4551-B75F-93D1A084C817}"
 EndProject
@@ -59,17 +59,17 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VbExpressions", "OpenRiaSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWap", "OpenRiaServices.Tools\Test\TestWap\TestWap.csproj", "{D08C2165-DC46-407B-9CCC-40ED1972F552}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Endpoint", "OpenRiaServices.Hosting.Endpoint\Framework\OpenRiaServices.Hosting.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.WCF.Endpoint", "OpenRiaServices.Hosting.Endpoint\Framework\OpenRiaServices.Hosting.WCF.Endpoint.csproj", "{063022B7-FAF8-43FB-B605-30A5F29910C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Endpoint.Test", "OpenRiaServices.Hosting.Endpoint\Test\OpenRiaServices.Hosting.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.WCF.Endpoint.Test", "OpenRiaServices.Hosting.Endpoint\Test\OpenRiaServices.Hosting.WCF.Endpoint.Test.csproj", "{9FA9ED54-49F1-4BC6-B316-43970A34D738}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFPOCOModels", "Test\Desktop\EFPOCOModels\EFPOCOModels.csproj", "{1A2B04D0-1A09-414E-BC3F-C0C159AD668B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteFullTrust", "Test\WebsiteFullTrust\WebsiteFullTrust.csproj", "{FB928CDD-D223-4921-B97D-EB16EEE7D2AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.OData", "OpenRiaServices.Hosting.OData\Framework\OpenRiaServices.Hosting.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.WCF.OData", "OpenRiaServices.Hosting.OData\Framework\OpenRiaServices.Hosting.WCF.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.OData.Test", "OpenRiaServices.Hosting.OData\Test\OpenRiaServices.Hosting.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.WCF.OData.Test", "OpenRiaServices.Hosting.OData\Test\OpenRiaServices.Hosting.WCF.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
