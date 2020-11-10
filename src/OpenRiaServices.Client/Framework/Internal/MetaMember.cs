@@ -31,8 +31,8 @@ namespace OpenRiaServices.Client.Internal
             IsComplex = TypeUtility.IsSupportedComplexType(property.PropertyType);
             if (hasGetter && (property.GetSetMethod() != null))
             {
-                IsDataMember = IsComplex
-                    || (TypeUtility.IsPredefinedType(property.PropertyType) && !TypeUtility.IsAttributeDefined(property, typeof(IgnoreDataMemberAttribute), false));
+                IsDataMember = (IsComplex || TypeUtility.IsPredefinedType(property.PropertyType))
+                        && !TypeUtility.IsAttributeDefined(property, typeof(IgnoreDataMemberAttribute), false);
             }
 
             if (hasGetter)
