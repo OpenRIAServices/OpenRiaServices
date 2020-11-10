@@ -57,12 +57,12 @@ It is currently quite empty but already demonstrates some of the following scena
   
 ### Client
 
-* `IgnoreDataMember` can now be used on the client to prevent client properties from beeing included/overwritten when loading data using `MergeIntoCurrent` or the state manipulating methods `ApplyState`, `ExtractState` etc. #249
+* `IgnoreDataMemberAttribute` can now be used on the client to prevent client properties from beeing included/overwritten when loading data using `MergeIntoCurrent` or the state manipulating methods `ApplyState`, `ExtractState` etc. #249
 	* `MergeAttribute` which has a similar usage area has been moved to `OpenRiaServices.Client.Internal` and might be removed in future releases.
 
 ### Code Generation
 
-* Suppress generation of DebuggerStepThroughAttribute from async methods
+* Suppress generation of `DebuggerStepThroughAttribute` from async methods
 * New handling of shared files #229
   Instead of copying all ".shared" files to the `Generated_Code` folder the server version is referenced instead
   * This should build faster builds and allows find all references, refactoring etc to work for shared files
