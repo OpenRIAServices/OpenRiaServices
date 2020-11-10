@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.Client
+namespace OpenRiaServices.Client.Internal
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class MergeAttribute : Attribute
