@@ -1,4 +1,4 @@
-﻿using OpenRiaServices.Hosting;
+﻿using OpenRiaServices.Server;
 using OpenRiaServices.Server.Authentication.AspNetMembership;
 
 namespace RootNamespace.TestNamespace

@@ -8,7 +8,6 @@ namespace OpenRiaServices.Tools.TextTemplate
     using System.Globalization;
     using System.Linq;
     using OpenRiaServices;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     using OpenRiaServices.Tools.SharedTypes;
 

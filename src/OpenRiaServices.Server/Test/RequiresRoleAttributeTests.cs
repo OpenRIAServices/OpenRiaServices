@@ -136,7 +136,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreNotEqual(attr1.TypeId, attr2.TypeId, "TypeID should be different for different attributes");
         }
 
-        [OpenRiaServices.Hosting.EnableClientAccess]
+        [EnableClientAccess]
         public class RequiresRoleTestService : DomainService
         {
             [RequiresRole("role1", "role2")]

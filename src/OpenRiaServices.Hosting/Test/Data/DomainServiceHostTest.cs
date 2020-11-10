@@ -161,7 +161,7 @@ namespace OpenRiaServices.Hosting.UnitTests
         }
     }
 
-    [EnableClientAccess]
+    [OpenRiaServices.Server.EnableClientAccess]
     public class MyDomainService : OpenRiaServices.Server.DomainService
     {
         public IQueryable<MyDomainService_Entity> GetEntities()
@@ -170,7 +170,7 @@ namespace OpenRiaServices.Hosting.UnitTests
         }
     }
 
-    [EnableClientAccess(RequiresSecureEndpoint = true)]
+    [OpenRiaServices.Server.EnableClientAccess(RequiresSecureEndpoint = true)]
     public class MySecureDomainService : MyDomainService
     {
     }

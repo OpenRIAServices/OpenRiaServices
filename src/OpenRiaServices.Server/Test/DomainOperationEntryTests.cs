@@ -76,7 +76,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("Delete", entry.OperationType, "Wrong operation type for this DomainOperationEntry");
         }
 
-        [OpenRiaServices.Hosting.EnableClientAccess]
+        [EnableClientAccess]
         public class DomainOperationEntryTestDomainService : DomainService
         {
             [Query]
