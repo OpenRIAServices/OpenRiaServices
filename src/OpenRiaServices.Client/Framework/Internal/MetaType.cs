@@ -304,7 +304,7 @@ namespace OpenRiaServices.Client.Internal
             if (TypeUtility.IsAttributeDefined(type, typeof(ValidationAttribute), true))
                 return true;
 
-            if (type.GetInterface(typeof(IValidatableObject).FullName) != null)
+            if (typeof(IValidatableObject).IsAssignableFrom(type))
                 return true;
 
             // visit all data members
