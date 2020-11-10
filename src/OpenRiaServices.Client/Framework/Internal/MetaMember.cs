@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Client.Internal
 {
@@ -30,7 +31,8 @@ namespace OpenRiaServices.Client.Internal
             IsComplex = TypeUtility.IsSupportedComplexType(property.PropertyType);
             if (hasGetter && (property.GetSetMethod() != null))
             {
-                IsDataMember = IsComplex || TypeUtility.IsPredefinedType(property.PropertyType);
+                IsDataMember = IsComplex
+                    || (TypeUtility.IsPredefinedType(property.PropertyType) && !TypeUtility.IsAttributeDefined(property, typeof(IgnoreDataMemberAttribute)));
             }
 
             if (hasGetter)
