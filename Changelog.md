@@ -54,16 +54,20 @@ It is currently quite empty but already demonstrates some of the following scena
 * Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication` **search and replace is needed on upgraing** #248
 * Updated required version of .Net Framework to 4.7.2 (#241)
 * Updated dependencies including EntityFramework to latests availible versions #240
-* New handling of shared files #229
-  Instead of copying all ".shared" files to the `Generated_Code` folder the server version is referenced instead
-  * This should build faster builds and allows find all references, refactoring etc to work for shared files
-  * It is possible to opt out of the new behaviour by adding `<OpenRiaSharedFilesMode>Copy</OpenRiaSharedFilesMode>` in the project file
-  * The tooling is updated with a new option
   
 ### Client
 
 * `IgnoreDataMember` can now be used on the client to prevent client properties from beeing included/overwritten when loading data using `MergeIntoCurrent` or the state manipulating methods `ApplyState`, `ExtractState` etc. #249
 	* `MergeAttribute` which has a similar usage area has been moved to `OpenRiaServices.Client.Internal` and might be removed in future releases.
+
+### Code Generation
+
+* Suppress generation of DebuggerStepThroughAttribute from async methods
+* New handling of shared files #229
+  Instead of copying all ".shared" files to the `Generated_Code` folder the server version is referenced instead
+  * This should build faster builds and allows find all references, refactoring etc to work for shared files
+  * It is possible to opt out of the new behaviour by adding `<OpenRiaSharedFilesMode>Copy</OpenRiaSharedFilesMode>` in the project file
+  * The tooling is updated with a new option
 
 ### Server 
 
