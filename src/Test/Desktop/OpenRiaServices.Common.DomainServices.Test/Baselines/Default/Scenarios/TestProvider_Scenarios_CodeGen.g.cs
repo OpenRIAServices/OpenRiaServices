@@ -22,7 +22,7 @@ namespace TestDomainServices
     using CustomNamespace;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>

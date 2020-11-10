@@ -15,7 +15,7 @@ Option Explicit On
 
 Imports OpenRiaServices
 Imports OpenRiaServices.Client
-Imports OpenRiaServices.Client.ApplicationServices
+Imports OpenRiaServices.Client.Authentication
 Imports RootNamespace.TestNamespace
 Imports System
 Imports System.Collections.Generic
@@ -86,7 +86,7 @@ Namespace TestNamespace
     ''' The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class AuthenticationService1
-        Inherits Global.OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
+        Inherits Global.OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase
         
         #Region "Extensibility Method Definitions"
 

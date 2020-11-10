@@ -7,13 +7,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Abstract extension of the <see cref="AuthenticationService"/> that
     /// interacts with a <see cref="DomainContext"/> generated from a domain
     /// service implementing
-    /// <c>OpenRiaServices.Server.ApplicationServices.IAuthentication&lt;T&gt;</c>.
+    /// <c>OpenRiaServices.Server.Authentication.IAuthentication&lt;T&gt;</c>.
     /// </summary>
     public abstract class WebAuthenticationService : AuthenticationService
     {

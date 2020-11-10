@@ -10,7 +10,7 @@
 
 using OpenRiaServices;
 using OpenRiaServices.Client;
-using OpenRiaServices.Client.ApplicationServices;
+using OpenRiaServices.Client.Authentication;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +49,7 @@ namespace GlobalNamespaceTest
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>

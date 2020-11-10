@@ -21,7 +21,7 @@ namespace TestDomainServices
     using System.Xml.Linq;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>

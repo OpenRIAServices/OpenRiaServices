@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Result of a user load request

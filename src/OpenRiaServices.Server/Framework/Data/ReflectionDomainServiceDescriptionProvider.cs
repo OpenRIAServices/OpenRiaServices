@@ -475,7 +475,7 @@ namespace OpenRiaServices.Server
                 List<Attribute> attributes = new List<Attribute>(methodInfo.GetCustomAttributes(true).Cast<Attribute>());
 
                 // Filter out AsyncStateMachineAttribute for "async" methods
-                attributes.RemoveAll(a => a.GetType().FullName == "System.Runtime.CompilerServices.AsyncStateMachineAttribute");
+                attributes.RemoveAll(a => a is System.Runtime.CompilerServices.AsyncStateMachineAttribute);
 
                 // Examine interfaces on the type and try to find matching method implmentations.
                 foreach (Type interfaceType in methodInfo.DeclaringType.GetInterfaces())

@@ -4,7 +4,7 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Abstract subclass of the <see cref="OperationBase"/> class

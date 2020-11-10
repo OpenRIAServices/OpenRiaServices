@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 
-namespace OpenRiaServices.Client.ApplicationServices.Test
+namespace OpenRiaServices.Client.Authentication.Test
 {
     /// <summary>
     /// Tests <see cref="LoginParameters"/> members.

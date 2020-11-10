@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.Client.ApplicationServices
+﻿namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// The parameters that specify the user to authentication in the <c>Login</c>

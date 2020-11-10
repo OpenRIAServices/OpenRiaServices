@@ -19,7 +19,7 @@ namespace DataTests.Northwind.LTS
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>
@@ -2510,7 +2510,7 @@ namespace TestDomainServices.LTS
     using DataTests.Northwind.LTS;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>

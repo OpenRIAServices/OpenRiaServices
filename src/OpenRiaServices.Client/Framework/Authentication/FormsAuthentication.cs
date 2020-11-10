@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.Client.ApplicationServices
+﻿namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// <see cref="AuthenticationService"/> that performs Forms authentication using

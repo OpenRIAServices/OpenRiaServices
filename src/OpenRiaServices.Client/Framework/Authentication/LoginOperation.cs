@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Operation type returned from <c>Login</c> operations on <see cref="AuthenticationService"/>.

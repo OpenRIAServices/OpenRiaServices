@@ -20,7 +20,7 @@ namespace TestDomainServices.TypeNameConflictResolution
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>
@@ -316,7 +316,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     using TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namespace1;
     
     
@@ -629,7 +629,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>
@@ -777,7 +777,7 @@ namespace TestDomainServices.TypeNameConflictResolution.ExternalConflicts.Namesp
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>

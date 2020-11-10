@@ -2,29 +2,29 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
-    /// Operation type returned from <c>Logout</c> operations on <see cref="AuthenticationService"/>.
+    /// Operation type returned from <c>SaveUser</c> operations on <see cref="AuthenticationService"/>.
     /// </summary>
-    public sealed class LogoutOperation : AuthenticationOperation
+    public sealed class SaveUserOperation : AuthenticationOperation
     {
-        private readonly Action<LogoutOperation> _completeAction;
+        private readonly Action<SaveUserOperation> _completeAction;
 
-        internal LogoutOperation(AuthenticationService service, Action<LogoutOperation> completeAction, object userState)
-            : base(service, userState)
+        internal SaveUserOperation(AuthenticationService service, Action<SaveUserOperation> completeAction, object userState) :
+            base(service, userState)
         {
             this._completeAction = completeAction;
         }
 
         /// <summary>
-        /// Begins a logout operation
+        /// Begins a save operation
         /// </summary>
         /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The async result for the operation</returns>
         protected internal override Task<AuthenticationResult> InvokeAsync(CancellationToken cancellationToken)
         {
-            return CastTaskResult(this.Service.LogoutAsync(cancellationToken));
+            return CastTaskResult(this.Service.SaveUserAsync(this.Service.User, cancellationToken));
         }
 
         /// <summary>

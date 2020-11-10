@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     using $safeprojectname$.Web.Resources;
 
     /// <summary>

@@ -23,7 +23,7 @@ Option Explicit On
 ''' for consumption from code and xaml.
 ''' </remarks>
 Partial Public NotInheritable Class WebContext
-    Inherits Global.OpenRiaServices.Client.ApplicationServices.WebContextBase
+    Inherits Global.OpenRiaServices.Client.Authentication.WebContextBase
     
     #Region "Extensibility Method Definitions"
 
@@ -54,7 +54,7 @@ Partial Public NotInheritable Class WebContext
     ''' <seealso cref="System.Windows.Application.ApplicationLifetimeObjects"/>
     Public Shadows Shared ReadOnly Property Current() As Global.RootNamespace.WebContext
         Get
-            Return CType(Global.OpenRiaServices.Client.ApplicationServices.WebContextBase.Current,Global.RootNamespace.WebContext)
+            Return CType(Global.OpenRiaServices.Client.Authentication.WebContextBase.Current,Global.RootNamespace.WebContext)
         End Get
     End Property
 End Class
@@ -65,7 +65,7 @@ Namespace TestNamespace
     ''' The DomainContext corresponding to the 'AuthenticationService1' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class AuthenticationService1
-        Inherits Global.OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
+        Inherits Global.OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase
         
         #Region "Extensibility Method Definitions"
 
@@ -249,7 +249,7 @@ Namespace TestNamespace
     ''' The DomainContext corresponding to the 'AuthenticationService2' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class AuthenticationService2
-        Inherits Global.OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase
+        Inherits Global.OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase
         
         #Region "Extensibility Method Definitions"
 

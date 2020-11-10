@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     using System.Windows;
     using System.Windows.Controls;
 

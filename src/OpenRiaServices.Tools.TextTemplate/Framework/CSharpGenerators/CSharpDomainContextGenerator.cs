@@ -55,7 +55,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using OpenRiaServices.Client;
-using OpenRiaServices.Client.ApplicationServices;
+using OpenRiaServices.Client.Authentication;
 ");
 
 
@@ -69,7 +69,7 @@ using OpenRiaServices.Client.ApplicationServices;
 		string baseType = "OpenRiaServices.Client.DomainContext";
 		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
 		{
-			baseType = @"global::OpenRiaServices.Client.ApplicationServices.AuthenticationDomainContextBase";
+			baseType = @"global::OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase";
 		}
 		 
 

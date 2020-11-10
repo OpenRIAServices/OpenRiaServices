@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Principal;
 
-namespace OpenRiaServices.Client.ApplicationServices
+namespace OpenRiaServices.Client.Authentication
 {
     /// <summary>
     /// Event args for events raised by the <see cref="AuthenticationService"/> class.
