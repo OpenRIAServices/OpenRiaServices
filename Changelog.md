@@ -15,8 +15,8 @@
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
-2. Seach and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files
-3. Seach and Replace `.ApplicationServices` with `.Authentication` in all files.
+2. Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files
+3. Search and Replace `.ApplicationServices` with `.Authentication` in all files.
 	* `OpenRiaServices.Client.ApplicationServices` has been renamed to `OpenRiaServices.Client.Authentication`
 	* `OpenRiaServices.Server.ApplicationServices` has been renamed to `OpenRiaServices.Server.Authentication`
 2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.Server.ApplicationServices` namespace in your server project 
@@ -50,7 +50,7 @@ It is currently quite empty but already demonstrates some of the following scena
 # 5.0.0 RC
 
 * "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs. #234
-  * **IMPORTANT** Seach and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
+  * **IMPORTANT** Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
 * Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication` **search and replace is needed on upgraing** #248
 * Updated required version of .Net Framework to 4.7.2 (#241)
 * Updated dependencies including EntityFramework to latests availible versions #240
