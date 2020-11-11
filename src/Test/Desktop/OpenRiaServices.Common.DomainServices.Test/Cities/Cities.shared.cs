@@ -164,7 +164,7 @@ namespace Cities
             {
                 return new[]
                 {
-                    new ValidationResult(nameof(IValidatableObject), new[]{ nameof(MakeIValidatableObjectFail) })
+                    new ValidationResult("IValidatableObject", new[]{ "MakeIValidatableObjectFail" })
                 };
             }
             else

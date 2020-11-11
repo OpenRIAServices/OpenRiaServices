@@ -363,10 +363,10 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(newCity.HasValidationErrors);
             Assert.AreEqual(1, newCity.ValidationErrors.Count, "Expected one (and only one) validation error");
             ValidationResult validationResult = newCity.ValidationErrors.Single();
-            Assert.AreEqual(nameof(IValidatableObject), validationResult.ErrorMessage);
+            Assert.AreEqual("IValidatableObject", validationResult.ErrorMessage);
 
             string memberName = validationResult.MemberNames.Single();
-            Assert.AreEqual(nameof(City.MakeIValidatableObjectFail), memberName);
+            Assert.AreEqual("MakeIValidatableObjectFail", memberName);
             actualErrors.Clear();
 
             newCity.MakeIValidatableObjectFail = false;
