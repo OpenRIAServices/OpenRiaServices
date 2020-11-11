@@ -32,7 +32,7 @@ namespace OpenRiaServices.Hosting
             // * Remove this method and "manually inline" the code where used?
 
             ChangeSet changeSet = CreateChangeSet(changeSetEntries);
-            await domainService.SubmitAsync(changeSet, CancellationToken.None).ConfigureAwait(false);
+            await domainService.SubmitAsync(changeSet, domainService.ServiceContext.CancellationToken).ConfigureAwait(false);
 
             // Process the submit results and build the result list to be sent back
             // to the client
