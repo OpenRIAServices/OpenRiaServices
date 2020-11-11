@@ -12,7 +12,6 @@ using System.Runtime.Serialization;
 #endif
 
 #if SERVERFX
-using OpenRiaServices.Server;
 #else
 using OpenRiaServices.Client;
 #endif
@@ -46,10 +45,10 @@ namespace OpenRiaServices
             "OpenRiaServices.Client.Web",
             "OpenRiaServices.EntityFramework",
             "OpenRiaServices.EntityFramework.EF4",
-            "OpenRiaServices.Hosting",
-            "OpenRiaServices.Hosting.Endpoint",
+            "OpenRiaServices.Hosting.WCF",
+            "OpenRiaServices.Hosting.WCF.Endpoint",
             "OpenRiaServices.Hosting.Local",
-            "OpenRiaServices.Hosting.OData",
+            "OpenRiaServices.Hosting.WCF.OData",
             "OpenRiaServices.LinqToSql",
             "OpenRiaServices.Server",
             "OpenRiaServices.Server.UnitTesting",

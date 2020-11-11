@@ -10,7 +10,6 @@ namespace OpenRiaServices.Tools.TextTemplate
     using OpenRiaServices.Server;
     using System.Text;
     using OpenRiaServices.Tools;
-    using OpenRiaServices.Tools.TextTemplate.CSharpGenerators;
 
     /// <summary>
     /// Generator class to generate a domain service proxy using Text Templates.

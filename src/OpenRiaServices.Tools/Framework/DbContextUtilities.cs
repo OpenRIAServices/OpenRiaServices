@@ -2,8 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+/* Unmerged change from project 'OpenRiaServices.VisualStudio.DomainServices.Tools'
+Before:
 using System.Reflection;
 using OpenRiaServices;
+using OpenRiaServices.Server;
+After:
+using System.Reflection;
+*/
+using System.Reflection;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools

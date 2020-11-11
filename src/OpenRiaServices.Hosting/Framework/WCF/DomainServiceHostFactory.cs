@@ -1,9 +1,8 @@
 ﻿using System;
 using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Activation;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Factory that provides instances of <see cref="DomainServiceHost"/> in managed 

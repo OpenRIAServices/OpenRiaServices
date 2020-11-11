@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenRiaServices.Hosting.OData
+namespace OpenRiaServices.Hosting.WCF.OData
 {
     #region Namespaces
     using System.Diagnostics;

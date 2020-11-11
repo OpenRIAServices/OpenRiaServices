@@ -29,10 +29,10 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs">
       <Link>Utilities\ExceptionHandlingUtility.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs">
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\Behaviors\WebHttpQueryStringConverter.cs">
       <Link>Web\Behaviors\WebHttpQueryStringConverter.cs</Link>
     </Compile>
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\MessageEncoders\*.cs" LinkBase="Data\MessageEncoders" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\MessageEncoders\*.cs" LinkBase="Data\MessageEncoders" />
   </ItemGroup>
 
   <!-- Remove ServiceModel.Web dependent parts (binary endpoint) -->
@@ -40,7 +40,7 @@
     <Compile Remove="Data\Behaviors\MessageUtility.cs" />
     <Compile Remove="Web\WebDomainClientFactory.cs" />
     <Compile Remove="Web\Behaviors\WebDomainClientWebHttpBehavior.cs" />
-    <Compile Remove="..\..\OpenRiaServices.Hosting\Framework\Services\Behaviors\WebHttpQueryStringConverter.cs" />
+    <Compile Remove="..\..\OpenRiaServices.Hosting\Framework\WCF\Behaviors\WebHttpQueryStringConverter.cs" />
     <Compile Remove="..\..\OpenRiaServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs" />
   </ItemGroup>
   <ItemGroup>

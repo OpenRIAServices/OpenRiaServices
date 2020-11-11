@@ -10,7 +10,6 @@ using System.Reflection;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Tools.Test.T4Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

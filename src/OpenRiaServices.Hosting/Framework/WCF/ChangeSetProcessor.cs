@@ -6,13 +6,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices;
 using OpenRiaServices.Server;
 using System.Web;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Class used to process a changeset.

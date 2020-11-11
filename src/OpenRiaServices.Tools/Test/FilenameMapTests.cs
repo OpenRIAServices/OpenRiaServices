@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using OpenRiaServices.Server;
-using OpenRiaServices.Server.Test.Utilities;
 using OpenRiaServices.Tools.SharedTypes;
-using OpenRiaServices.Tools.SourceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ServerClassLib;
 

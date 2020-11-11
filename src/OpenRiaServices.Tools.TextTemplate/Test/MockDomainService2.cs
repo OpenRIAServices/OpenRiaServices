@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using System.ComponentModel.DataAnnotations;
 

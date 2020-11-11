@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Syndication;
 using System.ServiceModel.Web;
@@ -14,7 +13,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Resx = OpenRiaServices.Hosting.EndpointResource;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Tracing
 {
     /// <summary>
     /// A class implementing a WCF REST service that exposes WCF traces collected by <see cref="InMemoryTraceListener"/> as 

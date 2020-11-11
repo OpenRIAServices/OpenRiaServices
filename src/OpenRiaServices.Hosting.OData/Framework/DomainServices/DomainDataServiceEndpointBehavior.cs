@@ -1,11 +1,10 @@
-﻿namespace OpenRiaServices.Hosting.OData
+﻿namespace OpenRiaServices.Hosting.WCF.OData
 {
     #region Namespaces
     
     using System.Diagnostics;
     using System.ServiceModel.Description;
     using System.ServiceModel.Dispatcher;
-    using OpenRiaServices.Server;
     
     #endregion
 

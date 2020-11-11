@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using OpenRiaServices;
 using System.Text;
 
 namespace OpenRiaServices.Tools.TextTemplate

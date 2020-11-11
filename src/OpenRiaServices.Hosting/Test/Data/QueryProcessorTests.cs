@@ -6,10 +6,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.Client.Test;
 using OpenRiaServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF;
 
 namespace OpenRiaServices.Hosting.UnitTests
 {

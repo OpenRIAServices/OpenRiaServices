@@ -11,7 +11,6 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
     using System.Runtime.Serialization;
     using OpenRiaServices;
     using OpenRiaServices.Server;
-    using OpenRiaServices.Tools;
 
     /// <summary>
     /// C# generator for entity types.

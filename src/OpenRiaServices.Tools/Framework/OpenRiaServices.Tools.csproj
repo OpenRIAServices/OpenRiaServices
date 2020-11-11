@@ -22,7 +22,7 @@
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\SerializationUtility.cs" Link="SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\SerializationUtility.cs" Link="SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
     <Compile Update="Pdb\SymStore\*.cs">

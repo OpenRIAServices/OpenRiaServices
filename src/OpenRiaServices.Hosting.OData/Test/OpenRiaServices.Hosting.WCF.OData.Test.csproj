@@ -2,14 +2,14 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <GenerateAssemblyRefs>true</GenerateAssemblyRefs>
-    <RootNamespace>OpenRiaServices.Hosting.OData.Test</RootNamespace>
+    <RootNamespace>OpenRiaServices.Hosting.WCF.OData.Test</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Models\Northwind.edmx" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Models\Northwind.edmx">
-      <CustomToolNamespace>OpenRiaServices.Hosting.OData.Test.Models</CustomToolNamespace>
+      <CustomToolNamespace>OpenRiaServices.Hosting.WCF.OData.Test.Models</CustomToolNamespace>
       <LastGenOutput>Northwind.Designer.cs</LastGenOutput>
       <Generator>EntityModelCodeGenerator</Generator>
     </EntityDeploy>

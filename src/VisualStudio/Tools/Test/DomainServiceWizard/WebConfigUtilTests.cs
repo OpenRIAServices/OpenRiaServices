@@ -5,10 +5,10 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Configuration;
-using OpenRiaServices.Hosting;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF.Configuration;
 using System.Web.Configuration;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

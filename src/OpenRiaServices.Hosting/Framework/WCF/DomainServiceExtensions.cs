@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     static class DomainServiceExtensions
     {

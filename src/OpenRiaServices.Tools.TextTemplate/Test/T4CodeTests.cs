@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Server.Test.Utilities;
 using OpenRiaServices.Tools.Test;
-using OpenRiaServices.Tools.TextTemplate.CSharpGenerators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 

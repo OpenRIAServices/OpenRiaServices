@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Authentication;
 

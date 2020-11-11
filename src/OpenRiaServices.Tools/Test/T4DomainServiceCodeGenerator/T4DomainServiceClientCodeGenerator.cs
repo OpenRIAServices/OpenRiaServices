@@ -16,7 +16,6 @@ namespace OpenRiaServices.Tools.Test.T4Generator
     using System.Reflection;
     using OpenRiaServices.Server;
     using System.Text;
-    using OpenRiaServices.Tools;
     
     /// <summary>
     /// Class to produce the template output

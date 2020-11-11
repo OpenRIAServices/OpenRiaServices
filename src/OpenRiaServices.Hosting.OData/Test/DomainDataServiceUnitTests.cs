@@ -10,8 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices.EntityFramework;
-using OpenRiaServices.Hosting;
-using OpenRiaServices.Hosting.OData.Test.Models;
+using OpenRiaServices.Hosting.WCF.OData.Test.Models;
 using OpenRiaServices.Server;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,7 +20,7 @@ using System.Data.Linq;
 using System.Data.Services.Providers;
 #endregion
 
-namespace OpenRiaServices.Hosting.OData.Test
+namespace OpenRiaServices.Hosting.WCF.OData.Test
 {
     [EnableClientAccess]
     public class NorthwindDomainService : LinqToEntitiesDomainService<NorthwindEntities>
@@ -1048,9 +1047,9 @@ namespace OpenRiaServices.Hosting.OData.Test
 
                 TestUtil.AssertSelectNodes(document, "/edmx:Edmx/edmx:DataServices[@adsm:DataServiceVersion='1.0']");
 
-                String[] xpath = { @"edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.OData.Test.Models']/csdl1:EntityType[@Name='Customer']/csdl1:Property[@Name='Address']",
-                                   @"edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.OData.Test']/csdl1:EntityContainer[@Name='NorthwindDomainService']/csdl1:EntitySet[@Name='CustomerSet']",
-                                   @"edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.OData.Test']/csdl1:EntityContainer[@Name='NorthwindDomainService']/csdl1:FunctionImport[@Name='GetCustomersByCountry']"
+                String[] xpath = { @"edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.WCF.OData.Test.Models']/csdl1:EntityType[@Name='Customer']/csdl1:Property[@Name='Address']",
+                                   @"edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.WCF.OData.Test']/csdl1:EntityContainer[@Name='NorthwindDomainService']/csdl1:EntitySet[@Name='CustomerSet']",
+                                   @"edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.WCF.OData.Test']/csdl1:EntityContainer[@Name='NorthwindDomainService']/csdl1:FunctionImport[@Name='GetCustomersByCountry']"
                                  };
 
                 for (int i = 0; i < xpath.Length; i++)
@@ -1072,7 +1071,7 @@ namespace OpenRiaServices.Hosting.OData.Test
                     else
                         if (i == 1)
                     {
-                        Assert.AreEqual("OpenRiaServices.Hosting.OData.Test.Models.Customer", currentResult.Attributes["EntityType"].Value);
+                        Assert.AreEqual("OpenRiaServices.Hosting.WCF.OData.Test.Models.Customer", currentResult.Attributes["EntityType"].Value);
                     }
                     else
                     {
@@ -1126,30 +1125,30 @@ namespace OpenRiaServices.Hosting.OData.Test
 
                             "not    (/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='NotVisiblePersonTypeWithDataContract'])",
 
-                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PersonWithBirthday' and @BaseType='OpenRiaServices.Hosting.OData.Test.Person'])",
+                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PersonWithBirthday' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.Person'])",
                             "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PersonWithBirthday']/csdl1:Property)=1)",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PersonWithBirthday']/csdl1:Property[@Name='Birthday' and @Type='Edm.DateTime'])",
 
-                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Teacher' and @BaseType='OpenRiaServices.Hosting.OData.Test.PersonWithBirthday'])",
+                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Teacher' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.PersonWithBirthday'])",
                             "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Teacher']/csdl1:Property)=3)",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Teacher']/csdl1:Property[@Name='Subject' and @Type='Edm.String'])",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Teacher']/csdl1:Property[@Name='Visible3' and @Type='Edm.Binary'])",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Teacher']/csdl1:Property[@Name='Visible4' and @Type='Edm.Decimal'])",
 
-                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='SubstituteTeacher' and @BaseType='OpenRiaServices.Hosting.OData.Test.Teacher'])",
+                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='SubstituteTeacher' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.Teacher'])",
                             "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='SubstituteTeacher']/csdl1:Property)=0)",
 
-                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Student' and @BaseType='OpenRiaServices.Hosting.OData.Test.PersonWithBirthday'])",
+                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Student' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.PersonWithBirthday'])",
                             "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Student']/csdl1:Property)=3)",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Student']/csdl1:Property[@Name='GPA' and @Type='Edm.Double'])",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Student']/csdl1:Property[@Name='Visible3' and @Type='Edm.Binary'])",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='Student']/csdl1:Property[@Name='Visible4' and @Type='Edm.Decimal'])",
 
-                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PartTimeStudent' and @BaseType='OpenRiaServices.Hosting.OData.Test.Student'])",
+                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PartTimeStudent' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.Student'])",
                             "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PartTimeStudent']/csdl1:Property)=1)",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='PartTimeStudent']/csdl1:Property[@Name='Status' and @Type='Edm.String'])",
 
-                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='FullTimeStudent' and @BaseType='OpenRiaServices.Hosting.OData.Test.Student'])",
+                            "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='FullTimeStudent' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.Student'])",
                             "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='FullTimeStudent']/csdl1:Property)=1)",
                             "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='FullTimeStudent']/csdl1:Property[@Name='ClassOf' and @Type='Edm.DateTime'])",
 
@@ -1380,11 +1379,11 @@ namespace OpenRiaServices.Hosting.OData.Test
                     "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='VisibleEntityBase']/csdl1:Key/csdl1:PropertyRef[@Name='ID'])",
                     "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='VisibleEntityBase']/csdl1:Property[@Name='ID' and @Type='Edm.Int32'])",
 
-                    "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='VisibleEntityType' and @BaseType='OpenRiaServices.Hosting.OData.Test.VisibleEntityBase'])",
+                    "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='VisibleEntityType' and @BaseType='OpenRiaServices.Hosting.WCF.OData.Test.VisibleEntityBase'])",
                     "not    (/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType[@Name='VisibleEntityType']/csdl1:Property)",
 
                     "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer[@Name='DummyDomainService'])",
-                    "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer/csdl1:EntitySet[@Name='VisibleEntityTypeSet' and @EntityType='OpenRiaServices.Hosting.OData.Test.VisibleEntityType'])",
+                    "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer/csdl1:EntitySet[@Name='VisibleEntityTypeSet' and @EntityType='OpenRiaServices.Hosting.WCF.OData.Test.VisibleEntityType'])",
                     "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer/csdl1:EntitySet)=1)",
                     "boolean(count(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer/csdl1:FunctionImport)=1)",
                     "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer/csdl1:FunctionImport[@Name='GetVisibleEntitiesInvoke' and @EntitySet='VisibleEntityTypeSet' and @adsm:HttpMethod='POST'])",
@@ -1435,7 +1434,7 @@ namespace OpenRiaServices.Hosting.OData.Test
 
                 String[] xpath =
                 {
-                    "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.OData.Test'])",
+                    "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema[@Namespace='OpenRiaServices.Hosting.WCF.OData.Test'])",
                     "not    (/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityType)",
                     "boolean(/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer[@Name='EchoDomainService' and @adsm:IsDefaultEntityContainer='true'])",
                     "not    (/edmx:Edmx/edmx:DataServices/csdl1:Schema/csdl1:EntityContainer/csdl1:EntitySet)",

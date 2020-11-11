@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenRiaServices.Server;
-using OpenRiaServices.Hosting;
 
 namespace OpenRiaServices.Tools.Test
 {

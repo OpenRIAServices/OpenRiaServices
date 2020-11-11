@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFramework
 {

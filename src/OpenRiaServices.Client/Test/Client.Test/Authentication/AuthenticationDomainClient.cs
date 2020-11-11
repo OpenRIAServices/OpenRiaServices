@@ -10,7 +10,6 @@ using System.Threading;
 using OpenRiaServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
-using OpenRiaServices.Client.Test.Utilities;
 
 namespace OpenRiaServices.Client.Authentication.Test
 {

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
-using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.WCF;
 using OpenRiaServices.Server;
-using System.Text;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {

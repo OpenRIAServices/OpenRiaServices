@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Hosting.WCF.Configuration;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,9 +12,8 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using System.Web;
 using OpenRiaServices.Server;
-using OpenRiaServices.Hosting.Configuration.Internal;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Provides a host for domain services.
@@ -112,7 +113,7 @@ namespace OpenRiaServices.Hosting
                 ServiceDescription serviceDesc = ServiceDescription.GetService(domainServiceType);
                 implementedContracts = new Dictionary<string, ContractDescription>();
 
-                var config = DomainServieHostingConfiguration.Current;
+                var config = DomainServiceHostingConfiguration.Current;
                 var contract = CreateContract(this._domainServiceDescription);
 
                 foreach (DomainServiceEndpointFactory endpointFactory in config.EndpointFactories)

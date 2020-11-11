@@ -10,11 +10,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using OpenRiaServices;
 using OpenRiaServices.Tools.SourceLocation;
 using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TypeUtility = SystemWebDomainServices::OpenRiaServices.TypeUtility;
 
 namespace OpenRiaServices.Tools.Test
 {

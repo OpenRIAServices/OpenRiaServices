@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenRiaServices.Hosting.WCF.Behaviors;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ using System.Xml;
 
 // WARNING: Keep this file in sync with OpenRiaServices.Hosting
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     internal static class ServiceUtility
     {
@@ -584,7 +585,7 @@ namespace OpenRiaServices.Hosting
 
             public WebServiceHostInspector()
                 : base(
-                    typeof(WebServiceHostInspector.Service),
+                    typeof(Service),
                     new Uri("http://OpenRiaServices.Hosting.ServiceUtility.WebServiceHostInspector.Service.svc"))
             { }
 

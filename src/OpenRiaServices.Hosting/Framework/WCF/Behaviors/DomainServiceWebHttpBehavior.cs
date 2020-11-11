@@ -10,7 +10,7 @@ using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Web;
 using System.Web;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Behaviors
 {
     /// <summary>
     /// A REST endpoint behavior which injects a message inspector that parses query headers.

@@ -1,5 +1,4 @@
 ﻿using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Activation;
 using System.Web;
 using TestDomainServices.Testing;

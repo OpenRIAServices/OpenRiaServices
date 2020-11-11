@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ServiceModel.Description;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Base class for <see cref="DomainService"/> endpoint factories.
@@ -25,7 +25,7 @@ namespace OpenRiaServices.Hosting
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceEndpointFactory"/> class and the specified name
         /// </summary>
-        /// <param name="name">the detfault <see cref="Name"/> of the endpoint</param>
+        /// <param name="name">the default <see cref="Name"/> of the endpoint</param>
         protected DomainServiceEndpointFactory(string name)
         {
             this._name = name;

@@ -176,13 +176,13 @@ namespace OpenRiaServices.Client.Web.Behaviors
             if (queryOptions.Count > 0)
             {
                 Debug.Assert(OperationContext.Current != null, "OpeartionContext.Current cannot be null at this point.");
-                if (MessageUtility.IsHttpPOSTMethod(OperationContext.Current.OutgoingMessageProperties))
+                if (OpenRiaServices.Hosting.WCF.MessageUtility.IsHttpPOSTMethod(OperationContext.Current.OutgoingMessageProperties))
                 {
-                    MessageUtility.AddMessageQueryOptions(ref request, queryOptions);
+                    OpenRiaServices.Hosting.WCF.MessageUtility.AddMessageQueryOptions(ref request, queryOptions);
                 }
                 else
                 {
-                    MessageUtility.AddQueryToUrl(ref request, queryOptions);
+                    OpenRiaServices.Hosting.WCF.MessageUtility.AddQueryToUrl(ref request, queryOptions);
                 }
             }
 

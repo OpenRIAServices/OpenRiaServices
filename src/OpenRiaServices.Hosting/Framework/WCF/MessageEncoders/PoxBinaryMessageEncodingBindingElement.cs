@@ -7,7 +7,7 @@ using System.Threading;
 using System.Xml;
 
 #if SERVERFX
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.MessageEncoders
 #else
 namespace OpenRiaServices.Client.Web
 #endif

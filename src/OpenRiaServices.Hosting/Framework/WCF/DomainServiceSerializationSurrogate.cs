@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     internal class DomainServiceSerializationSurrogate : IDataContractSurrogate
     {

@@ -5,8 +5,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Cities;
-using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF;
 using System.Threading.Tasks;
 using System.Threading;
 

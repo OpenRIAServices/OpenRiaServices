@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Represents a module which takes care of registering the <see cref="DomainServiceVirtualPathProvider"/>.

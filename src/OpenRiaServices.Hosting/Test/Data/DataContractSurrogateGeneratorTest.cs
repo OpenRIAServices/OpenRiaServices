@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using OpenRiaServices.Server;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

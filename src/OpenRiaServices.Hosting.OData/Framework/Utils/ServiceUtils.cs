@@ -1,14 +1,13 @@
 ﻿using System;
 using System.ServiceModel;
 
-namespace OpenRiaServices.Hosting.OData
+namespace OpenRiaServices.Hosting.WCF.OData
 {
     #region Namespaces
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Net;
-    using OpenRiaServices;
     using System.ServiceModel.Activation;
     using System.ServiceModel.Description;
     using System.ServiceModel.Web;
@@ -311,8 +310,8 @@ namespace OpenRiaServices.Hosting.OData
             /// <summary>Constructor for host inspector.</summary>
             internal WebServiceHostInspector()
                 : base(
-                typeof(OpenRiaServices.Hosting.OData.ServiceUtils.WebServiceHostInspector.Service),
-                new Uri("http://OpenRiaServices.Hosting.OData.ServiceUtils.WebServiceHostInspector.Service.svc"))
+                typeof(OpenRiaServices.Hosting.WCF.OData.ServiceUtils.WebServiceHostInspector.Service),
+                new Uri("http://OpenRiaServices.Hosting.WCF.OData.ServiceUtils.WebServiceHostInspector.Service.svc"))
             {
             }
 

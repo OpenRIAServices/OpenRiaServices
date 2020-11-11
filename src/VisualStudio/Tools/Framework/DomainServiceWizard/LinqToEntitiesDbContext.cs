@@ -7,7 +7,6 @@ using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
 using System.Globalization;
 using System.Reflection;
-using OpenRiaServices;
 using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools

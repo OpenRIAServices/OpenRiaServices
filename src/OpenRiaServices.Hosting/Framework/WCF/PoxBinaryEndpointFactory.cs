@@ -1,11 +1,13 @@
-﻿using System;
+﻿using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Hosting.WCF.MessageEncoders;
+using System;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Represents a REST w/ binary encoding endpoint factory for <see cref="DomainService"/>s.

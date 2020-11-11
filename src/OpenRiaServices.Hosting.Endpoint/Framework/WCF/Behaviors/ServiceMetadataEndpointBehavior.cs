@@ -2,12 +2,10 @@
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-using OpenRiaServices;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using System.Xml;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Behaviors
 {
     internal class ServiceMetadataEndpointBehavior : IEndpointBehavior
     {

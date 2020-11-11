@@ -3,7 +3,6 @@ using System.Data.Linq;
 using System.Linq;
 using System.Runtime.Serialization;
 using OpenRiaServices.Server;
-using OpenRiaServices.Hosting;
 using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.LinqToSql;
 

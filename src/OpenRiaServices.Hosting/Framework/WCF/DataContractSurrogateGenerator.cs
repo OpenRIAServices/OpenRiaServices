@@ -8,11 +8,10 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
 using System.Security;
-using OpenRiaServices;
 using OpenRiaServices.Server;
 using System.Threading;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Takes care of generating CLR types based on the virtual shape of an exposed type. E.g. we may be dealing with 

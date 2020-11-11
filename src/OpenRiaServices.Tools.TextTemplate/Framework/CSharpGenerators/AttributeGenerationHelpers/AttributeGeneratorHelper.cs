@@ -4,9 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices;
 using System.Text;
-using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.Tools.TextTemplate
 {

@@ -4,13 +4,12 @@ using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using OpenRiaServices;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF;
 
 namespace OpenRiaServices.Hosting.UnitTests
 {

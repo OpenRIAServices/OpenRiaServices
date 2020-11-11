@@ -19,7 +19,7 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ValidationUtilities.cs" Link="Data\ValidationUtilities.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Data\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ValidationResultInfo.cs" Link="Data\ValidationResultInfo.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Authentication\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\SerializationUtility.cs" Link="Authentication\SerializationUtility.cs" />
     <Compile Update="Data\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

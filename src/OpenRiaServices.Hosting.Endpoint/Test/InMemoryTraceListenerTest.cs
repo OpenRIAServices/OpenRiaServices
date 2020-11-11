@@ -1,5 +1,5 @@
-﻿using OpenRiaServices.Hosting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF.Tracing;
 using System;
 using System.Xml.Linq;
 using System.Linq;

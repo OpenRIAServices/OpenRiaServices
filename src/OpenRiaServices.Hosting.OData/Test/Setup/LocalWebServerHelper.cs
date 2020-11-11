@@ -8,8 +8,10 @@ using System.IO;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Common.Test;
+using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.WCF.Configuration;
 
-namespace OpenRiaServices.Hosting.OData.Test
+namespace OpenRiaServices.Hosting.WCF.OData.Test
 {
     /// <summary>
     /// Provides a helper class for tests that rely on a local web

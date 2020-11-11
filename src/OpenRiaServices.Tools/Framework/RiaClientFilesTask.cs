@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools
 {

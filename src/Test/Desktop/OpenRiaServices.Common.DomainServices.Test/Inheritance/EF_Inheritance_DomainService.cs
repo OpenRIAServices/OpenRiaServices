@@ -2,7 +2,6 @@
 {
     using System.Linq;
     using OpenRiaServices.EntityFramework;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
 
     /// <summary>

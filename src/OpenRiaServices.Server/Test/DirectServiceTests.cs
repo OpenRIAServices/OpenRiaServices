@@ -13,6 +13,8 @@ using System.Security.Principal;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.WCF.Behaviors;
 using System.Text;
 using System.Threading;
 using System.Web;

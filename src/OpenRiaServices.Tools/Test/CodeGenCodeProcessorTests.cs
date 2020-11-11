@@ -4,7 +4,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using OpenRiaServices;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;

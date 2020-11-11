@@ -4,6 +4,7 @@ using System.IO;
 using System.ServiceModel.Channels;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF;
 using System.Linq;
 using System.Xml.Linq;
 

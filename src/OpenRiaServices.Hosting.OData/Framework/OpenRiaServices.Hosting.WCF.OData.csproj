@@ -3,7 +3,7 @@
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>OpenRiaServices.Hosting.OData</RootNamespace>
+    <RootNamespace>OpenRiaServices.Hosting.WCF.OData</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -25,9 +25,9 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Utils\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Utils\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utils\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\WcfDomainServiceContext.cs" Link="Utils\WcfDomainServiceContext.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\WcfDomainServiceContext.cs" Link="Utils\WcfDomainServiceContext.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="DomainServices\TypeDescriptorExtensions.cs" />
     <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

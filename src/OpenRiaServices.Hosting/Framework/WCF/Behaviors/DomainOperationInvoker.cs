@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Behaviors
 {
     internal abstract class DomainOperationInvoker : IOperationInvoker
     {
@@ -50,13 +50,13 @@ namespace OpenRiaServices.Hosting
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
-            return TaskExtensions.BeginApm(InvokeAsync(instance, inputs), callback, state);
+            return Hosting.TaskExtensions.BeginApm(InvokeAsync(instance, inputs), callback, state);
         }
 
         public object InvokeEnd(object instance, out object[] outputs, IAsyncResult result)
         {
             outputs = ServiceUtility.EmptyObjectArray;
-            return TaskExtensions.EndApm<object>(result);
+            return Hosting.TaskExtensions.EndApm<object>(result);
         }
 
         private async ValueTask<object> InvokeAsync(object instance, object[] inputs)

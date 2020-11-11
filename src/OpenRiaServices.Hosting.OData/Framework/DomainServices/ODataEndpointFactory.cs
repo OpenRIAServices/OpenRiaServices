@@ -7,10 +7,11 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
 using System.Text;
-using OpenRiaServices.Hosting.OData;
+using OpenRiaServices.Hosting.WCF.OData;
+using OpenRiaServices.Hosting.WCF;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Represents a Domain Data Service endpoint factory for <see cref="DomainService"/>s.
@@ -33,7 +34,7 @@ namespace OpenRiaServices.Hosting
         /// </summary>
         /// <param name="description">The <see cref="DomainServiceDescription"/> of the <see cref="DomainService"/> to create the endpoints for.</param>
         /// <param name="serviceHost">The service host for which the endpoints will be created.</param>
-        /// <param name="contractDescription">the default contract descritpion</param>
+        /// <param name="contractDescription">the default contract description</param>
         /// <returns>The endpoints that were created.</returns>
         public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {

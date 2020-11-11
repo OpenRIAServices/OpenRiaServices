@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using OpenRiaServices;
 using OpenRiaServices.Server;
 using System.Xml;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Behaviors
 {
     internal static class ServiceMetadataGenerator
     {

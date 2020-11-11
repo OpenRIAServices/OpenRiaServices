@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices;
 using OpenRiaServices.Server;
 using System.Text;
 using System.Web.Hosting;

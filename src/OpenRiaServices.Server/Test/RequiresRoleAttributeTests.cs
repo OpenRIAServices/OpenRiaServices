@@ -7,7 +7,6 @@ using System.Security.Principal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using OpenRiaServices.Client.Test;
-using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
 namespace OpenRiaServices.Server.Test
 {

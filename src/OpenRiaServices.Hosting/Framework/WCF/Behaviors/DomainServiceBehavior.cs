@@ -2,13 +2,12 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.ServiceModel;
-using OpenRiaServices;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Behaviors
 {
     internal class DomainServiceBehavior : IContractBehavior
     {

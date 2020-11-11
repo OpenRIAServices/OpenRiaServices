@@ -1,13 +1,13 @@
 ﻿using System.ServiceModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.WCF.Tracing;
 using System;
 using OpenRiaServices.Server;
-using OpenRiaServices.Hosting;
 using System.ServiceModel.Description;
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
-using OpenRiaServices;
 
 namespace OpenRiaServices.Hosting.Local.Test
 {

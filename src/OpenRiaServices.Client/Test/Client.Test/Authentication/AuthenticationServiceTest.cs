@@ -11,7 +11,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using System.Threading.Tasks;
-using OpenRiaServices.Client;
 
 namespace OpenRiaServices.Client.Authentication.Test
 {

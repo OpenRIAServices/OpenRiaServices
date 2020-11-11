@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools

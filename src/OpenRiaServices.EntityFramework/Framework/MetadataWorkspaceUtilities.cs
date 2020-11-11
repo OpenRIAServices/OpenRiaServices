@@ -13,7 +13,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices;
-using OpenRiaServices.Server;
 
 namespace System.Data.Mapping
 {

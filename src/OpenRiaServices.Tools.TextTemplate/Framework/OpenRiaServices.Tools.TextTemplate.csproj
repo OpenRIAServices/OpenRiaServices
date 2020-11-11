@@ -30,7 +30,7 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Utilities\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Utilities\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\Services\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="Utilities\TypeDescriptorExtensions.cs" />
     <Compile Update="CodeGeneratorTextTemplate.cs">
       <AutoGen>True</AutoGen>

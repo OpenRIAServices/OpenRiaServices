@@ -18,12 +18,12 @@
     <Reference Include="system" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\Behaviors\MessageUtility.cs" Link="Services\Behaviors\MessageUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\Behaviors\MessageUtility.cs" Link="WCF\Behaviors\MessageUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Linq\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Linq\TypeUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Services\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Services\DynamicMethodUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\MetaType.cs" Link="Services\MetaType.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\DynamicMethodUtility.cs" Link="Utilities\DynamicMethodUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\MetaType.cs" Link="Utilities\MetaType.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="DomainServiceFault.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\QueryResult.cs" Link="QueryResult.cs" />
@@ -58,5 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
   </ItemGroup>
 </Project>

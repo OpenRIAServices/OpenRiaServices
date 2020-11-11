@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF.Behaviors
 {
     internal class InvokeOperationBehavior : IOperationBehavior
     {

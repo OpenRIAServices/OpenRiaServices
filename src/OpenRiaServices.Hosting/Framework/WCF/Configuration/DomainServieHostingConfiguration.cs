@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Configuration;
 
-namespace OpenRiaServices.Hosting.Configuration.Internal
+namespace OpenRiaServices.Hosting.WCF.Configuration
 {
     /// <summary>
     /// internal use, will probably change between minor releases
     /// </summary>
-    public class DomainServieHostingConfiguration
+    public class DomainServiceHostingConfiguration
     {
-        private static readonly Lazy<DomainServieHostingConfiguration> s_domainServiceConfiguration = new Lazy<DomainServieHostingConfiguration>(CreateConfiguration, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        private static readonly Lazy<DomainServiceHostingConfiguration> s_domainServiceConfiguration = new Lazy<DomainServiceHostingConfiguration>(CreateConfiguration, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-        private DomainServieHostingConfiguration()
+        private DomainServiceHostingConfiguration()
         {
             EndpointFactories = new HashSet<DomainServiceEndpointFactory>(new EndpointNameComparer());
         }
@@ -19,7 +19,7 @@ namespace OpenRiaServices.Hosting.Configuration.Internal
         /// <summary>
         /// Get the current global configuration
         /// </summary>
-        public static DomainServieHostingConfiguration Current => s_domainServiceConfiguration.Value;
+        public static DomainServiceHostingConfiguration Current => s_domainServiceConfiguration.Value;
 
         /// <summary>
         /// List of all endpoints, name must be unique
@@ -30,9 +30,9 @@ namespace OpenRiaServices.Hosting.Configuration.Internal
         /// Initialize the singleton instance
         /// </summary>
         /// <returns></returns>
-        static DomainServieHostingConfiguration CreateConfiguration()
+        static DomainServiceHostingConfiguration CreateConfiguration()
         {
-            var instance = new DomainServieHostingConfiguration();
+            var instance = new DomainServiceHostingConfiguration();
             foreach (ProviderSettings provider in DomainServicesSection.Current.Endpoints)
             {
                 DomainServiceEndpointFactory endpointFactory = CreateEndpointFactoryInstance(provider);

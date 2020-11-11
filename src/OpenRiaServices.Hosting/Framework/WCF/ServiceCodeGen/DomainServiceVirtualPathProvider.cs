@@ -12,7 +12,7 @@ using System.Web.Caching;
 using System.Web.Compilation;
 using System.Web.Hosting;
 
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.WCF
 {
     /// <summary>
     /// Takes care of generating a service file when a physical one doesn't exist.

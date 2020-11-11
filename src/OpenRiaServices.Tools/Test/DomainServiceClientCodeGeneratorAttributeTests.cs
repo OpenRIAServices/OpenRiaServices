@@ -7,10 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Server;
-using OpenRiaServices.Server.Test.Utilities;
-using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.Tools.Test
 {

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using OpenRiaServices.EntityFramework;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using System;
 

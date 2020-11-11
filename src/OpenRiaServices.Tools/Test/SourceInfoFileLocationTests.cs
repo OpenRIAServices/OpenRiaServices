@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.Server.Test.Utilities;
 using OpenRiaServices.Tools.SharedTypes;
 using OpenRiaServices.Tools.SourceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
