@@ -3,7 +3,7 @@
 namespace OpenRiaServices.Client.Internal
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class MergeAttribute : Attribute
+    class MergeAttribute : Attribute
     {
         private readonly bool _isMergeable;
 
