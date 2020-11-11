@@ -1,10 +1,10 @@
-﻿using OpenRiaServices.Hosting.WCF.Behaviors;
-using OpenRiaServices.Hosting.WCF.MessageEncoders;
-using System;
+﻿using System;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
+using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Hosting.WCF.MessageEncoders;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.WCF

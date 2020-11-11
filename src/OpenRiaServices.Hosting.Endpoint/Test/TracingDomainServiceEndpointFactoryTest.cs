@@ -1,13 +1,13 @@
-﻿using System.ServiceModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.WCF;
 using OpenRiaServices.Hosting.WCF.Tracing;
-using System;
 using OpenRiaServices.Server;
-using System.ServiceModel.Description;
-using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
 
 namespace OpenRiaServices.Hosting.Local.Test
 {
@@ -18,8 +18,6 @@ namespace OpenRiaServices.Hosting.Local.Test
     [TestClass()]
     public class TracingDomainServiceEndpointFactoryTest
     {
-
-
         private TestContext testContextInstance;
 
         /// <summary>

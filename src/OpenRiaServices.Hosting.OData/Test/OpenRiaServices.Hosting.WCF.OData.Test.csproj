@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <GenerateAssemblyRefs>true</GenerateAssemblyRefs>
-    <RootNamespace>OpenRiaServices.Hosting.WCF.OData.Test</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Models\Northwind.edmx" />

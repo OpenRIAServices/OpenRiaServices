@@ -1,6 +1,5 @@
 using System;
 using System.ServiceModel;
-using TaskExtensions = OpenRiaServices.Hosting.TaskExtensions;
 using System.ComponentModel;
 using System.Net;
 using System.Reflection;
@@ -8,7 +7,6 @@ using System.ServiceModel.Dispatcher;
 using OpenRiaServices.Server;
 using System.Web;
 using System.Threading.Tasks;
-using OpenRiaServices.Hosting.WCF;
 
 namespace OpenRiaServices.Hosting.WCF.OData
 {

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.ServiceModel.Configuration;
+using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.WCF.Configuration;
-using System.Web.Configuration;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test

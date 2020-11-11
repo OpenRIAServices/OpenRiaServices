@@ -3,7 +3,6 @@
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>OpenRiaServices.Hosting.WCF.OData</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />

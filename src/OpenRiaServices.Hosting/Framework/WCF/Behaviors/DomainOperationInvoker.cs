@@ -50,13 +50,13 @@ namespace OpenRiaServices.Hosting.WCF.Behaviors
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
-            return Hosting.TaskExtensions.BeginApm(InvokeAsync(instance, inputs), callback, state);
+            return TaskExtensions.BeginApm(InvokeAsync(instance, inputs), callback, state);
         }
 
         public object InvokeEnd(object instance, out object[] outputs, IAsyncResult result)
         {
             outputs = ServiceUtility.EmptyObjectArray;
-            return Hosting.TaskExtensions.EndApm<object>(result);
+            return TaskExtensions.EndApm<object>(result);
         }
 
         private async ValueTask<object> InvokeAsync(object instance, object[] inputs)

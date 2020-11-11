@@ -1,5 +1,4 @@
-﻿using OpenRiaServices.Hosting.WCF.Behaviors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -10,11 +9,12 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.Server;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
+using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Server;
 
 // WARNING: Keep this file in sync with OpenRiaServices.Hosting
 

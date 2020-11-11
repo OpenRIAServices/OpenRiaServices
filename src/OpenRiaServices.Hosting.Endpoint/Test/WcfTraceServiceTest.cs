@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF.Tracing;
-using System;
+﻿using System;
 using System.IO;
-using System.Xml.Linq;
 using System.ServiceModel.Syndication;
-using System.ServiceModel.Channels;
 using System.Text;
+using System.Xml.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF.Tracing;
 
 namespace OpenRiaServices.Hosting.Local.Test
 {
@@ -18,7 +17,6 @@ namespace OpenRiaServices.Hosting.Local.Test
     {
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationFeedTest()
         {
             SyndicationFeed actual = WcfTraceService.CreateTraceSyndicationFeed();
@@ -27,7 +25,6 @@ namespace OpenRiaServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceXmlTest()
         {
             Stream actual = WcfTraceService.CreateTraceXml();
@@ -37,7 +34,6 @@ namespace OpenRiaServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceHtmlTest()
         {
             Stream actual = WcfTraceService.CreateTraceHtml();
@@ -50,7 +46,6 @@ namespace OpenRiaServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void CreateTraceSyndicationItemTest()
         {
             SyndicationItem actual = WcfTraceService.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
@@ -66,7 +61,6 @@ namespace OpenRiaServices.Hosting.Local.Test
         }
 
         [TestMethod()]
-        [DeploymentItem("OpenRiaServices.Hosting.Endpoint.dll")]
         public void InstanceTest()
         {
             WcfTraceService actual;

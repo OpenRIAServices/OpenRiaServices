@@ -8,7 +8,6 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Web;
 using System.Text;
 using OpenRiaServices.Hosting.WCF.OData;
-using OpenRiaServices.Hosting.WCF;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.WCF

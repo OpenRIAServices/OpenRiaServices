@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.ServiceModel.Channels;
 using System.Xml;
+using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.WCF;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace OpenRiaServices.Hosting.Test.Data
 {

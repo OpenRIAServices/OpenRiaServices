@@ -1,8 +1,8 @@
-﻿using OpenRiaServices.Hosting.WCF.Behaviors;
-using System;
+﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
+using OpenRiaServices.Hosting.WCF.Behaviors;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.WCF

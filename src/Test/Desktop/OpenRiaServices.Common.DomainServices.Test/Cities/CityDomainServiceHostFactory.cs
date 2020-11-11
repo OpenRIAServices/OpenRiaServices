@@ -1,6 +1,6 @@
-﻿using OpenRiaServices.Hosting.WCF;
-using System;
+﻿using System;
 using System.ServiceModel;
+using OpenRiaServices.Hosting.WCF;
 
 namespace Cities
 {

@@ -5,10 +5,8 @@ using System.Data.Test.Astoria;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Common.Test;
-using OpenRiaServices.Hosting.WCF;
 using OpenRiaServices.Hosting.WCF.Configuration;
 
 namespace OpenRiaServices.Hosting.WCF.OData.Test

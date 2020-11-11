@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF.Tracing;
-using System;
-using System.Xml.Linq;
+﻿using System;
 using System.Linq;
+using System.Xml.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.WCF.Tracing;
 
 namespace OpenRiaServices.Hosting.Local.Test
 {

@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
-using OpenRiaServices.Server;
-using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.UnitTests
 {
