@@ -1,0 +1,20 @@
+<configuration>
+  <configSections>
+    <sectionGroup name="system.serviceModel">
+      <section name="domainServices" type="OpenRiaServices.Hosting.WCF.Configuration.DomainServicesSection, OpenRiaServices.Hosting.WCF" allowDefinition="MachineToApplication" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <system.web>
+    <httpModules>
+      <add name="DomainServiceModule" type="OpenRiaServices.Hosting.WCF.DomainServiceHttpModule, OpenRiaServices.Hosting.WCF" />
+    </httpModules>
+  </system.web>
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="true">
+      <add name="DomainServiceModule" preCondition="managedHandler" type="OpenRiaServices.Hosting.WCF.DomainServiceHttpModule, OpenRiaServices.Hosting.WCF" />
+    </modules>
+  </system.webServer>
+  <system.serviceModel>
+    <serviceHostingEnvironment aspNetCompatibilityEnabled="true" multipleSiteBindingsEnabled="true" />
+  </system.serviceModel>
+</configuration>
