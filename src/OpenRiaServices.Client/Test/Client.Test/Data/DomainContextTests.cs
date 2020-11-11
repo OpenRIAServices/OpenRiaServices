@@ -339,6 +339,47 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueTestComplete();
         }
 
+        [TestMethod]
+        [Description("SubmitChanges should validate IValidatableObject entities")]
+        public async Task SubmitChanges_ValidatesIValidatableEntities()
+        {
+            CityDomainContext domainContext = new CityDomainContext();
+            City newCity = new City() { Name = "Test" };
+            domainContext.Cities.Add(newCity);
+
+            System.ComponentModel.INotifyDataErrorInfo notifier = newCity;
+            List<string> actualErrors = new List<string>();
+            notifier.ErrorsChanged += (s, e) => actualErrors.Add(e.PropertyName);
+
+            newCity.MakeIValidatableObjectFail = true;
+            SubmitOperation = domainContext.SubmitChanges();
+
+            // The submission will fail because of the validation error.  Mark it as handled.
+            SubmitOperation.Completed += (_, __) => SubmitOperation.MarkErrorAsHandled();
+
+            // Invalid IValidatableObject's will be reported as in error
+            await SubmitOperation;
+
+            Assert.IsTrue(newCity.HasValidationErrors);
+            Assert.AreEqual(1, newCity.ValidationErrors.Count, "Expected one (and only one) validation error");
+            ValidationResult validationResult = newCity.ValidationErrors.Single();
+            Assert.AreEqual(nameof(IValidatableObject), validationResult.ErrorMessage);
+
+            string memberName = validationResult.MemberNames.Single();
+            Assert.AreEqual(nameof(City.MakeIValidatableObjectFail), memberName);
+            actualErrors.Clear();
+
+            newCity.MakeIValidatableObjectFail = false;
+            SubmitOperation = domainContext.SubmitChanges();
+            // The submission will succeed since the object now is valid
+            SubmitOperation.Completed += (_, __) => SubmitOperation.MarkErrorAsHandled();
+
+            await SubmitOperation;
+
+            Assert.IsFalse(newCity.HasValidationErrors);
+            Assert.IsFalse(newCity.ValidationErrors.Any());
+        }
+
         private void BeginLoadCityData(Action<LoadOperation<City>> callback, object userState)
         {
             Assert.IsTrue(this.LoadOperation == null);

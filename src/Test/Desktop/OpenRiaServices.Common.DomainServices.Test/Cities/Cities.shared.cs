@@ -154,20 +154,22 @@ namespace Cities
         }
     }
 
-    public partial class City
+    public partial class City : IValidatableObject
     {
-        // Demonstration of a shared method
-        public bool Validate()
-        {
-            return Validator.IsValidCity(this);
-        }
+        public bool MakeIValidatableObjectFail { get; set; }
 
-        // Demonstration of a shared property.
-        public bool IsValid
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            get
+            if(MakeIValidatableObjectFail)
             {
-                return this.Validate();
+                return new[]
+                {
+                    new ValidationResult(nameof(IValidatableObject), new[]{ nameof(MakeIValidatableObjectFail) })
+                };
+            }
+            else
+            {
+                return Enumerable.Empty<ValidationResult>();
             }
         }
     }
