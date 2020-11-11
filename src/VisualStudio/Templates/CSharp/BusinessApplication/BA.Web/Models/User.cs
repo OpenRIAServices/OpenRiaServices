@@ -1,7 +1,7 @@
 ﻿namespace $safeprojectname$
 {
     using System.Runtime.Serialization;
-    using OpenRiaServices.Server.ApplicationServices;
+    using OpenRiaServices.Server.Authentication;
 
     /// <summary>
     /// Class containing information about the authenticated user.

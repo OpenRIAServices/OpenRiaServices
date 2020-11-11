@@ -2,7 +2,7 @@
 
 <#@ import namespace="OpenRiaServices" #>
 <#@ import namespace="OpenRiaServices.Server" #>
-<#@ import namespace="OpenRiaServices.Server.ApplicationServices" #>
+<#@ import namespace="OpenRiaServices.Server.Authentication" #>
 <#@ import namespace="System.Linq" #>
 
 <#@ include file="Templates\Utility.ttinclude" #>

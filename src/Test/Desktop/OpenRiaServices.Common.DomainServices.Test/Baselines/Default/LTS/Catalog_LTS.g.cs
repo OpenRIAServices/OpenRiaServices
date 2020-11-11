@@ -2451,7 +2451,7 @@ namespace TestDomainServices.LTS
     using System.Threading.Tasks;
     using DataTests.AdventureWorks.LTS;
     using OpenRiaServices.Client;
-    using OpenRiaServices.Client.ApplicationServices;
+    using OpenRiaServices.Client.Authentication;
     
     
     /// <summary>
