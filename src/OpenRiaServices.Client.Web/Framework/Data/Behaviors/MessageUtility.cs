@@ -62,7 +62,7 @@ namespace OpenRiaServices.Client
             object property;
             HttpRequestMessageProperty httpMessageProperty = null;
 
-            if (properties.TryGetValue(OpenRiaServices.Hosting.WCF.MessageUtility.HttpRequestName, out property))
+            if (properties.TryGetValue(MessageUtility.HttpRequestName, out property))
             {
                 httpMessageProperty = property as HttpRequestMessageProperty;
             }
@@ -70,10 +70,10 @@ namespace OpenRiaServices.Client
             if (httpMessageProperty == null)
             {
                 httpMessageProperty = new HttpRequestMessageProperty();
-                properties.Add(OpenRiaServices.Hosting.WCF.MessageUtility.HttpRequestName, httpMessageProperty);
+                properties.Add(MessageUtility.HttpRequestName, httpMessageProperty);
             }
 
-            httpMessageProperty.Method = OpenRiaServices.Hosting.WCF.MessageUtility.HttpPostMethodName;
+            httpMessageProperty.Method = MessageUtility.HttpPostMethodName;
             httpMessageProperty.SuppressEntityBody = false;
         }
 
@@ -265,13 +265,13 @@ namespace OpenRiaServices.Client
 
                 try
                 {
-                    writer.WriteStartElement(OpenRiaServices.Hosting.WCF.MessageUtility.MessageRootElementName);        // <MessageRoot>
-                    writer.WriteStartElement(OpenRiaServices.Hosting.WCF.MessageUtility.QueryOptionsListElementName);   // <QueryOptions>
+                    writer.WriteStartElement(MessageUtility.MessageRootElementName);        // <MessageRoot>
+                    writer.WriteStartElement(MessageUtility.QueryOptionsListElementName);   // <QueryOptions>
                     foreach (var queryOption in this._queryOptions)                         // for each query option write <QueryOption Name="..." Value="..." />
                     {
-                        writer.WriteStartElement(OpenRiaServices.Hosting.WCF.MessageUtility.QueryOptionElementName);
-                        writer.WriteAttributeString(OpenRiaServices.Hosting.WCF.MessageUtility.QueryNameAttribute, queryOption.Key);
-                        writer.WriteAttributeString(OpenRiaServices.Hosting.WCF.MessageUtility.QueryValueAttribute, queryOption.Value);
+                        writer.WriteStartElement(MessageUtility.QueryOptionElementName);
+                        writer.WriteAttributeString(MessageUtility.QueryNameAttribute, queryOption.Key);
+                        writer.WriteAttributeString(MessageUtility.QueryValueAttribute, queryOption.Value);
                         writer.WriteEndElement();
                     }
                     writer.WriteEndElement();                                               // </QueryOptions>

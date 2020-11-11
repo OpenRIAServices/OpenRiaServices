@@ -96,14 +96,13 @@ namespace OpenRiaServices.Client.Web
             return context.CanBuildInnerChannelFactory<TChannel>();
         }
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETSTANDARD2_0
         public override IChannelListener<TChannel> BuildChannelListener<TChannel>(BindingContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
             context.BindingParameters.Add(this);
             return context.BuildInnerChannelListener<TChannel>();
         }
