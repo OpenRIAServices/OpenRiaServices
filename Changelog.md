@@ -72,6 +72,7 @@ It is currently quite empty but already demonstrates some of the following scena
 ### Server 
 
 * Create, Update and Delete methods on server can now return Task #226
+* The CancellationToken passed to SubmitAsync and InvokeAsync now supports cancellation on client disconnect #250 
 
 ### Unit Testing
 
