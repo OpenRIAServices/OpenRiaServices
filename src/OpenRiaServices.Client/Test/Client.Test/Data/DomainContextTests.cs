@@ -339,6 +339,34 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueTestComplete();
         }
 
+        [TestMethod]
+        [Description("SubmitChanges should validate IValidatableObject entities")]
+        public async Task SubmitChanges_ValidatesIValidatableEntities()
+        {
+            CityDomainContext domainContext = new CityDomainContext();
+            City newCity = new City() { Name = "Test", CountyName = "Test", StateName = "TE", MakeIValidatableObjectFail = true };
+            domainContext.Cities.Add(newCity);
+
+            // Invalid IValidatableObject's will be reported as in error
+            var ex = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(domainContext.SubmitChangesAsync);
+
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+            Assert.IsTrue(newCity.HasValidationErrors);
+            Assert.AreEqual(1, newCity.ValidationErrors.Count, "Expected one (and only one) validation error");
+
+            ValidationResult validationResult = newCity.ValidationErrors.Single();
+            Assert.AreEqual("IValidatableObject", validationResult.ErrorMessage);
+            string memberName = validationResult.MemberNames.Single();
+            Assert.AreEqual("MakeIValidatableObjectFail", memberName);
+
+            // Verify that IValidatableObject validation error clearing is treated the same way as other errors.
+            newCity.MakeIValidatableObjectFail = false;
+            await domainContext.SubmitChangesAsync();
+
+            Assert.IsFalse(newCity.HasValidationErrors, "Entity should not have any validation errors");
+            Assert.IsFalse(newCity.ValidationErrors.Any());
+        }
+
         private void BeginLoadCityData(Action<LoadOperation<City>> callback, object userState)
         {
             Assert.IsTrue(this.LoadOperation == null);

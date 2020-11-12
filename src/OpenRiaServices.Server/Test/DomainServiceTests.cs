@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using System.Threading.Tasks;
 using System.Threading;
+using OpenRiaServices.Server.UnitTesting;
 
 namespace OpenRiaServices.Server.Test
 {

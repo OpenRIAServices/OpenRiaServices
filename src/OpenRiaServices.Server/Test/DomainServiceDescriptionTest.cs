@@ -138,11 +138,12 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexTypes_TestService));
 
             // verify that RequiresValidation is recursive through CTs
-            MetaType mt = MetaType.GetMetaType(typeof(ComplexType_NoValidation));
-            Assert.IsTrue(mt.RequiresValidation);
+            Assert.IsTrue(MetaType.GetMetaType(typeof(ComplexType_NoValidation)).RequiresValidation);
             Assert.IsTrue(MetaType.GetMetaType(typeof(ContactInfo)).RequiresValidation);
             Assert.IsTrue(MetaType.GetMetaType(typeof(Address)).RequiresValidation);
             Assert.IsTrue(MetaType.GetMetaType(typeof(Phone)).RequiresValidation);
+            Assert.IsTrue(MetaType.GetMetaType(typeof(ValidatableObject)).RequiresValidation);
+            Assert.IsTrue(MetaType.GetMetaType(typeof(Indirect_ValidatableObject)).RequiresValidation);
 
             // add positive/negative CT identification tests
         }

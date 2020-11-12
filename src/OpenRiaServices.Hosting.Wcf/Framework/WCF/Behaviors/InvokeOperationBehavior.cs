@@ -67,7 +67,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 try
                 {
                     InvokeDescription invokeDescription = new InvokeDescription(this.operation, inputs);
-                    invokeResult = await instance.InvokeAsync(invokeDescription, CancellationToken.None).ConfigureAwait(false);
+                    invokeResult = await instance.InvokeAsync(invokeDescription, instance.ServiceContext.CancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

@@ -1,9 +1,9 @@
-﻿using OpenRiaServices.Server.Data;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Client.Internal
 {
@@ -31,7 +31,8 @@ namespace OpenRiaServices.Client.Internal
             IsComplex = TypeUtility.IsSupportedComplexType(property.PropertyType);
             if (hasGetter && (property.GetSetMethod() != null))
             {
-                IsDataMember = IsComplex || TypeUtility.IsPredefinedType(property.PropertyType);
+                IsDataMember = (IsComplex || TypeUtility.IsPredefinedType(property.PropertyType))
+                        && !TypeUtility.IsAttributeDefined(property, typeof(IgnoreDataMemberAttribute), false);
             }
 
             if (hasGetter)
@@ -161,7 +162,7 @@ namespace OpenRiaServices.Client.Internal
         /// <summary>
         /// Gets a value indicating whether this member is mergable 
         /// (should be updated when loading with behaviour <see cref="LoadBehavior.MergeIntoCurrent"/> or <see cref="LoadBehavior.RefreshCurrent"/>).
-        /// Supported types are mergable by default unless a <see cref="MergeAttribute"/> is defined with <see cref="MergeAttribute.IsMergeable"/> set to false.
+        /// Supported types are mergable by default unless a <see cref="IgnoreDataMemberAttribute"/> is defined.
         /// </summary>
         public bool IsMergable { get; }
 
@@ -225,9 +226,7 @@ namespace OpenRiaServices.Client.Internal
 
         private static bool CheckIfMergeableMember(MetaMember metaMember)
         {
-            return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
-                   (TypeUtility.IsAttributeDefined(metaMember.Member, typeof(MergeAttribute), true) == false ||
-                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof(MergeAttribute), true).First()).IsMergeable);
+            return metaMember.IsDataMember && !metaMember.IsAssociationMember;
         }
 
 

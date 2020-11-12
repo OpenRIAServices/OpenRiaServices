@@ -340,6 +340,20 @@ namespace TestDomainServices
         public ComplexType_Recursive ComplexType_Recursive { get; set; }
     }
 
+
+    public class ValidatableObject : IValidatableObject
+    {
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class Indirect_ValidatableObject
+    {
+        public ValidatableObject Validatable { get; }
+    }
+
     #region Complex Types Inheritance
     [EnableClientAccess]
     public class ComplexTypes_DomainService : DomainService

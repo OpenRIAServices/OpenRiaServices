@@ -6,14 +6,20 @@
 2. Client networking API the *DomainClient* is now based on Task instead of using the APM pattern with Begin/End methods
 3. Supported TargetFrameworks has changed
 4. Code generation now works against *netstandard 2.0* and *netcore 2.1+* clients
-5. **Major namespace changes** *DomainServices* is dropped from namespaces and assemblies
+5. **Major namespace changes** 
+	1. *DomainServices* is dropped from namespaces and assemblies
+	2. *ApplicationServices* has been renamed to *Authentication*
 5. AspNetMembership authentication (**AuthenticationBase** and related classes) are moved to a new namespace and nuget package
    * Add a reference to *OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
-
+6. Full support for IValidatableObject validation (earlier versions only validated IValidatableObject if ValidationAttribute also was specified)
+   
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.
-2. Seach and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files
+2. Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files
+3. Search and Replace `.ApplicationServices` with `.Authentication` in all files.
+	* `OpenRiaServices.Client.ApplicationServices` has been renamed to `OpenRiaServices.Client.Authentication`
+	* `OpenRiaServices.Server.ApplicationServices` has been renamed to `OpenRiaServices.Server.Authentication`
 2. If you have been using **AuthenticationBase** or other classes in the `OpenRiaServices.Server.ApplicationServices` namespace in your server project 
    1. Add the *OpenRiaServices.Server.Authentication.AspNetMembership* nuget package to it
    2. Replace *OpenRiaServices.Server.ApplicationServices* with *OpenRiaServices.Server.Authentication*
@@ -44,17 +50,44 @@ It is currently quite empty but already demonstrates some of the following scena
 
 # 5.0.0 RC
 
-* "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs.
-  * **IMPORTANT** Seach and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
+* "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs. #234
+  * **IMPORTANT** Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
+* Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication` **search and replace is needed on upgrading** #248
 * Updated required version of .Net Framework to 4.7.2 (#241)
 * Updated dependencies including EntityFramework to latests availible versions #240
-* Create, Update and Delete methods on server can now return Task #226
+  
+### Client
+
+* `IgnoreDataMemberAttribute` can now be used on the client to prevent client properties from beeing included/overwritten when loading data using `MergeIntoCurrent` or the state manipulating methods `ApplyState`, `ExtractState` etc. #249
+	* `MergeAttribute` which has a similar usage area has been moved to `OpenRiaServices.Client.Internal` and might be removed in future releases.
+
+### Code Generation
+
+* Suppress generation of `DebuggerStepThroughAttribute` from async methods
 * New handling of shared files #229
   Instead of copying all ".shared" files to the `Generated_Code` folder the server version is referenced instead
   * This should build faster builds and allows find all references, refactoring etc to work for shared files
   * It is possible to opt out of the new behaviour by adding `<OpenRiaSharedFilesMode>Copy</OpenRiaSharedFilesMode>` in the project file
   * The tooling is updated with a new option
-  
+
+### Server 
+
+* Create, Update and Delete methods on server can now return Task #226
+* The CancellationToken passed to SubmitAsync and InvokeAsync now supports cancellation on client disconnect #250 
+
+### Unit Testing
+
+* `DomainServiceTestHost` has received an number of new methods and overloads to help with unit testing async code. (#245)
+	* Added async methods for DomainServiceTestHost
+		* UpdateAsync
+		* InsertAsync
+		* InvokeAsync
+		* QueryAsync
+		* SubmitAsync
+	* Added overloads to `Invoke` for methods returning `Task` to fix the following issues   
+		* Fixed bug when TResult was a Task and returned null (could await null)
+		* Fixed bug when TResult was a Task<TResult> and returned Task<TResult>
+
 # 5.0.0 Preview 3
 
 ### Client
