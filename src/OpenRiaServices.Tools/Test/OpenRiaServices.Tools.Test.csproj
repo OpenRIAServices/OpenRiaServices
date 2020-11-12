@@ -37,7 +37,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Aliases>global,SystemWebDomainServices</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj">
       <Aliases>TextTemplate</Aliases>
     </ProjectReference>

@@ -19,7 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
     <ProjectReference Include="..\ServerClassLib2\ServerClassLib2.csproj" />
   </ItemGroup>
 </Project>

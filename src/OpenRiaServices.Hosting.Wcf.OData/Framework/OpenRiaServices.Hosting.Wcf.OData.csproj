@@ -16,7 +16,7 @@
     <Reference Include="System.Data.Linq.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -25,8 +25,8 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Utils\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utils\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\WcfDomainServiceContext.cs" Link="Utils\WcfDomainServiceContext.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\WCF\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\WCF\WcfDomainServiceContext.cs" Link="Utils\WcfDomainServiceContext.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="DomainServices\TypeDescriptorExtensions.cs" />
     <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

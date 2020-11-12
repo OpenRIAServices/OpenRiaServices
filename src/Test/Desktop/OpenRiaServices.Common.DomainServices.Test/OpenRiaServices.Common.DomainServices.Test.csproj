@@ -27,7 +27,7 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios_RootNs_FullTypeNames.g.vb">

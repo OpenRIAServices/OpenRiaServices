@@ -102,7 +102,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Endpoint\Framework\OpenRiaServices.Hosting.Wcf.Endpoint.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf.Endpoint\Framework\OpenRiaServices.Hosting.Wcf.Endpoint.csproj">
       <Project>{063022B7-FAF8-43FB-B605-30A5F29910C1}</Project>
       <Name>OpenRiaServices.Hosting.Wcf.Endpoint</Name>
     </ProjectReference>
@@ -125,7 +125,7 @@
       <Name>OpenRiaServices.Server</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.Wcf.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
       <Name>OpenRiaServices.Hosting.Wcf</Name>
       <Private>True</Private>

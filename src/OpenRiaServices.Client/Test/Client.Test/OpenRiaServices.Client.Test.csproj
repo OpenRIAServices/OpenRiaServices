@@ -113,7 +113,7 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Aliases>DomainServices</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.Wcf.csproj">
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj">
       <Aliases>WebRia</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
