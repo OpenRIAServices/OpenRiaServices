@@ -344,37 +344,24 @@ namespace OpenRiaServices.Client.Test
         public async Task SubmitChanges_ValidatesIValidatableEntities()
         {
             CityDomainContext domainContext = new CityDomainContext();
-            City newCity = new City() { Name = "Test" };
+            City newCity = new City() { Name = "Test", CountyName = "Test", StateName = "TE", MakeIValidatableObjectFail = true };
             domainContext.Cities.Add(newCity);
 
-            System.ComponentModel.INotifyDataErrorInfo notifier = newCity;
-            List<string> actualErrors = new List<string>();
-            notifier.ErrorsChanged += (s, e) => actualErrors.Add(e.PropertyName);
-
-            newCity.MakeIValidatableObjectFail = true;
-            SubmitOperation = domainContext.SubmitChanges();
-
-            // The submission will fail because of the validation error.  Mark it as handled.
-            SubmitOperation.Completed += (_, __) => SubmitOperation.MarkErrorAsHandled();
-
             // Invalid IValidatableObject's will be reported as in error
-            await SubmitOperation;
+            var ex = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(domainContext.SubmitChangesAsync);
 
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
             Assert.IsTrue(newCity.HasValidationErrors);
             Assert.AreEqual(1, newCity.ValidationErrors.Count, "Expected one (and only one) validation error");
+
             ValidationResult validationResult = newCity.ValidationErrors.Single();
             Assert.AreEqual("IValidatableObject", validationResult.ErrorMessage);
-
             string memberName = validationResult.MemberNames.Single();
             Assert.AreEqual("MakeIValidatableObjectFail", memberName);
-            actualErrors.Clear();
 
+            // Verify that IValidatableObject validation error clearing is treated the same way as other errors.
             newCity.MakeIValidatableObjectFail = false;
-            SubmitOperation = domainContext.SubmitChanges();
-            // The submission will succeed since the object now is valid
-            SubmitOperation.Completed += (_, __) => SubmitOperation.MarkErrorAsHandled();
-
-            await SubmitOperation;
+            await domainContext.SubmitChangesAsync();
 
             Assert.IsFalse(newCity.HasValidationErrors);
             Assert.IsFalse(newCity.ValidationErrors.Any());
