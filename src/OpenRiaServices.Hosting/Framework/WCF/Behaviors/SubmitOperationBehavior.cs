@@ -7,7 +7,7 @@ using System.ServiceModel.Dispatcher;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     internal class SubmitOperationBehavior : IOperationBehavior
     {

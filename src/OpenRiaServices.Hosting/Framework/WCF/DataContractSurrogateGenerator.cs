@@ -11,7 +11,7 @@ using System.Security;
 using OpenRiaServices.Server;
 using System.Threading;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Takes care of generating CLR types based on the virtual shape of an exposed type. E.g. we may be dealing with 

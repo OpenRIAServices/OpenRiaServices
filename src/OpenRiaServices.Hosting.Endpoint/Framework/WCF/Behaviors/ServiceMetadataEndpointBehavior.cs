@@ -5,7 +5,7 @@ using System.ServiceModel.Dispatcher;
 using OpenRiaServices.Server;
 using System.Xml;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     internal class ServiceMetadataEndpointBehavior : IEndpointBehavior
     {

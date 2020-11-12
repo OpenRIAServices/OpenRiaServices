@@ -8,7 +8,7 @@ using OpenRiaServices.Server;
 using System.Web;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Hosting.WCF.OData
+namespace OpenRiaServices.Hosting.Wcf.OData
 {
 
     /// <summary>Base class for all operation invokers supported on the domain data service endpoint.</summary>

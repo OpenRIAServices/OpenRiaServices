@@ -15,7 +15,7 @@ using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System.Threading;
 using Cities;

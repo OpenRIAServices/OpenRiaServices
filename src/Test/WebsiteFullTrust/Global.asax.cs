@@ -5,8 +5,8 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Security;
 using System.Web.SessionState;
-using OpenRiaServices.Hosting.WCF;
-using OpenRiaServices.Hosting.WCF.Configuration;
+using OpenRiaServices.Hosting.Wcf;
+using OpenRiaServices.Hosting.Wcf.Configuration;
 
 namespace WebsiteMediumTrust
 {

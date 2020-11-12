@@ -6,7 +6,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Xml;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     /// <summary>
     /// A SOAP endpoint behavior which injects a message inspector that parses query headers.

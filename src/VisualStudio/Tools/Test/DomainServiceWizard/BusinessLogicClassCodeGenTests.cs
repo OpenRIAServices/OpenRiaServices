@@ -54,7 +54,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for an empty model with an OData endpoing")]
         public void BusinessLogicClass_CodeGen_Empty_OData_CSharp()
         {
-            string[] references = new string[] { "OpenRiaServices.Hosting.WCF.OData" };
+            string[] references = new string[] { "OpenRiaServices.Hosting.Wcf.OData" };
             this.ValidateCodeGen("C#", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -62,7 +62,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for an empty model with an OData endpoint")]
         public void BusinessLogicClass_CodeGen_Empty_OData_VB()
         {
-            string[] references = new string[] { "OpenRiaServices.Hosting.WCF.OData" };
+            string[] references = new string[] { "OpenRiaServices.Hosting.Wcf.OData" };
             this.ValidateCodeGen("VB", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -182,7 +182,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_CSharp()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.WCF.OData" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.Wcf.OData" };
             this.ValidateCodeGen("C#", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 
@@ -190,7 +190,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("Verifies VB codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
         public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_VB()
         {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.WCF.OData" };
+            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.Wcf.OData" };
             this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 

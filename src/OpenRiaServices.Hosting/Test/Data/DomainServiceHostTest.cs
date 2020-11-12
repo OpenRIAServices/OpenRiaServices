@@ -8,8 +8,8 @@ using System.ServiceModel.Description;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Common.Test;
-using OpenRiaServices.Hosting.WCF;
-using OpenRiaServices.Hosting.WCF.Configuration;
+using OpenRiaServices.Hosting.Wcf;
+using OpenRiaServices.Hosting.Wcf.Configuration;
 using OpenRiaServices.Client.Test;
 
 namespace OpenRiaServices.Hosting.UnitTests

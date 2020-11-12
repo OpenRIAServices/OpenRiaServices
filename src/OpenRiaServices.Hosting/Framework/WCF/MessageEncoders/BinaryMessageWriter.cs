@@ -3,7 +3,7 @@ using System.ServiceModel.Channels;
 using System.Xml;
 
 #if SERVERFX
-namespace OpenRiaServices.Hosting.WCF.MessageEncoders
+namespace OpenRiaServices.Hosting.Wcf.MessageEncoders
 #else
 namespace OpenRiaServices.Client.Web
 #endif

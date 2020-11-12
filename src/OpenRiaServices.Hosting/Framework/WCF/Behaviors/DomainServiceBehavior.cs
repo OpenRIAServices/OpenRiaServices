@@ -7,7 +7,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     internal class DomainServiceBehavior : IContractBehavior
     {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel.Description;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.UnitTests

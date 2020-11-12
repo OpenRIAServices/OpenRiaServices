@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Class encapsulating query deserialization and operation execution, including

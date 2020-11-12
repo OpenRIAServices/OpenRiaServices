@@ -12,7 +12,7 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 #else
 using OpenRiaServices.Client.Web.Behaviors;
 namespace OpenRiaServices.Client

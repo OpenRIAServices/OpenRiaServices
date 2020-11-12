@@ -13,12 +13,12 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
-using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Hosting.Wcf.Behaviors;
 using OpenRiaServices.Server;
 
 // WARNING: Keep this file in sync with OpenRiaServices.Hosting
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     internal static class ServiceUtility
     {

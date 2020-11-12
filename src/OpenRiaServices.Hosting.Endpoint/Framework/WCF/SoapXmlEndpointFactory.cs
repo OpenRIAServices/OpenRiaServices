@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Hosting.Wcf.Behaviors;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Represents a SOAP w/ XML encoding endpoint factory for <see cref="DomainService"/>s.

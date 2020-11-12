@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 using System.Xml.Linq;
 using Cities;
 using OpenRiaServices.LinqToSql;

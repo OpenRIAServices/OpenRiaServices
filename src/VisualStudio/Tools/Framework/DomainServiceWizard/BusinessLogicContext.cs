@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools

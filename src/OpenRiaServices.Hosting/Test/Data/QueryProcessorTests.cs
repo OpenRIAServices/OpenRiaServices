@@ -9,7 +9,7 @@ using System.ServiceModel.Description;
 using OpenRiaServices.Server;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace OpenRiaServices.Hosting.UnitTests
 {

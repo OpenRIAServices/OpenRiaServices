@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.Hosting.WCF.OData.Test
+﻿namespace OpenRiaServices.Hosting.Wcf.OData.Test
 {
     #region Namespaces
     using System;

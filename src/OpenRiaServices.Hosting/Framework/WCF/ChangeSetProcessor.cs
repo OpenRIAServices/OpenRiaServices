@@ -11,7 +11,7 @@ using System.Web;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Class used to process a changeset.

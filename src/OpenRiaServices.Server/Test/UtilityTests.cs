@@ -1,4 +1,4 @@
-﻿extern alias OpenRiaServicesDomainServicesHosting;
+﻿extern alias SystemWebDomainServices;
 
 using System.Collections.Generic;
 using System.Data.Linq;
@@ -11,8 +11,8 @@ using Address = TestDomainServices.Address;
 
 namespace OpenRiaServices.Server.Test
 {
-    using BinaryTypeUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.BinaryTypeUtility;
-    using SerializationUtility = OpenRiaServicesDomainServicesHosting::OpenRiaServices.SerializationUtility;
+    using BinaryTypeUtility = SystemWebDomainServices::OpenRiaServices.BinaryTypeUtility;
+    using SerializationUtility = SystemWebDomainServices::OpenRiaServices.SerializationUtility;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>

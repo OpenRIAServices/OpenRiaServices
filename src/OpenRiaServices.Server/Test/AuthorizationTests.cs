@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace OpenRiaServices.Server.Test
 {

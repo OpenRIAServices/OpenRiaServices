@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 
-namespace OpenRiaServices.Hosting.WCF.Configuration.Internal
+namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
 {
     /// <summary>
     /// internal use, will probably change between minor releases

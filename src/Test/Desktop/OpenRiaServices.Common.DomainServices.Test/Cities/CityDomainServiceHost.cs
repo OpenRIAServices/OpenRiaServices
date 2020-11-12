@@ -1,5 +1,5 @@
 ﻿using System;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace Cities
 {

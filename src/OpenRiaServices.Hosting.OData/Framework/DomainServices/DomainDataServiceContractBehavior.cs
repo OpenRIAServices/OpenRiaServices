@@ -1,7 +1,7 @@
 using System;
 using System.ServiceModel;
 
-namespace OpenRiaServices.Hosting.WCF.OData
+namespace OpenRiaServices.Hosting.Wcf.OData
 {
     #region Namespaces
     

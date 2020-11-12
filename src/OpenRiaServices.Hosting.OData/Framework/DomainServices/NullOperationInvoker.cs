@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpenRiaServices.Hosting.WCF.OData
+namespace OpenRiaServices.Hosting.Wcf.OData
 {
     #region Namespace
     using System.ServiceModel.Dispatcher;

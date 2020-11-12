@@ -10,7 +10,7 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 #else
 namespace OpenRiaServices.Client.Web.Behaviors
 #endif

@@ -2,7 +2,7 @@
 using System.Web.Configuration;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF.Configuration
+namespace OpenRiaServices.Hosting.Wcf.Configuration
 {
     /// <summary>
     /// Configures the <see cref="DomainService"/>s in this application.

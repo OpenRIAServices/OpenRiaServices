@@ -2,10 +2,10 @@
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
-using OpenRiaServices.Hosting.WCF.Behaviors;
+using OpenRiaServices.Hosting.Wcf.Behaviors;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Represents a JSON endpoint factory for <see cref="DomainService"/>s.

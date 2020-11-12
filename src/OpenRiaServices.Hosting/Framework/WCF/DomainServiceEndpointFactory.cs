@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ServiceModel.Description;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Base class for <see cref="DomainService"/> endpoint factories.

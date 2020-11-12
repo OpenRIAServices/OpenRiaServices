@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Runtime.Serialization;
 
 #if SERVERFX
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace OpenRiaServices.Hosting
 #else

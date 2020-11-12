@@ -1,4 +1,4 @@
-﻿namespace OpenRiaServices.Hosting.WCF.Behaviors
+﻿namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     /// <summary>
     /// Encapsulates the settings the user specified for the query method.

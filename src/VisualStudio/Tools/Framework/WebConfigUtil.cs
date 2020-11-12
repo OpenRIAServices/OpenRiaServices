@@ -11,8 +11,8 @@ using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Linq;
 using EnvDTE;
-using OpenRiaServices.Hosting.WCF;
-using OpenRiaServices.Hosting.WCF.Configuration;
+using OpenRiaServices.Hosting.Wcf;
+using OpenRiaServices.Hosting.Wcf.Configuration;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {

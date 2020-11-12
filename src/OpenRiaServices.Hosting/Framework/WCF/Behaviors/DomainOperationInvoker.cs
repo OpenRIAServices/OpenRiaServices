@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     internal abstract class DomainOperationInvoker : IOperationInvoker
     {

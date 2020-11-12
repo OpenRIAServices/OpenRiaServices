@@ -13,7 +13,7 @@ using System.Web.Caching;
 using System.Web.Configuration;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     internal class QueryOperationBehavior<TEntity> : IOperationBehavior, IQueryOperationSettings
     {

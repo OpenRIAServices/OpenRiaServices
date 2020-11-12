@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.Test;
-using OpenRiaServices.Hosting.WCF.MessageEncoders;
+using OpenRiaServices.Hosting.Wcf.MessageEncoders;
 
 namespace OpenRiaServices.Hosting.Test.Data
 {

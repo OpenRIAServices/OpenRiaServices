@@ -9,11 +9,11 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using System.Web;
-using OpenRiaServices.Hosting.WCF.Behaviors;
-using OpenRiaServices.Hosting.WCF.Configuration.Internal;
+using OpenRiaServices.Hosting.Wcf.Behaviors;
+using OpenRiaServices.Hosting.Wcf.Configuration.Internal;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Provides a host for domain services.

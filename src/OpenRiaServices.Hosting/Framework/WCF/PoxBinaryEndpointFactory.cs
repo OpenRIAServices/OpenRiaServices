@@ -3,11 +3,11 @@ using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
-using OpenRiaServices.Hosting.WCF.Behaviors;
-using OpenRiaServices.Hosting.WCF.MessageEncoders;
+using OpenRiaServices.Hosting.Wcf.Behaviors;
+using OpenRiaServices.Hosting.Wcf.MessageEncoders;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Represents a REST w/ binary encoding endpoint factory for <see cref="DomainService"/>s.

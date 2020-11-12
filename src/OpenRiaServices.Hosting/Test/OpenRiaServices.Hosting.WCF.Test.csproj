@@ -24,6 +24,6 @@
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.WCF.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
   </ItemGroup>
 </Project>

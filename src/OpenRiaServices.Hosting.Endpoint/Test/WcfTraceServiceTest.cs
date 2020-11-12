@@ -4,7 +4,7 @@ using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF.Tracing;
+using OpenRiaServices.Hosting.Wcf.Tracing;
 
 namespace OpenRiaServices.Hosting.Local.Test
 {

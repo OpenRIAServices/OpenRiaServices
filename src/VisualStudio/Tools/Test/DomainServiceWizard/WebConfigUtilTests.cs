@@ -8,7 +8,7 @@ using System.Web.Configuration;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF.Configuration;
+using OpenRiaServices.Hosting.Wcf.Configuration;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test

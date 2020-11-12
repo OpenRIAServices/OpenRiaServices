@@ -7,7 +7,7 @@ using System.ServiceModel.Dispatcher;
 using OpenRiaServices.Server;
 using Resx = OpenRiaServices.Hosting.EndpointResource;
 
-namespace OpenRiaServices.Hosting.WCF.Tracing
+namespace OpenRiaServices.Hosting.Wcf.Tracing
 {
     /// <summary>
     /// Represents a tracing endpoint factory for a <see cref="DomainServiceHost"/>. Adding

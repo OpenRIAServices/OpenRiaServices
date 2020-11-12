@@ -5,8 +5,8 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF;
-using OpenRiaServices.Hosting.WCF.Tracing;
+using OpenRiaServices.Hosting.Wcf;
+using OpenRiaServices.Hosting.Wcf.Tracing;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.Local.Test

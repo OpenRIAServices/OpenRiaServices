@@ -20,8 +20,8 @@ For 4.6.0+</Description>
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" AssemblyName="|OpenRiaServices.VisualStudio.DomainServices.Tools;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.WCF" Path="|OpenRiaServices.Hosting.WCF|" AssemblyName="|OpenRiaServices.Hosting.WCF;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.WCF.OData" Path="|OpenRiaServices.Hosting.WCF.OData|" AssemblyName="|OpenRiaServices.Hosting.WCF.OData;AssemblyName|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf" Path="|OpenRiaServices.Hosting.Wcf|" AssemblyName="|OpenRiaServices.Hosting.Wcf;AssemblyName|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf.OData" Path="|OpenRiaServices.Hosting.Wcf.OData|" AssemblyName="|OpenRiaServices.Hosting.Wcf.OData;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Server" Path="|OpenRiaServices.Server|" AssemblyName="|OpenRiaServices.Server;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.dll" AssemblyName="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.SqlServer.dll" AssemblyName="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />

@@ -4,7 +4,7 @@ using System.Web;
 using System.Security.Principal;
 using System.ServiceModel;
 
-namespace OpenRiaServices.Hosting.WCF
+namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>
     /// Context with extra WCF specific per-request properties

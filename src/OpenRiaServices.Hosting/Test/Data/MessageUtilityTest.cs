@@ -6,7 +6,7 @@ using System.ServiceModel.Channels;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.WCF;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace OpenRiaServices.Hosting.Test.Data
 {

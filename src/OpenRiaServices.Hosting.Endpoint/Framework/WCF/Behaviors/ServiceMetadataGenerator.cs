@@ -7,7 +7,7 @@ using System.Linq;
 using OpenRiaServices.Server;
 using System.Xml;
 
-namespace OpenRiaServices.Hosting.WCF.Behaviors
+namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
     internal static class ServiceMetadataGenerator
     {
