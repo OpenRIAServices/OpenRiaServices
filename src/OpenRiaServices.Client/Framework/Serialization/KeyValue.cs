@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Serialization
@@ -45,26 +44,5 @@ namespace OpenRiaServices.Serialization
         /// </value>
         [DataMember(IsRequired = true)]
         public TValue Value { get { return _value; } set { _value = value; } }
-    }
-}
-
-namespace OpenRiaServices.Server
-{
-    using Serialization;
-
-    /// <summary>
-    /// Collection representing number of EntityAction invocations
-    /// </summary>
-    public class EntityActionCollection : List<KeyValue<string, object[]>>
-    {
-        /// <summary>
-        /// Adds a KeyValue to the specified list.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        public void Add(string key, object[] value)
-        {
-            base.Add(new KeyValue<string, object[]>(key, value));
-        }
     }
 }

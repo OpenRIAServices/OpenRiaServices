@@ -9,6 +9,7 @@ using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Threading;
+using OpenRiaServices.Server.UnitTesting;
 
 namespace OpenRiaServices.Server.Test
 {

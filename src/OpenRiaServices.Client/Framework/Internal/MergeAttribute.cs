@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace OpenRiaServices.Server.Data
+namespace OpenRiaServices.Client.Internal
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public class MergeAttribute : Attribute
+    class MergeAttribute : Attribute
     {
         private readonly bool _isMergeable;
 
@@ -13,7 +13,7 @@ namespace OpenRiaServices.Server.Data
         /// </summary>
         public MergeAttribute()
         {
-            this._isMergeable = true;
+            _isMergeable = true;
         }
 
 
@@ -23,7 +23,7 @@ namespace OpenRiaServices.Server.Data
         /// <param name="isMergeable">The member name for the mergeable member.</param>
         public MergeAttribute(bool isMergeable)
         {
-            this._isMergeable = isMergeable;
+            _isMergeable = isMergeable;
         }
 
         /// <summary>
