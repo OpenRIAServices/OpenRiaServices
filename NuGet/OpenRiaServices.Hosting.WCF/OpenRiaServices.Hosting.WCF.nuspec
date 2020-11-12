@@ -28,8 +28,8 @@
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
     <file src="tools\Install.ps1" target="tools\Install.ps1" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.dll" target="lib\net472\OpenRiaServices.Hosting.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.pdb" target="lib\net472\OpenRiaServices.Hosting.pdb" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.xml" target="lib\net472\OpenRiaServices.Hosting.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.dll" target="lib\net472\OpenRiaServices.Hosting.Wcf.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.pdb" target="lib\net472\OpenRiaServices.Hosting.Wcf.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.xml" target="lib\net472\OpenRiaServices.Hosting.Wcf.xml" />
   </files>
 </package>
