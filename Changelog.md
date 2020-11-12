@@ -51,7 +51,7 @@ It is currently quite empty but already demonstrates some of the following scena
 
 * "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs. #234
   * **IMPORTANT** Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
-* Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication` **search and replace is needed on upgraing** #248
+* Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication` **search and replace is needed on upgrading** #248
 * Updated required version of .Net Framework to 4.7.2 (#241)
 * Updated dependencies including EntityFramework to latests availible versions #240
   
