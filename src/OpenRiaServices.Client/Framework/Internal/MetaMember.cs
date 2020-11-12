@@ -162,7 +162,7 @@ namespace OpenRiaServices.Client.Internal
         /// <summary>
         /// Gets a value indicating whether this member is mergable 
         /// (should be updated when loading with behaviour <see cref="LoadBehavior.MergeIntoCurrent"/> or <see cref="LoadBehavior.RefreshCurrent"/>).
-        /// Supported types are mergable by default unless a <see cref="MergeAttribute"/> is defined with <see cref="MergeAttribute.IsMergeable"/> set to false.
+        /// Supported types are mergable by default unless a <see cref="IgnoreDataMemberAttribute"/> is defined.
         /// </summary>
         public bool IsMergable { get; }
 
@@ -226,9 +226,7 @@ namespace OpenRiaServices.Client.Internal
 
         private static bool CheckIfMergeableMember(MetaMember metaMember)
         {
-            return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
-                   (TypeUtility.IsAttributeDefined(metaMember.Member, typeof(MergeAttribute), true) == false ||
-                   ((MergeAttribute)metaMember.Member.GetCustomAttributes(typeof(MergeAttribute), true).First()).IsMergeable);
+            return metaMember.IsDataMember && !metaMember.IsAssociationMember;
         }
 
 
