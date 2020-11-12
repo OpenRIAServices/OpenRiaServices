@@ -24,7 +24,7 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Utils\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Utils\TypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utils\ExceptionHandlingUtility.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\SerializationUtility.cs" Link="Utils\SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\TaskExtensions.cs" Link="Utils\TaskExtensions.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting\Framework\WCF\WcfDomainServiceContext.cs" Link="Utils\WcfDomainServiceContext.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="DomainServices\TypeDescriptorExtensions.cs" />

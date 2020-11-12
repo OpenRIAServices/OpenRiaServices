@@ -553,7 +553,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <summary>
         /// Invokes the specified <paramref name="invokeOperation"/> asynchronously
         /// </summary>
-        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task<typeparamref name="TResult"/>"/> as return type,
+        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task"/> as return type,
         /// <param name="ct">The <see cref="CancellationToken"/></param>
         /// identifying the operation to invoke</param>
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
@@ -634,7 +634,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// Invokes the specified <paramref name="invokeOperation"/> and returns the result
         /// </summary>
         /// <typeparam name="TResult">The result type</typeparam>
-        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task<typeparamref name="TResult"/>"/> as return type,
+        /// <param name="invokeOperation">The <see cref="Expression"/> with <see cref="Task{TResult}"/> as return type,
         /// identifying the operation to invoke</param>
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
         public TResult Invoke<TResult>(Expression<Func<TDomainService, Task<TResult>>> invokeOperation)
