@@ -363,7 +363,7 @@ namespace OpenRiaServices.Client.Test
             newCity.MakeIValidatableObjectFail = false;
             await domainContext.SubmitChangesAsync();
 
-            Assert.IsFalse(newCity.HasValidationErrors);
+            Assert.IsFalse(newCity.HasValidationErrors, "Entity should not have any validation errors");
             Assert.IsFalse(newCity.ValidationErrors.Any());
         }
 
