@@ -173,9 +173,8 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Gets a value indicating whether the Type has any Type or member level
-        /// validation attributes applied. The check is recursive through any complex
-        /// type members.
+        /// Gets a value indicating whether the Type requires any Type or member level
+        /// validation. The check is recursive through any complex type members.
         /// </summary>
         public bool RequiresValidation
         {
@@ -198,7 +197,7 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Gets the Type level validation errors for the underlying Type.
+        /// Gets the Type level validation attributes for the underlying Type.
         /// </summary>
         public IEnumerable<ValidationAttribute> ValidationAttributes
         {
@@ -223,7 +222,8 @@ namespace OpenRiaServices.Server
 
             if (!this._requiresValidation)
             {
-                this._requiresValidation = TypeDescriptor.GetAttributes(this._type)[typeof(ValidationAttribute)] != null;
+                this._requiresValidation = TypeDescriptor.GetAttributes(this._type)[typeof(ValidationAttribute)] != null
+                    || typeof(IValidatableObject).IsAssignableFrom(type);
             }
 
             // visit all data members

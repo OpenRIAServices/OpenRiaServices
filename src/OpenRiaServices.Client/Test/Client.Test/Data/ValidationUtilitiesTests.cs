@@ -264,6 +264,30 @@ namespace OpenRiaServices.Hosting.Test
                 "The validation error should be for Strings");
         }
 
+        [TestMethod]
+        [Description("TryValidateObject should fail if object is IValidatableObject and reports validation error")]
+        public void Validation_ValidatableObject_CustomInvalid()
+        {
+            ValTestClass_IValidatable entity = new ValTestClass_IValidatable();
+
+            ValidationContext validationContext = new ValidationContext(entity, null, null);
+            List<ValidationResult> validationResults = new List<ValidationResult>();
+
+            bool result = ValidationUtilities.TryValidateObject(entity, validationContext, validationResults);
+            Assert.IsFalse(result,
+                "Validation should fail.");
+            Assert.AreEqual(1, validationResults.Count(),
+                "There should be 1 validation error");
+            Assert.AreEqual("IValidatableObject Invalid Value", validationResults[0].ErrorMessage,
+                "The validation error message is wrong");
+            Assert.AreEqual(2, validationResults[0].MemberNames.Count(),
+                "The validation error message should be for 2 members");
+            Assert.AreEqual("Member1", validationResults[0].MemberNames.ElementAt(0),
+                "The validation error does not report Member1 as faulty or wrong order");
+            Assert.AreEqual("Member2", validationResults[0].MemberNames.ElementAt(1),
+                "The validation error does not report Member2 as faulty or wrong order");
+        }
+
         #region Method Parameters
         [TestMethod]
         [Description("Validating a method with too few parameters throws ArgumentException")]
@@ -527,6 +551,18 @@ namespace OpenRiaServices.Hosting.Test
         {
             [CustomValidation(typeof(ValTestValidator), "IsValTest_IsValidationContextValid")]
             public object ObjectProperty { get; set; }
+        }
+
+        public class ValTestClass_IValidatable : IValidatableObject
+        {
+            public int Member1 { get; set; }
+
+            public int Member2 { get; set; }
+
+            public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+            {
+                yield return new ValidationResult("IValidatableObject Invalid Value", new[] { "Member1", "Member2"});
+            }
         }
 
         #endregion

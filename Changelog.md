@@ -11,7 +11,8 @@
 	2. *ApplicationServices* has been renamed to *Authentication*
 5. AspNetMembership authentication (**AuthenticationBase** and related classes) are moved to a new namespace and nuget package
    * Add a reference to *OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
-
+6. Full support for IValidatableObject validation (earlier versions only validated IValidatableObject if ValidationAttribute also was specified)
+   
 ## Upgrade instructions
 
 1. Update both all client anor/or server nuget packages to the new version, dont't mix with v4 in the same project.

@@ -44,6 +44,13 @@ namespace OpenRiaServices.Client.Test
 
             MetaType mt = MetaType.GetMetaType(typeof(ComplexType_RequiresValidation));
             Assert.IsTrue(mt.RequiresValidation);
+
+            MetaType mtivo = MetaType.GetMetaType(typeof(Indirect_ValidatableObject));
+            Assert.IsTrue(mtivo.RequiresValidation);
+
+            MetaType mtvo = MetaType.GetMetaType(typeof(ValidatableObject));
+            Assert.IsTrue(mtvo.RequiresValidation);
+
         }
 
         [TestMethod]
@@ -2475,6 +2482,19 @@ namespace OpenRiaServices.Client.Test
         public int ValidationInt { get; set; }
         [CustomValidation(typeof(DynamicTestValidator), "Validate")]
         public ComplexType_RequiresValidation ValidationComplexObject { get; set; }
+    }
+
+    public class ValidatableObject : ComplexObject, IValidatableObject
+    {
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class Indirect_ValidatableObject : ComplexObject
+    {
+        public ValidatableObject Validatable { get; }
     }
 }
 
