@@ -101,9 +101,9 @@
       <Project>{72E74082-7928-4A70-83C1-49806B942FCB}</Project>
       <Name>OpenRiaServices.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting\Framework\OpenRiaServices.Hosting.csproj">
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj">
       <Project>{E3844512-48A8-451A-9BE4-AC7793016B9D}</Project>
-      <Name>OpenRiaServices.Hosting</Name>
+      <Name>OpenRiaServices.Hosting.Wcf</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

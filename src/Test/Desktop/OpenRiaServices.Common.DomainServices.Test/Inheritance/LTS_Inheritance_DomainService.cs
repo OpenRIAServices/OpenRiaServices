@@ -2,7 +2,6 @@
 {
     using System.Linq;
     using System.Runtime.Serialization;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     using OpenRiaServices.LinqToSql;
 

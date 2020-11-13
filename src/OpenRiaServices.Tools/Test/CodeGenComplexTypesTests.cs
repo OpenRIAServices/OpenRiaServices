@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
-using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 

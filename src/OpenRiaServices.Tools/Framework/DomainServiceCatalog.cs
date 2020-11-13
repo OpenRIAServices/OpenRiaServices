@@ -5,8 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools

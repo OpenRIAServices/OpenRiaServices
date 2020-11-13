@@ -6,8 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
-using OpenRiaServices;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using System.ServiceModel.Web;
 using OpenRiaServices.Tools.SharedTypes;

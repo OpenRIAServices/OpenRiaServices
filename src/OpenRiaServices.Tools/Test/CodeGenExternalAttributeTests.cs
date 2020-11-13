@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using OpenRiaServices.Server.Test.Utilities;
-using OpenRiaServices;
 using DataTests.Scenarios.EF.Northwind;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DomainObjectResource = OpenRiaServices.Server.Resource;

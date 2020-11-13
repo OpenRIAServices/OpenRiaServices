@@ -7,7 +7,6 @@ using System.Security.Principal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using OpenRiaServices.Client.Test;
-using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
 namespace OpenRiaServices.Server.Test
 {
@@ -136,7 +135,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreNotEqual(attr1.TypeId, attr2.TypeId, "TypeID should be different for different attributes");
         }
 
-        [OpenRiaServices.Hosting.EnableClientAccess]
+        [EnableClientAccess]
         public class RequiresRoleTestService : DomainService
         {
             [RequiresRole("role1", "role2")]

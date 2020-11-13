@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Server;
-using OpenRiaServices.Hosting;
 using AdventureWorksModel;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract

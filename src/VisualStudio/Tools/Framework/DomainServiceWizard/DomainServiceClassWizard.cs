@@ -14,7 +14,6 @@ using System.Windows.Forms.Design;
 using System.Windows.Interop;
 using EnvDTE;
 using EnvDTE80;
-using OpenRiaServices.Tools;
 using Microsoft.VisualStudio.ManagedInterfaces9;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;

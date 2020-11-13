@@ -15,7 +15,6 @@ using TestDomainServices;
 namespace OpenRiaServices.Client.Test
 {
     using Cities;
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
     using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
     [TestClass]

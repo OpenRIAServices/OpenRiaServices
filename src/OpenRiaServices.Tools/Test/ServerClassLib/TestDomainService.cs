@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenRiaServices.Server;
-using OpenRiaServices.Hosting;
 using ServerClassLib2;
 
 namespace ServerClassLib

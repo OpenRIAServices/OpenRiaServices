@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace Cities
 {

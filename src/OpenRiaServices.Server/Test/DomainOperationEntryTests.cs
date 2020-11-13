@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
-using OpenRiaServices.Client.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Server.Test
@@ -76,7 +75,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("Delete", entry.OperationType, "Wrong operation type for this DomainOperationEntry");
         }
 
-        [OpenRiaServices.Hosting.EnableClientAccess]
+        [EnableClientAccess]
         public class DomainOperationEntryTestDomainService : DomainService
         {
             [Query]

@@ -20,8 +20,6 @@ using System.Diagnostics;
 
 namespace OpenRiaServices.Client.Web.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
-    using Resources = SSmDsClient::OpenRiaServices.Client.Resources;
 
     /// <summary>
     /// Tests <see cref="WebDomainClient&lt;TContract&gt;"/> members.

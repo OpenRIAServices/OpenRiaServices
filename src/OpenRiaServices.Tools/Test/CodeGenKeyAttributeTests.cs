@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using OpenRiaServices.Server.Test.Utilities;
-using OpenRiaServices.Tools.SharedTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Tools.Test

@@ -8,11 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using OpenRiaServices.Server;
-using OpenRiaServices.Tools.SharedTypes;
-using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-using DomainService_Resource = OpenRiaServices.Server.Resource;
 using ComponentModelDescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 namespace OpenRiaServices.Tools.Test

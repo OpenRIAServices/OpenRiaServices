@@ -247,7 +247,7 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
-        [OpenRiaServices.Hosting.EnableClientAccess]
+        [EnableClientAccess]
         public class AuthorizationTestDomainService : DomainService
         {
             [Invoke]

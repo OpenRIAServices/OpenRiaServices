@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Server.UnitTesting
 {

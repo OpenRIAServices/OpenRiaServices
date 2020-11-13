@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Tools.Test

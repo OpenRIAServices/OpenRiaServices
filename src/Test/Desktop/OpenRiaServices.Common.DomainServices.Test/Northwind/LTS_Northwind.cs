@@ -4,8 +4,6 @@ using System.Data.Linq;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using OpenRiaServices;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using DataTests.Northwind.LTS;
 using OpenRiaServices.LinqToSql;

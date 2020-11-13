@@ -14,7 +14,6 @@ using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.Descri
 
 namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     /// <summary>
     /// Tests for compositional hierarchy features.

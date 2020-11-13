@@ -26,8 +26,8 @@
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Endpoint.dll" target="lib\net472\OpenRiaServices.Hosting.Endpoint.dll" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Endpoint.pdb" target="lib\net472\OpenRiaServices.Hosting.Endpoint.pdb" />
-    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Endpoint.xml" target="lib\net472\OpenRiaServices.Hosting.Endpoint.xml" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.Endpoint.dll" target="lib\net472\OpenRiaServices.Hosting.Wcf.Endpoint.dll" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.Endpoint.pdb" target="lib\net472\OpenRiaServices.Hosting.Wcf.Endpoint.pdb" />
+    <file src="..\..\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.Endpoint.xml" target="lib\net472\OpenRiaServices.Hosting.Wcf.Endpoint.xml" />
   </files>
 </package>

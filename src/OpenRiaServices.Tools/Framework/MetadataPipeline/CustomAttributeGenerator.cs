@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices;
 using System.Text;
 
 namespace OpenRiaServices.Tools

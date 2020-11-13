@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using OpenRiaServices;
 #if !SILVERLIGHT
 using System.Runtime.Serialization;
 #endif

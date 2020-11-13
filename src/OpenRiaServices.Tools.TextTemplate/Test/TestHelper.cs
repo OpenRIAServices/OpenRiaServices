@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Tools.Test;
 using System.Reflection;
 using System.IO;
 using OpenRiaServices.Tools.TextTemplate.Test;

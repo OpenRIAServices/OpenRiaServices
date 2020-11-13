@@ -74,6 +74,9 @@ ipch/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 
+# CodeRush coding
+.cr/
+
 # TeamCity is a build add-in
 _TeamCity*
 

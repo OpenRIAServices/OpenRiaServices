@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

@@ -1,8 +1,6 @@
 ﻿extern alias SSmDsClient;
 using System;
 using System.Collections.Generic;
-using OpenRiaServices;
-using OpenRiaServices.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Client.Test

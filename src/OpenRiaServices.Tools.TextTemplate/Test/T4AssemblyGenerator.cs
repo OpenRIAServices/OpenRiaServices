@@ -9,7 +9,6 @@ using OpenRiaServices.Server.Test.Utilities;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
-using OpenRiaServices.Tools.TextTemplate;
 using OpenRiaServices.Tools.TextTemplate.CSharpGenerators;
 using OpenRiaServices.Tools.Test;
 using Microsoft.CodeAnalysis.Text;

@@ -29,7 +29,16 @@
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
 4. Fix any additional compilation errors, use changes below for guidance about replacements.
 5. If you are using `OpenRiaServices.EntityFramework` the framework will now only call the `SaveChangesAsync` and not `SaveChanges` so if you are overriding `SaveChanges` make sure you do the same for `SaveChangesAsync`   
+6. Search and Replace `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
+7. Update your web.config file so that it matches the [new format](NuGet/OpenRiaServices.Hosting.WCF/content/web.config.transform)
+   If you are packages.config for nuget packages, this step should have been performed automatically.
+   1. Replace `OpenRiaServices.Hosting.DomainServicesSection, OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection, OpenRiaServices.Hosting.Wcf`
+   2. Replace all other places with `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
+   3. If you reference OpenRiaServices.Hosting with version number, the version number must be updated from 4 to 5
    
+
+
+
 For better scalability (can be done afterwards):
 
 1. Update your Query and Invoke methods so that they use async/await where relevant.

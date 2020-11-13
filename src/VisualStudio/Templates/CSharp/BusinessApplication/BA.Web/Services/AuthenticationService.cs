@@ -3,7 +3,7 @@
     using System.Security.Authentication;
     using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
-    using OpenRiaServices.Server.ApplicationServices;
+    using OpenRiaServices.Server.Authentication;
     using System.Threading;
 
     // TODO: Switch to a secure endpoint when deploying the application.

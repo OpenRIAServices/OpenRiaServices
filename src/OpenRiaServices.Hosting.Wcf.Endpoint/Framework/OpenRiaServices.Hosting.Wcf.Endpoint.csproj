@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
+    <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Condition=" '$(RunCodeAnalysis)' != 'true' " Remove="GlobalSuppressions.cs" />
+    <Compile Update="EndpointResource.Designer.cs">
+      <DependentUpon>EndpointResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="EndpointResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EndpointResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.Hosting</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

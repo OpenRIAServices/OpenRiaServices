@@ -12,7 +12,7 @@ using System.Web;
 #endif
 
 #if SERVERFX
-namespace OpenRiaServices.Hosting
+namespace OpenRiaServices.Hosting.Wcf
 #else
 using OpenRiaServices.Client.Web.Behaviors;
 namespace OpenRiaServices.Client
@@ -41,10 +41,10 @@ namespace OpenRiaServices.Client
         public static bool IsHttpPOSTMethod(MessageProperties properties)
         {
             object property;
-            if (properties.TryGetValue(MessageUtility.HttpRequestName, out property))
+            if (properties.TryGetValue(HttpRequestName, out property))
             {
                 HttpRequestMessageProperty httpMessageProperty = property as HttpRequestMessageProperty;
-                if (httpMessageProperty != null && httpMessageProperty.Method.Equals(MessageUtility.HttpPostMethodName, StringComparison.OrdinalIgnoreCase))
+                if (httpMessageProperty != null && httpMessageProperty.Method.Equals(HttpPostMethodName, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -151,12 +151,12 @@ namespace OpenRiaServices.Client
                 XmlDictionaryReader reader = message.GetReaderAtBodyContents();
                 // If the message root is not <MessageRoot> then the message does not contain QueryOptions.
                 // So re-write the stream back to a message.
-                if (reader.IsStartElement(MessageUtility.MessageRootElementName))
+                if (reader.IsStartElement(MessageRootElementName))
                 {
                     // Go to the <QueryOptions> node.
                     reader.Read();                                                              // <MessageRoot>
-                    reader.ReadStartElement(MessageUtility.QueryOptionsListElementName);        // <QueryOptions>
-                    serviceQuery = MessageUtility.ReadServiceQuery(reader);                     // <QueryOption></QueryOption>
+                    reader.ReadStartElement(QueryOptionsListElementName);        // <QueryOptions>
+                    serviceQuery = ReadServiceQuery(reader);                     // <QueryOption></QueryOption>
                     // Go to the starting node of the original message.
                     reader.ReadEndElement();                                                    // </QueryOptions>
                     reader = XmlDictionaryReader.CreateDictionaryReader(reader.ReadSubtree());  // Remainder of the message
@@ -184,11 +184,11 @@ namespace OpenRiaServices.Client
         {
             List<ServiceQueryPart> serviceQueryParts = new List<ServiceQueryPart>();
             bool includeTotalCount = false;
-            while (reader.IsStartElement(MessageUtility.QueryOptionElementName))
+            while (reader.IsStartElement(QueryOptionElementName))
             {
-                string name = reader.GetAttribute(MessageUtility.QueryNameAttribute);
-                string value = reader.GetAttribute(MessageUtility.QueryValueAttribute);
-                if (name.Equals(MessageUtility.QueryIncludeTotalCountOption, StringComparison.OrdinalIgnoreCase))
+                string name = reader.GetAttribute(QueryNameAttribute);
+                string value = reader.GetAttribute(QueryValueAttribute);
+                if (name.Equals(QueryIncludeTotalCountOption, StringComparison.OrdinalIgnoreCase))
                 {
                     bool queryOptionValue = false;
                     if (Boolean.TryParse(value, out queryOptionValue))
@@ -201,7 +201,7 @@ namespace OpenRiaServices.Client
                     serviceQueryParts.Add(new ServiceQueryPart { QueryOperator = name, Expression = value });
                 }
 
-                MessageUtility.ReadElement(reader);
+                ReadElement(reader);
             }
 
             ServiceQuery serviceQuery = new ServiceQuery()

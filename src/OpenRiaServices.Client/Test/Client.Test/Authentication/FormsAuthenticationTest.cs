@@ -1,5 +1,4 @@
-﻿using OpenRiaServices.Client.Test;
-using Microsoft.Silverlight.Testing;
+﻿using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using RootNamespace.TestNamespace;

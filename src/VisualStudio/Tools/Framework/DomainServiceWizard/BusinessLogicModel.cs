@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting;
 using System.Web.Hosting;
-using OpenRiaServices.Tools;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 {

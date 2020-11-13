@@ -14,7 +14,6 @@ namespace OpenRiaServices.Tools.Test
 {
     using Inheritance.Tests;
     using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
-    using OpenRiaServices.Server.Test.Utilities;
 
     /// <summary>
     /// Tests CustomAttributeGenerator
@@ -1841,7 +1840,6 @@ namespace OpenRiaServices.Tools.Test
 // Avoid the System namespace or VB treats System as its root namespace
 namespace Inheritance.Tests
 {
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Tools.Test;
 
     #region Inherit_Basic

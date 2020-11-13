@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
