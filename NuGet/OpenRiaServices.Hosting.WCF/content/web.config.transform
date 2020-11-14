@@ -4,11 +4,6 @@
       <section name="domainServices" type="OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection, OpenRiaServices.Hosting.Wcf, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8" allowDefinition="MachineToApplication" requirePermission="false" />
     </sectionGroup>
   </configSections>
-  <system.web>
-    <httpModules>
-      <add name="DomainServiceModule" type="OpenRiaServices.Hosting.Wcf.DomainServiceHttpModule, OpenRiaServices.Hosting.Wcf, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8" />
-    </httpModules>
-  </system.web>
   <system.webServer>
     <modules runAllManagedModulesForAllRequests="true">
       <add name="DomainServiceModule" preCondition="managedHandler" type="OpenRiaServices.Hosting.Wcf.DomainServiceHttpModule, OpenRiaServices.Hosting.Wcf, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8" />

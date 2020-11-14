@@ -2,7 +2,7 @@
   <system.serviceModel>
     <domainServices>
       <endpoints>
-        <add name="soap" type="OpenRiaServices.Hosting.SoapXmlEndpointFactory, OpenRiaServices.Hosting.Wcf.Endpoint, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8" />    
+        <add name="soap" type="OpenRiaServices.Hosting.Wcf.SoapXmlEndpointFactory, OpenRiaServices.Hosting.Wcf.Endpoint, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8" />    
         <add name="json" type="OpenRiaServices.Hosting.Wcf.JsonEndpointFactory, OpenRiaServices.Hosting.Wcf.Endpoint, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8" />  
       </endpoints>
     </domainServices>
