@@ -21,8 +21,8 @@
     <tags>WCF RIA Services RIAServices SOAP JSON OpenRiaServices</tags>
     <dependencies>
       <dependency id="OpenRiaServices.Server" version="$version$" />
+	  <dependency id="OpenRiaServices.Hosting.Wcf" version="$version$" />
     </dependencies>
-
   </metadata>
   <files>
     <file src="content\web.config.transform" target="content\web.config.transform" />
