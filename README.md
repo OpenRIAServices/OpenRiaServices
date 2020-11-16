@@ -32,6 +32,12 @@ Some of ther features are:
    * Automatically handles DTO creation and mapping based on attributes or configuration
    * Allows sharing validation and other logic by using partial classes and automatic linking of files
    
+**Release Notes / Changelog**
+
+* A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is keept keeping track of changes made and write down release notes as features are developed
+* [Github releases with changes and Release Notes](https://github.com/OpenRIAServices/OpenRiaServices/releases) for specific versions are created when a new version is released to nuget.
+
+   
 **Documentation**:
 * The original documentation for WCF RIA Services is still relevant and can be found at https://msdn.microsoft.com/en-us/library/ee707344(v=vs.91).aspx . Namespaces and assembly names are no longer correct since they changed with the release of OpenRiaServices.
 * Documentation for changes since WCF RIA Services can be found under https://github.com/OpenRIAServices/OpenRiaServices/releases)
