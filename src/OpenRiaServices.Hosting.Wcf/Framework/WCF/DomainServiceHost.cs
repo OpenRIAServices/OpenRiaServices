@@ -220,7 +220,6 @@ namespace OpenRiaServices.Hosting.Wcf
             // Force default service behavior.
             ServiceBehaviorAttribute serviceBehavior = ServiceUtility.EnsureBehavior<ServiceBehaviorAttribute>(this.Description);
             serviceBehavior.InstanceContextMode = InstanceContextMode.PerCall;
-            serviceBehavior.IncludeExceptionDetailInFaults = true;
             serviceBehavior.AddressFilterMode = AddressFilterMode.Any;
 
             // Force metadata to be available through HTTP GET.

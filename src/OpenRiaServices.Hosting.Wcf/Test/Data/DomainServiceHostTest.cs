@@ -58,7 +58,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             var serviceBehaviorAtt = host.Description.Behaviors.Find<ServiceBehaviorAttribute>();
             Assert.IsNotNull(serviceBehaviorAtt, "Service behavior not found.");
             Assert.AreEqual(AddressFilterMode.Any, serviceBehaviorAtt.AddressFilterMode, "Unexpected address filter mode.");
-            Assert.IsTrue(serviceBehaviorAtt.IncludeExceptionDetailInFaults, "Exception details are expected to be included in faults.");
+            Assert.IsFalse(serviceBehaviorAtt.IncludeExceptionDetailInFaults, "Exception details should not be included in faults by default.");
 
             // Verify we that for a service with just a HTTP base address, only HttpGetEnabled is true.
             var metadataAtt = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
