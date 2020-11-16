@@ -59,7 +59,9 @@ namespace OpenRiaServices.Tools
                 AppDomainUtilities.ConfigureAppDomain(options);
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
-                AssemblyUtilities.LoadAssembly("Mono.Cecil.dll", loggingService);
+                var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
+                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
+                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
 
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
