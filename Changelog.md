@@ -57,7 +57,7 @@ It is currently quite empty but already demonstrates some of the following scena
     * Writing your own custom Authentication logic
     * Running OpenRiaServices in same project as Asp.Net MVC
 
-# 5.0.0 RC
+# 5.0.0 RC1
 
 * "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs. #234
   * **IMPORTANT** Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
@@ -78,6 +78,7 @@ It is currently quite empty but already demonstrates some of the following scena
   * This should build faster builds and allows find all references, refactoring etc to work for shared files
   * It is possible to opt out of the new behaviour by adding `<OpenRiaSharedFilesMode>Copy</OpenRiaSharedFilesMode>` in the project file
   * The tooling is updated with a new option
+* Load Mono.Cecil exclicitly in code generation #255 to fix issue such as #247 without having to do a workaround
 
 ### Server 
 

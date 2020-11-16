@@ -58,6 +58,11 @@ namespace OpenRiaServices.Tools
             {
                 AppDomainUtilities.ConfigureAppDomain(options);
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+                // Try to load mono.cecil from same folder as tools
+                var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
+                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
+                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
                 {
@@ -206,8 +211,8 @@ namespace OpenRiaServices.Tools
                     // It is acceptable to report this exception and "ignore" it because we
                     // are running in a separate AppDomain which will be torn down immediately
                     // after our return.
-                    host.LogError(string.Format(CultureInfo.CurrentCulture, 
-                                                    Resource.CodeGenerator_Threw_Exception, 
+                    host.LogError(string.Format(CultureInfo.CurrentCulture,
+                                                    Resource.CodeGenerator_Threw_Exception,
                                                     string.IsNullOrEmpty(codeGeneratorName) ? proxyGenerator.GetType().FullName : codeGeneratorName,
                                                     options.ClientProjectPath,
                                                     ex.Message));
@@ -268,7 +273,7 @@ namespace OpenRiaServices.Tools
                             {
                                 throw;
                             }
-                            host.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Code_Generator_Instantiation_Error, codeGeneratorName,  e.Message));
+                            host.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Code_Generator_Instantiation_Error, codeGeneratorName, e.Message));
                         }
                     }
                 }
@@ -303,10 +308,10 @@ namespace OpenRiaServices.Tools
                         if (numberOfMatchingGenerators == 0)
                         {
                             host.LogError(string.Format(CultureInfo.CurrentCulture,
-                                                        Resource.Code_Generator_Not_Found, 
-                                                        codeGeneratorName, 
-                                                        options.Language, 
-                                                        options.ServerProjectPath, 
+                                                        Resource.Code_Generator_Not_Found,
+                                                        codeGeneratorName,
+                                                        options.Language,
+                                                        options.ServerProjectPath,
                                                         options.ClientProjectPath,
                                                         CodeDomClientCodeGenerator.GeneratorName));
                         }
@@ -324,12 +329,12 @@ namespace OpenRiaServices.Tools
                             {
                                 sb.AppendLine("    " + import.Value.GetType().FullName);
                             }
-                            host.LogError(string.Format(CultureInfo.CurrentCulture, 
-                                                        Resource.Multiple_Named_Code_Generators, 
+                            host.LogError(string.Format(CultureInfo.CurrentCulture,
+                                                        Resource.Multiple_Named_Code_Generators,
                                                         codeGeneratorName,
-                                                        options.Language, 
+                                                        options.Language,
                                                         sb.ToString(),
-                                                        options.ServerProjectPath, 
+                                                        options.ServerProjectPath,
                                                         options.ClientProjectPath,
                                                         allImportsForLanguageAndName.First().Value.GetType().AssemblyQualifiedName));
                         }
@@ -373,10 +378,10 @@ namespace OpenRiaServices.Tools
                                     sb.AppendLine("    " + import.Metadata.GeneratorName);
                                 }
 
-                                host.LogWarning(string.Format(CultureInfo.CurrentCulture, 
-                                                                Resource.Multiple_Custom_Code_Generators_Using_Default, 
-                                                                options.Language, sb.ToString(), 
-                                                                options.ClientProjectPath, 
+                                host.LogWarning(string.Format(CultureInfo.CurrentCulture,
+                                                                Resource.Multiple_Custom_Code_Generators_Using_Default,
+                                                                options.Language, sb.ToString(),
+                                                                options.ClientProjectPath,
                                                                 orderedCustomGenerators.First().Metadata.GeneratorName,
                                                                 CodeDomClientCodeGenerator.GeneratorName));
 

@@ -31,6 +31,7 @@
   <files>
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Tools.dll" target="build\OpenRiaServices.Tools.dll" />
+	<file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="build\Mono.Cecil.dll"/>
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.dll" target="lib\net472\OpenRiaServices.Server.dll" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.pdb" target="lib\net472\OpenRiaServices.Server.pdb" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.xml" target="lib\net472\OpenRiaServices.Server.xml" />
