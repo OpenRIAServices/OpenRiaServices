@@ -9,6 +9,7 @@
 5. **Major namespace changes** 
 	1. *DomainServices* is dropped from namespaces and assemblies
 	2. *ApplicationServices* has been renamed to *Authentication*
+    3. *Hosting* assembly has been moved to *Hosting.Wcf* namesapce and **moved to a separate nuget package**
 5. AspNetMembership authentication (**AuthenticationBase** and related classes) are moved to a new namespace and nuget package
    * Add a reference to *OpenRIAServices.Server.Authenication.AspNetMembership* if you use it
 6. Full support for IValidatableObject validation (earlier versions only validated IValidatableObject if ValidationAttribute also was specified)
@@ -29,7 +30,9 @@
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
 4. Fix any additional compilation errors, use changes below for guidance about replacements.
 5. If you are using `OpenRiaServices.EntityFramework` the framework will now only call the `SaveChangesAsync` and not `SaveChanges` so if you are overriding `SaveChanges` make sure you do the same for `SaveChangesAsync`   
-6. Search and Replace `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
+6.  `OpenRiaServices.Hosting` has been moved to a separate nuget `OpenRiaServices.Hosting.Wcf` #251
+    1. You must add a reference to `OpenRiaServices.Hosting.Wcf` nuget in your web application
+    2. Search and Replace `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
 7. Update your web.config file so that it matches the [new format](NuGet/OpenRiaServices.Hosting.WCF/content/web.config.transform)
    If you are packages.config for nuget packages, this step should have been performed automatically.
    1. Replace `OpenRiaServices.Hosting.DomainServicesSection, OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection, OpenRiaServices.Hosting.Wcf`
@@ -61,10 +64,14 @@ It is currently quite empty but already demonstrates some of the following scena
 
 * "DomainServices" dropped from all namespaces, filenames as well as nugets and DLLs. #234
   * **IMPORTANT** Search and Replace `OpenRiaServices.DomainServices` with `OpenRiaServices` in all files when uprading
-* Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication` **search and replace is needed on upgrading** #248
+* Namespace `OpenRiaServices.Client.ApplicationServices` has been replaced with  `OpenRiaServices.Client.Authentication`
+   **search and replace is needed on upgrading** #248
+* `OpenRiaServices.Hosting` has been moved to a separate nuget `OpenRiaServices.Hosting.Wcf` #251
+   * **IMPORTANT** You must add a reference to `OpenRiaServices.Hosting.Wcf` nuget in your web application
+   * **IMPORTANT** Search and Replace `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf` in all files when uprading 
 * Updated required version of .Net Framework to 4.7.2 (#241)
 * Updated dependencies including EntityFramework to latests availible versions #240
-  
+
 ### Client
 
 * `IgnoreDataMemberAttribute` can now be used on the client to prevent client properties from beeing included/overwritten when loading data using `MergeIntoCurrent` or the state manipulating methods `ApplyState`, `ExtractState` etc. #249
