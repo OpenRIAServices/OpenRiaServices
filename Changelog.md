@@ -93,6 +93,8 @@ It is currently quite empty but already demonstrates some of the following scena
 * Create, Update and Delete methods on server can now return Task #226
 * The CancellationToken passed to SubmitAsync and InvokeAsync now supports cancellation on client disconnect #250
 * **Security**: Don't include stack traces for errors by default #256
+* Dont use HTTP status code "200 OK" for exceptions (will use 500 Internal Server Error by default) #257
+  * It is free for library consumers to change the handling of returned HTTP response codes status such as using a "SilverlightFaultBehavior" or similar
 
 ### Unit Testing
 
