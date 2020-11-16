@@ -32,6 +32,12 @@ Some of ther features are:
    * Automatically handles DTO creation and mapping based on attributes or configuration
    * Allows sharing validation and other logic by using partial classes and automatic linking of files
    
+**Release Notes / Changelog**
+
+* A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is keept keeping track of changes made and write down release notes as features are developed
+* [Github releases with changes and Release Notes](https://github.com/OpenRIAServices/OpenRiaServices/releases) for specific versions are created when a new version is released to nuget.
+
+   
 **Documentation**:
 * The original documentation for WCF RIA Services is still relevant and can be found at https://msdn.microsoft.com/en-us/library/ee707344(v=vs.91).aspx . Namespaces and assembly names are no longer correct since they changed with the release of OpenRiaServices.
 * Documentation for changes since WCF RIA Services can be found under https://github.com/OpenRIAServices/OpenRiaServices/releases)
@@ -50,6 +56,7 @@ Here are the most common nuget packages and their current versions.
 | OpenRiaServices.Client | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Client.svg)](https://www.nuget.org/packages/OpenRiaServices.Client) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Client.svg)](https://www.nuget.org/packages/OpenRiaServices.Client) |
 | OpenRiaServices.Client.Core | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Client.Core.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.Core) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Client.Core.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.Core) |
 | OpenRiaServices.Client.CodeGen | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Client.CodeGen.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.CodeGen) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Client.CodeGen.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.CodeGen) |
+| OpenRiaServices.Hosting.Wcf | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Hosting.Wcf.svg)](https://www.nuget.org/packages/OpenRiaServices.Hosting.Wcf) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Hosting.Wcf.svg)](https://www.nuget.org/packages/OpenRiaServices.Hosting.Wcf) |
 | OpenRiaServices.Server | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Server.svg)](https://www.nuget.org/packages/OpenRiaServices.Server) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Server.svg)](https://www.nuget.org/packages/OpenRiaServices.Server) |
 | OpenRiaServices.Server.Authentication.AspNetMembership | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Server.Authentication.AspNetMembership.svg)](https://www.nuget.org/packages/OpenRiaServices.Server.Authentication.AspNetMembership) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Server.Authentication.AspNetMembership.svg)](https://www.nuget.org/packages/OpenRiaServices.Server.Authentication.AspNetMembership) |
 | OpenRiaServices.EntityFramework | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.EntityFramework.svg)](https://www.nuget.org/packages/OpenRiaServices.EntityFramework) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.EntityFramework.svg)](https://www.nuget.org/packages/OpenRiaServices.EntityFramework) |
