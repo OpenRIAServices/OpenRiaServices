@@ -34,10 +34,11 @@
     1. You must add a reference to `OpenRiaServices.Hosting.Wcf` nuget in your web application
     2. Search and Replace `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
 7. Update your web.config file so that it matches the [new format](NuGet/OpenRiaServices.Hosting.WCF/content/web.config.transform)
-   If you are packages.config for nuget packages, this step should have been performed automatically.
-   1. Replace `OpenRiaServices.Hosting.DomainServicesSection, OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection, OpenRiaServices.Hosting.Wcf`
-   2. Replace all other places with `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
-   3. If you reference OpenRiaServices.Hosting with version number, the version number must be updated from 4 to 5
+   **Failure to do this step** will result in the server not responding to client request
+   **If you use packages.config for nuget packages**, this step should have been performed automatically.
+   1. Search for "`DomainServicesSection`" and **change type** to "`OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection, OpenRiaServices.Hosting.Wcf, Version=5.0.0.0, Culture=neutral, PublicKeyToken=2e0b7ccb1ae5b4c8`"
+   2. Replace all other places with `OpenRiaServices.Hosting` to `OpenRiaServices.Hosting.Wcf`(if not already replaced)
+   3. **If** you reference OpenRiaServices.Hosting with fully qualified assmebly name including **version number**, the version number must be updated from 4 to 5
    
 8. Start with building your web project, and only build the client once the server (web project) compiles fine
 
