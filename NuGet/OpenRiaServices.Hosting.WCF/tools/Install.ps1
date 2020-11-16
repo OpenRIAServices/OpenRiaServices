@@ -13,6 +13,17 @@ try {
     $configXml.PreserveWhitespace = $true
     $configXml.Load($configPath.Value)
 
+    function RemoveNodesWithOldNamespaces($nodes) {
+        foreach($node in $nodes)  {
+            if ($node.Attributes["type"].Value.Contains("DomainServices")) {
+                if ($node.PreviousSibling.NodeType -eq [System.Xml.XmlNodeType]::Whitespace) {
+                    $node.ParentNode.RemoveChild($node.PreviousSibling);
+                }
+                $node.ParentNode.RemoveChild($node);
+            }
+        }
+    }
+
     function RemoveDuplicateNode($nodes) {
         if ($nodes.Count -eq 2) {
             $node = $nodes.Item(1)
@@ -26,17 +37,25 @@ try {
     # Remove duplicate configSections/sectionGroup/section/domainServices nodes
     #
     $configSections = $configXml.configuration.configSections
+    RemoveNodesWithOldNamespaces($configSections.SelectNodes("sectionGroup[@name='system.serviceModel']/section[@name='domainServices']"));
     RemoveDuplicateNode($configSections.SelectNodes("sectionGroup[@name='system.serviceModel']/section[@name='domainServices']"));
 
-    # Remove duplicate system.web/httpModules/add/DomainServiceModule nodes
+    # Remove all system.web/httpModules/add/DomainServiceModule nodes
     #
     $httpModules = $configXml.configuration["system.web"].httpModules
-    RemoveDuplicateNode($httpModules.SelectNodes("add[@name='DomainServiceModule']"));
+    foreach($httpModule in $httpModules.SelectNodes("add[@name='DomainServiceModule']")) {
+        $httpModules.RemoveChild($httpModule)
+    }
 
     # Remove duplicate system.webServer/modules/add/DomainServiceModule nodes
     #
     $modules = $configXml.configuration["system.webServer"].modules
+    RemoveNodesWithOldNamespaces($modules.SelectNodes("add[@name='DomainServiceModule']"))
     RemoveDuplicateNode($modules.SelectNodes("add[@name='DomainServiceModule']"))
 
     $configXml.Save($configPath.Value)
 } catch { }
+
+
+
+/////////////////// TODOD_ REMOVE ALLA WITH DOMAINSERVICES
