@@ -30,7 +30,7 @@
    Eg. replace override of *Invoke* with override of *InvokeAsync*.
 4. Fix any additional compilation errors, use changes below for guidance about replacements.
 5. If you are using `OpenRiaServices.EntityFramework` the framework will now only call the `SaveChangesAsync` and not `SaveChanges` so if you are overriding `SaveChanges` make sure you do the same for `SaveChangesAsync`   
-6.  `OpenRiaServices.Hosting` has been moved to a separate nuget `OpenRiaServices.Hosting.Wcf` #251
+6.  `OpenRiaServices.Hosting` has been moved to a separate nuget package `OpenRiaServices.Hosting.Wcf` #251
     1. You must add a reference to `OpenRiaServices.Hosting.Wcf` nuget in your web application
     2. Search and Replace `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
 7. Update your web.config file so that it matches the [new format](NuGet/OpenRiaServices.Hosting.WCF/content/web.config.transform)
