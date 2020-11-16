@@ -39,7 +39,7 @@
    2. Replace all other places with `OpenRiaServices.Hosting` with `OpenRiaServices.Hosting.Wcf`
    3. If you reference OpenRiaServices.Hosting with version number, the version number must be updated from 4 to 5
    
-
+8. Start with building your web project, and only build the client once the server (web project) compiles fine
 
 
 For better scalability (can be done afterwards):
