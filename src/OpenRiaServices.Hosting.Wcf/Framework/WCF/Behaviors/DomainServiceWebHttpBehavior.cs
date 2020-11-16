@@ -251,12 +251,8 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                     }
                     else
                     {
-                        // serialize in the SOAP fault format so that Silverlight throws the right exception
                         MessageFault messageFault = MessageFault.CreateFault(faultError.Code, faultError.Reason, faultError.Detail);
                         fault = Message.CreateMessage(MessageVersion.None, messageFault, null);
-                        var rmp = new HttpResponseMessageProperty();
-                        rmp.StatusCode = System.Net.HttpStatusCode.OK;
-                        fault.Properties.Add(HttpResponseMessageProperty.Name, rmp);
                     }
                 }
             }
