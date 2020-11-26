@@ -55,7 +55,3 @@ try {
 
     $configXml.Save($configPath.Value)
 } catch { }
-
-
-
-/////////////////// TODOD_ REMOVE ALLA WITH DOMAINSERVICES
