@@ -15,7 +15,7 @@ try {
 
     function RemoveNodesWithOldNamespaces($nodes) {
         foreach($node in $nodes)  {
-            if ($node.Attributes["type"].Value.Contains("DomainServices")) {
+            if ($node.Attributes["type"].Value.Contains(".DomainServices.")) {
                 if ($node.PreviousSibling.NodeType -eq [System.Xml.XmlNodeType]::Whitespace) {
                     $node.ParentNode.RemoveChild($node.PreviousSibling);
                 }
