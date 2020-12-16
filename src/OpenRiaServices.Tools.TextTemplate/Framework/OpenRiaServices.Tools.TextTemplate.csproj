@@ -114,68 +114,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CodeGeneratorTextTemplate.tt">
+    <None Include="**\*.ttinclude" />
+    <None Update="**\*.tt">
+      <!---TextTemplatingFilePreprocessor , TextTemplatingFileGenerator-->
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CodeGeneratorTextTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="ComplexObjectGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ComplexObjectGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\Templates\AttributeGeneratorTemplate.ttinclude" />
-    <None Include="CSharpGenerators\CSharpComplexObjectGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CSharpComplexObjectGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\CSharpDomainContextGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CSharpDomainContextGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\CSharpEntityGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CSharpEntityGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\CSharpEnumGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CSharpEnumGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\CSharpClientCodeGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CSharpClientCodeGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\CSharpWebContextGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>CSharpWebContextGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="CSharpGenerators\Templates\DataContractGeneratorTemplate.ttinclude" />
-    <None Include="CSharpGenerators\Templates\ContractInterfaceTemplate.ttinclude" />
-    <None Include="CSharpGenerators\Templates\DomainOperationEntryProxyGeneratorTemplate.ttinclude" />
-    <None Include="CSharpGenerators\Templates\InvokeOperationProxyGeneratorTemplate.ttinclude" />
-    <None Include="CSharpGenerators\Templates\AssociationGenerator.ttinclude" />
-    <None Include="CSharpGenerators\Templates\Utility.ttinclude" />
-    <None Include="DataContractProxyGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>DataContractProxyGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="DomainContextGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>DomainContextGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="EntityGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EntityGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="EnumGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>EnumGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="ClientCodeGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ClientCodeGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="WebContextGenerator.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>WebContextGenerator.cs</LastGenOutput>
+      <LastGenOutput>%(Filename).cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -189,5 +132,8 @@
     <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>
