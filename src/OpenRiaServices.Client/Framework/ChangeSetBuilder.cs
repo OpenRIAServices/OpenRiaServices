@@ -83,8 +83,7 @@ namespace OpenRiaServices.Client
                 }
 
                 // add any custom method invocations
-                var entityActions = (ICollection<EntityAction>)entity.EntityActions;
-                foreach (EntityAction customInvokation in entityActions)
+                foreach (EntityAction customInvokation in entity.EntityActions)
                 {
                     if (string.IsNullOrEmpty(customInvokation.Name))
                     {
