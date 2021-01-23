@@ -1,8 +1,8 @@
 # OpenRiaServiecs
 
-Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=master)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
-[![Tests](https://img.shields.io/azure-devops/tests/OpenRiaServices/OpenRiaServices/1/master.svg)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
-[![Coverage](https://img.shields.io/azure-devops/coverage/OpenRiaServices/OpenRiaServices/1/master)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=master)
+Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=main)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=main)
+[![Tests](https://img.shields.io/azure-devops/tests/OpenRiaServices/OpenRiaServices/1/main.svg)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=main)
+[![Coverage](https://img.shields.io/azure-devops/coverage/OpenRiaServices/OpenRiaServices/1/main)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=main)
 
 
 
@@ -12,7 +12,7 @@ LGTM [![Total alerts](https://img.shields.io/lgtm/alerts/g/OpenRIAServices/OpenR
 
 <!-- Below badges should be reenabled once new scripts for appveyor build is set up
 
-Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/master.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/master)
+Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/main.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/main)
 
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
 -->
