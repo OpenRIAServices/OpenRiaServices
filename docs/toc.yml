@@ -1,0 +1,3438 @@
+- name: WCF RIA Services
+  href: ee707344(v=vs.91).md
+  items:
+  - name: Prerequisites for WCF RIA Services
+    href: gg512106(v=vs.91).md
+    items:
+    - name: 'Walkthrough: Installing and Configuring SQL Server 2008 R2 Express with Advanced Services'
+      href: gg512108(v=vs.91).md
+    - name: 'Walkthrough: Installing the AdventureWorks OLTP and LT sample databases'
+      href: gg512107(v=vs.91).md
+    - name: Universal Providers enable Cloud-based Storage in RIA Services
+      href: dn433232(v=vs.91).md
+  - name: Creating RIA Services Solutions
+    href: ee707336(v=vs.91).md
+    items:
+    - name: Visual Studio Templates for WCF RIA Services
+      href: hh180771(v=vs.91).md
+      items:
+      - name: Silverlight Application Template
+        href: hh180770(v=vs.91).md
+      - name: Silverlight Navigation Application Template
+        href: hh180767(v=vs.91).md
+      - name: Silverlight Business Application Template
+        href: hh180769(v=vs.91).md
+      - name: WCF RIA Services Class Library Template
+        href: hh180768(v=vs.91).md
+    - name: 'Walkthrough: Taking a Tour of RIA Services'
+      href: ff713719(v=vs.91).md
+    - name: 'Walkthrough: Creating a RIA Services Solution'
+      href: ee707376(v=vs.91).md
+    - name: 'Walkthrough: Creating a RIA Service with the Code First Approach'
+      href: hh556025(v=vs.91).md
+    - name: 'Walkthrough: Using the Silverlight Business Application Template'
+      href: ee707360(v=vs.91).md
+    - name: 'Walkthrough: Creating a RIA Services Class Library'
+      href: ee707351(v=vs.91).md
+    - name: 'Walkthrough: Localizing a Business Application'
+      href: ff679940(v=vs.91).md
+    - name: 'How to: Create a Domain Service that uses POCO-defined Entities'
+      href: gg602754(v=vs.91).md
+    - name: 'How to: Add or Remove a RIA Services Link'
+      href: ee707372(v=vs.91).md
+    - name: Using the Domain Service Wizard
+      href: gg153664(v=vs.91).md
+  - name: Building Secure Applications with WCF RIA Services
+    href: ff626373(v=vs.91).md
+  - name: Deploying and Localizing a RIA Services Solutions
+    href: ff679939(v=vs.91).md
+    items:
+    - name: A Guide to Deploying RIA Services Solutions
+      href: ff426912(v=vs.91).md
+    - name: Troubleshooting the Deployment of a RIA Services Solution
+      href: ff426913(v=vs.91).md
+    - name: 'Walkthrough: Localizing a Business Application'
+      href: ff679940(v=vs.91).md
+  - name: Middle Tier
+    href: ee707348(v=vs.91).md
+    items:
+    - name: Domain Services
+      href: ee707373(v=vs.91).md
+      items:
+      - name: 'Walkthrough: Adding Query Methods'
+        href: ee707362(v=vs.91).md
+      - name: 'How to: Add Business Logic to the Domain Service'
+        href: ee796240(v=vs.91).md
+      - name: 'How to: Create a Domain Service that uses POCO-defined Entities'
+        href: gg602754(v=vs.91).md
+      - name: 'How to: Use HTTPS with a Domain Service'
+        href: ee707342(v=vs.91).md
+    - name: Data
+      href: ee707356(v=vs.91).md
+      items:
+      - name: Compositional Hierarchies
+        href: ee707346(v=vs.91).md
+      - name: Presentation Models
+        href: ee707347(v=vs.91).md
+      - name: Inheritance in Data Models
+        href: ee707366(v=vs.91).md
+      - name: Complex Types
+        href: gg602753(v=vs.91).md
+      - name: Shared Entities
+        href: gg602750(v=vs.91).md
+      - name: 'Walkthrough: Sharing Entities between Multiple Domain Services'
+        href: ff422034(v=vs.91).md
+      - name: 'How to: Add Metadata Classes'
+        href: ee707339(v=vs.91).md
+      - name: Managing Data Concurrency
+        href: gg602751(v=vs.91).md
+        items:
+        - name: 'How to: Enable Optimistic Concurrency Checks'
+          href: gg602748(v=vs.91).md
+        - name: 'How to: Add Explicit Transactions to a Domain Service'
+          href: ee707364(v=vs.91).md
+      - name: 'How to: Validate Data'
+        href: ee707335(v=vs.91).md
+    - name: Shared Code
+      href: ee707371(v=vs.91).md
+      items:
+      - name: 'How to: Share Code through Source Files'
+        href: ee707369(v=vs.91).md
+      - name: 'Walkthrough: Creating a RIA Services Class Library'
+        href: ee707351(v=vs.91).md
+  - name: Silverlight Clients
+    href: ee707349(v=vs.91).md
+    items:
+    - name: Client Code Generation
+      href: ee707359(v=vs.91).md
+    - name: DomainContext and Operations
+      href: ee707370(v=vs.91).md
+    - name: DomainDataSource
+      href: ee707363(v=vs.91).md
+    - name: Error Handling on the Client
+      href: ee807307(v=vs.91).md
+    - name: Customizing Generated Code
+      href: ee707345(v=vs.91).md
+      items:
+      - name: 'How to: Add Computed Properties on the Client'
+        href: ee707331(v=vs.91).md
+  - name: Accessing non-Silverlight Clients
+    href: gg602749(v=vs.91).md
+    items:
+    - name: ASP.NET Clients
+      href: ee707352(v=vs.91).md
+    - name: 'Walkthrough: Using the Domain Service in ASP.NET Applications'
+      href: ee807305(v=vs.91).md
+  - name: Authentication, Roles, and Profiles
+    href: ee707361(v=vs.91).md
+    items:
+    - name: 'How to: Enable Authentication in RIA Services'
+      href: ee707353(v=vs.91).md
+    - name: 'How to: Enable Roles in RIA Services'
+      href: ee707375(v=vs.91).md
+    - name: 'How to: Enable Profiles in RIA Services'
+      href: ee707350(v=vs.91).md
+    - name: 'How to: Create a Custom Authorization Attribute'
+      href: ee707357(v=vs.91).md
+    - name: 'Walkthrough: Using Authentication Service with Silverlight Business Application'
+      href: ee942449(v=vs.91).md
+    - name: 'Walkthrough: Using Authentication Service with Silverlight Navigation Application'
+      href: ee942451(v=vs.91).md
+  - name: End-to-EndScenarios
+    href: gg602747(v=vs.91).md
+    items:
+    - name: 'Walkthrough: Retrieving and Displaying Data From a Domain Service'
+      href: ee707367(v=vs.91).md
+    - name: 'Walkthrough: Editing Data From a Domain Service'
+      href: ee707338(v=vs.91).md
+    - name: 'Walkthrough: Displaying Data in a Silverlight Business Application'
+      href: ee796239(v=vs.91).md
+    - name: 'Walkthrough: Displaying Related Data in a Silverlight Business Application'
+      href: ee796241(v=vs.91).md
+  - name: WCF RIA Services Templates and Wizards
+    href: hh180766(v=vs.91).md
+    items:
+    - name: Visual Studio Templates for WCF RIA Services
+      href: hh180771(v=vs.91).md
+      items:
+      - name: Silverlight Application Template
+        href: hh180770(v=vs.91).md
+      - name: Silverlight Navigation Application Template
+        href: hh180767(v=vs.91).md
+      - name: Silverlight Business Application Template
+        href: hh180769(v=vs.91).md
+      - name: WCF RIA Services Class Library Template
+        href: hh180768(v=vs.91).md
+    - name: Using the Domain Service Wizard
+      href: gg153664(v=vs.91).md
+  - name: Reference
+    href: ee707374(v=vs.91).md
+    items:
+    - name: System.ComponentModel.DataAnnotations Namespace
+      href: cc490428(v=vs.91).md
+      items:
+      - name: CompositionAttribute Class
+        href: ff422600(v=vs.91).md
+        items:
+        - name: 'CompositionAttribute Constructor '
+          href: ff423254(v=vs.91).md
+        - name: CompositionAttribute Methods
+          href: ff423026(v=vs.91).md
+        - name: CompositionAttribute Properties
+          href: ff422123(v=vs.91).md
+      - name: RoundtripOriginalAttribute Class
+        href: ff423279(v=vs.91).md
+        items:
+        - name: 'RoundtripOriginalAttribute Constructor '
+          href: ff423378(v=vs.91).md
+        - name: RoundtripOriginalAttribute Methods
+          href: ff422438(v=vs.91).md
+        - name: RoundtripOriginalAttribute Properties
+          href: ff423441(v=vs.91).md
+    - name: System.ServiceModel.DomainServices Namespace
+      href: ff422155(v=vs.91).md
+      items:
+      - name: DomainIdentifierAttribute Class
+        href: ff423010(v=vs.91).md
+        items:
+        - name: 'DomainIdentifierAttribute Constructor '
+          href: ff422404(v=vs.91).md
+        - name: DomainIdentifierAttribute Methods
+          href: ff423323(v=vs.91).md
+        - name: DomainIdentifierAttribute Properties
+          href: ff423055(v=vs.91).md
+          items:
+          - name: 'IsApplicationService Property '
+            href: ff423024(v=vs.91).md
+          - name: 'Name Property '
+            href: ff423013(v=vs.91).md
+      - name: ExternalReferenceAttribute Class
+        href: ff422861(v=vs.91).md
+        items:
+        - name: 'ExternalReferenceAttribute Constructor '
+          href: ff423307(v=vs.91).md
+        - name: ExternalReferenceAttribute Methods
+          href: ff422686(v=vs.91).md
+        - name: ExternalReferenceAttribute Properties
+          href: ff422359(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.Client Namespace
+      href: ff422479(v=vs.91).md
+      items:
+      - name: ChangeSetEntry Class
+        href: ff422693(v=vs.91).md
+        items:
+        - name: 'ChangeSetEntry Constructor '
+          href: ff422445(v=vs.91).md
+        - name: ChangeSetEntry Methods
+          href: ff423310(v=vs.91).md
+        - name: ChangeSetEntry Properties
+          href: ff423426(v=vs.91).md
+          items:
+          - name: 'Associations Property '
+            href: ff422144(v=vs.91).md
+          - name: 'ClientEntity Property '
+            href: ff423373(v=vs.91).md
+          - name: 'ConflictMembers Property '
+            href: ff422688(v=vs.91).md
+          - name: 'Entity Property '
+            href: ff422424(v=vs.91).md
+          - name: 'EntityActions Property '
+            href: ff422164(v=vs.91).md
+          - name: 'HasConflict Property '
+            href: ff422724(v=vs.91).md
+          - name: 'HasMemberChanges Property '
+            href: ff423271(v=vs.91).md
+          - name: 'Id Property '
+            href: ff422519(v=vs.91).md
+          - name: 'IsDeleteConflict Property '
+            href: ff423066(v=vs.91).md
+          - name: 'Operation Property '
+            href: ff422325(v=vs.91).md
+          - name: 'OriginalAssociations Property '
+            href: ff423185(v=vs.91).md
+          - name: 'OriginalEntity Property '
+            href: ff422475(v=vs.91).md
+          - name: 'StoreEntity Property '
+            href: ff422091(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff422147(v=vs.91).md
+      - name: ComplexObject Class
+        href: gg277298(v=vs.91).md
+        items:
+        - name: 'ComplexObject Constructor '
+          href: gg277259(v=vs.91).md
+        - name: ComplexObject Methods
+          href: gg277295(v=vs.91).md
+          items:
+          - name: 'IEditableObject.BeginEdit Method '
+            href: hh696930(v=vs.91).md
+          - name: 'IEditableObject.CancelEdit Method '
+            href: hh696917(v=vs.91).md
+          - name: 'IEditableObject.EndEdit Method '
+            href: hh696924(v=vs.91).md
+          - name: '. Method '
+            href: hh696931(v=vs.91).md
+          - name: 'BeginEdit Method '
+            href: gg277299(v=vs.91).md
+          - name: 'CancelEdit Method '
+            href: gg277297(v=vs.91).md
+          - name: 'EndEdit Method '
+            href: gg277276(v=vs.91).md
+          - name: 'OnDeserialized Method '
+            href: gg277289(v=vs.91).md
+          - name: 'OnDeserializing Method '
+            href: gg277284(v=vs.91).md
+          - name: 'OnPropertyChanged Method '
+            href: gg277283(v=vs.91).md
+          - name: 'RaiseDataMemberChanged Method '
+            href: gg277267(v=vs.91).md
+          - name: 'RaiseDataMemberChanging Method '
+            href: gg277260(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: gg277265(v=vs.91).md
+          - name: 'ValidateProperty Method '
+            href: gg277280(v=vs.91).md
+            items:
+            - name: ValidateProperty Method (ValidationContext, Object)
+              href: gg277293(v=vs.91).md
+            - name: ValidateProperty Method (String, Object)
+              href: gg277273(v=vs.91).md
+        - name: ComplexObject Properties
+          href: gg277294(v=vs.91).md
+          items:
+          - name: '. Property '
+            href: hh696929(v=vs.91).md
+          - name: 'HasValidationErrors Property '
+            href: gg277272(v=vs.91).md
+          - name: 'IsDeserializing Property '
+            href: gg277285(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: gg277262(v=vs.91).md
+        - name: ComplexObject Events
+          href: gg277291(v=vs.91).md
+          items:
+          - name: . Event
+            href: hh696914(v=vs.91).md
+          - name: INotifyPropertyChanged.PropertyChanged Event
+            href: hh696928(v=vs.91).md
+      - name: DomainClient Class
+        href: ff422792(v=vs.91).md
+        items:
+        - name: 'DomainClient Constructor '
+          href: ff422055(v=vs.91).md
+        - name: DomainClient Methods
+          href: ff423051(v=vs.91).md
+          items:
+          - name: 'BeginInvoke Method '
+            href: ff422397(v=vs.91).md
+          - name: 'BeginInvokeCore Method '
+            href: ff423146(v=vs.91).md
+          - name: 'BeginQuery Method '
+            href: ff422400(v=vs.91).md
+          - name: 'BeginQueryCore Method '
+            href: ff422403(v=vs.91).md
+          - name: 'BeginSubmit Method '
+            href: ff422408(v=vs.91).md
+          - name: 'BeginSubmitCore Method '
+            href: ff423264(v=vs.91).md
+          - name: 'CancelInvoke Method '
+            href: ff422036(v=vs.91).md
+          - name: 'CancelInvokeCore Method '
+            href: ff422335(v=vs.91).md
+          - name: 'CancelQuery Method '
+            href: ff422562(v=vs.91).md
+          - name: 'CancelQueryCore Method '
+            href: ff422504(v=vs.91).md
+          - name: 'CancelSubmit Method '
+            href: ff422950(v=vs.91).md
+          - name: 'CancelSubmitCore Method '
+            href: ff422485(v=vs.91).md
+          - name: 'EndInvoke Method '
+            href: ff422757(v=vs.91).md
+          - name: 'EndInvokeCore Method '
+            href: ff422068(v=vs.91).md
+          - name: 'EndQuery Method '
+            href: ff422759(v=vs.91).md
+          - name: 'EndQueryCore Method '
+            href: ff423142(v=vs.91).md
+          - name: 'EndSubmit Method '
+            href: ff423371(v=vs.91).md
+          - name: 'EndSubmitCore Method '
+            href: ff422304(v=vs.91).md
+        - name: DomainClient Properties
+          href: ff422496(v=vs.91).md
+          items:
+          - name: 'EntityTypes Property '
+            href: ff422389(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff422588(v=vs.91).md
+      - name: DomainClientResult Class
+        href: ff423197(v=vs.91).md
+        items:
+        - name: DomainClientResult Methods
+          href: ff422844(v=vs.91).md
+          items:
+          - name: 'CreateInvokeResult Method '
+            href: ff423383(v=vs.91).md
+          - name: 'CreateQueryResult Method '
+            href: ff422954(v=vs.91).md
+        - name: DomainClientResult Properties
+          href: ff423269(v=vs.91).md
+          items:
+          - name: 'AllEntities Property '
+            href: ff422774(v=vs.91).md
+          - name: 'Entities Property '
+            href: ff422837(v=vs.91).md
+          - name: 'ReturnValue Property '
+            href: ff422874(v=vs.91).md
+          - name: 'TotalEntityCount Property '
+            href: ff422598(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff422534(v=vs.91).md
+      - name: DomainContext Class
+        href: ff422732(v=vs.91).md
+        items:
+        - name: 'DomainContext Constructor '
+          href: ff422872(v=vs.91).md
+        - name: DomainContext Methods
+          href: ff422942(v=vs.91).md
+          items:
+          - name: 'AddReference Method '
+            href: ff422058(v=vs.91).md
+          - name: 'CreateEntityContainer Method '
+            href: ff422380(v=vs.91).md
+          - name: 'CreateQuery(TEntity) Method '
+            href: ff422988(v=vs.91).md
+          - name: 'InvokeOperation Method '
+            href: ff422523(v=vs.91).md
+            items:
+            - name: InvokeOperation(TValue) Method (String, Type, IDictionary(String, Object), Boolean, Action(InvokeOperation(TValue)), Object)
+              href: ff422446(v=vs.91).md
+            - name: InvokeOperation Method (String, Type, IDictionary(String, Object), Boolean, Action(InvokeOperation), Object)
+              href: ff422358(v=vs.91).md
+          - name: 'Load Method '
+            href: ff423329(v=vs.91).md
+            items:
+            - name: Load(TEntity) Method (EntityQuery(TEntity))
+              href: ff422589(v=vs.91).md
+            - name: Load(TEntity) Method (EntityQuery(TEntity), Boolean)
+              href: ff422635(v=vs.91).md
+            - name: Load(TEntity) Method (EntityQuery(TEntity), Action(LoadOperation(TEntity)), Object)
+              href: ff422945(v=vs.91).md
+            - name: Load(TEntity) Method (EntityQuery(TEntity), LoadBehavior, Boolean)
+              href: ff422670(v=vs.91).md
+            - name: Load Method (EntityQuery, LoadBehavior, Action(LoadOperation), Object)
+              href: ff423348(v=vs.91).md
+            - name: Load(TEntity) Method (EntityQuery(TEntity), LoadBehavior, Action(LoadOperation(TEntity)), Object)
+              href: ff423188(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff423376(v=vs.91).md
+          - name: 'RejectChanges Method '
+            href: ff422758(v=vs.91).md
+          - name: 'SubmitChanges Method '
+            href: ff422910(v=vs.91).md
+            items:
+            - name: 'SubmitChanges Method '
+              href: ff422324(v=vs.91).md
+            - name: SubmitChanges Method (Action(SubmitOperation), Object)
+              href: ff423067(v=vs.91).md
+          - name: 'ValidateMethod Method '
+            href: ff422367(v=vs.91).md
+        - name: DomainContext Properties
+          href: ff422159(v=vs.91).md
+          items:
+          - name: 'DomainClient Property '
+            href: ff422095(v=vs.91).md
+          - name: 'EntityContainer Property '
+            href: ff422356(v=vs.91).md
+          - name: 'HasChanges Property '
+            href: ff422591(v=vs.91).md
+          - name: 'IsLoading Property '
+            href: ff422573(v=vs.91).md
+          - name: 'IsSubmitting Property '
+            href: ff422131(v=vs.91).md
+          - name: 'ValidationContext Property '
+            href: ff422533(v=vs.91).md
+        - name: DomainContext Events
+          href: ff423227(v=vs.91).md
+          items:
+          - name: PropertyChanged Event
+            href: ff422176(v=vs.91).md
+      - name: DomainException Class
+        href: ff422448(v=vs.91).md
+        items:
+        - name: 'DomainException Constructor '
+          href: ff422124(v=vs.91).md
+          items:
+          - name: 'DomainException Constructor '
+            href: ff422644(v=vs.91).md
+          - name: DomainException Constructor (String)
+            href: ff422067(v=vs.91).md
+          - name: DomainException Constructor (String, Exception)
+            href: ff422081(v=vs.91).md
+          - name: DomainException Constructor (String, Int32)
+            href: ff422162(v=vs.91).md
+          - name: DomainException Constructor (String, Int32, Exception)
+            href: ff423078(v=vs.91).md
+          - name: DomainException Constructor (String, Int32, String)
+            href: ff423311(v=vs.91).md
+        - name: DomainException Methods
+          href: ff422955(v=vs.91).md
+        - name: DomainException Properties
+          href: ff422601(v=vs.91).md
+          items:
+          - name: 'ErrorCode Property '
+            href: ff422607(v=vs.91).md
+          - name: 'StackTrace Property '
+            href: ff422469(v=vs.91).md
+      - name: DomainOperationException Class
+        href: ff423001(v=vs.91).md
+        items:
+        - name: 'DomainOperationException Constructor '
+          href: ff422875(v=vs.91).md
+          items:
+          - name: 'DomainOperationException Constructor '
+            href: ff422881(v=vs.91).md
+          - name: DomainOperationException Constructor (String)
+            href: ff422518(v=vs.91).md
+          - name: DomainOperationException Constructor (String, Exception)
+            href: ff422715(v=vs.91).md
+          - name: DomainOperationException Constructor (String, OperationErrorStatus)
+            href: ff423131(v=vs.91).md
+          - name: DomainOperationException Constructor (String, OperationErrorStatus, Int32)
+            href: ff422038(v=vs.91).md
+          - name: DomainOperationException Constructor (String, OperationErrorStatus, Int32, String)
+            href: ff422899(v=vs.91).md
+        - name: DomainOperationException Methods
+          href: ff422407(v=vs.91).md
+        - name: DomainOperationException Properties
+          href: ff422665(v=vs.91).md
+          items:
+          - name: 'ErrorCode Property '
+            href: ff422968(v=vs.91).md
+          - name: 'StackTrace Property '
+            href: ff422998(v=vs.91).md
+          - name: 'Status Property '
+            href: ff423405(v=vs.91).md
+      - name: DomainServiceFault Class
+        href: ff423203(v=vs.91).md
+        items:
+        - name: 'DomainServiceFault Constructor '
+          href: ff423199(v=vs.91).md
+        - name: DomainServiceFault Methods
+          href: ff422967(v=vs.91).md
+          items:
+          - name: 'GetValidationErrors Method '
+            href: ff422045(v=vs.91).md
+        - name: DomainServiceFault Properties
+          href: ff423255(v=vs.91).md
+          items:
+          - name: 'ErrorCode Property '
+            href: ff422394(v=vs.91).md
+          - name: 'ErrorMessage Property '
+            href: ff422794(v=vs.91).md
+          - name: 'IsDomainException Property '
+            href: ff423048(v=vs.91).md
+          - name: 'OperationErrors Property '
+            href: ff422817(v=vs.91).md
+          - name: 'StackTrace Property '
+            href: ff422903(v=vs.91).md
+      - name: Entity Class
+        href: ff422907(v=vs.91).md
+        items:
+        - name: 'Entity Constructor '
+          href: ff422695(v=vs.91).md
+        - name: Entity Methods
+          href: ff423141(v=vs.91).md
+          items:
+          - name: 'IChangeTracking.AcceptChanges Method '
+            href: ff423294(v=vs.91).md
+          - name: 'IEditableObject.BeginEdit Method '
+            href: ff422332(v=vs.91).md
+          - name: 'IEditableObject.CancelEdit Method '
+            href: ff422175(v=vs.91).md
+          - name: 'IEditableObject.EndEdit Method '
+            href: ff422743(v=vs.91).md
+          - name: '. Method '
+            href: ff457831(v=vs.91).md
+          - name: 'IRevertibleChangeTracking.RejectChanges Method '
+            href: ff422472(v=vs.91).md
+          - name: 'AcceptChanges Method '
+            href: ff423117(v=vs.91).md
+          - name: 'BeginEdit Method '
+            href: ff422920(v=vs.91).md
+          - name: 'CancelEdit Method '
+            href: ff422053(v=vs.91).md
+          - name: 'CanInvokeAction Method '
+            href: ff422924(v=vs.91).md
+          - name: 'EndEdit Method '
+            href: ff423344(v=vs.91).md
+          - name: 'GetIdentity Method '
+            href: ff423443(v=vs.91).md
+          - name: 'GetOriginal Method '
+            href: ff422776(v=vs.91).md
+          - name: 'InvokeAction Method '
+            href: ff422191(v=vs.91).md
+          - name: 'IsActionInvoked Method '
+            href: ff422192(v=vs.91).md
+          - name: 'OnActionStateChanged Method '
+            href: ff422671(v=vs.91).md
+          - name: 'OnDeserialized Method '
+            href: ff422658(v=vs.91).md
+          - name: 'OnDeserializing Method '
+            href: ff422739(v=vs.91).md
+          - name: 'OnLoaded Method '
+            href: ff422914(v=vs.91).md
+          - name: 'OnPropertyChanged Method '
+            href: ff422782(v=vs.91).md
+          - name: 'RaiseDataMemberChanged Method '
+            href: ff423101(v=vs.91).md
+          - name: 'RaiseDataMemberChanging Method '
+            href: ff422866(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff422629(v=vs.91).md
+          - name: 'RejectChanges Method '
+            href: ff422708(v=vs.91).md
+          - name: 'ToString Method '
+            href: ff422550(v=vs.91).md
+          - name: 'UpdateActionState Method '
+            href: ff422150(v=vs.91).md
+          - name: 'ValidateProperty Method '
+            href: ff422663(v=vs.91).md
+            items:
+            - name: ValidateProperty Method (ValidationContext, Object)
+              href: ff422694(v=vs.91).md
+            - name: ValidateProperty Method (String, Object)
+              href: ff422361(v=vs.91).md
+        - name: Entity Properties
+          href: ff422077(v=vs.91).md
+          items:
+          - name: '. Property '
+            href: ff457907(v=vs.91).md
+          - name: 'IChangeTracking.IsChanged Property '
+            href: ff422119(v=vs.91).md
+          - name: 'EntityActions Property '
+            href: ff422487(v=vs.91).md
+          - name: 'EntityConflict Property '
+            href: ff422579(v=vs.91).md
+          - name: 'EntitySet Property '
+            href: gg277288(v=vs.91).md
+          - name: 'EntityState Property '
+            href: ff422190(v=vs.91).md
+          - name: 'HasChanges Property '
+            href: ff423084(v=vs.91).md
+          - name: 'HasValidationErrors Property '
+            href: ff422981(v=vs.91).md
+          - name: 'IsDeserializing Property '
+            href: ff423432(v=vs.91).md
+          - name: 'IsReadOnly Property '
+            href: ff423352(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff423390(v=vs.91).md
+        - name: Entity Events
+          href: ff422691(v=vs.91).md
+          items:
+          - name: . Event
+            href: ff457908(v=vs.91).md
+          - name: PropertyChanged Event
+            href: ff422749(v=vs.91).md
+      - name: EntityAction Class
+        href: ff423106(v=vs.91).md
+        items:
+        - name: 'EntityAction Constructor '
+          href: ff422552(v=vs.91).md
+        - name: EntityAction Methods
+          href: ff423392(v=vs.91).md
+        - name: EntityAction Properties
+          href: ff422118(v=vs.91).md
+          items:
+          - name: 'HasParameters Property '
+            href: ff423385(v=vs.91).md
+          - name: 'Name Property '
+            href: ff422570(v=vs.91).md
+          - name: 'Parameters Property '
+            href: ff423160(v=vs.91).md
+      - name: EntityChangeSet Class
+        href: ff422483(v=vs.91).md
+        items:
+        - name: EntityChangeSet Methods
+          href: ff422604(v=vs.91).md
+          items:
+          - name: 'IEnumerable(Entity).GetEnumerator Method '
+            href: ff422783(v=vs.91).md
+          - name: 'IEnumerable.GetEnumerator Method '
+            href: ff422531(v=vs.91).md
+          - name: 'GetChangeSetEntries Method '
+            href: ff422781(v=vs.91).md
+          - name: 'ToString Method '
+            href: ff423379(v=vs.91).md
+        - name: EntityChangeSet Properties
+          href: ff422494(v=vs.91).md
+          items:
+          - name: 'AddedEntities Property '
+            href: ff423169(v=vs.91).md
+          - name: 'IsEmpty Property '
+            href: ff423005(v=vs.91).md
+          - name: 'ModifiedEntities Property '
+            href: ff422309(v=vs.91).md
+          - name: 'RemovedEntities Property '
+            href: ff422084(v=vs.91).md
+      - name: EntityCollection(TEntity) Class
+        href: ff422772(v=vs.91).md
+        items:
+        - name: 'EntityCollection(TEntity) Constructor '
+          href: ff423152(v=vs.91).md
+          items:
+          - name: EntityCollection(TEntity) Constructor (Entity, String, Func(TEntity, Boolean))
+            href: ff457959(v=vs.91).md
+          - name: EntityCollection(TEntity) Constructor (Entity, String, Func(TEntity, Boolean), Action(TEntity), Action(TEntity))
+            href: ff457938(v=vs.91).md
+        - name: EntityCollection(TEntity) Methods
+          href: ff422610(v=vs.91).md
+          items:
+          - name: 'ICollectionViewFactory.CreateView Method '
+            href: hh696923(v=vs.91).md
+          - name: 'IEnumerable.GetEnumerator Method '
+            href: ff422646(v=vs.91).md
+          - name: 'Add Method '
+            href: ff422185(v=vs.91).md
+          - name: 'GetEnumerator Method '
+            href: ff423233(v=vs.91).md
+          - name: 'Remove Method '
+            href: ff423347(v=vs.91).md
+          - name: 'ToString Method '
+            href: ff422382(v=vs.91).md
+        - name: EntityCollection(TEntity) Properties
+          href: ff422536(v=vs.91).md
+          items:
+          - name: 'Count Property '
+            href: ff423040(v=vs.91).md
+        - name: EntityCollection(TEntity) Events
+          href: ff423430(v=vs.91).md
+          items:
+          - name: INotifyCollectionChanged.CollectionChanged Event
+            href: ff422106(v=vs.91).md
+          - name: INotifyPropertyChanged.PropertyChanged Event
+            href: ff423357(v=vs.91).md
+          - name: EntityAdded Event
+            href: ff423208(v=vs.91).md
+          - name: EntityRemoved Event
+            href: ff422393(v=vs.91).md
+      - name: EntityCollectionChangedEventArgs(TEntity) Class
+        href: ff423030(v=vs.91).md
+        items:
+        - name: 'EntityCollectionChangedEventArgs(TEntity) Constructor '
+          href: ff422849(v=vs.91).md
+        - name: EntityCollectionChangedEventArgs(TEntity) Methods
+          href: ff423177(v=vs.91).md
+        - name: EntityCollectionChangedEventArgs(TEntity) Properties
+          href: ff423353(v=vs.91).md
+          items:
+          - name: 'Entity Property '
+            href: ff422318(v=vs.91).md
+      - name: EntityConflict Class
+        href: ff423095(v=vs.91).md
+        items:
+        - name: EntityConflict Methods
+          href: ff423225(v=vs.91).md
+          items:
+          - name: 'Resolve Method '
+            href: ff423114(v=vs.91).md
+        - name: EntityConflict Properties
+          href: ff422350(v=vs.91).md
+          items:
+          - name: 'CurrentEntity Property '
+            href: ff422788(v=vs.91).md
+          - name: 'IsDeleted Property '
+            href: ff422931(v=vs.91).md
+          - name: 'OriginalEntity Property '
+            href: ff422744(v=vs.91).md
+          - name: 'PropertyNames Property '
+            href: ff422484(v=vs.91).md
+          - name: 'StoreEntity Property '
+            href: ff422398(v=vs.91).md
+      - name: EntityContainer Class
+        href: ff422965(v=vs.91).md
+        items:
+        - name: 'EntityContainer Constructor '
+          href: ff423121(v=vs.91).md
+        - name: EntityContainer Methods
+          href: ff422509(v=vs.91).md
+          items:
+          - name: 'IChangeTracking.AcceptChanges Method '
+            href: ff423172(v=vs.91).md
+          - name: 'IRevertibleChangeTracking.RejectChanges Method '
+            href: ff423427(v=vs.91).md
+          - name: 'AcceptChanges Method '
+            href: ff422765(v=vs.91).md
+          - name: 'AddReference Method '
+            href: ff422916(v=vs.91).md
+          - name: 'Clear Method '
+            href: ff422746(v=vs.91).md
+          - name: 'CreateEntitySet Method '
+            href: ff422960(v=vs.91).md
+            items:
+            - name: 'CreateEntitySet(TEntity) Method '
+              href: ff422992(v=vs.91).md
+            - name: CreateEntitySet(TEntity) Method (EntitySetOperations)
+              href: ff423150(v=vs.91).md
+          - name: 'GetChanges Method '
+            href: ff423108(v=vs.91).md
+          - name: 'GetEntitySet Method '
+            href: ff423115(v=vs.91).md
+            items:
+            - name: 'GetEntitySet(TEntity) Method '
+              href: ff423304(v=vs.91).md
+            - name: GetEntitySet Method (Type)
+              href: ff423050(v=vs.91).md
+          - name: 'LoadEntities Method '
+            href: ff422102(v=vs.91).md
+            items:
+            - name: LoadEntities Method (IEnumerable)
+              href: ff422996(v=vs.91).md
+            - name: LoadEntities Method (IEnumerable, LoadBehavior)
+              href: ff422993(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff422515(v=vs.91).md
+          - name: 'RejectChanges Method '
+            href: ff423377(v=vs.91).md
+          - name: 'TryGetEntitySet Method '
+            href: ff423386(v=vs.91).md
+        - name: EntityContainer Properties
+          href: ff422623(v=vs.91).md
+          items:
+          - name: 'IChangeTracking.IsChanged Property '
+            href: ff422399(v=vs.91).md
+          - name: 'EntitySets Property '
+            href: ff422329(v=vs.91).md
+          - name: 'HasChanges Property '
+            href: ff422956(v=vs.91).md
+        - name: EntityContainer Events
+          href: ff422937(v=vs.91).md
+          items:
+          - name: PropertyChanged Event
+            href: ff423388(v=vs.91).md
+      - name: EntityKey Class
+        href: ff422909(v=vs.91).md
+        items:
+        - name: 'EntityKey Constructor '
+          href: ff422620(v=vs.91).md
+        - name: EntityKey Methods
+          href: ff423166(v=vs.91).md
+          items:
+          - name: 'Create Method '
+            href: ff422148(v=vs.91).md
+            items:
+            - name: Create Method (Object[])
+              href: ff422051(v=vs.91).md
+            - name: Create(T1, T2) Method (T1, T2)
+              href: ff422773(v=vs.91).md
+            - name: Create(T1, T2, T3) Method (T1, T2, T3)
+              href: ff423399(v=vs.91).md
+          - name: 'ToString Method '
+            href: ff423129(v=vs.91).md
+      - name: EntityOperationType Enumeration
+        href: ff422172(v=vs.91).md
+      - name: EntityQuery Class
+        href: ff422488(v=vs.91).md
+        items:
+        - name: EntityQuery Methods
+          href: ff422436(v=vs.91).md
+        - name: EntityQuery Properties
+          href: ff422778(v=vs.91).md
+          items:
+          - name: 'DomainClient Property '
+            href: ff422559(v=vs.91).md
+          - name: 'EntityType Property '
+            href: ff422760(v=vs.91).md
+          - name: 'HasSideEffects Property '
+            href: ff422718(v=vs.91).md
+          - name: 'IncludeTotalCount Property '
+            href: ff422889(v=vs.91).md
+          - name: 'IsComposable Property '
+            href: ff423153(v=vs.91).md
+          - name: 'Parameters Property '
+            href: ff422440(v=vs.91).md
+          - name: 'Query Property '
+            href: ff422344(v=vs.91).md
+          - name: 'QueryName Property '
+            href: ff423213(v=vs.91).md
+      - name: EntityQuery(TEntity) Class
+        href: ff422815(v=vs.91).md
+        items:
+        - name: EntityQuery(TEntity) Methods
+          href: ff423257(v=vs.91).md
+        - name: EntityQuery(TEntity) Properties
+          href: ff423403(v=vs.91).md
+      - name: EntityQueryable Class
+        href: ff422834(v=vs.91).md
+        items:
+        - name: EntityQueryable Methods
+          href: ff422842(v=vs.91).md
+          items:
+          - name: 'OrderBy(TEntity, TKey) Method '
+            href: ff457936(v=vs.91).md
+          - name: 'OrderByDescending(TEntity, TKey) Method '
+            href: ff457860(v=vs.91).md
+          - name: 'Select(TEntity) Method '
+            href: ff457843(v=vs.91).md
+          - name: 'Skip(TEntity) Method '
+            href: ff422728(v=vs.91).md
+          - name: 'Take(TEntity) Method '
+            href: ff422793(v=vs.91).md
+          - name: 'ThenBy(TEntity, TKey) Method '
+            href: ff457925(v=vs.91).md
+          - name: 'ThenByDescending(TEntity, TKey) Method '
+            href: ff457800(v=vs.91).md
+          - name: 'Where(TEntity) Method '
+            href: ff457891(v=vs.91).md
+      - name: EntityRef(TEntity) Class
+        href: ff422755(v=vs.91).md
+        items:
+        - name: 'EntityRef(TEntity) Constructor '
+          href: ff457802(v=vs.91).md
+        - name: EntityRef(TEntity) Methods
+          href: ff422132(v=vs.91).md
+        - name: EntityRef(TEntity) Properties
+          href: ff423245(v=vs.91).md
+          items:
+          - name: 'Entity Property '
+            href: ff422154(v=vs.91).md
+      - name: EntitySet Class
+        href: ff423164(v=vs.91).md
+        items:
+        - name: EntitySet Methods
+          href: ff422080(v=vs.91).md
+          items:
+          - name: 'IChangeTracking.AcceptChanges Method '
+            href: ff422818(v=vs.91).md
+          - name: 'IEnumerable.GetEnumerator Method '
+            href: ff423260(v=vs.91).md
+          - name: 'IRevertibleChangeTracking.RejectChanges Method '
+            href: ff422365(v=vs.91).md
+          - name: 'AcceptChanges Method '
+            href: ff422770(v=vs.91).md
+          - name: 'Add Method '
+            href: ff422725(v=vs.91).md
+          - name: 'Attach Method '
+            href: ff422641(v=vs.91).md
+          - name: 'Clear Method '
+            href: ff423053(v=vs.91).md
+          - name: 'CreateEntity Method '
+            href: ff423280(v=vs.91).md
+          - name: 'CreateList Method '
+            href: ff422576(v=vs.91).md
+          - name: 'Detach Method '
+            href: ff423217(v=vs.91).md
+          - name: 'GetEnumerator Method '
+            href: ff422625(v=vs.91).md
+          - name: 'OnCollectionChanged Method '
+            href: ff423316(v=vs.91).md
+          - name: 'OnPropertyChanged Method '
+            href: ff422592(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff422539(v=vs.91).md
+          - name: 'RejectChanges Method '
+            href: ff423041(v=vs.91).md
+          - name: 'Remove Method '
+            href: ff422642(v=vs.91).md
+        - name: EntitySet Properties
+          href: ff422308(v=vs.91).md
+          items:
+          - name: 'IChangeTracking.IsChanged Property '
+            href: ff422459(v=vs.91).md
+          - name: 'CanAdd Property '
+            href: ff422632(v=vs.91).md
+          - name: 'CanEdit Property '
+            href: ff423027(v=vs.91).md
+          - name: 'CanRemove Property '
+            href: ff422904(v=vs.91).md
+          - name: 'Count Property '
+            href: ff422791(v=vs.91).md
+          - name: 'EntityContainer Property '
+            href: ff422112(v=vs.91).md
+          - name: 'EntityType Property '
+            href: ff423438(v=vs.91).md
+          - name: 'HasChanges Property '
+            href: ff422590(v=vs.91).md
+          - name: 'IsReadOnly Property '
+            href: ff423263(v=vs.91).md
+          - name: 'List Property '
+            href: ff423240(v=vs.91).md
+        - name: EntitySet Events
+          href: ff423045(v=vs.91).md
+          items:
+          - name: INotifyCollectionChanged.CollectionChanged Event
+            href: ff423429(v=vs.91).md
+          - name: PropertyChanged Event
+            href: ff423389(v=vs.91).md
+      - name: EntitySet(TEntity) Class
+        href: ff422464(v=vs.91).md
+        items:
+        - name: 'EntitySet(TEntity) Constructor '
+          href: ff423159(v=vs.91).md
+        - name: EntitySet(TEntity) Methods
+          href: ff422157(v=vs.91).md
+          items:
+          - name: 'ICollectionViewFactory.CreateView Method '
+            href: hh696922(v=vs.91).md
+          - name: 'IEnumerable(TEntity).GetEnumerator Method '
+            href: ff422567(v=vs.91).md
+          - name: 'Add Method '
+            href: ff422039(v=vs.91).md
+            items:
+            - name: Add Method (TEntity)
+              href: ff422676(v=vs.91).md
+          - name: 'Attach Method '
+            href: ff422115(v=vs.91).md
+            items:
+            - name: Attach Method (TEntity)
+              href: ff422174(v=vs.91).md
+          - name: 'Detach Method '
+            href: ff423168(v=vs.91).md
+            items:
+            - name: Detach Method (TEntity)
+              href: ff422752(v=vs.91).md
+          - name: 'GetEnumerator Method '
+            href: ff423006(v=vs.91).md
+          - name: 'Remove Method '
+            href: ff423069(v=vs.91).md
+            items:
+            - name: Remove Method (TEntity)
+              href: ff422890(v=vs.91).md
+        - name: EntitySet(TEntity) Properties
+          href: ff422508(v=vs.91).md
+        - name: EntitySet(TEntity) Events
+          href: ff423416(v=vs.91).md
+          items:
+          - name: EntityAdded Event
+            href: ff422884(v=vs.91).md
+          - name: EntityRemoved Event
+            href: ff423149(v=vs.91).md
+      - name: EntitySetOperations Enumeration
+        href: ff422730(v=vs.91).md
+      - name: EntityState Enumeration
+        href: ff423075(v=vs.91).md
+      - name: InvokeArgs Class
+        href: ff422540(v=vs.91).md
+        items:
+        - name: 'InvokeArgs Constructor '
+          href: ff423202(v=vs.91).md
+        - name: InvokeArgs Methods
+          href: ff423136(v=vs.91).md
+        - name: InvokeArgs Properties
+          href: ff422928(v=vs.91).md
+          items:
+          - name: 'HasSideEffects Property '
+            href: ff422820(v=vs.91).md
+          - name: 'OperationName Property '
+            href: ff422182(v=vs.91).md
+          - name: 'Parameters Property '
+            href: ff422070(v=vs.91).md
+          - name: 'ReturnType Property '
+            href: ff422807(v=vs.91).md
+      - name: InvokeCompletedResult Class
+        href: ff423175(v=vs.91).md
+        items:
+        - name: 'InvokeCompletedResult Constructor '
+          href: ff422868(v=vs.91).md
+          items:
+          - name: InvokeCompletedResult Constructor (Object)
+            href: ff422982(v=vs.91).md
+          - name: InvokeCompletedResult Constructor (Object, IEnumerable(ValidationResult))
+            href: ff422913(v=vs.91).md
+        - name: InvokeCompletedResult Methods
+          href: ff422184(v=vs.91).md
+        - name: InvokeCompletedResult Properties
+          href: ff423096(v=vs.91).md
+          items:
+          - name: 'ReturnValue Property '
+            href: ff422461(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff422786(v=vs.91).md
+      - name: InvokeOperation Class
+        href: ff423072(v=vs.91).md
+        items:
+        - name: InvokeOperation Methods
+          href: ff422883(v=vs.91).md
+          items:
+          - name: 'CancelCore Method '
+            href: ff422948(v=vs.91).md
+          - name: 'Complete Method '
+            href: ff422586(v=vs.91).md
+          - name: 'InvokeCompleteAction Method '
+            href: ff423396(v=vs.91).md
+        - name: InvokeOperation Properties
+          href: ff422061(v=vs.91).md
+          items:
+          - name: 'OperationName Property '
+            href: ff422116(v=vs.91).md
+          - name: 'Parameters Property '
+            href: ff422462(v=vs.91).md
+          - name: 'Result Property '
+            href: ff422571(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff423272(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff422640(v=vs.91).md
+          - name: 'Value Property '
+            href: ff422612(v=vs.91).md
+        - name: InvokeOperation Events
+          href: ff422867(v=vs.91).md
+      - name: InvokeOperation(TValue) Class
+        href: ff422679(v=vs.91).md
+        items:
+        - name: InvokeOperation(TValue) Methods
+          href: ff422720(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff422088(v=vs.91).md
+        - name: InvokeOperation(TValue) Properties
+          href: ff422857(v=vs.91).md
+          items:
+          - name: 'Value Property '
+            href: ff422456(v=vs.91).md
+        - name: InvokeOperation(TValue) Events
+          href: ff423436(v=vs.91).md
+      - name: LoadBehavior Enumeration
+        href: ff423060(v=vs.91).md
+      - name: LoadOperation Class
+        href: ff422941(v=vs.91).md
+        items:
+        - name: LoadOperation Methods
+          href: ff422122(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff423319(v=vs.91).md
+          - name: 'UpdateResults Method '
+            href: ff422707(v=vs.91).md
+        - name: LoadOperation Properties
+          href: ff423014(v=vs.91).md
+          items:
+          - name: 'AllEntities Property '
+            href: ff422323(v=vs.91).md
+          - name: 'Entities Property '
+            href: ff423154(v=vs.91).md
+          - name: 'EntityQuery Property '
+            href: ff422626(v=vs.91).md
+          - name: 'LoadBehavior Property '
+            href: ff422516(v=vs.91).md
+          - name: 'Result Property '
+            href: ff422597(v=vs.91).md
+          - name: 'TotalEntityCount Property '
+            href: ff422074(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff422929(v=vs.91).md
+        - name: LoadOperation Events
+          href: ff422492(v=vs.91).md
+      - name: LoadOperation(TEntity) Class
+        href: ff423147(v=vs.91).md
+        items:
+        - name: LoadOperation(TEntity) Methods
+          href: ff422618(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff422163(v=vs.91).md
+        - name: LoadOperation(TEntity) Properties
+          href: ff422639(v=vs.91).md
+          items:
+          - name: 'Entities Property '
+            href: ff423031(v=vs.91).md
+          - name: 'EntityQuery Property '
+            href: ff422603(v=vs.91).md
+        - name: LoadOperation(TEntity) Events
+          href: ff422491(v=vs.91).md
+      - name: OperationBase Class
+        href: ff422405(v=vs.91).md
+        items:
+        - name: 'OperationBase Constructor '
+          href: ff422997(v=vs.91).md
+        - name: OperationBase Methods
+          href: ff422761(v=vs.91).md
+          items:
+          - name: 'Cancel Method '
+            href: ff422177(v=vs.91).md
+          - name: 'CancelCore Method '
+            href: ff423140(v=vs.91).md
+          - name: 'Complete Method '
+            href: ff422969(v=vs.91).md
+            items:
+            - name: Complete Method (Exception)
+              href: ff422925(v=vs.91).md
+            - name: Complete Method (Object)
+              href: ff422063(v=vs.91).md
+          - name: 'InvokeCompleteAction Method '
+            href: ff422524(v=vs.91).md
+          - name: 'MarkErrorAsHandled Method '
+            href: ff422800(v=vs.91).md
+          - name: 'OnPropertyChanged Method '
+            href: ff423110(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff422848(v=vs.91).md
+        - name: OperationBase Properties
+          href: ff422339(v=vs.91).md
+          items:
+          - name: 'CanCancel Property '
+            href: ff422343(v=vs.91).md
+          - name: 'Error Property '
+            href: ff422735(v=vs.91).md
+          - name: 'HasError Property '
+            href: ff423384(v=vs.91).md
+          - name: 'IsCanceled Property '
+            href: ff422816(v=vs.91).md
+          - name: 'IsComplete Property '
+            href: ff422153(v=vs.91).md
+          - name: 'IsErrorHandled Property '
+            href: ff422437(v=vs.91).md
+          - name: 'Result Property '
+            href: ff422894(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff422079(v=vs.91).md
+          - name: 'UserState Property '
+            href: ff422506(v=vs.91).md
+        - name: OperationBase Events
+          href: ff423437(v=vs.91).md
+          items:
+          - name: INotifyPropertyChanged.PropertyChanged Event
+            href: ff422114(v=vs.91).md
+          - name: Completed Event
+            href: ff423145(v=vs.91).md
+      - name: OperationErrorStatus Enumeration
+        href: ff422311(v=vs.91).md
+      - name: QueryCompletedResult Class
+        href: ff422076(v=vs.91).md
+        items:
+        - name: 'QueryCompletedResult Constructor '
+          href: ff423327(v=vs.91).md
+        - name: QueryCompletedResult Methods
+          href: ff422040(v=vs.91).md
+        - name: QueryCompletedResult Properties
+          href: ff422099(v=vs.91).md
+          items:
+          - name: 'Entities Property '
+            href: ff422673(v=vs.91).md
+          - name: 'IncludedEntities Property '
+            href: ff422554(v=vs.91).md
+          - name: 'TotalCount Property '
+            href: ff422354(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff422409(v=vs.91).md
+      - name: QueryResult Class
+        href: ff423248(v=vs.91).md
+        items:
+        - name: 'QueryResult Constructor '
+          href: ff422522(v=vs.91).md
+        - name: QueryResult Methods
+          href: ff422885(v=vs.91).md
+          items:
+          - name: 'GetIncludedResults Method '
+            href: ff422371(v=vs.91).md
+          - name: 'GetRootResults Method '
+            href: ff422585(v=vs.91).md
+        - name: QueryResult Properties
+          href: ff422094(v=vs.91).md
+          items:
+          - name: 'TotalCount Property '
+            href: ff422193(v=vs.91).md
+      - name: QueryResult(T) Class
+        href: ff423034(v=vs.91).md
+        items:
+        - name: 'QueryResult(T) Constructor '
+          href: ff423324(v=vs.91).md
+          items:
+          - name: 'QueryResult(T) Constructor '
+            href: ff422085(v=vs.91).md
+          - name: QueryResult(T) Constructor (IEnumerable(T))
+            href: ff423232(v=vs.91).md
+          - name: QueryResult(T) Constructor (IEnumerable(T), Int32)
+            href: ff423009(v=vs.91).md
+        - name: QueryResult(T) Methods
+          href: ff422328(v=vs.91).md
+          items:
+          - name: 'GetIncludedResults Method '
+            href: ff422602(v=vs.91).md
+          - name: 'GetRootResults Method '
+            href: ff423409(v=vs.91).md
+        - name: QueryResult(T) Properties
+          href: ff423176(v=vs.91).md
+          items:
+          - name: 'IncludedResults Property '
+            href: ff422847(v=vs.91).md
+          - name: 'RootResults Property '
+            href: ff422474(v=vs.91).md
+      - name: SubmitCompletedResult Class
+        href: ff423226(v=vs.91).md
+        items:
+        - name: 'SubmitCompletedResult Constructor '
+          href: ff422568(v=vs.91).md
+        - name: SubmitCompletedResult Methods
+          href: ff422549(v=vs.91).md
+        - name: SubmitCompletedResult Properties
+          href: ff422946(v=vs.91).md
+          items:
+          - name: 'ChangeSet Property '
+            href: ff423094(v=vs.91).md
+          - name: 'Results Property '
+            href: ff422302(v=vs.91).md
+      - name: SubmitOperation Class
+        href: ff422360(v=vs.91).md
+        items:
+        - name: SubmitOperation Methods
+          href: ff422613(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff422966(v=vs.91).md
+        - name: SubmitOperation Properties
+          href: ff423302(v=vs.91).md
+          items:
+          - name: 'ChangeSet Property '
+            href: ff422711(v=vs.91).md
+          - name: 'EntitiesInError Property '
+            href: ff422680(v=vs.91).md
+        - name: SubmitOperation Events
+          href: ff423433(v=vs.91).md
+      - name: ValidationResultInfo Class
+        href: ff423246(v=vs.91).md
+        items:
+        - name: 'ValidationResultInfo Constructor '
+          href: ff422143(v=vs.91).md
+          items:
+          - name: 'ValidationResultInfo Constructor '
+            href: ff423345(v=vs.91).md
+          - name: ValidationResultInfo Constructor (String, IEnumerable(String))
+            href: ff422701(v=vs.91).md
+          - name: ValidationResultInfo Constructor (String, Int32, String, IEnumerable(String))
+            href: ff422199(v=vs.91).md
+        - name: ValidationResultInfo Methods
+          href: ff422843(v=vs.91).md
+          items:
+          - name: 'IEquatable(ValidationResultInfo).Equals Method '
+            href: ff422447(v=vs.91).md
+          - name: 'GetHashCode Method '
+            href: ff422480(v=vs.91).md
+        - name: ValidationResultInfo Properties
+          href: ff423425(v=vs.91).md
+          items:
+          - name: 'ErrorCode Property '
+            href: ff422605(v=vs.91).md
+          - name: 'Message Property '
+            href: ff422621(v=vs.91).md
+          - name: 'SourceMemberNames Property '
+            href: ff423230(v=vs.91).md
+          - name: 'StackTrace Property '
+            href: ff422569(v=vs.91).md
+      - name: WebDomainClient(TContract) Class
+        href: ff422638(v=vs.91).md
+        items:
+        - name: 'WebDomainClient(TContract) Constructor '
+          href: ff423221(v=vs.91).md
+          items:
+          - name: WebDomainClient(TContract) Constructor (Uri)
+            href: ff422330(v=vs.91).md
+          - name: WebDomainClient(TContract) Constructor (Uri, Boolean)
+            href: ff422314(v=vs.91).md
+          - name: WebDomainClient(TContract) Constructor (Uri, Boolean, ChannelFactory(TContract))
+            href: ff423082(v=vs.91).md
+        - name: WebDomainClient(TContract) Methods
+          href: ff422584(v=vs.91).md
+        - name: WebDomainClient(TContract) Properties
+          href: ff423299(v=vs.91).md
+          items:
+          - name: 'ChannelFactory Property '
+            href: ff423266(v=vs.91).md
+          - name: 'ServiceUri Property '
+            href: ff423116(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff422856(v=vs.91).md
+          - name: 'UsesHttps Property '
+            href: ff422078(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.Client.ApplicationServices Namespace
+      href: ff457765(v=vs.91).md
+      items:
+      - name: AuthenticationDomainContextBase Class
+        href: ff457983(v=vs.91).md
+        items:
+        - name: 'AuthenticationDomainContextBase Constructor '
+          href: ff457901(v=vs.91).md
+        - name: AuthenticationDomainContextBase Methods
+          href: ff457949(v=vs.91).md
+          items:
+          - name: 'InvokeOperation Method '
+            href: ff457917(v=vs.91).md
+          - name: 'Load Method '
+            href: ff457941(v=vs.91).md
+          - name: 'SubmitChanges Method '
+            href: ff457834(v=vs.91).md
+        - name: AuthenticationDomainContextBase Properties
+          href: ff457759(v=vs.91).md
+        - name: AuthenticationDomainContextBase Events
+          href: ff457862(v=vs.91).md
+      - name: AuthenticationEventArgs Class
+        href: ff457923(v=vs.91).md
+        items:
+        - name: AuthenticationEventArgs Methods
+          href: ff457956(v=vs.91).md
+        - name: AuthenticationEventArgs Properties
+          href: ff457913(v=vs.91).md
+          items:
+          - name: 'User Property '
+            href: ff457893(v=vs.91).md
+      - name: AuthenticationOperation Class
+        href: ff457816(v=vs.91).md
+        items:
+        - name: AuthenticationOperation Methods
+          href: ff457904(v=vs.91).md
+          items:
+          - name: 'BeginCore Method '
+            href: ff457916(v=vs.91).md
+          - name: 'Complete Method '
+            href: ff457792(v=vs.91).md
+          - name: 'EndCore Method '
+            href: ff457945(v=vs.91).md
+          - name: 'RaiseCompletionPropertyChanges Method '
+            href: ff457793(v=vs.91).md
+        - name: AuthenticationOperation Properties
+          href: ff457984(v=vs.91).md
+          items:
+          - name: 'AsyncResult Property '
+            href: ff457791(v=vs.91).md
+          - name: 'Result Property '
+            href: ff457933(v=vs.91).md
+          - name: 'Service Property '
+            href: ff457975(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff457847(v=vs.91).md
+          - name: 'User Property '
+            href: ff457980(v=vs.91).md
+        - name: AuthenticationOperation Events
+          href: ff457818(v=vs.91).md
+      - name: AuthenticationResult Class
+        href: ff457764(v=vs.91).md
+        items:
+        - name: AuthenticationResult Methods
+          href: ff457865(v=vs.91).md
+        - name: AuthenticationResult Properties
+          href: ff457894(v=vs.91).md
+          items:
+          - name: 'User Property '
+            href: ff457840(v=vs.91).md
+      - name: AuthenticationService Class
+        href: ff457927(v=vs.91).md
+        items:
+        - name: 'AuthenticationService Constructor '
+          href: ff457767(v=vs.91).md
+        - name: AuthenticationService Methods
+          href: ff457848(v=vs.91).md
+          items:
+          - name: 'BeginLoadUser Method '
+            href: ff457877(v=vs.91).md
+          - name: 'BeginLogin Method '
+            href: ff457971(v=vs.91).md
+          - name: 'BeginLogout Method '
+            href: ff457922(v=vs.91).md
+          - name: 'BeginSaveUser Method '
+            href: ff457912(v=vs.91).md
+          - name: 'CancelLoadUser Method '
+            href: ff457973(v=vs.91).md
+          - name: 'CancelLogin Method '
+            href: ff457832(v=vs.91).md
+          - name: 'CancelLogout Method '
+            href: ff457951(v=vs.91).md
+          - name: 'CancelSaveUser Method '
+            href: ff457897(v=vs.91).md
+          - name: 'CreateDefaultUser Method '
+            href: ff457878(v=vs.91).md
+          - name: 'EndLoadUser Method '
+            href: ff457960(v=vs.91).md
+          - name: 'EndLogin Method '
+            href: ff457889(v=vs.91).md
+          - name: 'EndLogout Method '
+            href: ff457783(v=vs.91).md
+          - name: 'EndSaveUser Method '
+            href: ff457906(v=vs.91).md
+          - name: 'LoadUser Method '
+            href: ff457880(v=vs.91).md
+            items:
+            - name: 'LoadUser Method '
+              href: ff457942(v=vs.91).md
+            - name: LoadUser Method (Action(LoadUserOperation), Object)
+              href: ff457808(v=vs.91).md
+          - name: 'Login Method '
+            href: ff457850(v=vs.91).md
+            items:
+            - name: Login Method (LoginParameters)
+              href: ff457914(v=vs.91).md
+            - name: Login Method (String, String)
+              href: ff457798(v=vs.91).md
+            - name: Login Method (LoginParameters, Action(LoginOperation), Object)
+              href: ff457875(v=vs.91).md
+          - name: 'Logout Method '
+            href: ff457902(v=vs.91).md
+            items:
+            - name: Logout Method (Boolean)
+              href: ff457948(v=vs.91).md
+            - name: Logout Method (Action(LogoutOperation), Object)
+              href: ff457940(v=vs.91).md
+          - name: 'OnPropertyChanged Method '
+            href: ff457852(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff457946(v=vs.91).md
+          - name: 'SaveUser Method '
+            href: ff457896(v=vs.91).md
+            items:
+            - name: SaveUser Method (Boolean)
+              href: ff457828(v=vs.91).md
+            - name: SaveUser Method (Action(SaveUserOperation), Object)
+              href: ff457932(v=vs.91).md
+        - name: AuthenticationService Properties
+          href: ff457790(v=vs.91).md
+          items:
+          - name: 'IsBusy Property '
+            href: ff457974(v=vs.91).md
+          - name: 'IsLoadingUser Property '
+            href: ff457935(v=vs.91).md
+          - name: 'IsLoggingIn Property '
+            href: ff457797(v=vs.91).md
+          - name: 'IsLoggingOut Property '
+            href: ff457961(v=vs.91).md
+          - name: 'IsSavingUser Property '
+            href: ff457825(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff457879(v=vs.91).md
+          - name: 'User Property '
+            href: ff457833(v=vs.91).md
+        - name: AuthenticationService Events
+          href: ff457837(v=vs.91).md
+          items:
+          - name: INotifyPropertyChanged.PropertyChanged Event
+            href: ff457761(v=vs.91).md
+          - name: LoggedIn Event
+            href: ff457920(v=vs.91).md
+          - name: LoggedOut Event
+            href: ff457972(v=vs.91).md
+      - name: FormsAuthentication Class
+        href: ff457803(v=vs.91).md
+        items:
+        - name: 'FormsAuthentication Constructor '
+          href: ff457855(v=vs.91).md
+        - name: FormsAuthentication Methods
+          href: ff457873(v=vs.91).md
+          items:
+          - name: 'LoadUser Method '
+            href: ff457762(v=vs.91).md
+          - name: 'Login Method '
+            href: ff457919(v=vs.91).md
+          - name: 'Logout Method '
+            href: ff457804(v=vs.91).md
+          - name: 'SaveUser Method '
+            href: ff457924(v=vs.91).md
+        - name: FormsAuthentication Properties
+          href: ff457795(v=vs.91).md
+        - name: FormsAuthentication Events
+          href: ff457763(v=vs.91).md
+      - name: LoadUserOperation Class
+        href: ff457801(v=vs.91).md
+        items:
+        - name: LoadUserOperation Methods
+          href: ff457830(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff457899(v=vs.91).md
+        - name: LoadUserOperation Properties
+          href: ff457814(v=vs.91).md
+        - name: LoadUserOperation Events
+          href: ff457958(v=vs.91).md
+      - name: LoadUserResult Class
+        href: ff457887(v=vs.91).md
+        items:
+        - name: 'LoadUserResult Constructor '
+          href: ff457963(v=vs.91).md
+        - name: LoadUserResult Methods
+          href: ff457944(v=vs.91).md
+        - name: LoadUserResult Properties
+          href: ff457934(v=vs.91).md
+      - name: LoginOperation Class
+        href: ff457854(v=vs.91).md
+        items:
+        - name: LoginOperation Methods
+          href: ff457870(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff457979(v=vs.91).md
+        - name: LoginOperation Properties
+          href: ff457968(v=vs.91).md
+          items:
+          - name: 'LoginParameters Property '
+            href: ff457849(v=vs.91).md
+          - name: 'LoginSuccess Property '
+            href: ff457872(v=vs.91).md
+        - name: LoginOperation Events
+          href: ff457815(v=vs.91).md
+      - name: LoginParameters Class
+        href: ff457782(v=vs.91).md
+        items:
+        - name: 'LoginParameters Constructor '
+          href: ff457905(v=vs.91).md
+          items:
+          - name: 'LoginParameters Constructor '
+            href: ff457985(v=vs.91).md
+          - name: LoginParameters Constructor (String, String)
+            href: ff457954(v=vs.91).md
+          - name: LoginParameters Constructor (String, String, Boolean, String)
+            href: ff457982(v=vs.91).md
+        - name: LoginParameters Methods
+          href: ff457839(v=vs.91).md
+        - name: LoginParameters Properties
+          href: ff457909(v=vs.91).md
+          items:
+          - name: 'CustomData Property '
+            href: ff457758(v=vs.91).md
+          - name: 'IsPersistent Property '
+            href: ff457976(v=vs.91).md
+          - name: 'Password Property '
+            href: ff457900(v=vs.91).md
+          - name: 'UserName Property '
+            href: ff457874(v=vs.91).md
+      - name: LoginResult Class
+        href: ff457786(v=vs.91).md
+        items:
+        - name: 'LoginResult Constructor '
+          href: ff457812(v=vs.91).md
+        - name: LoginResult Methods
+          href: ff457807(v=vs.91).md
+        - name: LoginResult Properties
+          href: ff457842(v=vs.91).md
+          items:
+          - name: 'LoginSuccess Property '
+            href: ff457871(v=vs.91).md
+      - name: LogoutOperation Class
+        href: ff457967(v=vs.91).md
+        items:
+        - name: LogoutOperation Methods
+          href: ff457895(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff457796(v=vs.91).md
+        - name: LogoutOperation Properties
+          href: ff457805(v=vs.91).md
+        - name: LogoutOperation Events
+          href: ff457813(v=vs.91).md
+      - name: LogoutResult Class
+        href: ff457851(v=vs.91).md
+        items:
+        - name: 'LogoutResult Constructor '
+          href: ff457857(v=vs.91).md
+        - name: LogoutResult Methods
+          href: ff457838(v=vs.91).md
+        - name: LogoutResult Properties
+          href: ff457950(v=vs.91).md
+      - name: SaveUserOperation Class
+        href: ff457903(v=vs.91).md
+        items:
+        - name: SaveUserOperation Methods
+          href: ff457915(v=vs.91).md
+          items:
+          - name: 'Complete Method '
+            href: ff457955(v=vs.91).md
+        - name: SaveUserOperation Properties
+          href: ff457844(v=vs.91).md
+        - name: SaveUserOperation Events
+          href: ff457820(v=vs.91).md
+      - name: SaveUserResult Class
+        href: ff457929(v=vs.91).md
+        items:
+        - name: 'SaveUserResult Constructor '
+          href: ff457970(v=vs.91).md
+        - name: SaveUserResult Methods
+          href: ff457867(v=vs.91).md
+        - name: SaveUserResult Properties
+          href: ff457947(v=vs.91).md
+      - name: WebAuthenticationService Class
+        href: ff457928(v=vs.91).md
+        items:
+        - name: WebAuthenticationService Methods
+          href: ff457869(v=vs.91).md
+          items:
+          - name: 'BeginLoadUser Method '
+            href: ff457817(v=vs.91).md
+          - name: 'BeginLogin Method '
+            href: ff457868(v=vs.91).md
+          - name: 'BeginLogout Method '
+            href: ff457853(v=vs.91).md
+          - name: 'BeginSaveUser Method '
+            href: ff457757(v=vs.91).md
+          - name: 'CancelLoadUser Method '
+            href: ff457821(v=vs.91).md
+          - name: 'CancelLogin Method '
+            href: ff457858(v=vs.91).md
+          - name: 'CancelLogout Method '
+            href: ff457827(v=vs.91).md
+          - name: 'CancelSaveUser Method '
+            href: ff457876(v=vs.91).md
+          - name: 'CreateDefaultUser Method '
+            href: ff457957(v=vs.91).md
+          - name: 'EndLoadUser Method '
+            href: ff457810(v=vs.91).md
+          - name: 'EndLogin Method '
+            href: ff457884(v=vs.91).md
+          - name: 'EndLogout Method '
+            href: ff457788(v=vs.91).md
+          - name: 'EndSaveUser Method '
+            href: ff457760(v=vs.91).md
+          - name: 'Initialize Method '
+            href: ff457981(v=vs.91).md
+          - name: 'LoadUser Method '
+            href: ff457845(v=vs.91).md
+          - name: 'Login Method '
+            href: ff457785(v=vs.91).md
+          - name: 'Logout Method '
+            href: ff457866(v=vs.91).md
+          - name: 'SaveUser Method '
+            href: ff457965(v=vs.91).md
+        - name: WebAuthenticationService Properties
+          href: ff457784(v=vs.91).md
+          items:
+          - name: 'DomainContext Property '
+            href: ff457937(v=vs.91).md
+          - name: 'DomainContextType Property '
+            href: ff457806(v=vs.91).md
+          - name: 'SupportsCancellation Property '
+            href: ff457969(v=vs.91).md
+        - name: WebAuthenticationService Events
+          href: ff457799(v=vs.91).md
+      - name: WebContextBase Class
+        href: ff457966(v=vs.91).md
+        items:
+        - name: 'WebContextBase Constructor '
+          href: ff457926(v=vs.91).md
+        - name: WebContextBase Methods
+          href: ff457824(v=vs.91).md
+          items:
+          - name: '. Method '
+            href: ff457953(v=vs.91).md
+          - name: '. Method '
+            href: ff457823(v=vs.91).md
+          - name: '. Method '
+            href: ff457846(v=vs.91).md
+          - name: '. Method '
+            href: ff457910(v=vs.91).md
+          - name: '. Method '
+            href: ff457881(v=vs.91).md
+          - name: '. Method '
+            href: ff457861(v=vs.91).md
+          - name: 'OnPropertyChanged Method '
+            href: ff457978(v=vs.91).md
+          - name: 'RaisePropertyChanged Method '
+            href: ff457964(v=vs.91).md
+        - name: WebContextBase Properties
+          href: ff457859(v=vs.91).md
+          items:
+          - name: 'Authentication Property '
+            href: ff457819(v=vs.91).md
+          - name: 'Current Property '
+            href: ff457952(v=vs.91).md
+          - name: 'User Property '
+            href: ff457886(v=vs.91).md
+        - name: WebContextBase Events
+          href: ff457826(v=vs.91).md
+          items:
+          - name: INotifyPropertyChanged.PropertyChanged Event
+            href: ff457811(v=vs.91).md
+      - name: WindowsAuthentication Class
+        href: ff457780(v=vs.91).md
+        items:
+        - name: 'WindowsAuthentication Constructor '
+          href: ff457939(v=vs.91).md
+        - name: WindowsAuthentication Methods
+          href: ff457863(v=vs.91).md
+          items:
+          - name: 'BeginLogin Method '
+            href: ff457962(v=vs.91).md
+          - name: 'BeginLogout Method '
+            href: ff457789(v=vs.91).md
+          - name: 'LoadUser Method '
+            href: ff457768(v=vs.91).md
+          - name: 'Login Method '
+            href: ff457898(v=vs.91).md
+          - name: 'Logout Method '
+            href: ff457766(v=vs.91).md
+          - name: 'SaveUser Method '
+            href: ff457781(v=vs.91).md
+        - name: WindowsAuthentication Properties
+          href: ff457930(v=vs.91).md
+        - name: WindowsAuthentication Events
+          href: ff457864(v=vs.91).md
+    - name: System.Windows.Controls Namespace
+      href: ms590941(v=vs.91).md
+      items:
+      - name: DomainDataSource Class
+        href: ee732901(v=vs.91).md
+        items:
+        - name: 'DomainDataSource Constructor '
+          href: ee725921(v=vs.91).md
+        - name: DomainDataSource Fields
+          href: ee726129(v=vs.91).md
+          items:
+          - name: AutoLoadProperty Field
+            href: ee726017(v=vs.91).md
+          - name: CanLoadProperty Field
+            href: ee708039(v=vs.91).md
+          - name: DataProperty Field
+            href: ee732890(v=vs.91).md
+          - name: DataViewProperty Field
+            href: ee725966(v=vs.91).md
+          - name: DesignDataProperty Field
+            href: ff422811(v=vs.91).md
+          - name: DomainContextProperty Field
+            href: ee732958(v=vs.91).md
+          - name: FilterOperatorProperty Field
+            href: ff422482(v=vs.91).md
+          - name: HasChangesProperty Field
+            href: ee725904(v=vs.91).md
+          - name: IsBusyProperty Field
+            href: ee732643(v=vs.91).md
+          - name: IsLoadingDataProperty Field
+            href: ee708032(v=vs.91).md
+          - name: IsSubmittingChangesProperty Field
+            href: ee732650(v=vs.91).md
+          - name: LoadDelayProperty Field
+            href: ee707828(v=vs.91).md
+          - name: LoadIntervalProperty Field
+            href: ee732911(v=vs.91).md
+          - name: LoadSizeProperty Field
+            href: ee732735(v=vs.91).md
+          - name: PageSizeProperty Field
+            href: ee725894(v=vs.91).md
+          - name: QueryNameProperty Field
+            href: ff422468(v=vs.91).md
+          - name: RefreshIntervalProperty Field
+            href: ee726107(v=vs.91).md
+        - name: DomainDataSource Methods
+          href: ee707486(v=vs.91).md
+          items:
+          - name: 'CancelLoad Method '
+            href: ee707873(v=vs.91).md
+          - name: 'CancelSubmit Method '
+            href: ee707744(v=vs.91).md
+          - name: 'Clear Method '
+            href: ee732866(v=vs.91).md
+          - name: 'DeferLoad Method '
+            href: ee732779(v=vs.91).md
+          - name: 'Load Method '
+            href: ee707956(v=vs.91).md
+          - name: 'OnApplyTemplate Method '
+            href: ee732899(v=vs.91).md
+          - name: 'RejectChanges Method '
+            href: ee732674(v=vs.91).md
+          - name: 'SubmitChanges Method '
+            href: ee732567(v=vs.91).md
+        - name: DomainDataSource Properties
+          href: ee708056(v=vs.91).md
+          items:
+          - name: 'AutoLoad Property '
+            href: ee707383(v=vs.91).md
+          - name: 'CanLoad Property '
+            href: ee707640(v=vs.91).md
+          - name: 'Data Property '
+            href: ee707579(v=vs.91).md
+          - name: 'DataView Property '
+            href: ee707416(v=vs.91).md
+          - name: 'DesignData Property '
+            href: ff422805(v=vs.91).md
+          - name: 'DomainContext Property '
+            href: ee707753(v=vs.91).md
+          - name: 'FilterDescriptors Property '
+            href: ee707531(v=vs.91).md
+          - name: 'FilterOperator Property '
+            href: ff422862(v=vs.91).md
+          - name: 'GroupDescriptors Property '
+            href: ee725928(v=vs.91).md
+          - name: 'HasChanges Property '
+            href: ee732907(v=vs.91).md
+          - name: 'IsBusy Property '
+            href: ee732923(v=vs.91).md
+          - name: 'IsLoadingData Property '
+            href: ee732877(v=vs.91).md
+          - name: 'IsSubmittingChanges Property '
+            href: ee707605(v=vs.91).md
+          - name: 'LoadCommand Property '
+            href: ff422392(v=vs.91).md
+          - name: 'LoadDelay Property '
+            href: ee707670(v=vs.91).md
+          - name: 'LoadInterval Property '
+            href: ee707480(v=vs.91).md
+          - name: 'LoadSize Property '
+            href: ee707740(v=vs.91).md
+          - name: 'PageSize Property '
+            href: ee707425(v=vs.91).md
+          - name: 'QueryName Property '
+            href: ee732614(v=vs.91).md
+          - name: 'QueryParameters Property '
+            href: ee707656(v=vs.91).md
+          - name: 'RefreshInterval Property '
+            href: ee725874(v=vs.91).md
+          - name: 'RejectChangesCommand Property '
+            href: ff423170(v=vs.91).md
+          - name: 'SortDescriptors Property '
+            href: ee725951(v=vs.91).md
+          - name: 'SubmitChangesCommand Property '
+            href: ff422167(v=vs.91).md
+        - name: DomainDataSource Events
+          href: ee707612(v=vs.91).md
+          items:
+          - name: LoadedData Event
+            href: ee725877(v=vs.91).md
+          - name: LoadingData Event
+            href: ee732732(v=vs.91).md
+          - name: SubmittedChanges Event
+            href: ee707404(v=vs.91).md
+          - name: SubmittingChanges Event
+            href: ee726225(v=vs.91).md
+      - name: DomainDataSourceView Class
+        href: ff422675(v=vs.91).md
+        items:
+        - name: DomainDataSourceView Methods
+          href: ff422580(v=vs.91).md
+          items:
+          - name: 'IEditableCollectionView.AddNew Method '
+            href: ff423228(v=vs.91).md
+          - name: 'IEditableCollectionView.CancelEdit Method '
+            href: ff422105(v=vs.91).md
+          - name: 'IEditableCollectionView.CancelNew Method '
+            href: ff422926(v=vs.91).md
+          - name: 'IEditableCollectionView.CommitEdit Method '
+            href: ff422593(v=vs.91).md
+          - name: 'IEditableCollectionView.CommitNew Method '
+            href: ff422790(v=vs.91).md
+          - name: 'ICollectionView.DeferRefresh Method '
+            href: ff422414(v=vs.91).md
+          - name: 'IEditableCollectionView.EditItem Method '
+            href: ff422780(v=vs.91).md
+          - name: 'IEnumerable.GetEnumerator Method '
+            href: ff422049(v=vs.91).md
+          - name: 'ICollectionView.Refresh Method '
+            href: ff422994(v=vs.91).md
+          - name: 'Add Method '
+            href: ff423287(v=vs.91).md
+          - name: 'Contains Method '
+            href: ff423080(v=vs.91).md
+          - name: 'GetItemAt Method '
+            href: ff422582(v=vs.91).md
+          - name: 'IndexOf Method '
+            href: ff423314(v=vs.91).md
+          - name: 'MoveCurrentTo Method '
+            href: ff422490(v=vs.91).md
+          - name: 'MoveCurrentToFirst Method '
+            href: ff422100(v=vs.91).md
+          - name: 'MoveCurrentToLast Method '
+            href: ff423007(v=vs.91).md
+          - name: 'MoveCurrentToNext Method '
+            href: ff423435(v=vs.91).md
+          - name: 'MoveCurrentToPosition Method '
+            href: ff422795(v=vs.91).md
+          - name: 'MoveCurrentToPrevious Method '
+            href: ff423087(v=vs.91).md
+          - name: 'MoveToFirstPage Method '
+            href: ff422441(v=vs.91).md
+          - name: 'MoveToLastPage Method '
+            href: ff423036(v=vs.91).md
+          - name: 'MoveToNextPage Method '
+            href: ff422864(v=vs.91).md
+          - name: 'MoveToPage Method '
+            href: ff422599(v=vs.91).md
+          - name: 'MoveToPreviousPage Method '
+            href: ff422700(v=vs.91).md
+          - name: 'Remove Method '
+            href: ff423434(v=vs.91).md
+          - name: 'RemoveAt Method '
+            href: ff422529(v=vs.91).md
+        - name: DomainDataSourceView Properties
+          href: ff422548(v=vs.91).md
+          items:
+          - name: 'IEditableCollectionView.CanAddNew Property '
+            href: ff422502(v=vs.91).md
+          - name: 'IEditableCollectionView.CanCancelEdit Property '
+            href: ff422547(v=vs.91).md
+          - name: 'ICollectionView.CanFilter Property '
+            href: ff422493(v=vs.91).md
+          - name: 'ICollectionView.CanGroup Property '
+            href: ff423148(v=vs.91).md
+          - name: 'ICollectionView.CanSort Property '
+            href: ff422762(v=vs.91).md
+          - name: 'ICollectionView.Culture Property '
+            href: ff422940(v=vs.91).md
+          - name: 'IEditableCollectionView.CurrentAddItem Property '
+            href: ff423421(v=vs.91).md
+          - name: 'IEditableCollectionView.CurrentEditItem Property '
+            href: ff422630(v=vs.91).md
+          - name: 'ICollectionView.Filter Property '
+            href: ff422696(v=vs.91).md
+          - name: 'ICollectionView.GroupDescriptions Property '
+            href: ff422669(v=vs.91).md
+          - name: 'ICollectionView.Groups Property '
+            href: ff423093(v=vs.91).md
+          - name: 'IEditableCollectionView.IsAddingNew Property '
+            href: ff422596(v=vs.91).md
+          - name: 'ICollectionView.IsCurrentAfterLast Property '
+            href: ff422349(v=vs.91).md
+          - name: 'ICollectionView.IsCurrentBeforeFirst Property '
+            href: ff422845(v=vs.91).md
+          - name: 'IEditableCollectionView.IsEditingItem Property '
+            href: ff423285(v=vs.91).md
+          - name: '. Property '
+            href: ff422431(v=vs.91).md
+          - name: 'IEditableCollectionView.NewItemPlaceholderPosition Property '
+            href: ff422553(v=vs.91).md
+          - name: 'ICollectionView.SortDescriptions Property '
+            href: ff423239(v=vs.91).md
+          - name: 'ICollectionView.SourceCollection Property '
+            href: ff423085(v=vs.91).md
+          - name: 'CanAdd Property '
+            href: ff423318(v=vs.91).md
+          - name: 'CanChangePage Property '
+            href: ff422619(v=vs.91).md
+          - name: 'CanRemove Property '
+            href: ff422463(v=vs.91).md
+          - name: 'Count Property '
+            href: ff423268(v=vs.91).md
+          - name: 'CurrentItem Property '
+            href: ff423099(v=vs.91).md
+          - name: 'CurrentPosition Property '
+            href: ff422726(v=vs.91).md
+          - name: 'IsEmpty Property '
+            href: ff422923(v=vs.91).md
+          - name: 'IsPageChanging Property '
+            href: ff422418(v=vs.91).md
+          - name: 'Item Property '
+            href: ff422130(v=vs.91).md
+          - name: 'PageCount Property '
+            href: ff422486(v=vs.91).md
+          - name: 'PageIndex Property '
+            href: ff423063(v=vs.91).md
+          - name: 'PageSize Property '
+            href: ff422855(v=vs.91).md
+          - name: 'TotalItemCount Property '
+            href: ff422532(v=vs.91).md
+        - name: DomainDataSourceView Events
+          href: ff423283(v=vs.91).md
+          items:
+          - name: INotifyCollectionChanged.CollectionChanged Event
+            href: ff422560(v=vs.91).md
+          - name: INotifyPropertyChanged.PropertyChanged Event
+            href: ff423237(v=vs.91).md
+          - name: CurrentChanged Event
+            href: ff422915(v=vs.91).md
+          - name: CurrentChanging Event
+            href: ff423391(v=vs.91).md
+          - name: PageChanged Event
+            href: ff422839(v=vs.91).md
+          - name: PageChanging Event
+            href: ff422933(v=vs.91).md
+      - name: FilterDescriptor Class
+        href: ff422357(v=vs.91).md
+        items:
+        - name: 'FilterDescriptor Constructor '
+          href: ff423025(v=vs.91).md
+          items:
+          - name: 'FilterDescriptor Constructor '
+            href: ff422158(v=vs.91).md
+          - name: FilterDescriptor Constructor (String, FilterOperator, Object)
+            href: ff423301(v=vs.91).md
+        - name: FilterDescriptor Fields
+          href: ff422066(v=vs.91).md
+          items:
+          - name: DefaultIgnoredValue Field
+            href: ff422319(v=vs.91).md
+          - name: IgnoredValueProperty Field
+            href: ff423105(v=vs.91).md
+          - name: IsCaseSensitiveProperty Field
+            href: ff422935(v=vs.91).md
+          - name: OperatorProperty Field
+            href: ff423209(v=vs.91).md
+          - name: PropertyPathProperty Field
+            href: ff422453(v=vs.91).md
+          - name: ValueProperty Field
+            href: ff423275(v=vs.91).md
+        - name: FilterDescriptor Methods
+          href: ff423184(v=vs.91).md
+        - name: FilterDescriptor Properties
+          href: ff422073(v=vs.91).md
+          items:
+          - name: 'IgnoredValue Property '
+            href: ff422616(v=vs.91).md
+          - name: 'IsCaseSensitive Property '
+            href: ff422307(v=vs.91).md
+          - name: 'Operator Property '
+            href: ff423349(v=vs.91).md
+          - name: 'PropertyPath Property '
+            href: ff422897(v=vs.91).md
+          - name: 'Value Property '
+            href: ff422457(v=vs.91).md
+      - name: FilterDescriptorCollection Class
+        href: ff422048(v=vs.91).md
+        items:
+        - name: 'FilterDescriptorCollection Constructor '
+          href: ff422460(v=vs.91).md
+        - name: FilterDescriptorCollection Methods
+          href: ff423038(v=vs.91).md
+        - name: FilterDescriptorCollection Properties
+          href: ff422037(v=vs.91).md
+        - name: FilterDescriptorCollection Events
+          href: ff422779(v=vs.91).md
+      - name: FilterDescriptorLogicalOperator Enumeration
+        href: ff422951(v=vs.91).md
+      - name: FilterOperator Enumeration
+        href: ff423439(v=vs.91).md
+      - name: GroupDescriptor Class
+        href: ff423125(v=vs.91).md
+        items:
+        - name: 'GroupDescriptor Constructor '
+          href: ff422476(v=vs.91).md
+          items:
+          - name: 'GroupDescriptor Constructor '
+            href: ff422821(v=vs.91).md
+          - name: GroupDescriptor Constructor (String)
+            href: ff422417(v=vs.91).md
+        - name: GroupDescriptor Fields
+          href: ff422342(v=vs.91).md
+          items:
+          - name: PropertyPathProperty Field
+            href: ff423411(v=vs.91).md
+        - name: GroupDescriptor Methods
+          href: ff422451(v=vs.91).md
+        - name: GroupDescriptor Properties
+          href: ff422538(v=vs.91).md
+          items:
+          - name: 'PropertyPath Property '
+            href: ff422854(v=vs.91).md
+      - name: GroupDescriptorCollection Class
+        href: ff422615(v=vs.91).md
+        items:
+        - name: 'GroupDescriptorCollection Constructor '
+          href: ff423322(v=vs.91).md
+        - name: GroupDescriptorCollection Methods
+          href: ff422052(v=vs.91).md
+        - name: GroupDescriptorCollection Properties
+          href: ff423178(v=vs.91).md
+        - name: GroupDescriptorCollection Events
+          href: ff422809(v=vs.91).md
+      - name: LoadedDataEventArgs Class
+        href: ee732792(v=vs.91).md
+        items:
+        - name: LoadedDataEventArgs Methods
+          href: ee726003(v=vs.91).md
+          items:
+          - name: 'MarkErrorAsHandled Method '
+            href: ee707434(v=vs.91).md
+        - name: LoadedDataEventArgs Properties
+          href: ee726031(v=vs.91).md
+          items:
+          - name: 'AllEntities Property '
+            href: ee707739(v=vs.91).md
+          - name: 'Entities Property '
+            href: ee725798(v=vs.91).md
+          - name: 'HasError Property '
+            href: ee707735(v=vs.91).md
+          - name: 'IsErrorHandled Property '
+            href: ee726014(v=vs.91).md
+          - name: 'TotalEntityCount Property '
+            href: ee726030(v=vs.91).md
+      - name: LoadingDataEventArgs Class
+        href: ee732586(v=vs.91).md
+        items:
+        - name: LoadingDataEventArgs Methods
+          href: ee733019(v=vs.91).md
+        - name: LoadingDataEventArgs Properties
+          href: ee732889(v=vs.91).md
+          items:
+          - name: 'LoadBehavior Property '
+            href: ee707967(v=vs.91).md
+          - name: 'Query Property '
+            href: ee707948(v=vs.91).md
+          - name: 'RestoreLoadSettings Property '
+            href: ee707679(v=vs.91).md
+      - name: Parameter Class
+        href: ff422556(v=vs.91).md
+        items:
+        - name: 'Parameter Constructor '
+          href: ff423290(v=vs.91).md
+        - name: Parameter Fields
+          href: ff422305(v=vs.91).md
+          items:
+          - name: ParameterNameProperty Field
+            href: ff422454(v=vs.91).md
+          - name: ValueProperty Field
+            href: ff422841(v=vs.91).md
+        - name: Parameter Methods
+          href: ff423157(v=vs.91).md
+        - name: Parameter Properties
+          href: ff422705(v=vs.91).md
+          items:
+          - name: 'ParameterName Property '
+            href: ff422877(v=vs.91).md
+          - name: 'Value Property '
+            href: ff422173(v=vs.91).md
+      - name: ParameterCollection Class
+        href: ff422376(v=vs.91).md
+        items:
+        - name: 'ParameterCollection Constructor '
+          href: ff423182(v=vs.91).md
+        - name: ParameterCollection Methods
+          href: ff422346(v=vs.91).md
+        - name: ParameterCollection Properties
+          href: ff422687(v=vs.91).md
+        - name: ParameterCollection Events
+          href: ff422187(v=vs.91).md
+      - name: SortDescriptor Class
+        href: ff423258(v=vs.91).md
+        items:
+        - name: 'SortDescriptor Constructor '
+          href: ff423165(v=vs.91).md
+          items:
+          - name: 'SortDescriptor Constructor '
+            href: ff422661(v=vs.91).md
+          - name: SortDescriptor Constructor (String, ListSortDirection)
+            href: ff422846(v=vs.91).md
+        - name: SortDescriptor Fields
+          href: ff423440(v=vs.91).md
+          items:
+          - name: DirectionProperty Field
+            href: ff422127(v=vs.91).md
+          - name: PropertyPathProperty Field
+            href: ff422435(v=vs.91).md
+        - name: SortDescriptor Methods
+          href: ff422546(v=vs.91).md
+        - name: SortDescriptor Properties
+          href: ff423083(v=vs.91).md
+          items:
+          - name: 'Direction Property '
+            href: ff423011(v=vs.91).md
+          - name: 'PropertyPath Property '
+            href: ff422047(v=vs.91).md
+      - name: SortDescriptorCollection Class
+        href: ff422426(v=vs.91).md
+        items:
+        - name: 'SortDescriptorCollection Constructor '
+          href: ff423374(v=vs.91).md
+        - name: SortDescriptorCollection Methods
+          href: ff423021(v=vs.91).md
+        - name: SortDescriptorCollection Properties
+          href: ff423039(v=vs.91).md
+        - name: SortDescriptorCollection Events
+          href: ff422189(v=vs.91).md
+      - name: SubmittedChangesEventArgs Class
+        href: ee707731(v=vs.91).md
+        items:
+        - name: SubmittedChangesEventArgs Methods
+          href: ee708029(v=vs.91).md
+          items:
+          - name: 'MarkErrorAsHandled Method '
+            href: ee732603(v=vs.91).md
+        - name: SubmittedChangesEventArgs Properties
+          href: ee707880(v=vs.91).md
+          items:
+          - name: 'ChangeSet Property '
+            href: ee732619(v=vs.91).md
+          - name: 'EntitiesInError Property '
+            href: ee725824(v=vs.91).md
+          - name: 'HasError Property '
+            href: ee707426(v=vs.91).md
+          - name: 'IsErrorHandled Property '
+            href: ee707973(v=vs.91).md
+      - name: SubmittingChangesEventArgs Class
+        href: ee708057(v=vs.91).md
+        items:
+        - name: SubmittingChangesEventArgs Methods
+          href: ee725843(v=vs.91).md
+        - name: SubmittingChangesEventArgs Properties
+          href: ee732648(v=vs.91).md
+          items:
+          - name: 'ChangeSet Property '
+            href: ee707993(v=vs.91).md
+    - name: Microsoft.ServiceModel.DomainServices.Hosting.Local Namespace
+      href: ff422859(v=vs.91).md
+      items:
+      - name: OperationException Class
+        href: ff423265(v=vs.91).md
+        items:
+        - name: OperationException Methods
+          href: ff422742(v=vs.91).md
+        - name: OperationException Properties
+          href: ff422507(v=vs.91).md
+          items:
+          - name: 'OperationErrors Property '
+            href: ff422315(v=vs.91).md
+    - name: Microsoft.ServiceModel.DomainServices.Tools Namespace
+      href: gg153739(v=vs.91).md
+      items:
+      - name: CleanRiaClientFilesTask Class
+        href: gg153837(v=vs.91).md
+        items:
+        - name: 'CleanRiaClientFilesTask Constructor '
+          href: gg153808(v=vs.91).md
+        - name: CleanRiaClientFilesTask Methods
+          href: gg153820(v=vs.91).md
+          items:
+          - name: 'ExecuteInternal Method '
+            href: gg153736(v=vs.91).md
+          - name: 'LogError Method '
+            href: hh766091(v=vs.91).md
+          - name: 'LogWarning Method '
+            href: hh766090(v=vs.91).md
+        - name: CleanRiaClientFilesTask Properties
+          href: gg153751(v=vs.91).md
+      - name: ClientCodeGenerationOptions Class
+        href: gg153689(v=vs.91).md
+        items:
+        - name: 'ClientCodeGenerationOptions Constructor '
+          href: gg153841(v=vs.91).md
+        - name: ClientCodeGenerationOptions Methods
+          href: gg153797(v=vs.91).md
+        - name: ClientCodeGenerationOptions Properties
+          href: gg153753(v=vs.91).md
+          items:
+          - name: 'ClientFrameworkPath Property '
+            href: hh309267(v=vs.91).md
+          - name: 'ClientProjectPath Property '
+            href: gg153792(v=vs.91).md
+          - name: 'ClientRootNamespace Property '
+            href: gg153727(v=vs.91).md
+          - name: 'IsApplicationContextGenerationEnabled Property '
+            href: gg153671(v=vs.91).md
+          - name: 'Language Property '
+            href: gg153804(v=vs.91).md
+          - name: 'ServerProjectPath Property '
+            href: gg153803(v=vs.91).md
+          - name: 'ServerRootNamespace Property '
+            href: gg153794(v=vs.91).md
+          - name: 'UseFullTypeNames Property '
+            href: gg153681(v=vs.91).md
+      - name: CodeMemberShareKind Enumeration
+        href: gg153676(v=vs.91).md
+      - name: CreateRiaClientFilesTask Class
+        href: gg153718(v=vs.91).md
+        items:
+        - name: 'CreateRiaClientFilesTask Constructor '
+          href: gg153691(v=vs.91).md
+        - name: CreateRiaClientFilesTask Methods
+          href: gg153791(v=vs.91).md
+          items:
+          - name: 'ExecuteInternal Method '
+            href: gg153785(v=vs.91).md
+          - name: 'LogError Method '
+            href: hh766087(v=vs.91).md
+          - name: 'LogWarning Method '
+            href: hh766086(v=vs.91).md
+          - name: 'NormalizeProjectPaths Method '
+            href: gg153815(v=vs.91).md
+        - name: CreateRiaClientFilesTask Properties
+          href: gg153814(v=vs.91).md
+          items:
+          - name: 'ClientAssemblySearchPaths Property '
+            href: gg153728(v=vs.91).md
+          - name: 'ClientFrameworkPath Property '
+            href: hh309268(v=vs.91).md
+          - name: 'ClientProjectRootNamespace Property '
+            href: gg153790(v=vs.91).md
+          - name: 'ClientReferenceAssemblies Property '
+            href: gg153717(v=vs.91).md
+          - name: 'ClientSourceFiles Property '
+            href: gg153787(v=vs.91).md
+          - name: 'CodeGeneratorName Property '
+            href: gg153723(v=vs.91).md
+          - name: 'CopiedFiles Property '
+            href: gg153824(v=vs.91).md
+          - name: 'GeneratedFiles Property '
+            href: gg153818(v=vs.91).md
+          - name: 'IsClientApplication Property '
+            href: gg153713(v=vs.91).md
+          - name: 'Language Property '
+            href: gg153800(v=vs.91).md
+          - name: 'LinkedFiles Property '
+            href: gg153696(v=vs.91).md
+          - name: 'ServerAssemblies Property '
+            href: gg153731(v=vs.91).md
+          - name: 'ServerProjectPath Property '
+            href: gg153688(v=vs.91).md
+          - name: 'ServerReferenceAssemblies Property '
+            href: gg153720(v=vs.91).md
+          - name: 'SharedFiles Property '
+            href: gg153823(v=vs.91).md
+          - name: 'UseFullTypeNames Property '
+            href: gg153685(v=vs.91).md
+      - name: DomainServiceClientCodeGeneratorAttribute Class
+        href: gg153672(v=vs.91).md
+        items:
+        - name: 'DomainServiceClientCodeGeneratorAttribute Constructor '
+          href: gg153724(v=vs.91).md
+          items:
+          - name: DomainServiceClientCodeGeneratorAttribute Constructor (String, String)
+            href: gg153693(v=vs.91).md
+          - name: DomainServiceClientCodeGeneratorAttribute Constructor (Type, String)
+            href: gg153840(v=vs.91).md
+        - name: DomainServiceClientCodeGeneratorAttribute Methods
+          href: gg153767(v=vs.91).md
+        - name: DomainServiceClientCodeGeneratorAttribute Properties
+          href: gg153760(v=vs.91).md
+          items:
+          - name: 'GeneratorName Property '
+            href: gg153780(v=vs.91).md
+          - name: 'Language Property '
+            href: gg153784(v=vs.91).md
+      - name: ICodeGenerationHost Interface
+        href: gg153779(v=vs.91).md
+        items:
+        - name: ICodeGenerationHost Methods
+          href: gg153826(v=vs.91).md
+          items:
+          - name: 'GetMethodShareKind Method '
+            href: gg153748(v=vs.91).md
+          - name: 'GetPropertyShareKind Method '
+            href: gg153802(v=vs.91).md
+          - name: 'GetTypeShareKind Method '
+            href: gg153702(v=vs.91).md
+          - name: 'LogError Method '
+            href: hh766089(v=vs.91).md
+            items:
+            - name: LogError Method (String, String, String, String, String, Int32, Int32, Int32, Int32)
+              href: gg153665(v=vs.91).md
+          - name: 'LogWarning Method '
+            href: hh766088(v=vs.91).md
+            items:
+            - name: LogWarning Method (String, String, String, String, String, Int32, Int32, Int32, Int32)
+              href: gg153830(v=vs.91).md
+        - name: ICodeGenerationHost Properties
+          href: hh696926(v=vs.91).md
+      - name: ICodeGeneratorMetadata Interface
+        href: gg153817(v=vs.91).md
+        items:
+        - name: ICodeGeneratorMetadata Properties
+          href: gg153805(v=vs.91).md
+          items:
+          - name: 'GeneratorName Property '
+            href: gg153831(v=vs.91).md
+          - name: 'Language Property '
+            href: gg153701(v=vs.91).md
+      - name: IDomainServiceClientCodeGenerator Interface
+        href: gg153730(v=vs.91).md
+        items:
+        - name: IDomainServiceClientCodeGenerator Methods
+          href: gg153799(v=vs.91).md
+          items:
+          - name: 'GenerateCode Method '
+            href: gg153795(v=vs.91).md
+      - name: ILogger Interface
+        href: gg153832(v=vs.91).md
+        items:
+        - name: ILogger Methods
+          href: gg153843(v=vs.91).md
+          items:
+          - name: 'LogError Method '
+            href: gg153733(v=vs.91).md
+          - name: 'LogMessage Method '
+            href: gg153729(v=vs.91).md
+          - name: 'LogWarning Method '
+            href: gg153705(v=vs.91).md
+        - name: ILogger Properties
+          href: gg153679(v=vs.91).md
+          items:
+          - name: 'HasLoggedErrors Property '
+            href: gg153836(v=vs.91).md
+      - name: RiaClientFilesTask Class
+        href: gg153747(v=vs.91).md
+        items:
+        - name: 'RiaClientFilesTask Constructor '
+          href: gg153690(v=vs.91).md
+        - name: RiaClientFilesTask Methods
+          href: gg153746(v=vs.91).md
+          items:
+          - name: 'DeleteCodeGenMetafileLists Method '
+            href: hh309264(v=vs.91).md
+          - name: 'DeleteFolderIfEmpty Method '
+            href: gg153667(v=vs.91).md
+          - name: 'Execute Method '
+            href: gg153762(v=vs.91).md
+          - name: 'ExecuteInternal Method '
+            href: gg153768(v=vs.91).md
+          - name: 'FilesPreviouslyWritten Method '
+            href: hh309265(v=vs.91).md
+          - name: 'GetFullPathRelativeToDirectory Method '
+            href: gg153756(v=vs.91).md
+          - name: 'GetPathRelativeToProjectDirectory Method '
+            href: gg153774(v=vs.91).md
+          - name: 'LogError Method '
+            href: gg153745(v=vs.91).md
+            items:
+            - name: LogError Method (String)
+              href: gg153833(v=vs.91).md
+            - name: LogError Method (String, String, String, String, String, Int32, Int32, Int32, Int32)
+              href: gg153838(v=vs.91).md
+          - name: 'LogMessage Method '
+            href: gg153735(v=vs.91).md
+          - name: 'LogWarning Method '
+            href: gg153807(v=vs.91).md
+            items:
+            - name: LogWarning Method (String)
+              href: gg153670(v=vs.91).md
+            - name: LogWarning Method (String, String, String, String, String, Int32, Int32, Int32, Int32)
+              href: gg153810(v=vs.91).md
+          - name: 'NormalizeProjectPaths Method '
+            href: gg153827(v=vs.91).md
+        - name: RiaClientFilesTask Properties
+          href: gg153704(v=vs.91).md
+          items:
+          - name: 'ClientProjectDirectory Property '
+            href: gg153759(v=vs.91).md
+          - name: 'ClientProjectPath Property '
+            href: gg153842(v=vs.91).md
+          - name: 'HasLoggedErrors Property '
+            href: gg153796(v=vs.91).md
+          - name: 'LiveIntellisense Property '
+            href: gg153712(v=vs.91).md
+          - name: 'OutputDirectory Property '
+            href: gg153710(v=vs.91).md
+          - name: 'OutputPath Property '
+            href: gg153750(v=vs.91).md
+      - name: ValidateDomainServicesTask Class
+        href: hh696943(v=vs.91).md
+        items:
+        - name: 'ValidateDomainServicesTask Constructor '
+          href: hh696916(v=vs.91).md
+        - name: ValidateDomainServicesTask Methods
+          href: hh696921(v=vs.91).md
+          items:
+          - name: 'Execute Method '
+            href: hh696925(v=vs.91).md
+        - name: ValidateDomainServicesTask Properties
+          href: hh696927(v=vs.91).md
+          items:
+          - name: 'Assembly Property '
+            href: hh696934(v=vs.91).md
+          - name: 'ProjectPath Property '
+            href: hh696935(v=vs.91).md
+          - name: 'ReferenceAssemblies Property '
+            href: hh696936(v=vs.91).md
+    - name: Microsoft.ServiceModel.DomainServices.Tools.Pdb.SymStore Namespace
+      href: gg153801(v=vs.91).md
+      items:
+      - name: IMetadataImportPrivateComVisible Interface
+        href: gg153714(v=vs.91).md
+        items:
+        - name: IMetadataImportPrivateComVisible Methods
+          href: gg153703(v=vs.91).md
+          items:
+          - name: 'Placeholder Method '
+            href: gg153668(v=vs.91).md
+    - name: System.ComponentModel.DataAnnotations Namespace
+      href: cc490428(v=vs.91).md
+      items:
+      - name: AuthorizationAttribute Class
+        href: ff422833(v=vs.91).md
+        items:
+        - name: 'AuthorizationAttribute Constructor '
+          href: ff422829(v=vs.91).md
+        - name: AuthorizationAttribute Methods
+          href: ff423397(v=vs.91).md
+          items:
+          - name: 'Authorize Method '
+            href: ff422072(v=vs.91).md
+          - name: 'FormatErrorMessage Method '
+            href: ff422149(v=vs.91).md
+          - name: 'IsAuthorized Method '
+            href: ff422908(v=vs.91).md
+        - name: AuthorizationAttribute Properties
+          href: ff423305(v=vs.91).md
+          items:
+          - name: 'ErrorMessage Property '
+            href: ff423081(v=vs.91).md
+          - name: 'ResourceType Property '
+            href: ff422627(v=vs.91).md
+      - name: AuthorizationContext Class
+        href: ff422637(v=vs.91).md
+        items:
+        - name: 'AuthorizationContext Constructor '
+          href: ff423196(v=vs.91).md
+          items:
+          - name: AuthorizationContext Constructor (IServiceProvider)
+            href: ff423061(v=vs.91).md
+          - name: AuthorizationContext Constructor (Object, String, String, AuthorizationContext)
+            href: ff422385(v=vs.91).md
+          - name: AuthorizationContext Constructor (Object, String, String, IServiceProvider, IDictionary(Object, Object))
+            href: ff423192(v=vs.91).md
+        - name: AuthorizationContext Methods
+          href: ff422521(v=vs.91).md
+          items:
+          - name: 'Dispose Method '
+            href: ff422316(v=vs.91).md
+          - name: 'GetService Method '
+            href: ff422964(v=vs.91).md
+        - name: AuthorizationContext Properties
+          href: ff422347(v=vs.91).md
+          items:
+          - name: 'Instance Property '
+            href: ff423003(v=vs.91).md
+          - name: 'Items Property '
+            href: ff422975(v=vs.91).md
+          - name: 'Operation Property '
+            href: ff423018(v=vs.91).md
+          - name: 'OperationType Property '
+            href: ff422836(v=vs.91).md
+          - name: 'ServiceContainer Property '
+            href: ff422458(v=vs.91).md
+      - name: AuthorizationResult Class
+        href: ff422636(v=vs.91).md
+        items:
+        - name: 'AuthorizationResult Constructor '
+          href: ff422563(v=vs.91).md
+        - name: AuthorizationResult Fields
+          href: ff422137(v=vs.91).md
+          items:
+          - name: Allowed Field
+            href: ff423282(v=vs.91).md
+        - name: AuthorizationResult Methods
+          href: ff423016(v=vs.91).md
+        - name: AuthorizationResult Properties
+          href: ff422702(v=vs.91).md
+          items:
+          - name: 'ErrorMessage Property '
+            href: ff422370(v=vs.91).md
+      - name: CompositionAttribute Class
+        href: ff422600(v=vs.91).md
+        items:
+        - name: 'CompositionAttribute Constructor '
+          href: ff423254(v=vs.91).md
+        - name: CompositionAttribute Methods
+          href: ff423026(v=vs.91).md
+        - name: CompositionAttribute Properties
+          href: ff422123(v=vs.91).md
+      - name: RoundtripOriginalAttribute Class
+        href: ff423279(v=vs.91).md
+        items:
+        - name: 'RoundtripOriginalAttribute Constructor '
+          href: ff423378(v=vs.91).md
+        - name: RoundtripOriginalAttribute Methods
+          href: ff422438(v=vs.91).md
+        - name: RoundtripOriginalAttribute Properties
+          href: ff423441(v=vs.91).md
+    - name: System.ServiceModel.DomainServices Namespace
+      href: ff422155(v=vs.91).md
+      items:
+      - name: DomainIdentifierAttribute Class
+        href: ff423010(v=vs.91).md
+        items:
+        - name: 'DomainIdentifierAttribute Constructor '
+          href: ff422404(v=vs.91).md
+        - name: DomainIdentifierAttribute Methods
+          href: ff423323(v=vs.91).md
+        - name: DomainIdentifierAttribute Properties
+          href: ff423055(v=vs.91).md
+          items:
+          - name: 'CodeProcessor Property '
+            href: ff422838(v=vs.91).md
+          - name: 'IsApplicationService Property '
+            href: ff423024(v=vs.91).md
+          - name: 'Name Property '
+            href: ff423013(v=vs.91).md
+          - name: 'TypeId Property '
+            href: ff422659(v=vs.91).md
+      - name: ExternalReferenceAttribute Class
+        href: ff422861(v=vs.91).md
+        items:
+        - name: 'ExternalReferenceAttribute Constructor '
+          href: ff423307(v=vs.91).md
+        - name: ExternalReferenceAttribute Methods
+          href: ff422686(v=vs.91).md
+        - name: ExternalReferenceAttribute Properties
+          href: ff422359(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.EntityFramework Namespace
+      href: ff422378(v=vs.91).md
+      items:
+      - name: LinqToEntitiesDomainService(TContext) Class
+        href: ff423019(v=vs.91).md
+        items:
+        - name: 'LinqToEntitiesDomainService(TContext) Constructor '
+          href: ff422918(v=vs.91).md
+        - name: LinqToEntitiesDomainService(TContext) Methods
+          href: ff422892(v=vs.91).md
+          items:
+          - name: 'Count Method '
+            href: ff422657(v=vs.91).md
+            items:
+            - name: Count(T) Method (IQueryable(T))
+              href: ff422873(v=vs.91).md
+          - name: 'CreateObjectContext Method '
+            href: ff422712(v=vs.91).md
+          - name: 'Dispose Method '
+            href: ff423074(v=vs.91).md
+            items:
+            - name: Dispose Method (Boolean)
+              href: ff423064(v=vs.91).md
+          - name: 'Initialize Method '
+            href: ff423187(v=vs.91).md
+          - name: 'PersistChangeSet Method '
+            href: ff423204(v=vs.91).md
+          - name: 'ResolveConflicts Method '
+            href: ff422901(v=vs.91).md
+        - name: LinqToEntitiesDomainService(TContext) Properties
+          href: ff422151(v=vs.91).md
+          items:
+          - name: 'ObjectContext Property '
+            href: ff422042(v=vs.91).md
+      - name: LinqToEntitiesDomainServiceDescriptionProviderAttribute Class
+        href: ff423015(v=vs.91).md
+        items:
+        - name: 'LinqToEntitiesDomainServiceDescriptionProviderAttribute Constructor '
+          href: ff422823(v=vs.91).md
+          items:
+          - name: 'LinqToEntitiesDomainServiceDescriptionProviderAttribute Constructor '
+            href: ff422959(v=vs.91).md
+          - name: LinqToEntitiesDomainServiceDescriptionProviderAttribute Constructor (Type)
+            href: ff423139(v=vs.91).md
+        - name: LinqToEntitiesDomainServiceDescriptionProviderAttribute Methods
+          href: ff422452(v=vs.91).md
+          items:
+          - name: 'CreateProvider Method '
+            href: ff422564(v=vs.91).md
+        - name: LinqToEntitiesDomainServiceDescriptionProviderAttribute Properties
+          href: ff422043(v=vs.91).md
+          items:
+          - name: 'ObjectContextType Property '
+            href: ff422947(v=vs.91).md
+      - name: ObjectContextExtensions Class
+        href: ff423219(v=vs.91).md
+        items:
+        - name: ObjectContextExtensions Methods
+          href: ff422668(v=vs.91).md
+          items:
+          - name: 'AttachAsModified Method '
+            href: ff422785(v=vs.91).md
+            items:
+            - name: AttachAsModified(T) Method (ObjectSet(T), T)
+              href: ff423414(v=vs.91).md
+            - name: AttachAsModified(T) Method (ObjectSet(T), T, T)
+              href: ff422710(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.Hosting Namespace
+      href: ff422683(v=vs.91).md
+      items:
+      - name: ODataEndpointFactory Class
+        href: ff688012(v=vs.91).md
+        items:
+        - name: 'ODataEndpointFactory Constructor '
+          href: ff688018(v=vs.91).md
+        - name: ODataEndpointFactory Methods
+          href: ff688024(v=vs.91).md
+          items:
+          - name: 'CreateEndpoints Method '
+            href: ff688015(v=vs.91).md
+        - name: ODataEndpointFactory Properties
+          href: ff688013(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.Hosting.OData Namespace
+      href: ff688014(v=vs.91).md
+      items:
+      - name: DomainDataService Class
+        href: ff688019(v=vs.91).md
+        items:
+        - name: DomainDataService Methods
+          href: ff688022(v=vs.91).md
+          items:
+          - name: 'GetService Method '
+            href: ff688020(v=vs.91).md
+          - name: 'InitializeService Method '
+            href: ff688017(v=vs.91).md
+        - name: DomainDataService Properties
+          href: ff688016(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.Server Namespace
+      href: ff423220(v=vs.91).md
+      items:
+      - name: ChangeOperation Enumeration
+        href: ff422455(v=vs.91).md
+      - name: ChangeSet Class
+        href: ff422535(v=vs.91).md
+        items:
+        - name: 'ChangeSet Constructor '
+          href: ff422840(v=vs.91).md
+        - name: ChangeSet Methods
+          href: ff423201(v=vs.91).md
+          items:
+          - name: 'Associate(TEntity, TStoreEntity) Method '
+            href: ff422858(v=vs.91).md
+          - name: 'GetAssociatedChanges Method '
+            href: ff422578(v=vs.91).md
+            items:
+            - name: GetAssociatedChanges(TEntity, TResult) Method (TEntity, Expression(Func))
+              href: ff422970(v=vs.91).md
+            - name: GetAssociatedChanges(TEntity, TResult) Method (TEntity, Expression(Func), Boolean)
+              href: ff422689(v=vs.91).md
+          - name: 'GetAssociatedEntities(TEntity, TStoreEntity) Method '
+            href: ff422497(v=vs.91).md
+          - name: 'GetChangeOperation Method '
+            href: ff423052(v=vs.91).md
+          - name: 'GetOriginal(TEntity) Method '
+            href: ff422939(v=vs.91).md
+          - name: 'Replace(TEntity) Method '
+            href: ff422306(v=vs.91).md
+        - name: ChangeSet Properties
+          href: ff422169(v=vs.91).md
+          items:
+          - name: 'ChangeSetEntries Property '
+            href: ff422165(v=vs.91).md
+          - name: 'HasError Property '
+            href: ff423256(v=vs.91).md
+      - name: ChangeSetEntry Class
+        href: ff422139(v=vs.91).md
+        items:
+        - name: 'ChangeSetEntry Constructor '
+          href: ff422160(v=vs.91).md
+          items:
+          - name: 'ChangeSetEntry Constructor '
+            href: ff422520(v=vs.91).md
+          - name: ChangeSetEntry Constructor (Int32, Object, Object, DomainOperation)
+            href: ff422421(v=vs.91).md
+        - name: ChangeSetEntry Methods
+          href: ff422128(v=vs.91).md
+        - name: ChangeSetEntry Properties
+          href: ff422467(v=vs.91).md
+          items:
+          - name: 'Associations Property '
+            href: ff422634(v=vs.91).md
+          - name: 'ConflictMembers Property '
+            href: ff423431(v=vs.91).md
+          - name: 'Entity Property '
+            href: ff423044(v=vs.91).md
+          - name: 'EntityActions Property '
+            href: ff423214(v=vs.91).md
+          - name: 'HasConflict Property '
+            href: ff422905(v=vs.91).md
+          - name: 'HasError Property '
+            href: ff422412(v=vs.91).md
+          - name: 'HasMemberChanges Property '
+            href: ff423288(v=vs.91).md
+          - name: 'Id Property '
+            href: ff422852(v=vs.91).md
+          - name: 'IsDeleteConflict Property '
+            href: ff423076(v=vs.91).md
+          - name: 'Operation Property '
+            href: ff423342(v=vs.91).md
+          - name: 'OriginalAssociations Property '
+            href: ff422326(v=vs.91).md
+          - name: 'OriginalEntity Property '
+            href: ff423361(v=vs.91).md
+          - name: 'StoreEntity Property '
+            href: ff422082(v=vs.91).md
+          - name: 'ValidationErrors Property '
+            href: ff423216(v=vs.91).md
+      - name: CodeProcessor Class
+        href: ff422044(v=vs.91).md
+        items:
+        - name: 'CodeProcessor Constructor '
+          href: ff422577(v=vs.91).md
+        - name: CodeProcessor Methods
+          href: ff422369(v=vs.91).md
+          items:
+          - name: 'ProcessGeneratedCode Method '
+            href: ff423033(v=vs.91).md
+        - name: CodeProcessor Properties
+          href: ff422652(v=vs.91).md
+          items:
+          - name: 'CodeDomProvider Property '
+            href: ff423162(v=vs.91).md
+      - name: DeleteAttribute Class
+        href: ff422660(v=vs.91).md
+        items:
+        - name: 'DeleteAttribute Constructor '
+          href: ff423234(v=vs.91).md
+        - name: DeleteAttribute Methods
+          href: ff422420(v=vs.91).md
+        - name: DeleteAttribute Properties
+          href: ff422327(v=vs.91).md
+      - name: DomainException Class
+        href: ff423362(v=vs.91).md
+        items:
+        - name: 'DomainException Constructor '
+          href: ff422317(v=vs.91).md
+          items:
+          - name: 'DomainException Constructor '
+            href: ff422983(v=vs.91).md
+          - name: DomainException Constructor (String)
+            href: ff422166(v=vs.91).md
+          - name: DomainException Constructor (String, Exception)
+            href: ff422075(v=vs.91).md
+          - name: DomainException Constructor (String, Int32)
+            href: ff422113(v=vs.91).md
+          - name: DomainException Constructor (String, Int32, Exception)
+            href: ff422544(v=vs.91).md
+        - name: DomainException Methods
+          href: ff422775(v=vs.91).md
+        - name: DomainException Properties
+          href: ff423417(v=vs.91).md
+          items:
+          - name: 'ErrorCode Property '
+            href: ff423364(v=vs.91).md
+      - name: DomainOperation Enumeration
+        href: ff423104(v=vs.91).md
+      - name: DomainOperationEntry Class
+        href: ff423137(v=vs.91).md
+        items:
+        - name: 'DomainOperationEntry Constructor '
+          href: ff422514(v=vs.91).md
+        - name: DomainOperationEntry Methods
+          href: ff423252(v=vs.91).md
+          items:
+          - name: 'Invoke Method '
+            href: ff423193(v=vs.91).md
+          - name: 'ToString Method '
+            href: ff423098(v=vs.91).md
+        - name: DomainOperationEntry Properties
+          href: ff422876(v=vs.91).md
+          items:
+          - name: 'AssociatedType Property '
+            href: ff423191(v=vs.91).md
+          - name: 'Attributes Property '
+            href: ff423057(v=vs.91).md
+          - name: 'DomainServiceType Property '
+            href: ff423370(v=vs.91).md
+          - name: 'Name Property '
+            href: ff423123(v=vs.91).md
+          - name: 'Operation Property '
+            href: ff422345(v=vs.91).md
+          - name: 'OperationAttribute Property '
+            href: ff423058(v=vs.91).md
+          - name: 'Parameters Property '
+            href: ff423422(v=vs.91).md
+          - name: 'ReturnType Property '
+            href: ff423130(v=vs.91).md
+      - name: DomainOperationParameter Class
+        href: ff422362(v=vs.91).md
+        items:
+        - name: 'DomainOperationParameter Constructor '
+          href: ff423303(v=vs.91).md
+          items:
+          - name: DomainOperationParameter Constructor (String, Type, AttributeCollection)
+            href: ff422466(v=vs.91).md
+          - name: DomainOperationParameter Constructor (String, Type, AttributeCollection, Boolean)
+            href: ff423406(v=vs.91).md
+        - name: DomainOperationParameter Methods
+          href: ff423367(v=vs.91).md
+          items:
+          - name: 'ToString Method '
+            href: ff423326(v=vs.91).md
+        - name: DomainOperationParameter Properties
+          href: ff423109(v=vs.91).md
+          items:
+          - name: 'Attributes Property '
+            href: ff422706(v=vs.91).md
+          - name: 'IsOut Property '
+            href: ff422802(v=vs.91).md
+          - name: 'Name Property '
+            href: ff422853(v=vs.91).md
+          - name: 'ParameterType Property '
+            href: ff422557(v=vs.91).md
+      - name: DomainOperationType Enumeration
+        href: ff422763(v=vs.91).md
+      - name: DomainService Class
+        href: ff422911(v=vs.91).md
+        items:
+        - name: 'DomainService Constructor '
+          href: ff423247(v=vs.91).md
+        - name: DomainService Methods
+          href: ff423124(v=vs.91).md
+          items:
+          - name: 'AuthorizeChangeSet Method '
+            href: ff422525(v=vs.91).md
+          - name: 'Count(T) Method '
+            href: ff422050(v=vs.91).md
+          - name: 'Dispose Method '
+            href: ff423270(v=vs.91).md
+            items:
+            - name: 'Dispose Method '
+              href: ff422146(v=vs.91).md
+            - name: Dispose Method (Boolean)
+              href: ff422574(v=vs.91).md
+          - name: 'ExecuteChangeSet Method '
+            href: ff422312(v=vs.91).md
+          - name: 'Initialize Method '
+            href: ff423313(v=vs.91).md
+          - name: 'Invoke Method '
+            href: ff422495(v=vs.91).md
+          - name: 'IsAuthorized Method '
+            href: ff422558(v=vs.91).md
+          - name: 'OnError Method '
+            href: ff422662(v=vs.91).md
+          - name: 'PersistChangeSet Method '
+            href: ff422655(v=vs.91).md
+          - name: 'Query Method '
+            href: ff422957(v=vs.91).md
+          - name: 'Submit Method '
+            href: ff422511(v=vs.91).md
+          - name: 'ValidateChangeSet Method '
+            href: ff422900(v=vs.91).md
+        - name: DomainService Properties
+          href: ff422828(v=vs.91).md
+          items:
+          - name: 'AuthorizationContext Property '
+            href: ff422768(v=vs.91).md
+          - name: 'ChangeSet Property '
+            href: ff422364(v=vs.91).md
+          - name: 'Factory Property '
+            href: ff423171(v=vs.91).md
+          - name: 'ServiceContext Property '
+            href: ff422647(v=vs.91).md
+          - name: 'ServiceDescription Property '
+            href: ff422716(v=vs.91).md
+          - name: 'ValidationContext Property '
+            href: ff423296(v=vs.91).md
+      - name: DomainServiceContext Class
+        href: ff423400(v=vs.91).md
+        items:
+        - name: 'DomainServiceContext Constructor '
+          href: ff423300(v=vs.91).md
+        - name: DomainServiceContext Methods
+          href: ff423423(v=vs.91).md
+          items:
+          - name: 'GetService Method '
+            href: ff422477(v=vs.91).md
+        - name: DomainServiceContext Properties
+          href: ff423212(v=vs.91).md
+          items:
+          - name: 'Operation Property '
+            href: ff423419(v=vs.91).md
+          - name: 'OperationType Property '
+            href: ff422183(v=vs.91).md
+          - name: 'User Property '
+            href: ff422121(v=vs.91).md
+      - name: DomainServiceDescription Class
+        href: ff422896(v=vs.91).md
+        items:
+        - name: DomainServiceDescription Methods
+          href: ff423215(v=vs.91).md
+          items:
+          - name: 'AddOperation Method '
+            href: ff422109(v=vs.91).md
+          - name: 'GetCustomMethod Method '
+            href: ff422060(v=vs.91).md
+          - name: 'GetCustomMethods Method '
+            href: ff422766(v=vs.91).md
+          - name: 'GetDescription Method '
+            href: ff422827(v=vs.91).md
+          - name: 'GetEntityBaseType Method '
+            href: ff422808(v=vs.91).md
+          - name: 'GetInvokeOperation Method '
+            href: ff422093(v=vs.91).md
+          - name: 'GetParentAssociations Method '
+            href: ff422395(v=vs.91).md
+          - name: 'GetQueryMethod Method '
+            href: ff423156(v=vs.91).md
+          - name: 'GetRootEntityType Method '
+            href: ff423231(v=vs.91).md
+          - name: 'GetSerializationType Method '
+            href: ff423174(v=vs.91).md
+          - name: 'GetSubmitMethod Method '
+            href: ff422826(v=vs.91).md
+          - name: 'IsOperationSupported Method '
+            href: ff422501(v=vs.91).md
+        - name: DomainServiceDescription Properties
+          href: ff422366(v=vs.91).md
+          items:
+          - name: 'Attributes Property '
+            href: ff422152(v=vs.91).md
+          - name: 'ComplexTypes Property '
+            href: gg277296(v=vs.91).md
+          - name: 'DomainOperationEntries Property '
+            href: ff422865(v=vs.91).md
+          - name: 'DomainServiceType Property '
+            href: ff422126(v=vs.91).md
+          - name: 'EntityTypes Property '
+            href: ff423218(v=vs.91).md
+          - name: 'RootEntityTypes Property '
+            href: ff422594(v=vs.91).md
+      - name: DomainServiceDescriptionProvider Class
+        href: ff423341(v=vs.91).md
+        items:
+        - name: 'DomainServiceDescriptionProvider Constructor '
+          href: ff423122(v=vs.91).md
+        - name: DomainServiceDescriptionProvider Methods
+          href: ff422850(v=vs.91).md
+          items:
+          - name: 'CreateDescription Method '
+            href: ff422734(v=vs.91).md
+            items:
+            - name: 'CreateDescription Method '
+              href: ff423207(v=vs.91).md
+            - name: CreateDescription Method (DomainServiceDescription)
+              href: ff422135(v=vs.91).md
+          - name: 'GetDescription Method '
+            href: ff422510(v=vs.91).md
+          - name: 'GetOperationAttributes Method '
+            href: ff423155(v=vs.91).md
+          - name: 'GetTypeDescriptor Method '
+            href: ff423259(v=vs.91).md
+          - name: 'IsEntityType Method '
+            href: ff423267(v=vs.91).md
+          - name: 'LookupIsEntityType Method '
+            href: ff422738(v=vs.91).md
+      - name: DomainServiceDescriptionProviderAttribute Class
+        href: ff423012(v=vs.91).md
+        items:
+        - name: 'DomainServiceDescriptionProviderAttribute Constructor '
+          href: ff422754(v=vs.91).md
+        - name: DomainServiceDescriptionProviderAttribute Methods
+          href: ff422374(v=vs.91).md
+          items:
+          - name: 'CreateProvider Method '
+            href: ff423119(v=vs.91).md
+        - name: DomainServiceDescriptionProviderAttribute Properties
+          href: ff422059(v=vs.91).md
+          items:
+          - name: 'DomainServiceDescriptionProviderType Property '
+            href: ff423354(v=vs.91).md
+          - name: 'TypeId Property '
+            href: ff422195(v=vs.91).md
+      - name: DomainServiceErrorInfo Class
+        href: ff422962(v=vs.91).md
+        items:
+        - name: 'DomainServiceErrorInfo Constructor '
+          href: ff423295(v=vs.91).md
+        - name: DomainServiceErrorInfo Methods
+          href: ff423317(v=vs.91).md
+        - name: DomainServiceErrorInfo Properties
+          href: ff422740(v=vs.91).md
+          items:
+          - name: 'Error Property '
+            href: ff423365(v=vs.91).md
+      - name: ExcludeAttribute Class
+        href: ff422771(v=vs.91).md
+        items:
+        - name: 'ExcludeAttribute Constructor '
+          href: ff422198(v=vs.91).md
+        - name: ExcludeAttribute Methods
+          href: ff423398(v=vs.91).md
+        - name: ExcludeAttribute Properties
+          href: ff422422(v=vs.91).md
+      - name: IDomainServiceFactory Interface
+        href: ff422737(v=vs.91).md
+        items:
+        - name: IDomainServiceFactory Methods
+          href: ff423251(v=vs.91).md
+          items:
+          - name: 'CreateDomainService Method '
+            href: ff422129(v=vs.91).md
+          - name: 'ReleaseDomainService Method '
+            href: ff422958(v=vs.91).md
+      - name: IgnoreAttribute Class
+        href: ff423126(v=vs.91).md
+        items:
+        - name: 'IgnoreAttribute Constructor '
+          href: ff422481(v=vs.91).md
+        - name: IgnoreAttribute Methods
+          href: ff422919(v=vs.91).md
+        - name: IgnoreAttribute Properties
+          href: ff422108(v=vs.91).md
+      - name: IncludeAttribute Class
+        href: ff422505(v=vs.91).md
+        items:
+        - name: 'IncludeAttribute Constructor '
+          href: ff423211(v=vs.91).md
+          items:
+          - name: 'IncludeAttribute Constructor '
+            href: ff423363(v=vs.91).md
+          - name: IncludeAttribute Constructor (String, String)
+            href: ff422860(v=vs.91).md
+        - name: IncludeAttribute Methods
+          href: ff423198(v=vs.91).md
+        - name: IncludeAttribute Properties
+          href: ff422631(v=vs.91).md
+          items:
+          - name: 'IsProjection Property '
+            href: ff422699(v=vs.91).md
+          - name: 'MemberName Property '
+            href: ff422107(v=vs.91).md
+          - name: 'Path Property '
+            href: ff422930(v=vs.91).md
+          - name: 'TypeId Property '
+            href: ff422056(v=vs.91).md
+      - name: InsertAttribute Class
+        href: ff423143(v=vs.91).md
+        items:
+        - name: 'InsertAttribute Constructor '
+          href: ff422753(v=vs.91).md
+        - name: InsertAttribute Methods
+          href: ff422891(v=vs.91).md
+        - name: InsertAttribute Properties
+          href: ff422672(v=vs.91).md
+      - name: InvokeAttribute Class
+        href: ff422624(v=vs.91).md
+        items:
+        - name: 'InvokeAttribute Constructor '
+          href: ff422178(v=vs.91).md
+        - name: InvokeAttribute Methods
+          href: ff422943(v=vs.91).md
+        - name: InvokeAttribute Properties
+          href: ff422368(v=vs.91).md
+          items:
+          - name: 'HasSideEffects Property '
+            href: ff423418(v=vs.91).md
+      - name: InvokeDescription Class
+        href: ff423134(v=vs.91).md
+        items:
+        - name: 'InvokeDescription Constructor '
+          href: ff423412(v=vs.91).md
+        - name: InvokeDescription Methods
+          href: ff422729(v=vs.91).md
+        - name: InvokeDescription Properties
+          href: ff422089(v=vs.91).md
+          items:
+          - name: 'Method Property '
+            href: ff423173(v=vs.91).md
+          - name: 'ParameterValues Property '
+            href: ff422423(v=vs.91).md
+      - name: OutputCacheAttribute Class
+        href: ff423291(v=vs.91).md
+        items:
+        - name: 'OutputCacheAttribute Constructor '
+          href: ff423274(v=vs.91).md
+          items:
+          - name: OutputCacheAttribute Constructor (String)
+            href: ff422443(v=vs.91).md
+          - name: OutputCacheAttribute Constructor (OutputCacheLocation)
+            href: ff422388(v=vs.91).md
+          - name: OutputCacheAttribute Constructor (OutputCacheLocation, Int32)
+            href: ff422351(v=vs.91).md
+        - name: OutputCacheAttribute Methods
+          href: ff422499(v=vs.91).md
+        - name: OutputCacheAttribute Properties
+          href: ff422880(v=vs.91).md
+          items:
+          - name: 'CacheProfile Property '
+            href: ff422581(v=vs.91).md
+          - name: 'Duration Property '
+            href: ff422413(v=vs.91).md
+          - name: 'Location Property '
+            href: ff423284(v=vs.91).md
+          - name: 'SqlCacheDependencies Property '
+            href: ff423320(v=vs.91).md
+          - name: 'UseSlidingExpiration Property '
+            href: ff422517(v=vs.91).md
+          - name: 'VaryByHeaders Property '
+            href: ff423097(v=vs.91).md
+      - name: OutputCacheLocation Enumeration
+        href: ff422391(v=vs.91).md
+      - name: QueryAttribute Class
+        href: ff422090(v=vs.91).md
+        items:
+        - name: 'QueryAttribute Constructor '
+          href: ff422188(v=vs.91).md
+        - name: QueryAttribute Methods
+          href: ff422767(v=vs.91).md
+        - name: QueryAttribute Properties
+          href: ff423346(v=vs.91).md
+          items:
+          - name: 'HasSideEffects Property '
+            href: ff422879(v=vs.91).md
+          - name: 'IsComposable Property '
+            href: ff422651(v=vs.91).md
+          - name: 'IsDefault Property '
+            href: ff422348(v=vs.91).md
+          - name: 'ResultLimit Property '
+            href: ff423062(v=vs.91).md
+      - name: QueryDescription Class
+        href: ff422741(v=vs.91).md
+        items:
+        - name: 'QueryDescription Constructor '
+          href: ff422551(v=vs.91).md
+          items:
+          - name: QueryDescription Constructor (DomainOperationEntry)
+            href: ff422402(v=vs.91).md
+          - name: QueryDescription Constructor (DomainOperationEntry, Object[])
+            href: ff422886(v=vs.91).md
+          - name: QueryDescription Constructor (DomainOperationEntry, Object[], Boolean, IQueryable)
+            href: ff423278(v=vs.91).md
+        - name: QueryDescription Methods
+          href: ff422156(v=vs.91).md
+        - name: QueryDescription Properties
+          href: ff423261(v=vs.91).md
+          items:
+          - name: 'IncludeTotalCount Property '
+            href: ff422171(v=vs.91).md
+          - name: 'Method Property '
+            href: ff423017(v=vs.91).md
+          - name: 'ParameterValues Property '
+            href: ff423407(v=vs.91).md
+          - name: 'Query Property '
+            href: ff422692(v=vs.91).md
+      - name: RequiresAuthenticationAttribute Class
+        href: ff423107(v=vs.91).md
+        items:
+        - name: 'RequiresAuthenticationAttribute Constructor '
+          href: ff422799(v=vs.91).md
+        - name: RequiresAuthenticationAttribute Methods
+          href: ff422411(v=vs.91).md
+        - name: RequiresAuthenticationAttribute Properties
+          href: ff422898(v=vs.91).md
+      - name: RequiresRoleAttribute Class
+        href: ff422065(v=vs.91).md
+        items:
+        - name: 'RequiresRoleAttribute Constructor '
+          href: ff422355(v=vs.91).md
+          items:
+          - name: RequiresRoleAttribute Constructor (String)
+            href: ff422617(v=vs.91).md
+          - name: RequiresRoleAttribute Constructor (String[])
+            href: ff422932(v=vs.91).md
+        - name: RequiresRoleAttribute Methods
+          href: ff422140(v=vs.91).md
+        - name: RequiresRoleAttribute Properties
+          href: ff422528(v=vs.91).md
+          items:
+          - name: 'Roles Property '
+            href: ff422717(v=vs.91).md
+          - name: 'TypeId Property '
+            href: ff423070(v=vs.91).md
+      - name: UpdateAttribute Class
+        href: ff422141(v=vs.91).md
+        items:
+        - name: 'UpdateAttribute Constructor '
+          href: ff423382(v=vs.91).md
+        - name: UpdateAttribute Methods
+          href: ff422566(v=vs.91).md
+        - name: UpdateAttribute Properties
+          href: ff422083(v=vs.91).md
+          items:
+          - name: 'UsingCustomMethod Property '
+            href: ff422690(v=vs.91).md
+      - name: ValidationResultInfo Class
+        href: ff422142(v=vs.91).md
+        items:
+        - name: 'ValidationResultInfo Constructor '
+          href: ff422390(v=vs.91).md
+          items:
+          - name: 'ValidationResultInfo Constructor '
+            href: ff423077(v=vs.91).md
+          - name: ValidationResultInfo Constructor (String, IEnumerable(String))
+            href: ff422334(v=vs.91).md
+          - name: ValidationResultInfo Constructor (String, Int32, String, IEnumerable(String))
+            href: ff422057(v=vs.91).md
+        - name: ValidationResultInfo Methods
+          href: ff422902(v=vs.91).md
+          items:
+          - name: 'IEquatable(ValidationResultInfo).Equals Method '
+            href: ff422648(v=vs.91).md
+          - name: 'GetHashCode Method '
+            href: ff423088(v=vs.91).md
+        - name: ValidationResultInfo Properties
+          href: ff422352(v=vs.91).md
+          items:
+          - name: 'ErrorCode Property '
+            href: ff422450(v=vs.91).md
+          - name: 'Message Property '
+            href: ff422322(v=vs.91).md
+          - name: 'SourceMemberNames Property '
+            href: ff422196(v=vs.91).md
+          - name: 'StackTrace Property '
+            href: ff422092(v=vs.91).md
+    - name: System.ServiceModel.DomainServices.Server.ApplicationServices Namespace
+      href: ff422719(v=vs.91).md
+      items:
+      - name: AuthenticationBase(T) Class
+        href: ff422449(v=vs.91).md
+        items:
+        - name: 'AuthenticationBase(T) Constructor '
+          href: ff423223(v=vs.91).md
+        - name: AuthenticationBase(T) Methods
+          href: ff422301(v=vs.91).md
+          items:
+          - name: 'ClearAuthenticationToken Method '
+            href: ff423161(v=vs.91).md
+          - name: 'CreateUser Method '
+            href: ff423306(v=vs.91).md
+          - name: 'Dispose Method '
+            href: ff422145(v=vs.91).md
+          - name: 'GetAnonymousUser Method '
+            href: ff422622(v=vs.91).md
+          - name: 'GetAuthenticatedUser Method '
+            href: ff423206(v=vs.91).md
+          - name: 'GetUser Method '
+            href: ff422990(v=vs.91).md
+          - name: 'IssueAuthenticationToken Method '
+            href: ff423054(v=vs.91).md
+          - name: 'Login Method '
+            href: ff422138(v=vs.91).md
+          - name: 'Logout Method '
+            href: ff423315(v=vs.91).md
+          - name: 'UpdateUser Method '
+            href: ff422656(v=vs.91).md
+          - name: 'UpdateUserCore Method '
+            href: ff423286(v=vs.91).md
+          - name: 'ValidateUser Method '
+            href: ff423401(v=vs.91).md
+        - name: AuthenticationBase(T) Properties
+          href: ff423297(v=vs.91).md
+      - name: AuthenticationServiceAttribute Class
+        href: ff422133(v=vs.91).md
+        items:
+        - name: 'AuthenticationServiceAttribute Constructor '
+          href: ff422168(v=vs.91).md
+        - name: AuthenticationServiceAttribute Methods
+          href: ff422953(v=vs.91).md
+        - name: AuthenticationServiceAttribute Properties
+          href: ff423321(v=vs.91).md
+      - name: IAuthentication(T) Interface
+        href: ff422650(v=vs.91).md
+        items:
+        - name: IAuthentication(T) Methods
+          href: ff423100(v=vs.91).md
+          items:
+          - name: 'GetUser Method '
+            href: ff422430(v=vs.91).md
+          - name: 'Login Method '
+            href: ff422831(v=vs.91).md
+          - name: 'Logout Method '
+            href: ff423151(v=vs.91).md
+          - name: 'UpdateUser Method '
+            href: ff423020(v=vs.91).md
+      - name: IUser Interface
+        href: ff423186(v=vs.91).md
+        items:
+        - name: IUser Properties
+          href: ff422667(v=vs.91).md
+          items:
+          - name: 'Name Property '
+            href: ff423350(v=vs.91).md
+          - name: 'Roles Property '
+            href: ff423047(v=vs.91).md
+      - name: ProfileUsageAttribute Class
+        href: ff422064(v=vs.91).md
+        items:
+        - name: 'ProfileUsageAttribute Constructor '
+          href: ff422071(v=vs.91).md
+        - name: ProfileUsageAttribute Methods
+          href: ff422134(v=vs.91).md
+        - name: ProfileUsageAttribute Properties
+          href: ff423242(v=vs.91).md
+          items:
+          - name: 'Alias Property '
+            href: ff423413(v=vs.91).md
+          - name: 'IsExcluded Property '
+            href: ff423424(v=vs.91).md
+      - name: UserBase Class
+        href: ff422972(v=vs.91).md
+        items:
+        - name: 'UserBase Constructor '
+          href: ff422101(v=vs.91).md
+        - name: UserBase Methods
+          href: ff422087(v=vs.91).md
+          items:
+          - name: 'IsInRole Method '
+            href: ff423359(v=vs.91).md
+        - name: UserBase Properties
+          href: ff422961(v=vs.91).md
+          items:
+          - name: 'IIdentity.AuthenticationType Property '
+            href: ff422751(v=vs.91).md
+          - name: 'IPrincipal.Identity Property '
+            href: ff422611(v=vs.91).md
+          - name: 'IsAuthenticated Property '
+            href: ff422797(v=vs.91).md
+          - name: 'Name Property '
+            href: ff423372(v=vs.91).md
+          - name: 'Roles Property '
+            href: ff422103(v=vs.91).md
