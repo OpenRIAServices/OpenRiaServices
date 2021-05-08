@@ -39,8 +39,8 @@ Some of ther features are:
 
    
 **Documentation**:
-* The original documentation for WCF RIA Services is still relevant and can be found at https://msdn.microsoft.com/en-us/library/ee707344(v=vs.91).aspx . Namespaces and assembly names are no longer correct since they changed with the release of OpenRiaServices.
-* Documentation for changes since WCF RIA Services can be found under https://github.com/OpenRIAServices/OpenRiaServices/releases)
+* General [Documentation](https://openriaservices.gitbook.io/openriaservices/) is based on WCF RIA Services documentation and while not fully updated it is still relevant.
+* Changes since WCF RIA Services can be found under https://github.com/OpenRIAServices/OpenRiaServices/releases) and [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) 
 * The [wiki](https://github.com/OpenRIAServices/OpenRiaServices/wiki) contains various good information
 * The [Roadmap / Vision](https://github.com/OpenRIAServices/OpenRiaServices/wiki/Vision---Roadmap) might also be of interest
 
