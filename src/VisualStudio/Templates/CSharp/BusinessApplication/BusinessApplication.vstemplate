@@ -84,9 +84,8 @@
     <FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
   </WizardExtension>
   <WizardData>
-    <packages repository="extension"
-          repositoryId="874C448B-42DE-466B-A7E7-0EFEC1E7C009">
-        <package id="OpenRiaServices.Client" version = "4.6.3"/>
+    <packages>
+        <package id="OpenRiaServices.Client" version = "5.0.0"/>
     </packages>
   </WizardData>
   <WizardExtension>

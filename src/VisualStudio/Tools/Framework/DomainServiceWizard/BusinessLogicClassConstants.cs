@@ -21,7 +21,6 @@
             "System.ComponentModel",
             "System.ComponentModel.DataAnnotations",
             "System.Linq", 
-            "OpenRiaServices.Hosting",
             "OpenRiaServices.Server",
         };
 
