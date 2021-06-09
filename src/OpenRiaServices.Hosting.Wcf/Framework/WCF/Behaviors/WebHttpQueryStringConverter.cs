@@ -23,7 +23,6 @@ namespace OpenRiaServices.Client.Web.Behaviors
             return true;
         }
 
-#if !SILVERLIGHT // server-side path
         public override object ConvertStringToValue(string parameter, Type parameterType)
         {
             if (parameter == null)
@@ -36,13 +35,38 @@ namespace OpenRiaServices.Client.Web.Behaviors
                 return base.ConvertStringToValue(parameter, parameterType);
             }
 
+            // Nullable types have historically not been handled explicitly
+            // so they habe been serialized to json
+            // some of them (which are not represented as text) can be parsed directly
+            // other like guid, timespan etc can be parsed if quotation marks are removed
+            // but date related types cannot be parsed "normally" so skip anything treated as text
+            // This lets change the wire format later on and serialize values the same as when non-nullable
+            if (TypeUtility.IsNullableType(parameterType)
+                && !parameter.StartsWith(@"%22", StringComparison.Ordinal))
+            {
+                if (parameter == "null")
+                    return null;
+
+                var actualType = parameterType.GetGenericArguments()[0];
+                if (base.CanConvert(actualType))
+                {
+                    try
+                    {
+                        return base.ConvertStringToValue(parameter, actualType);
+                    }
+                    catch (FormatException)
+                    {
+                        // fallback to json serializer in case of error
+                    }
+                }
+            }
+
             parameter = HttpUtility.UrlDecode(parameter);
             using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(parameter)))
             {
                 return new DataContractJsonSerializer(parameterType).ReadObject(ms);
             }
         }
-#endif // !SILVERLIGHT
 
         public override string ConvertValueToString(object parameter, Type parameterType)
         {
@@ -52,7 +76,8 @@ namespace OpenRiaServices.Client.Web.Behaviors
             }
             using (MemoryStream ms = new MemoryStream())
             {
-                new DataContractJsonSerializer(parameterType).WriteObject(ms, parameter);
+                new DataContractJsonSerializer(parameterType)
+                    .WriteObject(ms, parameter);
                 byte[] result = ms.ToArray();
                 string value = Encoding.UTF8.GetString(result, 0, result.Length);
                 return HttpUtility.UrlEncode(value);
