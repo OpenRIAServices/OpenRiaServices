@@ -17,11 +17,12 @@ namespace OpenRiaServices.Client.Web.Behaviors
 {
     internal class WebHttpQueryStringConverter : QueryStringConverter
     {
+        // Specify datetime format so that the DateTimeKind can roundtrip, otherwise unspecified values are treated incorrect by server
+        // https://github.com/OpenRIAServices/OpenRiaServices/issues/75
         const string DateTimeFormat = @"yyyy\-MM\-ddTHH\:mm\:ss.FFFFFFFK";
         private static readonly DataContractJsonSerializerSettings s_jsonSettings
             = new DataContractJsonSerializerSettings()
             {
-                UseSimpleDictionaryFormat = true,
                 DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat(DateTimeFormat, System.Globalization.CultureInfo.InvariantCulture)
             };
 
