@@ -17,6 +17,14 @@ namespace OpenRiaServices.Client.Web.Behaviors
 {
     internal class WebHttpQueryStringConverter : QueryStringConverter
     {
+        const string DateTimeFormat = @"yyyy\-MM\-ddTHH\:mm\:ss.FFFFFFFK";
+        private static readonly DataContractJsonSerializerSettings s_jsonSettings
+            = new DataContractJsonSerializerSettings()
+            {
+                UseSimpleDictionaryFormat = true,
+                DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat(DateTimeFormat, System.Globalization.CultureInfo.InvariantCulture)
+            };
+
         public override bool CanConvert(Type type)
         {
             // Allow everything.
@@ -35,6 +43,9 @@ namespace OpenRiaServices.Client.Web.Behaviors
                 return base.ConvertStringToValue(parameter, parameterType);
             }
 
+            if (parameter == "null")
+                return null;
+
             // Nullable types have historically not been handled explicitly
             // so they habe been serialized to json
             // some of them (which are not represented as text) can be parsed directly
@@ -44,9 +55,6 @@ namespace OpenRiaServices.Client.Web.Behaviors
             if (TypeUtility.IsNullableType(parameterType)
                 && !parameter.StartsWith(@"%22", StringComparison.Ordinal))
             {
-                if (parameter == "null")
-                    return null;
-
                 var actualType = parameterType.GetGenericArguments()[0];
                 if (base.CanConvert(actualType))
                 {
@@ -64,7 +72,18 @@ namespace OpenRiaServices.Client.Web.Behaviors
             parameter = HttpUtility.UrlDecode(parameter);
             using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(parameter)))
             {
-                return new DataContractJsonSerializer(parameterType).ReadObject(ms);
+                try
+                {
+                    return new DataContractJsonSerializer(parameterType, s_jsonSettings)
+                        .ReadObject(ms);
+                }
+                catch (Exception)
+                {
+                    // Fallback to old serialization format
+                    ms.Seek(0, SeekOrigin.Begin);
+                    return new DataContractJsonSerializer(parameterType)
+                        .ReadObject(ms);
+                }
             }
         }
 
@@ -74,13 +93,32 @@ namespace OpenRiaServices.Client.Web.Behaviors
             {
                 return base.ConvertValueToString(parameter, parameterType);
             }
+
+            // Strings are handled above, so it should be save to return null here
+            // without giving wrong result for string
+            if (parameter == null)
+                return "null";
+            else if (TypeUtility.IsNullableType(parameterType))
+            {
+                parameterType = TypeUtility.GetNonNullableType(parameterType);
+                if (base.CanConvert(parameterType))
+                {
+                    return base.ConvertValueToString(parameter, parameterType);
+                }
+            }
+
             using (MemoryStream ms = new MemoryStream())
             {
-                new DataContractJsonSerializer(parameterType)
+                new DataContractJsonSerializer(parameterType, s_jsonSettings)
                     .WriteObject(ms, parameter);
-                byte[] result = ms.ToArray();
-                string value = Encoding.UTF8.GetString(result, 0, result.Length);
-                return HttpUtility.UrlEncode(value);
+
+                if (ms.TryGetBuffer(out var buffer))
+                {
+                    string value = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
+                    return HttpUtility.UrlEncode(value);
+                }
+                else
+                    return string.Empty;
             }
         }
     }
