@@ -1207,6 +1207,7 @@ namespace OpenRiaServices.Server
 
             validationResults = new List<ValidationResult>();
             ValidationContext validationContext = ValidationUtilities.CreateValidationContext(this, this.ValidationContext);
+
             // First do method level and simple parameter validation
             bool success = TryValidateOperation(domainOperationEntry, validationContext, parameters, validationResults);
 
