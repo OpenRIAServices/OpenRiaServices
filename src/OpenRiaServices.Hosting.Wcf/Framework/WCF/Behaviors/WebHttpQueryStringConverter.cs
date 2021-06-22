@@ -31,10 +31,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
             {
                 return null;
             }
-            
-            //if (parameterType.IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
-            //    parameterType = parameterType.GetGenericArguments().FirstOrDefault() ;
-           
+       
             if (base.CanConvert(parameterType))
             {
                 return base.ConvertStringToValue(parameter, parameterType);

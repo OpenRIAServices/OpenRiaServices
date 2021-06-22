@@ -167,7 +167,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// Gets a value indicating whether this operation requires validation.
         /// </summary>
-        public bool RequiresValidation
+        private bool RequiresValidation
         {
             get
             {

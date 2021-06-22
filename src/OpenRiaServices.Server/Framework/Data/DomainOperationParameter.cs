@@ -125,7 +125,7 @@ namespace OpenRiaServices.Server
                 {
                     foreach (var Prop in _parameterType.GetProperties())
                     {
-                        var Attributes = Prop.PropertyType.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                        var Attributes = Prop.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
                         if (Attributes != null)
                         {
                             _HasValidationAttribute = true;
@@ -135,15 +135,16 @@ namespace OpenRiaServices.Server
                     if (!_HasValidationAttribute.HasValue)
                     {
                         var Metadata = this._parameterType.GetCustomAttribute<System.ComponentModel.DataAnnotations.MetadataTypeAttribute>();
-                        foreach (var Prop in Metadata.MetadataClassType.GetProperties())
-                        {
-                            var Attributes = Prop.PropertyType.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
-                            if (Attributes != null)
+                        if (Metadata != null)
+                            foreach (var Prop in Metadata.MetadataClassType.GetProperties())
                             {
-                                _HasValidationAttribute = true;
-                                break;
+                                var Attributes = Prop.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                                if (Attributes != null)
+                                {
+                                    _HasValidationAttribute = true;
+                                    break;
+                                }
                             }
-                        }
                     }
                 }
                 return _HasValidationAttribute.Value;
