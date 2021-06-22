@@ -167,7 +167,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// Gets a value indicating whether this operation requires validation.
         /// </summary>
-        internal bool RequiresValidation
+        public bool RequiresValidation
         {
             get
             {
@@ -191,7 +191,7 @@ namespace OpenRiaServices.Server
             return this._attributes[typeof(ValidationAttribute)] != null
                 || this.Parameters.Any(p =>
                     {
-                        if (p.Attributes[typeof(ValidationAttribute)] != null)
+                        if (p.HasValidationAttributeOnProperties || p.Attributes[typeof(ValidationAttribute)] != null)
                             return true;
 
                         // Complex parameters need to be validated if validation occurs on the

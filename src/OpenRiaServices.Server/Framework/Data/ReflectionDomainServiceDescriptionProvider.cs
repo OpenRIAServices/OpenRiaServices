@@ -451,10 +451,19 @@ namespace OpenRiaServices.Server
                 foreach (ParameterInfo parameterInfo in actualParameters)
                 {
                     bool isOut = parameterInfo.IsOut && parameterInfo.ParameterType.HasElementType;
-                    DomainOperationParameter parameter = new DomainOperationParameter(
+                    var Metadata = parameterInfo.ParameterType.GetCustomAttributes(typeof(MetadataTypeAttribute), true).Cast<MetadataTypeAttribute>().FirstOrDefault();
+                    DomainOperationParameter parameter = null;
+                    if (Metadata == null)
+                        parameter = new DomainOperationParameter(
                         parameterInfo.Name,
                         parameterInfo.ParameterType,
                         new AttributeCollection(parameterInfo.GetCustomAttributes(true).Cast<Attribute>().ToArray()),
+                        isOut);
+                    else
+                        parameter = new DomainOperationParameter(
+                        parameterInfo.Name,
+                        parameterInfo.ParameterType,
+                        new AttributeCollection(parameterInfo.GetCustomAttributes(true).Cast<Attribute>().Union(Metadata.MetadataClassType.GetCustomAttributes(true).Cast<Attribute>()).ToArray()),
                         isOut);
 
                     parameters.Add(parameter);

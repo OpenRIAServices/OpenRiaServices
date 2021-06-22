@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
 
 namespace OpenRiaServices.Server
 {
@@ -106,6 +109,45 @@ namespace OpenRiaServices.Server
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "{0} {1}", this.ParameterType, this.Name);
+        }
+
+        private Nullable<bool> _HasValidationAttribute;
+        /// <summary>
+        /// Returns true if this type has validation attribute
+        /// </summary>
+        public bool HasValidationAttributeOnProperties
+        {
+            get
+            {
+                if (TypeUtility.IsPredefinedSimpleType(this._parameterType))
+                    _HasValidationAttribute = false;
+                if (!_HasValidationAttribute.HasValue)
+                {
+                    foreach (var Prop in _parameterType.GetProperties())
+                    {
+                        var Attributes = Prop.PropertyType.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                        if (Attributes != null)
+                        {
+                            _HasValidationAttribute = true;
+                            break;
+                        }
+                    }
+                    if (!_HasValidationAttribute.HasValue)
+                    {
+                        var Metadata = this._parameterType.GetCustomAttribute<System.ComponentModel.DataAnnotations.MetadataTypeAttribute>();
+                        foreach (var Prop in Metadata.MetadataClassType.GetProperties())
+                        {
+                            var Attributes = Prop.PropertyType.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                            if (Attributes != null)
+                            {
+                                _HasValidationAttribute = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return _HasValidationAttribute.Value;
+            }
         }
     }
 }
