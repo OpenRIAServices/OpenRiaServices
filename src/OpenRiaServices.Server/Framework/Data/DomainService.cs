@@ -1201,14 +1201,12 @@ namespace OpenRiaServices.Server
             // Then do validaiton only if required
             if (!domainOperationEntry.RequiresValidation)
             {
-                System.Diagnostics.Debug.WriteLine($"Ehsan Vali :{domainOperationEntry.Name} validation not required");
                 validationResults = null;
                 return true;
             }
 
             validationResults = new List<ValidationResult>();
             ValidationContext validationContext = ValidationUtilities.CreateValidationContext(this, this.ValidationContext);
-            System.Diagnostics.Debug.WriteLine($"Ehsan Vali :{domainOperationEntry.Name} Begin validaiton");
             // First do method level and simple parameter validation
             bool success = TryValidateOperation(domainOperationEntry, validationContext, parameters, validationResults);
 
