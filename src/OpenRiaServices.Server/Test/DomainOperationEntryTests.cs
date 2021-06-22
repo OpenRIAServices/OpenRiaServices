@@ -34,7 +34,17 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(typeof(DomainOperationEntryTestDomainService), entry.DomainServiceType, "Wrong domain service type");
             Assert.AreEqual(DomainOperation.Invoke, entry.Operation, "Wrong domain operation");
             Assert.AreEqual("Invoke", entry.OperationType, "Wrong operation type for this DomainOperationEntry");
-            
+            Assert.AreEqual(true, entry.RequiresValidation, "Operation required validation");
+
+            // Invoke with entity that has metadata
+            entry = description.DomainOperationEntries.SingleOrDefault(p => p.Name == "InvokeMethodEntityWithMetadata");
+            Assert.IsNotNull(entry, "Could not locate InvokeMethodEntity");
+            Assert.AreEqual(typeof(DomainOperationEntryTestEntityWithMetadata), entry.AssociatedType, "Wrong associated type");
+            Assert.AreEqual(typeof(DomainOperationEntryTestDomainService), entry.DomainServiceType, "Wrong domain service type");
+            Assert.AreEqual(DomainOperation.Invoke, entry.Operation, "Wrong domain operation");
+            Assert.AreEqual("Invoke", entry.OperationType, "Wrong operation type for this DomainOperationEntry");
+            Assert.AreEqual(true, entry.RequiresValidation, "Operation required validation");
+
             // Query
             entry = description.DomainOperationEntries.SingleOrDefault(p => p.Name == "GetEntities");
             Assert.IsNotNull(entry, "Could not locate GetEntities");
@@ -98,13 +108,39 @@ namespace OpenRiaServices.Server.Test
 
             [Invoke]
             public void InvokeMethodEntity(DomainOperationEntryTestEntity entity) { }
+
+            [Query]
+            public IEnumerable<DomainOperationEntryTestEntityWithMetadata> GetDomainOperationEntryTestEntityWithMetadata() { return null; }
+
+            [Invoke]
+            public void InvokeMethodEntityWithMetadata(DomainOperationEntryTestEntityWithMetadata entity) { }
         }
 
         public class DomainOperationEntryTestEntity
         {
             [Key]
             public string TheValue { get; set; }
+
+            [Required]
+            public string ValidableProperty { get; set; }
         }
+
+        [MetadataType(typeof(DomainOperationEntryTestEntityWithMetadataMetadata))]
+        public class DomainOperationEntryTestEntityWithMetadata
+        {
+            [Key]
+            public string TheValue { get; set; }
+
+            public string ValidableProperty { get; set; }
+
+        }
+
+        public class DomainOperationEntryTestEntityWithMetadataMetadata
+        {
+            [Required]
+            public string ValidableProperty { get; set; }
+        }
+
 
     }
 }
