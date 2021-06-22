@@ -121,12 +121,13 @@ namespace OpenRiaServices.Server
             {
                 if (TypeUtility.IsPredefinedSimpleType(this._parameterType))
                     _HasValidationAttribute = false;
-                if (!_HasValidationAttribute.HasValue)
+                else if (!_HasValidationAttribute.HasValue)
                 {
+                    _HasValidationAttribute = false;
                     foreach (var Prop in _parameterType.GetProperties())
                     {
-                        var Attributes = Prop.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
-                        if (Attributes != null)
+                        var Attributes = Prop.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                        if (Attributes.Any())
                         {
                             _HasValidationAttribute = true;
                             break;
@@ -138,8 +139,8 @@ namespace OpenRiaServices.Server
                         if (Metadata != null)
                             foreach (var Prop in Metadata.MetadataClassType.GetProperties())
                             {
-                                var Attributes = Prop.GetCustomAttribute<System.ComponentModel.DataAnnotations.ValidationAttribute>();
-                                if (Attributes != null)
+                                var Attributes = Prop.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                                if (Attributes.Any())
                                 {
                                     _HasValidationAttribute = true;
                                     break;
