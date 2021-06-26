@@ -119,33 +119,37 @@ namespace OpenRiaServices.Server
         {
             get
             {
-                if (TypeUtility.IsPredefinedSimpleType(this._parameterType))
-                    _HasValidationAttribute = false;
-                else if (!_HasValidationAttribute.HasValue)
+                if (!_HasValidationAttribute.HasValue)
                 {
-                    _HasValidationAttribute = false;
-                    foreach (var Prop in _parameterType.GetProperties())
+                    if (TypeUtility.IsPredefinedSimpleType(this._parameterType))
+                        _HasValidationAttribute = false;
+                    else
                     {
-                        var Attributes = Prop.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>();
-                        if (Attributes.Any())
+                        foreach (var Prop in _parameterType.GetProperties())
                         {
-                            _HasValidationAttribute = true;
-                            break;
-                        }
-                    }
-                    if (!_HasValidationAttribute.HasValue)
-                    {
-                        var Metadata = this._parameterType.GetCustomAttribute<System.ComponentModel.DataAnnotations.MetadataTypeAttribute>();
-                        if (Metadata != null)
-                            foreach (var Prop in Metadata.MetadataClassType.GetProperties())
+                            var Attributes = Prop.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                            if (Attributes.Any())
                             {
-                                var Attributes = Prop.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>();
-                                if (Attributes.Any())
-                                {
-                                    _HasValidationAttribute = true;
-                                    break;
-                                }
+                                _HasValidationAttribute = true;
+                                break;
                             }
+                        }
+                        if (!_HasValidationAttribute.HasValue)
+                        {
+                            var Metadata = this._parameterType.GetCustomAttribute<System.ComponentModel.DataAnnotations.MetadataTypeAttribute>();
+                            if (Metadata != null)
+                                foreach (var Prop in Metadata.MetadataClassType.GetProperties())
+                                {
+                                    var Attributes = Prop.GetCustomAttributes<System.ComponentModel.DataAnnotations.ValidationAttribute>();
+                                    if (Attributes.Any())
+                                    {
+                                        _HasValidationAttribute = true;
+                                        break;
+                                    }
+                                }
+                        }
+                        if (!_HasValidationAttribute.HasValue)
+                            _HasValidationAttribute = false;
                     }
                 }
                 return _HasValidationAttribute.Value;
