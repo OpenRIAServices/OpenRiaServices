@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.ServiceModel.Dispatcher;
 using System.Text;
@@ -30,7 +31,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
             {
                 return null;
             }
-
+       
             if (base.CanConvert(parameterType))
             {
                 return base.ConvertStringToValue(parameter, parameterType);

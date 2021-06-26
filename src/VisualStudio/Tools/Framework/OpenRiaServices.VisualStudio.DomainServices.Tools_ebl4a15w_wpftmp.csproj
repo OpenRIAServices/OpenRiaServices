@@ -1,0 +1,158 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);SERVERFX;WIZARD;DBCONTEXT;VS14</DefineConstants>
+    <AssemblyName>OpenRiaServices.VisualStudio.DomainServices.Tools.14.0</AssemblyName>
+    <VsVersion Condition=" '$(VsVersion)' == '' ">14.0</VsVersion>
+    <TargetFramework>net472</TargetFramework>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <CodeAnalysisAdditionalOptions>/assemblycomparemode:strongnameignoringversion</CodeAnalysisAdditionalOptions>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants Condition="'$(VsVersion)' == '10.0'">$(DefineConstants);VS10</DefineConstants>
+    <DefineConstants Condition="'$(VsVersion)' == '11.0'">$(DefineConstants);VS11</DefineConstants>
+    <DefineConstants Condition="'$(VsVersion)' == '12.0'">$(DefineConstants);VS12</DefineConstants>
+    <DefineConstants Condition="'$(VsVersion)' == '14.0'">$(DefineConstants);VS14</DefineConstants>
+    <DefineConstants Condition="'$(VsVersion)' == '15.0'">$(DefineConstants);VS15</DefineConstants>
+    <DefineConstants Condition="'$(VsVersion)' == '16.0'">$(DefineConstants);VS16</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="EnvDTE80" Version="8.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.ComponentModelHost" Version="14.0.25424" />
+    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="9.0.30730" />
+    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="9.0.21023" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.0.23205" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Design" Version="14.0.23205" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30320" />
+    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="14.0.50702" />
+    <PackageReference Include="VSLangProj" Version="7.0.3301" />
+    <PackageReference Include="VSSDK.TemplateWizardInterface" Version="12.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.Tools\Framework\CodeDomVisitor.cs" Link="DomainServiceWizard\CodeDomVisitor.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.Tools\Framework\DbContextUtilities.cs" Link="DomainServiceWizard\DbContextUtilities.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="DomainServiceWizard\TypeUtility.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.EntityFramework\Framework\MetadataResource.Designer.cs" Link="MetadataResource.Designer.cs">
+      <DependentUpon>MetadataResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="..\..\..\OpenRiaServices.EntityFramework\Framework\MetadataWorkspaceUtilities.cs" Link="MetadataWorkspaceUtilities.cs" />
+    <Compile Include="..\..\..\OpenRiaServices.EntityFramework\Framework\ObjectContextUtilities.cs" Link="ObjectContextUtilities.cs" />
+    <Compile Update="LocalDB.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Update="DomainServiceWizard\BusinessLogicClassDialog.xaml.cs">
+      <DependentUpon>BusinessLogicClassDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\..\OpenRiaServices.EntityFramework\Framework\MetadataResource.resx" Link="MetadataResource.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
+      <LogicalName>System.ServiceModel.DomainServices.EntityFramework.MetadataResource.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf.OData\Framework\OpenRiaServices.Hosting.Wcf.OData.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Accessibility.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\entityframework\6.4.4\lib\net45\EntityFramework.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\entityframework\6.4.4\lib\net45\EntityFramework.SqlServer.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\vssdk.dte\7.0.4\lib\net20\envdte.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\envdte80\8.0.3\lib\net10\EnvDTE80.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\Microsoft.CSharp.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.componentmodelhost\14.0.25424\lib\net45\Microsoft.VisualStudio.ComponentModelHost.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.imaging\14.0.23205\lib\net45\Microsoft.VisualStudio.Imaging.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.managedinterfaces.9.0\9.0.30730\lib\net20\Microsoft.VisualStudio.ManagedInterfaces.9.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.managedinterfaces\8.0.50728\lib\net20\Microsoft.VisualStudio.ManagedInterfaces.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.managedinterfaces.wcf\9.0.21023\lib\net20\Microsoft.VisualStudio.ManagedInterfaces.WCF.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.ole.interop\7.10.6071\lib\Microsoft.VisualStudio.OLE.Interop.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.14.0\14.0.23205\lib\Microsoft.VisualStudio.Shell.14.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.design\14.0.23205\lib\net45\Microsoft.VisualStudio.Shell.Design.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.immutable.10.0\10.0.30319\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.immutable.11.0\11.0.50727\lib\net45\Microsoft.VisualStudio.Shell.Immutable.11.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.immutable.12.0\12.0.21003\lib\net45\Microsoft.VisualStudio.Shell.Immutable.12.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.immutable.14.0\14.0.23205\lib\net45\Microsoft.VisualStudio.Shell.Immutable.14.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.interop.10.0\10.0.30320\lib\net20\Microsoft.VisualStudio.Shell.Interop.10.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.interop.8.0\8.0.50728\lib\net11\Microsoft.VisualStudio.Shell.Interop.8.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.interop.9.0\9.0.30729\lib\Microsoft.VisualStudio.Shell.Interop.9.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.shell.interop\7.10.6072\lib\net11\Microsoft.VisualStudio.Shell.Interop.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\vssdk.templatewizardinterface\12.0.4\lib\net20\Microsoft.VisualStudio.TemplateWizardInterface.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.textmanager.interop.8.0\8.0.50728\lib\net11\Microsoft.VisualStudio.TextManager.Interop.8.0.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.textmanager.interop\7.10.6071\lib\net11\Microsoft.VisualStudio.TextManager.Interop.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.threading\14.0.50702\lib\net45\Microsoft.VisualStudio.Threading.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.utilities\14.0.23205\lib\net45\Microsoft.VisualStudio.Utilities.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\microsoft.visualstudio.validation\14.0.50702\lib\net45\Microsoft.VisualStudio.Validation.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\mscorlib.dll" />
+    <ReferencePath Include="E:\OpenSource\OpenRiaServices\5\src\bin\Release\net472\OpenRiaServices.EntityFramework.dll" />
+    <ReferencePath Include="E:\OpenSource\OpenRiaServices\5\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.dll" />
+    <ReferencePath Include="E:\OpenSource\OpenRiaServices\5\src\bin\Release\net472\OpenRiaServices.Hosting.Wcf.OData.dll" />
+    <ReferencePath Include="E:\OpenSource\OpenRiaServices\5\src\bin\Release\net472\OpenRiaServices.Server.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\PresentationCore.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\PresentationFramework.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\vssdk.dte\7.0.4\lib\net20\stdole.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.ComponentModel.Composition.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.ComponentModel.DataAnnotations.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Configuration.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Core.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Data.DataSetExtensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Data.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Data.Linq.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Drawing.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.IdentityModel.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.IO.Compression.FileSystem.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Numerics.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\system.runtime.compilerservices.unsafe\4.5.3\ref\net461\System.Runtime.CompilerServices.Unsafe.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Runtime.Serialization.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.ServiceModel.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\system.threading.tasks.extensions\4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Web.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Windows.Forms.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xaml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xml.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xml.Linq.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\UIAutomationProvider.dll" />
+    <ReferencePath Include="C:\Users\ehsan\.nuget\packages\vslangproj\7.0.3301\lib\net10\VSLangProj.dll" />
+    <ReferencePath Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\WindowsBase.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="E:\OpenSource\OpenRiaServices\5\src\VisualStudio\Tools\Framework\obj\Release\net472\DomainServiceWizard\BusinessLogicClassDialog.g.cs" />
+  </ItemGroup>
+</Project>

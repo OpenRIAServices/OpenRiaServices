@@ -456,7 +456,6 @@ namespace OpenRiaServices.Server
                         parameterInfo.ParameterType,
                         new AttributeCollection(parameterInfo.GetCustomAttributes(true).Cast<Attribute>().ToArray()),
                         isOut);
-
                     parameters.Add(parameter);
                 }
 
