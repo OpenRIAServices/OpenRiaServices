@@ -6,12 +6,16 @@ using System.Text;
 
 namespace OpenRiaServices.Client.HttpDomainClient
 {
+    /// <summary>
+    ///  A new <see cref="HttpClient"/> based approach for connecting to services using the default REST with binary encoding protocol.
+    ///  It is easier to extend than the original WCF based WebDomainClient
+    /// </summary>
     public class BinaryHttpDomainClientFactory
         : DomainClientFactory
     {
-        private Func<HttpClient> httpClientFactory;
+        private readonly Func<HttpClient> _httpClientFactory;
 
-        public BinaryHttpDomainClientFactory()
+        private BinaryHttpDomainClientFactory()
             : this(new HttpClientHandler()
             {
                 CookieContainer = new System.Net.CookieContainer(),
@@ -22,31 +26,41 @@ namespace OpenRiaServices.Client.HttpDomainClient
 
         }
 
+        /// <summary>
+        /// Create a <see cref="BinaryHttpDomainClientFactory"/> where all requests share a single <see cref="HttpMessageHandler"/>
+        /// <para>IMPORTANT: To handle DNS updates you need to configure <c>System.Net.ServicePointManager.ConnectionLeaseTimeout</c> on .Net framework</para>
+        /// </summary>
+        /// <param name="messageHandler"><see cref="HttpMessageHandler"/> to be shared by all requests,
+        /// if uncertain create a <see cref="HttpClientHandler"/> and enable cookies and compression</param>
         public BinaryHttpDomainClientFactory(HttpMessageHandler messageHandler)
             : this(() => new HttpClient(messageHandler, disposeHandler: false))
         {
         }
 
+        /// <summary>
+        /// Constructor intended for .Net Core where the actual creation is handled by <c>IHttpClientFactory</c> or similar
+        /// </summary>
+        /// <param name="httpClientFactory">method creating a new HttpClient each time, should never return null</param>
         public BinaryHttpDomainClientFactory(Func<HttpClient> httpClientFactory)
         {
-            this.httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
+        /// <inheritdoc />
         protected override DomainClient CreateDomainClientCore(Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
         {
-            var httpClient = httpClientFactory();
-            httpClient.BaseAddress = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
-        //    httpClient.DefaultRequestHeaders.Add("Content-Type", "application/msbin1");
+            HttpClient httpClient = CreateHttpClient(serviceUri);
 
             return new BinaryHttpDomainClient(httpClient, serviceContract);
         }
 
-        public HttpMessageHandler HttpMessageHandler
+        // We do not make this virtual and protected at the momement since to do that the some thought must be put into
+        // what parameters to support, it might make sens to do changes per DomainService/DomainContext
+        private HttpClient CreateHttpClient(Uri serviceUri)
         {
-            set
-            {
-                this.httpClientFactory = () => new HttpClient(value, disposeHandler: false);
-            }
+            var httpClient = _httpClientFactory();
+            httpClient.BaseAddress = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
+            return httpClient;
         }
     }
 }

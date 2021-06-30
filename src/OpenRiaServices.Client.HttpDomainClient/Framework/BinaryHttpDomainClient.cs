@@ -46,17 +46,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
 
         HttpClient HttpClient { get; set; }
 
-        #region Begin*** Methods
-        /// <summary>
-        /// Method called by the framework to begin an Invoke operation asynchronously. Overrides
-        /// should not call the base method.
-        /// </summary>
-        /// <param name="invokeArgs">The arguments to the Invoke operation.</param>
-        /// <param name="callback">The callback to invoke when the invocation has been completed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>
-        /// An asynchronous result that identifies this invocation.
-        /// </returns>
+        #region Invoke/Query/Submit Methods
         protected override async Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
             var response = await ExecuteRequestAsync(invokeArgs.OperationName, invokeArgs.HasSideEffects, invokeArgs.Parameters, queryOptions: null, cancellationToken: cancellationToken)
@@ -85,16 +75,6 @@ namespace OpenRiaServices.Client.HttpDomainClient
             return new InvokeCompletedResult(returnValue, validationErrors ?? Enumerable.Empty<ValidationResult>());
         }
 
-        /// <summary>
-        /// Method called by the framework to asynchronously process the specified <see cref="T:OpenRiaServices.Client.EntityChangeSet" />.
-        /// Overrides should not call the base method.
-        /// </summary>
-        /// <param name="changeSet">The <see cref="T:OpenRiaServices.Client.EntityChangeSet" /> to submit to the DomainService.</param>
-        /// <param name="callback">The callback to invoke when the submit has been executed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>
-        /// An asynchronous result that identifies this submit request.
-        /// </returns>
         protected override async Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
             const string operationName = "SubmitChanges";
@@ -118,15 +98,6 @@ namespace OpenRiaServices.Client.HttpDomainClient
             }
         }
 
-        /// <summary>
-        /// Method called by the framework to begin the asynchronous query operation.
-        /// </summary>
-        /// <param name="query">The query to invoke.</param>
-        /// <param name="callback">The callback to invoke when the query has been executed.</param>
-        /// <param name="userState">Optional user state associated with this operation.</param>
-        /// <returns>
-        /// An asynchronous result that identifies this query.
-        /// </returns>
         protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
         {
             List<ServiceQueryPart> queryOptions = query.Query != null ? QuerySerializer.Serialize(query.Query) : null;
@@ -146,7 +117,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
 
             // Move async statemachine to separate func so that 
             // any exception from query parsing is thrown immediately and not wrapped in task
-            async Task<QueryCompletedResult> QueryAsyncCoreContinuation() 
+            async Task<QueryCompletedResult> QueryAsyncCoreContinuation()
             {
                 var response = await responseTask;
                 IEnumerable<ValidationResult> validationErrors = null;
@@ -188,12 +159,13 @@ namespace OpenRiaServices.Client.HttpDomainClient
 
         #region Private methods for making requests
         /// <summary>
-        /// Invokes a web request for the operation defined by the <see cref="WebApiDomainClientAsyncResult"/>
+        /// Invokes a web request for the operation <paramref name="operationName"/>
         /// </summary>
-        /// <param name="result">The result.</param>
+        /// <param name="operationName">name of operation</param>
         /// <param name="hasSideEffects">if set to <c>true</c> then the request will always be a POST operation.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <param name="queryOptions">The query options.</param>
+        /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
+        /// <param name="queryOptions">The query options, or <c>null</c>.</param>
+        /// <param name="cancellationToken"></param>
         private Task<HttpResponseMessage> ExecuteRequestAsync(string operationName, bool hasSideEffects, IDictionary<string, object> parameters,
             List<ServiceQueryPart> queryOptions,
             CancellationToken cancellationToken)
@@ -210,17 +182,16 @@ namespace OpenRiaServices.Client.HttpDomainClient
                 response = PostAsync(operationName, parameters, queryOptions, cancellationToken);
             }
 
-
             return response;
         }
 
         /// <summary>
         /// Initiates a POST request for the given operation and return the server respose (as a task).
         /// </summary>
-        /// <param name="result">The result object which contains information about which operation was performed.</param>
+        /// <param name="operationName">Name of operation</param>
         /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
         /// <param name="queryOptions">The query options if any.</param>
-        /// <returns></returns>
+        /// <param name="cancellationToken"></param>
         private Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, operationName)
@@ -234,10 +205,11 @@ namespace OpenRiaServices.Client.HttpDomainClient
         /// <summary>
         /// Initiates a GET request for the given operation and return the server respose (as a task).
         /// </summary>
-        /// <param name="result">The result object which contains information about which operation was performed.</param>
+        /// <param name="operationName">Name of operation</param>
         /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
         /// <param name="queryOptions">The query options if any.</param>
-        /// <returns></returns>
+        /// <param name="cancellationToken"></param>
+        /// <returns>A task for the pending operation, or <c>null</c> if operation was not attempted</returns>
         private Task<HttpResponseMessage> GetAsync(string operationName, IDictionary<string, object> parameters, IList<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
             int i = 0;
@@ -249,19 +221,16 @@ namespace OpenRiaServices.Client.HttpDomainClient
             {
                 foreach (var param in parameters)
                 {
+                    // TODO: We nned to look at using the interface instead
+                    // This is sort of a hack, we should ideally get the parameterType
+                    // null string should be emtpy string, null for other types should be "null"
                     if (param.Value != null)
                     {
                         uriBuilder.Append(i++ == 0 ? '?' : '&');
                         uriBuilder.Append(Uri.EscapeDataString(param.Key));
-                        uriBuilder.Append("=");
-                        // TODO: We nned to look at using the interface instead
-                        // This is sort of a hack, we should ideally get the parameterType
-                        // null string should be emtpy string, null for other types should be "null"
-                        //if (param.Value != null)
-                        //{
-                            var value = WebQueryStringConverter.ConvertValueToString(param.Value, param.Value.GetType());
-                            uriBuilder.Append(Uri.EscapeDataString(value));
-                        //}
+                        uriBuilder.Append('=');
+                        var value = WebQueryStringConverter.ConvertValueToString(param.Value, param.Value.GetType());
+                        uriBuilder.Append(Uri.EscapeDataString(value));
                     }
                 }
             }
@@ -297,7 +266,8 @@ namespace OpenRiaServices.Client.HttpDomainClient
         /// <summary>
         /// Reads a response from the service and converts it to the specified return type.
         /// </summary>
-        /// <param name="result">The result object which contains information about which operation was performed.</param>
+        /// <param name="response">the <see cref="HttpResponseMessage"/> to deserialize</param>
+        /// <param name="operationName">name of operation invoked, used to verify returned xml</param>
         /// <param name="returnType">Type which should be returned.</param>
         /// <returns></returns>
         /// <exception cref="OpenRiaServices.Client.DomainOperationException">On server errors which did not produce expected output</exception>
@@ -305,7 +275,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
         private async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
         {
             // Always dispose using finally block below  respnse or we can leak connections
-            using(response)
+            using (response)
             {
                 // TODO: OpenRia 5.0 returns different status codes
                 // Need to read content and parse it even if status code is not 200
@@ -508,7 +478,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
                 // Check any derived types to
                 foreach (KnownTypeAttribute derived in entityType.GetCustomAttributes(typeof(KnownTypeAttribute), inherit: false))
                 {
-                    if (visitedTypes.Add(derived.Type)) 
+                    if (visitedTypes.Add(derived.Type))
                         toVisit.Push(derived.Type);
                 }
 

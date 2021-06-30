@@ -8,18 +8,18 @@ namespace OpenRiaServices.Client.HttpDomainClient
 {
     class BinaryXmlContent : HttpContent
     {
-        private readonly BinaryHttpDomainClient domainClient;
-        private readonly string operationName;
-        private readonly IDictionary<string, object> parameters;
-        private readonly List<ServiceQueryPart> queryOptions;
+        private readonly BinaryHttpDomainClient _domainClient;
+        private readonly string _operationName;
+        private readonly IDictionary<string, object> _parameters;
+        private readonly List<ServiceQueryPart> _queryOptions;
 
         public BinaryXmlContent(BinaryHttpDomainClient domainClient,
             string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
-            this.domainClient = domainClient;
-            this.operationName = operationName;
-            this.parameters = parameters;
-            this.queryOptions = queryOptions;
+            this._domainClient = domainClient;
+            this._operationName = operationName;
+            this._parameters = parameters;
+            this._queryOptions = queryOptions;
 
             Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
         }
@@ -30,13 +30,13 @@ namespace OpenRiaServices.Client.HttpDomainClient
             {
                 // Write message
                 var rootNamespace = "http://tempuri.org/";
-                bool hasQueryOptions = (queryOptions != null && queryOptions.Count > 0);
+                bool hasQueryOptions = (_queryOptions != null && _queryOptions.Count > 0);
 
                 if (hasQueryOptions)
                 {
                     writer.WriteStartElement("MessageRoot");
                     writer.WriteStartElement("QueryOptions");
-                    foreach (var queryOption in queryOptions)
+                    foreach (var queryOption in _queryOptions)
                     {
                         writer.WriteStartElement("QueryOption");
                         writer.WriteAttributeString("Name", queryOption.QueryOperator);
@@ -45,17 +45,17 @@ namespace OpenRiaServices.Client.HttpDomainClient
                     }
                     writer.WriteEndElement();
                 }
-                writer.WriteStartElement(operationName, rootNamespace); // <OperationName>
+                writer.WriteStartElement(_operationName, rootNamespace); // <OperationName>
 
                 // Write all parameters
-                if (parameters != null && parameters.Count > 0)
+                if (_parameters != null && _parameters.Count > 0)
                 {
-                    foreach (var param in parameters)
+                    foreach (var param in _parameters)
                     {
                         writer.WriteStartElement(param.Key);  // <ParameterName>
                         if (param.Value != null)
                         {
-                            var serializer = domainClient.GetSerializer(param.Value.GetType());
+                            var serializer = _domainClient.GetSerializer(param.Value.GetType());
                             serializer.WriteObjectContent(writer, param.Value);
                         }
                         else
@@ -80,5 +80,4 @@ namespace OpenRiaServices.Client.HttpDomainClient
             return false;
         }
     }
-
 }
