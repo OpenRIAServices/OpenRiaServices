@@ -15,6 +15,8 @@ namespace OpenRiaServices.Client.HttpDomainClient
     {
         private readonly Func<HttpClient> _httpClientFactory;
 
+        //  not all platforms (blazor) support the cookiecontainer and it might be better if the end user configures
+        //  their messagehandler/httpclient to match the applications requirement instead of getting runtime exceptions
         private BinaryHttpDomainClientFactory()
             : this(new HttpClientHandler()
             {
