@@ -117,36 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Authentication_CannotInitializeDomainContext" xml:space="preserve">
-    <value>The DomainContextType is null or invalid and there are no contexts generated from AuthenticationBase&lt;T&gt;.</value>
-  </data>
-  <data name="Authentication_CannotInitializeUser" xml:space="preserve">
-    <value>The User type must extend UserBase and provide a default constructor.</value>
-  </data>
-  <data name="Authentication_CannotSaveAnonymous" xml:space="preserve">
-    <value>The current user is anonymous. Data may only be saved for authenticated users.</value>
-  </data>
-  <data name="Authentication_LoadNoUser" xml:space="preserve">
-    <value>GetUser should have returned a single user.</value>
-  </data>
-  <data name="Authentication_LogoutNoUser" xml:space="preserve">
-    <value>Logout should have returned a single, anonymous user.</value>
-  </data>
-  <data name="Authentication_NoLoadUserMethod" xml:space="preserve">
-    <value>Derived service does not contain a LoadUser method.</value>
-  </data>
-  <data name="Authentication_SaveErrors" xml:space="preserve">
-    <value>Errors occurred while submitting the user changes.</value>
-  </data>
-  <data name="Authentication_ServiceMustNotBeActive" xml:space="preserve">
-    <value>The service must be inactive to update state.</value>
-  </data>
-  <data name="Authentication_WANoLogin" xml:space="preserve">
-    <value>Windows authentication does not support logging in.</value>
-  </data>
-  <data name="Authentication_WANoLogout" xml:space="preserve">
-    <value>Windows authentication does not support logging out.</value>
-  </data>
   <data name="DomainClient_UnexpectedHttpStatusCode" xml:space="preserve">
     <value>Unexpected server statuscode {0} '{1}'</value>
     <comment>0 =status code as int, 1 =status code as text/enum</comment>
@@ -154,15 +124,6 @@
   <data name="DomainClient_UnexpectedResultContent" xml:space="preserve">
     <value>Unknown server response content, exptected '{0}' but was '{1}'</value>
     <comment>0 =expected xml node, 1 = actual xml node</comment>
-  </data>
-  <data name="MethodCanOnlyBeInvokedOnce" xml:space="preserve">
-    <value>Method can only be invoked once.</value>
-  </data>
-  <data name="OperationCancelled" xml:space="preserve">
-    <value>The operation was canceled.</value>
-  </data>
-  <data name="OperationNotComplete" xml:space="preserve">
-    <value>The operation has not completed.</value>
   </data>
   <data name="QuerySerialization_BitwiseOperatorsNotSupported" xml:space="preserve">
     <value>Bitwise operators are not supported in queries.</value>
@@ -190,20 +151,5 @@
   </data>
   <data name="QuerySerialization_UnsupportedUnaryOp" xml:space="preserve">
     <value>Unary operation '{0}' is not supported.</value>
-  </data>
-  <data name="WebContext_AuthenticationNotSet" xml:space="preserve">
-    <value>WebContextBase.Authentication has not been initialized. This member is only supported in valid implementations.</value>
-  </data>
-  <data name="WebContext_CannotModifyAuthentication" xml:space="preserve">
-    <value>Authentication cannot be set after the Application.Startup event has occurred.</value>
-  </data>
-  <data name="WebContext_NoContexts" xml:space="preserve">
-    <value>The current instance of WebContext is not available.  You must instantiate a WebContext and add it to Application.ApplicationLifetimeObjects within the default App constructor.</value>
-  </data>
-  <data name="WebContext_OnlyOne" xml:space="preserve">
-    <value>Only one WebContextBase can be created per application.</value>
-  </data>
-  <data name="WrongAsyncResult" xml:space="preserve">
-    <value>IAsyncResult object did not come from the corresponding async method on this Type.</value>
   </data>
 </root>
