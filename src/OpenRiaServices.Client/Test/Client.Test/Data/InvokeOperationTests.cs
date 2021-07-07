@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cities;
 using Microsoft.Silverlight.Testing;
@@ -430,6 +432,23 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public async Task InvokeOperation_EntityParameter_Invalid_ServerValidation()
+        {
+            TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
+            var parameters = new Dictionary<string, object>()
+            {
+                { "a", new A() }
+            };
+            var invokeArgs = new InvokeArgs("IncrementBid1ForA", typeof(int), parameters, true);
+
+            var res = await provider.DomainClient.InvokeAsync(invokeArgs, CancellationToken.None);
+
+            Assert.IsNotNull(res.ValidationErrors);
+            Assert.AreEqual(1, res.ValidationErrors.Count);
+            Assert.AreEqual("SOME MESSAGE about RequiredProperty missing", res.ValidationErrors.First());
+        }
+
+        [TestMethod]
         [Asynchronous]
         public void InvokeOperation_EntityParameter_Invalid()
         {
@@ -679,7 +698,7 @@ namespace OpenRiaServices.Client.Test
             this.VerifyOnlineMethodReturn<TimeSpan>(provider, provider.ReturnsTimeSpan_Online, TimeSpan.FromSeconds(123));
             this.VerifyOnlineMethodReturn<IEnumerable<string>>(provider, provider.ReturnsStrings_Online, new string[] { "hello", "world" }.ToList());
             this.VerifyOnlineMethodReturn<DateTime[]>(provider, provider.ReturnsDateTimes_Online, new DateTime[] { new DateTime(2009, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2009, 1, 6, 0, 5, 0, DateTimeKind.Utc) });
-            this.VerifyOnlineMethodReturn<DateTimeOffset[]>(provider, provider.ReturnsDateTimeOffsets_Online, new DateTimeOffset[] { new DateTimeOffset(new DateTime(2009, 1, 1, 0, 0, 0), new TimeSpan(3, 0, 0)),  new DateTimeOffset(new DateTime(2009, 1, 6, 0, 5, 0), new TimeSpan(-6, 10, 0)) });
+            this.VerifyOnlineMethodReturn<DateTimeOffset[]>(provider, provider.ReturnsDateTimeOffsets_Online, new DateTimeOffset[] { new DateTimeOffset(new DateTime(2009, 1, 1, 0, 0, 0), new TimeSpan(3, 0, 0)), new DateTimeOffset(new DateTime(2009, 1, 6, 0, 5, 0), new TimeSpan(-6, 10, 0)) });
             this.VerifyOnlineMethodReturn<IEnumerable<TimeSpan>>(provider, provider.ReturnsTimeSpans_Online, new TimeSpan[] { TimeSpan.FromSeconds(123), TimeSpan.FromMinutes(3) }.ToList());
             this.VerifyOnlineMethodReturn<Uri>(provider, provider.ReturnsUri_Online, new Uri("http://localhost"));
             this.VerifyOnlineMethodReturn<Char>(provider, provider.ReturnsChar_Online, (char)0);
