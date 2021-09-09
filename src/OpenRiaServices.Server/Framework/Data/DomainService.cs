@@ -1198,13 +1198,6 @@ namespace OpenRiaServices.Server
             // First do an authentication check and throw immediately if unauthorized
             this.ValidateMethodPermissions(domainOperationEntry, /* entity */ null);
 
-            // Then do validaiton only if required
-            if (!domainOperationEntry.RequiresValidation)
-            {
-                validationResults = null;
-                return true;
-            }
-
             validationResults = new List<ValidationResult>();
             ValidationContext validationContext = ValidationUtilities.CreateValidationContext(this, this.ValidationContext);
 
