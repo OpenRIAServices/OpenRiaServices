@@ -2,15 +2,15 @@
 # 5.0.1
 
 * IMPORTANT: Fix a potential security vulnerability where entity parameters are not validated when calling invoke methods (#292)
-  - The issue  occurs if there are nothing else to validate so it there were validation attributes on the method, 
-  any parameters or it contained any "complex objects" then validation happend as expected.
-  Thanks to @ehsangfl for finding and helping finding the cause of the issue
-* Allow nullable parameters to GET methods to be sent using same format as non nullable parameters
-  This enables the "HttpClient" based sample DomainClient for xamarin etc to work, and prepares for the upcoming official version (#290)
+  - The issue occurs if there are nothing else to validate so if there were validation attributes on the method, 
+  any parameters or it contained any "complex objects" then validation happened as expected.
+  Thanks to @ehsangfl for finding and helping to find the cause of the issue
+* Allow nullable parameters to GET methods to be sent using same format as non-nullable parameters
+  This enables the "HttpClient" based sample DomainClient for Xamarin etc. to work, and prepares for the upcoming official version (#290)
 * Make it clear that DomainClientFactory must be set at startup (#301)
   Throws exception instead of trying to create a instance which does not work
 
-* Update dependencies
+**Update dependencies**
   * Mono.Cecil 0.11.3 -> 0.11.4
   * System.ServiceModel.Http 4.8.0 -> 4.8.1
 
