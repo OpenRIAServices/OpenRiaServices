@@ -123,20 +123,11 @@
   <data name="CyclicReferenceError" xml:space="preserve">
     <value>Reference cycle detected. Entity or ComplexObject members cannot contain cyclic references.</value>
   </data>
-  <data name="DomainClientFactory_FaildToGetGenericDomainClient" xml:space="preserve">
-    <value>Faild to construct generic WebDomainClient</value>
-  </data>
-  <data name="DomainClientFactory_MissingClientWebReference" xml:space="preserve">
-    <value>You must reference the assembly 'OpenRiaServices.Client.Web'</value>
-  </data>
   <data name="DomainClientFactory_ServiceContractMustBeAnInterface" xml:space="preserve">
     <value>Service contract must be an interface</value>
   </data>
   <data name="DomainClientFactory_UnableToCreateAbsoluteUri" xml:space="preserve">
     <value>Could not use ServerBaseUri and the serviceUri to create an absolute Uri.</value>
-  </data>
-  <data name="DomainClient_CancellationNotSupported" xml:space="preserve">
-    <value>The DomainClient '{0}' does not support cancellation.</value>
   </data>
   <data name="DomainClient_EmptyChangeSet" xml:space="preserve">
     <value>The submitted change-set was empty.</value>
@@ -147,14 +138,14 @@
   <data name="DomainClient_InvocationNameCannotBeNullOrEmpty" xml:space="preserve">
     <value>Custom method invocation name cannot be null or empty.</value>
   </data>
+  <data name="DomainContext_DomainClientFactoryNotSet" xml:space="preserve">
+    <value>Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as WebDomainClientFactory from 'OpenRiaServices.Client.Web'.</value>
+  </data>
   <data name="DomainContext_EntityContainerCannotBeNull" xml:space="preserve">
     <value>The EntityContainer for a DomainContext cannot be null.</value>
   </data>
   <data name="DomainContext_InvalidEntityQueryDomainClient" xml:space="preserve">
     <value>The specified EntityQuery '{0}' cannot be loaded because it was not created by this DomainContext.</value>
-  </data>
-  <data name="DomainContext_InvalidServiceUri" xml:space="preserve">
-    <value>The specified service URI is not correctly formatted.</value>
   </data>
   <data name="DomainContext_InvokeOperationFailed" xml:space="preserve">
     <value>Invoke operation '{0}' failed. {1}</value>
@@ -252,9 +243,6 @@
   <data name="Entity_KeyMembersCannotBeChanged" xml:space="preserve">
     <value>The value of key member '{0}' on an instance of an entity of type '{1}' has changed. Entity key members cannot be changed.</value>
   </data>
-  <data name="Entity_MultipleCustomMethodInvocations" xml:space="preserve">
-    <value>Only one pending custom method invocation is allowed per entity.</value>
-  </data>
   <data name="Entity_NoEntityActionWithName" xml:space="preserve">
     <value>Can not find any entity action named '{0}'</value>
   </data>
@@ -278,9 +266,6 @@
   </data>
   <data name="IsNotSupported" xml:space="preserve">
     <value>'{0}' is not supported.</value>
-  </data>
-  <data name="LoadResult_OperationNotSucessfullyCompleted" xml:space="preserve">
-    <value>The operation must have been sucessfully completed</value>
   </data>
   <data name="MemberMustBeAssociation" xml:space="preserve">
     <value>Member '{0}' must be marked with AssociationAttribute</value>
