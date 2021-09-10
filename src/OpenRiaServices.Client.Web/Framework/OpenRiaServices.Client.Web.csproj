@@ -44,6 +44,9 @@
     <Compile Remove="..\..\OpenRiaServices.hosting\framework\services\messageencoders\PoxBinaryMessageEncodingBindingElement.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
