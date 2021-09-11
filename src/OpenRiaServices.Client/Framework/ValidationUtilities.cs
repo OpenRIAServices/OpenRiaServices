@@ -375,6 +375,12 @@ namespace OpenRiaServices.Client
         {
             bool breakOnFirstError = validationResults == null;
 
+            // TODO: Split property into, properties for attributes on method and on properties
+            if (!operationEntry.RequiresValidation)
+            {
+                return true;
+            }
+
             ValidationContext methodContext = CreateValidationContext(validationContext.ObjectInstance, validationContext);
             methodContext.MemberName = operationEntry.Name;
 

@@ -19,7 +19,7 @@ namespace OpenRiaServices.Client {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -79,15 +79,6 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The DomainClient &apos;{0}&apos; does not support cancellation..
-        /// </summary>
-        internal static string DomainClient_CancellationNotSupported {
-            get {
-                return ResourceManager.GetString("DomainClient_CancellationNotSupported", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The submitted change-set was empty..
         /// </summary>
         internal static string DomainClient_EmptyChangeSet {
@@ -115,24 +106,6 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Faild to construct generic WebDomainClient.
-        /// </summary>
-        internal static string DomainClientFactory_FaildToGetGenericDomainClient {
-            get {
-                return ResourceManager.GetString("DomainClientFactory_FaildToGetGenericDomainClient", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You must reference the assembly &apos;OpenRiaServices.Client.Web&apos;.
-        /// </summary>
-        internal static string DomainClientFactory_MissingClientWebReference {
-            get {
-                return ResourceManager.GetString("DomainClientFactory_MissingClientWebReference", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Service contract must be an interface.
         /// </summary>
         internal static string DomainClientFactory_ServiceContractMustBeAnInterface {
@@ -151,6 +124,15 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as WebDomainClientFactory from &apos;OpenRiaServices.Client.Web&apos;..
+        /// </summary>
+        internal static string DomainContext_DomainClientFactoryNotSet {
+            get {
+                return ResourceManager.GetString("DomainContext_DomainClientFactoryNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The EntityContainer for a DomainContext cannot be null..
         /// </summary>
         internal static string DomainContext_EntityContainerCannotBeNull {
@@ -165,15 +147,6 @@ namespace OpenRiaServices.Client {
         internal static string DomainContext_InvalidEntityQueryDomainClient {
             get {
                 return ResourceManager.GetString("DomainContext_InvalidEntityQueryDomainClient", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The specified service URI is not correctly formatted..
-        /// </summary>
-        internal static string DomainContext_InvalidServiceUri {
-            get {
-                return ResourceManager.GetString("DomainContext_InvalidServiceUri", resourceCulture);
             }
         }
         
@@ -309,15 +282,6 @@ namespace OpenRiaServices.Client {
         internal static string Entity_KeyMembersCannotBeChanged {
             get {
                 return ResourceManager.GetString("Entity_KeyMembersCannotBeChanged", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Only one pending custom method invocation is allowed per entity..
-        /// </summary>
-        internal static string Entity_MultipleCustomMethodInvocations {
-            get {
-                return ResourceManager.GetString("Entity_MultipleCustomMethodInvocations", resourceCulture);
             }
         }
         
@@ -543,15 +507,6 @@ namespace OpenRiaServices.Client {
         internal static string IsNotSupported {
             get {
                 return ResourceManager.GetString("IsNotSupported", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The operation must have been sucessfully completed.
-        /// </summary>
-        internal static string LoadResult_OperationNotSucessfullyCompleted {
-            get {
-                return ResourceManager.GetString("LoadResult_OperationNotSucessfullyCompleted", resourceCulture);
             }
         }
         

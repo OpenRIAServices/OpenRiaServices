@@ -7,8 +7,8 @@
 
     <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
 
-    <!-- Use csharp 8.0 for all projects -->
-    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">8.0</LangVersion>
+    <!-- Use csharp 9.0 for all projects -->
+    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">9.0</LangVersion>
 
     <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
 

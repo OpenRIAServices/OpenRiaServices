@@ -80,12 +80,12 @@ namespace OpenRiaServices.Client
         /// The domain client factory.
         /// </value>
         /// <exception cref="System.ArgumentNullException">if trying to set the property to null</exception>
+        /// <exception cref="System.InvalidOperationException">If trying to get a DomainClientFactory without having one set</exception>
         public static IDomainClientFactory DomainClientFactory
         {
             get
             {
-                // We don't perform syncronization here, but it is ok since in worst case we might end up creating two different instances of the _domainClientFactory
-                return s_domainClientFactory ?? (s_domainClientFactory = CreateDomainClientFactory());
+                return s_domainClientFactory ?? throw new InvalidOperationException(Resource.DomainContext_DomainClientFactoryNotSet);
             }
             set
             {
@@ -1114,26 +1114,6 @@ namespace OpenRiaServices.Client
                 this._requiresValidationMap[methodName] = requiresValidation;
             }
             return requiresValidation;
-        }
-
-        /// <summary>
-        /// Creates a domain client factory to use, in case the user has not set the <see cref="DomainClientFactory"/> property.
-        /// </summary>
-        /// <returns>A WebDomainClientFactory if found otherwise a <see cref="DefaultDomainClientFactory"/></returns>
-        private static IDomainClientFactory CreateDomainClientFactory()
-        {
-            // 1; Check if any known DomainClientFactory can be found
-
-            // Check for DomainClient in OpenRiaServices.Client.Web assembly
-            var typeName = "OpenRiaServices.Client.WebDomainClientFactory, "
-                                    + typeof(DomainClient).Assembly.FullName.Replace("OpenRiaServices.Client", "OpenRiaServices.Client.Web");
-            var webDomainClientFactoryType = Type.GetType(typeName);
-            if (webDomainClientFactoryType != null)
-                return (IDomainClientFactory)Activator.CreateInstance(webDomainClientFactoryType);
-
-            // Fallback to default implementation, this should only ever happening if the user is using a
-            // an up-to-date version if the client library but an old version of the Client.Web assembly
-            return new DefaultDomainClientFactory();
         }
     }
 }
