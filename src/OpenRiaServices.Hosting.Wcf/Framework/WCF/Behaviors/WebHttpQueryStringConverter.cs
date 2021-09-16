@@ -80,7 +80,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
                 }
                 catch (Exception)
                 {
-                    // Fallback to old serialization format
+                    // Fallback to old serialization format (default settings)
                     ms.Seek(0, SeekOrigin.Begin);
                     return new DataContractJsonSerializer(parameterType)
                         .ReadObject(ms);
@@ -99,7 +99,9 @@ namespace OpenRiaServices.Client.Web.Behaviors
             // without giving wrong result for string
             if (parameter == null)
                 return "null";
-            else if (TypeUtility.IsNullableType(parameterType))
+
+            // For nullable types (which are not null), try to just serialize it as the underlying type
+            if (TypeUtility.IsNullableType(parameterType))
             {
                 parameterType = TypeUtility.GetNonNullableType(parameterType);
                 if (base.CanConvert(parameterType))
@@ -115,7 +117,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
 
                 if (ms.TryGetBuffer(out var buffer))
                 {
-                    string value = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
+                    string value = Encoding.UTF8.GetString(buffer.Array, index: buffer.Offset, count: buffer.Count);
                     return HttpUtility.UrlEncode(value);
                 }
                 else
