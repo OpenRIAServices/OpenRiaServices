@@ -3,56 +3,55 @@
 // LICENSE MIT https://github.com/microsoft/referencesource/blob/master/LICENSE.txt
 // Retreived from https://raw.githubusercontent.com/microsoft/referencesource/5697c29004a34d80acdaf5742d7e699022c64ecd/System.ServiceModel.Web/System/ServiceModel/Dispatcher/QueryStringConverter.cs
 //------------------------------------------------------------
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Xml;
+
 #pragma warning disable 1634, 1691
 namespace System.ServiceModel.Dispatcher
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Xml;
-
     // Thread Safety: This class is thread safe
     class QueryStringConverter
     {
-        HashSet<Type> defaultSupportedQueryStringTypes;
+        private readonly HashSet<Type> _defaultSupportedQueryStringTypes;
         // the cache does not have a quota since it is per endpoint and is
         // bounded by the number of types in the contract at the endpoint
-        Dictionary<Type, TypeConverter> typeConverterCache;
+        private readonly Dictionary<Type, TypeConverter> _typeConverterCache;
 
         public QueryStringConverter()
         {
-            this.defaultSupportedQueryStringTypes = new HashSet<Type>();
-            this.defaultSupportedQueryStringTypes.Add(typeof(Byte));
-            this.defaultSupportedQueryStringTypes.Add(typeof(SByte));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Int16));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Int32));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Int64));
-            this.defaultSupportedQueryStringTypes.Add(typeof(UInt16));
-            this.defaultSupportedQueryStringTypes.Add(typeof(UInt32));
-            this.defaultSupportedQueryStringTypes.Add(typeof(UInt64));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Single));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Double));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Boolean));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Char));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Decimal));
-            this.defaultSupportedQueryStringTypes.Add(typeof(String));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Object));
-            this.defaultSupportedQueryStringTypes.Add(typeof(DateTime));
-            this.defaultSupportedQueryStringTypes.Add(typeof(TimeSpan));
-            this.defaultSupportedQueryStringTypes.Add(typeof(byte[]));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Guid));
-            this.defaultSupportedQueryStringTypes.Add(typeof(Uri));
-            this.defaultSupportedQueryStringTypes.Add(typeof(DateTimeOffset));
-            this.typeConverterCache = new Dictionary<Type, TypeConverter>();
+            this._defaultSupportedQueryStringTypes = new HashSet<Type>();
+            this._defaultSupportedQueryStringTypes.Add(typeof(byte));
+            this._defaultSupportedQueryStringTypes.Add(typeof(sbyte));
+            this._defaultSupportedQueryStringTypes.Add(typeof(short));
+            this._defaultSupportedQueryStringTypes.Add(typeof(int));
+            this._defaultSupportedQueryStringTypes.Add(typeof(long));
+            this._defaultSupportedQueryStringTypes.Add(typeof(ushort));
+            this._defaultSupportedQueryStringTypes.Add(typeof(uint));
+            this._defaultSupportedQueryStringTypes.Add(typeof(ulong));
+            this._defaultSupportedQueryStringTypes.Add(typeof(float));
+            this._defaultSupportedQueryStringTypes.Add(typeof(double));
+            this._defaultSupportedQueryStringTypes.Add(typeof(bool));
+            this._defaultSupportedQueryStringTypes.Add(typeof(char));
+            this._defaultSupportedQueryStringTypes.Add(typeof(decimal));
+            this._defaultSupportedQueryStringTypes.Add(typeof(string));
+            this._defaultSupportedQueryStringTypes.Add(typeof(object));
+            this._defaultSupportedQueryStringTypes.Add(typeof(DateTime));
+            this._defaultSupportedQueryStringTypes.Add(typeof(TimeSpan));
+            this._defaultSupportedQueryStringTypes.Add(typeof(byte[]));
+            this._defaultSupportedQueryStringTypes.Add(typeof(Guid));
+            this._defaultSupportedQueryStringTypes.Add(typeof(Uri));
+            this._defaultSupportedQueryStringTypes.Add(typeof(DateTimeOffset));
+            this._typeConverterCache = new Dictionary<Type, TypeConverter>();
         }
 
         public virtual bool CanConvert(Type type)
         {
-            if (this.defaultSupportedQueryStringTypes.Contains(type))
+            if (this._defaultSupportedQueryStringTypes.Contains(type))
             {
                 return true;
             }
@@ -63,99 +62,6 @@ namespace System.ServiceModel.Dispatcher
             }
             // check if there's a typeconverter defined on the type
             return (GetStringConverter(type) != null);
-        }
-
-        public virtual object ConvertStringToValue(string parameter, Type parameterType)
-        {
-            if (parameterType == null)
-            {
-                throw new ArgumentNullException(nameof(parameterType));
-            }
-            switch (Type.GetTypeCode(parameterType))
-            {
-                case TypeCode.Byte:
-                    return parameter == null ? default(Byte) : XmlConvert.ToByte(parameter);
-                case TypeCode.SByte:
-                    return parameter == null ? default(SByte) : XmlConvert.ToSByte(parameter);
-                case TypeCode.Int16:
-                    return parameter == null ? default(Int16) : XmlConvert.ToInt16(parameter);
-                case TypeCode.Int32:
-                    {
-                        if (typeof(Enum).IsAssignableFrom(parameterType))
-                        {
-                            return Enum.Parse(parameterType, parameter, true);
-                        }
-                        else
-                        {
-                            return parameter == null ? default(Int32) : XmlConvert.ToInt32(parameter);
-                        }
-                    }
-                case TypeCode.Int64:
-                    return parameter == null ? default(Int64) : XmlConvert.ToInt64(parameter);
-                case TypeCode.UInt16:
-                    return parameter == null ? default(UInt16) : XmlConvert.ToUInt16(parameter);
-                case TypeCode.UInt32:
-                    return parameter == null ? default(UInt32) : XmlConvert.ToUInt32(parameter);
-                case TypeCode.UInt64:
-                    return parameter == null ? default(UInt64) : XmlConvert.ToUInt64(parameter);
-                case TypeCode.Single:
-                    return parameter == null ? default(Single) : XmlConvert.ToSingle(parameter);
-                case TypeCode.Double:
-                    return parameter == null ? default(Double) : XmlConvert.ToDouble(parameter);
-                case TypeCode.Char:
-                    return parameter == null ? default(Char) : XmlConvert.ToChar(parameter);
-                case TypeCode.Decimal:
-                    return parameter == null ? default(Decimal) : XmlConvert.ToDecimal(parameter);
-                case TypeCode.Boolean:
-                    return parameter == null ? default(Boolean) : Convert.ToBoolean(parameter, CultureInfo.InvariantCulture);
-                case TypeCode.String:
-                    return parameter;
-                case TypeCode.DateTime:
-                    return parameter == null ? default(DateTime) : DateTime.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
-                default:
-                    {
-                        if (parameterType == typeof(TimeSpan))
-                        {
-                            // support the XML as well as default way of representing timespans
-                            TimeSpan result;
-                            if (!TimeSpan.TryParse(parameter, out result))
-                            {
-                                result = parameter == null ? default(TimeSpan) : XmlConvert.ToTimeSpan(parameter);
-                            }
-                            return result;
-                        }
-                        else if (parameterType == typeof(Guid))
-                        {
-                            return parameter == null ? default(Guid) : XmlConvert.ToGuid(parameter);
-                        }
-                        else if (parameterType == typeof(DateTimeOffset))
-                        {
-                            return (parameter == null) ? default(DateTimeOffset) : DateTimeOffset.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.AllowWhiteSpaces);
-                        }
-                        else if (parameterType == typeof(byte[]))
-                        {
-                            return (!string.IsNullOrEmpty(parameter)) ? Convert.FromBase64String(parameter) : new byte[] { };
-                        }
-                        else if (parameterType == typeof(Uri))
-                        {
-                            return (!string.IsNullOrEmpty(parameter)) ? new Uri(parameter, UriKind.RelativeOrAbsolute) : null;
-                        }
-                        else if (parameterType == typeof(object))
-                        {
-                            return parameter;
-                        }
-                        else
-                        {
-                            TypeConverter stringConverter = GetStringConverter(parameterType);
-                            if (stringConverter == null)
-                            {
-                                throw new NotSupportedException(
-                                    $"Type {parameterType.FullName} is NotSupportedBy QueryStringConverter");
-                            }
-                            return stringConverter.ConvertFromInvariantString(parameter);
-                        }
-                    }
-            }
         }
 
         public virtual string ConvertValueToString(object parameter, Type parameterType)
@@ -171,11 +77,11 @@ namespace System.ServiceModel.Dispatcher
             switch (Type.GetTypeCode(parameterType))
             {
                 case TypeCode.Byte:
-                    return XmlConvert.ToString((Byte)parameter);
+                    return XmlConvert.ToString((byte)parameter);
                 case TypeCode.SByte:
-                    return XmlConvert.ToString((SByte)parameter);
+                    return XmlConvert.ToString((sbyte)parameter);
                 case TypeCode.Int16:
-                    return XmlConvert.ToString((Int16)parameter);
+                    return XmlConvert.ToString((short)parameter);
                 case TypeCode.Int32:
                     {
                         if (typeof(Enum).IsAssignableFrom(parameterType))
@@ -188,15 +94,15 @@ namespace System.ServiceModel.Dispatcher
                         }
                     }
                 case TypeCode.Int64:
-                    return XmlConvert.ToString((Int64)parameter);
+                    return XmlConvert.ToString((long)parameter);
                 case TypeCode.UInt16:
-                    return XmlConvert.ToString((UInt16)parameter);
+                    return XmlConvert.ToString((ushort)parameter);
                 case TypeCode.UInt32:
                     return XmlConvert.ToString((uint)parameter);
                 case TypeCode.UInt64:
-                    return XmlConvert.ToString((UInt64)parameter);
+                    return XmlConvert.ToString((ulong)parameter);
                 case TypeCode.Single:
-                    return XmlConvert.ToString((Single)parameter);
+                    return XmlConvert.ToString((float)parameter);
                 case TypeCode.Double:
                     return XmlConvert.ToString((double)parameter);
                 case TypeCode.Char:
@@ -253,9 +159,9 @@ namespace System.ServiceModel.Dispatcher
         [SuppressMessage("Reliability", "Reliability104:CaughtAndHandledExceptionsRule", Justification = "The exception is traced in the finally clause")]
         TypeConverter GetStringConverter(Type parameterType)
         {
-            if (this.typeConverterCache.ContainsKey(parameterType))
+            if (this._typeConverterCache.ContainsKey(parameterType))
             {
-                return (TypeConverter)this.typeConverterCache[parameterType];
+                return (TypeConverter)this._typeConverterCache[parameterType];
             }
             TypeConverterAttribute[] typeConverterAttrs = parameterType.GetCustomAttributes(typeof(TypeConverterAttribute), true) as TypeConverterAttribute[];
             if (typeConverterAttrs != null)
@@ -291,30 +197,21 @@ namespace System.ServiceModel.Dispatcher
                         {
                             handledException = e;
                         }
-                        finally
-                        {
-                            if (handledException != null)
-                            {
-                                //if (Fx.IsFatal(handledException))
-                                //{
-                                //    throw DiagnosticUtility.ExceptionUtility.ThrowHelperError(handledException);
-                                //}
-                                //DiagnosticUtility.TraceHandledException(handledException, TraceEventType.Warning);
-                            }
-                        }
+                        /* Original code has some logging of exceptions here, and rethrows Fatal exceptions like OutOfMemory */
+
                         if (converter == null)
                         {
                             continue;
                         }
                         if (converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
                         {
-                            this.typeConverterCache.Add(parameterType, converter);
+                            this._typeConverterCache.Add(parameterType, converter);
                             return converter;
                         }
                     }
                 }
             }
-            this.typeConverterCache.Add(parameterType, null);
+            this._typeConverterCache.Add(parameterType, null);
             return null;
         }
     }
