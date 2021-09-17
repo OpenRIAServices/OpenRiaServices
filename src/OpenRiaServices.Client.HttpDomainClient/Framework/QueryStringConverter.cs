@@ -13,10 +13,18 @@ namespace OpenRiaServices.Client.HttpDomainClient
     static class WebQueryStringConverter
     {
         static readonly QueryStringConverter s_systemConverter = new QueryStringConverter();
-        
+        // Specify datetime format so that the DateTimeKind can roundtrip, otherwise unspecified values are treated incorrect by server
+        // https://github.com/OpenRIAServices/OpenRiaServices/issues/75
+        const string DateTimeFormat = @"yyyy\-MM\-ddTHH\:mm\:ss.FFFFFFFK";
+        private static readonly DataContractJsonSerializerSettings s_jsonSettings
+            = new DataContractJsonSerializerSettings()
+            {
+                DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat(DateTimeFormat, System.Globalization.CultureInfo.InvariantCulture)
+            };
+
         public static string ConvertValueToString(object parameter, Type parameterType)
         {
-            if (parameterType.IsValueType 
+            if (parameterType.IsValueType
                 && parameter == null
                 && !TypeUtility.IsNullableType(parameterType))
             {
@@ -29,23 +37,16 @@ namespace OpenRiaServices.Client.HttpDomainClient
             }
             using (MemoryStream ms = new MemoryStream())
             {
-                new DataContractJsonSerializer(parameterType, new DataContractJsonSerializerSettings()
+                new DataContractJsonSerializer(parameterType, s_jsonSettings)
+                    .WriteObject(ms, parameter);
+
+                if (ms.TryGetBuffer(out var buffer))
                 {
-                     DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat("o", CultureInfo.InvariantCulture)
-                }).WriteObject(ms, parameter);
-
-                byte[] result = ms.ToArray();
-                string value = Encoding.UTF8.GetString(result, 0, result.Length);
-
-                // TODO: JsonSerializerSettings? , and ensure it is correctly configured
-                //string value = Newtonsoft.Json.JsonConvert.SerializeObject(parameter, parameterType, new Newtonsoft.Json.JsonSerializerSettings()
-                //{
-                //     DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat
-                //});
-
-
-                // https://weblog.west-wind.com/posts/2009/Feb/05/Html-and-Uri-String-Encoding-without-SystemWeb
-                return Uri.EscapeDataString(value);
+                    string value = Encoding.UTF8.GetString(buffer.Array, index: buffer.Offset, count: buffer.Count);
+                    return Uri.EscapeDataString(value);
+                }
+                else
+                    return string.Empty;
             }
         }
     }
