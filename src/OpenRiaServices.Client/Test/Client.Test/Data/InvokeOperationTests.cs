@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cities;
 using Microsoft.Silverlight.Testing;
@@ -429,23 +427,6 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(inputA.BID1 + 1, invoke.Value);
             });
             EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        public async Task InvokeOperation_EntityParameter_Invalid_ServerValidation()
-        {
-            TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
-            var parameters = new Dictionary<string, object>()
-            {
-                { "a", new A() }
-            };
-            var invokeArgs = new InvokeArgs("IncrementBid1ForA", typeof(int), parameters, true);
-
-            var res = await provider.DomainClient.InvokeAsync(invokeArgs, CancellationToken.None);
-
-            Assert.IsNotNull(res.ValidationErrors);
-            Assert.AreEqual(1, res.ValidationErrors.Count);
-            Assert.AreEqual("SOME MESSAGE about RequiredProperty missing", res.ValidationErrors.First());
         }
 
         [TestMethod]
