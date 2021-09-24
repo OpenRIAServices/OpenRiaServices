@@ -171,7 +171,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             List<ServiceQueryPart> queryOptions,
             CancellationToken cancellationToken)
         {
-            Task<HttpResponseMessage> response = null;
+            Task<HttpResponseMessage> response = s_skipGetUsePostInstead;
 
             if (!hasSideEffects)
             {
