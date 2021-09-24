@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.Serialization.Json;
 using System.ServiceModel.Dispatcher;
 
-namespace OpenRiaServices.Client.HttpDomainClient
+namespace OpenRiaServices.Client.DomainClients.Http
 {
     /// <summary>
     /// This file is based on the OpenRiaServices.Client/Hosting.WebHttpQueryStringConverter 
@@ -30,7 +30,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
                 return s_systemConverter.ConvertValueToString(parameter, parameterType);
             }
 
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 new DataContractJsonSerializer(parameterType, s_jsonSettings)
                     .WriteObject(ms, parameter);

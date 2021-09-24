@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.HttpDomainClient
+namespace OpenRiaServices.Client.DomainClients.Http
 {
     class BinaryXmlContent : HttpContent
     {
@@ -16,10 +16,10 @@ namespace OpenRiaServices.Client.HttpDomainClient
         public BinaryXmlContent(BinaryHttpDomainClient domainClient,
             string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
-            this._domainClient = domainClient;
-            this._operationName = operationName;
-            this._parameters = parameters;
-            this._queryOptions = queryOptions;
+            _domainClient = domainClient;
+            _operationName = operationName;
+            _parameters = parameters;
+            _queryOptions = queryOptions;
 
             Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
         }
@@ -30,7 +30,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
             {
                 // Write message
                 var rootNamespace = "http://tempuri.org/";
-                bool hasQueryOptions = (_queryOptions != null && _queryOptions.Count > 0);
+                bool hasQueryOptions = _queryOptions != null && _queryOptions.Count > 0;
 
                 if (hasQueryOptions)
                 {

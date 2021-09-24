@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28606.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -138,7 +138,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.Auth
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.UnitTesting.Test", "OpenRiaServices.Server.UnitTesting\Test\OpenRiaServices.Server.UnitTesting.Test.csproj", "{7026BE35-4A31-4C10-B9C8-98BA36D333C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.HttpDomainClient", "OpenRiaServices.Client.HttpDomainClient\Framework\OpenRiaServices.Client.HttpDomainClient.csproj", "{C5D0BD0D-5CE8-43E9-B28C-951B04CB6CC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.DomainClients.Http", "OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj", "{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -334,10 +334,10 @@ Global
 		{7026BE35-4A31-4C10-B9C8-98BA36D333C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7026BE35-4A31-4C10-B9C8-98BA36D333C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7026BE35-4A31-4C10-B9C8-98BA36D333C5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C5D0BD0D-5CE8-43E9-B28C-951B04CB6CC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5D0BD0D-5CE8-43E9-B28C-951B04CB6CC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5D0BD0D-5CE8-43E9-B28C-951B04CB6CC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5D0BD0D-5CE8-43E9-B28C-951B04CB6CC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -402,7 +402,7 @@ Global
 		{B2183838-A948-47FD-8AB4-E8E7C5CD4477} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{7026BE35-4A31-4C10-B9C8-98BA36D333C5} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
-		{C5D0BD0D-5CE8-43E9-B28C-951B04CB6CC9} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
+		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}

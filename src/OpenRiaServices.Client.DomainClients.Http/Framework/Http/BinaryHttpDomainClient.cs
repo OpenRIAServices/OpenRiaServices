@@ -1,4 +1,5 @@
-﻿using OpenRiaServices.Client.Internal;
+﻿using OpenRiaServices.Client.HttpDomainClient;
+using OpenRiaServices.Client.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.HttpDomainClient
+namespace OpenRiaServices.Client.DomainClients.Http
 {
     // TODO: Extract serialization to separate class (hierarchy) Serializer / SerializerCache
     // Pass in HttpDomainClientFactory to ctor,
@@ -178,7 +179,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
                 response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
             }
             // It is a POST, or GET returned null (maybe due to too large request uri)
-            if (object.ReferenceEquals(response, s_skipGetUsePostInstead))
+            if (ReferenceEquals(response, s_skipGetUsePostInstead))
             {
                 response = PostAsync(operationName, parameters, queryOptions, cancellationToken);
             }
@@ -274,7 +275,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
         /// <param name="operationName">name of operation invoked, used to verify returned xml</param>
         /// <param name="returnType">Type which should be returned.</param>
         /// <returns></returns>
-        /// <exception cref="OpenRiaServices.Client.DomainOperationException">On server errors which did not produce expected output</exception>
+        /// <exception cref="DomainOperationException">On server errors which did not produce expected output</exception>
         /// <exception cref="FaultException{DomainServiceFault}">If server returned a DomainServiceFault</exception>
         private async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
         {
@@ -338,7 +339,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
         /// <param name="reader">The reader.</param>
         /// <param name="operationName">Name of the operation.</param>
         /// <param name="postfix">The postfix.</param>
-        /// <exception cref="OpenRiaServices.Client.DomainOperationException">If reader is not at the expected xml element</exception>
+        /// <exception cref="DomainOperationException">If reader is not at the expected xml element</exception>
         private static void VerifyReaderIsAtNode(System.Xml.XmlDictionaryReader reader, string operationName, string postfix)
         {
             // localName should be operationName + postfix
@@ -390,7 +391,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
         {
             FaultCode faultCode;
             FaultReason faultReason;
-            List<FaultReasonText> faultReasons = new List<FaultReasonText>();
+            var faultReasons = new List<FaultReasonText>();
             FaultCode subCode = null;
 
             reader.ReadStartElement("Fault"); // <Fault>

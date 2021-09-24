@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml;
 
-namespace OpenRiaServices.Client.HttpDomainClient
+namespace OpenRiaServices.Client.DomainClients.Http
 {
     /// <summary>
     /// When sending EntityAction invocations we send parameters as object[] so all types needs to be registered
@@ -22,7 +22,7 @@ namespace OpenRiaServices.Client.HttpDomainClient
         {
             return knownTypeResolver.ResolveName(typeName, typeNamespace, declaredType, knownTypeResolver);
         }
-      
+
         public override bool TryResolveType(Type type, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)
         {
             if (knownTypeResolver.TryResolveType(type, declaredType, null, out typeName, out typeNamespace))
