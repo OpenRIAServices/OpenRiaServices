@@ -432,10 +432,9 @@ namespace OpenRiaServices.Client
                     bool parameterSuccess = ValidationUtilities.ValidateValue(value, parameterContext, validationResults, parameterValidationAttributes,
                         ValidationUtilities.NormalizeMemberPath(parameterPath, methodParameter.ParameterType));
                     
-                    // Custom methods run deep validation as well as parameter validation.
+                    // Run deep validation as well as parameter validation for complex types
                     // If parameter validation has already failed, stop further validation.
-                    if (parameterSuccess && value != null 
-                        && (operationEntry.Operation == DomainOperation.Custom || operationEntry.Operation == DomainOperation.Invoke))
+                    if (parameterSuccess && value != null)
                     {
                         Type parameterType = methodParameter.ParameterType;
 
