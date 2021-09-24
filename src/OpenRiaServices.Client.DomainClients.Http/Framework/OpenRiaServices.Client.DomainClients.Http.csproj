@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <RootNamespace>OpenRiaServices.Client.DomainClients</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="OpenRiaServices.DomainServices.Client.Web\DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="OpenRiaServices.DomainServices.Client.Web\ServiceQueryPart.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Linq\Evaluator.cs" Link="OpenRiaServices.DomainServices.Client.Web\Linq\Evaluator.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Linq\QuerySerializer.cs" Link="OpenRiaServices.DomainServices.Client.Web\Linq\QuerySerializer.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="OpenRiaServices.DomainServices.Client\BinaryTypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="OpenRiaServices.DomainServices.Client\TypeUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Http\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Http\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.Client</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
