@@ -116,17 +116,13 @@ namespace OpenRiaServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        public void Load_CancellationBehavior()
+        public async Task Load_CancellationBehavior()
         {
-            this.EnqueueCallback(() =>
-            {
-                this.BeginLoadCityDataAndCancel();
-            });
-            this.EnqueueCompletion(() => LoadOperation);
-            this.EnqueueCallback(() =>
-            {
-                this.AssertLoadCancelled();
-            });
+            this.BeginLoadCityDataAndCancel();
+
+            await LoadOperation;
+
+            this.AssertLoadCancelled();
             this.EnqueueTestComplete();
         }
 

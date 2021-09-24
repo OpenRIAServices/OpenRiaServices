@@ -12,6 +12,8 @@ using OpenRiaServices.Silverlight.Testing;
 namespace OpenRiaServices.Client.Test
 {
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Internal;
     using TestDomainServices;
     using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
@@ -540,26 +542,17 @@ namespace OpenRiaServices.Client.Test
         /// during deserialization.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void ComplexType_RoundtripInvalidCT()
+        public async Task ComplexType_RoundtripInvalidCT()
         {
-            ComplexTypes_TestContext ctxt = new ComplexTypes_TestContext(TestURIs.ComplexTypes_TestService);
+            var ctxt = new ComplexTypes_InvokeOperationsOnly(TestURIs.ComplexTypes_TestService);
 
-            Address address = new Address { AddressLine1 = "47 South Wynn Rd.", City = "Oregon", State = "OH" };
-            TestHelperMethods.EnableValidation(address, false);
-            address.State = "Invalid";
-            TestHelperMethods.EnableValidation(address, true);
 
-            InvokeOperation<Address> io = ctxt.RoundtripAddress(address);
+            // Mocka nätverkstrafik, 
+            // Ny metod, RoundtripAddressAsInvalid - sätter om till invalid och returnerar
+            var res = await ctxt.InvokeGetInvalidAddressAsync(CancellationToken.None);
 
-            this.EnqueueCompletion(() => io);
-            EnqueueCallback(delegate
-            {
-                TestHelperMethods.AssertOperationSuccess(io);
-
-                Address returnAddress = io.Value;
-                Assert.IsFalse(returnAddress.HasValidationErrors);
-            });
+            var returnAddress = res.Value;
+            Assert.IsFalse(returnAddress.HasValidationErrors);
 
             EnqueueTestComplete();
         }

@@ -105,6 +105,17 @@ namespace TestDomainServices
         {
             return address;
         }
+
+        [Invoke]
+        public Address InvokeGetInvalidAddress()
+        {
+            return new Address
+            {
+                AddressLine1 = "47 South Wynn Rd.",
+                City = "Oregon",
+                State = "Invalid"
+            };
+        }
     }
 
     [EnableClientAccess]
