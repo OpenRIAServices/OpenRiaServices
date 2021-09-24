@@ -2,7 +2,7 @@
 using System.Net.Http;
 using OpenRiaServices.Client.DomainClients.Http;
 
-namespace OpenRiaServices.Client.HttpDomainClient
+namespace OpenRiaServices.Client.DomainClients
 {
     /// <summary>
     ///  A new <see cref="HttpClient"/> based approach for connecting to services using the default REST with binary encoding protocol.
@@ -23,6 +23,11 @@ namespace OpenRiaServices.Client.HttpDomainClient
                 AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip,
             })
         {
+
+            DomainContext.DomainClientFactory = new DomainClients.s()
+            {
+                ServerBaseUri = TestURIs.RootURI,
+            };
 
         }
 
