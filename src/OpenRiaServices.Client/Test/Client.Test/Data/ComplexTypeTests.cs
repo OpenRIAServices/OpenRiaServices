@@ -544,17 +544,12 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task ComplexType_RoundtripInvalidCT()
         {
-            var ctxt = new ComplexTypes_InvokeOperationsOnly(TestURIs.ComplexTypes_TestService);
+            var ctxt = new ComplexTypes_InvokeOperationsOnly();
 
+            Address returnAddress = await ctxt.InvokeGetInvalidAddressAsync(CancellationToken.None);
 
-            // Mocka nätverkstrafik, 
-            // Ny metod, RoundtripAddressAsInvalid - sätter om till invalid och returnerar
-            var res = await ctxt.InvokeGetInvalidAddressAsync(CancellationToken.None);
-
-            var returnAddress = res.Value;
             Assert.IsFalse(returnAddress.HasValidationErrors);
-
-            EnqueueTestComplete();
+            Assert.AreEqual("Invalid", returnAddress.State);
         }
 
         /// <summary>
