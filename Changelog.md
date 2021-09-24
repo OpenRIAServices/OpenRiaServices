@@ -1,3 +1,36 @@
+# 5.1.0-preview1
+
+* New HttpClient based DomainClient - BinaryHttpDomainClientFactory (#290, #
+* **BREAKING CHANGE** Changes to wire format in order to fix serialization of DateTime (nullable and on complex objects) (#289, #75)
+  * 5.1 Clients need a 5.1 Server
+  * Server is backwards compatible so that it can be upgraded safly first
+* **Potential BREAKING change**: Complex Objects/Typs (classes/structs which are not entities) parameters will now always be validated (#303, 
+   * Previously they were only validated when calling entity actions and not Invoke methods
+
+## BinaryHttpDomainClientFactory
+Add a new cross platform (Including Blazor wasm) more easily extensible DomainClient for the binary protocol.
+
+* Enable binary endpoint to be use on other clients than .Net Framework
+* Adds support for blazor wasm where the wcf soap based client has problems
+* Enable easier extensibility such as oath, client side caching, compression etc using standard HttpClient middleware (HttpMessageHandler)
+* Can support HTTP2 and other more advanced networking features
+
+
+```C#
+HttpMessageHandler httpMessageHandler = new HttpClientHandler() { ... };
+DomainContext.DomainClientFactory = new OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory(httpMessageHandler)
+            {
+                ServerBaseUri = "https://YOUR_SERVER_URI"
+            };
+```
+
+Or if you want to use factory for your HttpClients you can pass in a function as callback
+```C#
+DomainContext.DomainClientFactory = new OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory(() => createHttpClient())
+            {
+                ServerBaseUri = "https://YOUR_SERVER_URI"
+            };
+```
 
 # 5.0.1
 
