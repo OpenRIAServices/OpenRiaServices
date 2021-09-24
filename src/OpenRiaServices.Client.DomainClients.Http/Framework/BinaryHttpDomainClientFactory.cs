@@ -23,12 +23,6 @@ namespace OpenRiaServices.Client.DomainClients
                 AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip,
             })
         {
-
-            DomainContext.DomainClientFactory = new DomainClients.s()
-            {
-                ServerBaseUri = TestURIs.RootURI,
-            };
-
         }
 
         /// <summary>
