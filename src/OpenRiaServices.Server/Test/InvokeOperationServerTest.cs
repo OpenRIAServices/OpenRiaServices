@@ -151,6 +151,26 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
+        [Description("Invoking an invoke operation with single complex type should perform object level validation of the complex type")]
+        public async Task InvokeOperation_ServerValidationError_ComplexObject()
+        {
+            var provider = ServerTestHelper.CreateInitializedDomainService<ComplexTypes_TestService>(DomainOperationType.Invoke);
+            DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(ComplexTypes_TestService));
+            DomainOperationEntry operationEntry = serviceDescription.GetInvokeOperation(nameof(ComplexTypes_TestService.RoundtripAddress));
+            Assert.IsNotNull(operationEntry);
+
+            Address address = new Address() { State = "123", Zip = "123456" };
+
+            var invokeResult = await provider.InvokeAsync(new InvokeDescription(operationEntry, new object[] { address }), CancellationToken.None);
+            Assert.IsNotNull(invokeResult.ValidationErrors, "Should have validation errors");
+            Assert.AreEqual(2, invokeResult.ValidationErrors.Count);
+            Assert.AreEqual("The field State must be a string with a maximum length of 2.", invokeResult.ValidationErrors.ElementAt(0).ErrorMessage);
+            Assert.AreEqual("The field Zip must be a string with a maximum length of 5.", invokeResult.ValidationErrors.ElementAt(1).ErrorMessage);         
+
+            Assert.IsTrue(operationEntry.RequiresValidation, "Method should require validation");
+        }
+
+        [TestMethod]
         [Description("Invoking an invoke operation with invalid parameters")]
         public async Task InvokeOperation_ServerValidationException()
         {
