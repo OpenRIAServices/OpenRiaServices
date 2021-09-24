@@ -1,4 +1,4 @@
-# 5.1.0
+# 5.1.0-preview1
 
 * New HttpClient based DomainClient - BinaryHttpDomainClientFactory (#290, #
 * **BREAKING CHANGE** Changes to wire format in order to fix serialization of DateTime (nullable and on complex objects) (#289, #75)
