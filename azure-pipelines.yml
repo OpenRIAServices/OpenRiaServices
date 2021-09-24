@@ -14,10 +14,13 @@ steps:
   inputs:
     versionSpec: 5.11.0
     
-- task: GitVersion@4
-  displayName: GitVersion
+- task: gitversion/setup@0
+  displayName: Install GitVersion
   inputs:
-    preferBundledVersion: true
+    versionSpec: '5.x'
+
+- task: gitversion/execute@0
+  displayName: Use GitVersion
 
 - task: NuGetCommand@2
   displayName: 'NuGet restore RiaServices.sln'
@@ -33,7 +36,7 @@ steps:
     organization: openriaservices
     projectKey: 'OpenRIAServices_OpenRiaServices'
     projectName: OpenRiaServices
-    projectVersion: '$(GitVersion.NuGetVersion)'
+    projectVersion: '$(Build.BuildNumber)'
     extraProperties: |
      # Additional properties that will be passed to the scanner, 
      # Put one key=value per line, example:
@@ -84,7 +87,7 @@ steps:
     command: pack
     packagesToPack: 'NuGet\**\*.nuspec'
     versioningScheme: byEnvVar
-    versionEnvVar: GitVersion.NuGetVersion
+    versionEnvVar: Build.BuildNumber
     packDestination: '$(Build.ArtifactStagingDirectory)' 
   continueOnError: true
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
