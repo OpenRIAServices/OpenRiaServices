@@ -470,7 +470,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <returns></returns>
         internal DataContractSerializerSettings GetSubmitDataContractSettings()
         {
-            var resolver = new SubmitDataContractResolver();
             var visitedTypes = new HashSet<Type>(EntityTypes);
             var knownTypes = new HashSet<Type>(visitedTypes);
             var toVisit = new Stack<Type>(knownTypes);
@@ -502,7 +501,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                                 if (typeof(DateTimeOffset) == type || type.IsEnum)
                                     knownTypes.Add(type);
                             }
-                            else if (resolver.TryGetEquivalentContractType(type, out var collectionType))
+                            else if (SubmitDataContractResolver.TryGetEquivalentContractType(type, out var collectionType))
                             {
                                 knownTypes.Add(collectionType);
                                 // Add elementType too ??
@@ -516,6 +515,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 }
             }
 
+            var resolver = new SubmitDataContractResolver();
             return new DataContractSerializerSettings()
             {
                 KnownTypes = knownTypes,
