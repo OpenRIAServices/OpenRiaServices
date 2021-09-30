@@ -386,45 +386,60 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="reader">The reader, which should start at the "Fault" element.</param>
         /// <param name="operationName">Name of the operation.</param>
         /// <returns>A FaultException with the details in the server reply</returns>
-        private static FaultException<DomainServiceFault> ReadFaultException(System.Xml.XmlDictionaryReader reader, string operationName)
+        private static FaultException ReadFaultException(System.Xml.XmlDictionaryReader reader, string operationName)
         {
-            FaultCode faultCode;
-            FaultReason faultReason;
+            FaultCode faultCode = null;
+            FaultReason faultReason = null;
             var faultReasons = new List<FaultReasonText>();
             FaultCode subCode = null;
 
             reader.ReadStartElement("Fault"); // <Fault>
-            reader.ReadStartElement("Code");  // <Code>
-            reader.ReadStartElement("Value"); // <Value>
-            var code = reader.ReadContentAsString();
-            reader.ReadEndElement(); // </Value>
-            if (reader.IsStartElement("Subcode"))
+
+            if (reader.IsStartElement("Code"))
             {
-                reader.ReadStartElement();
-                reader.ReadStartElement("Value");
-                subCode = new FaultCode(reader.ReadContentAsString());
+                reader.ReadStartElement("Code");  // <Code>
+                reader.ReadStartElement("Value"); // <Value>
+                var code = reader.ReadContentAsString();
                 reader.ReadEndElement(); // </Value>
-                reader.ReadEndElement(); // </Subcode>
+                if (reader.IsStartElement("Subcode"))
+                {
+                    reader.ReadStartElement();
+                    reader.ReadStartElement("Value");
+                    subCode = new FaultCode(reader.ReadContentAsString());
+                    reader.ReadEndElement(); // </Value>
+                    reader.ReadEndElement(); // </Subcode>
+                }
+                reader.ReadEndElement(); // </Code>
+                faultCode = new FaultCode(code, subCode);
             }
-            reader.ReadEndElement(); // </Code>
-            faultCode = new FaultCode(code, subCode);
 
-            reader.ReadStartElement("Reason");
-            while (reader.LocalName == "Text")
+            if (reader.IsStartElement("Reason"))
             {
-                var lang = reader.XmlLang;
-                reader.ReadStartElement("Text");
-                var text = reader.ReadContentAsString();
-                reader.ReadEndElement();
+                reader.ReadStartElement("Reason");
+                while (reader.LocalName == "Text")
+                {
+                    var lang = reader.XmlLang;
+                    reader.ReadStartElement("Text");
+                    var text = reader.ReadContentAsString();
+                    reader.ReadEndElement();
 
-                faultReasons.Add(new FaultReasonText(text, lang));
+                    faultReasons.Add(new FaultReasonText(text, lang));
+                }
+                reader.ReadEndElement(); // </Reason>
+                faultReason = new FaultReason(faultReasons);
             }
-            reader.ReadEndElement(); // </Reason>
-            faultReason = new FaultReason(faultReasons);
 
-            reader.ReadStartElement("Detail"); // <Detail>
-            var fault = (DomainServiceFault)s_faultSerializer.ReadObject(reader);
-            return new FaultException<DomainServiceFault>(fault, faultReason, faultCode, operationName);
+            if (reader.IsStartElement("Detail"))
+            {
+                reader.ReadStartElement("Detail"); // <Detail>
+                var fault = (DomainServiceFault)s_faultSerializer.ReadObject(reader);
+                reader.ReadEndElement(); // </ Detail>
+                return new FaultException<DomainServiceFault>(fault, faultReason, faultCode, operationName);
+            }
+            else
+            {
+                return new FaultException(faultReason, faultCode, operationName);
+            }
         }
         #endregion
 
