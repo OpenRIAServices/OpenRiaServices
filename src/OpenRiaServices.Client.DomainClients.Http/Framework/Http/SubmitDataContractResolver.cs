@@ -51,30 +51,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return true;
             }
 
-            // Handle types with datacontract with Name or Namespace missing
-            // This might happen for types in other referenced assemblies in some scenarios
-            foreach (DataContractAttribute dataContract in type.GetCustomAttributes(typeof(DataContractAttribute), false))
-            {
-                var xmlDictionary = new XmlDictionary(2);
-
-                // Name defaults to type name if not set, special care is needed for genereic types 
-                // but as long as those use datacontract attributes to set Name it should work fine (the fallback here won't work for them)
-                // https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/data-contract-names#data-contract-names-1
-                typeName = xmlDictionary.Add(dataContract.Name ?? type.Name);
-
-                // Namespace seems to be populated by default even if not set, we do however include a fallback
-                // which works, except that it does not account for the ContractNamespaceAttribute set on the target 
-                // https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/data-contract-names#data-contract-namespaces
-                string @namespace = dataContract.Namespace;
-                if (@namespace is null)
-                    @namespace = "http://schemas.datacontract.org/2004/07/" + type.Namespace;
-
-                typeNamespace = xmlDictionary.Add(@namespace);
-                _knownTypes.TryAdd(type, (typeName, typeNamespace));
-
-                return true;
-            }
-
             typeName = null;
             typeNamespace = null;
             return true;

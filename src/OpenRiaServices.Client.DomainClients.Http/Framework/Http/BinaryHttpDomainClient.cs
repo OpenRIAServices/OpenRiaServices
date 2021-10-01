@@ -157,7 +157,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
         }
         #endregion
 
-
         #region Private methods for making requests
         /// <summary>
         /// Invokes a web request for the operation <paramref name="operationName"/>
@@ -492,7 +491,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     var method = entityType.GetMethod(entityAction.Name);
                     foreach (var parameter in method.GetParameters())
                     {
-                        var type = parameter.ParameterType;
+                        var type = TypeUtility.GetNonNullableType(parameter.ParameterType);
                         if (visitedTypes.Add(type))
                         {
                             // Most "primitive types" are already registered
