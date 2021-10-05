@@ -157,7 +157,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
         }
         #endregion
 
-
         #region Private methods for making requests
         /// <summary>
         /// Invokes a web request for the operation <paramref name="operationName"/>
@@ -485,7 +484,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <returns></returns>
         internal DataContractSerializerSettings GetSubmitDataContractSettings()
         {
-            var resolver = new SubmitDataContractResolver();
             var visitedTypes = new HashSet<Type>(EntityTypes);
             var knownTypes = new HashSet<Type>(visitedTypes);
             var toVisit = new Stack<Type>(knownTypes);
@@ -508,7 +506,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     var method = entityType.GetMethod(entityAction.Name);
                     foreach (var parameter in method.GetParameters())
                     {
-                        var type = parameter.ParameterType;
+                        var type = TypeUtility.GetNonNullableType(parameter.ParameterType);
                         if (visitedTypes.Add(type))
                         {
                             // Most "primitive types" are already registered
@@ -517,7 +515,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                                 if (typeof(DateTimeOffset) == type || type.IsEnum)
                                     knownTypes.Add(type);
                             }
-                            else if (resolver.TryGetEquivalentContractType(type, out var collectionType))
+                            else if (SubmitDataContractResolver.TryGetEquivalentContractType(type, out var collectionType))
                             {
                                 knownTypes.Add(collectionType);
                                 // Add elementType too ??
@@ -531,6 +529,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 }
             }
 
+            var resolver = new SubmitDataContractResolver();
             return new DataContractSerializerSettings()
             {
                 KnownTypes = knownTypes,

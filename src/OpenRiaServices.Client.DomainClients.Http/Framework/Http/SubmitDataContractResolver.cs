@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml;
 
@@ -59,7 +60,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// For collection types such as List{T} returns array of T (T[])
         /// For dictionary types returns Dictionary{K,V}
         /// </summary>
-        public bool TryGetEquivalentContractType(Type type, out Type result)
+        public static bool TryGetEquivalentContractType(Type type, out Type result)
         {
             // Collections are normally serialized as arrays (same xml naming for all)
             // - ve register all as list so 
