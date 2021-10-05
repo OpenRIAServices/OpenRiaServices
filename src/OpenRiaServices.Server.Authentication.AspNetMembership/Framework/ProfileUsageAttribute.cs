@@ -2,12 +2,6 @@
 
 namespace OpenRiaServices.Server.Authentication.AspNetMembership
 {
-#if NETSTANDARD2_0
-    /// <summary>
-    /// Attribute that describes how a property is backed in an ASP.NET profile. It can 
-    /// be used with user entities extending <see cref="UserBase"/>.
-    /// </summary>
-#else
     /// <summary>
     /// Attribute that describes how a property is backed in an ASP.NET profile. It can 
     /// be used with user entities extending <see cref="UserBase"/>.
@@ -21,20 +15,19 @@ namespace OpenRiaServices.Server.Authentication.AspNetMembership
     /// profile value that backs it, then <see cref="Alias"/> should be set to the name
     /// of the backing value in the profile.
     /// </remarks>
-#endif
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public sealed class ProfileUsageAttribute : Attribute
     {
-#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProfileUsageAttribute"/> class
         /// </summary>
         public ProfileUsageAttribute() { }
 
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
 
         /// <summary>
         /// Gets or sets the name of the member backing the property in an ASP.NET profile.
@@ -46,6 +39,6 @@ namespace OpenRiaServices.Server.Authentication.AspNetMembership
         /// </summary>
         public bool IsExcluded { get; set; }
 
-#endregion
+        #endregion
     }
 }
