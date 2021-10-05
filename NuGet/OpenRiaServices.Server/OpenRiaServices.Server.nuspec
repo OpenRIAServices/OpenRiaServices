@@ -26,7 +26,7 @@
 		<group targetFramework="net472">
 			<dependency id="System.Threading.Tasks.Extensions" version="4.5.4"/>
 		</group>
-		<group targetFramework="net5.0">
+		<group targetFramework="netstandard2.0">
 			<dependency id="System.ComponentModel.Annotations" version="5.0.0"/>
 			<dependency id="System.Reflection.Emit.Lightweight" version="4.7.0"/>
 			<dependency id="System.CodeDom" version="5.0.0"/>
@@ -42,8 +42,8 @@
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.pdb" target="lib\net472\OpenRiaServices.Server.pdb" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.xml" target="lib\net472\OpenRiaServices.Server.xml" />
 
-    <file src="..\..\src\bin\Release\net5.0\OpenRiaServices.DomainServices.Server.dll" target="lib\net5.0\OpenRiaServices.DomainServices.Server.dll" />
-    <file src="..\..\src\bin\Release\net5.0\OpenRiaServices.DomainServices.Server.pdb" target="lib\net5.0\OpenRiaServices.DomainServices.Server.pdb" />
-    <file src="..\..\src\bin\Release\net5.0\OpenRiaServices.DomainServices.Server.xml" target="lib\net5.0\OpenRiaServices.DomainServices.Server.xml" />
+    <file src="..\..\src\bin\Release\netstandard2.0\OpenRiaServices.Server.dll" target="lib\netstandard2.0\OpenRiaServices.Server.dll" />
+    <file src="..\..\src\bin\Release\netstandard2.0\OpenRiaServices.Server.pdb" target="lib\netstandard2.0\OpenRiaServices.Server.pdb" />
+    <file src="..\..\src\bin\Release\netstandard2.0\OpenRiaServices.Server.xml" target="lib\netstandard2.0\OpenRiaServices.Server.xml" />
   </files>
 </package>
