@@ -457,7 +457,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             {
                 if (!_serializerCache.TryGetValue(type, out serializer))
                 {
-                    if (type != typeof(List<ChangeSetEntry>))
+                    if (type != typeof(IEnumerable<ChangeSetEntry>))
                     {
                         // optionally we might consider only passing in EntityTypes as knowntypes for queries
                         serializer = new DataContractSerializer(type, EntityTypes);

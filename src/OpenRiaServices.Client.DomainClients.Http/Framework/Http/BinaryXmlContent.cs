@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -55,7 +56,16 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         writer.WriteStartElement(param.Key);  // <ParameterName>
                         if (param.Value != null)
                         {
-                            var serializer = _domainClient.GetSerializer(param.Value.GetType());
+                            var parameterType = param.Value.GetType();
+
+                            // For nonserializable IEnumerables we must get a working serialization contract
+                            // Or we cannot pass .Select(x => ...) as paramters to invoke methods
+                            // For arrays and lists (which implements ICollection) this can give problem so exclude them
+                            if (!typeof(ICollection).IsAssignableFrom(parameterType)   
+                                && SubmitDataContractResolver.TryGetEquivalentContractType(parameterType, out var equivalentType))
+                                parameterType = equivalentType;
+
+                            var serializer = _domainClient.GetSerializer(parameterType);
                             serializer.WriteObjectContent(writer, param.Value);
                         }
                         else

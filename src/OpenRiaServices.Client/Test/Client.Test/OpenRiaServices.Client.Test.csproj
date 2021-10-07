@@ -91,6 +91,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj">
+      <Aliases>httpDomainClient</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>

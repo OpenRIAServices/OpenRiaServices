@@ -77,7 +77,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 }
                 else // general array
                 {
-                    result = elementType.MakeArrayType();
+                    result = typeof(IEnumerable<>).MakeGenericType(elementType);
                 }
 
                 return true;
