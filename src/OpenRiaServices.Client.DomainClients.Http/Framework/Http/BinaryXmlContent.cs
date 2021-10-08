@@ -61,7 +61,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                             // For nonserializable IEnumerables we must get a working serialization contract
                             // Or we cannot pass .Select(x => ...) as paramters to invoke methods
                             // For arrays and lists (which implements ICollection) this can give problem so exclude them
-                            if (!typeof(ICollection).IsAssignableFrom(parameterType)   
+                            if (!parameterType.IsArray
                                 && SubmitDataContractResolver.TryGetEquivalentContractType(parameterType, out var equivalentType))
                                 parameterType = equivalentType;
 
