@@ -457,7 +457,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             {
                 if (!_serializerCache.TryGetValue(type, out serializer))
                 {
-                    if (type != typeof(IEnumerable<ChangeSetEntry>))
+                    if (type != typeof(IEnumerable<ChangeSetEntry>) && type != typeof(List<ChangeSetEntry>))
                     {
                         // optionally we might consider only passing in EntityTypes as knowntypes for queries
                         serializer = new DataContractSerializer(type, EntityTypes);
@@ -466,7 +466,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     {
                         // Submit need to be able to serialize all types that are part of entity actions as well
                         // since the parameters are passed in object arrays
-                        serializer = new DataContractSerializer(type, GetSubmitDataContractSettings());
+                        serializer = new DataContractSerializer(typeof(List<ChangeSetEntry>), GetSubmitDataContractSettings());
                     }
                     _serializerCache.Add(type, serializer);
                 }
