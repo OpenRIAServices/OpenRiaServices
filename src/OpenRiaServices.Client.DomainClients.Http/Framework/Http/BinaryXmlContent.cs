@@ -56,6 +56,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         writer.WriteStartElement(param.Key);  // <ParameterName>
                         if (param.Value != null)
                         {
+                            // TODO: Use reflection on serviceContract
+                            // and take "parameterType" from the methods parameter
                             var parameterType = param.Value.GetType();
 
                             // For nonserializable IEnumerables we must get a working serialization contract
