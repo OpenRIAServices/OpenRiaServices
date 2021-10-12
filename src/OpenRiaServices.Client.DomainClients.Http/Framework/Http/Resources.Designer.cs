@@ -61,6 +61,15 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No parameter with name {0} for method {1}.
+        /// </summary>
+        internal static string BinaryXMLContents_NoParameterWithName0ForMethod1 {
+            get {
+                return ResourceManager.GetString("BinaryXMLContents_NoParameterWithName0ForMethod1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected server statuscode {0} &apos;{1}&apos;.
         /// </summary>
         internal static string DomainClient_UnexpectedHttpStatusCode {

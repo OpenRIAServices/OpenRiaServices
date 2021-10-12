@@ -24,16 +24,23 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// - response headers read should teoretically give lower latency since result can be 
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
+        // Hide these two in a class in one dictionary s_globalSerializerCache och s_globalMethodParametersCache i samma dict (två dict)
         private static readonly Dictionary<Type, Dictionary<Type, DataContractSerializer>> s_globalSerializerCache = new Dictionary<Type, Dictionary<Type, DataContractSerializer>>();
+        private static readonly Dictionary<Type, Dictionary<string, MethodParameters>> s_globalMethodParametersCache = new Dictionary<Type, Dictionary<string, MethodParameters>>();
+
         private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
         private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache;
+        private readonly Dictionary<string, MethodParameters> _methodParametersCache; // Och dessa två blir en instans av cacheklasss 
+
+        private readonly Type _serviceInterface;
 
         public override bool SupportsCancellation => true;
 
         public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface)
         {
             HttpClient = httpClient;
+            _serviceInterface = serviceInterface;
 
             lock (s_globalSerializerCache)
             {
@@ -41,6 +48,15 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 {
                     _serializerCache = new Dictionary<Type, DataContractSerializer>();
                     s_globalSerializerCache.Add(serviceInterface, _serializerCache);
+                }
+            }
+
+            lock (s_globalMethodParametersCache)
+            {
+                if (!s_globalMethodParametersCache.TryGetValue(serviceInterface, out _methodParametersCache))
+                {
+                    _methodParametersCache = new Dictionary<string, MethodParameters>();
+                    s_globalMethodParametersCache.Add(_serviceInterface, _methodParametersCache);
                 }
             }
         }
@@ -444,6 +460,18 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         #region Serialization helpers
 
+        public MethodParameters GetParametersForMethod(string methodName)
+        {
+            var serializedMethodName = $"Begin{methodName}";
+            
+            if (_methodParametersCache.TryGetValue(serializedMethodName, out var methodParameters))
+                return methodParameters;
+
+            var notCachedMethodParameters = new MethodParameters(methodName, _serviceInterface.GetMethod(serializedMethodName).GetParameters());
+            _methodParametersCache.Add(serializedMethodName, notCachedMethodParameters);
+            return notCachedMethodParameters;
+        }
+
         /// <summary>
         /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
         /// The serializers are cached for performance reasons.
@@ -452,12 +480,14 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
         internal DataContractSerializer GetSerializer(Type type)
         {
+            // Denna behövs även för metodparameterar
+            // Om möjligt stoppa i cache-klassen
             DataContractSerializer serializer;
             lock (_serializerCache)
             {
                 if (!_serializerCache.TryGetValue(type, out serializer))
                 {
-                    if (type != typeof(IEnumerable<ChangeSetEntry>) && type != typeof(List<ChangeSetEntry>))
+                    if (type != typeof(IEnumerable<ChangeSetEntry>))
                     {
                         // optionally we might consider only passing in EntityTypes as knowntypes for queries
                         serializer = new DataContractSerializer(type, EntityTypes);

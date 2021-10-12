@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -47,27 +49,17 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     writer.WriteEndElement();
                 }
                 writer.WriteStartElement(_operationName, rootNamespace); // <OperationName>
-
+                                
                 // Write all parameters
                 if (_parameters != null && _parameters.Count > 0)
                 {
+                    var parameters = _domainClient.GetParametersForMethod(_operationName);
                     foreach (var param in _parameters)
                     {
                         writer.WriteStartElement(param.Key);  // <ParameterName>
                         if (param.Value != null)
                         {
-                            // TODO: Use reflection on serviceContract
-                            // and take "parameterType" from the methods parameter
-                            var parameterType = param.Value.GetType();
-
-                            // For nonserializable IEnumerables we must get a working serialization contract
-                            // Or we cannot pass .Select(x => ...) as paramters to invoke methods
-                            // For arrays and lists (which implements ICollection) this can give problem so exclude them
-                            if (!typeof(ICollection).IsAssignableFrom(parameterType)
-                                // !parameterType.IsArray ??
-                                && SubmitDataContractResolver.TryGetEquivalentContractType(parameterType, out var equivalentType))
-                                parameterType = equivalentType;
-
+                            var parameterType = parameters.GetTypeForMethodParameter(param.Key);
                             var serializer = _domainClient.GetSerializer(parameterType);
                             serializer.WriteObjectContent(writer, param.Value);
                         }
