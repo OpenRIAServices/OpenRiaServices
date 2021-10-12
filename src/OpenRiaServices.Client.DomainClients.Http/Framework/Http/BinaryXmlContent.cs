@@ -53,7 +53,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 // Write all parameters
                 if (_parameters != null && _parameters.Count > 0)
                 {
-                    var parameters = _domainClient.GetParametersForMethod(_operationName);
+                    var parameters = _domainClient.GetMethodParameters(_operationName);
                     foreach (var param in _parameters)
                     {
                         writer.WriteStartElement(param.Key);  // <ParameterName>
