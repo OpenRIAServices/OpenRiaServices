@@ -1,6 +1,22 @@
+# 5.1.0-preview2
+
+* BinaryHttpDomainClientFactory improvements and bug fixes
+   * Serialize parameters based on contact's parameterType #318
+     This fixes a number of potential issues, such as passing "non-serialisable" enumerables such as result of LINQ Select
+     as method parameters
+   * Properly handle nullable parameters for EntityActions #311
+   * Make fault handling more tolerant to different variants of Faults #310
+* Add .netstandard 2.0 build of server project #314
+  This is intended to unblock development of newer code generation and hosting layers on .Net 6
+
+New code to create BinaryHttpDomainClientFactory
+```C#
+DomainContext.DomainClientFactory = new OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory(new Uri("https://YOUR_SERVER_URI"), () => createHttpClient());
+```
+            
 # 5.1.0-preview1
 
-* New HttpClient based DomainClient - BinaryHttpDomainClientFactory (#290, #
+* New HttpClient based DomainClient - BinaryHttpDomainClientFactory (#290)
 * **BREAKING CHANGE** Changes to wire format in order to fix serialization of DateTime (nullable and on complex objects) (#289, #75)
   * 5.1 Clients need a 5.1 Server
   * Server is backwards compatible so that it can be upgraded safly first
