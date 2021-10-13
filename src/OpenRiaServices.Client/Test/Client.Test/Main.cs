@@ -33,17 +33,17 @@ namespace OpenRiaServices.Client.Test
                 ServerBaseUri = TestURIs.RootURI,
             };
 
-            // Uncomment below to run tests usiung BinaryHttpDomainClientFactory instead
-            
-            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(new HttpClientHandler()
-            {
-                CookieContainer = new CookieContainer(),
-                UseCookies = true,
-                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-            })
-            {
-                ServerBaseUri = TestURIs.RootURI,
-            };
+            // Uncomment below to run tests using BinaryHttpDomainClientFactory instead:
+            //
+            //DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(new HttpClientHandler()
+            //{
+            //    CookieContainer = new CookieContainer(),
+            //    UseCookies = true,
+            //    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+            //})
+            //{
+            //    ServerBaseUri = TestURIs.RootURI,
+            //};
 
             HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
         }
