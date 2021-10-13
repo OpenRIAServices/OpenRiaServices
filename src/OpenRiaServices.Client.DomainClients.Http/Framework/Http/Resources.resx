@@ -153,6 +153,6 @@
     <value>Unary operation '{0}' is not supported.</value>
   </data>
   <data name="BinaryXMLContents_NoParameterWithName0ForMethod1" xml:space="preserve">
-    <value>No parameter with name {0} for method {1}</value>
+    <value>No parameter with name '{0}'  for method '{1}'</value>
   </data>
 </root>

@@ -19,7 +19,7 @@ namespace OpenRiaServices.Client {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,7 +61,7 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No parameter with name {0} for method {1}.
+        ///   Looks up a localized string similar to No parameter with name &apos;{0}&apos;  for method &apos;{1}&apos;.
         /// </summary>
         internal static string BinaryXMLContents_NoParameterWithName0ForMethod1 {
             get {

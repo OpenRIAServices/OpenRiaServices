@@ -1,9 +1,7 @@
 ﻿using OpenRiaServices.Client.Internal;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -11,8 +9,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
     {
         private static readonly Dictionary<Type, Dictionary<Type, DataContractSerializer>> s_globalSerializerCache = new Dictionary<Type, Dictionary<Type, DataContractSerializer>>();
         private static readonly Dictionary<Type, Dictionary<string, MethodParameters>> s_globalMethodParametersCache = new Dictionary<Type, Dictionary<string, MethodParameters>>();
-        private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
-        private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache;
         private readonly Dictionary<string, MethodParameters> _methodParametersCache;
         private readonly Type _serviceInterface;
@@ -40,22 +36,17 @@ namespace OpenRiaServices.Client.DomainClients.Http
             }
         }
 
-        internal Task<HttpResponseMessage> SkipGetUsePostInstead => s_skipGetUsePostInstead;
-
-        internal DataContractSerializer FaultSerializer => s_faultSerializer;
-
-
         /// <summary>
         /// Get parameter names and types for method
         /// </summary>
-        /// <param name="methodName"></param>
-        /// <returns></returns>
+        /// <param name="methodName">The name of the method</param>
+        /// <returns>MethodParameters object containing the method parameters</returns>
         internal MethodParameters GetParametersForMethod(string methodName)
         {
             MethodParameters methodParameters;
             var serializedMethodName = $"Begin{methodName}";
             
-            lock (_serializerCache)
+            lock (_methodParametersCache)
             {
                 if (!_methodParametersCache.TryGetValue(serializedMethodName, out methodParameters))
                 {
@@ -72,12 +63,10 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// The serializers are cached for performance reasons.
         /// </summary>
         /// <param name="type">type which should be serializable.</param>
-        /// <param name="entityTypes"></param>
+        /// <param name="entityTypes">the collection of Entity Types that the method will operate on.</param>
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
         internal DataContractSerializer GetSerializer(Type type, IEnumerable<Type> entityTypes)
         {
-            // Denna behövs även för metodparameterar
-            // Om möjligt stoppa i cache-klassen
             DataContractSerializer serializer;
             lock (_serializerCache)
             {

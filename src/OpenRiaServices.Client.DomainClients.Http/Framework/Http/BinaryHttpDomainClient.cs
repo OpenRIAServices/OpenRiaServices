@@ -1,5 +1,4 @@
-﻿using OpenRiaServices.Client.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    // TODO: Extract serialization to separate class (hierarchy) Serializer / SerializerCache
+    // TODO:
     // Pass in HttpDomainClientFactory to ctor,
     // pass in HttpClient ?
     internal partial class BinaryHttpDomainClient : DomainClient
@@ -24,15 +23,26 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// - response headers read should teoretically give lower latency since result can be 
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
-
-        private readonly BinaryHttpDomainClientSerializationHelper _serializationHelper;
+        private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
+        private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
+        private static readonly Dictionary<Type, BinaryHttpDomainClientSerializationHelper> s_globalCacheHelpers = new Dictionary<Type, BinaryHttpDomainClientSerializationHelper>();
+        
+        private readonly BinaryHttpDomainClientSerializationHelper _localCacheHelper;
 
         public override bool SupportsCancellation => true;
 
         public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface)
         {
+
             HttpClient = httpClient;
-            _serializationHelper = new BinaryHttpDomainClientSerializationHelper(serviceInterface);
+            lock(s_globalCacheHelpers)
+            {
+                if (!s_globalCacheHelpers.TryGetValue(serviceInterface, out _localCacheHelper))
+                {
+                    _localCacheHelper = new BinaryHttpDomainClientSerializationHelper(serviceInterface);
+                    s_globalCacheHelpers.Add(serviceInterface, _localCacheHelper);
+                }
+            }
         }
 
         HttpClient HttpClient { get; set; }
@@ -160,14 +170,14 @@ namespace OpenRiaServices.Client.DomainClients.Http
             List<ServiceQueryPart> queryOptions,
             CancellationToken cancellationToken)
         {
-            Task<HttpResponseMessage> response = _serializationHelper.SkipGetUsePostInstead;
+            Task<HttpResponseMessage> response = s_skipGetUsePostInstead;
 
             if (!hasSideEffects)
             {
                 response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
             }
             // It is a POST, or GET returned null (maybe due to too large request uri)
-            if (ReferenceEquals(response, _serializationHelper.SkipGetUsePostInstead))
+            if (ReferenceEquals(response, s_skipGetUsePostInstead))
             {
                 response = PostAsync(operationName, parameters, queryOptions, cancellationToken);
             }
@@ -248,7 +258,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // - MaxUrlLength is 260 per default, but we dont check it since POST will get same lenght
             // - maxUrl defaults to 4096 bytes, but we assume it will not be an issue since we limit the query string length
             if (uri.Length - operationName.Length > 2048) // uri contains query + operationName, so subract operationName to only get query string length
-                return _serializationHelper.SkipGetUsePostInstead;
+                return s_skipGetUsePostInstead;
 
             return HttpClient.GetAsync(uri, DefaultHttpCompletionOption, cancellationToken);
         }
@@ -421,7 +431,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             if (reader.IsStartElement("Detail"))
             {
                 reader.ReadStartElement("Detail"); // <Detail>
-                var fault = (DomainServiceFault)_serializationHelper.FaultSerializer.ReadObject(reader);
+                var fault = (DomainServiceFault)s_faultSerializer.ReadObject(reader);
                 reader.ReadEndElement(); // </ Detail>
                 return new FaultException<DomainServiceFault>(fault, faultReason, faultCode, operationName);
             }
@@ -434,10 +444,23 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         #region Serialization helpers
 
-        internal DataContractSerializer GetSerializer(Type returnType) => _serializationHelper.GetSerializer(returnType, EntityTypes);
+        /// <summary>
+        /// Get parameter names and types for method
+        /// </summary>
+        /// <param name="methodName">The name of the method</param>
+        /// <returns>MethodParameters object containing the method parameters</returns>
+        public MethodParameters GetMethodParameters(string methodName) 
+            => _localCacheHelper.GetParametersForMethod(methodName);
 
-        internal MethodParameters GetMethodParameters(string methodName) => _serializationHelper.GetParametersForMethod(methodName);
+        /// <summary>
+        /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
+        /// The serializers are cached for performance reasons.
+        /// </summary>
+        /// <param name="type">type which should be serializable.</param>
+        /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
+        internal DataContractSerializer GetSerializer(Type type) 
+            => _localCacheHelper.GetSerializer(type, EntityTypes);
 
-        #endregion Serialization helpers
+        #endregion
     }
 }
