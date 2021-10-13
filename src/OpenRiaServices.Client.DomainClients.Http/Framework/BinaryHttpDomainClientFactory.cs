@@ -13,35 +13,27 @@ namespace OpenRiaServices.Client.DomainClients
     {
         private readonly Func<HttpClient> _httpClientFactory;
 
-        //  not all platforms (blazor) support the cookiecontainer and it might be better if the end user configures
-        //  their messagehandler/httpclient to match the applications requirement instead of getting runtime exceptions
-        private BinaryHttpDomainClientFactory()
-            : this(new HttpClientHandler()
-            {
-                CookieContainer = new System.Net.CookieContainer(),
-                UseCookies = true,
-                AutomaticDecompression = System.Net.DecompressionMethods.Deflate | System.Net.DecompressionMethods.GZip,
-            })
-        {
-        }
 
         /// <summary>
         /// Create a <see cref="BinaryHttpDomainClientFactory"/> where all requests share a single <see cref="HttpMessageHandler"/>
         /// <para>IMPORTANT: To handle DNS updates you need to configure <c>System.Net.ServicePointManager.ConnectionLeaseTimeout</c> on .Net framework</para>
         /// </summary>
+        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="ServerBaseUri"/>)</param>
         /// <param name="messageHandler"><see cref="HttpMessageHandler"/> to be shared by all requests,
         /// if uncertain create a <see cref="HttpClientHandler"/> and enable cookies and compression</param>
-        public BinaryHttpDomainClientFactory(HttpMessageHandler messageHandler)
-            : this(() => new HttpClient(messageHandler, disposeHandler: false))
+        public BinaryHttpDomainClientFactory(string serverBaseUri, HttpMessageHandler messageHandler)
+            : this(serverBaseUri, () => new HttpClient(messageHandler, disposeHandler: false))
         {
         }
 
         /// <summary>
         /// Constructor intended for .Net Core where the actual creation is handled by <c>IHttpClientFactory</c> or similar
         /// </summary>
+        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="ServerBaseUri"/>)</param>
         /// <param name="httpClientFactory">method creating a new HttpClient each time, should never return null</param>
-        public BinaryHttpDomainClientFactory(Func<HttpClient> httpClientFactory)
+        public BinaryHttpDomainClientFactory(string serverBaseUri, Func<HttpClient> httpClientFactory)
         {
+            base.ServerBaseUri = serverBaseUri;
             this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
