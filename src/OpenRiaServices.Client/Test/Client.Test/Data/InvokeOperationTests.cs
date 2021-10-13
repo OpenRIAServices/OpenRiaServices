@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cities;
 using Microsoft.Silverlight.Testing;
@@ -491,6 +492,31 @@ namespace OpenRiaServices.Client.Test
                 }
             });
             EnqueueTestComplete();
+        }
+
+
+        [TestMethod]
+        [Description("Checks that Invoke Operations with IEnumerable of non-serializeble types such as linq enumerables")]
+        public async Task InvokeOperation_IEnumerableParameters_LinqSelect()
+        {
+            TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
+
+            var args = Enumerable.Range(1, 3)
+                .Select(i => new TestEntityForInvokeOperations() { Key = i, StrProp = "Str" + i, CTProp = new TestCT() { CTProp1 = i, CTProp2 = "CtStr1" } });
+
+            var result = (await ctxt.InvokeOpWithIEnumerableParamAsync(args)).Value;
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.Count(), 3);
+
+            TestEntityForInvokeOperations[] resultArray = result.ToArray();
+            var list = args.ToList();
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(list[i].Key, resultArray[i].Key);
+                Assert.AreEqual(list[i].StrProp, resultArray[i].StrProp);
+                Assert.AreEqual(list[i].CTProp.CTProp1, resultArray[i].CTProp.CTProp1);
+                Assert.AreEqual(list[i].CTProp.CTProp2, resultArray[i].CTProp.CTProp2);
+            }
         }
 
         [TestMethod]

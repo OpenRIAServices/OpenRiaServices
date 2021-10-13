@@ -57,8 +57,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
         }
 
         /// <summary>
-        /// For collection types such as List{T} returns array of T (T[])
-        /// For dictionary types returns Dictionary{K,V}
+        /// For collection types such as List{T}, T[] return IEnumerable{T}
+        /// For dictionary types returns IDictionary{K,V}
         /// </summary>
         public static bool TryGetEquivalentContractType(Type type, out Type result)
         {
@@ -73,11 +73,11 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         .MakeGenericType(elementType.GetGenericArguments())
                         .IsAssignableFrom(type))
                 {
-                    result = typeof(Dictionary<,>).MakeGenericType(elementType.GetGenericArguments());
+                    result = typeof(IDictionary<,>).MakeGenericType(elementType.GetGenericArguments());
                 }
                 else // general array
                 {
-                    result = elementType.MakeArrayType();
+                    result = typeof(IEnumerable<>).MakeGenericType(elementType);
                 }
 
                 return true;

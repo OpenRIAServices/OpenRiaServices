@@ -46,16 +46,18 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     writer.WriteEndElement();
                 }
                 writer.WriteStartElement(_operationName, rootNamespace); // <OperationName>
-
+                                
                 // Write all parameters
                 if (_parameters != null && _parameters.Count > 0)
                 {
+                    var parameters = _domainClient.GetMethodParameters(_operationName);
                     foreach (var param in _parameters)
                     {
                         writer.WriteStartElement(param.Key);  // <ParameterName>
                         if (param.Value != null)
                         {
-                            var serializer = _domainClient.GetSerializer(param.Value.GetType());
+                            var parameterType = parameters.GetTypeForMethodParameter(param.Key);
+                            var serializer = _domainClient.GetSerializer(parameterType);
                             serializer.WriteObjectContent(writer, param.Value);
                         }
                         else

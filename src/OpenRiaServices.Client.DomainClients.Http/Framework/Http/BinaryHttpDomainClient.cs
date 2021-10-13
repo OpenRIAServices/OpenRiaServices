@@ -1,5 +1,4 @@
-﻿using OpenRiaServices.Client.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    // TODO: Extract serialization to separate class (hierarchy) Serializer / SerializerCache
     // Pass in HttpDomainClientFactory to ctor,
     // pass in HttpClient ?
     internal partial class BinaryHttpDomainClient : DomainClient
@@ -24,23 +22,24 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// - response headers read should teoretically give lower latency since result can be 
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
-        private static readonly Dictionary<Type, Dictionary<Type, DataContractSerializer>> s_globalSerializerCache = new Dictionary<Type, Dictionary<Type, DataContractSerializer>>();
         private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
         private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
-        private readonly Dictionary<Type, DataContractSerializer> _serializerCache;
+        private static readonly Dictionary<Type, BinaryHttpDomainClientSerializationHelper> s_globalCacheHelpers = new Dictionary<Type, BinaryHttpDomainClientSerializationHelper>();
+        
+        private readonly BinaryHttpDomainClientSerializationHelper _localCacheHelper;
 
         public override bool SupportsCancellation => true;
 
         public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface)
         {
-            HttpClient = httpClient;
 
-            lock (s_globalSerializerCache)
+            HttpClient = httpClient;
+            lock(s_globalCacheHelpers)
             {
-                if (!s_globalSerializerCache.TryGetValue(serviceInterface, out _serializerCache))
+                if (!s_globalCacheHelpers.TryGetValue(serviceInterface, out _localCacheHelper))
                 {
-                    _serializerCache = new Dictionary<Type, DataContractSerializer>();
-                    s_globalSerializerCache.Add(serviceInterface, _serializerCache);
+                    _localCacheHelper = new BinaryHttpDomainClientSerializationHelper(serviceInterface);
+                    s_globalCacheHelpers.Add(serviceInterface, _localCacheHelper);
                 }
             }
         }
@@ -329,7 +328,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 }
             }
         }
-
+        
         /// <summary>
         /// Verifies the reader is at node with LocalName equal to operationName + postfix.
         /// If the reader is at any other node, then a <see cref="DomainOperationException"/> is thrown
@@ -445,97 +444,22 @@ namespace OpenRiaServices.Client.DomainClients.Http
         #region Serialization helpers
 
         /// <summary>
+        /// Get parameter names and types for method
+        /// </summary>
+        /// <param name="methodName">The name of the method</param>
+        /// <returns>MethodParameters object containing the method parameters</returns>
+        internal MethodParameters GetMethodParameters(string methodName) 
+            => _localCacheHelper.GetParametersForMethod(methodName);
+
+        /// <summary>
         /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
         /// The serializers are cached for performance reasons.
         /// </summary>
         /// <param name="type">type which should be serializable.</param>
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
-        internal DataContractSerializer GetSerializer(Type type)
-        {
-            DataContractSerializer serializer;
-            lock (_serializerCache)
-            {
-                if (!_serializerCache.TryGetValue(type, out serializer))
-                {
-                    if (type != typeof(List<ChangeSetEntry>))
-                    {
-                        // optionally we might consider only passing in EntityTypes as knowntypes for queries
-                        serializer = new DataContractSerializer(type, EntityTypes);
-                    }
-                    else
-                    {
-                        // Submit need to be able to serialize all types that are part of entity actions as well
-                        // since the parameters are passed in object arrays
-                        serializer = new DataContractSerializer(type, GetSubmitDataContractSettings());
-                    }
-                    _serializerCache.Add(type, serializer);
-                }
-            }
+        internal DataContractSerializer GetSerializer(Type type) 
+            => _localCacheHelper.GetSerializer(type, EntityTypes);
 
-            return serializer;
-        }
-
-        /// <summary>
-        /// Submit need to be able to serialize all types that are part of entity actions as well
-        /// since the parameters are passed in object arrays.
-        /// 
-        /// Find all types which are part of parameters and add them
-        /// </summary>
-        /// <returns></returns>
-        internal DataContractSerializerSettings GetSubmitDataContractSettings()
-        {
-            var visitedTypes = new HashSet<Type>(EntityTypes);
-            var knownTypes = new HashSet<Type>(visitedTypes);
-            var toVisit = new Stack<Type>(knownTypes);
-
-            while (toVisit.Count > 0)
-            {
-                var entityType = toVisit.Pop();
-
-                // Check any derived types to
-                foreach (KnownTypeAttribute derived in entityType.GetCustomAttributes(typeof(KnownTypeAttribute), inherit: false))
-                {
-                    if (visitedTypes.Add(derived.Type))
-                        toVisit.Push(derived.Type);
-                }
-
-                // Ensure all parameter types are known
-                var metaType = MetaType.GetMetaType(entityType);
-                foreach (var entityAction in metaType.GetEntityActions())
-                {
-                    var method = entityType.GetMethod(entityAction.Name);
-                    foreach (var parameter in method.GetParameters())
-                    {
-                        var type = TypeUtility.GetNonNullableType(parameter.ParameterType);
-                        if (visitedTypes.Add(type))
-                        {
-                            // Most "primitive types" are already registered
-                            if (TypeUtility.IsPredefinedSimpleType(type))
-                            {
-                                if (typeof(DateTimeOffset) == type || type.IsEnum)
-                                    knownTypes.Add(type);
-                            }
-                            else if (SubmitDataContractResolver.TryGetEquivalentContractType(type, out var collectionType))
-                            {
-                                knownTypes.Add(collectionType);
-                                // Add elementType too ??
-                            }
-                            else
-                            {
-                                knownTypes.Add(type);
-                            }
-                        }
-                    }
-                }
-            }
-
-            var resolver = new SubmitDataContractResolver();
-            return new DataContractSerializerSettings()
-            {
-                KnownTypes = knownTypes,
-                DataContractResolver = resolver,
-            };
-        }
         #endregion
     }
 }
