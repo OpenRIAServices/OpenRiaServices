@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    // TODO:
     // Pass in HttpDomainClientFactory to ctor,
     // pass in HttpClient ?
     internal partial class BinaryHttpDomainClient : DomainClient

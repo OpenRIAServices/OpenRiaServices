@@ -10,9 +10,10 @@ namespace OpenRiaServices.Client.DomainClients.Http
     /// <summary>
     /// A dictionary of parameter name and types for a method
     /// </summary>
-    public class MethodParameters : Dictionary<string, Type>
+    public class MethodParameters 
     {
-        private string _methodName;
+        private readonly string _methodName;
+        private readonly Dictionary<string, Type> _parameterNameAndTypeDictionary;
 
         /// <summary>
         /// Set up a new method parameters dictionary
@@ -20,11 +21,11 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="methodName">Method name</param>
         /// <param name="parameters">The reflection parameters for method</param>
         public MethodParameters(string methodName, System.Reflection.ParameterInfo[] parameters)
-        : base(parameters.Length)
         {
+            _parameterNameAndTypeDictionary = new Dictionary<string, Type>(parameters.Length);
             // For loop to skip the two last default arguments cref="AsyncCallback" callback and cref="object" asyncState
             for (var i = 0; i < parameters.Length - 2; i++)
-                Add(parameters[i].Name, parameters[i].ParameterType);
+                _parameterNameAndTypeDictionary.Add(parameters[i].Name, parameters[i].ParameterType);
 
             _methodName = methodName;
         }
@@ -36,7 +37,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <returns></returns>
         public Type GetTypeForMethodParameter(string name)
         {
-            if (!this.TryGetValue(name, out var parameterType))
+            if (!_parameterNameAndTypeDictionary.TryGetValue(name, out var parameterType))
                 throw new MissingMethodException(string.Format(CultureInfo.InvariantCulture, Resources.BinaryXMLContents_NoParameterWithName0ForMethod1, name, _methodName));
 
             return parameterType;
