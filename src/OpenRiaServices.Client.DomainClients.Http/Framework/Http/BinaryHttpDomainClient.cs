@@ -384,7 +384,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="reader">The reader, which should start at the "Fault" element.</param>
         /// <param name="operationName">Name of the operation.</param>
         /// <returns>A FaultException with the details in the server reply</returns>
-        private FaultException ReadFaultException(System.Xml.XmlDictionaryReader reader, string operationName)
+        private static FaultException ReadFaultException(System.Xml.XmlDictionaryReader reader, string operationName)
         {
             FaultCode faultCode = null;
             FaultReason faultReason = null;
