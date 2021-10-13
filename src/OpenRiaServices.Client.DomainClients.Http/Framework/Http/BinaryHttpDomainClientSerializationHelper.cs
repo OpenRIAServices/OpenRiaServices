@@ -1,61 +1,38 @@
 ﻿using OpenRiaServices.Client.Internal;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
     internal class BinaryHttpDomainClientSerializationHelper
-    {
-        private static readonly Dictionary<Type, Dictionary<Type, DataContractSerializer>> s_globalSerializerCache = new Dictionary<Type, Dictionary<Type, DataContractSerializer>>();
-        private static readonly Dictionary<Type, Dictionary<string, MethodParameters>> s_globalMethodParametersCache = new Dictionary<Type, Dictionary<string, MethodParameters>>();
-        private readonly Dictionary<Type, DataContractSerializer> _serializerCache;
-        private readonly Dictionary<string, MethodParameters> _methodParametersCache;
+    {       
+        private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
+        private readonly Dictionary<string, MethodParameters> _methodParametersCache = new Dictionary<string, MethodParameters>();
         private readonly Type _serviceInterface;
 
         public BinaryHttpDomainClientSerializationHelper(Type serviceInterface)
         {
             _serviceInterface = serviceInterface;
-
-            lock (s_globalSerializerCache)
-            {
-                if (!s_globalSerializerCache.TryGetValue(serviceInterface, out _serializerCache))
-                {
-                    _serializerCache = new Dictionary<Type, DataContractSerializer>();
-                    s_globalSerializerCache.Add(serviceInterface, _serializerCache);
-                }
-            }
-
-            lock (s_globalMethodParametersCache)
-            {
-                if (!s_globalMethodParametersCache.TryGetValue(serviceInterface, out _methodParametersCache))
-                {
-                    _methodParametersCache = new Dictionary<string, MethodParameters>();
-                    s_globalMethodParametersCache.Add(_serviceInterface, _methodParametersCache);
-                }
-            }
         }
 
         /// <summary>
         /// Get parameter names and types for method
         /// </summary>
-        /// <param name="methodName">The name of the method</param>
+        /// <param name="operationName">The name of the method</param>
         /// <returns>MethodParameters object containing the method parameters</returns>
-        internal MethodParameters GetParametersForMethod(string methodName)
+        internal MethodParameters GetParametersForMethod(string operationName)
         {
-            MethodParameters methodParameters;
-            var serializedMethodName = $"Begin{methodName}";
-            
             lock (_methodParametersCache)
             {
-                if (!_methodParametersCache.TryGetValue(serializedMethodName, out methodParameters))
+                if (!_methodParametersCache.TryGetValue(operationName, out var methodParameters))
                 {
-                    methodParameters = new MethodParameters(methodName, _serviceInterface.GetMethod(serializedMethodName).GetParameters());
-                    _methodParametersCache.Add(serializedMethodName, methodParameters);
+                    methodParameters = new MethodParameters(_serviceInterface, operationName);
+                    _methodParametersCache.Add(operationName, methodParameters);
                 }
+                return methodParameters;
             }
-
-            return methodParameters;
         }
 
         /// <summary>
@@ -67,10 +44,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
         internal DataContractSerializer GetSerializer(Type type, IEnumerable<Type> entityTypes)
         {
-            DataContractSerializer serializer;
             lock (_serializerCache)
             {
-                if (!_serializerCache.TryGetValue(type, out serializer))
+                if (!_serializerCache.TryGetValue(type, out var serializer))
                 {
                     if (type != typeof(IEnumerable<ChangeSetEntry>))
                     {
@@ -85,9 +61,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     }
                     _serializerCache.Add(type, serializer);
                 }
+                return serializer;
             }
-
-            return serializer;
         }
 
         /// <summary>

@@ -70,6 +70,15 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operation &apos;{0}&apos; does not exist..
+        /// </summary>
+        internal static string DomainClient_Operation0DoesNotExist {
+            get {
+                return ResourceManager.GetString("DomainClient_Operation0DoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unexpected server statuscode {0} &apos;{1}&apos;.
         /// </summary>
         internal static string DomainClient_UnexpectedHttpStatusCode {

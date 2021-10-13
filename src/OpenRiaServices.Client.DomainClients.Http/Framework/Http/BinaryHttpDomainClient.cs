@@ -448,7 +448,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// </summary>
         /// <param name="methodName">The name of the method</param>
         /// <returns>MethodParameters object containing the method parameters</returns>
-        public MethodParameters GetMethodParameters(string methodName) 
+        internal MethodParameters GetMethodParameters(string methodName) 
             => _localCacheHelper.GetParametersForMethod(methodName);
 
         /// <summary>

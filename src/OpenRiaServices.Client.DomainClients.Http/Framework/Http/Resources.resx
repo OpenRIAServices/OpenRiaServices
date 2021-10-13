@@ -155,4 +155,7 @@
   <data name="BinaryXMLContents_NoParameterWithName0ForMethod1" xml:space="preserve">
     <value>No parameter with name '{0}'  for method '{1}'</value>
   </data>
+  <data name="DomainClient_Operation0DoesNotExist" xml:space="preserve">
+    <value>Operation '{0}' does not exist.</value>
+  </data>
 </root>
