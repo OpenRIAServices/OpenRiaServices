@@ -1,7 +1,12 @@
+# 5.1.0-preview3
+
+* Fix bug in 5.1.0-preview2 where server project had wrong assembly name (#320, #321)
+
 # 5.1.0-preview2
 
 * BinaryHttpDomainClientFactory improvements and bug fixes
    * Serialize parameters based on contact's parameterType #318
+
      This fixes a number of potential issues, such as passing "non-serialisable" enumerables such as result of LINQ Select
      as method parameters
    * Properly handle nullable parameters for EntityActions #311
