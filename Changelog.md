@@ -1,3 +1,8 @@
+# 5.1.0-preview4
+
+* BinaryHttpDomainClientFactory improvements and bug fixes
+   * Serialize parameters based on contact's parameterType in methods without sideeffects #322
+
 # 5.1.0-preview3
 
 * Fix bug in 5.1.0-preview2 where server project had wrong assembly name (#320, #321)

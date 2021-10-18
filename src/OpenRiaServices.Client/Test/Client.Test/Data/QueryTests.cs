@@ -1157,6 +1157,21 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        // Verify support of non-serialized IEnumerables such as the result from Select/Where
+        public async Task TestMethodWithParameters_LinqWhere()
+        {
+            TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
+            IEnumerable<TimeSpan?> nullableTimeSpans = new TimeSpan?[] { TimeSpan.FromDays(1), null }.Where(t => true);
+
+            var query = provider.GetMixedTypes_NullableQuery("MixedType_Max", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, nullableTimeSpans, null);
+            await provider.LoadAsync(query, CancellationToken.None);
+
+            var changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
+            var returnedTimeSpans = changedObj.NullableTimeSpanListProp.ToArray();
+            CollectionAssert.AreEqual(nullableTimeSpans.ToArray(), returnedTimeSpans);
+        }
+
+        [TestMethod]
         public async Task TestMethod_ComplexQueryProperties()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);

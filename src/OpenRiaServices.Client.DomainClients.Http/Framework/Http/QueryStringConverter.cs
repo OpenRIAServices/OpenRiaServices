@@ -30,6 +30,21 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return s_systemConverter.ConvertValueToString(parameter, parameterType);
             }
 
+            // Strings are handled above, so it should be safe to return null here
+            // without giving wrong result for string
+            if (parameter == null)
+                return "null";
+
+            // For nullable types (which are not null), try to just serialize it as the underlying type
+            if (TypeUtility.IsNullableType(parameterType))
+            {
+                parameterType = TypeUtility.GetNonNullableType(parameterType);
+                if (s_systemConverter.CanConvert(parameterType))
+                {
+                    return s_systemConverter.ConvertValueToString(parameter, parameterType);
+                }
+            }
+
             using (var ms = new MemoryStream())
             {
                 new DataContractJsonSerializer(parameterType, s_jsonSettings)
