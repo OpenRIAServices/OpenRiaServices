@@ -1157,7 +1157,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        [FullTrustTest] // ISerializable types cannot be deserialized in medium trust.
+        // Verify support of non-serialized IEnumerables such as the result from Select/Where
         public async Task TestMethodWithParameters_LinqWhere()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
