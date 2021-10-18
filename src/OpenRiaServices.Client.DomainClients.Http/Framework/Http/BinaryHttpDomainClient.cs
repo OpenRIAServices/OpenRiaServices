@@ -218,17 +218,16 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // Parameters
             if (parameters != null && parameters.Count > 0)
             {
+                var methodParameters = GetMethodParameters(operationName);
                 foreach (var param in parameters)
                 {
-                    // TODO: We nned to look at using the interface instead
-                    // This is sort of a hack, we should ideally get the parameterType
-                    // null string should be emtpy string, null for other types should be "null"
                     if (param.Value != null)
                     {
                         uriBuilder.Append(i++ == 0 ? '?' : '&');
                         uriBuilder.Append(Uri.EscapeDataString(param.Key));
                         uriBuilder.Append('=');
-                        var value = WebQueryStringConverter.ConvertValueToString(param.Value, param.Value.GetType());
+                        var parameterType = methodParameters.GetTypeForMethodParameter(param.Key);
+                        var value = WebQueryStringConverter.ConvertValueToString(param.Value, parameterType);
                         uriBuilder.Append(Uri.EscapeDataString(value));
                     }
                 }
