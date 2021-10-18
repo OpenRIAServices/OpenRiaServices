@@ -767,11 +767,13 @@ namespace OpenRiaServices.Server
         /// <param name="type">The type to register.</param>
         private void RegisterCustomTypeDescriptors(Type type)
         {
+#if !NETSTANDARD2_0
             // if this type has a metadata class defined, add a 'buddy class' type descriptor. 
             if (type.GetCustomAttributes(typeof(MetadataTypeAttribute), true).Length != 0)
             {
                 RegisterCustomTypeDescriptor(new AssociatedMetadataTypeTypeDescriptionProvider(type), type);
             }
+#endif
 
             if (this._descriptionProvider != null)
             {
