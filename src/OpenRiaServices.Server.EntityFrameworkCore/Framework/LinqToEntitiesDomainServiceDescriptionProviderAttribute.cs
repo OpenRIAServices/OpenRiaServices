@@ -10,6 +10,9 @@ using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFramework
 {
+
+    // TODO: Remove and move code to DB context
+
     /// <summary>
     /// Attribute applied to a <see cref="DomainService"/> that exposes LINQ to Entities mapped
     /// Types.

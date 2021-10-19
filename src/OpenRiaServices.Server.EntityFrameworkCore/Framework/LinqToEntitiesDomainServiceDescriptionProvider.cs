@@ -13,6 +13,8 @@ using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFramework
 {
+    // TODO: Remove and move code to DB context
+
     internal class LinqToEntitiesDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
     {
         private static Dictionary<Type, LinqToEntitiesTypeDescriptionContext> tdpContextMap = new Dictionary<Type, LinqToEntitiesTypeDescriptionContext>();
