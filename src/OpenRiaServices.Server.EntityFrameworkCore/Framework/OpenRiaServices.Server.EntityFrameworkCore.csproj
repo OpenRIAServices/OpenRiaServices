@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;net472;</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+    <Compile Update="DbResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DbResource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="MetadataResource.Designer.cs">
+      <DependentUpon>MetadataResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="Resource.Designer.cs">
+      <DependentUpon>Resource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="DbResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="MetadataResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+ </Project>
