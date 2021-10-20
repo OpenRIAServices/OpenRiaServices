@@ -1,31 +1,13 @@
 ﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif
-using System.Data.Entity;
-#if DBCONTEXT
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects.DataClasses;
-using System.Data.Entity.Core.Objects;
-#else
-using System.Data;
-using System.Data.Metadata.Edm;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
-#endif
 using System.Linq;
-using OpenRiaServices.Server;
+using System.Data.Metadata.Edm;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
-#if DBCONTEXT
-    using ConcurrencyMode = System.Data.Entity.Core.Metadata.Edm.ConcurrencyMode;
-#else
-using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
-#endif
-
 
     /// <summary>
     /// Internal utility functions for dealing with EF types and metadata
@@ -90,34 +72,6 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             return structuralType;
         }
 
-
-        /// <summary>
-        /// Method used to return the current <see cref="EntityState"/> of the specified
-        /// entity.
-        /// </summary>
-        /// <param name="context">The <see cref="ObjectContext"/></param>
-        /// <param name="entity">The entity to return the <see cref="EntityState"/> for</param>
-        /// <returns>The current <see cref="EntityState"/> of the specified entity</returns>
-        public static EntityState GetEntityState(ObjectContext context, object entity)
-        {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            ObjectStateEntry stateEntry = null;
-            if (!context.ObjectStateManager.TryGetObjectStateEntry(entity, out stateEntry))
-            {
-                return EntityState.Detached;
-            }
-            return stateEntry.State;
-        }
-
-
         /// <summary>
         /// Determines if the specified EdmMember is a concurrency timestamp.
         /// </summary>
@@ -167,29 +121,30 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
             return md;
         }
 
-        public static ObjectStateEntry AttachAsModifiedInternal(object current, object original, ObjectContext objectContext)
+        public static EntityEntry AttachAsModifiedInternal(object current, object original, ChangeTracker objectContext)
         {
-            ObjectStateEntry stateEntry = objectContext.ObjectStateManager.GetObjectStateEntry(current);
-            stateEntry.ApplyOriginalValues(original);
+            var stateEntry = objectContext.Context.Entry(current); // ObjectStateManager.GetObjectStateEntry(current);
+            
+            // TODO: The code below may be needed based on how RoundTripOriginalAttribute behaves in EF Core
 
             // For any members that don't have RoundtripOriginal applied, EF can't determine modification
             // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
             // mark such members as modified.
-            Type entityType = current.GetType();
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(entityType);
-            AttributeCollection attributes = TypeDescriptor.GetAttributes(entityType);
-            bool isRoundtripType = attributes[typeof(RoundtripOriginalAttribute)] != null;
-            foreach (var fieldMetadata in stateEntry.CurrentValues.DataRecordInfo.FieldMetadata)
-            {
-                string memberName = stateEntry.CurrentValues.GetName(fieldMetadata.Ordinal);
-                PropertyDescriptor property = properties[memberName];
-                if (property != null &&
-                    (property.Attributes[typeof(RoundtripOriginalAttribute)] == null && !isRoundtripType) &&
-                    property.Attributes[typeof(ExcludeAttribute)] == null)
-                {
-                    stateEntry.SetModifiedProperty(memberName);
-                }
-            }
+            //Type entityType = current.GetType();
+            //PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(entityType);
+            //AttributeCollection attributes = TypeDescriptor.GetAttributes(entityType);
+            //bool isRoundtripType = attributes[typeof(RoundtripOriginalAttribute)] != null;
+            //foreach (var fieldMetadata in stateEntry.CurrentValues.DataRecordInfo.FieldMetadata)
+            //{
+            //    string memberName = stateEntry.CurrentValues.GetName(fieldMetadata.Ordinal);
+            //    PropertyDescriptor property = properties[memberName];
+            //    if (property != null &&
+            //        (property.Attributes[typeof(RoundtripOriginalAttribute)] == null && !isRoundtripType) &&
+            //        property.Attributes[typeof(ExcludeAttribute)] == null)
+            //    {
+            //        stateEntry.SetModifiedProperty(memberName);
+            //    }
+            //}
             return stateEntry;
         }
     }

@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Mapping;
-#if DBCONTEXT
-using System.Data.Entity.Core.Metadata.Edm;
-#else
 using System.Data.Metadata.Edm;
-#endif
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
     /// <summary>
     /// Metadata context for LINQ To Entities domain services

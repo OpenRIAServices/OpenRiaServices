@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.EntityFramework {
+namespace OpenRiaServices.EntityFrameworkCore {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace OpenRiaServices.EntityFramework {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.EntityFramework.DbResource", typeof(DbResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.EntityFrameworkCore.DbResource", typeof(DbResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

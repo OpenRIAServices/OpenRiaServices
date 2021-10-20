@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-#if DBCONTEXT
-using System.Data.Entity.Core.Metadata.Edm;
-#else
 using System.Data.Metadata.Edm;
-#endif
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
     // TODO: Remove and move code to DB context
 

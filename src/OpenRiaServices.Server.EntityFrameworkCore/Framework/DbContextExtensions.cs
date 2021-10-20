@@ -1,11 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
     /// <summary>
     /// DbContext extension methods for DbDomainService authors.
@@ -21,7 +18,7 @@ namespace OpenRiaServices.EntityFramework
         /// <param name="current">The current entity.</param>
         /// <param name="original">The original entity.</param>
         /// <param name="dbContext">The corresponding <see cref="DbContext"/></param>
-        public static void AttachAsModified<T>(this IDbSet<T> dbSet, T current, T original, DbContext dbContext) where T : class
+        public static void AttachAsModified<T>(this DbSet<T> dbSet, T current, T original, DbContext dbContext) where T : class
         {
             if (dbSet == null)
             {
@@ -40,7 +37,7 @@ namespace OpenRiaServices.EntityFramework
                 throw new ArgumentNullException(nameof(dbContext));
             }
 
-            DbEntityEntry<T> entityEntry = dbContext.Entry(current);
+            EntityEntry<T> entityEntry = dbContext.Entry(current);
             if (entityEntry.State == EntityState.Detached)
             {
                 dbSet.Attach(current);
@@ -50,8 +47,9 @@ namespace OpenRiaServices.EntityFramework
                 entityEntry.State = EntityState.Modified;
             }
 
-            ObjectContext objectContext = (dbContext as IObjectContextAdapter).ObjectContext;
-            ObjectStateEntry stateEntry = ObjectContextUtilities.AttachAsModifiedInternal(current, original, objectContext);            
+            // TODO: Look into this
+            var changeTracker = dbContext.ChangeTracker;
+            var stateEntry = ObjectContextUtilities.AttachAsModifiedInternal(current, original, changeTracker);
 
             if (stateEntry.State != EntityState.Modified)
             {
@@ -70,7 +68,7 @@ namespace OpenRiaServices.EntityFramework
         /// <param name="dbSet">The <see cref="DbSet"/> to attach to</param>
         /// <param name="entity">The current entity</param>
         /// <param name="dbContext">The coresponding <see cref="DbContext"/></param>
-        public static void AttachAsModified<T>(this IDbSet<T> dbSet, T entity, DbContext dbContext) where T : class
+        public static void AttachAsModified<T>(this DbSet<T> dbSet, T entity, DbContext dbContext) where T : class
         {
             if (dbSet == null)
             {
@@ -85,7 +83,7 @@ namespace OpenRiaServices.EntityFramework
                 throw new ArgumentNullException(nameof(dbContext));
             }
 
-            DbEntityEntry<T> entityEntry = dbContext.Entry(entity);
+            EntityEntry<T> entityEntry = dbContext.Entry(entity);
             if (entityEntry.State == EntityState.Detached)
             {
                 // attach the entity

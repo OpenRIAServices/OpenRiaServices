@@ -8,7 +8,7 @@ namespace CodeFirstModels
     {
         public Territory()
         {
-            this.Employees = new HashSet<Employee>();
+            this.EmployeeTerritories = new HashSet<EmployeeTerritory>();
         }
 
         [StringLength(20)]
@@ -18,6 +18,6 @@ namespace CodeFirstModels
         public int RegionID { get; set; }
     
         public virtual Region Region { get; set; }
-        public virtual ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<EmployeeTerritory> EmployeeTerritories { get; set; }
     }
 }

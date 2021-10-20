@@ -11,7 +11,7 @@ namespace CodeFirstModels
         {
             this.Employees1 = new HashSet<Employee>();
             this.Orders = new HashSet<Order>();
-            this.Territories = new HashSet<Territory>();
+            this.EmployeeTerritories = new HashSet<EmployeeTerritory>();
         }
     
         [Key]
@@ -40,6 +40,6 @@ namespace CodeFirstModels
         public virtual Employee Employee1 { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual ICollection<Territory> Territories { get; set; }
+        public virtual ICollection<EmployeeTerritory> EmployeeTerritories { get; set; }
     }
 }

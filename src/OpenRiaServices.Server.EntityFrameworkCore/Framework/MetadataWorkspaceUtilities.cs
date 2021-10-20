@@ -1,18 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-#if DBCONTEXT
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Core.Mapping;
-#else
-using System.Data.Metadata.Edm;
-using System.Data.Objects;
-using System.Data.Mapping;
-#endif
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices;
+using System.Data.Metadata.Edm;
+using Microsoft.EntityFrameworkCore;
 
 namespace System.Data.Mapping
 {
@@ -34,19 +26,17 @@ namespace System.Data.Mapping
             metadataWorkspace = MetadataWorkspaceUtilities.CreateMetadataWorkspaceFromResources(contextType, typeof(ObjectContext));
 
 #else
-            metadataWorkspace = MetadataWorkspaceUtilities.CreateMetadataWorkspaceFromResources(contextType, typeof(System.Data.Entity.DbContext));
-            if (metadataWorkspace == null && typeof(System.Data.Entity.DbContext).IsAssignableFrom(contextType))
+            metadataWorkspace = MetadataWorkspaceUtilities.CreateMetadataWorkspaceFromResources(contextType, typeof(DbContext));
+            if (metadataWorkspace == null && typeof(DbContext).IsAssignableFrom(contextType))
             {
                 if (contextType.GetConstructor(Type.EmptyTypes) == null)
                 {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.EntityFramework.DbResource.DefaultCtorNotFound, contextType.FullName));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.EntityFrameworkCore.DbResource.DefaultCtorNotFound, contextType.FullName));
                 }
 
                 try
                 {
-                    System.Data.Entity.DbContext dbContext = Activator.CreateInstance(contextType) as System.Data.Entity.DbContext;
-                    ObjectContext objectContext = (dbContext as System.Data.Entity.Infrastructure.IObjectContextAdapter).ObjectContext;
-                    metadataWorkspace = objectContext.MetadataWorkspace;
+                    DbContext dbContext = Activator.CreateInstance(contextType) as DbContext;
                 }
                 catch (Exception efException)
                 {
@@ -55,7 +45,7 @@ namespace System.Data.Mapping
                         throw;
                     }
                     
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.EntityFramework.DbResource.MetadataWorkspaceNotFound + ProcessException(efException), contextType.FullName), efException);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.EntityFrameworkCore.DbResource.MetadataWorkspaceNotFound + ProcessException(efException), contextType.FullName), efException);
                 }
             }
 #endif
@@ -102,20 +92,7 @@ namespace System.Data.Mapping
                     if (edmItemCollection.TryGetEntityContainer(currentType.Name, out container))
                     {
                         StoreItemCollection store = new StoreItemCollection(workspaceInfo.Ssdl);
-#if DBCONTEXT // This actually means EF6+
-                        MetadataWorkspace workspace = new MetadataWorkspace(
-                        () => edmItemCollection,
-                        () => store,
-                        () => new StorageMappingItemCollection(edmItemCollection, store, workspaceInfo.Msl),
-                        () => new ObjectItemCollection());
-#else // EF4
-                        StorageMappingItemCollection mapping = new StorageMappingItemCollection(edmItemCollection, store, workspaceInfo.Msl);
                         MetadataWorkspace workspace = new MetadataWorkspace();
-                        workspace.RegisterItemCollection(edmItemCollection);
-                        workspace.RegisterItemCollection(store);
-                        workspace.RegisterItemCollection(mapping);
-                        workspace.RegisterItemCollection(new ObjectItemCollection());
-#endif
                         return workspace;
                     }
 

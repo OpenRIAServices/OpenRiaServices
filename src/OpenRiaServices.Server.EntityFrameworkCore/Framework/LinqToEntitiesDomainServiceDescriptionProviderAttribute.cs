@@ -1,14 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-#if DBCONTEXT
-using System.Data.Entity.Core.Objects;
-#else
-using System.Data.Objects;
-#endif
 using System.Globalization;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
 
     // TODO: Remove and move code to DB context
@@ -72,13 +67,6 @@ namespace OpenRiaServices.EntityFramework
                 this._objectContextType = GetContextType(domainServiceType);
             }
 
-            if (!typeof(ObjectContext).IsAssignableFrom(this._objectContextType))
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
-                    Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
-                    this._objectContextType));
-            }
-
             return new LinqToEntitiesDomainServiceDescriptionProvider(domainServiceType, this._objectContextType, parent);
         }
 
@@ -90,13 +78,13 @@ namespace OpenRiaServices.EntityFramework
         private static Type GetContextType(Type domainServiceType)
         {
             Type efDomainServiceType = domainServiceType.BaseType;
-            while (!efDomainServiceType.IsGenericType || efDomainServiceType.GetGenericTypeDefinition() != typeof(LinqToEntitiesDomainService<>))
+            while (!efDomainServiceType.IsGenericType || efDomainServiceType.GetGenericTypeDefinition() != typeof(DomainService))
             {
                 if (efDomainServiceType == typeof(object))
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                     Resource.InvalidMetadataProviderSpecification,
-                    typeof(LinqToEntitiesDomainServiceDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(LinqToEntitiesDomainService<>).Name));
+                    typeof(LinqToEntitiesDomainServiceDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(DomainService).Name));
                 }
                 efDomainServiceType = efDomainServiceType.BaseType;
             }

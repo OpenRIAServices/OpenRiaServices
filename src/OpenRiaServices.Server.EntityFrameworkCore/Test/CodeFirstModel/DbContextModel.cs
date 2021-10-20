@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Runtime.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Configuration;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract
 [assembly: ContractNamespace("http://schemas.datacontract.org/2004/07/DataTests.Northwind",
@@ -11,40 +12,56 @@ namespace CodeFirstModels
 {
     public partial class EFCFNorthwindEntities : DbContext
     {
+        private string _connection;
+
         public EFCFNorthwindEntities()
-            : base("name=Northwind")
+            : this("name=Northwind")
         {
 
         }
 
         public EFCFNorthwindEntities(string connection)
-            : base(connection)
         {
+            _connection = connection;
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(_connection);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.Entity<Shipper>()
                         .HasMany(c => c.Orders)
-                        .WithOptional(c => c.Shipper)
+                        .WithOne(c => c.Shipper)
                         .HasForeignKey(c => c.ShipVia);
+
             modelBuilder.Entity<Order_Detail>().ToTable("Order Details");
+
             modelBuilder.Entity<Region>().ToTable("Region");
 
-            modelBuilder.Entity<Territory>().HasMany(t => t.Employees)
-                        .WithMany(e => e.Territories)
-                        .Map(m =>
-                            {
-                                m.ToTable("EmployeeTerritories");
-                                m.MapLeftKey("TerritoryID");
-                                m.MapRightKey("EmployeeID");
-                            });
-            
-            modelBuilder.Entity<Region>().HasKey(r => r.RegionID)
+            modelBuilder.Entity<EmployeeTerritory>()
+                .HasKey(et => new { et.EmployeeID, et.TerritoryID });
+
+            modelBuilder.Entity<EmployeeTerritory>()
+                .HasOne(bc => bc.Employee)
+                .WithMany(b => b.EmployeeTerritories)
+                .HasForeignKey(bc => bc.EmployeeID);
+
+            modelBuilder.Entity<EmployeeTerritory>()
+                .HasOne(bc => bc.Territory)
+                .WithMany(c => c.EmployeeTerritories)
+                .HasForeignKey(bc => bc.TerritoryID);
+
+            modelBuilder.Entity<Region>()
                         .Property(r => r.RegionID)
-                        .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+                        .ValueGeneratedNever();
+
+            modelBuilder.Entity<Region>()
+                        .HasKey(r => r.RegionID);
 
         }
 

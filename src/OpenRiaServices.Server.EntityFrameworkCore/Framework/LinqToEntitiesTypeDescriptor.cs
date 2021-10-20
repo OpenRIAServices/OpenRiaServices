@@ -6,20 +6,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ServiceModel.DomainServices.Server;
 #endif
 using System.ComponentModel.DataAnnotations.Schema;
-#if DBCONTEXT
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects.DataClasses;
-using System.Data.Entity;
-#else
-using System.Data;
-using System.Data.Metadata.Edm;
-using System.Data.Objects.DataClasses;
-#endif
-
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using OpenRiaServices.Server;
+using System.Data.Metadata.Edm;
+using System.Data.Objects.DataClasses;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
     /// <summary>
     /// CustomTypeDescriptor for LINQ To Entities

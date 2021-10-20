@@ -2,18 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
-using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace OpenRiaServices.EntityFramework
+namespace OpenRiaServices.EntityFrameworkCore
 {
     /// <summary>
     /// Base class for DomainServices operating on LINQ To Entities DbContext based data models
@@ -24,7 +20,6 @@ namespace OpenRiaServices.EntityFramework
         where TContext : DbContext, new()
     {
         private TContext _dbContext;
-        private ObjectContext _refreshContext;
 
         /// <summary>
         /// Protected constructor for the abstract class.
@@ -42,20 +37,6 @@ namespace OpenRiaServices.EntityFramework
         public override void Initialize(DomainServiceContext context)
         {
             base.Initialize(context);
-
-            ObjectContext objectContext = ((IObjectContextAdapter)this.DbContext).ObjectContext;
-            // We turn this off, since our deserializer isn't going to create
-            // the EF proxy types anyways. Proxies only really work if the entities
-            // are queried on the server.
-            objectContext.ContextOptions.ProxyCreationEnabled = false;
-
-            // Turn off DbContext validation.
-            this.DbContext.Configuration.ValidateOnSaveEnabled = false;
-
-            // Turn off AutoDetectChanges.
-            this.DbContext.Configuration.AutoDetectChangesEnabled = false;
-
-            this.DbContext.Configuration.LazyLoadingEnabled = false;
         }
 
         /// <summary>
@@ -66,23 +47,7 @@ namespace OpenRiaServices.EntityFramework
         {
             return new TContext();
         }
-
-        /// <summary>
-        /// Gets the <see cref="ObjectContext"/> used for retrieving store values
-        /// </summary>
-        private ObjectContext RefreshContext
-        {
-            get
-            {
-                if (this._refreshContext == null)
-                {
-                    DbContext dbContext = this.CreateDbContext();
-                    this._refreshContext = (dbContext as IObjectContextAdapter).ObjectContext;
-                }
-                return this._refreshContext;
-            }
-        }
-
+        
         /// <summary>
         /// Gets the <see cref="DbContext"/>
         /// </summary>
@@ -121,15 +86,7 @@ namespace OpenRiaServices.EntityFramework
         /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
         protected override ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            // EF will throw if provider is not a IDbAsyncEnumerable
-            if (enumerable is IDbAsyncEnumerable<T> asyncEnumerable)
-            {
-                return QueryHelper.EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
-            }
-            else
-            {
-                return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
-            }
+            return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
         }
 
 
@@ -153,7 +110,7 @@ namespace OpenRiaServices.EntityFramework
         /// </summary>
         /// <param name="conflicts">The list of concurrency conflicts that occurred</param>
         /// <returns>Returns <c>true</c> if the <see cref="ChangeSet"/> was persisted successfully, <c>false</c> otherwise.</returns>
-        protected virtual bool ResolveConflicts(IEnumerable<DbEntityEntry> conflicts)
+        protected virtual bool ResolveConflicts(IEnumerable<EntityEntry> conflicts)
         {
             return false;
         }
@@ -169,10 +126,6 @@ namespace OpenRiaServices.EntityFramework
                 if (this.DbContext != null)
                 {
                     this.DbContext.Dispose();
-                }
-                if (this._refreshContext != null)
-                {
-                    this._refreshContext.Dispose();
                 }
             }
             base.Dispose(disposing);
@@ -193,8 +146,8 @@ namespace OpenRiaServices.EntityFramework
             catch (DbUpdateConcurrencyException ex)
             {
                 // Map the operations that could have caused a conflict to an entity.
-                Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap = new Dictionary<DbEntityEntry, ChangeSetEntry>();
-                foreach (DbEntityEntry conflict in ex.Entries)
+                Dictionary<EntityEntry, ChangeSetEntry> operationConflictMap = new Dictionary<EntityEntry, ChangeSetEntry>();
+                foreach (EntityEntry conflict in ex.Entries)
                 {
                     ChangeSetEntry entry = this.ChangeSet.ChangeSetEntries.SingleOrDefault(p => object.ReferenceEquals(p.Entity, conflict.Entity));
                     if (entry == null)
@@ -243,71 +196,49 @@ namespace OpenRiaServices.EntityFramework
         /// Updates each entry in the ChangeSet with its corresponding conflict info.
         /// </summary>
         /// <param name="operationConflictMap">Map of conflicts to their corresponding operations entries.</param>
-        private void SetChangeSetConflicts(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap)
+        private void SetChangeSetConflicts(Dictionary<EntityEntry, ChangeSetEntry> operationConflictMap)
         {
-            object storeValue;
-            EntityKey refreshEntityKey;
-
-            ObjectContext objectContext = ((IObjectContextAdapter)this.DbContext).ObjectContext;
-            ObjectStateManager objectStateManager = objectContext.ObjectStateManager;
-            if (objectStateManager == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, DbResource.ObjectStateManagerNotFoundException, this.DbContext.GetType().Name));
-            }
-
             foreach (var conflictEntry in operationConflictMap)
             {
-                DbEntityEntry entityEntry = conflictEntry.Key;                                
-                ObjectStateEntry stateEntry = objectStateManager.GetObjectStateEntry(entityEntry.Entity);
-
-                if (stateEntry.State == EntityState.Unchanged)
+                EntityEntry stateEntry = conflictEntry.Key;                                
+                
+                if (stateEntry.State == Microsoft.EntityFrameworkCore.EntityState.Unchanged)
                 {
                     continue;
                 }
 
                 // Note: we cannot call Refresh StoreWins since this will overwrite Current entity and remove the optimistic concurrency ex.
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
-                refreshEntityKey = this.RefreshContext.CreateEntityKey(stateEntry.EntitySet.Name, stateEntry.Entity);
-                this.RefreshContext.TryGetObjectByKey(refreshEntityKey, out storeValue);
-                operationInConflict.StoreEntity = storeValue;
 
-                // StoreEntity will be null if the entity has been deleted in the store (i.e. Delete/Delete conflict)
-                bool isDeleted = (operationInConflict.StoreEntity == null);
-                if (isDeleted)
+                // Determine which members are in conflict by comparing original values to the current DB values
+                PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
+                List<string> membersInConflict = new List<string>();
+                object originalValue;
+                PropertyDescriptor pd;
+                foreach (var prop in stateEntry.OriginalValues.Properties)
                 {
-                    operationInConflict.IsDeleteConflict = true;
-                }
-                else
-                {
-                    // Determine which members are in conflict by comparing original values to the current DB values
-                    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
-                    List<string> membersInConflict = new List<string>();
-                    object originalValue;
-                    PropertyDescriptor pd;
-                    for (int i = 0; i < stateEntry.OriginalValues.FieldCount; i++)
+                    originalValue = stateEntry.OriginalValues.GetValue<object>(prop.Name);
+                    if (originalValue is DBNull)
                     {
-                        originalValue = stateEntry.OriginalValues.GetValue(i);
-                        if (originalValue is DBNull)
-                        {
-                            originalValue = null;
-                        }
-
-                        string propertyName = stateEntry.OriginalValues.GetName(i);
-                        pd = propDescriptors[propertyName];
-                        if (pd == null)
-                        {
-                            // This might happen in the case of a private model
-                            // member that isn't mapped
-                            continue;
-                        }
-
-                        if (!object.Equals(originalValue, pd.GetValue(operationInConflict.StoreEntity)))
-                        {
-                            membersInConflict.Add(pd.Name);
-                        }
+                        originalValue = null;
                     }
-                    operationInConflict.ConflictMembers = membersInConflict;
+
+                    string propertyName = prop.Name;
+                    pd = propDescriptors[propertyName];
+                    if (pd == null)
+                    {
+                        // This might happen in the case of a private model
+                        // member that isn't mapped
+                        continue;
+                    }
+
+                    if (!object.Equals(originalValue, pd.GetValue(operationInConflict.StoreEntity)))
+                    {
+                        membersInConflict.Add(pd.Name);
+                    }
                 }
+                operationInConflict.ConflictMembers = membersInConflict;
+
             }
         }
     }
