@@ -22,8 +22,10 @@ public static class TestURIs
     public static readonly Uri EF_Northwind_POCO_CUD = new Uri(RootURI, "TestDomainServices-EF-NorthwindPOCO_CUD.svc");
 
     // EF CodeFirst
+    public static readonly Uri EFCoreEFCF_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCoreEFCF-Northwind_CUD.svc");
     public static readonly Uri EFCF_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCF-Northwind_CUD.svc");
     public static readonly Uri DbCtx_Northwind_CUD = new Uri(RootURI, "TestDomainServices-DbCtx-Northwind_CUD.svc");
+    public static readonly Uri EFCoreDbCtx_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCoreDbCtx-Northwind_CUD.svc");
     public static readonly Uri DbCtx_Northwind = new Uri(RootURI, "TestDomainServices-DbCtx-Northwind.svc");
     public static readonly Uri DbCtx_Catalog = new Uri(RootURI, "TestDomainServices-DbCtx-Catalog.svc");
     public static readonly Uri EFCodeFirst = new Uri(RootURI, "EFCodeFirst-EFCodeFirstTestDomainService.svc");    

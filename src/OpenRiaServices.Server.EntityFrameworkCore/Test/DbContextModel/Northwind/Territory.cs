@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DbContextModels.Northwind
+namespace DbContextModels.NorthwindEFCore
 {
     using System;
     using System.Collections.Generic;

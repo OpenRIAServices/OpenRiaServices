@@ -16,6 +16,7 @@ namespace OpenRiaServices.Client.Test
     using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     /// <summary>
+    /// TODO: Make it work with EF Core. Maybe copy whole file and work with DBContext for EFCore
     /// End to end update scenario tests. These tests do a one time TestClass level test database
     /// initialization, creating the isolation database that will be used for all the tests. After
     /// all tests have run, and assembly level clean-up method disposes the test database.
@@ -4474,6 +4475,31 @@ TestContext testContext
     }
 
     [TestClass]
+    public class EFCoreEFCFUpdateTests : UpdateTests
+    {
+        public EFCoreEFCFUpdateTests()
+            : base(TestURIs.EFCoreEFCF_Northwind_CUD, ProviderType.EFCore)
+        {
+        }
+
+        /// <summary>
+        /// Silverlight version of class initializer doesn't take TestContext
+        /// </summary>
+        [ClassInitialize]
+        public static void ClassSetup(
+#if !SILVERLIGHT
+            TestContext testContext
+#endif
+)
+        {
+            // ensure that our isolation DB has been created once and only once
+            // at the test fixture level
+            TestDatabase.Initialize();
+        }
+
+    }
+
+    [TestClass]
     public class DbCtxUpdateTests : UpdateTests
     {
         public DbCtxUpdateTests()
@@ -4496,6 +4522,31 @@ TestContext testContext
             TestDatabase.Initialize();
         }
     }
+
+    [TestClass]
+    public class EFCoreDbCtxUpdateTests : UpdateTests
+    {
+        public EFCoreDbCtxUpdateTests()
+            : base(TestURIs.EFCoreDbCtx_Northwind_CUD, ProviderType.EFCore)
+        {
+        }
+
+        /// <summary>
+        /// Silverlight version of class initializer doesn't take TestContext
+        /// </summary>
+        [ClassInitialize]
+        public static void ClassSetup(
+#if !SILVERLIGHT
+            TestContext testContext
+#endif
+)
+        {
+            // ensure that our isolation DB has been created once and only once
+            // at the test fixture level
+            TestDatabase.Initialize();
+        }
+    }
+
 
     /// <summary>
     /// Non DAL/DB scenario tests

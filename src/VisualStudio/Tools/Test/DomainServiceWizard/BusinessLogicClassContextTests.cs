@@ -117,6 +117,15 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         }
 
         [TestMethod]
+        [Description("Tests if LinqToEntitiesDbContext works properly for DbContext entities")]
+        public void BusinessLogicClass_Context_EFCoreDbContextTest()
+        {
+            LinqToEntitiesDbContext dbContext = new LinqToEntitiesDbContext(typeof(DbContextModels.NorthwindEFCore.EFCoreDbCtxNorthwindEntities));
+            Assert.AreEqual(11, dbContext.Entities.Count());
+            Assert.IsTrue(dbContext.NeedToGenerateMetadataClasses);
+        }
+
+        [TestMethod]
         [Description("Tests if LinqToEntitiesDbContext works properly for EF CodeFirst entities")]
         public void BusinessLogicClass_Context_EFCFDbContextTest()
         {

@@ -7,24 +7,29 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DbContextModels.Northwind
+namespace DbContextModels.NorthwindEFCore
 {
     using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
-    
-    public partial class DbCtxNorthwindEntities : DbContext
+    using Microsoft.EntityFrameworkCore;
+
+
+    public partial class EFCoreDbCtxNorthwindEntities : DbContext
     {
-        public DbCtxNorthwindEntities()
-            : base("name=DbCtxNorthwindEntities")
+        public EFCoreDbCtxNorthwindEntities()
+            : base()
         {
         }
     
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+            throw new NotImplementedException();
         }
-    
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            
+        }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<CustomerDemographic> CustomerDemographics { get; set; }
         public DbSet<Customer> Customers { get; set; }

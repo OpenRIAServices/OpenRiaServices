@@ -10,17 +10,17 @@ using System.Configuration;
 
 namespace CodeFirstModels
 {
-    public partial class EFCFNorthwindEntities : DbContext
+    public partial class EFCoreCFNorthwindEntities : DbContext
     {
         private string _connection;
 
-        public EFCFNorthwindEntities()
+        public EFCoreCFNorthwindEntities()
             : this("name=Northwind")
         {
 
         }
 
-        public EFCFNorthwindEntities(string connection)
+        public EFCoreCFNorthwindEntities(string connection)
         {
             _connection = connection;
         }
@@ -46,6 +46,7 @@ namespace CodeFirstModels
             modelBuilder.Entity<EmployeeTerritory>()
                 .HasKey(et => new { et.EmployeeID, et.TerritoryID });
 
+            // In EF Core 3.1 a M2M link entity is required. This should not be needed in EF Core 5 and upwards
             modelBuilder.Entity<EmployeeTerritory>()
                 .HasOne(bc => bc.Employee)
                 .WithMany(b => b.EmployeeTerritories)

@@ -5,15 +5,17 @@ using OpenRiaServices.Server;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract
 [assembly: ContractNamespace("http://schemas.datacontract.org/2004/07/DataTests.Northwind",
-                              ClrNamespace = "DbContextModels.Northwind")]
+                              ClrNamespace = "DbContextModels.NorthwindEFCore")]
 
-namespace DbContextModels.Northwind
+namespace DbContextModels.NorthwindEFCore
 {
-    public partial class DbCtxNorthwindEntities
+    public partial class EFCoreDbCtxNorthwindEntities
     {
-        public DbCtxNorthwindEntities(string connection)
-            : base(connection)
+        string _connection;
+
+        public EFCoreDbCtxNorthwindEntities(string connection)
         {
+            _connection = connection;
         }
     }    
 

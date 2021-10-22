@@ -23,6 +23,8 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreDbContextModels.csproj" />
     <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />

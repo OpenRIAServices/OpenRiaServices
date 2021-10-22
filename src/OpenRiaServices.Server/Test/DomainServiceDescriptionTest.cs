@@ -31,7 +31,7 @@ namespace OpenRiaServices.Server.Test
     using System.Threading.Tasks;
     using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
 
-
+    // TODO Begin here to make it work with the new 
     /// <summary>
     /// DomainServiceDescription tests
     /// </summary>

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NoWarn>618</NoWarn>
     <RootNamespace>DbContextModels</RootNamespace>
-    <AssemblyName>DbContextModels</AssemblyName>
+    <AssemblyName>EFCoreDbContextModels</AssemblyName>
     <TargetFramework>net472</TargetFramework>
     <Version>1.0.0.0</Version>
   </PropertyGroup>
@@ -11,9 +11,6 @@
     <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Linq" />
@@ -21,234 +18,6 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="AdventureWorks\Address.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\AddressType.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\AdventureWorksDbCtx.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorksDbCtx.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\AdventureWorksDbCtx.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\AdventureWorksDbCtx.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorksDbCtx.edmx</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\AWBuildVersion.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\BillOfMaterial.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Contact.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ContactCreditCard.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ContactType.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\CountryRegion.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\CountryRegionCurrency.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\CreditCard.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Culture.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Currency.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\CurrencyRate.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Customer.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\CustomerAddress.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\DatabaseLog.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Department.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Document.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Employee.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\EmployeeAddress.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\EmployeeDepartmentHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\EmployeePayHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ErrorLog.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Illustration.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Individual.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\JobCandidate.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Location.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Product.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductCategory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductCostHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductDescription.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductDocument.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductInventory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductListPriceHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductModel.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductModelIllustration.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductModelProductDescriptionCulture.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductPhoto.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductProductPhoto.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductReview.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductSubcategory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ProductVendor.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\PurchaseOrder.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\PurchaseOrderDetail.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesOrderDetail.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesOrderHeader.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesOrderHeaderSalesReason.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesPerson.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesPersonQuotaHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesReason.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesTaxRate.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesTerritory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SalesTerritoryHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ScrapReason.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Shift.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ShipMethod.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\ShoppingCartItem.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SpecialOffer.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\SpecialOfferProduct.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\StateProvince.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Store.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\StoreContact.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\sysdiagram.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\TransactionHistory.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\TransactionHistoryArchive.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\UnitMeasure.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\Vendor.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\VendorAddress.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\VendorContact.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\WorkOrder.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
-    <Compile Update="AdventureWorks\WorkOrderRouting.cs">
-      <DependentUpon>AdventureWorksDbCtx.tt</DependentUpon>
-    </Compile>
     <Compile Update="Northwind\Category.cs">
       <DependentUpon>NorthwindEntities.tt</DependentUpon>
     </Compile>
@@ -306,19 +75,6 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="AdventureWorks\AdventureWorksDbCtx.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AdventureWorksDbCtx.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>DbContextModels.AdventureWorks</CustomToolNamespace>
-    </EntityDeploy>
-    <None Include="AdventureWorks\AdventureWorksDbCtx.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AdventureWorksDbCtx.Context.cs</LastGenOutput>
-    </None>
-    <None Include="AdventureWorks\AdventureWorksDbCtx.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AdventureWorksDbCtx.cs</LastGenOutput>
-    </None>
     <None Include="Northwind\NorthwindEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>NorthwindEntities.Context.cs</LastGenOutput>
@@ -327,6 +83,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>NorthwindEntities.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.20" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
