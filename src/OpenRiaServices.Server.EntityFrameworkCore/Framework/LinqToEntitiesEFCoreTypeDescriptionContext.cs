@@ -12,7 +12,7 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// <summary>
     /// Metadata context for LINQ To Entities domain services
     /// </summary>
-    internal class LinqToEntitiesTypeDescriptionContext : TypeDescriptionContextBase
+    internal class LinqToEntitiesEFCoreTypeDescriptionContext : TypeDescriptionContextBase
     {
         private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
@@ -22,7 +22,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// Constructor that accepts a LINQ To Entities context type
         /// </summary>
         /// <param name="contextType">The ObjectContext Type</param>
-        public LinqToEntitiesTypeDescriptionContext(Type contextType)
+        public LinqToEntitiesEFCoreTypeDescriptionContext(Type contextType)
         {
             if (contextType == null)
             {
@@ -41,7 +41,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 if (this._metadataWorkspace == null)
                 {
                     // we only support embedded mappings
-                    this._metadataWorkspace = MetadataWorkspaceUtilities.CreateMetadataWorkspace(this._contextType);
+                    this._metadataWorkspace = MetadataWorkspaceUtilitiesEFCore.CreateMetadataWorkspace(this._contextType);
                 }
                 return this._metadataWorkspace;
             }
@@ -54,7 +54,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <returns>The StructuralType that corresponds to the given CLR type</returns>
         public StructuralType GetEdmType(Type clrType)
         {
-            return ObjectContextUtilities.GetEdmType(this.MetadataWorkspace, clrType);
+            return ObjectContextUtilitiesEFCore.GetEdmType(this.MetadataWorkspace, clrType);
         }
 
         /// <summary>

@@ -17,9 +17,9 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// <summary>
     /// CustomTypeDescriptor for LINQ To Entities
     /// </summary>
-    internal class LinqToEntitiesTypeDescriptor : TypeDescriptorBase
+    internal class LinqToEntitiesEFCoreTypeDescriptor : TypeDescriptorBase
     {
-        private readonly LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
+        private readonly LinqToEntitiesEFCoreTypeDescriptionContext _typeDescriptionContext;
         private readonly StructuralType _edmType;
         private readonly EdmMember _timestampMember;
         private readonly HashSet<EdmMember> _foreignKeyMembers;
@@ -28,16 +28,16 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <summary>
         /// Constructor taking a metadata context, an structural type, and a parent custom type descriptor
         /// </summary>
-        /// <param name="typeDescriptionContext">The <see cref="LinqToEntitiesTypeDescriptionContext"/> context.</param>
+        /// <param name="typeDescriptionContext">The <see cref="LinqToEntitiesEFCoreTypeDescriptionContext"/> context.</param>
         /// <param name="edmType">The <see cref="StructuralType"/> type (can be an entity or complex type).</param>
         /// <param name="parent">The parent custom type descriptor.</param>
-        public LinqToEntitiesTypeDescriptor(LinqToEntitiesTypeDescriptionContext typeDescriptionContext, StructuralType edmType, ICustomTypeDescriptor parent)
+        public LinqToEntitiesEFCoreTypeDescriptor(LinqToEntitiesEFCoreTypeDescriptionContext typeDescriptionContext, StructuralType edmType, ICustomTypeDescriptor parent)
             : base(parent)
         {
             this._typeDescriptionContext = typeDescriptionContext;
             this._edmType = edmType;
 
-            EdmMember[] timestampMembers = this._edmType.Members.Where(p => ObjectContextUtilities.IsConcurrencyTimestamp(p)).ToArray();
+            EdmMember[] timestampMembers = this._edmType.Members.Where(p => ObjectContextUtilitiesEFCore.IsConcurrencyTimestamp(p)).ToArray();
             if (timestampMembers.Length == 1)
             {
                 this._timestampMember = timestampMembers[0];
@@ -63,7 +63,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <summary>
         /// Gets the metadata context
         /// </summary>
-        public LinqToEntitiesTypeDescriptionContext TypeDescriptionContext
+        public LinqToEntitiesEFCoreTypeDescriptionContext TypeDescriptionContext
         {
             get
             {
@@ -136,7 +136,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 bool databaseGenerated = false;
                 if (pd.Attributes[typeof(DatabaseGeneratedAttribute)] == null)
                 {
-                    MetadataProperty md = ObjectContextUtilities.GetStoreGeneratedPattern(member);
+                    MetadataProperty md = ObjectContextUtilitiesEFCore.GetStoreGeneratedPattern(member);
                     if (md != null)
                     {
                         if ((string)md.Value == "Computed")

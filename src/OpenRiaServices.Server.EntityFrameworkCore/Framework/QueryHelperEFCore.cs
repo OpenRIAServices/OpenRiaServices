@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
-    static class QueryHelper
+    static class QueryHelperEFCore
     {
         public static ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {

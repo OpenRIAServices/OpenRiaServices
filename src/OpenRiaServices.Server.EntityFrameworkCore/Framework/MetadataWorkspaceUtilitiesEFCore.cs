@@ -11,7 +11,7 @@ namespace System.Data.Mapping
     /// <summary>
     /// EF metadata utilities class.
     /// </summary>
-    internal static class MetadataWorkspaceUtilities
+    internal static class MetadataWorkspaceUtilitiesEFCore
     {
         /// <summary>
         /// Creates a metadata workspace for the specified context.
@@ -26,7 +26,7 @@ namespace System.Data.Mapping
             metadataWorkspace = MetadataWorkspaceUtilities.CreateMetadataWorkspaceFromResources(contextType, typeof(ObjectContext));
 
 #else
-            metadataWorkspace = MetadataWorkspaceUtilities.CreateMetadataWorkspaceFromResources(contextType, typeof(DbContext));
+            metadataWorkspace = MetadataWorkspaceUtilitiesEFCore.CreateMetadataWorkspaceFromResources(contextType, typeof(DbContext));
             if (metadataWorkspace == null && typeof(DbContext).IsAssignableFrom(contextType))
             {
                 if (contextType.GetConstructor(Type.EmptyTypes) == null)

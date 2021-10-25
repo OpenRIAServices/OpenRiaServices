@@ -1,51 +1,49 @@
 ﻿using System;
 using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
-
-    // TODO: Remove and move code to DB context
-
     /// <summary>
-    /// Attribute applied to a <see cref="DomainService"/> that exposes LINQ to Entities mapped
+    /// Attribute applied to a <see cref="DbDomainServiceEFCore{DbContext}"/> that exposes LINQ to Entities mapped
     /// Types.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public sealed class LinqToEntitiesDomainServiceDescriptionProviderAttribute : DomainServiceDescriptionProviderAttribute
+    public sealed class DbDomainServiceEFCoreDescriptionProviderAttribute : DomainServiceDescriptionProviderAttribute
     {
-        private Type _objectContextType;
+        private Type _dbContextType;
 
         /// <summary>
         /// Default constructor. Using this constructor, the Type of the LINQ To Entities
-        /// ObjectContext will be inferred from the <see cref="DomainService"/> the
+        /// DbContext will be inferred from the <see cref="DomainService"/> the
         /// attribute is applied to.
         /// </summary>
-        public LinqToEntitiesDomainServiceDescriptionProviderAttribute()
-            : base(typeof(LinqToEntitiesDomainServiceDescriptionProvider))
+        public DbDomainServiceEFCoreDescriptionProviderAttribute()
+            : base(typeof(LinqToEntitiesDomainServiceEFCoreDescriptionProvider))
         {
         }
 
         /// <summary>
         /// Constructs an attribute for the specified LINQ To Entities
-        /// ObjectContext Type.
+        /// DbContext Type.
         /// </summary>
-        /// <param name="objectContextType">The LINQ To Entities ObjectContext Type.</param>
-        public LinqToEntitiesDomainServiceDescriptionProviderAttribute(Type objectContextType)
-            : base(typeof(LinqToEntitiesDomainServiceDescriptionProvider))
+        /// <param name="dbContextType">The LINQ To Entities ObjectContext Type.</param>
+        public DbDomainServiceEFCoreDescriptionProviderAttribute(Type dbContextType)
+            : base(typeof(LinqToEntitiesDomainServiceEFCoreDescriptionProvider))
         {
-            this._objectContextType = objectContextType;
+            this._dbContextType = dbContextType;
         }
 
         /// <summary>
-        /// The Linq To Entities ObjectContext Type.
+        /// The Linq To Entities DbContext Type.
         /// </summary>
-        public Type ObjectContextType
+        public Type DbContextType
         {
             get
             {
-                return this._objectContextType;
+                return this._dbContextType;
             }
         }
 
@@ -62,12 +60,19 @@ namespace OpenRiaServices.EntityFrameworkCore
                 throw new ArgumentNullException(nameof(domainServiceType));
             }
 
-            if (this._objectContextType == null)
+            if (this._dbContextType == null)
             {
-                this._objectContextType = GetContextType(domainServiceType);
+                this._dbContextType = GetContextType(domainServiceType);
             }
 
-            return new LinqToEntitiesDomainServiceDescriptionProvider(domainServiceType, this._objectContextType, parent);
+            if (!typeof(DbContext).IsAssignableFrom(this._dbContextType))
+            {
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
+                    DbResource.InvalidDbDomainServiceDescriptionProviderSpecification,
+                    this._dbContextType));
+            }
+
+            return new LinqToEntitiesDomainServiceEFCoreDescriptionProvider(domainServiceType, this._dbContextType, parent);
         }
 
         /// <summary>
@@ -78,13 +83,13 @@ namespace OpenRiaServices.EntityFrameworkCore
         private static Type GetContextType(Type domainServiceType)
         {
             Type efDomainServiceType = domainServiceType.BaseType;
-            while (!efDomainServiceType.IsGenericType || efDomainServiceType.GetGenericTypeDefinition() != typeof(DomainService))
+            while (!efDomainServiceType.IsGenericType || efDomainServiceType.GetGenericTypeDefinition() != typeof(DbDomainServiceEFCore<>))
             {
                 if (efDomainServiceType == typeof(object))
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                     Resource.InvalidMetadataProviderSpecification,
-                    typeof(LinqToEntitiesDomainServiceDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(DomainService).Name));
+                    typeof(DbDomainServiceEFCoreDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(DbDomainServiceEFCore<>).Name));
                 }
                 efDomainServiceType = efDomainServiceType.BaseType;
             }

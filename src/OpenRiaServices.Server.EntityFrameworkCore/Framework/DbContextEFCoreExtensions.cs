@@ -7,7 +7,7 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// <summary>
     /// DbContext extension methods for DbDomainService authors.
     /// </summary>
-    public static class DbContextExtensions
+    public static class DbContextEFCoreExtensions
     {
         /// <summary>
         /// Extension method used to attach the specified entity as modified,
@@ -49,7 +49,7 @@ namespace OpenRiaServices.EntityFrameworkCore
 
             // TODO: Look into this
             var changeTracker = dbContext.ChangeTracker;
-            var stateEntry = ObjectContextUtilities.AttachAsModifiedInternal(current, original, changeTracker);
+            var stateEntry = ObjectContextUtilitiesEFCore.AttachAsModifiedInternal(current, original, changeTracker);
 
             if (stateEntry.State != EntityState.Modified)
             {

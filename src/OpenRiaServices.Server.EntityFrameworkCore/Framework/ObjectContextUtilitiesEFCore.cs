@@ -12,7 +12,7 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// <summary>
     /// Internal utility functions for dealing with EF types and metadata
     /// </summary>
-    internal static class ObjectContextUtilities
+    internal static class ObjectContextUtilitiesEFCore
     {
         /// <summary>
         /// Retrieves the <see cref="StructuralType"/> corresponding to the given CLR type (where the
@@ -100,7 +100,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 return false;
             }
 
-            MetadataProperty md = ObjectContextUtilities.GetStoreGeneratedPattern(member);
+            MetadataProperty md = ObjectContextUtilitiesEFCore.GetStoreGeneratedPattern(member);
             if (md == null || facet.Value == null || (string)md.Value != "Computed")
             {
                 return false;

@@ -11,13 +11,13 @@ namespace OpenRiaServices.EntityFrameworkCore
 {
     // TODO: Remove and move code to DB context
 
-    internal class LinqToEntitiesDomainServiceDescriptionProvider : DomainServiceDescriptionProvider
+    internal class LinqToEntitiesDomainServiceEFCoreDescriptionProvider : DomainServiceDescriptionProvider
     {
-        private static Dictionary<Type, LinqToEntitiesTypeDescriptionContext> tdpContextMap = new Dictionary<Type, LinqToEntitiesTypeDescriptionContext>();
-        private readonly LinqToEntitiesTypeDescriptionContext _typeDescriptionContext;
+        private static Dictionary<Type, LinqToEntitiesEFCoreTypeDescriptionContext> tdpContextMap = new Dictionary<Type, LinqToEntitiesEFCoreTypeDescriptionContext>();
+        private readonly LinqToEntitiesEFCoreTypeDescriptionContext _typeDescriptionContext;
         private readonly Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
 
-        public LinqToEntitiesDomainServiceDescriptionProvider(Type domainServiceType, Type contextType, DomainServiceDescriptionProvider parent)
+        public LinqToEntitiesDomainServiceEFCoreDescriptionProvider(Type domainServiceType, Type contextType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)
         {
             lock (tdpContextMap)
@@ -25,7 +25,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 if (!tdpContextMap.TryGetValue(contextType, out this._typeDescriptionContext))
                 {
                     // create and cache a context for this provider type
-                    this._typeDescriptionContext = new LinqToEntitiesTypeDescriptionContext(contextType);
+                    this._typeDescriptionContext = new LinqToEntitiesEFCoreTypeDescriptionContext(contextType);
                     tdpContextMap.Add(contextType, this._typeDescriptionContext);
                 }
             }
@@ -52,7 +52,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                     (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType || edmType.BuiltInTypeKind == BuiltInTypeKind.ComplexType))
                 {
                     // only add an LTE TypeDescriptor if the type is an EF Entity or ComplexType
-                    td = new LinqToEntitiesTypeDescriptor(this._typeDescriptionContext, edmType, parent);
+                    td = new LinqToEntitiesEFCoreTypeDescriptor(this._typeDescriptionContext, edmType, parent);
                 }
                 else
                 {

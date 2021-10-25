@@ -15,8 +15,8 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// Base class for DomainServices operating on LINQ To Entities DbContext based data models
     /// </summary>
     /// <typeparam name="TContext">The DbContext type</typeparam>
-    [DbDomainServiceDescriptionProvider]
-    public abstract class DbDomainService<TContext> : DomainService
+    [DbDomainServiceEFCoreDescriptionProvider]
+    public abstract class DbDomainServiceEFCore<TContext> : DomainService
         where TContext : DbContext, new()
     {
         private TContext _dbContext;
@@ -24,7 +24,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <summary>
         /// Protected constructor for the abstract class.
         /// </summary>
-        protected DbDomainService()
+        protected DbDomainServiceEFCore()
         {
         }
 
@@ -72,7 +72,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <returns>The total number of rows.</returns>
         protected override ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
-            return QueryHelper.CountAsync(query, cancellationToken);
+            return QueryHelperEFCore.CountAsync(query, cancellationToken);
         }
 
         /// <summary>
