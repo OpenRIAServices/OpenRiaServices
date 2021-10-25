@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace TestDomainServices.EFCoreDbCtx
 {
     [EnableClientAccess]
-    public class Northwind : DbDomainService<EFCoreDbCtxNorthwindEntities>
+    public class Northwind : DbDomainServiceEFCore<EFCoreDbCtxNorthwindEntities>
     {
         #region Product methods
         public Product GetProductById(int id)

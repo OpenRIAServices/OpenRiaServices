@@ -166,6 +166,30 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.DbCtx.Northwind), sharedFiles, true));
         }
 
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFDbContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFDbContext")]
+        [TestMethod]
+        public void TestClientCodegen_EFCoreEFDbCtxDomainServices()
+        {
+            string[] sharedFiles = Array.Empty<string>();
+
+            // Default codegen
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFDbContext", "EFDbContextScenarios.g",
+                typeof(TestDomainServices.EFCoreDbCtx.Northwind), sharedFiles, false));
+        }
+
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFDbContext_FullTypes")]
+        [TestMethod]
+        public void TestClientCodegen_EFCoreEFDbCtxDomainServices_FullTypes()
+        {
+            string[] sharedFiles = Array.Empty<string>();
+
+            // Full type names
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFDbContextScenarios.g",
+                typeof(TestDomainServices.EFCoreDbCtx.Northwind), sharedFiles, true));
+        }
+
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
         [TestMethod]

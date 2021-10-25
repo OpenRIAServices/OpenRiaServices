@@ -246,8 +246,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         internal static bool ShouldExcludeEntityMember(PropertyDescriptor pd)
         {
             // exclude EntityState members
-            if (pd.PropertyType == typeof(EntityState) &&
-                (pd.ComponentType == typeof(EntityObject) || typeof(IEntityChangeTracker).IsAssignableFrom(pd.ComponentType)))
+            if (pd.PropertyType == typeof(EntityState)) // TODO: Maybe also check pd.Component type
             {
                 return true;
             }

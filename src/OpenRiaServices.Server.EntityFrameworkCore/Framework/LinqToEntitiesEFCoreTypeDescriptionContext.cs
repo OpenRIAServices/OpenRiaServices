@@ -77,7 +77,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                         // We only support EF models where FK info is part of the model.
                         throw new NotSupportedException(
                             string.Format(CultureInfo.CurrentCulture,
-                            Resource.LinqToEntitiesProvider_UnableToRetrieveAssociationInfo, associationName));
+                            ResourceEFCore.LinqToEntitiesProvider_UnableToRetrieveAssociationInfo, associationName));
                     }
 
                     associationInfo = new AssociationInfo();

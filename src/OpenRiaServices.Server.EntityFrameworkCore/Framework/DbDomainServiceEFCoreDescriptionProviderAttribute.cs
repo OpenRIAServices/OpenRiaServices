@@ -88,7 +88,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 if (efDomainServiceType == typeof(object))
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
-                    Resource.InvalidMetadataProviderSpecification,
+                    ResourceEFCore.InvalidMetadataProviderSpecification,
                     typeof(DbDomainServiceEFCoreDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(DbDomainServiceEFCore<>).Name));
                 }
                 efDomainServiceType = efDomainServiceType.BaseType;
