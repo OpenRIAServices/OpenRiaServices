@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace DbContextModels
+namespace DbContextModels.AdventureWorksEFCoreScaffolded
 {
     public partial class AdventureWorksContext : DbContext
     {
