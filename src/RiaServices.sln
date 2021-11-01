@@ -142,9 +142,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.Doma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.EntityFrameworkCore", "OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj", "{B8D39090-3B76-41BB-A139-956E42619E91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreCodeFirstModels", "OpenRiaServices.Server.EntityFrameworkCore\Test\CodeFirstModel\EFCoreCodeFirstModels.csproj", "{D18943F4-49C8-49E5-A658-1FD4E59C7E0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreCodeFirstModels_dont_care", "OpenRiaServices.Server.EntityFrameworkCore\Test\CodeFirstModel\EFCoreCodeFirstModels_dont_care.csproj", "{D18943F4-49C8-49E5-A658-1FD4E59C7E0D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreDbContextModels", "OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreDbContextModels.csproj", "{6F468ADB-5799-4C24-93C5-765120AAAA4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCorePOCOModels", "Test\Desktop\EFCodePOCOModels\EFCorePOCOModels.csproj", "{28B11752-D00D-4BD9-B496-A54371F5C6D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -356,6 +358,10 @@ Global
 		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B11752-D00D-4BD9-B496-A54371F5C6D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B11752-D00D-4BD9-B496-A54371F5C6D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B11752-D00D-4BD9-B496-A54371F5C6D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B11752-D00D-4BD9-B496-A54371F5C6D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -424,6 +430,7 @@ Global
 		{B8D39090-3B76-41BB-A139-956E42619E91} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{D18943F4-49C8-49E5-A658-1FD4E59C7E0D} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{6F468ADB-5799-4C24-93C5-765120AAAA4E} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
+		{28B11752-D00D-4BD9-B496-A54371F5C6D9} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}

@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreDbContextModels.csproj" />
+    <ProjectReference Include="..\EFCodePOCOModels\EFCorePOCOModels.csproj" />
     <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
@@ -66,6 +67,11 @@
       <SubType>Code</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Update="DataModels\AdventureWorks - Copy.cs">
+      <DependentUpon>AdventureWorks - Copy.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="DataModels\AdventureWorks.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -75,6 +81,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.dbml</DependentUpon>
+    </Compile>
+    <Compile Update="DataModels\AdventureWorks1 - Copy.Designer.cs">
+      <DependentUpon>AdventureWorks.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="DataModels\Northwind.cs">
       <AutoGen>True</AutoGen>
@@ -281,11 +292,6 @@
     <Compile Update="Cities\RequiresUserForStateAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="DataModels\AdventureWorks1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorks.edmx</DependentUpon>
-    </Compile>
     <Compile Update="DataModels\Northwind.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -485,6 +491,7 @@
       <LastGenOutput>AdventureWorks.cs</LastGenOutput>
       <DependentUpon>AdventureWorks.edmx</DependentUpon>
     </None>
+    <None Include="DataModels\AdventureWorksEFCore.cs" />
     <None Include="DataModels\Northwind.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Northwind.designer.cs</LastGenOutput>
@@ -574,5 +581,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Baselines\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DataModels\AdventureWorksEFCore.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="DataModels\AdventureWorks - Copy.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AdventureWorks - Copy.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>
