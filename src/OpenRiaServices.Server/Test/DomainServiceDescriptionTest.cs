@@ -358,16 +358,10 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void EFCoreTypeDescriptor_ExcludedEntityMembers()
         {
+            // TODO: Not applicable to EF CORE so might be removed
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCorePocoEntity_IEntityChangeTracker))["EntityState"];
             Assert.IsTrue(LinqToEntitiesEFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
 
-            // TODO: Do we really need to check this for adveture works? If we nee to fix the model in some way
-            // https://docs.microsoft.com/en-us/ef/efcore-and-ef6/porting/port-edmx
-            //pd = TypeDescriptor.GetProperties(typeof(AdventureWorksModelEFCore.Customer))["EntityState"];
-            //Assert.IsTrue(LinqToEntitiesEFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
-
-            //pd = TypeDescriptor.GetProperties(typeof(AdventureWorksModelEFCore.Customer))["SalesTerritoryReference"];
-            //Assert.IsTrue(LinqToEntitiesEFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
         }
 
         /// <summary>
