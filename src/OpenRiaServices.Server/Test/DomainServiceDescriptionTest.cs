@@ -391,34 +391,18 @@ namespace OpenRiaServices.Server.Test
         }
 
         /// <summary>
-        /// Verify that our EF custom type descriptors work for POCO models
+        /// Verify FindEntityType for EF Core
         /// </summary>
         [TestMethod]
-        public void DomainServiceDescription_EFCorePOCO()
+        public void DomainServiceDescription_EFCoreTestFindEntityType()
         {
             // First create a context manually and verify that POCO metadata is configured correctly
-            NorthwindEFCorePOCOModel.NorthwindEntities ctxt = new NorthwindEFCorePOCOModel.NorthwindEntities();
-            IEntityType entityType = ctxt.Model.FindEntityType(nameof(NorthwindEFCorePOCOModel.Product));
+            var ctxt = new DbContextModels.NorthwindEFCoreScaffolded.NorthwindContext();
+            IEntityType entityType = ctxt.Model.FindEntityType(typeof(DbContextModels.NorthwindEFCoreScaffolded.Products).FullName);
             Assert.IsNotNull(entityType);
 
-            //
-            // TODO: Do we need to test this? ObjectContext is not used..
-            // direct test verifying that our helper methods work for POCO metadata
-            // metadata do not work in EF Core use IEntityType fake = _context.Model.FindEntityType(basicModelType);
-            // See https://stackoverflow.com/questions/54122313/where-is-metadataworkspace-in-entity-framework-core
-            //entityType = (EntityType)ObjectContextUtilities.GetEdmType(ctxt., typeof(NorthwindPOCOModel.Product));
-            //Assert.IsNotNull(entityType);
-
-            // E2E DomainServiceDescription test, verifying that our custom TDs are registered
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.EFCoreNorthwindPOCO));
-
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(NorthwindEFCorePOCOModel.Product))["ProductID"];
-            Assert.IsNotNull(pd.Attributes[typeof(KeyAttribute)]);
-
-            pd = TypeDescriptor.GetProperties(typeof(NorthwindEFCorePOCOModel.Product))["Category"];
-            AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
-            Assert.IsNotNull(assocAttrib);
         }
+
 
         /// <summary>
         /// Verify that after deriving from an EF type TypeDescriptor continues to work as expected.
