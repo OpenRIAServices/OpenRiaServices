@@ -12,7 +12,7 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 5.11.0
+    versionSpec: 6.0.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
@@ -21,6 +21,11 @@ steps:
 
 - task: gitversion/execute@0
   displayName: Use GitVersion
+
+- task: VisualStudioTestPlatformInstaller@1
+  inputs:
+    packageFeedSelector: 'nugetOrg'
+    versionSelector: 'latestStable'
 
 - task: NuGetCommand@2
   displayName: 'NuGet restore RiaServices.sln'
@@ -74,6 +79,7 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: false
+    vsTestVersion: 'toolsInstaller'
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
