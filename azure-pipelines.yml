@@ -76,7 +76,7 @@ steps:
     runInParallel: true
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
+    platform: 'x86'
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: false
     vsTestVersion: 'toolsInstaller'
