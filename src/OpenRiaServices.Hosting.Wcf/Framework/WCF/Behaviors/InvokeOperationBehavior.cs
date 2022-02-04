@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.Wcf.Behaviors
@@ -63,9 +63,11 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
 
             protected async override ValueTask<object> InvokeCoreAsync(DomainService instance, object[] inputs, bool disableStackTraces)
             {
+                HttpContext httpContext = HttpContext.Current;
                 ServiceInvokeResult invokeResult;
                 try
                 {
+                    SetOutputCachingPolicy(httpContext, operation);
                     InvokeDescription invokeDescription = new InvokeDescription(this.operation, inputs);
                     invokeResult = await instance.InvokeAsync(invokeDescription, instance.ServiceContext.CancellationToken).ConfigureAwait(false);
                 }
@@ -75,6 +77,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                     {
                         throw;
                     }
+                    ClearOutputCachingPolicy(httpContext);
                     throw ServiceUtility.CreateFaultException(ex, disableStackTraces);
                 }
 
