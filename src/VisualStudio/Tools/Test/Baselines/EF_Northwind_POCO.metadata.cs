@@ -7,7 +7,6 @@ namespace NorthwindPOCOModelBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using NorthwindPOCOModel;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

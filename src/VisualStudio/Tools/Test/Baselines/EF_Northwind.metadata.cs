@@ -8,7 +8,6 @@ namespace NorthwindModelBuddy
     using System.Data.Entity.Core.Objects.DataClasses;
     using System.Linq;
     using NorthwindModel;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

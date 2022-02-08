@@ -9,7 +9,6 @@ namespace BizLogic.Test
     using System.Linq;
     using DataTests.Scenarios.EF.Northwind;
     using OpenRiaServices.EntityFramework;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

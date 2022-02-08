@@ -4,7 +4,6 @@ Option Infer On
 Option Strict On
 Option Explicit On
 
-Imports OpenRiaServices.Hosting
 Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic

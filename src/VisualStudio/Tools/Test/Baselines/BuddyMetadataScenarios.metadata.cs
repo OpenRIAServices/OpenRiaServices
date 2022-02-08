@@ -7,7 +7,6 @@ namespace DataModels.ScenarioModelsBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using DataModels.ScenarioModels;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     
