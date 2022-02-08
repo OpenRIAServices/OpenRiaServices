@@ -6,7 +6,6 @@ Option Explicit On
 
 Imports NorthwindModel
 Imports OpenRiaServices.EntityFramework
-Imports OpenRiaServices.Hosting
 Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic

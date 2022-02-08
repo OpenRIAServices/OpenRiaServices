@@ -6,7 +6,6 @@ namespace BizLogic.Test
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

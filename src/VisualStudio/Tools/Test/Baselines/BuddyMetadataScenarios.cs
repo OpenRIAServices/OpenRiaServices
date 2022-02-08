@@ -8,7 +8,6 @@ namespace BizLogic.Test
     using System.Data.Linq;
     using System.Linq;
     using DataModels.ScenarioModels;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.LinqToSql;
     using OpenRiaServices.Server;
     

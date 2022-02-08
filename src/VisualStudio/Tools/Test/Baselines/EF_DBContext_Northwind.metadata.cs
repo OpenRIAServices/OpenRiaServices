@@ -7,7 +7,6 @@ namespace DbContextModels.NorthwindBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using DbContextModels.Northwind;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     
