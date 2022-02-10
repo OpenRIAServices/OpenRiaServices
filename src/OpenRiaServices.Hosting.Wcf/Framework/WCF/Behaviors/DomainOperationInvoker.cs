@@ -14,7 +14,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
     internal abstract class DomainOperationInvoker : IOperationInvoker
     {
         private readonly DomainOperationType operationType;
-        private static readonly string[] supportedQueryParameters = { "$where", "$orderby", "$skip", "$take", "$includeTotalCount" };
+        private static readonly string[] s_unsupportedQueryParameters = { "$where", "$orderby", "$skip", "$take", "$includeTotalCount" };
         private static readonly char[] colonDelimiter = new char[] { ':' };
         private static readonly char[] semiColonDelimiter = new char[] { ';' };
         private static readonly object syncRoot = new object();
@@ -232,7 +232,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
 
                     // We don't cache when query parameters are used. We need to vary by query parameters 
                     // though such that we can intercept requests with query parameters and by-pass the cache.
-                    foreach (string queryParameter in supportedQueryParameters)
+                    foreach (string queryParameter in s_unsupportedQueryParameters)
                     {
                         policy.VaryByParams[queryParameter] = true;
                     }
@@ -256,7 +256,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             if (domainOperationEntry != null
                 && context.Request.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
             {
-                foreach (string queryParameter in supportedQueryParameters)
+                foreach (string queryParameter in s_unsupportedQueryParameters)
                 {
                     if (context.Request.QueryString[queryParameter] != null)
                     {

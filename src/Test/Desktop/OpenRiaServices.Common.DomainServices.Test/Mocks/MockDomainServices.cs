@@ -1631,14 +1631,6 @@ namespace TestDomainServices
             throw new InvalidOperationException(s_counter++.ToString());
         }
 
-        // Cache on server because that's the only deterministic scenario.
-        [Invoke(HasSideEffects = false)]
-        [OutputCache(OutputCacheLocation.Server, 5, VaryByHeaders = "foo")]
-        public IEnumerable<CityWithCacheData> GetCitiesWithCachingVaryByHeadersInvoke()
-        {
-            return GetCities().AsEnumerable();
-        }
-
         [Invoke]
         public XElement ReturnsXElement(XElement value)
         {
