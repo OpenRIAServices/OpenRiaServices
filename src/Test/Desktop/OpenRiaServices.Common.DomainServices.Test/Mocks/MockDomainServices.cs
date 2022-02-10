@@ -1598,12 +1598,6 @@ namespace TestDomainServices
             throw new ValidationException("Validation error.");
         }
 
-        [Invoke]
-        public void VoidMethod()
-        {
-
-        }
-
         [Invoke(HasSideEffects = true)]
         [OutputCache(OutputCacheLocation.Client, 2)]
         public void VoidInvokeWithSideEffectsAndCaching()
