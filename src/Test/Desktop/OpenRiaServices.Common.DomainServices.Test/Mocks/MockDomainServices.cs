@@ -1598,10 +1598,31 @@ namespace TestDomainServices
             throw new ValidationException("Validation error.");
         }
 
-        [Invoke]
-        public void VoidMethod()
+        [Invoke(HasSideEffects = true)]
+        [OutputCache(OutputCacheLocation.Client, 2)]
+        public void VoidInvokeWithSideEffectsAndCaching()
         {
 
+        }
+
+        [Invoke(HasSideEffects = false)]
+        public void VoidInvokeNoSideEffectsAndNoCaching()
+        {
+
+        }
+
+        [Invoke(HasSideEffects = false)]
+        [OutputCache(OutputCacheLocation.Client, 2)]
+        public IEnumerable<CityWithCacheData> GetCitiesWithCachingInvoke()
+        {
+            return GetCities().AsEnumerable();
+        }
+
+        [Invoke(HasSideEffects = false)]
+        [OutputCache(OutputCacheLocation.Client, 2)]
+        public IEnumerable<CityWithCacheData> GetCitiesWithCachingAndThrowInvoke()
+        {
+            throw new InvalidOperationException(s_counter++.ToString());
         }
 
         [Invoke]
