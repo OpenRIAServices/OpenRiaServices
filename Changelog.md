@@ -1,3 +1,8 @@
+# 5.1.0-preview5
+
+* Make it possible to Cache invokes
+   * Introduce caching for Invoke operations by refactoring and using the same logic as for Querys #332
+
 # 5.1.0-preview4
 
 * BinaryHttpDomainClientFactory improvements and bug fixes
