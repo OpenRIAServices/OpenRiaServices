@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DbResource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -48,6 +48,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="ResourceEFCore.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceEFCore.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
  </Project>

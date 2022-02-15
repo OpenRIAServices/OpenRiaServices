@@ -5,6 +5,7 @@ using System.Reflection;
 using OpenRiaServices;
 using System.Data.Entity.Core.Metadata.Edm;
 using Microsoft.EntityFrameworkCore;
+using OpenRiaServices.Server.EntityFrameworkCore;
 
 namespace System.Data.Mapping
 {
@@ -31,7 +32,7 @@ namespace System.Data.Mapping
             {
                 if (contextType.GetConstructor(Type.EmptyTypes) == null)
                 {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.EntityFrameworkCore.DbResource.DefaultCtorNotFound, contextType.FullName));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, DbResource.DefaultCtorNotFound, contextType.FullName));
                 }
 
                 try
@@ -45,7 +46,7 @@ namespace System.Data.Mapping
                         throw;
                     }
                     
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, OpenRiaServices.EntityFrameworkCore.DbResource.MetadataWorkspaceNotFound + ProcessException(efException), contextType.FullName), efException);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, DbResource.MetadataWorkspaceNotFound + ProcessException(efException), contextType.FullName), efException);
                 }
             }
 #endif

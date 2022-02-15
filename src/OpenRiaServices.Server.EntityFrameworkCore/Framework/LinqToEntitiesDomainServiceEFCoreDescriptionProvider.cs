@@ -76,12 +76,8 @@ namespace OpenRiaServices.EntityFrameworkCore
 
         public override bool LookupIsEntityType(Type type)
         {
-            StructuralType edmType = this._typeDescriptionContext.GetEdmType(type);
-            if (edmType != null && edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType)
-            {
-                return true;
-            }
-            return false;
+            // TODO: Check if ef model, need to double check it fails for non- entity types
+            return _typeDescriptionContext.GetEntityType(type) != null;
         }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OpenRiaServices.EntityFrameworkCore {
+namespace OpenRiaServices.Server.EntityFrameworkCore {
     using System;
     
     
@@ -19,10 +19,10 @@ namespace OpenRiaServices.EntityFrameworkCore {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DbResource {
+    internal class DbResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace OpenRiaServices.EntityFrameworkCore {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.EntityFrameworkCore.DbResource", typeof(DbResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.Server.EntityFrameworkCore.DbResource", typeof(DbResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace OpenRiaServices.EntityFrameworkCore {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace OpenRiaServices.EntityFrameworkCore {
         /// <summary>
         ///   Looks up a localized string similar to The DbContext type &apos;{0}&apos; does not contain a default constructor. A default constructor is required to use EntityFramework in the Code-First mode with WCF RIA Services..
         /// </summary>
-        public static string DefaultCtorNotFound {
+        internal static string DefaultCtorNotFound {
             get {
                 return ResourceManager.GetString("DefaultCtorNotFound", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace OpenRiaServices.EntityFrameworkCore {
         /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; is not a valid DbDomainServiceDescriptionProviderAttribute parameter because it does not derive from DbContext..
         /// </summary>
-        public static string InvalidDbDomainServiceDescriptionProviderSpecification {
+        internal static string InvalidDbDomainServiceDescriptionProviderSpecification {
             get {
                 return ResourceManager.GetString("InvalidDbDomainServiceDescriptionProviderSpecification", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace OpenRiaServices.EntityFrameworkCore {
         /// <summary>
         ///   Looks up a localized string similar to Failed to get the MetadataWorkspace for the DbContext type &apos;{0}&apos;..
         /// </summary>
-        public static string MetadataWorkspaceNotFound {
+        internal static string MetadataWorkspaceNotFound {
             get {
                 return ResourceManager.GetString("MetadataWorkspaceNotFound", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace OpenRiaServices.EntityFrameworkCore {
         /// <summary>
         ///   Looks up a localized string similar to ObjectStateManager not initialized for the DbContext type &apos;{0}&apos;..
         /// </summary>
-        public static string ObjectStateManagerNotFoundException {
+        internal static string ObjectStateManagerNotFoundException {
             get {
                 return ResourceManager.GetString("ObjectStateManagerNotFoundException", resourceCulture);
             }

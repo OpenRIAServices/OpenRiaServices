@@ -8,6 +8,7 @@ using System.Linq;
 using OpenRiaServices.Server;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
+using OpenRiaServices.Server.EntityFrameworkCore;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
@@ -49,6 +50,8 @@ namespace OpenRiaServices.EntityFrameworkCore
             }
         }
 
+        public IEntityType GetEntityType(Type type) => Model.FindEntityType(type);
+
         /// <summary>
         /// Gets the MetadataWorkspace for the context
         /// </summary>
@@ -72,7 +75,8 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <returns>The StructuralType that corresponds to the given CLR type</returns>
         public StructuralType GetEdmType(Type clrType)
         {
-            return ObjectContextUtilitiesEFCore.GetEdmType(this.MetadataWorkspace, clrType);
+            return null;
+            //return ObjectContextUtilitiesEFCore.GetEdmType(this.MetadataWorkspace, clrType);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using OpenRiaServices.Server;
+using OpenRiaServices.Server.EntityFrameworkCore;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
