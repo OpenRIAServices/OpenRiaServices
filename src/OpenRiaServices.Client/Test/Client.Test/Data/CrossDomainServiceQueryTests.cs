@@ -584,4 +584,20 @@ namespace OpenRiaServices.Client.Test
             return new Northwind(TestURIs.DbCtx_Northwind);
         }
     }
+    /** TODO: 
+     * 
+    [TestClass]
+    public class EFCoreQueryTests : CrossDomainServiceQueryTests
+    {
+        public EFCoreQueryTests()
+            : base(TestURIs.EFCore_Catalog, ProviderType.EFCore)
+        {
+        }
+
+        protected override Northwind CreateNorthwind()
+        {
+            return new Northwind(TestURIs.EFCore_Northwind);
+        }
+    }
+    **/
 }

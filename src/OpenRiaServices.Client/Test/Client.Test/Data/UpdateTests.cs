@@ -4475,10 +4475,10 @@ TestContext testContext
     }
 
     [TestClass]
-    public class EFCoreEFCFUpdateTests : UpdateTests
+    public class EFCoreUpdateTests : UpdateTests
     {
-        public EFCoreEFCFUpdateTests()
-            : base(TestURIs.EFCoreEFCF_Northwind_CUD, ProviderType.EFCore)
+        public EFCoreUpdateTests()
+            : base(TestURIs.EFCore_Northwind_CUD, ProviderType.EFCore)
         {
         }
 
@@ -4522,31 +4522,6 @@ TestContext testContext
             TestDatabase.Initialize();
         }
     }
-
-    [TestClass]
-    public class EFCoreDbCtxUpdateTests : UpdateTests
-    {
-        public EFCoreDbCtxUpdateTests()
-            : base(TestURIs.EFCoreDbCtx_Northwind_CUD, ProviderType.EFCore)
-        {
-        }
-
-        /// <summary>
-        /// Silverlight version of class initializer doesn't take TestContext
-        /// </summary>
-        [ClassInitialize]
-        public static void ClassSetup(
-#if !SILVERLIGHT
-            TestContext testContext
-#endif
-)
-        {
-            // ensure that our isolation DB has been created once and only once
-            // at the test fixture level
-            TestDatabase.Initialize();
-        }
-    }
-
 
     /// <summary>
     /// Non DAL/DB scenario tests
