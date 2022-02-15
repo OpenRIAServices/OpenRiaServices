@@ -396,9 +396,11 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void DomainServiceDescription_EFCoreTestFindEntityType()
         {
+            // TODO: Use code such as this to 
+
             // First create a context manually and verify that POCO metadata is configured correctly
-            var ctxt = new DbContextModels.NorthwindEFCoreScaffolded.NorthwindContext();
-            IEntityType entityType = ctxt.Model.FindEntityType(typeof(DbContextModels.NorthwindEFCoreScaffolded.Products).FullName);
+            var ctxt = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
+            IEntityType entityType = ctxt.Model.FindEntityType(typeof(EFCoreModels.Northwind.Product).FullName);
             Assert.IsNotNull(entityType);
 
         }

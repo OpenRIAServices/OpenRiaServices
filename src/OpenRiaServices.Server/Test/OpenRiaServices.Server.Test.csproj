@@ -37,11 +37,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreDbContextModels.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreModels.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Server.UnitTesting\Framework\OpenRiaServices.Server.UnitTesting.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
-    <ProjectReference Include="..\..\Test\Desktop\EFCodePOCOModels\EFCorePOCOModels.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
