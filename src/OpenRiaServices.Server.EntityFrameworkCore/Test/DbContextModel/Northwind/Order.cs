@@ -11,7 +11,7 @@ namespace EFCoreModels.Northwind
     {
         public Order()
         {
-            OrderDetails = new HashSet<Order_Detail>();
+            Order_Details = new HashSet<Order_Detail>();
         }
 
         public int OrderID { get; set; }
@@ -32,6 +32,6 @@ namespace EFCoreModels.Northwind
         public virtual Customer Customer { get; set; }
         public virtual Employees Employee { get; set; }
         public virtual Shipper ShipViaNavigation { get; set; }
-        public virtual ICollection<Order_Detail> OrderDetails { get; set; }
+        public virtual ICollection<Order_Detail> Order_Details { get; set; }
     }
 }

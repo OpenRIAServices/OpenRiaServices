@@ -262,13 +262,13 @@ namespace EFCoreModels.Northwind
                     .HasDefaultValueSql("(0)");
 
                 entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderDetails)
+                    .WithMany(p => p.Order_Details)
                     .HasForeignKey(d => d.OrderID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Details_Orders");
 
                 entity.HasOne(d => d.Product)
-                    .WithMany(p => p.OrderDetails)
+                    .WithMany(p => p.Order_Details)
                     .HasForeignKey(d => d.ProductID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Details_Products");
