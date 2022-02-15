@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices;
-using System.Data.Metadata.Edm;
+using System.Data.Entity.Core.Metadata.Edm;
 using Microsoft.EntityFrameworkCore;
 
 namespace System.Data.Mapping

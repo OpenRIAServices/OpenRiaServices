@@ -3,7 +3,7 @@
 using System.ServiceModel.DomainServices.Server;
 #endif
 using System.Linq;
-using System.Data.Metadata.Edm;
+using System.Data.Entity.Core.Metadata.Edm;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace OpenRiaServices.EntityFrameworkCore

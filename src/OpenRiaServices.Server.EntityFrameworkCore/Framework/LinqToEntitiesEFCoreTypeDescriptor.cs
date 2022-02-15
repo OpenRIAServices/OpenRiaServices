@@ -9,8 +9,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using OpenRiaServices.Server;
-using System.Data.Metadata.Edm;
-using System.Data.Objects.DataClasses;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.Core.Objects.DataClasses;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
@@ -182,7 +182,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                     if (facet != null && facet.Value != null && facet.Value.GetType() == typeof(int))
                     {
                         // need to test for Type int, since the value can also be of type
-                        // System.Data.Metadata.Edm.EdmConstants.Unbounded
+                        // System.Data.Entity.Core.Metadata.Edm.EdmConstants.Unbounded
                         int maxLength = (int)facet.Value;
                         attributes.Add(new StringLengthAttribute(maxLength));
                     }

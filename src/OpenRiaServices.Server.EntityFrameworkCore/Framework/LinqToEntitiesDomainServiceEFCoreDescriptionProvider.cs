@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Metadata.Edm;
+using System.Data.Entity.Core.Metadata.Edm;
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif

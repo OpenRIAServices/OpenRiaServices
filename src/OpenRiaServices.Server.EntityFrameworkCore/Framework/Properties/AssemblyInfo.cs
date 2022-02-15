@@ -21,6 +21,5 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("4291e253-9e86-4a66-a9a4-8e09139f86c9")]
 
-[assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 

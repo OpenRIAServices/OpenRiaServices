@@ -14,7 +14,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// with the specified original state.
         /// </summary>
         /// <typeparam name="T">The entity Type</typeparam>
-        /// <param name="dbSet">The <see cref="DbSet"/> to attach to.</param>
+        /// <param name="dbSet">The <see cref="DbSet{T}"/> to attach to.</param>
         /// <param name="current">The current entity.</param>
         /// <param name="original">The original entity.</param>
         /// <param name="dbContext">The corresponding <see cref="DbContext"/></param>
@@ -65,7 +65,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// can be used in cases where the entity has a Timestamp member.
         /// </summary>
         /// <typeparam name="T">The entity type</typeparam>
-        /// <param name="dbSet">The <see cref="DbSet"/> to attach to</param>
+        /// <param name="dbSet">The <see cref="DbSet{T}"/> to attach to</param>
         /// <param name="entity">The current entity</param>
         /// <param name="dbContext">The coresponding <see cref="DbContext"/></param>
         public static void AttachAsModified<T>(this DbSet<T> dbSet, T entity, DbContext dbContext) where T : class

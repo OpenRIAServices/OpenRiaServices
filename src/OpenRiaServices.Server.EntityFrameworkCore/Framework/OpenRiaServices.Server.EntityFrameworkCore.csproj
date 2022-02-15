@@ -1,17 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+      <!-- TODO: netstandard2.0 -->
     <TargetFramework>net472</TargetFramework>
-    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;net472;</DefineConstants>
+    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;</DefineConstants>
      <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="system" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.Entity" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+    <!-- TODO: Remove EF6 -->
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.20">
       <!--<PrivateAssets>all</PrivateAssets>-->
