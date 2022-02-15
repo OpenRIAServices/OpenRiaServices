@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity.Core.Metadata.Edm;
+using Microsoft.EntityFrameworkCore.Metadata;
 #if RIACONTRIB
 using System.ServiceModel.DomainServices.Server;
 #endif
@@ -46,6 +47,14 @@ namespace OpenRiaServices.EntityFrameworkCore
             {
                 // call into base so the TDs are chained
                 parent = base.GetTypeDescriptor(objectType, parent);
+
+                // TODO: Check if ef model
+                var model = _typeDescriptionContext.Model;
+                if (model != null && model.FindEntityType(objectType.FullName) is IEntityType entityType)
+                {
+                    // TODO: ...
+                }
+
 
                 StructuralType edmType = this._typeDescriptionContext.GetEdmType(objectType);
                 if (edmType != null && 

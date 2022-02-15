@@ -6,6 +6,8 @@ using System.Data.Entity.Core.Metadata.Edm;
 using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Server;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
@@ -17,6 +19,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
         private MetadataWorkspace _metadataWorkspace;
+        private IModel _model;
 
         /// <summary>
         /// Constructor that accepts a LINQ To Entities context type
@@ -29,6 +32,21 @@ namespace OpenRiaServices.EntityFrameworkCore
                 throw new ArgumentNullException(nameof(contextType));
             }
             this._contextType = contextType;
+        }
+
+        // TODO: Add model property _context.Model
+        public IModel Model
+        {
+            get
+            {
+                if (_model == null)
+                {
+                    // TODO: Is there a smarter way ?? 
+                    var dbContext = (DbContext)Activator.CreateInstance(_contextType);
+                    _model = dbContext.Model;
+                }
+                return _model;
+            }
         }
 
         /// <summary>
