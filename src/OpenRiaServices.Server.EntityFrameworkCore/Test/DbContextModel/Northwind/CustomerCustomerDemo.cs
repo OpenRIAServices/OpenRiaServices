@@ -7,16 +7,12 @@ using System.Collections.Generic;
 
 namespace EFCoreModels.Northwind
 {
-    public partial class Region
+    public partial class CustomerCustomerDemo
     {
-        public Region()
-        {
-            Territories = new HashSet<Territory>();
-        }
+        public string CustomerID { get; set; }
+        public string CustomerTypeID { get; set; }
 
-        public int RegionID { get; set; }
-        public string RegionDescription { get; set; }
-
-        public virtual ICollection<Territory> Territories { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual CustomerDemographics CustomerType { get; set; }
     }
 }

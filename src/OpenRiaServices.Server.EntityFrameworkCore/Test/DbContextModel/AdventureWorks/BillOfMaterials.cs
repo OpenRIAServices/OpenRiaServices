@@ -6,16 +6,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EFCoreModels.AdventureWorks.AdventureWorks
 {
-    [Table("ProductListPriceHistory", Schema = "Production")]
-    public partial class ProductListPriceHistory
+    [Table("BillOfMaterials", Schema = "Production")]
+    public partial class BillOfMaterials
     {
-        public int ProductID { get; set; }
+        public int BillOfMaterialsID { get; set; }
+        public int? ProductAssemblyID { get; set; }
+        public int ComponentID { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime StartDate { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime? EndDate { get; set; }
-        [Column(TypeName = "money")]
-        public decimal ListPrice { get; set; }
+        [Required]
+        [StringLength(3)]
+        public string UnitMeasureCode { get; set; }
+        public short BOMLevel { get; set; }
+        [Column(TypeName = "decimal(8, 2)")]
+        public decimal PerAssemblyQty { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
     }

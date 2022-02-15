@@ -5,20 +5,11 @@ using OpenRiaServices.Server;
 
 // These assembly attributes allow us to serialize different CLR types into the same contract
 [assembly: ContractNamespace("http://schemas.datacontract.org/2004/07/DataTests.Northwind",
-                              ClrNamespace = "DbContextModels.NorthwindEFCore")]
+                              ClrNamespace = "DbContextModels.Northwind")]
 
-namespace DbContextModels.NorthwindEFCore
+namespace EFCoreModels.Northwind
 {
-    public partial class EFCoreDbCtxNorthwindEntities
-    {
-        string _connection;
-
-        public EFCoreDbCtxNorthwindEntities(string connection)
-        {
-            _connection = connection;
-        }
-    }    
-
+     // TODO: Remove MetaDataType attributes and move attributes directly to classe ==
     [MetadataType(typeof(RegionMetadata))]
     public partial class Region
     {

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <NoWarn>618</NoWarn>
+      <!-- TODO: Considuer multitarget to net3.1+ (such as net6) as well -->
+    <TargetFramework>net472</TargetFramework>
+    <Version>1.0.0.0</Version>
+  </PropertyGroup>
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
+    <Message Text="Writing project path" />
+    <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.20" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.20" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.20" />
+      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+
+</Project>
