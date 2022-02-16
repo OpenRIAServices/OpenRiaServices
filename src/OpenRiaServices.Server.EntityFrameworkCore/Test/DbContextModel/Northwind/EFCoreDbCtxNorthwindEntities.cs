@@ -341,6 +341,8 @@ namespace EFCoreModels.Northwind
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.ShipVia)
                     .HasConstraintName("FK_Orders_Shippers");
+
+                entity.Ignore(e => e.FormattedName);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -390,10 +392,15 @@ namespace EFCoreModels.Northwind
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.SupplierID)
                     .HasConstraintName("FK_Products_Suppliers");
+
+                // Only used for tets
+                entity.Ignore(e => e.ResolveMethod);
             });
 
             modelBuilder.Entity<Region>(entity =>
             {
+                entity.ToTable("Region");
+
                 entity.HasKey(e => e.RegionID)
                     .IsClustered(false);
 
