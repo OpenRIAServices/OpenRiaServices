@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OpenRiaServices.Server
 {
@@ -33,16 +34,16 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <param name="members">A collection of members.</param>
         /// <returns>A comma delimited list of member names.</returns>
-        protected static string FormatMemberList(IEnumerable<string> members)
+        protected static string FormatMemberList(IEnumerable<IProperty> members)
         {
             string memberList = string.Empty;
-            foreach (string name in members)
+            foreach (var prop in members)
             {
                 if (memberList.Length > 0)
                 {
                     memberList += ",";
                 }
-                memberList += name;
+                memberList += prop.Name;
             }
             return memberList;
         }

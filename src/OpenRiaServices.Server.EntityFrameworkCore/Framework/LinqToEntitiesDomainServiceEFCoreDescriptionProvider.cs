@@ -53,15 +53,8 @@ namespace OpenRiaServices.EntityFrameworkCore
                 if (model != null && model.FindEntityType(objectType.FullName) is IEntityType entityType)
                 {
                     // TODO: ...
-                }
-
-
-                StructuralType edmType = this._typeDescriptionContext.GetEdmType(objectType);
-                if (edmType != null && 
-                    (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType || edmType.BuiltInTypeKind == BuiltInTypeKind.ComplexType))
-                {
                     // only add an LTE TypeDescriptor if the type is an EF Entity or ComplexType
-                    td = new LinqToEntitiesEFCoreTypeDescriptor(this._typeDescriptionContext, edmType, parent);
+                    td = new LinqToEntitiesEFCoreTypeDescriptor(this._typeDescriptionContext, entityType, parent);
                 }
                 else
                 {

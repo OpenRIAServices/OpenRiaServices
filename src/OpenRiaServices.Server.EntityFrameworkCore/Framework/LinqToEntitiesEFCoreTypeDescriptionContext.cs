@@ -9,6 +9,7 @@ using OpenRiaServices.Server;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using OpenRiaServices.Server.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
@@ -19,7 +20,6 @@ namespace OpenRiaServices.EntityFrameworkCore
     {
         private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
-        private MetadataWorkspace _metadataWorkspace;
         private IModel _model;
 
         /// <summary>
@@ -53,22 +53,6 @@ namespace OpenRiaServices.EntityFrameworkCore
         public IEntityType GetEntityType(Type type) => Model.FindEntityType(type);
 
         /// <summary>
-        /// Gets the MetadataWorkspace for the context
-        /// </summary>
-        public MetadataWorkspace MetadataWorkspace
-        {
-            get
-            {
-                if (this._metadataWorkspace == null)
-                {
-                    // we only support embedded mappings
-                    this._metadataWorkspace = MetadataWorkspaceUtilitiesEFCore.CreateMetadataWorkspace(this._contextType);
-                }
-                return this._metadataWorkspace;
-            }
-        }
-
-        /// <summary>
         /// Returns the <see cref="StructuralType"/> that corresponds to the given CLR type
         /// </summary>
         /// <param name="clrType">The CLR type</param>
@@ -79,67 +63,76 @@ namespace OpenRiaServices.EntityFrameworkCore
             //return ObjectContextUtilitiesEFCore.GetEdmType(this.MetadataWorkspace, clrType);
         }
 
-        /// <summary>
-        /// Returns the association information for the specified navigation property.
-        /// </summary>
-        /// <param name="navigationProperty">The navigation property to return association information for</param>
-        /// <returns>The association info</returns>
-        internal AssociationInfo GetAssociationInfo(NavigationProperty navigationProperty)
-        {
-            lock (this._associationMap)
-            {
-                string associationName = navigationProperty.RelationshipType.FullName;
-                AssociationInfo associationInfo = null;
-                if (!this._associationMap.TryGetValue(associationName, out associationInfo))
-                {
-                    AssociationType associationType = (AssociationType)navigationProperty.RelationshipType;
+        ///// <summary>
+        ///// Returns the association information for the specified navigation property.
+        ///// </summary>
+        ///// <param name="navigationProperty">The navigation property to return association information for</param>
+        ///// <returns>The association info</returns>
+        //internal AssociationInfo GetAssociationInfo(NavigationProperty navigationProperty)
+        //{
+        //    lock (this._associationMap)
+        //    {
+        //        string associationName = navigationProperty.RelationshipType.FullName;
+        //        AssociationInfo associationInfo = null;
+        //        if (!this._associationMap.TryGetValue(associationName, out associationInfo))
+        //        {
+        //            AssociationType associationType = (AssociationType)navigationProperty.RelationshipType;
 
-                    if (!associationType.ReferentialConstraints.Any())
-                    {
-                        // We only support EF models where FK info is part of the model.
-                        throw new NotSupportedException(
-                            string.Format(CultureInfo.CurrentCulture,
-                            ResourceEFCore.LinqToEntitiesProvider_UnableToRetrieveAssociationInfo, associationName));
-                    }
+        //            if (!associationType.ReferentialConstraints.Any())
+        //            {
+        //                // We only support EF models where FK info is part of the model.
+        //                throw new NotSupportedException(
+        //                    string.Format(CultureInfo.CurrentCulture,
+        //                    ResourceEFCore.LinqToEntitiesProvider_UnableToRetrieveAssociationInfo, associationName));
+        //            }
 
-                    associationInfo = new AssociationInfo();
-                    associationInfo.FKRole = associationType.ReferentialConstraints[0].ToRole.Name;
-                    associationInfo.Name = this.GetAssociationName(navigationProperty, associationInfo.FKRole);
-                    associationInfo.ThisKey = associationType.ReferentialConstraints[0].ToProperties.Select(p => p.Name).ToArray();
-                    associationInfo.OtherKey = associationType.ReferentialConstraints[0].FromProperties.Select(p => p.Name).ToArray();
-                    associationInfo.IsRequired = associationType.RelationshipEndMembers[0].RelationshipMultiplicity == RelationshipMultiplicity.One;
+        //            associationInfo = new AssociationInfo();
+        //            associationInfo.FKRole = associationType.ReferentialConstraints[0].ToRole.Name;
+        //            associationInfo.Name = this.GetAssociationName(navigationProperty, associationInfo.FKRole);
+        //            associationInfo.ThisKey = associationType.ReferentialConstraints[0].ToProperties.Select(p => p.Name).ToArray();
+        //            associationInfo.OtherKey = associationType.ReferentialConstraints[0].FromProperties.Select(p => p.Name).ToArray();
+        //            associationInfo.IsRequired = associationType.RelationshipEndMembers[0].RelationshipMultiplicity == RelationshipMultiplicity.One;
 
-                    this._associationMap[associationName] = associationInfo;
-                }
+        //            this._associationMap[associationName] = associationInfo;
+        //        }
 
-                return associationInfo;
-            }
-        }
+        //        return associationInfo;
+        //    }
+        //}
 
         /// <summary>
         /// Creates an AssociationAttribute for the specified navigation property
         /// </summary>
         /// <param name="navigationProperty">The navigation property that corresponds to the association (it identifies the end points)</param>
         /// <returns>A new AssociationAttribute that describes the given navigation property association</returns>
-        internal AssociationAttribute CreateAssociationAttribute(NavigationProperty navigationProperty)
+        internal AssociationAttribute CreateAssociationAttribute(INavigation navigationProperty)
         {
-            AssociationInfo assocInfo = this.GetAssociationInfo(navigationProperty);
-            bool isForeignKey = navigationProperty.FromEndMember.Name == assocInfo.FKRole;
+            var fk = navigationProperty.ForeignKey;
+
+
+            ////                // We only support EF models where FK info is part of the model.
+            //if (fk is null)
+            //    throw new NotSupportedException(
+            //        string.Format(CultureInfo.CurrentCulture,
+            //        ResourceEFCore.LinqToEntitiesProvider_UnableToRetrieveAssociationInfo, associationName));
+
             string thisKey;
             string otherKey;
-            if (isForeignKey)
+            if (navigationProperty.IsDependentToPrincipal())
             {
-                thisKey = FormatMemberList(assocInfo.ThisKey);
-                otherKey = FormatMemberList(assocInfo.OtherKey);
+                thisKey = FormatMemberList(fk.Properties);
+                otherKey = FormatMemberList(fk.PrincipalKey.Properties);
             }
             else
             {
-                otherKey = FormatMemberList(assocInfo.ThisKey);
-                thisKey = FormatMemberList(assocInfo.OtherKey);
+                Debug.Assert(fk.PrincipalEntityType == navigationProperty.DeclaringEntityType);
+
+                otherKey = FormatMemberList(fk.PrincipalKey.Properties);
+                thisKey = FormatMemberList(fk.Properties);
             }
 
-            AssociationAttribute assocAttrib = new AssociationAttribute(assocInfo.Name, thisKey, otherKey);
-            assocAttrib.IsForeignKey = isForeignKey;
+            AssociationAttribute assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
+            assocAttrib.IsForeignKey = navigationProperty.IsDependentToPrincipal(); // TODO:  isForeignKey;
             return assocAttrib;
         }
 

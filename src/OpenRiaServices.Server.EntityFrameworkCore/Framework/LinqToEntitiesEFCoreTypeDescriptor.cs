@@ -11,6 +11,7 @@ using System.Linq;
 using OpenRiaServices.Server;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects.DataClasses;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
@@ -20,43 +21,36 @@ namespace OpenRiaServices.EntityFrameworkCore
     internal class LinqToEntitiesEFCoreTypeDescriptor : TypeDescriptorBase
     {
         private readonly LinqToEntitiesEFCoreTypeDescriptionContext _typeDescriptionContext;
-        private readonly StructuralType _edmType;
-        private readonly EdmMember _timestampMember;
-        private readonly HashSet<EdmMember> _foreignKeyMembers;
+        private readonly IEntityType _entityType;
+        private readonly IProperty _timestampProperty;
         private readonly bool _keyIsEditable;
 
-        /// <summary>
-        /// Constructor taking a metadata context, an structural type, and a parent custom type descriptor
-        /// </summary>
-        /// <param name="typeDescriptionContext">The <see cref="LinqToEntitiesEFCoreTypeDescriptionContext"/> context.</param>
-        /// <param name="edmType">The <see cref="StructuralType"/> type (can be an entity or complex type).</param>
-        /// <param name="parent">The parent custom type descriptor.</param>
-        public LinqToEntitiesEFCoreTypeDescriptor(LinqToEntitiesEFCoreTypeDescriptionContext typeDescriptionContext, StructuralType edmType, ICustomTypeDescriptor parent)
-            : base(parent)
+        public LinqToEntitiesEFCoreTypeDescriptor(LinqToEntitiesEFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
+        : base(parent)
         {
             this._typeDescriptionContext = typeDescriptionContext;
-            this._edmType = edmType;
+            this._entityType = entityType;
 
-            EdmMember[] timestampMembers = this._edmType.Members.Where(p => ObjectContextUtilitiesEFCore.IsConcurrencyTimestamp(p)).ToArray();
+            var timestampMembers = entityType.GetProperties().Where(p => p.IsConcurrencyToken).ToArray();
             if (timestampMembers.Length == 1)
             {
-                this._timestampMember = timestampMembers[0];
+                this._timestampProperty = timestampMembers[0];
             }
 
-            if (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType)
+            // if (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType)
             {
                 // if any FK member of any association is also part of the primary key, then the key cannot be marked
                 // Editable(false)
-                EntityType entityType = (EntityType)edmType;
-                this._foreignKeyMembers = new HashSet<EdmMember>(entityType.NavigationProperties.SelectMany(p => p.GetDependentProperties()));
-                foreach (EdmProperty foreignKeyMember in this._foreignKeyMembers)
-                {
-                    if (entityType.KeyMembers.Contains(foreignKeyMember))
-                    {
-                        this._keyIsEditable = true;
-                        break;
-                    }
-                }
+                var fk = entityType.GetNavigations().SelectMany(n => n.ForeignKey.Properties).ToHashSet();
+                //this._foreignKeyMembers
+                //foreach (EdmProperty foreignKeyMember in this._foreignKeyMembers)
+                //{
+                //    if (entityType.KeyMembers.Contains(foreignKeyMember))
+                //    {
+                //        this._keyIsEditable = true;
+                //        break;
+                //    }
+                //}
             }
         }
 
@@ -68,17 +62,6 @@ namespace OpenRiaServices.EntityFrameworkCore
             get
             {
                 return this._typeDescriptionContext;
-            }
-        }
-
-        /// <summary>
-        /// Gets the Edm type
-        /// </summary>
-        private StructuralType EdmType
-        {
-            get
-            {
-                return this._edmType;
             }
         }
 
@@ -105,21 +88,17 @@ namespace OpenRiaServices.EntityFrameworkCore
             bool inferRoundtripOriginalAttribute = false;
 
             bool hasKeyAttribute = (pd.Attributes[typeof(KeyAttribute)] != null);
-            bool isEntity = this.EdmType.BuiltInTypeKind == BuiltInTypeKind.EntityType;
-            if (isEntity)
+            bool isEntity = true; //  this.EdmType.BuiltInTypeKind == BuiltInTypeKind.EntityType;
+            var property = _entityType.FindProperty(pd.Name);
+
+            if (property != null)
             {
-                EntityType entityType = (EntityType)this.EdmType;
-                EdmMember keyMember = entityType.KeyMembers.SingleOrDefault(k => k.Name == pd.Name);
-                if (keyMember != null && !hasKeyAttribute)
+                if (property.IsPrimaryKey())
                 {
                     attributes.Add(new KeyAttribute());
                     hasKeyAttribute = true;
                 }
-            }
 
-            EdmProperty member = this.EdmType.Members.SingleOrDefault(p => p.Name == pd.Name) as EdmProperty;
-            if (member != null)
-            {
                 if (hasKeyAttribute)
                 {
                     // key members must always be roundtripped
@@ -136,20 +115,20 @@ namespace OpenRiaServices.EntityFrameworkCore
                 bool databaseGenerated = false;
                 if (pd.Attributes[typeof(DatabaseGeneratedAttribute)] == null)
                 {
-                    MetadataProperty md = ObjectContextUtilitiesEFCore.GetStoreGeneratedPattern(member);
-                    if (md != null)
-                    {
-                        if ((string)md.Value == "Computed")
-                        {
-                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
-                            databaseGenerated = true;
-                        }
-                        else if ((string)md.Value == "Identity")
-                        {
-                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity));
-                            databaseGenerated = true;
-                        }
-                    }
+                    //MetadataProperty md = ObjectContextUtilitiesEFCore.GetStoreGeneratedPattern(member);
+                    //if (property.ValueGenerated != ValueGenerated.Never)
+                    //{
+                    //    if ((string)md.Value == "Computed")
+                    //    {
+                    //        attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
+                    //        databaseGenerated = true;
+                    //    }
+                    //    else if ((string)md.Value == "Identity")
+                    //    {
+                    //        attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity));
+                    //        databaseGenerated = true;
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -157,17 +136,16 @@ namespace OpenRiaServices.EntityFrameworkCore
                 }
 
                 // Add implicit ConcurrencyCheck attribute to metadata if ConcurrencyMode is anything other than ConcurrencyMode.None
-                Facet facet = member.TypeUsage.Facets.SingleOrDefault(p => p.Name == "ConcurrencyMode");
-                if (facet != null && facet.Value != null && (ConcurrencyMode)facet.Value != ConcurrencyMode.None &&
+                if (property.IsConcurrencyToken &&
                     pd.Attributes[typeof(ConcurrencyCheckAttribute)] == null)
                 {
                     attributes.Add(new ConcurrencyCheckAttribute());
                     inferRoundtripOriginalAttribute = true;
                 }
-                
+
                 // Add Required attribute to metadata if the member cannot be null and it is either a reference type or a Nullable<T>
                 // unless it is a database generated field
-                if (!member.Nullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType)) 
+                if (!property.IsNullable && (!pd.PropertyType.IsValueType || IsNullableType(pd.PropertyType))
                     && !databaseGenerated
                     && pd.Attributes[typeof(RequiredAttribute)] == null)
                 {
@@ -178,49 +156,44 @@ namespace OpenRiaServices.EntityFrameworkCore
                 if (isStringType &&
                     pd.Attributes[typeof(StringLengthAttribute)] == null)
                 {
-                    facet = member.TypeUsage.Facets.SingleOrDefault(p => p.Name == "MaxLength");
-                    if (facet != null && facet.Value != null && facet.Value.GetType() == typeof(int))
+                    if (property.GetMaxLength() is int maxLength)
                     {
-                        // need to test for Type int, since the value can also be of type
-                        // System.Data.Entity.Core.Metadata.Edm.EdmConstants.Unbounded
-                        int maxLength = (int)facet.Value;
                         attributes.Add(new StringLengthAttribute(maxLength));
                     }
                 }
 
-                bool hasTimestampAttribute = (pd.Attributes[typeof(TimestampAttribute)] != null);
-
-                if (this._timestampMember == member && !hasTimestampAttribute)
-                {
-                    attributes.Add(new TimestampAttribute());
-                    hasTimestampAttribute = true;
-                }
+                //bool hasTimestampAttribute = (pd.Attributes[typeof(TimestampAttribute)] != null);
+                //if (this._timestampMember == member && !hasTimestampAttribute)
+                //{
+                //    attributes.Add(new TimestampAttribute());
+                //    hasTimestampAttribute = true;
+                //}
 
                 // All members marked with TimestampAttribute (inferred or explicit) need to
                 // have [Editable(false)] and [RoundtripOriginal] applied
-                if (hasTimestampAttribute)
-                {
-                    inferRoundtripOriginalAttribute = true;
+                //if (hasTimestampAttribute)
+                //{
+                //    inferRoundtripOriginalAttribute = true;
 
-                    if (editableAttribute == null)
-                    {
-                        editableAttribute = new EditableAttribute(false);
-                    }
-                }
+                //    if (editableAttribute == null)
+                //    {
+                //        editableAttribute = new EditableAttribute(false);
+                //    }
+                //}
 
                 // Add RTO to this member if required. If this type has a timestamp
                 // member that member should be the ONLY member we apply RTO to.
                 // Dont apply RTO if it is an association member.
-                bool isForeignKeyMember = this._foreignKeyMembers != null && this._foreignKeyMembers.Contains(member);
-                if ((this._timestampMember == null || this._timestampMember == member) &&
-                    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
-                    pd.Attributes[typeof(AssociationAttribute)] == null)
-                {
-                    if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
-                    {
-                        attributes.Add(new RoundtripOriginalAttribute());
-                    }
-                }
+                //bool isForeignKeyMember = this._foreignKeyMembers != null && this._foreignKeyMembers.Contains(member);
+                //if ((this._timestampMember == null || this._timestampMember == member) &&
+                //    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
+                //    pd.Attributes[typeof(AssociationAttribute)] == null)
+                //{
+                //    if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
+                //    {
+                //        attributes.Add(new RoundtripOriginalAttribute());
+                //    }
+                //}
             }
 
             // Add the Editable attribute if required
@@ -229,9 +202,21 @@ namespace OpenRiaServices.EntityFrameworkCore
                 attributes.Add(editableAttribute);
             }
 
-            if (isEntity)
+            if (_entityType.FindNavigation(pd.Name) is INavigation navigation)
             {
                 this.AddAssociationAttributes(pd, attributes);
+                
+                bool isManyToMany = false; // TODO: Fix for EF5+
+                if (!isManyToMany)
+                {
+                    AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
+                    if (assocAttrib == null)
+                    {
+                        assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(navigation);
+                        attributes.Add(assocAttrib);
+                    }
+                }
+
             }
 
             return attributes.ToArray();
@@ -267,22 +252,22 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <param name="attributes">The list of attributes to append to</param>
         private void AddAssociationAttributes(PropertyDescriptor pd, List<Attribute> attributes)
         {
-            EntityType entityType = (EntityType)this.EdmType;
-            NavigationProperty navProperty = entityType.NavigationProperties.Where(n => n.Name == pd.Name).SingleOrDefault();
-            if (navProperty != null)
-            {
-                bool isManyToMany = navProperty.RelationshipType.RelationshipEndMembers[0].RelationshipMultiplicity == RelationshipMultiplicity.Many &&
-                                    navProperty.RelationshipType.RelationshipEndMembers[1].RelationshipMultiplicity == RelationshipMultiplicity.Many;
-                if (!isManyToMany)
-                {
-                    AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
-                    if (assocAttrib == null)
-                    {
-                        assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(navProperty);
-                        attributes.Add(assocAttrib);
-                    }
-                }
-            }
+            //EntityType entityType = (EntityType)this.EdmType;
+            //NavigationProperty navProperty = entityType.NavigationProperties.Where(n => n.Name == pd.Name).SingleOrDefault();
+            //if (navProperty != null)
+            //{
+            //    bool isManyToMany = navProperty.RelationshipType.RelationshipEndMembers[0].RelationshipMultiplicity == RelationshipMultiplicity.Many &&
+            //                        navProperty.RelationshipType.RelationshipEndMembers[1].RelationshipMultiplicity == RelationshipMultiplicity.Many;
+            //    if (!isManyToMany)
+            //    {
+            //        AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
+            //        if (assocAttrib == null)
+            //        {
+            //            assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(navProperty);
+            //            attributes.Add(assocAttrib);
+            //        }
+            //    }
+            //}
         }
     }
 }
