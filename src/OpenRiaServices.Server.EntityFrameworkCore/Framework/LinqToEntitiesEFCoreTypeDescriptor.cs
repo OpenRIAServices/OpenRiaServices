@@ -31,7 +31,7 @@ namespace OpenRiaServices.EntityFrameworkCore
             this._typeDescriptionContext = typeDescriptionContext;
             this._entityType = entityType;
 
-            var timestampMembers = entityType.GetProperties().Where(p => p.IsConcurrencyToken).ToArray();
+            var timestampMembers = entityType.GetProperties().Where(p => p.IsConcurrencyToken && p.ValueGenerated == ValueGenerated.OnAddOrUpdate).ToArray();
             if (timestampMembers.Length == 1)
             {
                 this._timestampProperty = timestampMembers[0];
@@ -115,20 +115,20 @@ namespace OpenRiaServices.EntityFrameworkCore
                 bool databaseGenerated = false;
                 if (pd.Attributes[typeof(DatabaseGeneratedAttribute)] == null)
                 {
-                    //MetadataProperty md = ObjectContextUtilitiesEFCore.GetStoreGeneratedPattern(member);
-                    //if (property.ValueGenerated != ValueGenerated.Never)
-                    //{
-                    //    if ((string)md.Value == "Computed")
-                    //    {
-                    //        attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
-                    //        databaseGenerated = true;
-                    //    }
-                    //    else if ((string)md.Value == "Identity")
-                    //    {
-                    //        attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity));
-                    //        databaseGenerated = true;
-                    //    }
-                    //}
+                    switch (property.ValueGenerated)
+                    {
+                        case ValueGenerated.Never:
+                            break;
+                        case ValueGenerated.OnAddOrUpdate:
+                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
+                            databaseGenerated = true;
+                            break;
+                        case ValueGenerated.OnAdd:
+                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity));
+                            databaseGenerated = true;
+                            break;
+                        default: throw new NotImplementedException("Only suppport ValueGenerated.OnAdd, OnAddOrUpdate, None");
+                    }
                 }
                 else
                 {
@@ -162,30 +162,30 @@ namespace OpenRiaServices.EntityFrameworkCore
                     }
                 }
 
-                //bool hasTimestampAttribute = (pd.Attributes[typeof(TimestampAttribute)] != null);
-                //if (this._timestampMember == member && !hasTimestampAttribute)
-                //{
-                //    attributes.Add(new TimestampAttribute());
-                //    hasTimestampAttribute = true;
-                //}
+                bool hasTimestampAttribute = (pd.Attributes[typeof(TimestampAttribute)] != null);
+                if (this._timestampProperty == property && !hasTimestampAttribute)
+                {
+                    attributes.Add(new TimestampAttribute());
+                    hasTimestampAttribute = true;
+                }
 
                 // All members marked with TimestampAttribute (inferred or explicit) need to
                 // have [Editable(false)] and [RoundtripOriginal] applied
-                //if (hasTimestampAttribute)
-                //{
-                //    inferRoundtripOriginalAttribute = true;
+                if (hasTimestampAttribute)
+                {
+                    inferRoundtripOriginalAttribute = true;
 
-                //    if (editableAttribute == null)
-                //    {
-                //        editableAttribute = new EditableAttribute(false);
-                //    }
-                //}
+                    if (editableAttribute == null)
+                    {
+                        editableAttribute = new EditableAttribute(false);
+                    }
+                }
 
                 // Add RTO to this member if required. If this type has a timestamp
                 // member that member should be the ONLY member we apply RTO to.
                 // Dont apply RTO if it is an association member.
                 //bool isForeignKeyMember = this._foreignKeyMembers != null && this._foreignKeyMembers.Contains(member);
-                //if ((this._timestampMember == null || this._timestampMember == member) &&
+                //if ((this._timestampProperty == null || this._timestampProperty == property) &&
                 //    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
                 //    pd.Attributes[typeof(AssociationAttribute)] == null)
                 //{
@@ -202,11 +202,10 @@ namespace OpenRiaServices.EntityFrameworkCore
                 attributes.Add(editableAttribute);
             }
 
+            // Add AssociationAttribute if required for the specified property
             if (_entityType.FindNavigation(pd.Name) is INavigation navigation)
             {
-                this.AddAssociationAttributes(pd, attributes);
-                
-                bool isManyToMany = false; // TODO: Fix for EF5+
+                bool isManyToMany = navigation.IsCollection() && (navigation.FindInverse()?.IsCollection() == true);
                 if (!isManyToMany)
                 {
                     AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
@@ -243,31 +242,6 @@ namespace OpenRiaServices.EntityFrameworkCore
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Add AssociationAttribute if required for the specified property
-        /// </summary>
-        /// <param name="pd">The property</param>
-        /// <param name="attributes">The list of attributes to append to</param>
-        private void AddAssociationAttributes(PropertyDescriptor pd, List<Attribute> attributes)
-        {
-            //EntityType entityType = (EntityType)this.EdmType;
-            //NavigationProperty navProperty = entityType.NavigationProperties.Where(n => n.Name == pd.Name).SingleOrDefault();
-            //if (navProperty != null)
-            //{
-            //    bool isManyToMany = navProperty.RelationshipType.RelationshipEndMembers[0].RelationshipMultiplicity == RelationshipMultiplicity.Many &&
-            //                        navProperty.RelationshipType.RelationshipEndMembers[1].RelationshipMultiplicity == RelationshipMultiplicity.Many;
-            //    if (!isManyToMany)
-            //    {
-            //        AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
-            //        if (assocAttrib == null)
-            //        {
-            //            assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(navProperty);
-            //            attributes.Add(assocAttrib);
-            //        }
-            //    }
-            //}
         }
     }
 }

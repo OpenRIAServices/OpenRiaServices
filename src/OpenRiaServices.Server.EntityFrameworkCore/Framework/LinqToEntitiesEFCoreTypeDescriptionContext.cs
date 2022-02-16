@@ -52,17 +52,6 @@ namespace OpenRiaServices.EntityFrameworkCore
 
         public IEntityType GetEntityType(Type type) => Model.FindEntityType(type);
 
-        /// <summary>
-        /// Returns the <see cref="StructuralType"/> that corresponds to the given CLR type
-        /// </summary>
-        /// <param name="clrType">The CLR type</param>
-        /// <returns>The StructuralType that corresponds to the given CLR type</returns>
-        public StructuralType GetEdmType(Type clrType)
-        {
-            return null;
-            //return ObjectContextUtilitiesEFCore.GetEdmType(this.MetadataWorkspace, clrType);
-        }
-
         ///// <summary>
         ///// Returns the association information for the specified navigation property.
         ///// </summary>
