@@ -175,7 +175,7 @@ namespace OpenRiaServices.Tools.Test
 
             // Default codegen
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFDbContext", "EFDbContextScenarios.g",
-                typeof(TestDomainServices.EFCoreDbCtx.Northwind), sharedFiles, false));
+                typeof(TestDomainServices.EFCore.Northwind), sharedFiles, false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes")]
@@ -187,7 +187,7 @@ namespace OpenRiaServices.Tools.Test
 
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFDbContextScenarios.g",
-                typeof(TestDomainServices.EFCoreDbCtx.Northwind), sharedFiles, true));
+                typeof(TestDomainServices.EFCore.Northwind), sharedFiles, true));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
