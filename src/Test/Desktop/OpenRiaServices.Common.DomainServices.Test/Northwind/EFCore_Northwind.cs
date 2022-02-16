@@ -515,7 +515,6 @@ namespace TestDomainServices.EFCore
             {
                 // if there is an active connection in scope use it
                 // Here we have to append the mapping file info to the connection string
-                connection = string.Format("metadata=res://*/Northwind.NorthwindDbCtx.csdl|res://*/Northwind.NorthwindDbCtx.ssdl|res://*/Northwind.NorthwindDbCtx.msl;provider=System.Data.SqlClient;provider connection string=\"{0}\"", connection);
                 context = new EFCoreDbCtxNorthwindEntities(connection);
             }
             else
