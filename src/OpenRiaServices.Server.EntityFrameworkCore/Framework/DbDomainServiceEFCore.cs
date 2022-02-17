@@ -211,9 +211,11 @@ namespace OpenRiaServices.EntityFrameworkCore
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
 
 
+                //TODO: Make sure that code reflects code in DbDomainServicde.SetChangeSetConflicts
+
                 // Determine which members are in conflict by comparing original values to the current DB values
                 //                            // TODO: Populate store entity conflictEntry.Value.StoreEntity
-                // TODO: make async
+                // TODO: make async loading of tate
                 var dbValues = stateEntry.GetDatabaseValues();
 
             //    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
