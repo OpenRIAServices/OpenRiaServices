@@ -212,12 +212,20 @@ namespace OpenRiaServices.EntityFrameworkCore
 
                 // TODO: Look into DbDomainService.SetChangeSetConflicts it looks quite different and contains other logic such as 
                 // loading store entity
-                throw new NotImplementedException();
+                // It might be possible to use "NoTracking" load to find database version
+                // - this would include getting keys of entity (using stateEntry.Metadata.GetKeys ? )
+                // - then creating an expression comparing an X.Key1 = A && X.Key2 == 2 and so on
+                // - and doing a NoTracking load (some if it woud need to be in a generic method for eas of use)
+                // another approach would be to create an instance of the same type as X and use 
+                //  valeus obtained from stateEntry.GetDatabaseValues() to set it's values
+                // throw new NotImplementedException();
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 //                            // TODO: Populate store entity conflictEntry.Value.StoreEntity
                 // TODO: make async loading of tate
                 var dbValues = stateEntry.GetDatabaseValues();
+                operationInConflict.StoreEntity = dbValues?.ToObject();
+                operationInConflict.IsDeleteConflict = operationInConflict.StoreEntity == null;
 
             //    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
                 List<string> membersInConflict = new List<string>();
