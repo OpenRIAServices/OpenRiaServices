@@ -202,13 +202,17 @@ namespace OpenRiaServices.EntityFrameworkCore
             {
                 EntityEntry stateEntry = conflictEntry.Key;                                
                 
-                if (stateEntry.State == Microsoft.EntityFrameworkCore.EntityState.Unchanged)
+                if (stateEntry.State == EntityState.Unchanged)
                 {
                     continue;
                 }
 
                 // Note: we cannot call Refresh StoreWins since this will overwrite Current entity and remove the optimistic concurrency ex.
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
+
+                // TODO: Look into DbDomainService.SetChangeSetConflicts it looks quite different and contains other logic such as 
+                // loading store entity
+                throw new NotImplementedException();
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
@@ -217,7 +221,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 PropertyDescriptor pd;
                 foreach (var prop in stateEntry.OriginalValues.Properties)
                 {
-                    originalValue = stateEntry.OriginalValues.GetValue<object>(prop.Name);
+                    originalValue = stateEntry.OriginalValues[prop.Name];
                     if (originalValue is DBNull)
                     {
                         originalValue = null;
