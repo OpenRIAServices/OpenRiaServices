@@ -11,7 +11,7 @@ namespace EFCoreModels.Northwind
     {
         public Territory()
         {
-            EmployeeTerritories = new HashSet<EmployeeTerritories>();
+            Employees = new HashSet<EmployeeTerritories>();
         }
 
         public string TerritoryID { get; set; }
@@ -19,6 +19,6 @@ namespace EFCoreModels.Northwind
         public int RegionID { get; set; }
 
         public virtual Region Region { get; set; }
-        public virtual ICollection<EmployeeTerritories> EmployeeTerritories { get; set; }
+        public virtual ICollection<EmployeeTerritories> Employees { get; set; }
     }
 }

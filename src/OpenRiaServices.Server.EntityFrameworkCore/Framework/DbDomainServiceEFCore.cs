@@ -210,8 +210,9 @@ namespace OpenRiaServices.EntityFrameworkCore
                 // Note: we cannot call Refresh StoreWins since this will overwrite Current entity and remove the optimistic concurrency ex.
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
 
-
-                //TODO: Make sure that code reflects code in DbDomainServicde.SetChangeSetConflicts
+                // TODO: Look into DbDomainService.SetChangeSetConflicts it looks quite different and contains other logic such as 
+                // loading store entity
+                throw new NotImplementedException();
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 //                            // TODO: Populate store entity conflictEntry.Value.StoreEntity

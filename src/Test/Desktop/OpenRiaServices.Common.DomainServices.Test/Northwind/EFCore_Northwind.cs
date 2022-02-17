@@ -424,9 +424,9 @@ namespace TestDomainServices.EFCore
                 
                 // need to remove any employee territory rows
                 EntityEntry tEntityEntry = this.DbContext.Entry(territory);
-                CollectionEntry employeesCollection = tEntityEntry.Collection("Employees");
+                CollectionEntry employeesCollection = tEntityEntry.Collection(nameof(territory.Employees));
                 employeesCollection.Load();
-                territory.EmployeeTerritories.Clear();
+                territory.Employees.Clear();
 
                 this.DbContext.Territories.Remove(territory);
             }
@@ -448,9 +448,9 @@ namespace TestDomainServices.EFCore
 
                 // need to remove any employee territory rows
                 EntityEntry tEntityEntry = this.DbContext.Entry(territory);
-                CollectionEntry employeesCollection = tEntityEntry.Collection("Employees");
+                CollectionEntry employeesCollection = tEntityEntry.Collection(nameof(territory.Employees));
                 employeesCollection.Load();
-                territory.EmployeeTerritories.Clear();
+                territory.Employees.Clear();
 
                 this.DbContext.Territories.Remove(territory);
             }

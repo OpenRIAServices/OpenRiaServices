@@ -31,7 +31,7 @@ namespace EFCoreModels.Northwind
 
         public virtual Customer Customer { get; set; }
         public virtual Employees Employee { get; set; }
-        public virtual Shipper ShipViaNavigation { get; set; }
+        public virtual Shipper Shipper { get; set; }
         public virtual ICollection<Order_Detail> Order_Details { get; set; }
     }
 }
