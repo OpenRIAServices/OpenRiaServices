@@ -88,24 +88,22 @@ namespace TestDomainServices.EFCore
         protected override bool ResolveConflicts(IEnumerable<EntityEntry> conflicts)
         {
             // TODO - resolve conflicts
-            //foreach (EntityEntry entityEntry in conflicts)
-            //{
-            //    ObjectStateEntry stateEntry = objectStateManager.GetObjectStateEntry(entityEntry.Entity);
-            //    if (entityEntry.State == EntityState.Detached || 
-            //        stateEntry.IsRelationship)
-            //    {
-            //        continue;
-            //    }
+            foreach (EntityEntry entityEntry in conflicts)
+            {
+                var stateEntry = DbContext.Entry(entityEntry.Entity);
+                if (entityEntry.State == EntityState.Detached) {
+                    continue;
+                }
 
-            //    Type entityType = stateEntry.Entity.GetType();
-            //    if (entityType == typeof(Product))
-            //    {
-            //        if (!this.ResolveProductConflict(entityEntry))
-            //        {
-            //            return false;
-            //        }
-            //    }
-            //}
+                Type entityType = stateEntry.Entity.GetType();
+                if (entityType == typeof(Product))
+                {
+                    if (!this.ResolveProductConflict(entityEntry))
+                    {
+                        return false;
+                    }
+                }
+            }
 
             return true;
         }
@@ -123,10 +121,11 @@ namespace TestDomainServices.EFCore
                     return this.ResolveProductWithMerge(entryInConflict);
                 case "KeepCurrent":
                     // Client Wins
-                    // objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
+                    //objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
                     break;
                 case "RefreshCurrent":
                     // Store wins
+                    DbContext.Entry(product).Reload();
                     // objectContext.Refresh(RefreshMode.StoreWins, product); // TODO
                     break;
                 case "ReturnTrueNoResolve":
@@ -135,6 +134,7 @@ namespace TestDomainServices.EFCore
                     return false;
                 case "ReturnFalseWithResolve":
                     // Store Wins
+                    DbContext.Entry(product).Reload();
                     // objectContext.Refresh(RefreshMode.StoreWins, product); // TODO
                     return false;
                 case "":

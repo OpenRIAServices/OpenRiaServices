@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Data.Mapping;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Globalization;
+using System.ComponentModel.DataAnnotations;using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Server;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -18,7 +15,7 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// </summary>
     internal class LinqToEntitiesEFCoreTypeDescriptionContext : TypeDescriptionContextBase
     {
-        private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
+  //      private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
         private IModel _model;
 
@@ -131,6 +128,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <param name="navigationProperty">The navigation property</param>
         /// <param name="foreignKeyRoleName">The foreign key role name for the property's association</param>
         /// <returns>A unique association name for the specified navigation property.</returns>
+        /*
         private string GetAssociationName(NavigationProperty navigationProperty, string foreignKeyRoleName)
         {
             RelationshipEndMember fromMember = navigationProperty.FromEndMember;
@@ -152,5 +150,6 @@ namespace OpenRiaServices.EntityFrameworkCore
 
             return associationName;
         }
+        */
     }
 }

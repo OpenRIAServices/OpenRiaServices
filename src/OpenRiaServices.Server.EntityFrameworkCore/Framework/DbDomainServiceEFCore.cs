@@ -202,7 +202,7 @@ namespace OpenRiaServices.EntityFrameworkCore
             {
                 EntityEntry stateEntry = conflictEntry.Key;                                
                 
-                if (stateEntry.State == Microsoft.EntityFrameworkCore.EntityState.Unchanged)
+                if (stateEntry.State == EntityState.Unchanged)
                 {
                     continue;
                 }
@@ -210,35 +210,39 @@ namespace OpenRiaServices.EntityFrameworkCore
                 // Note: we cannot call Refresh StoreWins since this will overwrite Current entity and remove the optimistic concurrency ex.
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
 
+
                 // Determine which members are in conflict by comparing original values to the current DB values
-                PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
+                //                            // TODO: Populate store entity conflictEntry.Value.StoreEntity
+                // TODO: make async
+                var dbValues = stateEntry.GetDatabaseValues();
+
+            //    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
                 List<string> membersInConflict = new List<string>();
                 object originalValue;
-                PropertyDescriptor pd;
+                //PropertyDescriptor pd;
                 foreach (var prop in stateEntry.OriginalValues.Properties)
                 {
-                    originalValue = stateEntry.OriginalValues.GetValue<object>(prop.Name);
+                    originalValue = stateEntry.OriginalValues[prop.Name];
                     if (originalValue is DBNull)
                     {
                         originalValue = null;
                     }
 
                     string propertyName = prop.Name;
-                    pd = propDescriptors[propertyName];
-                    if (pd == null)
-                    {
-                        // This might happen in the case of a private model
-                        // member that isn't mapped
-                        continue;
-                    }
+                    //pd = propDescriptors[propertyName];
+                    //if (pd == null)
+                    //{
+                    //    // This might happen in the case of a private model
+                    //    // member that isn't mapped
+                    //    continue;
+                    //}
 
-                    if (!object.Equals(originalValue, pd.GetValue(operationInConflict.StoreEntity)))
+                    if (!object.Equals(originalValue, dbValues[prop.Name]))
                     {
-                        membersInConflict.Add(pd.Name);
+                        membersInConflict.Add(prop.Name);
                     }
                 }
                 operationInConflict.ConflictMembers = membersInConflict;
-
             }
         }
     }

@@ -585,7 +585,7 @@ namespace OpenRiaServices.Client.Test
         }
     }
     /** TODO: 
-     * 
+     * copy EFQueryTests, do we want the added test from that one
     [TestClass]
     public class EFCoreQueryTests : CrossDomainServiceQueryTests
     {

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Entity.Core.Metadata.Edm;
 using Microsoft.EntityFrameworkCore.Metadata;
-#if RIACONTRIB
-using System.ServiceModel.DomainServices.Server;
-#endif
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFrameworkCore

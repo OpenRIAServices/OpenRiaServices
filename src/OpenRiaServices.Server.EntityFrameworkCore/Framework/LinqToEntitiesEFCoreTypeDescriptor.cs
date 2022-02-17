@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-#if RIACONTRIB
-using System.ServiceModel.DomainServices.Server;
-#endif
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using OpenRiaServices.Server;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects.DataClasses;
+//using System.Data.Entity.Core.Objects.DataClasses;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OpenRiaServices.EntityFrameworkCore
@@ -74,15 +70,6 @@ namespace OpenRiaServices.EntityFrameworkCore
         protected override IEnumerable<Attribute> GetMemberAttributes(PropertyDescriptor pd)
         {
             List<Attribute> attributes = new List<Attribute>();
-
-            // Exclude any EntityState, EntityReference, etc. members
-            if (ShouldExcludeEntityMember(pd))
-            {
-                // for these members, we don't want to do any further
-                // attribute inference
-                attributes.Add(new ExcludeAttribute());
-                return attributes.ToArray();
-            }
 
             EditableAttribute editableAttribute = null;
             bool inferRoundtripOriginalAttribute = false;
@@ -229,18 +216,15 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <returns>True if the property should be excluded, false otherwise.</returns>
         internal static bool ShouldExcludeEntityMember(PropertyDescriptor pd)
         {
+            //TODO: remove this, EntityState is not part of entities 
+
             // exclude EntityState members
             if (pd.PropertyType == typeof(EntityState)) // TODO: Maybe also check pd.Component type
             {
                 return true;
             }
 
-            // exclude entity reference properties
-            if (typeof(EntityReference).IsAssignableFrom(pd.PropertyType))
-            {
-                return true;
-            }
-
+         
             return false;
         }
     }

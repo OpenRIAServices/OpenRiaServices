@@ -9,7 +9,7 @@ using OpenRiaServices.Server;
 
 namespace EFCoreModels.Northwind
 {
-     // TODO: Remove MetaDataType attributes and move attributes directly to classe ==
+     // TODO: Remove MetaDataType attributes and move attributes directly to classe so project can be netstandard2
     [MetadataType(typeof(RegionMetadata))]
     public partial class Region
     {
