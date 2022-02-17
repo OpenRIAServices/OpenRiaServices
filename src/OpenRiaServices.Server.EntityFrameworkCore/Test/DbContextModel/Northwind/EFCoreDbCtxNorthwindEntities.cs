@@ -133,29 +133,32 @@ namespace EFCoreModels.Northwind
                 entity.Property(e => e.CustomerID)
                     .HasColumnName("CustomerID")
                     .HasMaxLength(5)
-                    .IsFixedLength();
+                    .IsFixedLength()
+                    .IsConcurrencyToken();
 
-                entity.Property(e => e.Address).HasMaxLength(60);
+                entity.Property(e => e.Address).HasMaxLength(60).IsConcurrencyToken();
 
-                entity.Property(e => e.City).HasMaxLength(15);
+                entity.Property(e => e.City).HasMaxLength(15).IsConcurrencyToken();
 
                 entity.Property(e => e.CompanyName)
                     .IsRequired()
-                    .HasMaxLength(40);
+                    .HasMaxLength(40)
+                    .IsConcurrencyToken();
 
-                entity.Property(e => e.ContactName).HasMaxLength(30);
+                entity.Property(e => e.ContactName).HasMaxLength(30).IsConcurrencyToken();
 
-                entity.Property(e => e.ContactTitle).HasMaxLength(30);
+                entity.Property(e => e.ContactTitle).HasMaxLength(30).IsConcurrencyToken();
 
-                entity.Property(e => e.Country).HasMaxLength(15);
+                entity.Property(e => e.Country).HasMaxLength(15).IsConcurrencyToken();
 
-                entity.Property(e => e.Fax).HasMaxLength(24);
+                entity.Property(e => e.Fax).HasMaxLength(24).IsConcurrencyToken();
 
-                entity.Property(e => e.Phone).HasMaxLength(24);
+                entity.Property(e => e.Phone).HasMaxLength(24).IsConcurrencyToken();
 
-                entity.Property(e => e.PostalCode).HasMaxLength(10);
+                entity.Property(e => e.PostalCode).HasMaxLength(10).IsConcurrencyToken();
 
-                entity.Property(e => e.Region).HasMaxLength(15);
+                entity.Property(e => e.Region).HasMaxLength(15).IsConcurrencyToken();
+
             });
 
             modelBuilder.Entity<EmployeeTerritories>(entity =>
@@ -176,7 +179,7 @@ namespace EFCoreModels.Northwind
                     .HasConstraintName("FK_EmployeeTerritories_Employees");
 
                 entity.HasOne(d => d.Territory)
-                    .WithMany(p => p.EmployeeTerritories)
+                    .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.TerritoryID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmployeeTerritories_Territories");
@@ -249,17 +252,18 @@ namespace EFCoreModels.Northwind
                 entity.HasIndex(e => e.ProductID)
                     .HasName("ProductsOrder_Details");
 
-                entity.Property(e => e.OrderID).HasColumnName("OrderID");
+                entity.Property(e => e.OrderID).HasColumnName("OrderID").IsConcurrencyToken();
 
-                entity.Property(e => e.ProductID).HasColumnName("ProductID");
+                entity.Property(e => e.ProductID).HasColumnName("ProductID").IsConcurrencyToken();
 
-                entity.Property(e => e.Discount).HasDefaultValueSql("(0)");
+                entity.Property(e => e.Discount).HasDefaultValueSql("(0)").IsConcurrencyToken();
 
-                entity.Property(e => e.Quantity).HasDefaultValueSql("(1)");
+                entity.Property(e => e.Quantity).HasDefaultValueSql("(1)").IsConcurrencyToken();
 
                 entity.Property(e => e.UnitPrice)
                     .HasColumnType("money")
-                    .HasDefaultValueSql("(0)");
+                    .HasDefaultValueSql("(0)")
+                    .IsConcurrencyToken();
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Order_Details)
@@ -296,36 +300,39 @@ namespace EFCoreModels.Northwind
                 entity.HasIndex(e => e.ShippedDate)
                     .HasName("ShippedDate");
 
-                entity.Property(e => e.OrderID).HasColumnName("OrderID");
+                entity.Property(e => e.OrderID).HasColumnName("OrderID")
+                    .IsConcurrencyToken();
 
                 entity.Property(e => e.CustomerID)
                     .HasColumnName("CustomerID")
                     .HasMaxLength(5)
-                    .IsFixedLength();
+                    .IsFixedLength()
+                    .IsConcurrencyToken();
 
-                entity.Property(e => e.EmployeeID).HasColumnName("EmployeeID");
+                entity.Property(e => e.EmployeeID).HasColumnName("EmployeeID").IsConcurrencyToken();
 
                 entity.Property(e => e.Freight)
                     .HasColumnType("money")
-                    .HasDefaultValueSql("(0)");
+                    .HasDefaultValueSql("(0)")
+                    .IsConcurrencyToken();
 
-                entity.Property(e => e.OrderDate).HasColumnType("datetime");
+                entity.Property(e => e.OrderDate).HasColumnType("datetime").IsConcurrencyToken();
 
-                entity.Property(e => e.RequiredDate).HasColumnType("datetime");
+                entity.Property(e => e.RequiredDate).HasColumnType("datetime").IsConcurrencyToken();
 
-                entity.Property(e => e.ShipAddress).HasMaxLength(60);
+                entity.Property(e => e.ShipAddress).HasMaxLength(60).IsConcurrencyToken();
 
-                entity.Property(e => e.ShipCity).HasMaxLength(15);
+                entity.Property(e => e.ShipCity).HasMaxLength(15).IsConcurrencyToken();
 
-                entity.Property(e => e.ShipCountry).HasMaxLength(15);
+                entity.Property(e => e.ShipCountry).HasMaxLength(15).IsConcurrencyToken();
 
-                entity.Property(e => e.ShipName).HasMaxLength(40);
+                entity.Property(e => e.ShipName).HasMaxLength(40).IsConcurrencyToken();
 
-                entity.Property(e => e.ShipPostalCode).HasMaxLength(10);
+                entity.Property(e => e.ShipPostalCode).HasMaxLength(10).IsConcurrencyToken();
 
-                entity.Property(e => e.ShipRegion).HasMaxLength(15);
+                entity.Property(e => e.ShipRegion).HasMaxLength(15).IsConcurrencyToken();
 
-                entity.Property(e => e.ShippedDate).HasColumnType("datetime");
+                entity.Property(e => e.ShippedDate).HasColumnType("datetime").IsConcurrencyToken();
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
@@ -337,7 +344,7 @@ namespace EFCoreModels.Northwind
                     .HasForeignKey(d => d.EmployeeID)
                     .HasConstraintName("FK_Orders_Employees");
 
-                entity.HasOne(d => d.ShipViaNavigation)
+                entity.HasOne(d => d.Shipper)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.ShipVia)
                     .HasConstraintName("FK_Orders_Shippers");
