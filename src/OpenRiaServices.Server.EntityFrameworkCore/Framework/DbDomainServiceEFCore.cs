@@ -47,7 +47,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         {
             return new TContext();
         }
-        
+
         /// <summary>
         /// Gets the <see cref="DbContext"/>
         /// </summary>
@@ -86,7 +86,15 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
         protected override ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
+            //  TODO: Determine if we get into if statement
+            if (enumerable is IAsyncEnumerable<T> asyncEnumerable)
+            {
+                return QueryHelperEFCore.EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
+            }
+            else
+            {
+                return base.EnumerateAsync<T>(enumerable, estimatedResultCount, cancellationToken);
+            }
         }
 
 
@@ -200,8 +208,8 @@ namespace OpenRiaServices.EntityFrameworkCore
         {
             foreach (var conflictEntry in operationConflictMap)
             {
-                EntityEntry stateEntry = conflictEntry.Key;                                
-                
+                EntityEntry stateEntry = conflictEntry.Key;
+
                 if (stateEntry.State == EntityState.Unchanged)
                 {
                     continue;
@@ -210,16 +218,6 @@ namespace OpenRiaServices.EntityFrameworkCore
                 // Note: we cannot call Refresh StoreWins since this will overwrite Current entity and remove the optimistic concurrency ex.
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
 
-                // TODO: Look into DbDomainService.SetChangeSetConflicts it looks quite different and contains other logic such as 
-                // loading store entity
-                // It might be possible to use "NoTracking" load to find database version
-                // - this would include getting keys of entity (using stateEntry.Metadata.GetKeys ? )
-                // - then creating an expression comparing an X.Key1 = A && X.Key2 == 2 and so on
-                // - and doing a NoTracking load (some if it woud need to be in a generic method for eas of use)
-                // another approach would be to create an instance of the same type as X and use 
-                //  valeus obtained from stateEntry.GetDatabaseValues() to set it's values
-                // throw new NotImplementedException();
-
                 // Determine which members are in conflict by comparing original values to the current DB values
                 //                            // TODO: Populate store entity conflictEntry.Value.StoreEntity
                 // TODO: make async loading of tate
@@ -227,33 +225,18 @@ namespace OpenRiaServices.EntityFrameworkCore
                 operationInConflict.StoreEntity = dbValues?.ToObject();
                 operationInConflict.IsDeleteConflict = dbValues == null;
 
-            //    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
-                List<string> membersInConflict = new List<string>();
-                object originalValue;
-                //PropertyDescriptor pd;
-                foreach (var prop in stateEntry.OriginalValues.Properties)
+                if (dbValues != null)
                 {
-                    originalValue = stateEntry.OriginalValues[prop.Name];
-                    if (originalValue is DBNull)
+                    List<string> membersInConflict = new List<string>();
+                    foreach (var property in stateEntry.OriginalValues.Properties)
                     {
-                        originalValue = null;
+                        if (!object.Equals(stateEntry.OriginalValues[property.Name], dbValues[property.Name]))
+                        {
+                            membersInConflict.Add(property.Name);
+                        }
                     }
-
-                    string propertyName = prop.Name;
-                    //pd = propDescriptors[propertyName];
-                    //if (pd == null)
-                    //{
-                    //    // This might happen in the case of a private model
-                    //    // member that isn't mapped
-                    //    continue;
-                    //}
-
-                    if (!object.Equals(originalValue, dbValues[prop.Name]))
-                    {
-                        membersInConflict.Add(prop.Name);
-                    }
+                    operationInConflict.ConflictMembers = membersInConflict;
                 }
-                operationInConflict.ConflictMembers = membersInConflict;
             }
         }
     }

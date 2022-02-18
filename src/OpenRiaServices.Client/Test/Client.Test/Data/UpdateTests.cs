@@ -3078,7 +3078,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
                 DomainOperationException ex = so.Error as DomainOperationException;
 
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error.Message);
+                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
                 Assert.AreEqual(1, so.EntitiesInError.Count());
                 EntityConflict conflict = so.EntitiesInError.Single().EntityConflict;
                 Assert.IsTrue(conflict.IsDeleted);

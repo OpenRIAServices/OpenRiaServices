@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using OpenRiaServices.Server;
-//using System.Data.Entity.Core.Objects.DataClasses;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OpenRiaServices.EntityFrameworkCore
@@ -28,7 +27,7 @@ namespace OpenRiaServices.EntityFrameworkCore
             this._typeDescriptionContext = typeDescriptionContext;
             this._entityType = entityType;
 
-            var timestampMembers = entityType.GetProperties().Where(p => IsTimestampProperty(p)).ToArray();
+            var timestampMembers = entityType.GetProperties().Where(p => IsConcurrencyTimestamp(p)).ToArray();
             if (timestampMembers.Length == 1)
             {
                 this._timestampProperty = timestampMembers[0];
@@ -61,11 +60,16 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <summary>
         /// Check if a property is a "Timestamp" property (rowversion or similar)
         /// </summary>
-        /// <param name="p"></param>
-        /// <returns></returns>
-        private static bool IsTimestampProperty(IProperty p)
+        ///  /// <remarks>Since EF doesn't expose "timestamp" as a first class
+        /// concept, we use the below criteria to infer this for ourselves.
+        /// </remarks>
+        private static bool IsConcurrencyTimestamp(IProperty p)
         {
-            return p.IsConcurrencyToken && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
+            //IsConcurrencyTimestamp
+            return p.IsConcurrencyToken
+                // && p.GetMaxLength() == 8
+                // && p.IsFixedLength
+                && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
         }
 
         /// <summary>
